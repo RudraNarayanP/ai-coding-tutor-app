@@ -1,0 +1,77 @@
+{
+  "id": "comparisons",
+  "title": "Comparisons",
+  "order": 5,
+  "concepts": [
+    {
+      "id": "comparisons",
+      "title": "Comparisons",
+      "prerequisites": ["basics", "booleans", "conditionals"]
+    }
+  ],
+  "lessons": [
+    {
+      "id": "comparisons-01",
+      "title": "Black Jack",
+      "description": "Use Python's comparison operators — including chained comparisons — and conditional (ternary) expressions to compare values concisely.",
+      "order": 5,
+      "difficulty": "beginner",
+      "duration_minutes": 30,
+      "concepts": ["comparisons"],
+      "prerequisites": ["basics", "booleans", "conditionals"],
+      "learning_objectives": [
+        "Chain comparison operators: 9 <= x <= 11",
+        "Use conditional expressions: value_if_true if cond else value_if_false",
+        "Return different types from one function depending on conditions"
+      ],
+      "starter_code": "\"\"\"Functions to help play and score a game of blackjack.\n\nHow to play blackjack:    https://bicyclecards.com/how-to-play/blackjack/\n\\\"Standard\\\" playing cards: https://en.wikipedia.org/wiki/Standard_52-card_deck\n\"\"\"\n\n\ndef value_of_card(card):\n    \"\"\"Determine the scoring value of a card.\n\n    Parameters:\n        card (str): The given card.\n\n    Returns:\n        int: The value of a given card.  See below for values.\n\n        1.  'J', 'Q', or 'K' (otherwise known as \"face cards\") = 10\n        2.  'A' (ace card) = 1\n        3.  '2' - '10' = numerical value.\n    \"\"\"\n\n    pass\n\n\ndef higher_card(card_one, card_two):\n    \"\"\"Determine which card has a higher value in the hand.\n\n    Parameters:\n        card_one (str): First card dealt in the hand.  See below for values.\n        card_two (str): Second card dealt in the hand. See below for values.\n\n        1.  'J', 'Q', or 'K' (otherwise known as \"face cards\") = 10\n        2.  'A' (ace card) = 1\n        3.  '2' - '10' = numerical value.\n\n    Returns:\n        str or tuple: The resulting tuple contains both cards if they are of equal value.\n    \"\"\"\n\n    pass\n\n\ndef value_of_ace(card_one, card_two):\n    \"\"\"Calculate the most advantageous value for an upcoming ace card.\n\n    Parameters:\n        card_one (str): First card dealt in the hand.  See below for values.\n        card_two (str): Second card dealt in the hand. See below for values.\n\n        1.  'J', 'Q', or 'K' (otherwise known as \"face cards\") = 10\n        2.  'A' (ace card) = 11 (if already in hand)\n        3.  '2' - '10' = numerical value.\n\n    Returns:\n        int: Either 1 or 11, which is the value of the upcoming ace card.\n    \"\"\"\n\n    pass\n\n\ndef is_blackjack(card_one, card_two):\n    \"\"\"Determine if the hand is a 'natural' or 'blackjack'.\n\n    Parameters:\n        card_one (str): First card dealt in the hand.  See below for values.\n        card_two (str): Second card dealt in the hand. See below for values.\n\n        1.  'J', 'Q', or 'K' (otherwise known as \"face cards\") = 10\n        2.  'A' (ace card) = 11 (if already in hand)\n        3.  '2' - '10' = numerical value.\n\n    Returns:\n        bool: Is the hand is a blackjack (two cards worth 21).\n    \"\"\"\n\n    pass\n\n\ndef can_split_pairs(card_one, card_two):\n    \"\"\"Determine if a player can split their hand into two hands.\n\n    Parameters:\n        card_one (str): First card in the hand.\n        card_two (str): Second card in the hand.\n\n   Returns:\n        bool: Can the hand be split into two pairs? (i.e. cards are of the same value).\n    \"\"\"\n\n    pass\n\n\ndef can_double_down(card_one, card_two):\n    \"\"\"Determine if a blackjack player can place a double down bet.\n\n    Parameters:\n        card_one (str): First card in the hand.\n        card_two (str): Second card in the hand.\n\n    Returns:\n        bool: Can the hand can be doubled down? (i.e. totals 9, 10 or 11 points).\n    \"\"\"\n\n    pass\n",
+      "tests": [
+        {
+          "name": "test_value_of_card",
+          "unittest_code": "def test_value_of_card(self):\n    test_data = [('2', 2), ('5', 5), ('8', 8),\n                 ('A', 1), ('10', 10), ('J', 10),\n                 ('Q', 10), ('K', 10)]\n\n    for variant, (card, expected) in enumerate(test_data, 1):\n        with self.subTest(f'variation #{variant}', card=card, expected=expected):\n            actual_result = value_of_card(card)\n            error_msg = (f'Called value_of_card({card}). '\n                         f'The function returned {actual_result} as the value of the {card} card, '\n                         f'but the test expected {expected} as the {card} card value.')\n\n            self.assertEqual(actual_result, expected, msg=error_msg)",
+          "required": true
+        },
+        {
+          "name": "test_higher_card",
+          "unittest_code": "def test_higher_card(self):\n    test_data = [('A', 'A', ('A', 'A')),\n                 ('10', 'J', ('10', 'J')),\n                 ('3', 'A', '3'),\n                 ('3', '6', '6'),\n                 ('Q', '10', ('Q', '10')),\n                 ('4', '4', ('4', '4')),\n                 ('9',  '10', '10'),\n                 ('6', '9', '9'),\n                 ('4', '8', '8')]\n\n    for variant, (card_one, card_two, expected) in enumerate(test_data, 1):\n        with self.subTest(f'variation #{variant}', card_one=card_one, card_two=card_two, expected=expected):\n            actual_result = higher_card(card_one, card_two)\n            error_msg = (f'Called higher_card({card_one}, {card_two}). '\n                         f'The function returned {actual_result}, '\n                         f'but the test expected {expected} as the result for the cards {card_one, card_two}.')\n\n            self.assertEqual(actual_result, expected, msg=error_msg)",
+          "required": true
+        },
+        {
+          "name": "test_value_of_ace",
+          "unittest_code": "def test_value_of_ace(self):\n    test_data = [('2', '3', 11), ('3', '6', 11), ('5', '2', 11),\n                 ('8', '2', 11), ('5', '5', 11), ('Q', 'A', 1),\n                 ('10', '2', 1), ('7', '8', 1), ('J', '9', 1),\n                 ('K', 'K', 1), ('2', 'A', 1), ('A', '2', 1)]\n\n    for variant, (card_one, card_two, ace_value) in enumerate(test_data, 1):\n        with self.subTest(f'variation #{variant}', card_one=card_one, card_two=card_two, ace_value=ace_value):\n            actual_result = value_of_ace(card_one, card_two)\n            error_msg = (f'Called value_of_ace({card_one}, {card_two}). '\n                         f'The function returned {actual_result}, '\n                         f'but the test expected {ace_value} as the value of an ace card '\n                         f'when the hand includes {card_one, card_two}.')\n\n            self.assertEqual(value_of_ace(card_one, card_two), ace_value, msg=error_msg)",
+          "required": true
+        },
+        {
+          "name": "test_is_blackjack",
+          "unittest_code": "def test_is_blackjack(self):\n    test_data = [(('A', 'K'), True), (('10', 'A'), True),\n                 (('10', '9'), False), (('A', 'A'), False),\n                 (('4', '7'), False), (('9', '2'), False),\n                 (('Q', 'K'), False)]\n\n    for variant, (hand, expected) in enumerate(test_data, 1):\n        with self.subTest(f'variation #{variant}', hand=hand, expected=expected):\n            actual_result = is_blackjack(*hand)\n            error_msg = (f'Called is_blackjack({hand[0]}, {hand[1]}). '\n                         f'The function returned {actual_result}, '\n                         f'but hand {hand} {\"is\" if expected else \"is not\"} a blackjack.')\n\n            self.assertEqual(actual_result, expected, msg=error_msg)",
+          "required": true
+        },
+        {
+          "name": "test_can_split_pairs",
+          "unittest_code": "def test_can_split_pairs(self):\n    test_data = [(('Q', 'K'), True), (('6', '6'), True),\n                 (('A', 'A'), True),(('10', 'A'), False),\n                 (('10', '9'), False)]\n\n    for variant, (hand, expected) in enumerate(test_data, 1):\n        with self.subTest(f'variation #{variant}', input=hand, expected=expected):\n            actual_result = can_split_pairs(*hand)\n            error_msg = (f'Called can_split_pairs({hand[0]}, {hand[1]}). '\n                         f'The function returned {actual_result}, '\n                         f'but hand {hand} {\"can\" if expected else \"cannot\"} be split into pairs.')\n\n            self.assertEqual(actual_result, expected, msg=error_msg)",
+          "required": true
+        },
+        {
+          "name": "test_can_double_down",
+          "unittest_code": "def test_can_double_down(self):\n    test_data = [(('A', '9'), True), (('K', 'A'), True),\n                 (('4', '5'), True),(('A', 'A'), False),\n                 (('10', '2'), False), (('10', '9'), False)]\n\n    for variant, (hand, expected) in enumerate(test_data, 1):\n        with self.subTest(f'variation #{variant}', hand=hand, expected=expected):\n            actual_result = can_double_down(*hand)\n            error_msg = (f'Called can_double_down({hand[0]}, {hand[1]}). '\n                         f'The function returned {actual_result}, '\n                         f'but hand {hand} {\"can\" if expected else \"cannot\"} be doubled down.')\n\n            self.assertEqual(actual_result, expected, msg=error_msg)",
+          "required": true
+        }
+      ],
+      "completion_requirements": {
+        "required_test_names": [
+          "test_value_of_card",
+          "test_higher_card",
+          "test_value_of_ace",
+          "test_is_blackjack",
+          "test_can_split_pairs",
+          "test_can_double_down"
+        ]
+      },
+      "source": {
+        "name": "Exercism Python Track — Black Jack",
+        "url": "https://github.com/exercism/python/tree/main/exercises/concept/black-jack",
+        "license": "MIT"
+      }
+    }
+  ]
+}

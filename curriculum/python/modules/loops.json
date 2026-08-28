@@ -1,0 +1,78 @@
+{
+  "id": "loops",
+  "title": "Loops",
+  "order": 10,
+  "concepts": [
+    {
+      "id": "loops",
+      "title": "Loops",
+      "prerequisites": ["basics", "comparisons", "lists", "list-methods", "strings"]
+    }
+  ],
+  "lessons": [
+    {
+      "id": "loops-01",
+      "title": "Making the Grade",
+      "description": "Use for loops — including range(), enumerate(), and list comprehensions — to repeat work over a sequence and build up new lists.",
+      "order": 10,
+      "difficulty": "beginner",
+      "duration_minutes": 30,
+      "concepts": ["loops"],
+      "prerequisites": ["basics", "comparisons", "lists", "list-methods", "strings"],
+      "learning_objectives": [
+        "Write for loops over lists",
+        "Use range() for counted repetition",
+        "Use enumerate() for index-value pairs",
+        "Write list comprehensions with optional filter"
+      ],
+      "starter_code": "\"\"\"Functions for organizing and calculating student exam scores.\"\"\"\n\n\ndef round_scores(student_scores):\n    \"\"\"Round all provided student scores.\n\n    Parameters:\n        student_scores (list[float]): Student exam scores.\n\n    Returns:\n        list[int]: Student scores *rounded* to the nearest integer value.\n    \"\"\"\n\n    pass\n\n\ndef count_failed_students(student_scores):\n    \"\"\"Count the number of failing students out of the group provided.\n\n    Parameters:\n        student_scores (list[int]): Student scores as ints.\n\n    Returns:\n        int: The count of student scores at or below 40.\n    \"\"\"\n\n    pass\n\n\ndef above_threshold(student_scores, threshold):\n    \"\"\"Determine how many of the provided student scores were 'the best' based on the provided threshold.\n\n    Parameters:\n        student_scores (list[int]): Integer scores.\n        threshold (int): The threshold to cross to be the \"best\" score.\n\n    Returns:\n        list[int]: Integer scores that are at or above the \"best\" threshold.\n    \"\"\"\n\n    pass\n\n\ndef letter_grades(highest):\n    \"\"\"Create a list of grade thresholds based on the provided highest grade.\n\n    Parameters:\n        highest (int): The value of the highest exam score.\n\n    Returns:\n        list[int]: Lower threshold scores for each D-A letter grade interval.\n\n        For example, where the highest score is 100, and failing is <= 40,\n        The result would be [41, 56, 71, 86]:\n            41 <= \"D\" <= 55\n            56 <= \"C\" <= 70\n            71 <= \"B\" <= 85\n            86 <= \"A\" <= 100\n    \"\"\"\n\n    pass\n\n\ndef student_ranking(student_scores, student_names):\n    \"\"\"Organize the student's rank, name, and grade information in descending order.\n\n    Parameters:\n        student_scores (list): Scores in descending order.\n        student_names (list[str]): Student names by exam score in descending order.\n\n    Returns:\n        list[str]: Strings in format [\"<rank>. <student name>: <score>\"].\n    \"\"\"\n\n    pass\n\n\ndef perfect_score(student_info):\n    \"\"\"Create a list that contains the name and grade of the first student to make a perfect score on the exam.\n\n    Parameters:\n        student_info (list[list[str, int]]): List of [<student name>, <score>] lists.\n\n    Returns:\n        list: First `[<student name>, 100]` found OR `[]` if no student score of 100 is found.\n    \"\"\"\n\n    pass\n",
+      "tests": [
+        {
+          "name": "test_round_scores",
+          "unittest_code": "def test_round_scores(self):\n\n    test_data = [tuple(),\n                 (.5,),\n                 (1.5,),\n                 (90.33, 40.5, 55.44, 70.05, 30.55, 25.45, 80.45, 95.3, 38.7, 40.3),\n                 (50, 36.03, 76.92, 40.7, 43, 78.29, 63.58, 91, 28.6, 88.0)]\n    result_data = [[],\n                   [0],\n                   [2],\n                   [90, 40, 55, 70, 31, 25, 80, 95, 39, 40],\n                   [50, 36, 77, 41, 43, 78, 64, 91, 29, 88]]\n\n    for variant, (student_scores, expected) in enumerate(zip(test_data, result_data), start=1):\n        with self.subTest(f'variation #{variant}', student_scores=student_scores, expected=expected):\n\n            actual_result = round_scores(list(student_scores))\n            error_message = (f'Called round_scores({list(student_scores)}). '\n                             f'The function returned {sorted(actual_result)} after sorting, but '\n                             f'the tests expected {sorted(expected)} after sorting. '\n                             f'One or more scores were rounded incorrectly.')\n\n            self.assertEqual(sorted(actual_result), sorted(expected), msg=error_message)",
+          "required": true
+        },
+        {
+          "name": "test_count_failed_students",
+          "unittest_code": "def test_count_failed_students(self):\n    test_data = [[89, 85, 42, 57, 90, 100, 95, 48, 70, 96],\n                 [40, 40, 35, 70, 30, 41, 90]]\n    result_data = [0,4]\n\n    for variant, (student_scores, expected) in enumerate(zip(test_data, result_data), start=1):\n        with self.subTest(f'variation #{variant}',\n                          student_scores=student_scores,\n                          expected=expected):\n\n            actual_result = count_failed_students(student_scores)\n            error_message = (f'Called count_failed_students({student_scores}). '\n                             f'The function returned {actual_result}, but '\n                             f'the tests expected {expected} for the '\n                             'number of students who failed.')\n\n            self.assertEqual(actual_result, expected, msg=error_message)",
+          "required": true
+        },
+        {
+          "name": "test_above_threshold",
+          "unittest_code": "def test_above_threshold(self):\n    test_data = [([40, 39, 95, 80, 25, 31, 70, 55, 40, 90], 98),\n                 ([88, 29, 91, 64, 78, 43, 41, 77, 36, 50], 80),\n                 ([100, 89], 100),\n                 ([88, 29, 91, 64, 78, 43, 41, 77, 36, 50], 78),\n                 ([], 80)]\n\n    result_data = [[],\n                   [88, 91],\n                   [100],\n                   [88, 91, 78],\n                   []]\n\n    for variant, (params, expected) in enumerate(zip(test_data, result_data), start=1):\n        with self.subTest(f'variation #{variant}', params=params, expected=expected):\n            actual_result = above_threshold(*params)\n            error_message = (f'Called above_threshold{params}. '\n                             f'The function returned {actual_result}, but '\n                             f'the tests expected {expected} for the '\n                             'scores that are above the threshold.')\n\n            self.assertEqual(actual_result, expected, msg=error_message)",
+          "required": true
+        },
+        {
+          "name": "test_letter_grades",
+          "unittest_code": "def test_letter_grades(self):\n    test_data = [100, 97, 85, 92, 81]\n\n    result_data = [[41, 56, 71, 86],\n                   [41, 55, 69, 83],\n                   [41, 52, 63, 74],\n                   [41, 54, 67, 80],\n                   [41, 51, 61, 71]]\n\n    for variant, (highest, expected) in enumerate(zip(test_data, result_data), start=1):\n        with self.subTest(f'variation #{variant}', highest=highest, expected=expected):\n            actual_result = letter_grades(highest)\n            error_message = (f'Called letter_grades({highest}). '\n                             f'The function returned {actual_result}, but '\n                             f'the tests expected {expected} for the '\n                             'letter grade cutoffs.')\n\n            self.assertEqual(actual_result, expected, msg=error_message)",
+          "required": true
+        },
+        {
+          "name": "test_student_ranking",
+          "unittest_code": "def test_student_ranking(self):\n    test_data = [([82], ['Betty']),\n                 ([88, 73], ['Paul', 'Ernest']),\n                 ([100, 98, 92, 86, 70, 68, 67, 60],\n                  ['Rui', 'Betty', 'Joci', 'Yoshi', 'Kora', 'Bern', 'Jan', 'Rose'])]\n\n    result_data = [['1. Betty: 82'],\n                   ['1. Paul: 88', '2. Ernest: 73'],\n                   ['1. Rui: 100', '2. Betty: 98', '3. Joci: 92', '4. Yoshi: 86',\n                    '5. Kora: 70', '6. Bern: 68', '7. Jan: 67', '8. Rose: 60']]\n\n    for variant, (params, expected) in enumerate(zip(test_data, result_data), start=1):\n        with self.subTest(f'variation #{variant}', params=params, expected=expected):\n            actual_result = student_ranking(*params)\n            error_message = (f'Called student_ranking{params}. '\n                             f'The function returned {actual_result}, but '\n                             f'the tests expected {expected} for the '\n                             'student rankings.')\n\n            self.assertEqual(actual_result, expected, msg=error_message)",
+          "required": true
+        },
+        {
+          "name": "test_perfect_score",
+          "unittest_code": "def test_perfect_score(self):\n    test_data = [\n                 [['Joci', 100], ['Vlad', 100], ['Raiana', 100], ['Alessandro', 100]],\n                 [['Jill', 30], ['Paul', 73]],\n                 [],\n                 [['Rui', 60], ['Joci', 58], ['Sara', 91], ['Kora', 93], ['Alex', 42],\n                  ['Jan', 81], ['Lilliana', 40], ['John', 60], ['Bern', 28], ['Vlad', 55]],\n\n                 [['Yoshi', 52], ['Jan', 86], ['Raiana', 100], ['Betty', 60],\n                  ['Joci', 100], ['Kora', 81], ['Bern', 41], ['Rose', 94]]\n                 ]\n\n\n    result_data = [['Joci', 100],[], [], [], ['Raiana', 100]]\n\n    for variant, (student_info, expected) in enumerate(zip(test_data, result_data), start=1):\n\n        with self.subTest(f'variation #{variant}', student_info=student_info, expected=expected):\n            actual_result = perfect_score(student_info)\n            error_message = (f'Called perfect_score({student_info}). '\n                             f'The function returned {actual_result}, but '\n                             f'the tests expected {expected} for the '\n                             'first \"perfect\" score.')\n\n            self.assertEqual(actual_result, expected, msg=error_message)",
+          "required": true
+        }
+      ],
+      "completion_requirements": {
+        "required_test_names": [
+          "test_round_scores",
+          "test_count_failed_students",
+          "test_above_threshold",
+          "test_letter_grades",
+          "test_student_ranking",
+          "test_perfect_score"
+        ]
+      },
+      "source": {
+        "name": "Exercism Python Track — Making the Grade",
+        "url": "https://github.com/exercism/python/tree/main/exercises/concept/making-the-grade",
+        "license": "MIT"
+      }
+    }
+  ]
+}

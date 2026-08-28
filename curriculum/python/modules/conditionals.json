@@ -1,0 +1,59 @@
+{
+  "id": "conditionals",
+  "title": "Conditionals",
+  "order": 4,
+  "concepts": [
+    {
+      "id": "conditionals",
+      "title": "Conditionals",
+      "prerequisites": ["basics", "booleans"]
+    }
+  ],
+  "lessons": [
+    {
+      "id": "conditionals-01",
+      "title": "Meltdown Mitigation",
+      "description": "Use if / elif / else statements, combined with comparison and logical operators, to branch a function's behavior and return different results depending on its inputs.",
+      "order": 4,
+      "difficulty": "beginner",
+      "duration_minutes": 25,
+      "concepts": ["conditionals"],
+      "prerequisites": ["basics", "booleans"],
+      "learning_objectives": [
+        "Write if / elif / else chains",
+        "Use comparison operators < <= > >= == !=",
+        "Return from inside a conditional branch"
+      ],
+      "starter_code": "\"\"\"Functions to prevent a nuclear meltdown.\"\"\"\n\n\ndef is_criticality_balanced(temperature, neutrons_emitted):\n    \"\"\"Verify criticality is balanced.\n\n    Parameters:\n        temperature (int or float): The temperature value in kelvin.\n        neutrons_emitted (int or float): The number of neutrons emitted per second.\n\n    Returns:\n        bool: Is criticality balanced?\n\n    Note:\n        A reactor is said to be balanced in criticality if it satisfies the following conditions:\n            - The temperature is less than 800 K.\n            - The number of neutrons emitted per second is greater than 500.\n            - The product of temperature and neutrons emitted per second is less than 500000.\n\n    \"\"\"\n\n    pass\n\n\ndef reactor_efficiency(voltage, current, theoretical_max_power):\n    \"\"\"Assess reactor efficiency zone.\n\n    Parameters:\n        voltage (int or float): Voltage value.\n        current (int or float): Current value.\n        theoretical_max_power (int or float): The power level that corresponds to a 100% efficiency.\n\n    Returns:\n        str: One of ('green', 'orange', 'red', or 'black').\n\n    Note:\n        Efficiency can be grouped into 4 bands:\n            1. green -> efficiency of 80% or more,\n            2. orange -> efficiency of less than 80% but at least 60%,\n            3. red -> efficiency below 60%, but still 30% or more,\n            4. black ->  less than 30% efficient.\n\n        The percentage value is calculated as\n        (generated power/ theoretical max power)*100\n        where generated power = voltage  *current\n    \"\"\"\n\n    pass\n\n\ndef fail_safe(temperature, neutrons_produced_per_second, threshold):\n    \"\"\"Assess and return status code for the reactor.\n\n    Parameters:\n        temperature (int or float): The value of the temperature in kelvin.\n        neutrons_produced_per_second (int or float): The neutron flux.\n        threshold (int or float): The threshold for the category.\n\n    Returns:\n        str: One of ('LOW', 'NORMAL', 'DANGER').\n\n    Note:\n        1. 'LOW' ->* `temperature  neutrons per second` < 90% of `threshold`\n        2. 'NORMAL' -> `temperature  neutrons per second` *+/- 10% of* `threshold`*\n        3. 'DANGER' ->* `temperature  neutrons per second` is not in the above-stated ranges\n    \"\"\"\n\n    pass\n",
+      "tests": [
+        {
+          "name": "test_is_criticality_balanced",
+          "unittest_code": "def test_is_criticality_balanced(self):\n    test_data = ((750, 650, True), (799, 501, True), (500, 600, True),\n                 (1000, 800, False), (800, 500, False), (800, 500.01, False),\n                 (799.99, 500, False), (500.01, 999.99, False), (625, 800, False),\n                 (625.99, 800, False), (625.01, 799.99, False), (799.99, 500.01, True),\n                 (624.99, 799.99, True), (500, 1000, False), (500.01, 1000, False),\n                 (499.99, 1000, True))\n\n    for variant, data in enumerate(test_data, start=1):\n        temp, neutrons_emitted, expected = data\n        with self.subTest(f'variation #{variant}', temp=temp, neutrons_emitted=neutrons_emitted, expected=expected):\n            actual_result = is_criticality_balanced(temp, neutrons_emitted)\n            failure_message = (f'Called is_criticality_balanced({temp}, {neutrons_emitted}). '\n                               f' The function returned {actual_result}, '\n                               f'but the test expected {expected} as the return value.')\n\n            self.assertEqual(actual_result, expected, failure_message)",
+          "required": true
+        },
+        {
+          "name": "test_reactor_efficiency",
+          "unittest_code": "def test_reactor_efficiency(self):\n    voltage = 10\n    theoretical_max_power = 10000\n\n    test_data = ((1000, 'green'), (999, 'green'), (800, 'green'),\n                 (799, 'orange'), (700, 'orange'), (600, 'orange'),\n                 (599, 'red'), (560, 'red'), (400, 'red'), (300, 'red'),\n                 (299, 'black'), (200, 'black'), (0, 'black'))\n\n    for variant, data in enumerate(test_data, start=1):\n        current, expected = data\n        with self.subTest(f'variation #{variant}', voltage=voltage, current=current,\n                          theoretical_max_power=theoretical_max_power, expected=expected):\n            actual_result = reactor_efficiency(voltage, current, theoretical_max_power)\n            failure_message = (f'Called reactor_efficiency({voltage}, {current}, {theoretical_max_power}). '\n                               f'The function returned {actual_result}, '\n                               f'but the test expected {expected} as the return value.')\n\n            self.assertEqual(actual_result, expected, failure_message)",
+          "required": true
+        },
+        {
+          "name": "test_fail_safe",
+          "unittest_code": "def test_fail_safe(self):\n    temp = 10\n    threshold = 10000\n    test_data = ((399, 'LOW'), (300, 'LOW'), (1, 'LOW'),\n                 (0, 'LOW'), (901, 'NORMAL'), (1000, 'NORMAL'),\n                 (1099, 'NORMAL'), (899, 'LOW'), (700, 'LOW'),\n                 (400, 'LOW'), (1101, 'DANGER'), (1200, 'DANGER'))\n\n    for variant, (neutrons_per_second, expected) in enumerate(test_data, start=1):\n        with self.subTest(f'variation #{variant}', temp=temp, neutrons_per_second=neutrons_per_second,\n                          threshold=threshold, expected=expected):\n            actual_result = fail_safe(temp, neutrons_per_second, threshold)\n            failure_message = (f'Called fail_safe({temp}, {neutrons_per_second}, {threshold}). '\n                               f'The function returned {actual_result}, '\n                               f'but the test expected {expected} as the return value.')\n\n            self.assertEqual(actual_result, expected, failure_message)",
+          "required": true
+        }
+      ],
+      "completion_requirements": {
+        "required_test_names": [
+          "test_is_criticality_balanced",
+          "test_reactor_efficiency",
+          "test_fail_safe"
+        ]
+      },
+      "source": {
+        "name": "Exercism Python Track — Meltdown Mitigation",
+        "url": "https://github.com/exercism/python/tree/main/exercises/concept/meltdown-mitigation",
+        "license": "MIT"
+      }
+    }
+  ]
+}

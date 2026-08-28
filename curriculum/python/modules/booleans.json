@@ -1,0 +1,119 @@
+{
+  "id": "booleans",
+  "title": "Booleans",
+  "order": 2,
+  "concepts": [
+    {
+      "id": "booleans",
+      "title": "Booleans",
+      "prerequisites": ["basics"]
+    }
+  ],
+  "lessons": [
+    {
+      "id": "booleans-01",
+      "title": "Ghost Gobble Arcade Game",
+      "description": "Use Python's bool type and the logical operators and, or, and not to express and combine conditions, and return boolean results directly from a function.",
+      "order": 2,
+      "difficulty": "beginner",
+      "duration_minutes": 20,
+      "concepts": ["booleans"],
+      "prerequisites": ["basics"],
+      "learning_objectives": [
+        "Use and, or, not to combine boolean expressions",
+        "Return a boolean expression directly from a function",
+        "Short-circuit evaluation"
+      ],
+      "starter_code": "\"\"\"Functions for implementing the rules of the classic arcade game Pac-Man.\"\"\"\n\n\ndef eat_ghost(power_pellet_active, touching_ghost):\n    \"\"\"Verify that Pac-Man can eat a ghost if he is empowered by a power pellet.\n\n    Parameters:\n        power_pellet_active (bool): Does the player have an active power pellet?\n        touching_ghost (bool): Is the player touching a ghost?\n\n    Returns:\n        bool: Can a ghost be eaten?\n\n    \"\"\"\n\n    pass\n\n\ndef score(touching_power_pellet, touching_dot):\n    \"\"\"Verify that Pac-Man has scored when a power pellet or dot has been eaten.\n\n    Parameters:\n        touching_power_pellet (bool): Is the player touching a power pellet?\n        touching_dot (bool): Is the player touching a dot?\n\n    Returns:\n        bool: Has the player scored or not?\n\n    \"\"\"\n\n    pass\n\n\ndef lose(power_pellet_active, touching_ghost):\n    \"\"\"Trigger the game loop to end (GAME OVER) when Pac-Man touches a ghost without his power pellet.\n\n    Parameters:\n        power_pellet_active (bool): Does the player have an active power pellet?\n        touching_ghost (bool): Is the player touching a ghost?\n\n    Returns:\n        bool: Has the player lost the game?\n    \"\"\"\n\n    pass\n\n\ndef win(has_eaten_all_dots, power_pellet_active, touching_ghost):\n    \"\"\"Trigger the victory event when all dots have been eaten.\n\n    Parameters:\n        has_eaten_all_dots (bool): Has the player \"eaten\" all the dots?\n        power_pellet_active (bool): Does the player have an active power pellet?\n        touching_ghost (bool): Is the player touching a ghost?\n\n    Returns:\n        bool: Has the player won the game?\n    \"\"\"\n\n    pass\n",
+      "tests": [
+        {
+          "name": "test_ghost_gets_eaten",
+          "unittest_code": "def test_ghost_gets_eaten(self):\n    actual_result = eat_ghost(True, True)\n    error_message = ('Called eat_ghost(True, True).'\n                    f'The function returned {actual_result}, but the '\n                    f'tests expected that the ghost gets eaten (True).')\n\n    self.assertIs(actual_result, True, msg=error_message)",
+          "required": true
+        },
+        {
+          "name": "test_ghost_does_not_get_eaten_because_no_power_pellet_active",
+          "unittest_code": "def test_ghost_does_not_get_eaten_because_no_power_pellet_active(self):\n    actual_result = eat_ghost(False, True)\n    error_message = ('Called eat_ghost(False, True).'\n                     f'The function returned {actual_result}, but the '\n                     f'tests expected that the '\n                     'ghost **does not** get eaten because '\n                     'no power pellet was active.')\n\n    self.assertIs(actual_result, False, msg=error_message)",
+          "required": true
+        },
+        {
+          "name": "test_ghost_does_not_get_eaten_because_not_touching_ghost",
+          "unittest_code": "def test_ghost_does_not_get_eaten_because_not_touching_ghost(self):\n    actual_result = eat_ghost(True, False)\n    error_message = ('Called eat_ghost(True, False).'\n                     f'The function returned {actual_result}, but the '\n                     f'tests expected that the '\n                     'ghost **does not** get eaten because '\n                     'the player was not touching the ghost.')\n\n    self.assertIs(actual_result, False, msg=error_message)",
+          "required": true
+        },
+        {
+          "name": "test_score_when_eating_dot",
+          "unittest_code": "def test_score_when_eating_dot(self):\n    actual_result = score(False, True)\n    error_message = ('Called score(False, True).'\n                     f'The function returned {actual_result}, but the '\n                     f'tests expected that the '\n                     'player scores because they were touching a dot.')\n\n    self.assertIs(actual_result, True, msg=error_message)",
+          "required": true
+        },
+        {
+          "name": "test_score_when_eating_power_pellet",
+          "unittest_code": "def test_score_when_eating_power_pellet(self):\n    actual_result = score(True, False)\n    error_message = ('Called score(True, False).'\n                     f'The function returned {actual_result}, but the '\n                     f'tests expected that the '\n                     'player scores because they '\n                     'were touching a power pellet.')\n\n    self.assertIs(actual_result, True, msg=error_message)",
+          "required": true
+        },
+        {
+          "name": "test_no_score_when_nothing_eaten",
+          "unittest_code": "def test_no_score_when_nothing_eaten(self):\n    actual_result = score(False, False)\n    error_message = ('Called score(False, False).'\n                     f'The function returned {actual_result}, but the '\n                     f'tests expected that the '\n                     'player **does not** score because they '\n                     'were not touching anything.')\n    self.assertIs(actual_result, False, msg=error_message)",
+          "required": true
+        },
+        {
+          "name": "test_lose_if_touching_a_ghost_without_a_power_pellet_active",
+          "unittest_code": "def test_lose_if_touching_a_ghost_without_a_power_pellet_active(self):\n    actual_result = lose(False, True)\n    error_message = ('Called lose(False, True).'\n                     f'The function returned {actual_result}, but the '\n                     f'tests expected that the '\n                     'player loses because they touched a '\n                     'ghost without a power pellet activated.')\n    self.assertIs(actual_result, True, msg=error_message)",
+          "required": true
+        },
+        {
+          "name": "test_dont_lose_if_touching_a_ghost_with_a_power_pellet_active",
+          "unittest_code": "def test_dont_lose_if_touching_a_ghost_with_a_power_pellet_active(self):\n    actual_result = lose(True, True)\n    error_message = ('Called lose(True, True).'\n                     f'The function returned {actual_result}, but the '\n                     f'tests expected that the '\n                     'player **does not** lose because when they touched a '\n                     'ghost, a power pellet was active.')\n\n    self.assertIs(actual_result, False, msg=error_message)",
+          "required": true
+        },
+        {
+          "name": "test_dont_lose_if_not_touching_a_ghost",
+          "unittest_code": "def test_dont_lose_if_not_touching_a_ghost(self):\n    actual_result = lose(True, False)\n    error_message = ('Called lose(True, False).'\n                     f'The function returned {actual_result}, but the '\n                     f'tests expected that the '\n                     'player **does not** lose because they were '\n                     'not touching a ghost.')\n\n    self.assertIs(actual_result, False, msg=error_message)",
+          "required": true
+        },
+        {
+          "name": "test_win_if_all_dots_eaten",
+          "unittest_code": "def test_win_if_all_dots_eaten(self):\n    actual_result = win(True, False, False)\n    error_message = ('Called win(True, False, False).'\n                     f'The function returned {actual_result}, but the '\n                     f'tests expected that the '\n                     'player wins because all the dots were eaten.')\n\n    self.assertIs(actual_result, True, msg=error_message)",
+          "required": true
+        },
+        {
+          "name": "test_dont_win_if_all_dots_eaten_but_touching_a_ghost",
+          "unittest_code": "def test_dont_win_if_all_dots_eaten_but_touching_a_ghost(self):\n    actual_result = win(True, False, True)\n    error_message = ('Called win(True, False, True).'\n                     f'The function returned {actual_result}, but the '\n                     f'tests expected that the '\n                     'player **does not** win, because '\n                     'the player was touching a ghost.')\n\n    self.assertIs(actual_result, False, msg=error_message)",
+          "required": true
+        },
+        {
+          "name": "test_win_if_all_dots_eaten_and_touching_a_ghost_with_a_power_pellet_active",
+          "unittest_code": "def test_win_if_all_dots_eaten_and_touching_a_ghost_with_a_power_pellet_active(self):\n    actual_result = win(True, True, True)\n    error_message = ('Called win(True, True, True).'\n                     f'The function returned {actual_result}, but the '\n                     f'tests expected that the player wins, '\n                     f'because a power pellet was active when they '\n                     f'touched a ghost.')\n\n    self.assertIs(actual_result, True, msg=error_message)",
+          "required": true
+        },
+        {
+          "name": "test_dont_win_if_not_all_dots_eaten",
+          "unittest_code": "def test_dont_win_if_not_all_dots_eaten(self):\n    actual_result = win(False, True, True)\n    error_message = ('Called win(False, True, True).'\n                     f'The function returned {actual_result}, but the '\n                     f'tests expected that the player **does not** win, '\n                     f'because the player did not eat all of the dots.')\n\n    self.assertIs(actual_result, False, msg=error_message)",
+          "required": true
+        }
+      ],
+      "completion_requirements": {
+        "required_test_names": [
+          "test_ghost_gets_eaten",
+          "test_ghost_does_not_get_eaten_because_no_power_pellet_active",
+          "test_ghost_does_not_get_eaten_because_not_touching_ghost",
+          "test_score_when_eating_dot",
+          "test_score_when_eating_power_pellet",
+          "test_no_score_when_nothing_eaten",
+          "test_lose_if_touching_a_ghost_without_a_power_pellet_active",
+          "test_dont_lose_if_touching_a_ghost_with_a_power_pellet_active",
+          "test_dont_lose_if_not_touching_a_ghost",
+          "test_win_if_all_dots_eaten",
+          "test_dont_win_if_all_dots_eaten_but_touching_a_ghost",
+          "test_win_if_all_dots_eaten_and_touching_a_ghost_with_a_power_pellet_active",
+          "test_dont_win_if_not_all_dots_eaten"
+        ]
+      },
+      "source": {
+        "name": "Exercism Python Track — Ghost Gobble Arcade Game",
+        "url": "https://github.com/exercism/python/tree/main/exercises/concept/ghost-gobble-arcade-game",
+        "license": "MIT"
+      }
+    }
+  ]
+}

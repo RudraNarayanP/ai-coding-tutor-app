@@ -1,0 +1,71 @@
+{
+  "id": "basics",
+  "title": "Basics: Variables, Functions, Comments & Docstrings",
+  "order": 1,
+  "concepts": [
+    {
+      "id": "basics",
+      "title": "Variables, Functions, Comments & Docstrings",
+      "prerequisites": []
+    }
+  ],
+  "lessons": [
+    {
+      "id": "basics-01",
+      "title": "Guido's Gorgeous Lasagna",
+      "description": "Bind names to values with variables and constants, define simple functions using def and return, and document code with comments and docstrings.",
+      "order": 1,
+      "difficulty": "beginner",
+      "duration_minutes": 25,
+      "concepts": ["basics"],
+      "prerequisites": [],
+      "learning_objectives": [
+        "Define constants using SCREAMING_SNAKE_CASE",
+        "Write functions with def and return",
+        "Add docstrings to every function"
+      ],
+      "starter_code": "\"\"\"Functions used in preparing Guido's gorgeous lasagna.\n\nLearn about Guido, the creator of the Python language:\nhttps://en.wikipedia.org/wiki/Guido_van_Rossum\n\nThis is a module docstring, used to describe the functionality\nof a module and its functions and/or classes.\n\"\"\"\n\n\n#TODO (student): define your EXPECTED_BAKE_TIME (required) and PREPARATION_TIME (optional) constants below.\n\n\n#TODO (student): Remove 'pass' and complete the 'bake_time_remaining()' function below.\ndef bake_time_remaining():\n    \"\"\"Calculate the bake time remaining.\n\n    Parameters:\n        elapsed_bake_time (int): The baking time already elapsed.\n\n    Returns:\n        int: The remaining bake time (in minutes) derived from 'EXPECTED_BAKE_TIME'.\n\n    Function that takes the actual minutes the lasagna has been in the oven as\n    an argument and returns how many minutes the lasagna still needs to bake\n    based on the `EXPECTED_BAKE_TIME`.\n    \"\"\"\n\n    pass\n\n\n#TODO (student): Define the 'preparation_time_in_minutes()' function below.\n# To avoid the use of magic numbers (see: https://en.wikipedia.org/wiki/Magic_number_(programming)), you should define a PREPARATION_TIME constant.\n# You can do that on the line below the 'EXPECTED_BAKE_TIME' constant.\n# This will make it easier to do calculations, and make changes to your code.\n\n\n\n#TODO (student): define the 'elapsed_time_in_minutes()' function below.\n\n\n\n# TODO (student): Remember to go back and add docstrings to all your functions\n#  (you can copy and then alter the one from bake_time_remaining.)\n",
+      "tests": [
+        {
+          "name": "test_EXPECTED_BAKE_TIME",
+          "unittest_code": "def test_EXPECTED_BAKE_TIME(self):\n    failure_msg = 'Expected a constant of EXPECTED_BAKE_TIME with a value of 40.'\n    self.assertEqual(EXPECTED_BAKE_TIME, 40, msg=failure_msg)",
+          "required": true
+        },
+        {
+          "name": "test_bake_time_remaining",
+          "unittest_code": "def test_bake_time_remaining(self):\n    input_data = [1, 2, 5, 10, 15, 23, 33, 39]\n    result_data = [39, 38, 35, 30, 25, 17, 7, 1]\n\n    for variant, (time, expected) in enumerate(zip(input_data, result_data), start=1):\n        with self.subTest(f'variation #{variant}', time=time, expected=expected):\n            actual_result = bake_time_remaining(time)\n            failure_msg = (f'Called bake_time_remaining({time}). '\n                           f'The function returned {actual_result}, but the tests '\n                           f'expected {expected} as the remaining bake time.')\n\n            self.assertEqual(actual_result, expected, msg=failure_msg)",
+          "required": true
+        },
+        {
+          "name": "test_preparation_time_in_minutes",
+          "unittest_code": "def test_preparation_time_in_minutes(self):\n    input_data = [1, 2, 5, 8, 11, 15]\n    result_data = [2, 4, 10, 16, 22, 30]\n\n    for variant, (layers, expected) in enumerate(zip(input_data, result_data), start=1):\n        with self.subTest(f'variation #{variant}', layers=layers, expected=expected):\n            actual_result = preparation_time_in_minutes(layers)\n            failure_msg = (f'Called preparation_time_in_minutes({layers}). '\n                           f'The function returned {actual_result}, but the tests '\n                           f'expected {expected} as the preparation time.')\n\n            self.assertEqual(actual_result, expected, msg=failure_msg)",
+          "required": true
+        },
+        {
+          "name": "test_elapsed_time_in_minutes",
+          "unittest_code": "def test_elapsed_time_in_minutes(self):\n    layer_data = (1, 2, 5, 8, 11, 15)\n    time_data = (3, 7, 8, 4, 15, 20)\n    result_data = [5, 11, 18, 20, 37, 50]\n\n    for variant, (layers, time, expected) in enumerate(zip(layer_data, time_data, result_data), start=1):\n        with self.subTest(f'variation #{variant}', layers=layers, time=time, expected=expected):\n            actual_result = elapsed_time_in_minutes(layers, time)\n            failure_msg = (f'Called elapsed_time_in_minutes({layers}, {time}). '\n                           f'The function returned {actual_result}, but the tests '\n                           f'expected {expected} as the elapsed time.')\n\n            self.assertEqual(actual_result, expected, msg=failure_msg)",
+          "required": true
+        },
+        {
+          "name": "test_docstrings_were_written",
+          "unittest_code": "def test_docstrings_were_written(self):\n    functions = [bake_time_remaining, preparation_time_in_minutes, elapsed_time_in_minutes]\n\n    for variant, function in enumerate(functions, start=1):\n        with self.subTest(f'variation #{variant}', function=function):\n            actual_result = function.__doc__\n            failure_msg = (f'Called {function.__name__}.__doc__. {actual_result} was returned, '\n                           f'but the tests expected a docstring for the {function.__name__} function.')\n\n            self.assertIsNotNone(actual_result, msg=failure_msg)",
+          "required": true
+        }
+      ],
+      "completion_requirements": {
+        "required_test_names": [
+          "test_EXPECTED_BAKE_TIME",
+          "test_bake_time_remaining",
+          "test_preparation_time_in_minutes",
+          "test_elapsed_time_in_minutes",
+          "test_docstrings_were_written"
+        ]
+      },
+      "source": {
+        "name": "Exercism Python Track — Guido's Gorgeous Lasagna",
+        "url": "https://github.com/exercism/python/tree/main/exercises/concept/guidos-gorgeous-lasagna",
+        "license": "MIT"
+      }
+    }
+  ]
+}

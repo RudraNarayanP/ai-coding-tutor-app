@@ -1,0 +1,103 @@
+{
+  "id": "list-methods",
+  "title": "List Methods",
+  "order": 9,
+  "concepts": [
+    {
+      "id": "list-methods",
+      "title": "List Methods",
+      "prerequisites": ["lists"]
+    }
+  ],
+  "lessons": [
+    {
+      "id": "list-methods-01",
+      "title": "Chaitana's Colossal Coaster",
+      "description": "Use built-in list methods — .append(), .insert(), .remove(), .pop(), .index(), .count(), and sorted() — to manage a mutable collection in place.",
+      "order": 9,
+      "difficulty": "beginner",
+      "duration_minutes": 25,
+      "concepts": ["list-methods"],
+      "prerequisites": ["lists"],
+      "learning_objectives": [
+        "Mutate lists with .append(), .insert(), .remove(), .pop()",
+        "Search lists with .index() and .count()",
+        "Use sorted() to get a sorted copy without altering the original"
+      ],
+      "starter_code": "\"\"\"Functions to manage and organize queues at Chaitana's roller coaster.\"\"\"\n\n\ndef add_me_to_the_queue(express_queue, normal_queue, ticket_type, person_name):\n    \"\"\"Add a person to the 'express' or 'normal' queue depending on the ticket number.\n\n    Parameters:\n        express_queue (list): The names in the Fast-track queue.\n        normal_queue (list): The names in the normal queue.\n        ticket_type (int): Type of ticket. 1 = express, 0 = normal.\n        person_name (str): The name of person to add to a queue.\n\n    Returns:\n        list: The (updated) queue the name was added to.\n    \"\"\"\n\n    pass\n\n\ndef find_my_friend(queue, friend_name):\n    \"\"\"Search the queue for a name and return their queue position (index).\n\n    Parameters:\n        queue (list): The names in the queue.\n        friend_name (str): The name of friend to find.\n\n    Returns:\n        int: The index at which the friends name was found.\n    \"\"\"\n\n    pass\n\n\ndef add_me_with_my_friends(queue, index, person_name):\n    \"\"\"Insert the late arrival's name at a specific index of the queue.\n\n    Parameters:\n        queue (list): The names in the queue.\n        index (int): The index at which to add the new name.\n        person_name (str): The name to add.\n\n    Returns:\n        list: The queue updated with new name.\n    \"\"\"\n\n    pass\n\n\ndef remove_the_mean_person(queue, person_name):\n    \"\"\"Remove the mean person from the queue by the provided name.\n\n    Parameters:\n        queue (list): The names in the queue.\n        person_name (str): The name of mean person.\n\n    Returns:\n        list: The queue updated with the mean persons name removed.\n    \"\"\"\n\n    pass\n\n\ndef how_many_namefellows(queue, person_name):\n    \"\"\"Count how many times the provided name appears in the queue.\n\n    Parameters:\n        queue (list): The names in the queue.\n        person_name (str): The name you wish to count or track.\n\n    Returns:\n        int: The number of times the name appears in the queue.\n    \"\"\"\n\n    pass\n\n\ndef remove_the_last_person(queue):\n    \"\"\"Remove the person in the last index from the queue and return their name.\n\n    Parameters:\n        queue (list): The names in the queue.\n\n    Returns:\n        str: The name that has been removed from the end of the queue.\n    \"\"\"\n\n    pass\n\n\ndef sorted_names(queue):\n    \"\"\"Sort the names in the queue in alphabetical order and return the result.\n\n    Parameters:\n        queue (list): The names in the queue.\n\n    Returns:\n        list: A copy of the queue in alphabetical order.\n    \"\"\"\n\n    pass\n",
+      "tests": [
+        {
+          "name": "test_add_me_to_the_queue",
+          "unittest_code": "def test_add_me_to_the_queue(self):\n    from copy import deepcopy\n    test_data = [\n    ((['Tony', 'Bruce'], ['RobotGuy', 'WW'], 0, 'HawkEye'), ['RobotGuy', 'WW', 'HawkEye']),\n    ((['Tony', 'Bruce'], ['RobotGuy', 'WW'], 1, 'RichieRich'), ['Tony', 'Bruce', 'RichieRich']),\n    ((['Agatha', 'Pepper', 'Valkyrie'], ['Drax', 'Nebula'], 1, 'Okoye'), ['Agatha', 'Pepper', 'Valkyrie', 'Okoye']),\n    ((['Agatha', 'Pepper', 'Valkyrie'], ['Drax', 'Nebula'], 0, 'Gamora'), ['Drax', 'Nebula', 'Gamora']),\n    ]\n\n    for variant, (params, expected) in enumerate(test_data, start=1):\n        express_queue, normal_queue, ticket_type, person_name = deepcopy(params)\n\n        with self.subTest(f'variation #{variant}', params=params, expected=expected):\n            actual_result = add_me_to_the_queue(*params)\n\n            error_message = (\n                f'\\nCalled add_me_to_the_queue{express_queue, normal_queue, ticket_type, person_name}.\\n'\n                f'The function returned {actual_result},\\n'\n                f' but the tests expected {expected} after {person_name} was added.')\n\n            self.assertEqual(actual_result, expected, msg=error_message)",
+          "required": true
+        },
+        {
+          "name": "test_add_me_to_the_queue_validate_queue",
+          "unittest_code": "def test_add_me_to_the_queue_validate_queue(self):\n    from copy import deepcopy\n    test_data = [\n    ((['Tony', 'Bruce'], ['RobotGuy', 'WW'], 0, 'HawkEye'), ['RobotGuy', 'WW', 'HawkEye']),\n    ((['Tony', 'Bruce'], ['RobotGuy', 'WW'], 1, 'RichieRich'), ['Tony', 'Bruce', 'RichieRich']),\n    ((['Agatha', 'Pepper', 'Valkyrie'], ['Drax', 'Nebula'], 1, 'Okoye'), ['Agatha', 'Pepper', 'Valkyrie', 'Okoye']),\n    ((['Agatha', 'Pepper', 'Valkyrie'], ['Drax', 'Nebula'], 0, 'Gamora'), ['Drax', 'Nebula', 'Gamora']),\n    ]\n\n    for variant, (params, expected) in enumerate(test_data, start=1):\n        express_queue, normal_queue, ticket_type, person_name = deepcopy(params)\n        express, normal, ticket, name = params\n\n        with self.subTest(f'variation #{variant}',\n                          express=express, normal=normal,\n                          ticket=ticket, name=name, expected=expected):\n\n            actual_result = add_me_to_the_queue(express, normal, ticket, name)\n\n            if ticket == 1:\n                error_message = (\n                        f'\\nCalled add_me_to_the_queue{express_queue, normal_queue, ticket_type, person_name}.\\n'\n                        f'The queue == {express}, but the tests expected\\n'\n                        f'queue == {expected} after {person_name} was added.'\n                )\n\n                self.assertIs(actual_result, express, msg=error_message)\n\n            if ticket == 0:\n                error_message = (\n                        f'\\nCalled add_me_to_the_queue{express_queue, normal_queue, ticket_type, person_name}.\\n'\n                        f'The queue == {normal}, but the tests expected \\n'\n                        f'queue == {expected} after {person_name} was added.'\n                )\n\n                self.assertIs(actual_result, normal, msg=error_message)",
+          "required": false
+        },
+        {
+          "name": "test_find_my_friend",
+          "unittest_code": "def test_find_my_friend(self):\n    test_data = [\n            (['Natasha', 'Steve', 'Tchalla', 'Wanda', 'Rocket'], 'Natasha'),\n            (['Natasha', 'Steve', 'Tchalla', 'Wanda', 'Rocket'], 'Steve'),\n            (['Natasha', 'Steve', 'Tchalla', 'Wanda', 'Rocket'], 'Rocket'),\n    ]\n\n    result_data = (0,1,4)\n\n    for variant, (params, expected) in enumerate(zip(test_data, result_data), start=1):\n        with self.subTest(f'variation #{variant}', params=params, expected=expected):\n            actual_result = find_my_friend(*params)\n            error_message = (\n                    f'\\nCalled find_my_friend{params}.\\n'\n                    f'The function returned {actual_result}, but\\n'\n                    f'the tests expected {expected} when looking for\\n'\n                    f'{params[-1]} in the queue.'\n            )\n\n            self.assertIs(actual_result, expected, msg=error_message)",
+          "required": true
+        },
+        {
+          "name": "test_add_me_with_my_friends",
+          "unittest_code": "def test_add_me_with_my_friends(self):\n    from copy import deepcopy\n    test_data = [\n            (['Natasha', 'Steve', 'Tchalla', 'Wanda', 'Rocket'], 0, 'Bucky'),\n            (['Natasha', 'Steve', 'Tchalla', 'Wanda', 'Rocket'], 1, 'Bucky'),\n            (['Natasha', 'Steve', 'Tchalla', 'Wanda', 'Rocket'], 5, 'Bucky'),\n    ]\n\n    result_data = [\n            ['Bucky', 'Natasha', 'Steve', 'Tchalla', 'Wanda', 'Rocket'],\n            ['Natasha', 'Bucky', 'Steve', 'Tchalla', 'Wanda', 'Rocket'],\n            ['Natasha', 'Steve', 'Tchalla', 'Wanda', 'Rocket', 'Bucky'],\n    ]\n\n    for variant, (params, expected) in enumerate(zip(test_data, result_data), start=1):\n        queue, index, person_name = deepcopy(params)\n\n        with self.subTest(f'variation #{variant}', params=params, expected=expected):\n\n            actual_result = add_me_with_my_friends(*params)\n            error_message = (\n                    f'\\nCalled add_me_with_my_friends{queue, index, person_name}.\\n'\n                    f'The function returned {actual_result}, but\\n'\n                    f'the tests expected {expected} when adding\\n'\n                    f'{person_name} to position {index} in the queue.'\n            )\n\n            self.assertEqual(actual_result, expected, msg=error_message)",
+          "required": true
+        },
+        {
+          "name": "test_add_me_with_my_friends_validate_queue",
+          "unittest_code": "def test_add_me_with_my_friends_validate_queue(self):\n    from copy import deepcopy\n    test_data = [\n            (['Natasha', 'Steve', 'Tchalla', 'Wanda', 'Rocket'], 0, 'Bucky'),\n            (['Natasha', 'Steve', 'Tchalla', 'Wanda', 'Rocket'], 1, 'Bucky'),\n            (['Natasha', 'Steve', 'Tchalla', 'Wanda', 'Rocket'], 5, 'Bucky'),\n    ]\n\n    result_data = [\n            ['Bucky', 'Natasha', 'Steve', 'Tchalla', 'Wanda', 'Rocket'],\n            ['Natasha', 'Bucky', 'Steve', 'Tchalla', 'Wanda', 'Rocket'],\n            ['Natasha', 'Steve', 'Tchalla', 'Wanda', 'Rocket', 'Bucky'],\n    ]\n\n    for variant, (params, expected) in enumerate(zip(test_data, result_data), start=1):\n        start_queue, add_index, person_name = deepcopy(params)\n        queue, *_ = params\n\n        with self.subTest(f'variation #{variant}', params=params, expected=expected):\n            actual_result = add_me_with_my_friends(*params)\n            error_message = (\n                    f'\\nCalled add_me_with_my_friends{start_queue, add_index, person_name}.\\n'\n                    f'The function returned {actual_result},\\n'\n                    'but the original queue was unmodified. The tests expected the \\n'\n                    f'*original* queue to be modified by adding \"{person_name}\".'\n            )\n\n            self.assertIs(actual_result, queue, msg=error_message)",
+          "required": false
+        },
+        {
+          "name": "test_remove_the_mean_person",
+          "unittest_code": "def test_remove_the_mean_person(self):\n    from copy import deepcopy\n    test_data = [\n            (['Natasha', 'Steve', 'Ultron', 'Wanda', 'Rocket'], 'Ultron'),\n            (['Natasha', 'Steve', 'Wanda', 'Rocket', 'Ultron'], 'Rocket'),\n            (['Ultron', 'Natasha', 'Steve', 'Wanda', 'Rocket'], 'Steve'),\n    ]\n\n    result_data = [\n            ['Natasha', 'Steve', 'Wanda', 'Rocket'],\n            ['Natasha', 'Steve', 'Wanda', 'Ultron'],\n            ['Ultron', 'Natasha', 'Wanda', 'Rocket'],\n    ]\n\n    for variant, (params, expected) in enumerate(zip(test_data, result_data), start=1):\n\n        start_queue, person_name = deepcopy(params)\n\n        with self.subTest(f'variation #{variant}', params=params, expected=expected):\n            actual_result = remove_the_mean_person(*params)\n            error_message = (\n                    f'\\nCalled remove_the_mean_person{start_queue, person_name}.\\n'\n                    f'The function returned {actual_result}, but\\n'\n                    f'the tests expected {expected} when removing\\n'\n                    f'{person_name} from the queue.'\n            )\n\n            self.assertEqual(actual_result, expected, msg=error_message)",
+          "required": true
+        },
+        {
+          "name": "test_remove_the_mean_person_validate_queue",
+          "unittest_code": "def test_remove_the_mean_person_validate_queue(self):\n    from copy import deepcopy\n    test_data = [\n            (['Natasha', 'Steve', 'Ultron', 'Wanda', 'Rocket'], 'Ultron'),\n            (['Natasha', 'Steve', 'Wanda', 'Rocket', 'Ultron'], 'Rocket'),\n            (['Ultron', 'Natasha', 'Steve', 'Wanda', 'Rocket'], 'Steve'),\n    ]\n\n    result_data = [\n            ['Natasha', 'Steve', 'Wanda', 'Rocket'],\n            ['Natasha', 'Steve', 'Wanda', 'Ultron'],\n            ['Ultron', 'Natasha', 'Wanda', 'Rocket'],\n    ]\n\n    for variant, (params, expected) in enumerate(zip(test_data, result_data), start=1):\n\n        start_queue, person_name = deepcopy(params)\n        queue, _ = params\n\n        with self.subTest(f'variation #{variant}', params=params, expected=expected):\n            actual_result = remove_the_mean_person(*params)\n            error_message = (\n                    f'\\nCalled remove_the_mean_person{start_queue, person_name}.\\n'\n                    f'The function returned {actual_result}, queue == {queue}.\\n'\n                    f'But the tests expected queue == {expected} when removing\\n'\n                    f'{person_name}.'\n            )\n\n            self.assertIs(actual_result, queue, msg=error_message)",
+          "required": false
+        },
+        {
+          "name": "test_how_many_namefellows",
+          "unittest_code": "def test_how_many_namefellows(self):\n    test_data = [(['Natasha', 'Steve', 'Ultron', 'Natasha', 'Rocket'], 'Bucky'),\n                 (['Natasha', 'Steve', 'Ultron', 'Rocket'], 'Natasha'),\n                 (['Natasha', 'Steve', 'Ultron', 'Natasha', 'Rocket'], 'Natasha')]\n\n    result_data = (0,1,2)\n\n    for variant, (params, expected) in enumerate(zip(test_data, result_data), start=1):\n        with self.subTest(f'variation #{variant}', params=params, expected=expected):\n            actual_result = how_many_namefellows(*params)\n\n            error_message = (f'Called how_many_namefellows{params}. '\n                             f'The function returned {actual_result}, but '\n                             f'The tests expected {expected} when counting '\n                             f'namefellows in the queue for {params[-1]}.')\n\n            self.assertIs(actual_result, expected, msg=error_message)",
+          "required": true
+        },
+        {
+          "name": "test_remove_the_last_person",
+          "unittest_code": "def test_remove_the_last_person(self):\n    from copy import deepcopy\n    test_data = [\n        (['Natasha', 'Steve', 'Ultron', 'Natasha', 'Rocket'], ['Natasha', 'Steve', 'Ultron', 'Natasha'], 'Rocket'),\n        (['Wanda', 'Natasha', 'Steve', 'Rocket', 'Ultron'], ['Wanda', 'Natasha', 'Steve', 'Rocket'], 'Ultron'),\n        (['Steve', 'Wanda', 'Rocket', 'Ultron', 'Natasha'], ['Steve', 'Wanda', 'Rocket', 'Ultron'], 'Natasha')\n    ]\n    for variant, (queue, modified, expected) in enumerate(test_data, start=1):\n        with self.subTest(f'variation #{variant}', queue=queue, modified=modified, expected=expected):\n\n            unmodified_queue = deepcopy(queue)\n            expected_result = expected\n            actual_result = remove_the_last_person(queue)\n            expected_queue = modified\n\n            error_message = (f'\\nCalled remove_the_last_person({unmodified_queue}).\\n'\n                             f'The function was expected to remove and return the name \"{expected_result}\" '\n                             f'and change the queue to {expected_queue},\\n'\n                             f'but the name \"{actual_result}\" was returned and the queue == {queue}.')\n\n            self.assertEqual((actual_result, queue), (expected_result, expected_queue), msg=error_message)",
+          "required": true
+        },
+        {
+          "name": "test_sorted_names",
+          "unittest_code": "def test_sorted_names(self):\n    test_data =(\n    (['Steve', 'Ultron', 'Natasha', 'Rocket'], ['Natasha', 'Rocket', 'Steve', 'Ultron']),\n    (['Agatha', 'Pepper', 'Valkyrie', 'Drax', 'Nebula'], ['Agatha', 'Drax', 'Nebula', 'Pepper', 'Valkyrie']),\n    (['Gamora', 'Loki', 'Tony', 'Peggy', 'Okoye'], ['Gamora', 'Loki', 'Okoye', 'Peggy', 'Tony']),\n    )\n\n    for variant, (queue, expected) in enumerate(test_data, start=1):\n        with self.subTest(f'variation #{variant}', queue=queue, expected=expected):\n            actual_result = sorted_names(queue)\n            expected_result = expected\n\n        error_message = (f'\\nCalled sorted_names({queue}).\\n'\n                         f'The function returned {actual_result}, but \\n'\n                         f'the tests expect {expected_result}.')\n\n        self.assertEqual(actual_result, expected_result, msg=error_message)",
+          "required": true
+        },
+        {
+          "name": "test_sorted_names_validate_queue",
+          "unittest_code": "def test_sorted_names_validate_queue(self):\n    from copy import deepcopy\n    test_data = (\n    (['Steve', 'Ultron', 'Natasha', 'Rocket'], ['Natasha', 'Rocket', 'Steve', 'Ultron']),\n    (['Agatha', 'Pepper', 'Valkyrie', 'Drax', 'Nebula'], ['Agatha', 'Drax', 'Nebula', 'Pepper', 'Valkyrie']),\n    (['Gamora', 'Loki', 'Tony', 'Peggy', 'Okoye'], ['Gamora', 'Loki', 'Okoye', 'Peggy', 'Tony']),\n    )\n\n    for variant, (queue, expected) in enumerate(test_data, start=1):\n        with self.subTest(f'variation #{variant}', queue=queue, expected=expected):\n\n            original_queue = deepcopy(queue)\n            actual_result = sorted_names(queue)\n            expected_result = expected\n\n        error_message = (f'\\nCalled sorted_names({original_queue}).\\n'\n                         f'The function returned {actual_result}, \\n'\n                         f'with a queue == {queue}.\\n'\n                         f'The tests expect {expected_result}, \\n'\n                         f'with a queue == {original_queue}.')\n\n        self.assertIsNot(actual_result, queue, msg=error_message)",
+          "required": false
+        }
+      ],
+      "completion_requirements": {
+        "required_test_names": [
+          "test_add_me_to_the_queue",
+          "test_find_my_friend",
+          "test_add_me_with_my_friends",
+          "test_remove_the_mean_person",
+          "test_how_many_namefellows",
+          "test_remove_the_last_person",
+          "test_sorted_names"
+        ]
+      },
+      "source": {
+        "name": "Exercism Python Track — Chaitana's Colossal Coaster",
+        "url": "https://github.com/exercism/python/tree/main/exercises/concept/chaitanas-colossal-coaster",
+        "license": "MIT"
+      }
+    }
+  ]
+}

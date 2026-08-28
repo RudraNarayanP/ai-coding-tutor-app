@@ -1,0 +1,84 @@
+{
+  "id": "lists",
+  "title": "Lists",
+  "order": 8,
+  "concepts": [
+    {
+      "id": "lists",
+      "title": "Lists",
+      "prerequisites": ["conditionals", "strings"]
+    }
+  ],
+  "lessons": [
+    {
+      "id": "lists-01",
+      "title": "Card Games",
+      "description": "Create, index, slice, and concatenate lists, iterate over their contents, and compute simple aggregate values like an average.",
+      "order": 8,
+      "difficulty": "beginner",
+      "duration_minutes": 25,
+      "concepts": ["lists"],
+      "prerequisites": ["conditionals", "strings"],
+      "learning_objectives": [
+        "Index and slice lists",
+        "Concatenate lists with +",
+        "Use sum(), len(), and in for aggregate queries",
+        "Iterate over list elements with for"
+      ],
+      "starter_code": "\"\"\"Functions for tracking poker hands and assorted card tasks.\n\nPython list documentation: https://docs.python.org/3/tutorial/datastructures.html\n\"\"\"\n\n\ndef get_rounds(number):\n    \"\"\"Create a list containing the current and next two round numbers.\n\n    Parameters:\n        number (int): The current round number.\n\n    Returns:\n        list: The current round number and the two that follow.\n    \"\"\"\n\n    pass\n\n\ndef concatenate_rounds(rounds_1, rounds_2):\n    \"\"\"Concatenate two lists of round numbers.\n\n    Parameters:\n        rounds_1 (list): The first rounds played.\n        rounds_2 (list): The second group of rounds played.\n\n    Returns:\n        list:  All rounds played.\n    \"\"\"\n\n    pass\n\n\ndef list_contains_round(rounds, number):\n    \"\"\"Check if the list of rounds contains the specified number.\n\n    Parameters:\n        rounds (list): The rounds played.\n        number (int): The round number.\n\n    Returns:\n        bool: Was the round played?\n    \"\"\"\n\n    pass\n\n\ndef card_average(hand):\n    \"\"\"Calculate and returns the average card value from the list.\n\n    Parameters:\n        hand (list): The cards in the hand.\n\n    Returns:\n        float: The average value of the cards in the hand.\n    \"\"\"\n\n    pass\n\n\ndef approx_average_is_average(hand):\n    \"\"\"Return if the (average of first and last card values) OR ('middle' card) == calculated average.\n\n    Parameters:\n        hand (list): The cards in the hand.\n\n    Returns:\n        bool: Does one of the approximate averages equal the `true average`?\n    \"\"\"\n\n    pass\n\n\ndef average_even_is_average_odd(hand):\n    \"\"\"Return if the (average of even indexed card values) == (average of odd indexed card values).\n\n    Parameters:\n        hand (list): The cards in the hand.\n\n    Returns:\n        bool: Are the even and odd averages equal?\n    \"\"\"\n\n    pass\n\n\ndef maybe_double_last(hand):\n    \"\"\"Multiply a Jack card value in the last index position by 2.\n\n    Parameters:\n        hand (list): The cards in the hand.\n\n    Returns:\n        list: The hand with Jacks (if present) value doubled.\n    \"\"\"\n\n    pass\n",
+      "tests": [
+        {
+          "name": "test_get_rounds",
+          "unittest_code": "def test_get_rounds(self):\n\n    input_data = [0, 1, 10, 27, 99, 666]\n    result_data = [[0, 1, 2], [1, 2, 3],\n                   [10, 11, 12], [27, 28, 29],\n                   [99, 100, 101], [666, 667, 668]]\n\n    for variant, (number, expected) in enumerate(zip(input_data, result_data), start=1):\n        with self.subTest(f'variation #{variant}', number=number, expected=expected):\n            actual_result = get_rounds(number)\n            error_message = (f'Called get_rounds({number}). '\n                             f'The function returned {actual_result}, '\n                             f'but the tests expected rounds {expected} '\n                             f'given the current round {number}.')\n\n            self.assertEqual(actual_result, expected, msg=error_message)",
+          "required": true
+        },
+        {
+          "name": "test_concatenate_rounds",
+          "unittest_code": "def test_concatenate_rounds(self):\n\n    input_data = [([], []), ([0, 1], []), ([], [1, 2]),\n                  ([1], [2]), ([27, 28, 29], [35, 36]),\n                  ([1, 2, 3], [4, 5, 6])]\n\n    result_data = [[], [0, 1], [1, 2], [1, 2],\n                   [27, 28, 29, 35, 36],\n                   [1, 2, 3, 4, 5, 6]]\n\n    for variant, ((rounds_1, rounds_2), expected) in enumerate(zip(input_data, result_data), start=1):\n        with self.subTest(f'variation #{variant}', rounds_1=rounds_1, rounds_2=rounds_2, expected=expected):\n            actual_result = concatenate_rounds(rounds_1, rounds_2)\n            error_message = (f'Called concatenate_rounds({rounds_1}, {rounds_2}). '\n                             f'The function returned {actual_result}, but the tests '\n                             f'expected {expected} as the concatenation '\n                             f'of {rounds_1} and {rounds_2}.')\n\n            self.assertEqual(actual_result, expected, msg=error_message)",
+          "required": true
+        },
+        {
+          "name": "test_list_contains_round",
+          "unittest_code": "def test_list_contains_round(self):\n\n    input_data = [([], 1), ([1, 2, 3], 0),\n                  ([27, 28, 29, 35, 36], 30),\n                  ([1], 1), ([1, 2, 3], 1),\n                  ([27, 28, 29, 35, 36], 29)]\n    result_data = [False, False, False, True, True, True]\n\n    for variant, ((rounds, round_number), expected) in enumerate(zip(input_data, result_data), start=1):\n        with self.subTest(f'variation #{variant}', rounds=rounds, round_number=round_number, expected=expected):\n            actual_result = list_contains_round(rounds, round_number)\n            error_message = (f'Called list_contains_round({rounds}, {round_number}). '\n                             f'The function returned {actual_result}, but round {round_number} '\n                             f'{\"is\" if expected else \"is not\"} in {rounds}.')\n\n            self.assertEqual(actual_result, expected, msg=error_message)",
+          "required": true
+        },
+        {
+          "name": "test_card_average",
+          "unittest_code": "def test_card_average(self):\n\n    input_data = [[1], [5, 6, 7], [1, 2, 3, 4], [1, 10, 100]]\n    result_data = [1.0, 6.0, 2.5, 37.0]\n\n    for variant, (hand, expected) in enumerate(zip(input_data, result_data), start=1):\n        with self.subTest(f'variation #{variant}', hand=hand, expected=expected):\n            actual_result = card_average(hand)\n            error_message = (f'Called card_average({hand}). '\n                             f'The function returned {actual_result}, but '\n                             f'the tests expected {expected} as the average of {hand}.')\n\n            self.assertEqual(actual_result, expected, msg=error_message)",
+          "required": true
+        },
+        {
+          "name": "test_approx_average_is_average",
+          "unittest_code": "def test_approx_average_is_average(self):\n\n    input_data = [[0, 1, 5], [3, 6, 9, 12, 150], [1, 2, 3, 5, 9],\n                  [2, 3, 4, 7, 8], [1, 2, 3], [2, 3, 4],\n                  [2, 3, 4, 8, 8], [1, 2, 4, 5, 8]]\n\n    result_data = [False, False, False, False, True, True, True, True]\n\n    for variant, (hand, expected) in enumerate(zip(input_data, result_data), start=1):\n        with self.subTest(f'variation #{variant}', hand=hand, expected=expected):\n            actual_result = approx_average_is_average(hand)\n            error_message = (f'Called approx_average_is_average({hand}). '\n                             f'The function returned {actual_result}, but '\n                             f'the hand {hand} {\"does\" if expected else \"does not\"} '\n                             f'yield the same approximate average.')\n\n            self.assertEqual(actual_result, expected, msg=error_message)",
+          "required": true
+        },
+        {
+          "name": "test_average_even_is_average_odd",
+          "unittest_code": "def test_average_even_is_average_odd(self):\n\n    input_data = [[5, 6, 8], [1, 2, 3, 4], [1, 2, 3], [5, 6, 7], [1, 3, 5, 7, 9]]\n    result_data = [False, False, True, True, True]\n\n    for variant, (input_hand, expected) in enumerate(zip(input_data, result_data), start=1):\n        with self.subTest(f'variation #{variant}', input_hand=input_hand, expected=expected):\n            actual_result = average_even_is_average_odd(input_hand)\n            error_message = (f'Called average_even_is_average_odd({input_hand}). '\n                             f'The function returned {actual_result}, but '\n                             f'the hand {\"does\" if expected else \"does not\"} '\n                             f'yield the same odd-even average.')\n\n            self.assertEqual(actual_result, expected, msg=error_message)",
+          "required": true
+        },
+        {
+          "name": "test_maybe_double_last",
+          "unittest_code": "def test_maybe_double_last(self):\n\n    input_data = [(1, 2, 11), (5, 9, 11), (5, 9, 10), (1, 2, 3), (1, 11, 8)]\n    result_data = [[1, 2, 22], [5, 9, 22], [5, 9, 10], [1, 2, 3], [1, 11, 8]]\n\n    for variant, (hand, expected) in enumerate(zip(input_data, result_data), start=1):\n        with self.subTest(f'variation #{variant}', hand=list(hand), expected=expected):\n            actual_result = maybe_double_last(list(hand))\n            error_message = (f'Called maybe_double_last({list(hand)}). '\n                             f'The function returned {actual_result}, but '\n                             f'the tests expected {expected} as the maybe-doubled version of {list(hand)}.')\n\n            self.assertEqual(actual_result, expected, msg=error_message)",
+          "required": true
+        }
+      ],
+      "completion_requirements": {
+        "required_test_names": [
+          "test_get_rounds",
+          "test_concatenate_rounds",
+          "test_list_contains_round",
+          "test_card_average",
+          "test_approx_average_is_average",
+          "test_average_even_is_average_odd",
+          "test_maybe_double_last"
+        ]
+      },
+      "source": {
+        "name": "Exercism Python Track — Card Games",
+        "url": "https://github.com/exercism/python/tree/main/exercises/concept/card-games",
+        "license": "MIT"
+      }
+    }
+  ]
+}

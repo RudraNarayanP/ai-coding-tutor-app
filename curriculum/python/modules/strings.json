@@ -1,0 +1,83 @@
+{
+  "id": "strings",
+  "title": "Strings",
+  "order": 6,
+  "concepts": [
+    {
+      "id": "strings",
+      "title": "Strings",
+      "prerequisites": ["basics", "conditionals"]
+    }
+  ],
+  "lessons": [
+    {
+      "id": "strings-01",
+      "title": "Little Sister's Vocab",
+      "description": "Create, slice, index, and combine strings, and understand that strings are immutable sequences of characters.",
+      "order": 6,
+      "difficulty": "beginner",
+      "duration_minutes": 20,
+      "concepts": ["strings"],
+      "prerequisites": ["basics", "conditionals"],
+      "learning_objectives": [
+        "Index and slice strings",
+        "Concatenate strings with +",
+        "Use str.join() to combine a list of strings"
+      ],
+      "starter_code": "\"\"\"Functions for creating, transforming, and adding prefixes to strings.\"\"\"\n\n\ndef add_prefix_un(word):\n    \"\"\"Take the given word and add the 'un' prefix.\n\n    Parameters:\n        word (str): The root word.\n\n    Returns:\n        str: Root word prepended with 'un'.\n    \"\"\"\n\n    pass\n\n\ndef make_word_groups(vocab_words):\n    \"\"\"Transform a list containing a prefix and words.\n\n    Parameters:\n        vocab_words (list[str]): Vocabulary words with prefix at first index.\n\n    Returns:\n        str: Prefix followed by vocabulary words with prefix applied.\n\n    This function takes a `vocab_words` list of strings and returns a string\n    with the prefix and the words with prefix applied, separated by ' :: '.\n\n    Examples:\n        >>> list('en', 'close', 'joy', 'lighten')\n        'en :: enclose :: enjoy :: enlighten'.\n\n    \"\"\"\n\n    pass\n\n\ndef remove_suffix_ness(word):\n    \"\"\"Remove the suffix from the word while keeping spelling in mind.\n\n    Parameters:\n        word (str): Word to remove suffix from.\n\n    Returns:\n        str: Word with suffix removed & spelling adjusted.\n\n    Examples:\n        >>> remove_suffix_ness('heaviness')\n        'heavy'\n\n        >>> remove_suffix_ness('sadness')\n        'sad'\n\n    \"\"\"\n\n    pass\n\n\ndef adjective_to_verb(sentence, index):\n    \"\"\"Change the adjective within the sentence to a verb.\n\n    Parameters:\n        sentence (str): The word used in a sentence as an adjective.\n        index (int): Index of the adjective to remove and transform.\n\n    Returns:\n        str: The extracted adjective in verb form.\n\n    Examples:\n        >>> adjective_to_verb('It got dark as the sun set.', 2)\n        'darken'\n\n        >>> adjective_to_verb('The ink stains her fingers black.', -1)\n        'blacken'\n\n    \"\"\"\n\n    pass\n",
+      "tests": [
+        {
+          "name": "test_add_prefix_un",
+          "unittest_code": "def test_add_prefix_un(self):\n    input_data = ['happy', 'manageable', 'fold', 'eaten', 'avoidable', 'usual']\n    result_data = [f'un{item}' for item in input_data]\n\n    for variant, (word, expected) in enumerate(zip(input_data, result_data), start=1):\n        with self.subTest(f'variation #{variant}', word=word, expected=expected):\n\n            actual_result = add_prefix_un(word)\n            error_message = (f'Called add_prefix_un(\"{word}\"). '\n                            f'The function returned \"{actual_result}\", but the '\n                            f'tests expected \"{expected}\" after adding \"un\" as a prefix.')\n\n            self.assertEqual(actual_result, expected, msg=error_message)",
+          "required": true
+        },
+        {
+          "name": "test_make_word_groups_en",
+          "unittest_code": "def test_make_word_groups_en(self):\n    input_data = ['en', 'circle', 'fold', 'close', 'joy', 'lighten', 'tangle', 'able', 'code', 'culture']\n    expected = ('en :: encircle :: enfold :: enclose :: enjoy :: enlighten ::'\n                   ' entangle :: enable :: encode :: enculture')\n\n    actual_result = make_word_groups(input_data)\n    error_message = (f'Called make_word_groups({input_data}). '\n                     f'The function returned \"{actual_result}\", '\n                     f'but the tests expected \"{expected}\" for the '\n                     'word groups.')\n\n    self.assertEqual(actual_result, expected, msg=error_message)",
+          "required": true
+        },
+        {
+          "name": "test_make_word_groups_pre",
+          "unittest_code": "def test_make_word_groups_pre(self):\n    input_data = ['pre', 'serve', 'dispose', 'position', 'requisite', 'digest',\n                  'natal', 'addressed', 'adolescent', 'assumption', 'mature', 'compute']\n    expected = ('pre :: preserve :: predispose :: preposition :: prerequisite :: '\n                'predigest :: prenatal :: preaddressed :: preadolescent :: preassumption :: '\n                'premature :: precompute')\n\n    actual_result = make_word_groups(input_data)\n    error_message = (f'Called make_word_groups({input_data}). '\n                     f'The function returned \"{actual_result}\", '\n                     f'but the tests expected \"{expected}\" for the '\n                     'word groups.')\n\n    self.assertEqual(actual_result, expected, msg=error_message)",
+          "required": true
+        },
+        {
+          "name": "test_make_word_groups_auto",
+          "unittest_code": "def test_make_word_groups_auto(self):\n    input_data = ['auto', 'didactic', 'graph', 'mate', 'chrome', 'centric', 'complete',\n                  'echolalia', 'encoder', 'biography']\n    expected = ('auto :: autodidactic :: autograph :: automate :: autochrome :: '\n                'autocentric :: autocomplete :: autoecholalia :: autoencoder :: '\n                'autobiography')\n\n    actual_result = make_word_groups(input_data)\n    error_message = (f'Called make_word_groups({input_data}). '\n                     f'The function returned \"{actual_result}\", '\n                     f'but the tests expected \"{expected}\" for the '\n                     'word groups.')\n\n    self.assertEqual(actual_result, expected, msg=error_message)",
+          "required": true
+        },
+        {
+          "name": "test_make_words_groups_inter",
+          "unittest_code": "def test_make_words_groups_inter(self):\n    input_data = ['inter', 'twine', 'connected', 'dependent', 'galactic', 'action',\n                  'stellar', 'cellular', 'continental', 'axial', 'operative', 'disciplinary']\n    expected = ('inter :: intertwine :: interconnected :: interdependent :: '\n                'intergalactic :: interaction :: interstellar :: intercellular :: '\n                'intercontinental :: interaxial :: interoperative :: interdisciplinary')\n\n    actual_result = make_word_groups(input_data)\n    error_message = (f'Called make_word_groups({input_data}). '\n                     f'The function returned \"{actual_result}\", '\n                     f'but the tests expected \"{expected}\" for the '\n                     'word groups.')\n\n    self.assertEqual(actual_result, expected, msg=error_message)",
+          "required": true
+        },
+        {
+          "name": "test_remove_suffix_ness",
+          "unittest_code": "def test_remove_suffix_ness(self):\n    input_data = ['heaviness', 'sadness', 'softness', 'crabbiness', 'lightness', 'artiness', 'edginess']\n    result_data = ['heavy', 'sad', 'soft', 'crabby', 'light', 'arty', 'edgy']\n\n    for variant, (word, expected) in enumerate(zip(input_data, result_data), start=1):\n        with self.subTest(f'variation #{variant}', word=word, expected=expected):\n            actual_result = remove_suffix_ness(word)\n            error_message = (f'Called remove_suffix_ness(\"{word}\"). '\n                             f'The function returned \"{actual_result}\", '\n                             f'but the tests expected \"{expected}\" after the '\n                             'suffix was removed.')\n\n            self.assertEqual(actual_result, expected, msg=error_message)",
+          "required": true
+        },
+        {
+          "name": "test_adjective_to_verb",
+          "unittest_code": "def test_adjective_to_verb(self):\n    input_data = ['Look at the bright sky.',\n                  'His expression went dark.',\n                  'The bread got hard after sitting out.',\n                  'The butter got soft in the sun.',\n                  'Her eyes were light blue.',\n                  'The morning fog made everything damp with mist.',\n                  'He cut the fence pickets short by mistake.',\n                  'Charles made weak crying noises.',\n                  'The black oil got on the white dog.']\n    index_data = [-2, -1, 3, 3, -2, -3, 5, 2, 1]\n    result_data = ['brighten', 'darken', 'harden', 'soften',\n                   'lighten', 'dampen', 'shorten', 'weaken', 'blacken']\n\n    for variant, (sentence, index, expected) in enumerate(zip(input_data, index_data, result_data), start=1):\n        with self.subTest(f'variation #{variant}', sentence=sentence, index=index, expected=expected):\n            actual_result = adjective_to_verb(sentence, index)\n            error_message = (f'Called adjective_to_verb(\"{sentence}\", {index}). '\n                             f'The function returned \"{actual_result}\", but the tests '\n                             f'expected \"{expected}\" as the verb for '\n                             f'the word at index {index}.')\n\n            self.assertEqual(actual_result, expected, msg=error_message)",
+          "required": true
+        }
+      ],
+      "completion_requirements": {
+        "required_test_names": [
+          "test_add_prefix_un",
+          "test_make_word_groups_en",
+          "test_make_word_groups_pre",
+          "test_make_word_groups_auto",
+          "test_make_words_groups_inter",
+          "test_remove_suffix_ness",
+          "test_adjective_to_verb"
+        ]
+      },
+      "source": {
+        "name": "Exercism Python Track — Little Sister's Vocab",
+        "url": "https://github.com/exercism/python/tree/main/exercises/concept/little-sisters-vocab",
+        "license": "MIT"
+      }
+    }
+  ]
+}

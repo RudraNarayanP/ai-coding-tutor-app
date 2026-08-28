@@ -1,0 +1,108 @@
+{
+  "id": "dictionaries",
+  "title": "Dictionaries",
+  "order": 12,
+  "concepts": [
+    {
+      "id": "dictionaries",
+      "title": "Dictionaries",
+      "prerequisites": ["loops", "lists", "tuples"]
+    }
+  ],
+  "lessons": [
+    {
+      "id": "dictionaries-01",
+      "title": "Inventory Management",
+      "description": "Create dictionaries, look up and update values by key, iterate over key/value pairs, and remove entries.",
+      "order": 12,
+      "difficulty": "beginner",
+      "duration_minutes": 25,
+      "concepts": ["dictionaries"],
+      "prerequisites": ["loops", "lists", "tuples"],
+      "learning_objectives": [
+        "Create dicts with {} and dict()",
+        "Look up values with [] and .get(default)",
+        "Add, update, and delete keys",
+        "Iterate key/value pairs with .items()"
+      ],
+      "starter_code": "\"\"\"Functions to keep track and alter inventory.\"\"\"\n\n\ndef create_inventory(items):\n    \"\"\"Create a dict that tracks the amount (count) of each element on the `items` list.\n\n    Parameters:\n        items (list): Items to create an inventory from.\n\n    Returns:\n        dict: The inventory dictionary.\n    \"\"\"\n\n    pass\n\n\ndef add_items(inventory, items):\n    \"\"\"Add or increment items in inventory using elements from the items `list`.\n\n    Parameters:\n        inventory (dict): Dictionary of existing inventory.\n        items (list): List of items to update the inventory with.\n\n    Returns:\n        dict: The inventory updated with the new items.\n    \"\"\"\n\n    pass\n\n\ndef decrement_items(inventory, items):\n    \"\"\"Decrement items in inventory using elements from the `items` list.\n\n    Parameters:\n        inventory (dict): Inventory dictionary.\n        items (list): List of items to decrement from the inventory.\n\n    Returns:\n        dict: Updated inventory with items decremented.\n    \"\"\"\n\n    pass\n\n\ndef remove_item(inventory, item):\n    \"\"\"Remove item from inventory if it matches `item` string.\n\n    Parameters:\n        inventory (dict): Inventory dictionary.\n        item (str): Item to remove from the inventory.\n\n    Returns:\n        dict: Updated inventory with item removed. Current inventory if item does not match.\n    \"\"\"\n\n    pass\n\n\ndef list_inventory(inventory):\n    \"\"\"Create a list containing only available (item_name, item_count > 0) pairs in inventory.\n\n    Parameters:\n        inventory (dict): An inventory dictionary.\n\n    Returns:\n        list[tuple]: List of key, value tuples from the inventory dictionary.\n    \"\"\"\n\n    pass\n",
+      "tests": [
+        {
+          "name": "test_create_inventory",
+          "unittest_code": "def test_create_inventory(self):\n\n    actual_result = create_inventory([\"wood\", \"iron\", \"iron\", \"diamond\", \"diamond\"])\n    expected = {\"wood\": 1, \"iron\": 2, \"diamond\": 2}\n    error_message = ('Called create_inventory([\"wood\", \"iron\", \"iron\", \"diamond\", \"diamond\"]). '\n                     f'The function returned {actual_result}, but the tests expected {expected}.')\n\n    self.assertEqual(actual_result, expected, msg=error_message)",
+          "required": true
+        },
+        {
+          "name": "test_add_one_item",
+          "unittest_code": "def test_add_one_item(self):\n    actual_result = add_items({\"wood\": 4, \"iron\": 2}, [\"iron\", \"iron\"])\n    expected = {\"wood\": 4, \"iron\": 4}\n    error_message = ('Called add_items({\"wood\": 4, \"iron\": 2}, [\"iron\", \"iron\"]). '\n                     f'The function returned {actual_result}, but the tests expected {expected}.')\n\n    self.assertEqual(actual_result, expected, msg=error_message)",
+          "required": true
+        },
+        {
+          "name": "test_add_multiple_items",
+          "unittest_code": "def test_add_multiple_items(self):\n    actual_result = add_items({\"wood\": 2, \"gold\": 1, \"diamond\": 3}, [\"wood\", \"gold\", \"gold\"])\n    expected =  {\"wood\": 3, \"gold\": 3, \"diamond\": 3}\n    error_message = ('Called add_items({\"wood\": 2, \"gold\": 1, \"diamond\": 3}, [\"wood\", \"gold\", \"gold\"]). '\n                     f'The function returned {actual_result}, but the tests expected {expected}.')\n\n    self.assertEqual(actual_result, expected, msg=error_message)",
+          "required": true
+        },
+        {
+          "name": "test_add_new_item",
+          "unittest_code": "def test_add_new_item(self):\n    actual_result = add_items({\"iron\": 1, \"diamond\": 2}, [\"iron\", \"wood\", \"wood\"])\n    expected = {\"iron\": 2, \"diamond\": 2, \"wood\": 2}\n    error_message = ('Called add_items({\"iron\": 1, \"diamond\": 2}, [\"iron\", \"wood\", \"wood\"]). '\n                     f'The function returned {actual_result}, but the tests expected {expected}.')\n\n    self.assertEqual(actual_result, expected, msg=error_message)",
+          "required": true
+        },
+        {
+          "name": "test_add_from_empty_dict",
+          "unittest_code": "def test_add_from_empty_dict(self):\n    actual_result = add_items({}, [\"iron\", \"iron\", \"diamond\"])\n    expected = {\"iron\": 2, \"diamond\": 1}\n    error_message = ('Called add_items({}, [\"iron\", \"iron\", \"diamond\"]). '\n                     f'The function returned {actual_result}, but the tests expected {expected}.')\n\n    self.assertEqual(actual_result, expected, msg=error_message)",
+          "required": true
+        },
+        {
+          "name": "test_decrement_items",
+          "unittest_code": "def test_decrement_items(self):\n    actual_result = decrement_items({\"iron\": 3, \"diamond\": 4, \"gold\": 2},\n                                    [\"iron\", \"iron\", \"diamond\", \"gold\", \"gold\"])\n    expected = {\"iron\": 1, \"diamond\": 3, \"gold\": 0}\n    error_message = ('Called decrement_items({\"iron\": 3, \"diamond\": 4, \"gold\": 2},'\n                     '[\"iron\", \"iron\", \"diamond\", \"gold\", \"gold\"]). The function '\n                     f'returned {actual_result}, but the tests expected {expected}.')\n\n    self.assertEqual(actual_result, expected, msg=error_message)",
+          "required": true
+        },
+        {
+          "name": "test_not_below_zero",
+          "unittest_code": "def test_not_below_zero(self):\n    actual_result = decrement_items({\"wood\": 2, \"iron\": 3, \"diamond\": 1},\n                                  [\"wood\", \"wood\", \"wood\", \"iron\", \"diamond\", \"diamond\"])\n    expected = {\"wood\": 0, \"iron\": 2, \"diamond\": 0}\n    error_message = ('Called decrement_items({\"wood\": 2, \"iron\": 3, \"diamond\": 1}, '\n                     '[\"wood\", \"wood\", \"wood\", \"iron\", \"diamond\", \"diamond\"]). The '\n                     f'function returned {actual_result}, but the tests expected {expected}.')\n\n    self.assertEqual(actual_result, expected, msg=error_message)",
+          "required": true
+        },
+        {
+          "name": "test_decrement_items_not_in_inventory",
+          "unittest_code": "def test_decrement_items_not_in_inventory(self):\n    actual_result = decrement_items({\"iron\": 3, \"gold\": 2},\n                                    [\"iron\", \"wood\", \"iron\", \"diamond\"])\n\n    expected = {\"iron\": 1, \"gold\": 2}\n    error_message = ('Called decrement_items({\"iron\": 3, \"gold\": 2}, '\n                     '[\"iron\", \"wood\", \"iron\", \"diamond\"]). The function '\n                     f'returned {actual_result}, but the tests '\n                     f'expected {expected}.')\n\n    self.assertEqual(actual_result, expected, msg=error_message)",
+          "required": true
+        },
+        {
+          "name": "test_remove_item",
+          "unittest_code": "def test_remove_item(self):\n    actual_result = remove_item({\"iron\": 1, \"diamond\": 2, \"gold\": 1}, \"diamond\")\n    expected =  {\"iron\": 1, \"gold\": 1}\n    error_message = ('Called remove_item({\"iron\": 1, \"diamond\": 2, \"gold\": 1}, \"diamond\"). '\n                     f'The function returned {actual_result}, but the tests expected {expected}.')\n\n    self.assertEqual(actual_result, expected, msg=error_message)",
+          "required": true
+        },
+        {
+          "name": "test_remove_item_not_in_inventory",
+          "unittest_code": "def test_remove_item_not_in_inventory(self):\n    actual_result = remove_item({\"iron\": 1, \"diamond\": 2, \"gold\": 1}, \"wood\")\n    expected = {\"iron\": 1, \"gold\": 1, \"diamond\": 2}\n    error_message = ('Called remove_item({\"iron\": 1, \"diamond\": 2, \"gold\": 1}, \"wood\"). '\n                     f'The function returned {actual_result}, '\n                     f'but the tests expected {expected}.')\n\n    self.assertEqual(actual_result, expected, msg=error_message)",
+          "required": true
+        },
+        {
+          "name": "test_list_inventory",
+          "unittest_code": "def test_list_inventory(self):\n    actual_result = list_inventory({\"coal\": 15, \"diamond\": 3, \"wood\": 67, \"silver\": 0})\n    expected = [(\"coal\", 15), (\"diamond\", 3), (\"wood\", 67)]\n    error_message = ('Called list_inventory({\"coal\": 15, \"diamond\": 3, \"wood\": 67, \"silver\": 0}). '\n                     f'The function returned {actual_result}, '\n                     f'but the tests expected {expected}.')\n\n    self.assertEqual(actual_result, expected, msg=error_message)",
+          "required": true
+        }
+      ],
+      "completion_requirements": {
+        "required_test_names": [
+          "test_create_inventory",
+          "test_add_one_item",
+          "test_add_multiple_items",
+          "test_add_new_item",
+          "test_add_from_empty_dict",
+          "test_decrement_items",
+          "test_not_below_zero",
+          "test_decrement_items_not_in_inventory",
+          "test_remove_item",
+          "test_remove_item_not_in_inventory",
+          "test_list_inventory"
+        ]
+      },
+      "source": {
+        "name": "Exercism Python Track — Inventory Management",
+        "url": "https://github.com/exercism/python/tree/main/exercises/concept/inventory-management",
+        "license": "MIT"
+      }
+    }
+  ]
+}
