@@ -64,8 +64,8 @@ def make_engine(passed_flags: list[bool], curriculum: Curriculum | None = None):
 
 class TestLessonDefinitions:
 
-    def test_curriculum_has_twelve_lessons(self):
-        assert len(CURRICULUM.lessons) == 12
+    def test_curriculum_has_thirteen_lessons(self):
+        assert len(CURRICULUM.lessons) == 13
 
     def test_all_lessons_have_required_content(self):
         for lesson in CURRICULUM.lessons:
@@ -80,8 +80,8 @@ class TestLessonDefinitions:
             for test in lesson.tests:
                 assert test.name
 
-    def test_basics_is_first_lesson(self):
-        assert CURRICULUM.lessons[0].id == "basics-01"
+    def test_variables_is_first_lesson(self):
+        assert CURRICULUM.lessons[0].id == "variables-01"
 
 
 # ---------------------------------------------------------------------------
@@ -92,38 +92,38 @@ class TestProgression:
 
     def test_correct_code_completes_lesson_and_unlocks_next(self):
         engine = make_engine([True] * len(CURRICULUM.lessons[0].tests))
-        result = run(engine.run_lesson("basics-01", "pass"))
+        result = run(engine.run_lesson("variables-01", "pass"))
         assert result.passed is True
         assert result.completed is True
         assert result.next_lesson_id == "booleans-01"
 
     def test_first_required_test_failure_does_not_complete_lesson(self):
-        # Provide False for first required test of basics-01
+        # Provide False for first required test of variables-01
         n = len(CURRICULUM.lessons[0].tests)
         engine = make_engine([False] + [True] * (n - 1))
-        result = run(engine.run_lesson("basics-01", "pass"))
+        result = run(engine.run_lesson("variables-01", "pass"))
         assert result.passed is False
         assert result.completed is False
-        assert engine.store.state().current_lesson_id == "basics-01"
+        assert engine.store.state().current_lesson_id == "variables-01"
 
     def test_failed_lesson_does_not_advance_progression(self):
         engine = make_engine([False])
-        result = run(engine.run_lesson("basics-01", "pass"))
+        result = run(engine.run_lesson("variables-01", "pass"))
         assert result.completed is False
-        assert engine.store.state().current_lesson_id == "basics-01"
+        assert engine.store.state().current_lesson_id == "variables-01"
 
     def test_locked_lesson_returns_lesson_locked_error(self):
         engine = make_engine([True])
-        # booleans-01 is order 2, locked until basics-01 is completed
+        # booleans-01 is order 2, locked until variables-01 is completed
         result = run(engine.run_lesson("booleans-01", "pass"))
         assert result.error == "lesson_locked"
         assert result.passed is False
 
     def test_completing_lesson_unlocks_next(self):
-        n_basics = len(CURRICULUM.lessons[0].tests)
+        n_variables = len(CURRICULUM.lessons[0].tests)
         n_booleans = len(CURRICULUM.lessons[1].tests)
-        engine = make_engine([True] * max(n_basics, n_booleans))
-        run(engine.run_lesson("basics-01", "pass"))
+        engine = make_engine([True] * max(n_variables, n_booleans))
+        run(engine.run_lesson("variables-01", "pass"))
         result = run(engine.run_lesson("booleans-01", "pass"))
         assert result.completed is True
         assert result.next_lesson_id == "numbers-01"
@@ -173,7 +173,7 @@ class TestSummaries:
 
     def test_summaries_length_matches_curriculum(self):
         engine = make_engine([True])
-        assert len(engine.summaries()) == 12
+        assert len(engine.summaries()) == 13
 
     def test_first_lesson_is_current_before_any_completion(self):
         engine = make_engine([True])
@@ -189,7 +189,7 @@ class TestSummaries:
     def test_completed_lesson_shows_completed_status(self):
         n = len(CURRICULUM.lessons[0].tests)
         engine = make_engine([True] * n)
-        run(engine.run_lesson("basics-01", "pass"))
+        run(engine.run_lesson("variables-01", "pass"))
         summaries = engine.summaries()
         assert summaries[0].status == "completed"
         assert summaries[1].status == "current"
@@ -204,18 +204,18 @@ class TestAIIndependence:
     def test_lesson_engine_has_no_llm_dependency(self):
         """LessonEngine must work with only a deterministic executor."""
         engine = make_engine([True] * len(CURRICULUM.lessons[0].tests))
-        result = run(engine.run_lesson("basics-01", "pass"))
+        result = run(engine.run_lesson("variables-01", "pass"))
         assert result.completed is True
 
     def test_code_execution_works_without_ollama(self):
         engine = make_engine([True])
-        result = run(engine.run_lesson("basics-01", "pass"))
+        result = run(engine.run_lesson("variables-01", "pass"))
         assert result is not None
 
     def test_grading_works_without_ollama(self):
         n = len(CURRICULUM.lessons[0].tests)
         engine = make_engine([True] * n)
-        result = run(engine.run_lesson("basics-01", "pass"))
+        result = run(engine.run_lesson("variables-01", "pass"))
         assert result.passed is True
 
 
@@ -230,23 +230,23 @@ class TestAPIIntegration:
         transport = httpx.ASGITransport(app=main.app)
         return httpx.AsyncClient(transport=transport, base_url="http://test")
 
-    def test_lessons_endpoint_returns_all_12(self):
+    def test_lessons_endpoint_returns_all_13(self):
         async def call():
             async with self._client() as client:
                 return await client.get("/api/lessons")
         resp = asyncio.run(call())
         assert resp.status_code == 200
         data = resp.json()
-        assert len(data) == 12
+        assert len(data) == 13
 
     def test_lesson_detail_endpoint_returns_public_view(self):
         async def call():
             async with self._client() as client:
-                return await client.get("/api/lessons/basics-01")
+                return await client.get("/api/lessons/variables-01")
         resp = asyncio.run(call())
         assert resp.status_code == 200
         data = resp.json()
-        assert data["id"] == "basics-01"
+        assert data["id"] == "variables-01"
         assert "starter_code" in data
         # The public API must NOT expose internal grading data
         assert "tests" not in data
@@ -264,7 +264,7 @@ class TestAPIIntegration:
         async def call():
             async with self._client() as client:
                 return await client.post(
-                    "/api/lessons/basics-01/run", json={"code": "pass"}
+                    "/api/lessons/variables-01/run", json={"code": "pass"}
                 )
         resp = asyncio.run(call())
         # May be sandbox error in CI, but endpoint must respond

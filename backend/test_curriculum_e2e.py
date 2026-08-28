@@ -13,15 +13,19 @@ They are deliberately kept in a separate file so unit tests can be run without
 Docker and these can be run when Docker is available.
 
 Coverage:
-  - basics (functions, constants, docstrings) — basics-01
+  - variables (variables, values) — variables-01
   - booleans — booleans-01
   - numbers (floor division, modulo) — numbers-01
   - conditionals (if/elif/else) — conditionals-01
+  - comparisons — comparisons-01
   - strings (slicing, join) — strings-01
+  - string-methods — string-methods-01
   - lists (indexing, sum, len) — lists-01
+  - list-methods — list-methods-01
   - loops (range, enumerate, comprehensions) — loops-01
   - tuples (unpacking, nesting) — tuples-01
   - dictionaries — dictionaries-01
+  - functions (constants, docstrings) — functions-01
 """
 
 import asyncio
@@ -61,71 +65,51 @@ def fresh_engine() -> LessonEngine:
 
 
 # ---------------------------------------------------------------------------
-# basics-01: Guido's Gorgeous Lasagna
+# variables-01: Variable Assignment & Values
 # ---------------------------------------------------------------------------
 
-BASICS_CORRECT = """\
-EXPECTED_BAKE_TIME = 40
-PREPARATION_TIME = 2
-
-def bake_time_remaining(elapsed_bake_time):
-    \"\"\"Calculate the bake time remaining.\"\"\"
-    return EXPECTED_BAKE_TIME - elapsed_bake_time
-
-def preparation_time_in_minutes(number_of_layers):
-    \"\"\"Return preparation time in minutes.\"\"\"
-    return number_of_layers * PREPARATION_TIME
-
-def elapsed_time_in_minutes(number_of_layers, elapsed_bake_time):
-    \"\"\"Return total elapsed cooking time.\"\"\"
-    return preparation_time_in_minutes(number_of_layers) + elapsed_bake_time
+VARIABLES_CORRECT = """\
+country = "Italy"
+prep_time = 10
+bake_time = 40
+total_time = prep_time + bake_time
 """
 
-BASICS_WRONG = """\
-EXPECTED_BAKE_TIME = 99   # wrong constant
-PREPARATION_TIME = 2
-
-def bake_time_remaining(elapsed_bake_time):
-    \"\"\"Docstring present.\"\"\"
-    return EXPECTED_BAKE_TIME - elapsed_bake_time
-
-def preparation_time_in_minutes(number_of_layers):
-    \"\"\"Docstring present.\"\"\"
-    return number_of_layers * PREPARATION_TIME
-
-def elapsed_time_in_minutes(number_of_layers, elapsed_bake_time):
-    \"\"\"Docstring present.\"\"\"
-    return preparation_time_in_minutes(number_of_layers) + elapsed_bake_time
+VARIABLES_WRONG = """\
+country = "France"
+prep_time = 10
+bake_time = 40
+total_time = 0
 """
 
 
-class TestBasicsE2E:
+class TestVariablesE2E:
 
     def test_correct_solution_passes_all_required_tests(self):
-        result = docker_run(BASICS_CORRECT, "basics-01")
+        result = docker_run(VARIABLES_CORRECT, "variables-01")
         failing = [t for t in result["tests"] if not t["passed"]]
         assert not failing, f"Unexpected failures: {[t['name'] for t in failing]}"
 
-    def test_wrong_constant_fails_expected_bake_time_test(self):
-        result = docker_run(BASICS_WRONG, "basics-01")
+    def test_wrong_variable_fails_test(self):
+        result = docker_run(VARIABLES_WRONG, "variables-01")
         assert result["passed"] is False
-        bake_time_test = next(
-            t for t in result["tests"] if t["name"] == "test_EXPECTED_BAKE_TIME"
+        country_test = next(
+            t for t in result["tests"] if t["name"] == "test_country_variable"
         )
-        assert bake_time_test["passed"] is False
+        assert country_test["passed"] is False
 
     def test_correct_solution_completes_lesson_via_engine(self):
         engine = fresh_engine()
-        progression = engine_run(BASICS_CORRECT, "basics-01", engine)
+        progression = engine_run(VARIABLES_CORRECT, "variables-01", engine)
         assert progression.passed is True
         assert progression.completed is True
         assert progression.next_lesson_id == "booleans-01"
 
     def test_incorrect_solution_does_not_complete_lesson(self):
         engine = fresh_engine()
-        progression = engine_run(BASICS_WRONG, "basics-01", engine)
+        progression = engine_run(VARIABLES_WRONG, "variables-01", engine)
         assert progression.completed is False
-        assert engine.store.state().current_lesson_id == "basics-01"
+        assert engine.store.state().current_lesson_id == "variables-01"
 
 
 # ---------------------------------------------------------------------------
@@ -184,15 +168,15 @@ class TestBooleansE2E:
 
     def test_correct_solution_completes_lesson_via_engine(self):
         engine = fresh_engine()
-        # Unlock basics-01 first
-        engine_run(BASICS_CORRECT, "basics-01", engine)
+        # Unlock variables-01 first
+        engine_run(VARIABLES_CORRECT, "variables-01", engine)
         progression = engine_run(BOOLEANS_CORRECT, "booleans-01", engine)
         assert progression.passed is True
         assert progression.completed is True
 
     def test_incorrect_solution_does_not_complete_lesson(self):
         engine = fresh_engine()
-        engine_run(BASICS_CORRECT, "basics-01", engine)
+        engine_run(VARIABLES_CORRECT, "variables-01", engine)
         progression = engine_run(BOOLEANS_WRONG, "booleans-01", engine)
         assert progression.completed is False
 
@@ -263,7 +247,7 @@ class TestNumbersE2E:
 
     def test_correct_solution_completes_lesson_via_engine(self):
         engine = fresh_engine()
-        engine_run(BASICS_CORRECT, "basics-01", engine)
+        engine_run(VARIABLES_CORRECT, "variables-01", engine)
         # numbers-01 is order 3, so we need to complete order 2 (booleans-01) first
         engine_run(BOOLEANS_CORRECT, "booleans-01", engine)
         progression = engine_run(NUMBERS_CORRECT, "numbers-01", engine)
@@ -328,7 +312,7 @@ class TestConditionalsE2E:
 
     def test_correct_solution_completes_lesson_via_engine(self):
         engine = fresh_engine()
-        engine_run(BASICS_CORRECT, "basics-01", engine)
+        engine_run(VARIABLES_CORRECT, "variables-01", engine)
         engine_run(BOOLEANS_CORRECT, "booleans-01", engine)
         # conditionals-01 is order 4, so we need to complete order 3 (numbers-01) first
         engine_run(NUMBERS_CORRECT, "numbers-01", engine)
@@ -397,7 +381,7 @@ class TestStringsE2E:
     def test_correct_solution_completes_lesson_via_engine(self):
         engine = fresh_engine()
         # strings-01 is order 6, so complete lessons 1-5 first
-        engine_run(BASICS_CORRECT, "basics-01", engine)
+        engine_run(VARIABLES_CORRECT, "variables-01", engine)
         engine_run(BOOLEANS_CORRECT, "booleans-01", engine)
         engine_run(NUMBERS_CORRECT, "numbers-01", engine)
         engine_run(CONDITIONALS_CORRECT, "conditionals-01", engine)
@@ -552,7 +536,7 @@ class TestListsE2E:
 
     def test_correct_solution_completes_lesson_via_engine(self):
         engine = fresh_engine()
-        engine_run(BASICS_CORRECT, "basics-01", engine)
+        engine_run(VARIABLES_CORRECT, "variables-01", engine)
         engine_run(BOOLEANS_CORRECT, "booleans-01", engine)
         engine_run(NUMBERS_CORRECT, "numbers-01", engine)
         engine_run(CONDITIONALS_CORRECT, "conditionals-01", engine)
@@ -664,8 +648,8 @@ class TestLoopsE2E:
 
     def test_correct_solution_completes_lesson_via_engine(self):
         engine = fresh_engine()
-        # loops-01 prereqs: basics, comparisons, lists, list-methods, strings
-        engine_run(BASICS_CORRECT, "basics-01", engine)
+        # loops-01 prereqs: variables, comparisons, lists, list-methods, strings
+        engine_run(VARIABLES_CORRECT, "variables-01", engine)
         engine_run(BOOLEANS_CORRECT, "booleans-01", engine)
         engine_run(NUMBERS_CORRECT, "numbers-01", engine)
         engine_run(CONDITIONALS_CORRECT, "conditionals-01", engine)
@@ -870,22 +854,53 @@ class TestDictionariesE2E:
         create_test = next(t for t in result["tests"] if t["name"] == "test_create_inventory")
         assert create_test["passed"] is False
 
-    def test_correct_solution_completes_lesson_via_engine(self):
-        """Complete the full 12-lesson chain and verify the final lesson completes."""
+
+# ---------------------------------------------------------------------------
+# functions-01: Guido's Gorgeous Lasagna
+# ---------------------------------------------------------------------------
+
+FUNCTIONS_CORRECT = """\
+EXPECTED_BAKE_TIME = 40
+PREPARATION_TIME = 2
+
+def bake_time_remaining(elapsed_bake_time):
+    \"\"\"Calculate the bake time remaining.\"\"\"
+    return EXPECTED_BAKE_TIME - elapsed_bake_time
+
+def preparation_time_in_minutes(number_of_layers):
+    \"\"\"Return preparation time in minutes.\"\"\"
+    return number_of_layers * PREPARATION_TIME
+
+def elapsed_time_in_minutes(number_of_layers, elapsed_bake_time):
+    \"\"\"Return total elapsed cooking time.\"\"\"
+    return preparation_time_in_minutes(number_of_layers) + elapsed_bake_time
+"""
+
+
+class TestFunctionsE2E:
+
+    def test_correct_solution_passes_all_required_tests(self):
+        result = docker_run(FUNCTIONS_CORRECT, "functions-01")
+        failing = [t for t in result["tests"] if not t["passed"]]
+        assert not failing, f"Unexpected failures: {[t['name'] for t in failing]}"
+
+    def test_correct_solution_completes_full_chain(self):
+        """Complete the full 13-lesson chain and verify the final lesson completes."""
         engine = fresh_engine()
         chain = [
-            ("basics-01",        BASICS_CORRECT),
-            ("booleans-01",      BOOLEANS_CORRECT),
-            ("numbers-01",       NUMBERS_CORRECT),
-            ("conditionals-01",  CONDITIONALS_CORRECT),
-            ("comparisons-01",   COMPARISONS_CORRECT),
-            ("strings-01",       STRINGS_CORRECT),
+            ("variables-01",      VARIABLES_CORRECT),
+            ("booleans-01",       BOOLEANS_CORRECT),
+            ("numbers-01",        NUMBERS_CORRECT),
+            ("conditionals-01",   CONDITIONALS_CORRECT),
+            ("comparisons-01",    COMPARISONS_CORRECT),
+            ("strings-01",        STRINGS_CORRECT),
             ("string-methods-01", STRING_METHODS_CORRECT),
-            ("lists-01",         LISTS_CORRECT),
-            ("list-methods-01",  LIST_METHODS_CORRECT),
-            ("loops-01",         LOOPS_CORRECT),
-            ("tuples-01",        TUPLES_CORRECT),
-            ("dictionaries-01",  DICTS_CORRECT),
+            ("lists-01",          LISTS_CORRECT),
+            ("list-methods-01",   LIST_METHODS_CORRECT),
+            ("loops-01",          LOOPS_CORRECT),
+            ("tuples-01",         TUPLES_CORRECT),
+            ("dictionaries-01",   DICTS_CORRECT),
+            ("functions-01",      FUNCTIONS_CORRECT),
         ]
         for lesson_id, code in chain:
             progression = engine_run(code, lesson_id, engine)
@@ -896,4 +911,4 @@ class TestDictionariesE2E:
 
         state = engine.store.state()
         assert state.current_lesson_id is None, "Expected all lessons completed"
-        assert len(state.completed_lesson_ids) == 12
+        assert len(state.completed_lesson_ids) == 13
