@@ -138,5 +138,5 @@ def test_progression_does_not_need_a_provider():
         async def run(self, payload: dict) -> dict:
             return {"tests": [{"name": test["name"], "passed": True} for test in payload["tests"]]}
 
-    result = run(LessonEngine(Executor(), ProgressionStore(CURRICULUM), CURRICULUM).run_lesson("basics-01", "pass"))
+    result = run(LessonEngine(Executor(), ProgressionStore(CURRICULUM), CURRICULUM).run_lesson("variables-01", "pass"))
     assert result.completed is True

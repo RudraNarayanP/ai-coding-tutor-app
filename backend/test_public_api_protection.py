@@ -204,7 +204,7 @@ class TestLessonsListEndpointProtection:
                 return await client.get("/api/lessons")
         resp = asyncio.run(call())
         data = resp.json()
-        assert len(data) == 12
+        assert len(data) == 13
         for item in data:
             # Each summary has exactly the safe summary fields
             assert "tests" not in item
@@ -232,7 +232,7 @@ class TestRunEndpointDoesNotLeakTestImplementations:
         engine = LessonEngine(
             _NullExecutor(), ProgressionStore(CURRICULUM), CURRICULUM
         )
-        internal = engine.get_lesson("basics-01")
+        internal = engine.get_lesson("variables-01")
         assert isinstance(internal, LessonDefinition)
         assert internal.tests
         assert internal.completion_requirements.required_test_names
