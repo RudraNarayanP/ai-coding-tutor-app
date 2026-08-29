@@ -60,7 +60,12 @@ class OllamaProvider:
             async with httpx.AsyncClient(timeout=self.config.timeout_seconds) as client:
                 response = await client.post(
                     f"{self.config.base_url}/api/chat",
-                    json={"model": self.config.model, "stream": False, "messages": [{"role": "system", "content": system}, {"role": "user", "content": prompt}]},
+                    json={
+                        "model": self.config.model,
+                        "stream": False,
+                        "options": {"num_predict": 300},
+                        "messages": [{"role": "system", "content": system}, {"role": "user", "content": prompt}],
+                    },
                 )
                 if response.status_code == 404:
                     raise AIProviderError("Configured Ollama model is unavailable.")

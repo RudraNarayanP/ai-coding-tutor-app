@@ -134,10 +134,15 @@ function App() {
 
   // ── Ollama health check ────────────────────────────────────────────────────
   useEffect(() => {
-    fetch('http://localhost:8000/api/health/ollama')
-      .then((r) => r.json())
-      .then((h: { available: boolean }) => setAiAvailable(h.available))
-      .catch(() => setAiAvailable(false))
+    const checkHealth = () => {
+      fetch('http://localhost:8000/api/health/ollama')
+        .then((r) => r.json())
+        .then((h: { available: boolean }) => setAiAvailable(h.available))
+        .catch(() => setAiAvailable(false))
+    }
+    checkHealth()
+    const interval = setInterval(checkHealth, 10000)
+    return () => clearInterval(interval)
   }, [])
 
   // ── Navigate to lesson ─────────────────────────────────────────────────────
@@ -224,10 +229,13 @@ function App() {
     if (!lesson || !aiEnabled || !aiAvailable) return
     setIsTutorLoading(true)
     setFeedback('Getting a hint from your tutor\u2026')
+    const controller = new AbortController()
+    const timeoutId = setTimeout(() => controller.abort(), 50000)
     try {
       const response = await fetch('http://localhost:8000/api/tutor', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
+        signal: controller.signal,
         body: JSON.stringify({
           lesson_id: lesson.id,
           lesson_title: lesson.title,
@@ -240,6 +248,9 @@ function App() {
           solution_requested: false,
         }),
       })
+      if (!response.ok) {
+        throw new Error(`HTTP error ${response.status}`)
+      }
       const tutor = (await response.json()) as {
         available: boolean
         message: string
@@ -251,9 +262,6 @@ function App() {
         setHintLevel(Math.min(tutor.hint_level + 1, 4))
       } else {
         setAiAvailable(false)
-        setFeedback(
-          'AI tutoring is unavailable right now. Deterministic tests are still available.'
-        )
       }
     } catch {
       setAiAvailable(false)
@@ -261,6 +269,7 @@ function App() {
         'AI tutoring is unavailable right now. Deterministic tests are still available.'
       )
     } finally {
+      clearTimeout(timeoutId)
       setIsTutorLoading(false)
     }
   }, [lesson, aiEnabled, aiAvailable, code, results, previousHints, hintLevel])
@@ -328,14 +337,14 @@ function App() {
           aria-label={aiEnabled ? 'AI tutor on — click to pause' : 'AI tutor off — click to enable'}
           onClick={() => setAiEnabled((e) => !e)}
         >
-          {aiEnabled ? '\u25C9 AI on' : '\u25CB AI off'}
+          {aiEnabled ? '◉ AI on' : '◯ AI off'}
         </button>
         <div className="avatar" aria-hidden="true">AM</div>
       </header>
 
       {backendError && (
         <div className="backend-error-banner" role="alert">
-          <span aria-hidden="true">\u26A0</span>
+          <span aria-hidden="true">⚠️</span>
           <span>
             Backend unavailable — run <code>uvicorn backend.main:app --reload</code> then{' '}
             <button onClick={() => window.location.reload()} className="inline-link">Try again</button>
@@ -384,14 +393,14 @@ function App() {
                   title={item.status === 'locked' ? 'Complete earlier lessons to unlock' : ''}
                 >
                   <span className="lesson-number" aria-hidden="true">
-                    {item.status === 'completed' ? '\u2713' : String(item.order).padStart(2, '0')}
+                    {item.status === 'completed' ? '✓' : String(item.order).padStart(2, '0')}
                   </span>
                   <span className="lesson-detail">
                     <strong>{item.title}</strong>
                     <small>{statusLabel}</small>
                   </span>
                   <span className="lesson-meta">
-                    {item.status === 'locked' ? '\uD83D\uDD12' : `${item.duration_minutes}m`}
+                    {item.status === 'locked' ? '🔒' : `${item.duration_minutes}m`}
                   </span>
                 </button>
               )
@@ -399,7 +408,7 @@ function App() {
           </nav>
 
           <div className="privacy-note">
-            <span aria-hidden="true">\u23C1</span>
+            <span aria-hidden="true">⏁</span>
             <div>
               <strong>Runs on your machine</strong>
               <small>Your code stays here. Always.</small>
@@ -412,33 +421,33 @@ function App() {
           {isLoadingLesson ? (
             <div className="loading-state" role="status" aria-label="Loading lesson">
               <div className="loading-spinner" aria-hidden="true" />
-              <p>Loading lesson\u2026</p>
+              <p>Loading lesson…</p>
             </div>
           ) : (
             <>
               <div className="lesson-heading">
                 <div>
                   <div className="eyebrow warm">
-                    Lesson {lesson?.order ?? '\u2014'} <span aria-hidden="true">\u2022</span> {lesson?.difficulty ?? ''}
+                    Lesson {lesson?.order ?? '—'} <span aria-hidden="true">•</span> {lesson?.difficulty ?? ''}
                   </div>
                   <h2>{lesson?.title ?? 'Loading lesson'}</h2>
                 </div>
                 <span className="lesson-time" aria-label={`${lesson?.duration_minutes} minute lesson`}>
-                  \u25F7 {lesson?.duration_minutes ?? '\u2014'} min
+                  ◷ {lesson?.duration_minutes ?? '—'} min
                 </span>
               </div>
 
               {showCompletion && (
                 <div className="completion-banner" role="status" aria-live="polite">
                   <div className="completion-content">
-                    <span className="completion-icon" aria-hidden="true">\uD83C\uDF89</span>
+                    <span className="completion-icon" aria-hidden="true">🎉</span>
                     <div>
                       <strong>Lesson Complete!</strong>
                       <p>Great work! The next lesson is now unlocked.</p>
                     </div>
                   </div>
                   <button className="next-lesson-button" onClick={goToNextLesson} disabled={isLoadingLesson}>
-                    Next Lesson \u2192
+                    Next Lesson →
                   </button>
                 </div>
               )}
@@ -471,7 +480,7 @@ function App() {
                     onChange={(e) => setCode(e.target.value)}
                     onScroll={(e) => syncLineNumbers(e.currentTarget.scrollTop)}
                     disabled={!lesson || isRunning}
-                    placeholder={isLoadingLesson ? 'Loading\u2026' : 'Write your Python code here\u2026'}
+                    placeholder={isLoadingLesson ? 'Loading…' : 'Write your Python code here…'}
                     onKeyDown={handleEditorKeyDown}
                     autoCapitalize="off"
                     autoCorrect="off"
@@ -489,12 +498,12 @@ function App() {
                   aria-label="Run code and evaluate tests (Ctrl+Enter)"
                 >
                   {isRunning ? (
-                    <><span className="spinner" aria-hidden="true" />Running\u2026</>
+                    <><span className="spinner" aria-hidden="true" />Running…</>
                   ) : (
-                    <><span aria-hidden="true">\u25B6</span>Run tests</>
+                    <><span aria-hidden="true">▶</span>Run tests</>
                   )}
                 </button>
-                <span className="shortcut" aria-hidden="true">Ctrl <b>\u21B5</b></span>
+                <span className="shortcut" aria-hidden="true">Ctrl <b>↵</b></span>
                 <button
                   className="reset-button"
                   onClick={() => {
@@ -539,7 +548,7 @@ function App() {
                       className={`result-row${!r.passed && r.required ? ' error' : r.passed ? ' passed' : ' optional-fail'}`}
                     >
                       <span className={r.passed ? 'check' : 'cross'} aria-label={r.passed ? 'Passed' : 'Failed'} role="img">
-                        {r.passed ? '\u2713' : '\u00D7'}
+                        {r.passed ? '✓' : '×'}
                       </span>
                       <span className="result-name">{r.name}</span>
                       {!r.required && <span className="optional-badge">opt</span>}
@@ -559,12 +568,12 @@ function App() {
               <div className="eyebrow">Your guide</div>
               <h3>Feedback</h3>
             </div>
-            <span className="spark" aria-hidden="true">\u2726</span>
+            <span className="spark" aria-hidden="true">✦</span>
           </div>
 
           <div className="feedback-box" aria-live="polite" role="status" aria-label="Tutor feedback">
             <div className="tutor-avatar" aria-hidden="true">p</div>
-            <p>{isTutorLoading ? 'Thinking\u2026' : feedback}</p>
+            <p>{isTutorLoading ? 'Thinking…' : feedback}</p>
           </div>
 
           <div className="hint-heading">
@@ -595,8 +604,8 @@ function App() {
               : `Request a hint — ${getHintButtonText(hintLevel)}`
             }
           >
-            <span aria-hidden="true">\u2726</span>
-            {isTutorLoading ? 'Getting hint\u2026'
+            <span aria-hidden="true">✦</span>
+            {isTutorLoading ? 'Getting hint…'
               : !aiEnabled ? 'AI is paused'
               : aiAvailable ? getHintButtonText(hintLevel)
               : 'AI unavailable'}
@@ -623,7 +632,7 @@ function App() {
               <input
                 type="text"
                 className="note-input"
-                placeholder="Add a note\u2026"
+                placeholder="Add a note…"
                 value={noteInput}
                 onChange={(e) => setNoteInput(e.target.value)}
                 onKeyDown={(e) => { if (e.key === 'Enter') { e.preventDefault(); addNote() } }}
