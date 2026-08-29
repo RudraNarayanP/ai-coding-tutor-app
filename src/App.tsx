@@ -134,10 +134,15 @@ function App() {
 
   // ── Ollama health check ────────────────────────────────────────────────────
   useEffect(() => {
-    fetch('http://localhost:8000/api/health/ollama')
-      .then((r) => r.json())
-      .then((h: { available: boolean }) => setAiAvailable(h.available))
-      .catch(() => setAiAvailable(false))
+    const checkHealth = () => {
+      fetch('http://localhost:8000/api/health/ollama')
+        .then((r) => r.json())
+        .then((h: { available: boolean }) => setAiAvailable(h.available))
+        .catch(() => setAiAvailable(false))
+    }
+    checkHealth()
+    const interval = setInterval(checkHealth, 10000)
+    return () => clearInterval(interval)
   }, [])
 
   // ── Navigate to lesson ─────────────────────────────────────────────────────
