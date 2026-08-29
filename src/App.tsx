@@ -134,15 +134,61 @@ function App() {
 
   // ── Ollama health check ────────────────────────────────────────────────────
   useEffect(() => {
-    const checkHealth = () => {
-      fetch('http://localhost:8000/api/health/ollama')
-        .then((r) => r.json())
-        .then((h: { available: boolean }) => setAiAvailable(h.available))
-        .catch(() => setAiAvailable(false))
+    let latestRequestId = 0
+    let activeController: AbortController | null = null
+
+    const checkHealth = async () => {
+      const requestId = ++latestRequestId
+      const timestamp = new Date().toISOString()
+      console.log(`[health:start] req #${requestId} at ${timestamp}`)
+
+      if (activeController) {
+        activeController.abort()
+      }
+      const controller = new AbortController()
+      activeController = controller
+      const timeoutId = setTimeout(() => controller.abort(), 5000)
+
+      try {
+        const response = await fetch('http://localhost:8000/api/health/ollama', {
+          signal: controller.signal,
+        })
+        clearTimeout(timeoutId)
+
+        if (!response.ok) {
+          throw new Error(`HTTP ${response.status}`)
+        }
+        const data = (await response.json()) as { available: boolean }
+        console.log(`[health:response] req #${requestId} status ${response.status}:`, data)
+
+        // Ignore out-of-order stale responses
+        if (requestId === latestRequestId) {
+          setAiAvailable(data.available)
+          console.log(`[health:state] req #${requestId} set aiAvailable = ${data.available}`)
+        }
+      } catch (err: unknown) {
+        clearTimeout(timeoutId)
+        if (err instanceof Error && err.name === 'AbortError') {
+          console.log(`[health:aborted] req #${requestId}`)
+          return
+        }
+        console.log(`[health:error] req #${requestId}:`, err)
+        if (requestId === latestRequestId) {
+          setAiAvailable(false)
+          console.log(`[health:state] req #${requestId} set aiAvailable = false (error)`)
+        }
+      }
     }
+
     checkHealth()
     const interval = setInterval(checkHealth, 10000)
-    return () => clearInterval(interval)
+
+    return () => {
+      clearInterval(interval)
+      if (activeController) {
+        activeController.abort()
+      }
+    }
   }, [])
 
   // ── Navigate to lesson ─────────────────────────────────────────────────────
@@ -260,11 +306,8 @@ function App() {
       if (tutor.available) {
         setPreviousHints((h) => [...h, tutor.message].slice(-8))
         setHintLevel(Math.min(tutor.hint_level + 1, 4))
-      } else {
-        setAiAvailable(false)
       }
     } catch {
-      setAiAvailable(false)
       setFeedback(
         'AI tutoring is unavailable right now. Deterministic tests are still available.'
       )

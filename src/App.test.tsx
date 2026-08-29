@@ -541,7 +541,7 @@ describe('AI unavailable state', () => {
 
     await waitFor(() =>
       expect(screen.getByRole('status', { name: /Tutor feedback/ })).toHaveTextContent(
-        /AI tutoring is unavailable/
+        /Offline/
       )
     )
   })
