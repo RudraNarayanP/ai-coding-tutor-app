@@ -2,7 +2,7 @@ import re
 from dataclasses import dataclass, field
 
 from .ai_models import TutorRequest, TutorResponse
-from .ai_provider import AIProvider, AIProviderError
+from .ai_provider import AIProvider, AIProviderError, get_ai_provider, ALL_PROVIDERS
 
 
 LEVEL_FALLBACKS = {
@@ -29,8 +29,14 @@ class TutorSessionStore:
 
 
 class TutorService:
-    def __init__(self, provider: AIProvider, sessions: TutorSessionStore | None = None) -> None:
-        self.provider = provider
+    def __init__(
+        self,
+        provider: AIProvider | None = None,
+        fallback_provider: AIProvider | None = None,
+        sessions: TutorSessionStore | None = None,
+    ) -> None:
+        self.provider = provider or get_ai_provider()
+        self.fallback_provider = fallback_provider
         self.sessions = sessions or TutorSessionStore()
 
     @staticmethod
@@ -42,13 +48,59 @@ class TutorService:
             return LEVEL_FALLBACKS[request.hint_level]
         return message
 
-    async def tutor(self, request: TutorRequest) -> TutorResponse:
+    async def tutor(self, request: TutorRequest, active_provider: AIProvider | None = None) -> TutorResponse:
+        primary = active_provider or self.provider
         stored = self.sessions.hints_for(request.session_id, request.lesson_id)
         previous = list(dict.fromkeys(stored + request.previous_hints))[-8:]
         effective_request = request.model_copy(update={"previous_hints": previous})
+
+        used_fallback = False
+        target_provider = primary
+        raw_message = None
+
         try:
-            message = self._sanitize(await self.provider.tutor(effective_request), effective_request)
-        except AIProviderError:
-            return TutorResponse(hint_level=request.hint_level, message="AI tutoring is unavailable right now. Deterministic tests and lessons are still available.", available=False, error="tutor_unavailable")
+            raw_message = await target_provider.tutor(effective_request)
+        except AIProviderError as primary_err:
+            if self.fallback_provider and self.fallback_provider.provider_id != target_provider.provider_id:
+                try:
+                    target_provider = self.fallback_provider
+                    raw_message = await target_provider.tutor(effective_request)
+                    used_fallback = True
+                except AIProviderError as fallback_err:
+                    return TutorResponse(
+                        hint_level=request.hint_level,
+                        message=f"{primary_err.message} Fallback ({self.fallback_provider.name}) also failed: {fallback_err.message}",
+                        available=False,
+                        provider=primary.provider_id,
+                        error=primary_err.code or "tutor_unavailable",
+                    )
+            else:
+                return TutorResponse(
+                    hint_level=request.hint_level,
+                    message=primary_err.message,
+                    available=False,
+                    provider=primary.provider_id,
+                    error=primary_err.code or "tutor_unavailable",
+                )
+
+        try:
+            message = self._sanitize(raw_message, effective_request)
+        except AIProviderError as sanitize_err:
+            return TutorResponse(
+                hint_level=request.hint_level,
+                message=sanitize_err.message,
+                available=False,
+                provider=target_provider.provider_id,
+                error="invalid_response",
+            )
+
         self.sessions.add_hint(request.session_id, request.lesson_id, message)
-        return TutorResponse(hint_level=request.hint_level, message=message, is_solution=request.solution_requested, available=True)
+        return TutorResponse(
+            hint_level=request.hint_level,
+            message=message,
+            is_solution=request.solution_requested,
+            available=True,
+            provider=target_provider.provider_id,
+            model=getattr(target_provider, "model", None),
+            used_fallback=used_fallback,
+        )

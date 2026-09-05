@@ -25,20 +25,19 @@ type Lesson = {
   duration_minutes: number
   starter_code: string
 }
-
-// ─── Helpers ──────────────────────────────────────────────────────────────────
-function getHintLabel(level: number): string {
-  if (level === 1) return 'First hint'
-  if (level === 2) return 'Second hint'
-  if (level === 3) return 'Third hint'
-  return 'Final hint'
+type ProviderStatus = {
+  provider: string
+  name: string
+  available: boolean
+  model: string
+  is_current: boolean
+  reason: string | null
+  error: string | null
 }
-
-function getHintButtonText(level: number): string {
-  if (level === 1) return 'Ask for a hint'
-  if (level === 2) return 'Ask for another hint'
-  if (level === 3) return 'Ask for a more specific hint'
-  return 'Show me the approach'
+type ProvidersOverview = {
+  current_provider: string
+  fallback_provider: string | null
+  providers: ProviderStatus[]
 }
 
 // ─── Line Numbers ─────────────────────────────────────────────────────────────
@@ -72,7 +71,8 @@ function App() {
     'Run your code to get immediate feedback from the local sandbox.'
   )
   const [aiEnabled, setAiEnabled] = useState(true)
-  const [aiAvailable, setAiAvailable] = useState(false)
+  const [providersOverview, setProvidersOverview] = useState<ProvidersOverview | null>(null)
+  const [selectedProvider, setSelectedProvider] = useState<string>('ollama')
   const [previousHints, setPreviousHints] = useState<string[]>([])
   const [isRunning, setIsRunning] = useState(false)
   const [isLoadingLesson, setIsLoadingLesson] = useState(false)
@@ -85,6 +85,9 @@ function App() {
   const resultsRef = useRef<HTMLDivElement>(null)
   const editorRef = useRef<HTMLTextAreaElement>(null)
   const gutterContentRef = useRef<HTMLDivElement>(null)
+
+  const currentProviderStatus = providersOverview?.providers?.find((p) => p.provider === selectedProvider)
+  const isAiAvailable = currentProviderStatus?.available ?? false
 
   const scrollToResults = useCallback(() => {
     resultsRef.current?.scrollIntoView({ behavior: 'smooth', block: 'nearest' })
@@ -106,14 +109,13 @@ function App() {
     const load = async () => {
       setIsLoadingLesson(true)
       try {
-        const summariesResponse = await fetch('http://localhost:8000/api/lessons')
+        const summariesResponse = await fetch('/api/lessons')
         if (!summariesResponse.ok) throw new Error('Lesson service unavailable')
         const summaries = (await summariesResponse.json()) as LessonSummary[]
         if (summaries.length === 0) throw new Error('No lessons available')
         setLessons(summaries)
-        const current =
-          summaries.find((l) => l.status === 'current') ?? summaries[0]
-        const lessonResponse = await fetch(`http://localhost:8000/api/lessons/${current.id}`)
+        const current = summaries.find((l) => l.status === 'current') ?? summaries[0]
+        const lessonResponse = await fetch(`/api/lessons/${current.id}`)
         if (!lessonResponse.ok) throw new Error('Lesson unavailable')
         const selected = (await lessonResponse.json()) as Lesson
         setLesson(selected)
@@ -122,9 +124,7 @@ function App() {
         setBackendError(false)
       } catch {
         setBackendError(true)
-        setFeedback(
-          'The lesson service is unavailable. Start the local backend to continue.'
-        )
+        setFeedback('The lesson service is unavailable. Start the local backend to continue.')
       } finally {
         setIsLoadingLesson(false)
       }
@@ -132,81 +132,76 @@ function App() {
     load()
   }, [resetEditorScroll])
 
-  // ── Ollama Health Check Polling ─────────────────────────────────────────────
-  useEffect(() => {
-    let latestRequestId = 0
-    let activeController: AbortController | null = null
-
-    const checkHealth = async () => {
-      const requestId = ++latestRequestId
-
-      if (activeController) {
-        activeController.abort()
+  // ── AI Providers Health Polling ─────────────────────────────────────────────
+  const fetchProvidersHealth = useCallback(async () => {
+    try {
+      const response = await fetch('/api/ai/providers')
+      if (!response.ok) return
+      const data = (await response.json()) as ProvidersOverview
+      setProvidersOverview(data)
+      if (data.current_provider) {
+        setSelectedProvider(data.current_provider)
       }
-      const controller = new AbortController()
-      activeController = controller
-      const timeoutId = setTimeout(() => controller.abort(), 5000)
-
-      try {
-        const response = await fetch('http://localhost:8000/api/health/ollama', {
-          signal: controller.signal,
-        })
-        clearTimeout(timeoutId)
-
-        if (!response.ok) throw new Error(`HTTP ${response.status}`)
-        const data = (await response.json()) as { available: boolean }
-
-        if (requestId === latestRequestId) {
-          setAiAvailable(data.available)
-        }
-      } catch (err: unknown) {
-        clearTimeout(timeoutId)
-        if (err instanceof Error && err.name === 'AbortError') return
-        if (requestId === latestRequestId) {
-          setAiAvailable(false)
-        }
-      }
-    }
-
-    checkHealth()
-    const interval = setInterval(checkHealth, 10000)
-
-    return () => {
-      clearInterval(interval)
-      if (activeController) activeController.abort()
+    } catch {
+      // Ignore background poll errors
     }
   }, [])
 
-  // ── Navigate to Lesson ──────────────────────────────────────────────────────
-  const loadLesson = useCallback(async (item: LessonSummary) => {
-    if (item.status === 'locked') {
-      setFeedback('Complete earlier lessons to unlock this one.')
-      return
-    }
-    setIsLoadingLesson(true)
+  useEffect(() => {
+    fetchProvidersHealth()
+    const interval = setInterval(fetchProvidersHealth, 10000)
+    return () => clearInterval(interval)
+  }, [fetchProvidersHealth])
+
+  const handleProviderChange = async (providerId: string) => {
+    setSelectedProvider(providerId)
     try {
-      const response = await fetch(`http://localhost:8000/api/lessons/${item.id}`)
-      if (!response.ok) throw new Error('Lesson unavailable')
-      const selected = (await response.json()) as Lesson
-      setLesson(selected)
-      setCode(selected.starter_code ?? '')
-      setResults(null)
-      setPreviousHints([])
-      setHintLevel(1)
-      setShowCompletion(false)
-      setSessionNotes([])
-      setNoteInput('')
-      setFeedback('Run your code to get immediate feedback from the local sandbox.')
-      setTimeout(() => {
-        resetEditorScroll()
-        editorRef.current?.focus()
-      }, 50)
+      const res = await fetch('/api/ai/select', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ provider: providerId }),
+      })
+      if (res.ok) {
+        await fetchProvidersHealth()
+      }
     } catch {
-      setFeedback('Failed to load lesson. Please try again.')
-    } finally {
-      setIsLoadingLesson(false)
+      // Ignore selection errors
     }
-  }, [resetEditorScroll])
+  }
+
+  // ── Navigate to Lesson ──────────────────────────────────────────────────────
+  const loadLesson = useCallback(
+    async (item: LessonSummary) => {
+      if (item.status === 'locked') {
+        setFeedback('Complete earlier lessons to unlock this one.')
+        return
+      }
+      setIsLoadingLesson(true)
+      try {
+        const response = await fetch(`/api/lessons/${item.id}`)
+        if (!response.ok) throw new Error('Lesson unavailable')
+        const selected = (await response.json()) as Lesson
+        setLesson(selected)
+        setCode(selected.starter_code ?? '')
+        setResults(null)
+        setPreviousHints([])
+        setHintLevel(1)
+        setShowCompletion(false)
+        setSessionNotes([])
+        setNoteInput('')
+        setFeedback('Run your code to get immediate feedback from the local sandbox.')
+        setTimeout(() => {
+          resetEditorScroll()
+          editorRef.current?.focus()
+        }, 50)
+      } catch {
+        setFeedback('Failed to load lesson. Please try again.')
+      } finally {
+        setIsLoadingLesson(false)
+      }
+    },
+    [resetEditorScroll]
+  )
 
   // ── Run Code in Sandbox ────────────────────────────────────────────────────
   const runTests = useCallback(async () => {
@@ -214,14 +209,11 @@ function App() {
     setIsRunning(true)
     setFeedback('Checking your code in the sandbox…')
     try {
-      const response = await fetch(
-        `http://localhost:8000/api/lessons/${lesson.id}/run`,
-        {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ code }),
-        }
-      )
+      const response = await fetch(`/api/lessons/${lesson.id}/run`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ code }),
+      })
       if (!response.ok) throw new Error('Sandbox unavailable')
       const execution = (await response.json()) as {
         passed: boolean
@@ -244,7 +236,7 @@ function App() {
         )
       }
 
-      const summariesResponse = await fetch('http://localhost:8000/api/lessons')
+      const summariesResponse = await fetch('/api/lessons')
       if (summariesResponse.ok) {
         const summaries = (await summariesResponse.json()) as LessonSummary[]
         setLessons(summaries)
@@ -259,13 +251,13 @@ function App() {
 
   // ── Ask Tutor for Hint ─────────────────────────────────────────────────────
   const askTutor = useCallback(async () => {
-    if (!lesson || !aiEnabled || !aiAvailable) return
+    if (!lesson || !aiEnabled) return
     setIsTutorLoading(true)
     setFeedback('Getting a hint from your tutor…')
     const controller = new AbortController()
     const timeoutId = setTimeout(() => controller.abort(), 50000)
     try {
-      const response = await fetch('http://localhost:8000/api/tutor', {
+      const response = await fetch('/api/tutor', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         signal: controller.signal,
@@ -298,7 +290,7 @@ function App() {
       clearTimeout(timeoutId)
       setIsTutorLoading(false)
     }
-  }, [lesson, aiEnabled, aiAvailable, code, results, previousHints, hintLevel])
+  }, [lesson, aiEnabled, code, results, previousHints, hintLevel])
 
   // ── Keyboard shortcuts ─────────────────────────────────────────────────────
   const handleEditorKeyDown = useCallback(
@@ -341,7 +333,7 @@ function App() {
   const progressPct = lessons.length ? (completedCount / lessons.length) * 100 : 0
   const allPassed = results !== null && results.length > 0 && results.every((r) => r.passed || !r.required)
   const failedRequired = results?.filter((r) => !r.passed && r.required) ?? []
-  const hintDisabled = !aiEnabled || !aiAvailable || !lesson || isTutorLoading || isRunning
+  const hintDisabled = !aiEnabled || !isAiAvailable || !lesson || isTutorLoading || isRunning
 
   return (
     <div className="duo-app">
@@ -366,10 +358,36 @@ function App() {
         </div>
 
         <div className="duo-header-right">
-          <div className="duo-status-badge">
-            <span className={`duo-status-dot ${aiAvailable ? 'active' : ''}`} />
-            {aiAvailable ? 'Ollama ready' : 'Ollama offline'}
+          {/* AI Provider & Model Selector */}
+          <div className="duo-provider-selector" style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+            <select
+              value={selectedProvider}
+              onChange={(e) => handleProviderChange(e.target.value)}
+              aria-label="Select AI Provider"
+              style={{
+                padding: '4px 8px',
+                borderRadius: '8px',
+                border: '1px solid #cbd5e1',
+                fontSize: '13px',
+                fontWeight: 700,
+                background: '#fff',
+              }}
+            >
+              {providersOverview?.providers?.map((p) => (
+                <option key={p.provider} value={p.provider}>
+                  {p.available ? `✓ ${p.name}` : `⚠ ${p.name}`}
+                </option>
+              )) ?? <option value="ollama">Ollama</option>}
+            </select>
+
+            <div className="duo-status-badge">
+              <span className={`duo-status-dot ${isAiAvailable ? 'active' : ''}`} />
+              {isAiAvailable
+                ? `${currentProviderStatus?.name || selectedProvider} ready`
+                : `${currentProviderStatus?.name || selectedProvider} unavailable`}
+            </div>
           </div>
+
           <button
             className="duo-button duo-button-secondary"
             style={{ padding: '6px 14px', fontSize: '13px' }}
@@ -386,7 +404,9 @@ function App() {
           <span aria-hidden="true">⚠️</span>
           <span>
             Backend unavailable — run <code>uvicorn backend.main:app --reload</code> then{' '}
-            <button onClick={() => window.location.reload()} className="inline-link">Try again</button>
+            <button onClick={() => window.location.reload()} className="inline-link">
+              Try again
+            </button>
           </span>
         </div>
       )}
@@ -424,7 +444,12 @@ function App() {
         {/* Center Stage: Interactive Learning Moment */}
         <main className="duo-stage" aria-label="Lesson content">
           {isLoadingLesson ? (
-            <div className="duo-card" style={{ textAlign: 'center', padding: '48px' }} role="status" aria-label="Loading lesson">
+            <div
+              className="duo-card"
+              style={{ textAlign: 'center', padding: '48px' }}
+              role="status"
+              aria-label="Loading lesson"
+            >
               <h2>Loading exercise…</h2>
             </div>
           ) : lesson ? (
@@ -472,7 +497,7 @@ function App() {
                     <span>
                       {allPassed
                         ? `All ${results.length} tests passed`
-                        : `${failedRequired.length} of ${results.filter(r => r.required).length} required failed`}
+                        : `${failedRequired.length} of ${results.filter((r) => r.required).length} required failed`}
                     </span>
                   </div>
                   <div className="duo-feedback-msg">
@@ -485,10 +510,28 @@ function App() {
                     )}
                   </div>
                   {results.map((r) => (
-                    <div key={r.name} className="result-row" style={{ display: 'flex', gap: '8px', alignItems: 'center', fontSize: '13px' }}>
-                      <span role="img" aria-label={r.passed ? 'Passed' : 'Failed'}>{r.passed ? '✓' : '×'}</span>
+                    <div
+                      key={r.name}
+                      className="result-row"
+                      style={{ display: 'flex', gap: '8px', alignItems: 'center', fontSize: '13px' }}
+                    >
+                      <span role="img" aria-label={r.passed ? 'Passed' : 'Failed'}>
+                        {r.passed ? '✓' : '×'}
+                      </span>
                       <span>{r.name}</span>
-                      {!r.required && <span className="opt" style={{ fontSize: '10px', background: 'rgba(0,0,0,0.1)', padding: '1px 4px', borderRadius: '3px' }}>opt</span>}
+                      {!r.required && (
+                        <span
+                          className="opt"
+                          style={{
+                            fontSize: '10px',
+                            background: 'rgba(0,0,0,0.1)',
+                            padding: '1px 4px',
+                            borderRadius: '3px',
+                          }}
+                        >
+                          opt
+                        </span>
+                      )}
                     </div>
                   ))}
                 </div>
@@ -499,15 +542,17 @@ function App() {
                 <div className="duo-tutor-box" role="status" aria-label="Tutor feedback">
                   <div className="duo-tutor-avatar">p</div>
                   <div className="duo-tutor-content">
-                    <div className="duo-tutor-name">Tutor Guide</div>
+                    <div className="duo-tutor-name">Tutor Guide ({currentProviderStatus?.name || selectedProvider})</div>
                     <div className="duo-tutor-text">
-                      {isTutorLoading ? 'Thinking…' : feedback ?? (aiAvailable ? 'Run your code or ask for a hint!' : 'Start Ollama locally to enable AI hints.')}
+                      {isTutorLoading
+                        ? 'Thinking…'
+                        : feedback ?? (isAiAvailable ? 'Run your code or ask for a hint!' : currentProviderStatus?.reason || 'Provider unavailable.')}
                     </div>
                   </div>
                 </div>
-                {!aiAvailable && (
-                  <p className="ai-unavailable-note" style={{ marginTop: '8px' }}>
-                    Start Ollama locally to enable AI hints. Tests always work offline.
+                {!isAiAvailable && (
+                  <p className="ai-unavailable-note" style={{ marginTop: '8px', fontSize: '13px', color: '#64748b' }}>
+                    {currentProviderStatus?.reason || 'Selected provider is unconfigured.'} Tests always work offline.
                   </p>
                 )}
               </aside>
@@ -535,11 +580,22 @@ function App() {
                     placeholder="Add a note…"
                     value={noteInput}
                     onChange={(e) => setNoteInput(e.target.value)}
-                    onKeyDown={(e) => { if (e.key === 'Enter') { e.preventDefault(); addNote() } }}
+                    onKeyDown={(e) => {
+                      if (e.key === 'Enter') {
+                        e.preventDefault()
+                        addNote()
+                      }
+                    }}
                     aria-label="Session note"
                     style={{ flex: 1, padding: '8px 12px', borderRadius: '8px', border: '1px solid #cbd5e1' }}
                   />
-                  <button onClick={addNote} aria-label="Add note" style={{ padding: '8px 16px', background: '#58cc02', color: '#fff', borderRadius: '8px', fontWeight: 800 }}>+</button>
+                  <button
+                    onClick={addNote}
+                    aria-label="Add note"
+                    style={{ padding: '8px 16px', background: '#58cc02', color: '#fff', borderRadius: '8px', fontWeight: 800 }}
+                  >
+                    +
+                  </button>
                 </div>
                 {sessionNotes.length > 0 && (
                   <ul style={{ marginTop: '12px', paddingLeft: '20px' }}>
@@ -562,12 +618,20 @@ function App() {
           onClick={askTutor}
           disabled={hintDisabled}
           aria-label={
-            !aiAvailable ? 'AI tutor unavailable'
-            : !aiEnabled ? 'AI tutor is paused'
-            : 'Request a hint'
+            !isAiAvailable
+              ? 'AI tutor unavailable'
+              : !aiEnabled
+              ? 'AI tutor is paused'
+              : 'Request a hint'
           }
         >
-          {isTutorLoading ? 'Getting Hint…' : !aiAvailable ? 'AI tutor unavailable' : !aiEnabled ? 'AI tutor is paused' : 'Request a hint'}
+          {isTutorLoading
+            ? 'Getting Hint…'
+            : !isAiAvailable
+            ? 'AI tutor unavailable'
+            : !aiEnabled
+            ? 'AI tutor is paused'
+            : 'Request a hint'}
         </button>
 
         <button

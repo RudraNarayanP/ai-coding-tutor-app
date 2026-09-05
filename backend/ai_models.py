@@ -1,3 +1,4 @@
+from typing import Any
 from pydantic import BaseModel, Field
 
 from .lesson_models import TestResult
@@ -20,7 +21,26 @@ class TutorResponse(BaseModel):
     message: str
     is_solution: bool = False
     available: bool = True
+    provider: str | None = None
+    model: str | None = None
+    used_fallback: bool = False
     error: str | None = None
+
+
+class ProviderStatus(BaseModel):
+    provider: str
+    name: str
+    available: bool
+    model: str
+    is_current: bool = False
+    reason: str | None = None
+    error: str | None = None
+
+
+class ProvidersOverview(BaseModel):
+    current_provider: str
+    fallback_provider: str | None = None
+    providers: list[ProviderStatus]
 
 
 class OllamaHealth(BaseModel):

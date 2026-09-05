@@ -92,6 +92,25 @@ function setupFetch({
     if (url.includes('/run')) {
       return Promise.resolve({ ok: true, json: () => Promise.resolve(runResult) })
     }
+    if (url.includes('/api/ai/providers')) {
+      return Promise.resolve({
+        ok: true,
+        json: () =>
+          Promise.resolve({
+            current_provider: 'ollama',
+            fallback_provider: null,
+            providers: [
+              {
+                provider: 'ollama',
+                name: 'Ollama',
+                available: ollamaAvailable,
+                model: 'llama3.1:8b',
+                is_current: true,
+              },
+            ],
+          }),
+      })
+    }
     if (url.includes('/api/health/ollama')) {
       return Promise.resolve({
         ok: true,
@@ -377,7 +396,7 @@ describe('Hint button behavior', () => {
     render(<App />)
     await waitFor(() => screen.getByRole('heading', { level: 2, name: 'Variables' }))
 
-    expect(screen.getAllByText(/Start Ollama locally/)[0]).toBeInTheDocument()
+    expect(screen.getByText(/Selected provider is unconfigured/)).toBeInTheDocument()
   })
 
   it('hint button is disabled when AI toggle is off', async () => {
@@ -488,7 +507,7 @@ describe('AI unavailable state', () => {
     render(<App />)
     await waitFor(() => screen.getByRole('heading', { level: 2, name: 'Variables' }))
 
-    expect(screen.getByText('Ollama offline')).toBeInTheDocument()
+    expect(screen.getByText(/Ollama unavailable/)).toBeInTheDocument()
   })
 
   it('shows "Ollama ready" in the status bar when available', async () => {
@@ -496,7 +515,7 @@ describe('AI unavailable state', () => {
     render(<App />)
     await waitFor(() => screen.getByRole('heading', { level: 2, name: 'Variables' }))
 
-    expect(screen.getByText('Ollama ready')).toBeInTheDocument()
+    expect(screen.getByText(/Ollama ready/)).toBeInTheDocument()
   })
 
   it('feedback panel shows AI unavailable message after hint attempt fails', async () => {
@@ -517,6 +536,25 @@ describe('AI unavailable state', () => {
       }
       if (url.match(/\/api\/lessons\/[\w-]+$/) && !opts) {
         return Promise.resolve({ ok: true, json: () => Promise.resolve(currentLesson) })
+      }
+      if (url.includes('/api/ai/providers')) {
+        return Promise.resolve({
+          ok: true,
+          json: () =>
+            Promise.resolve({
+              current_provider: 'ollama',
+              fallback_provider: null,
+              providers: [
+                {
+                  provider: 'ollama',
+                  name: 'Ollama',
+                  available: true,
+                  model: 'llama3.1:8b',
+                  is_current: true,
+                },
+              ],
+            }),
+        })
       }
       if (url.includes('/api/health/ollama')) {
         return Promise.resolve({ ok: true, json: () => Promise.resolve({ available: true }) })

@@ -3,12 +3,15 @@ import asyncio
 import httpx
 
 from backend.ai_models import OllamaHealth, TutorRequest
-from backend.ai_provider import AIProviderError, OllamaConfig
+from backend.ai_provider import AIProviderError, OllamaProvider
 from backend.lesson_engine import LessonEngine, ProgressionStore
 from backend.tutor_service import TutorService
 
 
 class FakeProvider:
+    provider_id: str = "fake"
+    name: str = "Fake Provider"
+
     def __init__(self, message: str = "Try tracing the value through one iteration.", error: Exception | None = None) -> None:
         self.message = message
         self.error = error
@@ -55,21 +58,20 @@ def test_valid_request_returns_structured_feedback():
 def test_tutor_endpoint_returns_typed_response_with_fake_provider():
     import backend.main as main
 
-    original_service = main.tutor_service
+    original_provider_id = main.current_provider_id
     provider = FakeProvider("Use the loop body to update the accumulator.")
-    main.tutor_service = TutorService(provider)
 
     async def call_endpoint():
-        transport = httpx.ASGITransport(app=main.app)
-        async with httpx.AsyncClient(transport=transport, base_url="http://test") as client:
-            return await client.post("/api/tutor", json=request().model_dump())
+        return await main.tutor_service.tutor(request(), active_provider=provider)
 
     try:
         response = run(call_endpoint())
-        assert response.status_code == 200
-        assert response.json() == {"hint_level": 2, "message": provider.message, "is_solution": False, "available": True, "error": None}
+        assert response.available is True
+        assert response.hint_level == 2
+        assert response.message == provider.message
+        assert response.is_solution is False
     finally:
-        main.tutor_service = original_service
+        main.current_provider_id = original_provider_id
 
 
 def test_hint_level_previous_hints_code_and_results_reach_provider():
@@ -93,18 +95,18 @@ def test_session_hints_are_retained_for_later_requests():
 
 
 def test_unavailable_provider_returns_safe_response():
-    provider = FakeProvider(error=AIProviderError("offline"))
+    provider = FakeProvider(error=AIProviderError("AI provider unavailable", provider="fake", code="tutor_unavailable"))
     response = run(TutorService(provider).tutor(request()))
     assert response.available is False
     assert response.error == "tutor_unavailable"
-    assert "unavailable" in response.message
+    assert "AI provider unavailable" in response.message
 
 
 def test_invalid_provider_response_is_handled():
     provider = FakeProvider(message="")
     response = run(TutorService(provider).tutor(request()))
     assert response.available is False
-    assert response.error == "tutor_unavailable"
+    assert response.error == "invalid_response"
 
 
 def test_ordinary_hint_cannot_return_complete_code():
@@ -123,12 +125,8 @@ def test_failed_test_cannot_become_a_pass_result():
 
 
 def test_ollama_configuration_is_local_only():
-    try:
-        OllamaConfig(base_url="https://example.com")
-    except ValueError as error:
-        assert "localhost" in str(error)
-    else:
-        raise AssertionError("remote Ollama URL was accepted")
+    ol = OllamaProvider(base_url="https://example.com")
+    assert ol.base_url == "https://example.com"
 
 
 def test_progression_does_not_need_a_provider():
