@@ -47,7 +47,7 @@ function LineNumbers({
   contentRef,
 }: {
   code: string
-  contentRef: React.RefObject<HTMLDivElement | null>
+  contentRef?: React.RefObject<HTMLDivElement | null>
 }) {
   const lines = (code ?? '').split('\n')
   return (
@@ -61,7 +61,7 @@ function LineNumbers({
   )
 }
 
-// ─── App ──────────────────────────────────────────────────────────────────────
+// ─── App Component ────────────────────────────────────────────────────────────
 function App() {
   const [lessons, setLessons] = useState<LessonSummary[]>([])
   const [lesson, setLesson] = useState<Lesson | null>(null)
@@ -69,7 +69,7 @@ function App() {
   const [results, setResults] = useState<TestResult[] | null>(null)
   const [hintLevel, setHintLevel] = useState(1)
   const [feedback, setFeedback] = useState(
-    'Run your tests to get feedback from the local sandbox.'
+    'Run your code to get immediate feedback from the local sandbox.'
   )
   const [aiEnabled, setAiEnabled] = useState(true)
   const [aiAvailable, setAiAvailable] = useState(false)
@@ -101,7 +101,7 @@ function App() {
     syncLineNumbers(0)
   }, [syncLineNumbers])
 
-  // ── Initial data load ──────────────────────────────────────────────────────
+  // ── Initial Data Load ──────────────────────────────────────────────────────
   useEffect(() => {
     const load = async () => {
       setIsLoadingLesson(true)
@@ -132,15 +132,13 @@ function App() {
     load()
   }, [resetEditorScroll])
 
-  // ── Ollama health check ────────────────────────────────────────────────────
+  // ── Ollama Health Check Polling ─────────────────────────────────────────────
   useEffect(() => {
     let latestRequestId = 0
     let activeController: AbortController | null = null
 
     const checkHealth = async () => {
       const requestId = ++latestRequestId
-      const timestamp = new Date().toISOString()
-      console.log(`[health:start] req #${requestId} at ${timestamp}`)
 
       if (activeController) {
         activeController.abort()
@@ -155,27 +153,17 @@ function App() {
         })
         clearTimeout(timeoutId)
 
-        if (!response.ok) {
-          throw new Error(`HTTP ${response.status}`)
-        }
+        if (!response.ok) throw new Error(`HTTP ${response.status}`)
         const data = (await response.json()) as { available: boolean }
-        console.log(`[health:response] req #${requestId} status ${response.status}:`, data)
 
-        // Ignore out-of-order stale responses
         if (requestId === latestRequestId) {
           setAiAvailable(data.available)
-          console.log(`[health:state] req #${requestId} set aiAvailable = ${data.available}`)
         }
       } catch (err: unknown) {
         clearTimeout(timeoutId)
-        if (err instanceof Error && err.name === 'AbortError') {
-          console.log(`[health:aborted] req #${requestId}`)
-          return
-        }
-        console.log(`[health:error] req #${requestId}:`, err)
+        if (err instanceof Error && err.name === 'AbortError') return
         if (requestId === latestRequestId) {
           setAiAvailable(false)
-          console.log(`[health:state] req #${requestId} set aiAvailable = false (error)`)
         }
       }
     }
@@ -185,13 +173,11 @@ function App() {
 
     return () => {
       clearInterval(interval)
-      if (activeController) {
-        activeController.abort()
-      }
+      if (activeController) activeController.abort()
     }
   }, [])
 
-  // ── Navigate to lesson ─────────────────────────────────────────────────────
+  // ── Navigate to Lesson ──────────────────────────────────────────────────────
   const loadLesson = useCallback(async (item: LessonSummary) => {
     if (item.status === 'locked') {
       setFeedback('Complete earlier lessons to unlock this one.')
@@ -210,7 +196,7 @@ function App() {
       setShowCompletion(false)
       setSessionNotes([])
       setNoteInput('')
-      setFeedback('Run your tests to get feedback from the local sandbox.')
+      setFeedback('Run your code to get immediate feedback from the local sandbox.')
       setTimeout(() => {
         resetEditorScroll()
         editorRef.current?.focus()
@@ -222,11 +208,11 @@ function App() {
     }
   }, [resetEditorScroll])
 
-  // ── Run tests ──────────────────────────────────────────────────────────────
+  // ── Run Code in Sandbox ────────────────────────────────────────────────────
   const runTests = useCallback(async () => {
     if (!lesson) return
     setIsRunning(true)
-    setFeedback('Running your code in the sandbox\u2026')
+    setFeedback('Checking your code in the sandbox…')
     try {
       const response = await fetch(
         `http://localhost:8000/api/lessons/${lesson.id}/run`,
@@ -246,22 +232,23 @@ function App() {
 
       if (execution.completed) {
         setShowCompletion(true)
-        setFeedback('\uD83C\uDF89 Lesson complete! Great work. The next lesson is now unlocked.')
+        setFeedback('🎉 Great! Everything works. Next lesson is unlocked!')
       } else if (execution.passed) {
-        setFeedback('\u2713 All required tests passed. You\'re on the right track!')
+        setFeedback('✓ All required checks passed. You are on the right track!')
       } else {
         const failed = execution.tests.filter((t) => !t.passed && t.required)
         setFeedback(
           failed.length > 0
-            ? `\u2717 ${failed.length} test${failed.length > 1 ? 's' : ''} failed. Start with the first failing test above.`
-            : '\u2717 Some tests failed. Check the results above and try again.'
+            ? `Not quite. ${failed.length} check${failed.length > 1 ? 's' : ''} failed. Check the details above.`
+            : 'Some checks failed. Review your code and try again.'
         )
       }
 
       const summariesResponse = await fetch('http://localhost:8000/api/lessons')
-      if (!summariesResponse.ok) throw new Error('Lesson list unavailable')
-      const summaries = (await summariesResponse.json()) as LessonSummary[]
-      setLessons(summaries)
+      if (summariesResponse.ok) {
+        const summaries = (await summariesResponse.json()) as LessonSummary[]
+        setLessons(summaries)
+      }
       setTimeout(scrollToResults, 100)
     } catch {
       setFeedback('The sandbox is unavailable. Your code was not graded.')
@@ -270,11 +257,11 @@ function App() {
     }
   }, [lesson, code, scrollToResults])
 
-  // ── Ask tutor ──────────────────────────────────────────────────────────────
+  // ── Ask Tutor for Hint ─────────────────────────────────────────────────────
   const askTutor = useCallback(async () => {
     if (!lesson || !aiEnabled || !aiAvailable) return
     setIsTutorLoading(true)
-    setFeedback('Getting a hint from your tutor\u2026')
+    setFeedback('Getting a hint from your tutor…')
     const controller = new AbortController()
     const timeoutId = setTimeout(() => controller.abort(), 50000)
     try {
@@ -294,9 +281,7 @@ function App() {
           solution_requested: false,
         }),
       })
-      if (!response.ok) {
-        throw new Error(`HTTP error ${response.status}`)
-      }
+      if (!response.ok) throw new Error(`HTTP error ${response.status}`)
       const tutor = (await response.json()) as {
         available: boolean
         message: string
@@ -308,16 +293,14 @@ function App() {
         setHintLevel(Math.min(tutor.hint_level + 1, 4))
       }
     } catch {
-      setFeedback(
-        'AI tutoring is unavailable right now. Deterministic tests are still available.'
-      )
+      setFeedback('AI tutoring is unavailable right now. Deterministic tests are still available.')
     } finally {
       clearTimeout(timeoutId)
       setIsTutorLoading(false)
     }
   }, [lesson, aiEnabled, aiAvailable, code, results, previousHints, hintLevel])
 
-  // ── Tab key & Ctrl+Enter handler ───────────────────────────────────────────
+  // ── Keyboard shortcuts ─────────────────────────────────────────────────────
   const handleEditorKeyDown = useCallback(
     (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
       if (e.ctrlKey && e.key === 'Enter') {
@@ -341,7 +324,6 @@ function App() {
     [code, runTests]
   )
 
-  // ── Session notes ──────────────────────────────────────────────────────────
   const addNote = useCallback(() => {
     const trimmed = noteInput.trim()
     if (!trimmed) return
@@ -354,35 +336,49 @@ function App() {
     if (next) await loadLesson(next)
   }, [lessons, loadLesson])
 
-  // ── Derived ────────────────────────────────────────────────────────────────
+  // Derived state
   const completedCount = lessons.filter((l) => l.status === 'completed').length
   const progressPct = lessons.length ? (completedCount / lessons.length) * 100 : 0
   const allPassed = results !== null && results.length > 0 && results.every((r) => r.passed || !r.required)
   const failedRequired = results?.filter((r) => !r.passed && r.required) ?? []
   const hintDisabled = !aiEnabled || !aiAvailable || !lesson || isTutorLoading || isRunning
 
-  // ── Render ─────────────────────────────────────────────────────────────────
   return (
-    <main className="app-shell">
-      <header className="topbar" role="banner">
-        <div className="brand-mark" aria-hidden="true"><span>p</span></div>
-        <div className="brand-copy">
-          <strong>patchwork</strong>
-          <small>local coding tutor</small>
+    <div className="duo-app">
+      {/* Duolingo-style Top Header */}
+      <header className="duo-header" role="banner">
+        <div className="duo-brand">
+          <div className="duo-logo-icon">p</div>
+          <span>patchwork</span>
         </div>
-        <div className="topbar-status" aria-live="polite">
-          <span className={`status-dot ${aiAvailable ? 'on' : ''}`} aria-hidden="true" />
-          {aiAvailable ? 'Ollama ready' : 'Ollama offline'}
+
+        <div className="duo-header-progress">
+          <div
+            className="duo-progress-bar-bg"
+            role="progressbar"
+            aria-valuenow={completedCount}
+            aria-valuemin={0}
+            aria-valuemax={lessons.length}
+            aria-label="Course progress"
+          >
+            <div className="duo-progress-bar-fill" style={{ width: `${progressPct}%` }} />
+          </div>
         </div>
-        <button
-          className={`ai-toggle ${aiEnabled ? 'active' : ''}`}
-          aria-pressed={aiEnabled}
-          aria-label={aiEnabled ? 'AI tutor on — click to pause' : 'AI tutor off — click to enable'}
-          onClick={() => setAiEnabled((e) => !e)}
-        >
-          {aiEnabled ? '◉ AI on' : '◯ AI off'}
-        </button>
-        <div className="avatar" aria-hidden="true">AM</div>
+
+        <div className="duo-header-right">
+          <div className="duo-status-badge">
+            <span className={`duo-status-dot ${aiAvailable ? 'active' : ''}`} />
+            {aiAvailable ? 'Ollama ready' : 'Ollama offline'}
+          </div>
+          <button
+            className="duo-button duo-button-secondary"
+            style={{ padding: '6px 14px', fontSize: '13px' }}
+            aria-label="AI tutor on"
+            onClick={() => setAiEnabled((e) => !e)}
+          >
+            {aiEnabled ? 'AI tutor on' : 'AI tutor off'}
+          </button>
+        </div>
       </header>
 
       {backendError && (
@@ -395,29 +391,12 @@ function App() {
         </div>
       )}
 
-      <div className="workspace">
-        {/* Lesson nav */}
-        <aside className="lesson-nav" aria-label="Course navigation">
-          <div className="eyebrow">Python foundations</div>
-          <h1>Build your<br /><em>thinking.</em></h1>
-          <p className="nav-intro">A quiet place to practice, make mistakes, and understand why.</p>
-
-          <div className="progress-label">
-            <span>Course progress</span>
-            <strong>{completedCount} / {lessons.length}</strong>
-          </div>
-          <div
-            className="progress-track"
-            role="progressbar"
-            aria-valuenow={completedCount}
-            aria-valuemin={0}
-            aria-valuemax={lessons.length}
-            aria-label="Course progress"
-          >
-            <span style={{ width: `${progressPct}%` }} />
-          </div>
-
-          <nav aria-label="Lessons">
+      {/* Main Learning Workspace */}
+      <div className="duo-main-container">
+        {/* Left Side Skill Tree Path */}
+        <aside className="duo-sidebar" aria-label="Course navigation">
+          <div className="duo-sidebar-title">Python Path</div>
+          <nav className="duo-path-list" aria-label="Lessons">
             {lessons.map((item) => {
               const isActive = lesson?.id === item.id
               const statusLabel =
@@ -428,270 +407,180 @@ function App() {
                 <button
                   key={item.id}
                   id={`lesson-nav-${item.id}`}
-                  className={`lesson-item ${item.status}${isActive ? ' active' : ''}`}
+                  className={`duo-path-node ${item.status}${isActive ? ' active' : ''}`}
                   onClick={() => loadLesson(item)}
                   disabled={item.status === 'locked' || isLoadingLesson}
                   aria-current={isActive ? 'page' : undefined}
                   aria-label={`${item.title} — ${statusLabel}`}
-                  title={item.status === 'locked' ? 'Complete earlier lessons to unlock' : ''}
+                  title={item.title}
                 >
-                  <span className="lesson-number" aria-hidden="true">
-                    {item.status === 'completed' ? '✓' : String(item.order).padStart(2, '0')}
-                  </span>
-                  <span className="lesson-detail">
-                    <strong>{item.title}</strong>
-                    <small>{statusLabel}</small>
-                  </span>
-                  <span className="lesson-meta">
-                    {item.status === 'locked' ? '🔒' : `${item.duration_minutes}m`}
-                  </span>
+                  {item.status === 'completed' ? '✓' : item.order}
                 </button>
               )
             })}
           </nav>
-
-          <div className="privacy-note">
-            <span aria-hidden="true">⏁</span>
-            <div>
-              <strong>Runs on your machine</strong>
-              <small>Your code stays here. Always.</small>
-            </div>
-          </div>
         </aside>
 
-        {/* Lesson view */}
-        <section className="lesson-view" aria-label="Lesson content">
+        {/* Center Stage: Interactive Learning Moment */}
+        <main className="duo-stage" aria-label="Lesson content">
           {isLoadingLesson ? (
-            <div className="loading-state" role="status" aria-label="Loading lesson">
-              <div className="loading-spinner" aria-hidden="true" />
-              <p>Loading lesson…</p>
+            <div className="duo-card" style={{ textAlign: 'center', padding: '48px' }} role="status" aria-label="Loading lesson">
+              <h2>Loading exercise…</h2>
             </div>
-          ) : (
+          ) : lesson ? (
             <>
-              <div className="lesson-heading">
-                <div>
-                  <div className="eyebrow warm">
-                    Lesson {lesson?.order ?? '—'} <span aria-hidden="true">•</span> {lesson?.difficulty ?? ''}
-                  </div>
-                  <h2>{lesson?.title ?? 'Loading lesson'}</h2>
+              {/* Lesson Question Card */}
+              <div className="duo-card">
+                <div className="duo-card-header">
+                  <span className="duo-lesson-badge">LESSON {lesson.order}</span>
                 </div>
-                <span className="lesson-time" aria-label={`${lesson?.duration_minutes} minute lesson`}>
-                  ◷ {lesson?.duration_minutes ?? '—'} min
-                </span>
+                <h2 className="duo-lesson-title">{lesson.title}</h2>
+                <p className="duo-instruction">{lesson.description}</p>
+
+                {/* Embedded Code Editor */}
+                <div className="duo-editor-container">
+                  <div className="duo-editor-top">
+                    <span>exercise.py</span>
+                    <span>Python 3.12</span>
+                  </div>
+                  <div className="duo-editor-body">
+                    <LineNumbers code={code} />
+                    <textarea
+                      ref={editorRef}
+                      className="duo-textarea"
+                      spellCheck={false}
+                      value={code}
+                      onChange={(e) => setCode(e.target.value)}
+                      onKeyDown={handleEditorKeyDown}
+                      disabled={isRunning}
+                      placeholder="Write your Python code here…"
+                      aria-label="Code editor — use Ctrl+Enter to run"
+                    />
+                  </div>
+                </div>
               </div>
 
-              {showCompletion && (
-                <div className="completion-banner" role="status" aria-live="polite">
-                  <div className="completion-content">
-                    <span className="completion-icon" aria-hidden="true">🎉</span>
-                    <div>
-                      <strong>Lesson Complete!</strong>
-                      <p>Great work! The next lesson is now unlocked.</p>
+              {/* Immediate Test Feedback */}
+              {results && (
+                <div
+                  ref={resultsRef}
+                  className={`duo-feedback-panel ${allPassed ? 'success' : 'error'}`}
+                  role="region"
+                  aria-label="Test results"
+                >
+                  <div className="duo-feedback-title">
+                    <span>
+                      {allPassed
+                        ? `All ${results.length} tests passed`
+                        : `${failedRequired.length} of ${results.filter(r => r.required).length} required failed`}
+                    </span>
+                  </div>
+                  <div className="duo-feedback-msg">
+                    {allPassed ? (
+                      <p>All checks passed. You master this concept!</p>
+                    ) : (
+                      <p>
+                        {failedRequired.length} required check{failedRequired.length > 1 ? 's' : ''} failed. Review your code and run again.
+                      </p>
+                    )}
+                  </div>
+                  {results.map((r) => (
+                    <div key={r.name} className="result-row" style={{ display: 'flex', gap: '8px', alignItems: 'center', fontSize: '13px' }}>
+                      <span role="img" aria-label={r.passed ? 'Passed' : 'Failed'}>{r.passed ? '✓' : '×'}</span>
+                      <span>{r.name}</span>
+                      {!r.required && <span className="opt" style={{ fontSize: '10px', background: 'rgba(0,0,0,0.1)', padding: '1px 4px', borderRadius: '3px' }}>opt</span>}
+                    </div>
+                  ))}
+                </div>
+              )}
+
+              {/* Tutor Coach Feedback Display */}
+              <aside aria-label="Tutor feedback">
+                <div className="duo-tutor-box" role="status" aria-label="Tutor feedback">
+                  <div className="duo-tutor-avatar">p</div>
+                  <div className="duo-tutor-content">
+                    <div className="duo-tutor-name">Tutor Guide</div>
+                    <div className="duo-tutor-text">
+                      {isTutorLoading ? 'Thinking…' : feedback ?? (aiAvailable ? 'Run your code or ask for a hint!' : 'Start Ollama locally to enable AI hints.')}
                     </div>
                   </div>
-                  <button className="next-lesson-button" onClick={goToNextLesson} disabled={isLoadingLesson}>
+                </div>
+                {!aiAvailable && (
+                  <p className="ai-unavailable-note" style={{ marginTop: '8px' }}>
+                    Start Ollama locally to enable AI hints. Tests always work offline.
+                  </p>
+                )}
+              </aside>
+
+              {/* Celebratory Completion Overlay */}
+              {showCompletion && (
+                <div className="duo-feedback-panel success" style={{ marginTop: '16px' }}>
+                  <div className="duo-feedback-title">
+                    <span>🎉 Lesson Complete!</span>
+                  </div>
+                  <div className="duo-feedback-msg">
+                    <p>Awesome work! You completed this exercise and unlocked the next step.</p>
+                  </div>
+                  <button className="duo-button duo-button-primary" onClick={goToNextLesson}>
                     Next Lesson →
                   </button>
                 </div>
               )}
 
-              {lesson ? <div className="instruction">
-                <span className="step-tag">YOUR TURN</span>
-                <p>{lesson.description}</p>
-              </div> : <div className="lesson-empty-state" role="status">
-                <strong>No lesson is available yet.</strong>
-                <p>Check that the local lesson service is running, then try again.</p>
-                <button className="secondary-button" onClick={() => window.location.reload()}>Try again</button>
-              </div>}
-
-              <div className="editor-card">
-                <div className="editor-top">
-                  <span><i className="file-dot" aria-hidden="true" />exercise.py</span>
-                  <span className="editor-label">Python 3.12</span>
-                  <span className="line-count" aria-label={`${(code ?? '').split('\n').length} lines`}>
-                    {(code ?? '').split('\n').length} lines
-                  </span>
-                </div>
-                <div className="editor-body">
-                  <LineNumbers code={code} contentRef={gutterContentRef} />
-                  <textarea
-                    ref={editorRef}
-                    spellCheck={false}
-                    aria-label="Code editor — use Ctrl+Enter to run"
-                    aria-multiline="true"
-                    value={code}
-                    onChange={(e) => setCode(e.target.value)}
-                    onScroll={(e) => syncLineNumbers(e.currentTarget.scrollTop)}
-                    disabled={!lesson || isRunning}
-                    placeholder={isLoadingLesson ? 'Loading…' : 'Write your Python code here…'}
-                    onKeyDown={handleEditorKeyDown}
-                    autoCapitalize="off"
-                    autoCorrect="off"
-                    autoComplete="off"
+              {/* Session Notes Section */}
+              <div className="session-notes" style={{ marginTop: '24px' }}>
+                <div style={{ display: 'flex', gap: '8px' }}>
+                  <input
+                    type="text"
+                    placeholder="Add a note…"
+                    value={noteInput}
+                    onChange={(e) => setNoteInput(e.target.value)}
+                    onKeyDown={(e) => { if (e.key === 'Enter') { e.preventDefault(); addNote() } }}
+                    aria-label="Session note"
+                    style={{ flex: 1, padding: '8px 12px', borderRadius: '8px', border: '1px solid #cbd5e1' }}
                   />
+                  <button onClick={addNote} aria-label="Add note" style={{ padding: '8px 16px', background: '#58cc02', color: '#fff', borderRadius: '8px', fontWeight: 800 }}>+</button>
                 </div>
+                {sessionNotes.length > 0 && (
+                  <ul style={{ marginTop: '12px', paddingLeft: '20px' }}>
+                    {sessionNotes.map((note, i) => (
+                      <li key={i}>{note}</li>
+                    ))}
+                  </ul>
+                )}
               </div>
-
-              <div className="action-row">
-                <button
-                  id="run-tests-button"
-                  className="run-button"
-                  onClick={runTests}
-                  disabled={!lesson || isRunning || isLoadingLesson}
-                  aria-label="Run code and evaluate tests (Ctrl+Enter)"
-                >
-                  {isRunning ? (
-                    <><span className="spinner" aria-hidden="true" />Running…</>
-                  ) : (
-                    <><span aria-hidden="true">▶</span>Run tests</>
-                  )}
-                </button>
-                <span className="shortcut" aria-hidden="true">Ctrl <b>↵</b></span>
-                <button
-                  className="reset-button"
-                  onClick={() => {
-                    if (lesson) {
-                      setCode(lesson.starter_code)
-                      setResults(null)
-                      setShowCompletion(false)
-                      setFeedback('Starter code restored.')
-                    }
-                  }}
-                  disabled={!lesson || isRunning || isLoadingLesson}
-                  aria-label="Reset code to starter"
-                >
-                  Reset code
-                </button>
-              </div>
-
-              {results && (
-                <div
-                  ref={resultsRef}
-                  className={`test-results${allPassed ? ' all-passed' : ''}`}
-                  aria-live="polite"
-                  role="region"
-                  aria-label="Test results"
-                >
-                  <div className="result-title">
-                    <span>Local sandbox</span>
-                    <span className={results.length === 0 ? 'badge warning' : allPassed ? 'badge success' : 'badge error'}>
-                      {results.length === 0
-                        ? 'No test results returned'
-                        : allPassed
-                        ? `All ${results.length} tests passed`
-                        : `${failedRequired.length} of ${results.filter(r => r.required).length} required failed`}
-                    </span>
-                  </div>
-                  {results.length === 0 && (
-                    <p className="results-empty-message">The sandbox did not return individual tests. Try running your code again.</p>
-                  )}
-                  {results.map((r) => (
-                    <div
-                      key={r.name}
-                      className={`result-row${!r.passed && r.required ? ' error' : r.passed ? ' passed' : ' optional-fail'}`}
-                    >
-                      <span className={r.passed ? 'check' : 'cross'} aria-label={r.passed ? 'Passed' : 'Failed'} role="img">
-                        {r.passed ? '✓' : '×'}
-                      </span>
-                      <span className="result-name">{r.name}</span>
-                      {!r.required && <span className="optional-badge">opt</span>}
-                      <small className="result-detail">{r.error ?? r.description}</small>
-                    </div>
-                  ))}
-                </div>
-              )}
             </>
-          )}
-        </section>
-
-        {/* Feedback panel */}
-        <aside className="feedback-panel" aria-label="Tutor feedback">
-          <div className="panel-heading">
-            <div>
-              <div className="eyebrow">Your guide</div>
-              <h3>Feedback</h3>
-            </div>
-            <span className="spark" aria-hidden="true">✦</span>
-          </div>
-
-          <div className="feedback-box" aria-live="polite" role="status" aria-label="Tutor feedback">
-            <div className="tutor-avatar" aria-hidden="true">p</div>
-            <p>{isTutorLoading ? 'Thinking…' : feedback}</p>
-          </div>
-
-          <div className="hint-heading">
-            <span>Hint ladder</span>
-            <small>{getHintLabel(hintLevel)}</small>
-          </div>
-          <div
-            className="hint-track"
-            role="progressbar"
-            aria-valuenow={hintLevel - 1}
-            aria-valuemin={0}
-            aria-valuemax={4}
-            aria-label={`Hint level ${hintLevel - 1} of 4`}
-          >
-            {[1, 2, 3, 4].map((level) => (
-              <span key={level} className={level < hintLevel ? 'active' : ''} />
-            ))}
-          </div>
-
-          <button
-            id="hint-button"
-            className="hint-button"
-            onClick={askTutor}
-            disabled={hintDisabled}
-            aria-label={
-              !aiAvailable ? 'AI tutor unavailable'
-              : !aiEnabled ? 'AI tutor is paused'
-              : `Request a hint — ${getHintButtonText(hintLevel)}`
-            }
-          >
-            <span aria-hidden="true">✦</span>
-            {isTutorLoading ? 'Getting hint…'
-              : !aiEnabled ? 'AI is paused'
-              : aiAvailable ? getHintButtonText(hintLevel)
-              : 'AI unavailable'}
-          </button>
-
-          {!aiAvailable && (
-            <p className="ai-unavailable-note">
-              Start Ollama locally to enable AI hints. Tests always work offline.
-            </p>
-          )}
-
-          <p className="hint-policy">
-            Hints start conceptual and become more direct only when you need them. The tutor never runs your code.
-          </p>
-
-          <div className="session-notes">
-            <div className="eyebrow">Session notes</div>
-            {sessionNotes.length > 0 && (
-              <ul className="notes-list">
-                {sessionNotes.map((note, i) => <li key={i}>{note}</li>)}
-              </ul>
-            )}
-            <div className="note-input-row">
-              <input
-                type="text"
-                className="note-input"
-                placeholder="Add a note…"
-                value={noteInput}
-                onChange={(e) => setNoteInput(e.target.value)}
-                onKeyDown={(e) => { if (e.key === 'Enter') { e.preventDefault(); addNote() } }}
-                aria-label="Session note"
-              />
-              <button
-                className="add-note-button"
-                onClick={addNote}
-                disabled={!noteInput.trim()}
-                aria-label="Add note"
-              >+</button>
-            </div>
-          </div>
-        </aside>
+          ) : null}
+        </main>
       </div>
-    </main>
+
+      {/* Bottom Sticky Action Bar */}
+      <footer className="duo-footer-bar">
+        <button
+          id="hint-button"
+          className="duo-button duo-button-secondary"
+          onClick={askTutor}
+          disabled={hintDisabled}
+          aria-label={
+            !aiAvailable ? 'AI tutor unavailable'
+            : !aiEnabled ? 'AI tutor is paused'
+            : 'Request a hint'
+          }
+        >
+          {isTutorLoading ? 'Getting Hint…' : !aiAvailable ? 'AI tutor unavailable' : !aiEnabled ? 'AI tutor is paused' : 'Request a hint'}
+        </button>
+
+        <button
+          id="run-tests-button"
+          className="duo-button duo-button-primary"
+          onClick={runTests}
+          disabled={isRunning || isLoadingLesson}
+          aria-label="Run code"
+        >
+          {isRunning ? 'Running…' : 'Run code'}
+        </button>
+      </footer>
+    </div>
   )
 }
 
