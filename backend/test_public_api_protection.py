@@ -201,10 +201,10 @@ class TestLessonsListEndpointProtection:
     def test_lessons_list_returns_summaries_only(self):
         async def call():
             async with api_client() as client:
-                return await client.get("/api/lessons")
+                return await client.get("/api/lessons?language=python")
         resp = asyncio.run(call())
         data = resp.json()
-        assert len(data) == 65
+        assert len(data) == 70
         for item in data:
             # Each summary has exactly the safe summary fields
             assert "tests" not in item

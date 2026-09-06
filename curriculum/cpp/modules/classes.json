@@ -1,0 +1,144 @@
+{
+  "id": "cpp-classes",
+  "title": "Unit 6: C++ Classes & Encapsulation",
+  "order": 6,
+  "concepts": [
+    {
+      "id": "cpp-classes",
+      "title": "Classes, Member Functions & Encapsulation",
+      "prerequisites": ["cpp-vectors"]
+    }
+  ],
+  "lessons": [
+    {
+      "id": "cpp-classes-step-1",
+      "title": "1. Defining Classes & Constructors",
+      "description": "C++ classes encapsulate member variables and functions. Member initialization lists are preferred in constructors. Create a `Player` class.",
+      "order": 26,
+      "difficulty": "intermediate",
+      "duration_minutes": 5,
+      "type": "learn",
+      "concepts": ["cpp-classes"],
+      "prerequisites": ["cpp-vectors"],
+      "learning_objectives": [
+        "Define C++ class with constructor and getter member functions"
+      ],
+      "starter_code": "#include <string>\n\nclass Player {\nprivate:\n    std::string name_;\n    int health_;\npublic:\n    Player(const std::string& name, int health = 100)\n        : name_(name), health_(health) {}\n\n    std::string get_name() const { return name_; }\n    int get_health() const { return health_; }\n};\n",
+      "solution_code": "#include <string>\n\nclass Player {\nprivate:\n    std::string name_;\n    int health_;\npublic:\n    Player(const std::string& name, int health = 100)\n        : name_(name), health_(health) {}\n\n    std::string get_name() const { return name_; }\n    int get_health() const { return health_; }\n};\n",
+      "tests": [
+        {
+          "name": "test_player_init",
+          "test_code": "Player p(\"Arthur\", 120); assert(p.get_name() == \"Arthur\" && p.get_health() == 120);",
+          "required": true
+        }
+      ],
+      "completion_requirements": {
+        "required_test_names": ["test_player_init"]
+      }
+    },
+    {
+      "id": "cpp-classes-step-2",
+      "title": "2. Mutator Member Functions",
+      "description": "Add a `take_damage(int damage)` method to modify `health_` safely.",
+      "order": 27,
+      "difficulty": "intermediate",
+      "duration_minutes": 5,
+      "type": "learn",
+      "concepts": ["cpp-classes"],
+      "prerequisites": ["cpp-vectors"],
+      "learning_objectives": [
+        "Implement member functions that modify object state"
+      ],
+      "starter_code": "#include <string>\n#include <algorithm>\n\nclass Player {\nprivate:\n    std::string name_;\n    int health_;\npublic:\n    Player(const std::string& name, int health = 100)\n        : name_(name), health_(health) {}\n\n    int get_health() const { return health_; }\n\n    void take_damage(int damage) {\n        // TODO: Subtract damage from health_ (minimum 0)\n    }\n};\n",
+      "solution_code": "#include <string>\n#include <algorithm>\n\nclass Player {\nprivate:\n    std::string name_;\n    int health_;\npublic:\n    Player(const std::string& name, int health = 100)\n        : name_(name), health_(health) {}\n\n    int get_health() const { return health_; }\n\n    void take_damage(int damage) {\n        health_ = std::max(0, health_ - damage);\n    }\n};\n",
+      "tests": [
+        {
+          "name": "test_take_damage",
+          "test_code": "Player p(\"Hero\", 100); p.take_damage(40); assert(p.get_health() == 60);",
+          "required": true
+        }
+      ],
+      "completion_requirements": {
+        "required_test_names": ["test_take_damage"]
+      }
+    },
+    {
+      "id": "cpp-classes-01",
+      "title": "3. Bank Account Ledger (Concept Challenge)",
+      "description": "Encapsulate account balance and transaction operations in C++.",
+      "order": 28,
+      "difficulty": "intermediate",
+      "duration_minutes": 10,
+      "type": "challenge",
+      "concepts": ["cpp-classes"],
+      "prerequisites": ["cpp-vectors"],
+      "learning_objectives": [
+        "Implement BankAccount class with deposit and withdraw methods"
+      ],
+      "starter_code": "#include <string>\n\nclass BankAccount {\nprivate:\n    std::string owner_;\n    double balance_;\npublic:\n    BankAccount(const std::string& owner, double initial_balance = 0.0)\n        : owner_(owner), balance_(initial_balance) {}\n\n    double get_balance() const { return balance_; }\n\n    void deposit(double amount) {\n        // TODO: Add amount to balance_\n    }\n\n    bool withdraw(double amount) {\n        // TODO: Subtract amount if balance_ >= amount, return true, else false\n        return false;\n    }\n};\n",
+      "solution_code": "#include <string>\n\nclass BankAccount {\nprivate:\n    std::string owner_;\n    double balance_;\npublic:\n    BankAccount(const std::string& owner, double initial_balance = 0.0)\n        : owner_(owner), balance_(initial_balance) {}\n\n    double get_balance() const { return balance_; }\n\n    void deposit(double amount) {\n        if (amount > 0) balance_ += amount;\n    }\n\n    bool withdraw(double amount) {\n        if (balance_ >= amount) {\n            balance_ -= amount;\n            return true;\n        }\n        return false;\n    }\n};\n",
+      "tests": [
+        {
+          "name": "test_bank_account",
+          "test_code": "BankAccount acc(\"Alice\", 100.0); acc.deposit(50.0); assert(acc.get_balance() == 150.0); assert(acc.withdraw(30.0) == true); assert(acc.get_balance() == 120.0);",
+          "required": true
+        }
+      ],
+      "completion_requirements": {
+        "required_test_names": ["test_bank_account"]
+      }
+    },
+    {
+      "id": "cpp-classes-practice-1",
+      "title": "4. Rectangle Class (Practice)",
+      "description": "Calculate area and perimeter in a Rectangle class.",
+      "order": 29,
+      "difficulty": "intermediate",
+      "duration_minutes": 5,
+      "type": "practice",
+      "concepts": ["cpp-classes"],
+      "prerequisites": ["cpp-vectors"],
+      "learning_objectives": [
+        "Compute geometric values in C++ member functions"
+      ],
+      "starter_code": "class Rectangle {\nprivate:\n    double width_;\n    double height_;\npublic:\n    Rectangle(double width, double height)\n        : width_(width), height_(height) {}\n\n    double area() const {\n        // TODO: Return width_ * height_\n        return 0.0;\n    }\n};\n",
+      "solution_code": "class Rectangle {\nprivate:\n    double width_;\n    double height_;\npublic:\n    Rectangle(double width, double height)\n        : width_(width), height_(height) {}\n\n    double area() const {\n        return width_ * height_;\n    }\n};\n",
+      "tests": [
+        {
+          "name": "test_rectangle",
+          "test_code": "Rectangle r(4.0, 5.0); assert(r.area() == 20.0);",
+          "required": true
+        }
+      ],
+      "completion_requirements": {
+        "required_test_names": ["test_rectangle"]
+      }
+    },
+    {
+      "id": "cpp-classes-checkpoint",
+      "title": "5. Unit 6 Checkpoint: C++ Classes Mastery",
+      "description": "Verify C++ object-oriented encapsulation.",
+      "order": 30,
+      "difficulty": "intermediate",
+      "duration_minutes": 5,
+      "type": "checkpoint",
+      "concepts": ["cpp-classes"],
+      "prerequisites": ["cpp-vectors"],
+      "learning_objectives": [
+        "Pass C++ classes checkpoint"
+      ],
+      "starter_code": "class Counter {\nprivate:\n    int count_;\npublic:\n    Counter(int initial = 0) : count_(initial) {}\n    int get_count() const { return count_; }\n    void increment() {\n        // TODO: Add 1 to count_\n    }\n};\n",
+      "solution_code": "class Counter {\nprivate:\n    int count_;\npublic:\n    Counter(int initial = 0) : count_(initial) {}\n    int get_count() const { return count_; }\n    void increment() {\n        count_++;\n    }\n};\n",
+      "tests": [
+        {
+          "name": "test_counter",
+          "test_code": "Counter c(5); c.increment(); assert(c.get_count() == 6);",
+          "required": true
+        }
+      ],
+      "completion_requirements": {
+        "required_test_names": ["test_counter"]
+      }
+    }
+  ]
+}

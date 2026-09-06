@@ -10,13 +10,10 @@ class ConceptDefinition(BaseModel):
 class DeterministicTestSpec(BaseModel):
     name: str = Field(min_length=1, max_length=120)
     description: str = Field(default="", max_length=240)
-    # stdout-matching mode (legacy / simple exercises)
     stdin: str = Field(default="", max_length=64 * 1024)
     expected_stdout: str | None = Field(default=None, max_length=64 * 1024)
-    # unittest method mode (Exercism-style exercises)
-    # When set, the runner executes this method body inside a TestCase class
-    # together with the student's code loaded into the test namespace.
     unittest_code: str | None = Field(default=None, max_length=64 * 1024)
+    test_code: str | None = Field(default=None, max_length=64 * 1024)
     required: bool = True
 
 
@@ -76,13 +73,7 @@ class Curriculum(BaseModel):
 
 
 class PublicLessonView(BaseModel):
-    """Safe public projection of a lesson returned by the lesson detail API.
-
-    Contains only information the student UI needs to display the lesson and
-    allow code submission.  All internal grading implementation — test code,
-    expected outputs, completion requirements — is deliberately excluded so
-    that students cannot inspect the answer key through the API.
-    """
+    """Safe public projection of a lesson returned by the lesson detail API."""
 
     id: str
     title: str
@@ -91,13 +82,25 @@ class PublicLessonView(BaseModel):
     difficulty: str
     duration_minutes: int
     starter_code: str
+    type: str = "learn"
+    unit_id: str | None = None
+    unit_title: str | None = None
+    concept_id: str | None = None
+    concept_title: str | None = None
     concepts: list[str] = []
     prerequisites: list[str] = []
     learning_objectives: list[str] = []
     source: LessonSource | None = None
 
     @classmethod
-    def from_lesson(cls, lesson: "LessonDefinition") -> "PublicLessonView":
+    def from_lesson(
+        cls,
+        lesson: "LessonDefinition",
+        unit_id: str | None = None,
+        unit_title: str | None = None,
+        concept_id: str | None = None,
+        concept_title: str | None = None,
+    ) -> "PublicLessonView":
         return cls(
             id=lesson.id,
             title=lesson.title,
@@ -106,11 +109,24 @@ class PublicLessonView(BaseModel):
             difficulty=lesson.difficulty,
             duration_minutes=lesson.duration_minutes,
             starter_code=lesson.starter_code,
+            type=getattr(lesson, "type", "learn") or "learn",
+            unit_id=unit_id,
+            unit_title=unit_title,
+            concept_id=concept_id,
+            concept_title=concept_title,
             concepts=list(lesson.concepts),
             prerequisites=list(lesson.prerequisites),
             learning_objectives=list(lesson.learning_objectives),
             source=lesson.source,
         )
+
+
+class CourseSummary(BaseModel):
+    id: str
+    title: str
+    language: str
+    lesson_count: int
+    completed_count: int
 
 
 class LessonSummary(BaseModel):
@@ -120,6 +136,9 @@ class LessonSummary(BaseModel):
     difficulty: str
     duration_minutes: int
     status: str
+    unit_id: str | None = None
+    unit_title: str | None = None
+    type: str | None = None
 
 
 class TestResult(BaseModel):

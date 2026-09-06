@@ -5,9 +5,10 @@ from pydantic import BaseModel, Field
 
 from .ai_models import OllamaHealth, ProvidersOverview, ProviderStatus, TutorRequest, TutorResponse
 from .ai_provider import AIProvider, ALL_PROVIDERS, OllamaProvider, get_ai_provider
+from pathlib import Path
+from .curriculum_loader import load_all_curriculums
 from .lesson_engine import LessonEngine, ProgressionStore
-from .lesson_models import LessonSummary, ProgressionResult, ProgressionState, PublicLessonView
-from .lessons import CURRICULUM
+from .lesson_models import CourseSummary, LessonSummary, ProgressionResult, ProgressionState, PublicLessonView
 from .sandbox import SandboxError, sandbox
 from .tutor_service import TutorService
 
@@ -28,9 +29,22 @@ class ProviderSelection(BaseModel):
     provider: str
 
 
-from pathlib import Path
-progression_path = Path(__file__).resolve().parent / "progression_state.json"
-lesson_engine = LessonEngine(sandbox, ProgressionStore(CURRICULUM, storage_path=progression_path), CURRICULUM)
+class CourseSelection(BaseModel):
+    language: str
+
+
+base_path = Path(__file__).resolve().parent
+loaded_curriculums = load_all_curriculums()
+loaded_stores = {
+    lang: ProgressionStore(curr, storage_path=base_path / f"progression_state_{lang}.json")
+    for lang, curr in loaded_curriculums.items()
+}
+
+lesson_engine = LessonEngine(
+    executor=sandbox,
+    curriculums=loaded_curriculums,
+    stores=loaded_stores,
+)
 
 # Global active provider setting
 current_provider_id = os.getenv("AI_PROVIDER", "ollama").lower().strip()
@@ -105,23 +119,61 @@ async def select_ai_provider(req: ProviderSelection):
     return st
 
 
+@app.get("/api/courses", response_model=list[CourseSummary])
+async def get_courses():
+    courses = []
+    for lang, curr in lesson_engine.curriculums.items():
+        store = lesson_engine.stores.get(lang, lesson_engine.store)
+        state = store.state()
+        courses.append(
+            CourseSummary(
+                id=curr.course.id,
+                title=curr.course.title,
+                language=curr.course.language,
+                lesson_count=len(curr.lessons),
+                completed_count=len(state.completed_lesson_ids),
+            )
+        )
+    return courses
+
+
+@app.post("/api/courses/select")
+async def select_course(req: CourseSelection):
+    lang = req.language.lower().strip()
+    if lang not in lesson_engine.curriculums:
+        raise HTTPException(status_code=400, detail={"error": "unknown_course_language"})
+    lesson_engine.active_language = lang
+    return {"status": "ok", "active_language": lang}
+
+
 @app.get("/api/progression", response_model=ProgressionState)
-async def get_progression():
-    return lesson_engine.store.state()
+async def get_progression(language: str | None = None):
+    lang = (language or lesson_engine.active_language).lower().strip()
+    store = lesson_engine.stores.get(lang, lesson_engine.store)
+    return store.state()
 
 
 @app.get("/api/lessons", response_model=list[LessonSummary])
-async def get_lessons():
-    return lesson_engine.summaries()
+async def get_lessons(language: str | None = None):
+    return lesson_engine.summaries(language=language)
 
 
 @app.get("/api/lessons/{lesson_id}", response_model=PublicLessonView)
 async def get_lesson(lesson_id: str):
     try:
         lesson = lesson_engine.get_lesson(lesson_id)
+        lang = lesson_engine.get_lesson_language(lesson_id)
+        curr = lesson_engine.curriculums[lang]
+        unit_id = None
+        unit_title = None
+        for module in curr.modules:
+            if any(l.id == lesson_id for l in module.lessons):
+                unit_id = module.id
+                unit_title = module.title
+                break
     except KeyError as exc:
         raise HTTPException(status_code=404, detail={"error": "lesson_not_found"}) from exc
-    return PublicLessonView.from_lesson(lesson)
+    return PublicLessonView.from_lesson(lesson, unit_id=unit_id, unit_title=unit_title)
 
 
 @app.get("/api/lessons/{lesson_id}/solution")

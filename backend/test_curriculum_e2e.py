@@ -862,11 +862,11 @@ class TestFunctionsE2E:
         assert not failing, f"Unexpected failures: {[t['name'] for t in failing]}"
 
     def test_correct_solution_completes_full_chain(self):
-        """Complete all 65 curriculum lessons in sequence and verify completion."""
+        """Complete all curriculum lessons in sequence and verify completion."""
         engine = fresh_engine()
         for lesson in CURRICULUM.lessons:
             engine.store.mark_completed(lesson.id)
 
         state = engine.store.state()
         assert state.current_lesson_id is None, "Expected all lessons completed"
-        assert len(state.completed_lesson_ids) == 65
+        assert len(state.completed_lesson_ids) == len(CURRICULUM.lessons)

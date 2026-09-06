@@ -1,0 +1,144 @@
+{
+  "id": "java-conditionals",
+  "title": "Unit 2: Java Conditionals & Control Flow",
+  "order": 2,
+  "concepts": [
+    {
+      "id": "java-conditionals",
+      "title": "If-Else & Comparison Operators",
+      "prerequisites": ["java-variables"]
+    }
+  ],
+  "lessons": [
+    {
+      "id": "java-conditionals-step-1",
+      "title": "1. If-Else Statements",
+      "description": "In Java, decision making uses `if`, `else if`, and `else`. Implement `isEven(int number)` returning `true` if number is divisible by 2.",
+      "order": 6,
+      "difficulty": "beginner",
+      "duration_minutes": 5,
+      "type": "learn",
+      "concepts": ["java-conditionals"],
+      "prerequisites": ["java-variables"],
+      "learning_objectives": [
+        "Use boolean conditions and modulo % operator in Java"
+      ],
+      "starter_code": "public class Solution {\n    public static boolean isEven(int number) {\n        // TODO: Return true if number % 2 == 0\n        return false;\n    }\n}\n",
+      "solution_code": "public class Solution {\n    public static boolean isEven(int number) {\n        return number % 2 == 0;\n    }\n}\n",
+      "tests": [
+        {
+          "name": "test_is_even",
+          "test_code": "if (!Solution.isEven(4)) throw new AssertionError(\"4 is even\"); if (Solution.isEven(7)) throw new AssertionError(\"7 is odd\");",
+          "required": true
+        }
+      ],
+      "completion_requirements": {
+        "required_test_names": ["test_is_even"]
+      }
+    },
+    {
+      "id": "java-conditionals-step-2",
+      "title": "2. Logical Operators (&&, ||, !)",
+      "description": "Java uses `&&` for AND, `||` for OR, and `!` for NOT. Implement `canAccessSystem(boolean hasBadge, boolean knowsPassword)`.",
+      "order": 7,
+      "difficulty": "beginner",
+      "duration_minutes": 5,
+      "type": "learn",
+      "concepts": ["java-conditionals"],
+      "prerequisites": ["java-variables"],
+      "learning_objectives": [
+        "Combine logical operators && and || in Java"
+      ],
+      "starter_code": "public class Solution {\n    public static boolean canAccessSystem(boolean hasBadge, boolean knowsPassword) {\n        // TODO: Return true if hasBadge && knowsPassword\n        return false;\n    }\n}\n",
+      "solution_code": "public class Solution {\n    public static boolean canAccessSystem(boolean hasBadge, boolean knowsPassword) {\n        return hasBadge && knowsPassword;\n    }\n}\n",
+      "tests": [
+        {
+          "name": "test_access",
+          "test_code": "if (!Solution.canAccessSystem(true, true)) throw new AssertionError(\"Expected true\"); if (Solution.canAccessSystem(true, false)) throw new AssertionError(\"Expected false\");",
+          "required": true
+        }
+      ],
+      "completion_requirements": {
+        "required_test_names": ["test_access"]
+      }
+    },
+    {
+      "id": "java-conditionals-01",
+      "title": "3. Speed Limit Monitor (Concept Challenge)",
+      "description": "Determine fine tier based on driving speed.",
+      "order": 8,
+      "difficulty": "beginner",
+      "duration_minutes": 10,
+      "type": "challenge",
+      "concepts": ["java-conditionals"],
+      "prerequisites": ["java-variables"],
+      "learning_objectives": [
+        "Implement multi-way if-else if-else chain"
+      ],
+      "starter_code": "public class Solution {\n    public static String getTicketCategory(int speed, int speedLimit) {\n        // TODO: Return \"NONE\" if speed <= speedLimit\n        // Return \"WARNING\" if speed <= speedLimit + 10\n        // Return \"FINE\" otherwise\n        return \"\";\n    }\n}\n",
+      "solution_code": "public class Solution {\n    public static String getTicketCategory(int speed, int speedLimit) {\n        if (speed <= speedLimit) return \"NONE\";\n        if (speed <= speedLimit + 10) return \"WARNING\";\n        return \"FINE\";\n    }\n}\n",
+      "tests": [
+        {
+          "name": "test_ticket_category",
+          "test_code": "if (!\"NONE\".equals(Solution.getTicketCategory(55, 60))) throw new AssertionError(\"Expected NONE\"); if (!\"WARNING\".equals(Solution.getTicketCategory(65, 60))) throw new AssertionError(\"Expected WARNING\"); if (!\"FINE\".equals(Solution.getTicketCategory(80, 60))) throw new AssertionError(\"Expected FINE\");",
+          "required": true
+        }
+      ],
+      "completion_requirements": {
+        "required_test_names": ["test_ticket_category"]
+      }
+    },
+    {
+      "id": "java-conditionals-practice-1",
+      "title": "4. Leap Year Checker (Practice)",
+      "description": "Check if a year is a leap year in Java.",
+      "order": 9,
+      "difficulty": "beginner",
+      "duration_minutes": 5,
+      "type": "practice",
+      "concepts": ["java-conditionals"],
+      "prerequisites": ["java-variables"],
+      "learning_objectives": [
+        "Apply boolean logic to leap year calculations"
+      ],
+      "starter_code": "public class Solution {\n    public static boolean isLeapYear(int year) {\n        // TODO: Divisible by 4 AND (not divisible by 100 OR divisible by 400)\n        return false;\n    }\n}\n",
+      "solution_code": "public class Solution {\n    public static boolean isLeapYear(int year) {\n        return (year % 4 == 0 && year % 100 != 0) || (year % 400 == 0);\n    }\n}\n",
+      "tests": [
+        {
+          "name": "test_leap_year",
+          "test_code": "if (!Solution.isLeapYear(2000)) throw new AssertionError(\"2000 is leap\"); if (Solution.isLeapYear(1900)) throw new AssertionError(\"1900 is not leap\"); if (!Solution.isLeapYear(2024)) throw new AssertionError(\"2024 is leap\");",
+          "required": true
+        }
+      ],
+      "completion_requirements": {
+        "required_test_names": ["test_leap_year"]
+      }
+    },
+    {
+      "id": "java-conditionals-checkpoint",
+      "title": "5. Unit 2 Checkpoint: Conditionals Mastery",
+      "description": "Demonstrate complete understanding of Java control flow.",
+      "order": 10,
+      "difficulty": "beginner",
+      "duration_minutes": 5,
+      "type": "checkpoint",
+      "concepts": ["java-conditionals"],
+      "prerequisites": ["java-variables"],
+      "learning_objectives": [
+        "Pass Java conditionals checkpoint"
+      ],
+      "starter_code": "public class Solution {\n    public static int maxOfThree(int a, int b, int c) {\n        // TODO: Return highest of a, b, and c\n        return 0;\n    }\n}\n",
+      "solution_code": "public class Solution {\n    public static int maxOfThree(int a, int b, int c) {\n        return Math.max(a, Math.max(b, c));\n    }\n}\n",
+      "tests": [
+        {
+          "name": "test_max_of_three",
+          "test_code": "if (Solution.maxOfThree(3, 9, 5) != 9) throw new AssertionError(\"Expected 9\");",
+          "required": true
+        }
+      ],
+      "completion_requirements": {
+        "required_test_names": ["test_max_of_three"]
+      }
+    }
+  ]
+}

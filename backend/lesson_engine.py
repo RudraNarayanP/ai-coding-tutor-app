@@ -69,18 +69,48 @@ class LessonEngine:
     def __init__(
         self,
         executor: ExecutionService,
-        store: ProgressionStore,
-        curriculum: Curriculum,
+        store: ProgressionStore | None = None,
+        curriculum: Curriculum | None = None,
+        curriculums: dict[str, Curriculum] | None = None,
+        stores: dict[str, ProgressionStore] | None = None,
     ) -> None:
         self.executor = executor
-        self.curriculum = curriculum
-        self.store = store
+        self.curriculums: dict[str, Curriculum] = curriculums or {}
+        if curriculum:
+            self.curriculums[curriculum.course.language] = curriculum
+        self.stores: dict[str, ProgressionStore] = stores or {}
+        if store and curriculum:
+            self.stores[curriculum.course.language] = store
+        self.active_language = "python"
 
-    def get_lesson(self, lesson_id: str) -> LessonDefinition:
-        try:
-            return next(l for l in self.curriculum.lessons if l.id == lesson_id)
-        except StopIteration:
-            raise KeyError(lesson_id)
+    @property
+    def curriculum(self) -> Curriculum:
+        return self.curriculums.get(self.active_language) or next(iter(self.curriculums.values()))
+
+    @property
+    def store(self) -> ProgressionStore:
+        return self.stores.get(self.active_language) or next(iter(self.stores.values()))
+
+    def get_lesson(self, lesson_id: str, language: str | None = None) -> LessonDefinition:
+        target_lang = (language or self.active_language).lower().strip()
+        if target_lang in self.curriculums:
+            curr = self.curriculums[target_lang]
+            try:
+                return next(l for l in curr.lessons if l.id == lesson_id)
+            except StopIteration:
+                pass
+        for curr in self.curriculums.values():
+            try:
+                return next(l for l in curr.lessons if l.id == lesson_id)
+            except StopIteration:
+                continue
+        raise KeyError(lesson_id)
+
+    def get_lesson_language(self, lesson_id: str) -> str:
+        for lang, curr in self.curriculums.items():
+            if any(l.id == lesson_id for l in curr.lessons):
+                return lang
+        return self.active_language
 
     def get_solution_code(self, lesson: LessonDefinition) -> str:
         if lesson.solution_code:
@@ -89,37 +119,61 @@ class LessonEngine:
             return "\n".join(lesson.static_hints) + "\n"
         return "# Solution not available.\n"
 
-    def summaries(self) -> list[LessonSummary]:
-        state = self.store.state()
-        return [
-            LessonSummary(
-                id=lesson.id,
-                title=lesson.title,
-                order=lesson.order,
-                difficulty=lesson.difficulty,
-                duration_minutes=lesson.duration_minutes,
-                status=(
-                    "completed"
-                    if lesson.id in state.completed_lesson_ids
-                    else "current"
-                    if lesson.id == state.current_lesson_id
-                    else "locked"
-                ),
+    def summaries(self, language: str | None = None) -> list[LessonSummary]:
+        lang = (language or self.active_language).lower().strip()
+        curr = self.curriculums.get(lang, self.curriculum)
+        store = self.stores.get(lang, self.store)
+        state = store.state()
+
+        lesson_unit_map = {}
+        for module in curr.modules:
+            for lesson in module.lessons:
+                lesson_unit_map[lesson.id] = (module.id, module.title)
+
+        result = []
+        for lesson in curr.lessons:
+            uid, utitle = lesson_unit_map.get(lesson.id, ("unit-1", "Unit 1"))
+            ltype = getattr(lesson, "type", "learn") or "learn"
+            status = (
+                "completed"
+                if lesson.id in state.completed_lesson_ids
+                else "current"
+                if lesson.id == state.current_lesson_id
+                else "locked"
             )
-            for lesson in self.curriculum.lessons
-        ]
+            result.append(
+                LessonSummary(
+                    id=lesson.id,
+                    title=lesson.title,
+                    order=lesson.order,
+                    difficulty=lesson.difficulty,
+                    duration_minutes=lesson.duration_minutes,
+                    status=status,
+                    unit_id=uid,
+                    unit_title=utitle,
+                    type=ltype,
+                )
+            )
+        return result
 
     def _is_unlocked(self, lesson_id: str) -> bool:
-        lesson = self.get_lesson(lesson_id)
-        current_id = self.store.state().current_lesson_id
+        lang = self.get_lesson_language(lesson_id)
+        store = self.stores.get(lang, self.store)
+        curr = self.curriculums.get(lang, self.curriculum)
+        lesson = self.get_lesson(lesson_id, language=lang)
+        current_id = store.state().current_lesson_id
         if current_id is None:
-            # All lessons completed — still allow re-running any
             return True
-        current_order = self.get_lesson(current_id).order
-        return lesson.order <= current_order
+        current_lesson = next((l for l in curr.lessons if l.id == current_id), None)
+        if not current_lesson:
+            return True
+        return lesson.order <= current_lesson.order
 
     async def run_lesson(self, lesson_id: str, code: str) -> ProgressionResult:
         lesson = self.get_lesson(lesson_id)
+        lang = self.get_lesson_language(lesson_id)
+        store = self.stores.get(lang, self.store)
+
         if not self._is_unlocked(lesson_id):
             return ProgressionResult(
                 lesson_id=lesson_id,
@@ -129,7 +183,11 @@ class LessonEngine:
                 error="lesson_locked",
             )
         execution = await self.executor.run(
-            {"code": code, "tests": [test.model_dump() for test in lesson.tests]}
+            {
+                "language": lang,
+                "code": code,
+                "tests": [test.model_dump() for test in lesson.tests],
+            }
         )
         result_by_name = {
             result.get("name"): result for result in execution.get("tests", [])
@@ -156,8 +214,8 @@ class LessonEngine:
             test.passed for test in tests if test.name in required_names
         )
         if passed:
-            self.store.mark_completed(lesson_id)
-        state = self.store.state()
+            store.mark_completed(lesson_id)
+        state = store.state()
         return ProgressionResult(
             lesson_id=lesson_id,
             passed=passed,

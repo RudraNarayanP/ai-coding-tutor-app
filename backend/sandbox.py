@@ -13,7 +13,7 @@ class SandboxError(Exception):
 
 @dataclass(frozen=True)
 class SandboxLimits:
-    timeout_seconds: float = 3
+    timeout_seconds: float = 10
     memory: str = "128m"
     cpus: str = "0.5"
     pids: str = "32"
@@ -58,7 +58,7 @@ class DockerSandbox:
         container = f"patchwork-run-{uuid.uuid4().hex}"
         create_args = [
             "create", "--name", container, "--network=none", "--read-only",
-            "--tmpfs", "/tmp:rw,noexec,nosuid,size=16m", "--cap-drop=ALL",
+            "--tmpfs", "/tmp:exec,size=64m", "--cap-drop=ALL",
             "--security-opt=no-new-privileges", "--user", "10001:10001",
             "--memory", self.limits.memory, "--cpus", self.limits.cpus,
             "--pids-limit", self.limits.pids, "--ulimit", "nofile=64:64",

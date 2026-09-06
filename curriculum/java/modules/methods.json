@@ -1,0 +1,144 @@
+{
+  "id": "java-methods",
+  "title": "Unit 5: Java Methods & Overloading",
+  "order": 5,
+  "concepts": [
+    {
+      "id": "java-methods",
+      "title": "Methods, Return Values & Overloading",
+      "prerequisites": ["java-arrays"]
+    }
+  ],
+  "lessons": [
+    {
+      "id": "java-methods-step-1",
+      "title": "1. Method Overloading",
+      "description": "Java allows multiple methods with the same name if their parameter signatures differ. Implement two `multiply` methods: `multiply(int a, int b)` and `multiply(double a, double b)`.",
+      "order": 21,
+      "difficulty": "beginner",
+      "duration_minutes": 5,
+      "type": "learn",
+      "concepts": ["java-methods"],
+      "prerequisites": ["java-arrays"],
+      "learning_objectives": [
+        "Overload methods with different parameter types in Java"
+      ],
+      "starter_code": "public class Solution {\n    public static int multiply(int a, int b) {\n        // TODO: Return a * b\n        return 0;\n    }\n\n    public static double multiply(double a, double b) {\n        // TODO: Return a * b\n        return 0.0;\n    }\n}\n",
+      "solution_code": "public class Solution {\n    public static int multiply(int a, int b) {\n        return a * b;\n    }\n\n    public static double multiply(double a, double b) {\n        return a * b;\n    }\n}\n",
+      "tests": [
+        {
+          "name": "test_overloaded_multiply",
+          "test_code": "if (Solution.multiply(3, 4) != 12) throw new AssertionError(\"int multiply\"); if (Math.abs(Solution.multiply(2.5, 2.0) - 5.0) > 0.001) throw new AssertionError(\"double multiply\");",
+          "required": true
+        }
+      ],
+      "completion_requirements": {
+        "required_test_names": ["test_overloaded_multiply"]
+      }
+    },
+    {
+      "id": "java-methods-step-2",
+      "title": "2. Helper Methods & Formatting",
+      "description": "Break down problems into small private/public helper methods. Implement `formatName(String firstName, String lastName)`.",
+      "order": 22,
+      "difficulty": "beginner",
+      "duration_minutes": 5,
+      "type": "learn",
+      "concepts": ["java-methods"],
+      "prerequisites": ["java-arrays"],
+      "learning_objectives": [
+        "Format strings with String.format or concatenation in Java"
+      ],
+      "starter_code": "public class Solution {\n    public static String formatName(String firstName, String lastName) {\n        // TODO: Return \"LastName, FirstName\"\n        return \"\";\n    }\n}\n",
+      "solution_code": "public class Solution {\n    public static String formatName(String firstName, String lastName) {\n        return lastName + \", \" + firstName;\n    }\n}\n",
+      "tests": [
+        {
+          "name": "test_format_name",
+          "test_code": "if (!\"Hopper, Grace\".equals(Solution.formatName(\"Grace\", \"Hopper\"))) throw new AssertionError(\"Expected Hopper, Grace\");",
+          "required": true
+        }
+      ],
+      "completion_requirements": {
+        "required_test_names": ["test_format_name"]
+      }
+    },
+    {
+      "id": "java-methods-01",
+      "title": "3. Currency Exchange Calculator (Concept Challenge)",
+      "description": "Implement currency exchange conversion methods.",
+      "order": 23,
+      "difficulty": "beginner",
+      "duration_minutes": 10,
+      "type": "challenge",
+      "concepts": ["java-methods"],
+      "prerequisites": ["java-arrays"],
+      "learning_objectives": [
+        "Build modular conversion methods"
+      ],
+      "starter_code": "public class Solution {\n    public static double convert(double amount, double exchangeRate) {\n        // TODO: Return amount * exchangeRate\n        return 0.0;\n    }\n}\n",
+      "solution_code": "public class Solution {\n    public static double convert(double amount, double exchangeRate) {\n        return amount * exchangeRate;\n    }\n}\n",
+      "tests": [
+        {
+          "name": "test_convert",
+          "test_code": "if (Math.abs(Solution.convert(100.0, 0.85) - 85.0) > 0.001) throw new AssertionError(\"Expected 85.0\");",
+          "required": true
+        }
+      ],
+      "completion_requirements": {
+        "required_test_names": ["test_convert"]
+      }
+    },
+    {
+      "id": "java-methods-practice-1",
+      "title": "4. String Sanitization (Practice)",
+      "description": "Sanitize and trim input strings.",
+      "order": 24,
+      "difficulty": "beginner",
+      "duration_minutes": 5,
+      "type": "practice",
+      "concepts": ["java-methods"],
+      "prerequisites": ["java-arrays"],
+      "learning_objectives": [
+        "Use String methods like trim() and toLowerCase()"
+      ],
+      "starter_code": "public class Solution {\n    public static String sanitize(String input) {\n        // TODO: Trim whitespace and convert to lowercase\n        return \"\";\n    }\n}\n",
+      "solution_code": "public class Solution {\n    public static String sanitize(String input) {\n        if (input == null) return \"\";\n        return input.trim().toLowerCase();\n    }\n}\n",
+      "tests": [
+        {
+          "name": "test_sanitize",
+          "test_code": "if (!\"java\".equals(Solution.sanitize(\"  JAVA  \"))) throw new AssertionError(\"Expected java\");",
+          "required": true
+        }
+      ],
+      "completion_requirements": {
+        "required_test_names": ["test_sanitize"]
+      }
+    },
+    {
+      "id": "java-methods-checkpoint",
+      "title": "5. Unit 5 Checkpoint: Methods Mastery",
+      "description": "Verify method creation and invocation.",
+      "order": 25,
+      "difficulty": "beginner",
+      "duration_minutes": 5,
+      "type": "checkpoint",
+      "concepts": ["java-methods"],
+      "prerequisites": ["java-arrays"],
+      "learning_objectives": [
+        "Pass Java methods checkpoint"
+      ],
+      "starter_code": "public class Solution {\n    public static int power(int base, int exponent) {\n        // TODO: Calculate base^exponent\n        return 0;\n    }\n}\n",
+      "solution_code": "public class Solution {\n    public static int power(int base, int exponent) {\n        return (int) Math.pow(base, exponent);\n    }\n}\n",
+      "tests": [
+        {
+          "name": "test_power",
+          "test_code": "if (Solution.power(2, 3) != 8) throw new AssertionError(\"2^3 = 8\");",
+          "required": true
+        }
+      ],
+      "completion_requirements": {
+        "required_test_names": ["test_power"]
+      }
+    }
+  ]
+}

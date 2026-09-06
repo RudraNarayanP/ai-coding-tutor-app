@@ -85,16 +85,16 @@ class CurriculumLoader:
                 # Validate individual test specs
                 for test in lesson.tests:
                     has_stdout = test.expected_stdout is not None
-                    has_unittest = test.unittest_code is not None
+                    has_unittest = test.unittest_code is not None or test.test_code is not None
                     if not has_stdout and not has_unittest:
                         raise CurriculumLoadError(
                             f"Lesson {lesson.id}, test '{test.name}': "
-                            "must have either expected_stdout or unittest_code"
+                            "must have expected_stdout, unittest_code, or test_code"
                         )
                     if has_stdout and has_unittest:
                         raise CurriculumLoadError(
                             f"Lesson {lesson.id}, test '{test.name}': "
-                            "cannot have both expected_stdout and unittest_code"
+                            "cannot have both expected_stdout and unittest_code / test_code"
                         )
 
                 test_names = {test.name for test in lesson.tests}
@@ -149,3 +149,21 @@ def load_default_curriculum() -> Curriculum:
     return CurriculumLoader(
         Path(__file__).resolve().parent.parent / "curriculum" / "python"
     ).load()
+
+
+def load_all_curriculums() -> dict[str, Curriculum]:
+    curriculum_dir = Path(__file__).resolve().parent.parent / "curriculum"
+    curriculums: dict[str, Curriculum] = {}
+    if curriculum_dir.exists():
+        for path in curriculum_dir.iterdir():
+            if path.is_dir() and (path / "course.json").exists():
+                try:
+                    loader = CurriculumLoader(path)
+                    curr = loader.load()
+                    lang = curr.course.language.lower().strip()
+                    curriculums[lang] = curr
+                except Exception as exc:
+                    print(f"Warning: Failed to load curriculum at {path}: {exc}")
+    if "python" not in curriculums:
+        curriculums["python"] = load_default_curriculum()
+    return curriculums
