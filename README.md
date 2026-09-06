@@ -1,65 +1,69 @@
-# Patchwork: local coding tutor
+# Patchwork Local Coding Tutor
 
-A local-first Python tutor where the lesson engine, code execution, and AI tutor are separate concerns.
+Patchwork is an offline-first, deterministic local coding tutor with an interactive beginner learning progression and provider-agnostic AI hints.
 
-## Architecture
+## AI Provider Setup
 
-- `src/App.tsx`: lesson UI that consumes backend lesson and progression state.
-- `backend/lesson_models.py`: typed lesson, test, result, and progression contracts.
-- `curriculum/python/course.json` and `curriculum/python/modules/*.json`: version-controlled course, module, concept, prerequisite, lesson, and deterministic test content.
-- `backend/curriculum_loader.py`: schema validation, reference validation, ordering, and circular-prerequisite detection.
-- `backend/lessons.py`: startup-loaded curriculum compatibility exports.
-- `backend/lesson_engine.py`: lesson loading, execution-service orchestration, completion, and unlock decisions.
-- `backend/ai_provider.py`: local-only `AIProvider` protocol, Ollama implementation, configuration, and model health check.
-- `backend/tutor_service.py`: session hint storage and response-policy validation above the provider.
-- `backend/main.py`: FastAPI boundary with lesson/progression APIs and the typed tutor/health APIs.
-- `backend/sandbox.py` creates one fresh Docker container per `/api/run`, streams a JSON execution contract over stdin, collects structured results, and force-removes the container.
-- `sandbox/Dockerfile` contains only the sandbox runner. Student code is never copied from or mounted from a host directory.
-- AI boundary: `/api/tutor` sends lesson context, code, results, session hints, and hint level to Ollama on `localhost` only.
+Patchwork supports multiple interchangeable AI providers:
 
-Deterministic flow: `GET /api/lessons` and `GET /api/lessons/{id}` expose course data; `POST /api/lessons/{id}/run` sends code with the backend-owned tests to Docker, then returns test results and progression. `POST /api/run` remains a compatibility route for the current lesson. No lesson completion decision calls Ollama.
+- **Ollama (Local)** (default)
+- **OpenAI**
+- **Anthropic Claude**
+- **OpenRouter**
+- **Google Gemini**
 
-The UI remains usable when AI is toggled off or Ollama is unavailable. Ollama is not involved in test execution, deterministic grading, or progression.
+AI API keys remain **strictly server-side** and are never exposed to the frontend browser.
 
-## Run
+### Environment Configuration
 
-Frontend:
+Copy `.env.example` to `.env` or export environment variables before launching the backend:
 
-```powershell
-npm install
-npm run dev
+```bash
+# Select Provider
+export AI_PROVIDER=ollama  # Options: ollama, openai, anthropic, openrouter, gemini
+export AI_FALLBACK_PROVIDER=  # Optional fallback provider
+
+# Ollama
+export OLLAMA_BASE_URL=http://localhost:11434
+export OLLAMA_MODEL=llama3.1:8b
+
+# OpenAI
+export OPENAI_API_KEY=your_openai_api_key
+export OPENAI_MODEL=gpt-4o-mini
+
+# Anthropic
+export ANTHROPIC_API_KEY=your_anthropic_api_key
+export ANTHROPIC_MODEL=claude-3-5-sonnet-20241022
+
+# OpenRouter
+export OPENROUTER_API_KEY=your_openrouter_api_key
+export OPENROUTER_MODEL=meta-llama/llama-3.1-8b-instruct:free
+
+# Google Gemini
+export GEMINI_API_KEY=your_gemini_api_key
+export GEMINI_MODEL=gemini-1.5-flash
 ```
 
-Backend in another terminal:
+## Running Patchwork Locally
 
-```powershell
-python -m venv .venv
-.\.venv\Scripts\Activate.ps1
-pip install -r backend/requirements.txt
-uvicorn backend.main:app --reload --port 8000
-```
+1. **Start Backend Service:**
+   ```bash
+   .venv/bin/uvicorn backend.main:app --port 8000 --reload
+   ```
 
-Optional AI runtime:
+2. **Start Frontend Application:**
+   ```bash
+   npm run dev
+   ```
 
-```powershell
-ollama pull llama3.1:8b
-ollama serve
-```
+3. **Run Tests:**
+   ```bash
+   # Backend tests
+   .venv/bin/pytest backend/
 
-Optional configuration uses local environment variables:
+   # Frontend tests
+   npx vitest run
 
-```powershell
-$env:OLLAMA_BASE_URL = "http://localhost:11434"
-$env:OLLAMA_MODEL = "llama3.1:8b"
-$env:OLLAMA_TIMEOUT_SECONDS = "45"
-```
-
-The tutor endpoint is `POST /api/tutor`; health is available at `GET /api/health/ollama`. Tutor failures return a safe unavailable response. Responses containing complete code for ordinary hint requests are replaced with a level-appropriate hint. This is a policy guard, not a claim that an arbitrary local model can never produce unsafe text.
-
-The browser UI is at `http://localhost:5173`. The backend and Docker daemon are required for deterministic execution; Ollama is optional and only used by the separate tutor endpoint. Lessons and grading continue to work when Ollama is completely stopped.
-
-## Sandbox threat model
-
-The sandbox uses Docker's `network=none`, a non-root UID, read-only root filesystem, a small writable `/tmp`, dropped capabilities, `no-new-privileges`, memory/CPU/PID/file-descriptor limits, a 3-second wall-clock limit, and bounded request/output sizes. Containers are created and removed for every execution. No Docker socket, host directory, host environment, or host secret is mounted.
-
-This is defense in depth, not a perfect security boundary. Docker, the Linux kernel, the container runtime, and the backend host remain trusted computing-base dependencies. The backend process and Docker daemon must be protected, and production deployments should use a dedicated worker host, patched Docker Desktop/kernel versions, stronger syscall profiles, request authentication/rate limits, and separate test infrastructure for higher-risk code.
+   # Frontend production build
+   npm run build
+   ```

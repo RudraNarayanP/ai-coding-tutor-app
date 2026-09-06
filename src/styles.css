@@ -344,7 +344,7 @@ button:disabled { cursor: not-allowed; }
   min-height: 220px;
 }
 
-.duo-line-numbers {
+.line-numbers {
   padding: 16px var(--sp-3);
   background: #0f172a;
   color: #475569;
@@ -354,6 +354,17 @@ button:disabled { cursor: not-allowed; }
   text-align: right;
   user-select: none;
   border-right: 1px solid #334155;
+  display: flex;
+  flex-direction: column;
+}
+
+.line-numbers-content {
+  display: flex;
+  flex-direction: column;
+}
+
+.line-numbers span {
+  display: block;
 }
 
 .duo-textarea {
