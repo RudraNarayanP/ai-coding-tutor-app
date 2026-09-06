@@ -38,6 +38,10 @@ class ProviderStatus(BaseModel):
     is_current: bool = False
     reason: str | None = None
     error: str | None = None
+    configured: bool = True
+
+
+ProviderHealth = ProviderStatus
 
 
 class ProvidersOverview(BaseModel):
