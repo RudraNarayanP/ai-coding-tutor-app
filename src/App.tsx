@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
+import Settings from './components/Settings'
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 type TestResult = {
@@ -98,6 +99,8 @@ function App() {
   const [sessionNotes, setSessionNotes] = useState<string[]>([])
   const [noteInput, setNoteInput] = useState('')
   const [backendError, setBackendError] = useState(false)
+  const [showSettings, setShowSettings] = useState(false)
+  const [backendUrl, setBackendUrl] = useState('')
 
   const resultsRef = useRef<HTMLDivElement>(null)
   const editorRef = useRef<HTMLTextAreaElement>(null)
@@ -428,6 +431,15 @@ function App() {
           >
             {aiEnabled ? 'AI tutor on' : 'AI tutor off'}
           </button>
+
+          <button
+            className="duo-button duo-button-secondary"
+            style={{ padding: '6px 14px', fontSize: '13px' }}
+            aria-label="Open settings"
+            onClick={() => setShowSettings(true)}
+          >
+            ⚙️ Settings
+          </button>
         </div>
       </header>
 
@@ -545,7 +557,18 @@ function App() {
                 <div className="duo-editor-container">
                   <div className="duo-editor-top">
                     <span>exercise.py</span>
-                    <span>Python 3.12</span>
+                    <div className="duo-editor-top-right">
+                      <span>Python 3.12</span>
+                      <button
+                        className="duo-editor-quick-run"
+                        onClick={runTests}
+                        disabled={isRunning || isLoadingLesson}
+                        aria-label="Quick run (Ctrl+Enter)"
+                        title="Run code (Ctrl+Enter)"
+                      >
+                        ▶ Run
+                      </button>
+                    </div>
                   </div>
                   <div className="duo-editor-body">
                     <LineNumbers code={code} />
@@ -723,6 +746,14 @@ function App() {
           {isRunning ? 'Running…' : 'Run code'}
         </button>
       </footer>
+
+      <Settings
+        isOpen={showSettings}
+        onClose={() => setShowSettings(false)}
+        backendUrl={backendUrl}
+        onBackendUrlChange={setBackendUrl}
+        onProviderChange={fetchProvidersHealth}
+      />
     </div>
   )
 }
