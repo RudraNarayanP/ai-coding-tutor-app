@@ -88,7 +88,7 @@ class TestDefaultCurriculumLoads:
 
     def test_correct_lesson_count(self):
         curriculum = load_default_curriculum()
-        assert len(curriculum.lessons) == 13
+        assert len(curriculum.lessons) == 65
 
     def test_lessons_are_ordered_by_order_field(self):
         curriculum = load_default_curriculum()
@@ -97,11 +97,11 @@ class TestDefaultCurriculumLoads:
 
     def test_first_lesson_is_variables(self):
         curriculum = load_default_curriculum()
-        assert curriculum.lessons[0].id == "variables-01"
+        assert curriculum.lessons[0].id == "variables-step-1"
 
     def test_functions_lesson_is_functions_01(self):
         curriculum = load_default_curriculum()
-        assert curriculum.lessons[-1].id == "functions-01"
+        assert curriculum.lessons[-1].id == "functions-checkpoint"
 
     def test_no_duplicate_lesson_ids(self):
         curriculum = load_default_curriculum()
@@ -282,15 +282,15 @@ class TestEngineWithLoadedCurriculum:
                 }
 
         engine = LessonEngine(Executor(), ProgressionStore(curriculum), curriculum)
-        result = __import__("asyncio").run(engine.run_lesson("variables-01", "pass"))
+        result = __import__("asyncio").run(engine.run_lesson("variables-step-1", "pass"))
         assert result.completed is True
-        assert engine.store.state().current_lesson_id == "booleans-01"
+        assert engine.store.state().current_lesson_id == "variables-step-2"
 
     def test_curriculum_loading_works_without_ollama(self):
         """Curriculum must load even when no AI provider is available."""
         # Simply importing and loading proves independence from Ollama
         curriculum = load_default_curriculum()
-        assert len(curriculum.lessons) == 13
+        assert len(curriculum.lessons) == 65
 
     def test_lesson_engine_works_without_ollama(self):
         curriculum = load_default_curriculum()
@@ -302,7 +302,7 @@ class TestEngineWithLoadedCurriculum:
                 }
 
         engine = LessonEngine(Executor(), ProgressionStore(curriculum), curriculum)
-        result = __import__("asyncio").run(engine.run_lesson("variables-01", "pass"))
+        result = __import__("asyncio").run(engine.run_lesson("variables-step-1", "pass"))
         assert result.completed is True
 
     def test_grading_works_without_ollama(self):
@@ -316,7 +316,7 @@ class TestEngineWithLoadedCurriculum:
                 }
 
         engine = LessonEngine(AlwaysPassExecutor(), ProgressionStore(curriculum), curriculum)
-        result = __import__("asyncio").run(engine.run_lesson("variables-01", "pass"))
+        result = __import__("asyncio").run(engine.run_lesson("variables-step-1", "pass"))
         assert result.passed is True
         assert result.completed is True
 
@@ -332,9 +332,9 @@ class TestEngineWithLoadedCurriculum:
         import asyncio
         engine = LessonEngine(AlwaysPassExecutor(), ProgressionStore(curriculum), curriculum)
         # Complete first two lessons
-        asyncio.run(engine.run_lesson("variables-01", "pass"))
-        asyncio.run(engine.run_lesson("booleans-01", "pass"))
+        asyncio.run(engine.run_lesson("variables-step-1", "pass"))
+        asyncio.run(engine.run_lesson("variables-step-2", "pass"))
         state = engine.store.state()
-        assert "variables-01" in state.completed_lesson_ids
-        assert "booleans-01" in state.completed_lesson_ids
-        assert state.current_lesson_id == "numbers-01"
+        assert "variables-step-1" in state.completed_lesson_ids
+        assert "variables-step-2" in state.completed_lesson_ids
+        assert state.current_lesson_id == "variables-01"

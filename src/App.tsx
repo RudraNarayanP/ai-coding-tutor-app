@@ -8,6 +8,7 @@ type TestResult = {
   description: string
   error: string | null
 }
+
 type LessonSummary = {
   id: string
   title: string
@@ -15,7 +16,13 @@ type LessonSummary = {
   difficulty: string
   duration_minutes: number
   status: 'completed' | 'current' | 'locked'
+  type?: 'learn' | 'practice' | 'checkpoint' | 'challenge'
+  unit_id?: string
+  unit_title?: string
+  concept_id?: string
+  concept_title?: string
 }
+
 type Lesson = {
   id: string
   title: string
@@ -24,7 +31,16 @@ type Lesson = {
   difficulty: string
   duration_minutes: number
   starter_code: string
+  type?: 'learn' | 'practice' | 'checkpoint' | 'challenge'
+  unit_id?: string
+  unit_title?: string
+  concept_id?: string
+  concept_title?: string
+  concepts?: string[]
+  prerequisites?: string[]
+  learning_objectives?: string[]
 }
+
 type ProviderStatus = {
   provider: string
   name: string
@@ -34,6 +50,7 @@ type ProviderStatus = {
   reason: string | null
   error: string | null
 }
+
 type ProvidersOverview = {
   current_provider: string
   fallback_provider: string | null
@@ -264,6 +281,9 @@ function App() {
         body: JSON.stringify({
           lesson_id: lesson.id,
           lesson_title: lesson.title,
+          unit_title: lesson.unit_title ?? '',
+          concept_title: lesson.concept_title ?? '',
+          prerequisites: lesson.prerequisites ?? [],
           instructions: lesson.description,
           code,
           test_results: results ?? [],
@@ -327,6 +347,18 @@ function App() {
     const next = lessons.find((l) => l.status === 'current')
     if (next) await loadLesson(next)
   }, [lessons, loadLesson])
+
+  // Group lessons by Unit
+  const unitsMap = new Map<string, { id: string; title: string; lessons: LessonSummary[] }>()
+  lessons.forEach((item) => {
+    const uid = item.unit_id || 'unit-1'
+    const utitle = item.unit_title || 'Unit'
+    if (!unitsMap.has(uid)) {
+      unitsMap.set(uid, { id: uid, title: utitle, lessons: [] })
+    }
+    unitsMap.get(uid)!.lessons.push(item)
+  })
+  const unitGroupList = Array.from(unitsMap.values())
 
   // Derived state
   const completedCount = lessons.filter((l) => l.status === 'completed').length
@@ -417,27 +449,54 @@ function App() {
         <aside className="duo-sidebar" aria-label="Course navigation">
           <div className="duo-sidebar-title">Python Path</div>
           <nav className="duo-path-list" aria-label="Lessons">
-            {lessons.map((item) => {
-              const isActive = lesson?.id === item.id
-              const statusLabel =
-                item.status === 'current' ? (isActive ? 'Current lesson' : 'Available')
-                : item.status === 'completed' ? 'Completed'
-                : 'Locked'
-              return (
-                <button
-                  key={item.id}
-                  id={`lesson-nav-${item.id}`}
-                  className={`duo-path-node ${item.status}${isActive ? ' active' : ''}`}
-                  onClick={() => loadLesson(item)}
-                  disabled={item.status === 'locked' || isLoadingLesson}
-                  aria-current={isActive ? 'page' : undefined}
-                  aria-label={`${item.title} — ${statusLabel}`}
-                  title={item.title}
-                >
-                  {item.status === 'completed' ? '✓' : item.order}
-                </button>
-              )
-            })}
+            {unitGroupList.map((unitGroup) => (
+              <div key={unitGroup.id} className="duo-unit-block">
+                <div className="duo-unit-header">
+                  <span className="duo-unit-title">{unitGroup.title}</span>
+                </div>
+                <div className="duo-unit-node-group">
+                  {unitGroup.lessons.map((item) => {
+                    const isActive = lesson?.id === item.id
+                    const statusLabel =
+                      item.status === 'current'
+                        ? isActive
+                          ? 'Current lesson'
+                          : 'Available'
+                        : item.status === 'completed'
+                        ? 'Completed'
+                        : 'Locked'
+
+                    const iconSymbol =
+                      item.status === 'completed'
+                        ? '✓'
+                        : item.type === 'challenge'
+                        ? '🏆'
+                        : item.type === 'practice'
+                        ? '🎯'
+                        : item.type === 'checkpoint'
+                        ? '🏁'
+                        : item.order
+
+                    return (
+                      <button
+                        key={item.id}
+                        id={`lesson-nav-${item.id}`}
+                        className={`duo-path-node ${item.status} ${item.type || 'learn'}${
+                          isActive ? ' active' : ''
+                        }`}
+                        onClick={() => loadLesson(item)}
+                        disabled={item.status === 'locked' || isLoadingLesson}
+                        aria-current={isActive ? 'page' : undefined}
+                        aria-label={`${item.title} — ${statusLabel}`}
+                        title={item.title}
+                      >
+                        <span className="duo-node-icon">{iconSymbol}</span>
+                      </button>
+                    )
+                  })}
+                </div>
+              </div>
+            ))}
           </nav>
         </aside>
 
@@ -457,10 +516,30 @@ function App() {
               {/* Lesson Question Card */}
               <div className="duo-card">
                 <div className="duo-card-header">
-                  <span className="duo-lesson-badge">LESSON {lesson.order}</span>
+                  <div className="duo-badge-group">
+                    <span className={`duo-type-badge duo-type-${lesson.type || 'learn'}`}>
+                      {(lesson.type || 'learn').toUpperCase()}
+                    </span>
+                    {lesson.unit_title && (
+                      <span className="duo-unit-badge">{lesson.unit_title}</span>
+                    )}
+                  </div>
+                  <span className="duo-difficulty-badge">{lesson.difficulty}</span>
                 </div>
+
                 <h2 className="duo-lesson-title">{lesson.title}</h2>
                 <p className="duo-instruction">{lesson.description}</p>
+
+                {lesson.learning_objectives && lesson.learning_objectives.length > 0 && (
+                  <div className="duo-objectives-box">
+                    <div className="duo-objectives-title">Learning Objectives:</div>
+                    <ul>
+                      {lesson.learning_objectives.map((obj, i) => (
+                        <li key={i}>{obj}</li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
 
                 {/* Embedded Code Editor */}
                 <div className="duo-editor-container">

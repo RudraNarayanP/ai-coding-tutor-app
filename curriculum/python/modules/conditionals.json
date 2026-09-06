@@ -1,58 +1,177 @@
 {
   "id": "conditionals",
-  "title": "Conditionals",
+  "title": "Unit 4: Conditionals",
   "order": 4,
   "concepts": [
     {
       "id": "conditionals",
-      "title": "Conditionals",
+      "title": "If, Elif, & Else Branching",
       "prerequisites": ["variables", "booleans"]
     }
   ],
   "lessons": [
     {
-      "id": "conditionals-01",
-      "title": "Meltdown Mitigation",
-      "description": "Use if / elif / else statements, combined with comparison and logical operators, to branch a function's behavior and return different results depending on its inputs.",
-      "order": 4,
+      "id": "conditionals-step-1",
+      "title": "1. The `if` and `else` Statements",
+      "description": "Conditional statements execute code blocks based on conditions. Use `if` and `else` to return \"Pass\" if grade >= 50, otherwise \"Fail\".",
+      "order": 16,
       "difficulty": "beginner",
-      "duration_minutes": 25,
+      "duration_minutes": 5,
+      "type": "learn",
       "concepts": ["conditionals"],
       "prerequisites": ["variables", "booleans"],
       "learning_objectives": [
-        "Write if / elif / else chains",
-        "Use comparison operators < <= > >= == !=",
-        "Return from inside a conditional branch"
+        "Use basic if-else branching"
       ],
-      "starter_code": "\"\"\"Functions to prevent a nuclear meltdown.\"\"\"\n\n\ndef is_criticality_balanced(temperature, neutrons_emitted):\n    \"\"\"Verify criticality is balanced.\n\n    Parameters:\n        temperature (int or float): The temperature value in kelvin.\n        neutrons_emitted (int or float): The number of neutrons emitted per second.\n\n    Returns:\n        bool: Is criticality balanced?\n\n    Note:\n        A reactor is said to be balanced in criticality if it satisfies the following conditions:\n            - The temperature is less than 800 K.\n            - The number of neutrons emitted per second is greater than 500.\n            - The product of temperature and neutrons emitted per second is less than 500000.\n\n    \"\"\"\n\n    pass\n\n\ndef reactor_efficiency(voltage, current, theoretical_max_power):\n    \"\"\"Assess reactor efficiency zone.\n\n    Parameters:\n        voltage (int or float): Voltage value.\n        current (int or float): Current value.\n        theoretical_max_power (int or float): The power level that corresponds to a 100% efficiency.\n\n    Returns:\n        str: One of ('green', 'orange', 'red', or 'black').\n\n    Note:\n        Efficiency can be grouped into 4 bands:\n            1. green -> efficiency of 80% or more,\n            2. orange -> efficiency of less than 80% but at least 60%,\n            3. red -> efficiency below 60%, but still 30% or more,\n            4. black ->  less than 30% efficient.\n\n        The percentage value is calculated as\n        (generated power/ theoretical max power)*100\n        where generated power = voltage  *current\n    \"\"\"\n\n    pass\n\n\ndef fail_safe(temperature, neutrons_produced_per_second, threshold):\n    \"\"\"Assess and return status code for the reactor.\n\n    Parameters:\n        temperature (int or float): The value of the temperature in kelvin.\n        neutrons_produced_per_second (int or float): The neutron flux.\n        threshold (int or float): The threshold for the category.\n\n    Returns:\n        str: One of ('LOW', 'NORMAL', 'DANGER').\n\n    Note:\n        1. 'LOW' ->* `temperature  neutrons per second` < 90% of `threshold`\n        2. 'NORMAL' -> `temperature  neutrons per second` *+/- 10% of* `threshold`*\n        3. 'DANGER' ->* `temperature  neutrons per second` is not in the above-stated ranges\n    \"\"\"\n\n    pass\n",
+      "starter_code": "def evaluate_grade(score):\n    # TODO: Return \"Pass\" if score >= 50 else \"Fail\"\n    pass\n",
+      "tests": [
+        {
+          "name": "test_evaluate_grade",
+          "unittest_code": "def test_evaluate_grade(self):\n    self.assertEqual(evaluate_grade(80), \"Pass\")\n    self.assertEqual(evaluate_grade(40), \"Fail\")",
+          "required": true
+        }
+      ],
+      "completion_requirements": {
+        "required_test_names": ["test_evaluate_grade"]
+      }
+    },
+    {
+      "id": "conditionals-step-2",
+      "title": "2. Multi-way Branching with `elif`",
+      "description": "When you have more than two branches, use `elif`. Implement `temperature_status(temp)` returning \"Cold\" (< 15), \"Warm\" (15..28), or \"Hot\" (> 28).",
+      "order": 17,
+      "difficulty": "beginner",
+      "duration_minutes": 5,
+      "type": "learn",
+      "concepts": ["conditionals"],
+      "prerequisites": ["variables", "booleans"],
+      "learning_objectives": [
+        "Chain conditions using elif"
+      ],
+      "starter_code": "def temperature_status(temp):\n    # TODO: Return \"Cold\" if temp < 15, \"Warm\" if temp <= 28, else \"Hot\"\n    pass\n",
+      "tests": [
+        {
+          "name": "test_temperature_status",
+          "unittest_code": "def test_temperature_status(self):\n    self.assertEqual(temperature_status(10), \"Cold\")\n    self.assertEqual(temperature_status(20), \"Warm\")\n    self.assertEqual(temperature_status(35), \"Hot\")",
+          "required": true
+        }
+      ],
+      "completion_requirements": {
+        "required_test_names": ["test_temperature_status"]
+      }
+    },
+    {
+      "id": "conditionals-01",
+      "title": "3. Meltdown Mitigation (Concept Challenge)",
+      "description": "Control nuclear reactor safety using multi-condition if/elif/else logic.",
+      "order": 18,
+      "difficulty": "beginner",
+      "duration_minutes": 20,
+      "type": "challenge",
+      "concepts": ["conditionals"],
+      "prerequisites": ["variables", "booleans"],
+      "learning_objectives": [
+        "Use if, elif, and else statements to control execution flow",
+        "Evaluate numbers against threshold ranges",
+        "Implement guard conditions and multi-clause boolean checks"
+      ],
+      "starter_code": "def is_criticality_balanced(temperature, neutrons_emitted):\n    \"\"\"Return True when reactor is balanced.\"\"\"\n    pass\n\ndef reactor_efficiency(voltage, current, theoretical_max_power):\n    \"\"\"Return efficiency band as a colour string.\"\"\"\n    pass\n\ndef fail_safe(temperature, neutrons_produced_per_second, threshold):\n    \"\"\"Return safety status string.\"\"\"\n    pass\n",
       "tests": [
         {
           "name": "test_is_criticality_balanced",
-          "unittest_code": "def test_is_criticality_balanced(self):\n    test_data = ((750, 650, True), (799, 501, True), (500, 600, True),\n                 (1000, 800, False), (800, 500, False), (800, 500.01, False),\n                 (799.99, 500, False), (500.01, 999.99, False), (625, 800, False),\n                 (625.99, 800, False), (625.01, 799.99, False), (799.99, 500.01, True),\n                 (624.99, 799.99, True), (500, 1000, False), (500.01, 1000, False),\n                 (499.99, 1000, True))\n\n    for variant, data in enumerate(test_data, start=1):\n        temp, neutrons_emitted, expected = data\n        with self.subTest(f'variation #{variant}', temp=temp, neutrons_emitted=neutrons_emitted, expected=expected):\n            actual_result = is_criticality_balanced(temp, neutrons_emitted)\n            failure_message = (f'Called is_criticality_balanced({temp}, {neutrons_emitted}). '\n                               f' The function returned {actual_result}, '\n                               f'but the test expected {expected} as the return value.')\n\n            self.assertEqual(actual_result, expected, failure_message)",
+          "unittest_code": "def test_is_criticality_balanced(self):\n    self.assertEqual(is_criticality_balanced(750, 600), True)\n    self.assertEqual(is_criticality_balanced(800, 600), False)",
           "required": true
         },
         {
-          "name": "test_reactor_efficiency",
-          "unittest_code": "def test_reactor_efficiency(self):\n    voltage = 10\n    theoretical_max_power = 10000\n\n    test_data = ((1000, 'green'), (999, 'green'), (800, 'green'),\n                 (799, 'orange'), (700, 'orange'), (600, 'orange'),\n                 (599, 'red'), (560, 'red'), (400, 'red'), (300, 'red'),\n                 (299, 'black'), (200, 'black'), (0, 'black'))\n\n    for variant, data in enumerate(test_data, start=1):\n        current, expected = data\n        with self.subTest(f'variation #{variant}', voltage=voltage, current=current,\n                          theoretical_max_power=theoretical_max_power, expected=expected):\n            actual_result = reactor_efficiency(voltage, current, theoretical_max_power)\n            failure_message = (f'Called reactor_efficiency({voltage}, {current}, {theoretical_max_power}). '\n                               f'The function returned {actual_result}, '\n                               f'but the test expected {expected} as the return value.')\n\n            self.assertEqual(actual_result, expected, failure_message)",
+          "name": "test_reactor_efficiency_green",
+          "unittest_code": "def test_reactor_efficiency_green(self):\n    self.assertEqual(reactor_efficiency(200, 50, 10000), 'green')",
           "required": true
         },
         {
-          "name": "test_fail_safe",
-          "unittest_code": "def test_fail_safe(self):\n    temp = 10\n    threshold = 10000\n    test_data = ((399, 'LOW'), (300, 'LOW'), (1, 'LOW'),\n                 (0, 'LOW'), (901, 'NORMAL'), (1000, 'NORMAL'),\n                 (1099, 'NORMAL'), (899, 'LOW'), (700, 'LOW'),\n                 (400, 'LOW'), (1101, 'DANGER'), (1200, 'DANGER'))\n\n    for variant, (neutrons_per_second, expected) in enumerate(test_data, start=1):\n        with self.subTest(f'variation #{variant}', temp=temp, neutrons_per_second=neutrons_per_second,\n                          threshold=threshold, expected=expected):\n            actual_result = fail_safe(temp, neutrons_per_second, threshold)\n            failure_message = (f'Called fail_safe({temp}, {neutrons_per_second}, {threshold}). '\n                               f'The function returned {actual_result}, '\n                               f'but the test expected {expected} as the return value.')\n\n            self.assertEqual(actual_result, expected, failure_message)",
+          "name": "test_reactor_efficiency_orange",
+          "unittest_code": "def test_reactor_efficiency_orange(self):\n    self.assertEqual(reactor_efficiency(150, 50, 10000), 'orange')",
+          "required": true
+        },
+        {
+          "name": "test_fail_safe_low",
+          "unittest_code": "def test_fail_safe_low(self):\n    self.assertEqual(fail_safe(10, 100, 10000), 'LOW')",
+          "required": true
+        },
+        {
+          "name": "test_fail_safe_normal",
+          "unittest_code": "def test_fail_safe_normal(self):\n    self.assertEqual(fail_safe(100, 100, 10000), 'NORMAL')",
+          "required": true
+        },
+        {
+          "name": "test_fail_safe_danger",
+          "unittest_code": "def test_fail_safe_danger(self):\n    self.assertEqual(fail_safe(200, 100, 10000), 'DANGER')",
           "required": true
         }
       ],
       "completion_requirements": {
         "required_test_names": [
           "test_is_criticality_balanced",
-          "test_reactor_efficiency",
-          "test_fail_safe"
+          "test_reactor_efficiency_green",
+          "test_reactor_efficiency_orange",
+          "test_fail_safe_low",
+          "test_fail_safe_normal",
+          "test_fail_safe_danger"
         ]
       },
       "source": {
         "name": "Exercism Python Track — Meltdown Mitigation",
         "url": "https://github.com/exercism/python/tree/main/exercises/concept/meltdown-mitigation",
         "license": "MIT"
+      }
+    },
+    {
+      "id": "conditionals-practice-1",
+      "title": "4. Traffic Light System (Practice)",
+      "description": "Implement `traffic_action(color)` returning \"Stop\" for Red, \"Prepare\" for Yellow, \"Go\" for Green.",
+      "order": 19,
+      "difficulty": "beginner",
+      "duration_minutes": 5,
+      "type": "practice",
+      "concepts": ["conditionals"],
+      "prerequisites": ["variables", "booleans"],
+      "learning_objectives": [
+        "Apply conditional branching to traffic state machines"
+      ],
+      "starter_code": "def traffic_action(color):\n    # TODO: Return \"Stop\" if \"red\", \"Prepare\" if \"yellow\", \"Go\" if \"green\"\n    pass\n",
+      "tests": [
+        {
+          "name": "test_traffic_action",
+          "unittest_code": "def test_traffic_action(self):\n    self.assertEqual(traffic_action(\"red\"), \"Stop\")\n    self.assertEqual(traffic_action(\"yellow\"), \"Prepare\")\n    self.assertEqual(traffic_action(\"green\"), \"Go\")",
+          "required": true
+        }
+      ],
+      "completion_requirements": {
+        "required_test_names": ["test_traffic_action"]
+      }
+    },
+    {
+      "id": "conditionals-checkpoint",
+      "title": "5. Unit 4 Checkpoint: Conditionals Mastery",
+      "description": "Demonstrate complete conditional flow control.",
+      "order": 20,
+      "difficulty": "beginner",
+      "duration_minutes": 5,
+      "type": "checkpoint",
+      "concepts": ["conditionals"],
+      "prerequisites": ["variables", "booleans"],
+      "learning_objectives": [
+        "Complete conditional flow evaluation"
+      ],
+      "starter_code": "def discount_rate(is_member, total_spent):\n    # TODO: Return 0.2 if is_member and total_spent >= 100 else 0.1 if is_member else 0.0\n    pass\n",
+      "tests": [
+        {
+          "name": "test_discount_rate",
+          "unittest_code": "def test_discount_rate(self):\n    self.assertEqual(discount_rate(True, 150), 0.2)\n    self.assertEqual(discount_rate(True, 50), 0.1)\n    self.assertEqual(discount_rate(False, 200), 0.0)",
+          "required": true
+        }
+      ],
+      "completion_requirements": {
+        "required_test_names": ["test_discount_rate"]
       }
     }
   ]

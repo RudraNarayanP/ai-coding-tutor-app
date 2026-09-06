@@ -1,6 +1,6 @@
 {
   "id": "basics",
-  "title": "Basics: Variables & Values",
+  "title": "Unit 1: Basics (Variables & Values)",
   "order": 1,
   "concepts": [
     {
@@ -11,12 +11,70 @@
   ],
   "lessons": [
     {
-      "id": "variables-01",
-      "title": "Variable Assignment & Values",
-      "description": "Learn how to store text and numbers in Python variables, reassign values, and combine variables with simple arithmetic.",
+      "id": "variables-step-1",
+      "title": "1. First Variable & String Value",
+      "description": "Welcome to Python! In Python, you store text in variables using the equals sign (`=`). Assign the string \"Python\" to a variable named `language`.",
       "order": 1,
       "difficulty": "beginner",
+      "duration_minutes": 5,
+      "type": "learn",
+      "concepts": ["variables"],
+      "prerequisites": [],
+      "learning_objectives": [
+        "Create a variable and assign a string literal using ="
+      ],
+      "starter_code": "# TODO: Create a variable named `language` and set it to \"Python\".\nlanguage = None\n",
+      "tests": [
+        {
+          "name": "test_language_variable",
+          "unittest_code": "def test_language_variable(self):\n    self.assertEqual(language, \"Python\", msg=\"Expected variable 'language' to equal 'Python'.\")",
+          "required": true
+        }
+      ],
+      "completion_requirements": {
+        "required_test_names": ["test_language_variable"]
+      },
+      "static_hints": ["Write language = \"Python\""]
+    },
+    {
+      "id": "variables-step-2",
+      "title": "2. Numbers & Reassignment",
+      "description": "Variables can also hold numbers. You can update a variable's value or add numbers together. Set `apples` to 5, then set `total_fruit` to `apples` + 3.",
+      "order": 2,
+      "difficulty": "beginner",
+      "duration_minutes": 5,
+      "type": "learn",
+      "concepts": ["variables"],
+      "prerequisites": [],
+      "learning_objectives": [
+        "Assign integer values to variables and calculate totals with +"
+      ],
+      "starter_code": "# TODO: Create `apples` set to 5.\napples = None\n\n# TODO: Create `total_fruit` set to apples + 3.\ntotal_fruit = None\n",
+      "tests": [
+        {
+          "name": "test_apples_variable",
+          "unittest_code": "def test_apples_variable(self):\n    self.assertEqual(apples, 5, msg=\"Expected apples to equal 5.\")",
+          "required": true
+        },
+        {
+          "name": "test_total_fruit_variable",
+          "unittest_code": "def test_total_fruit_variable(self):\n    self.assertEqual(total_fruit, 8, msg=\"Expected total_fruit to equal 8.\")",
+          "required": true
+        }
+      ],
+      "completion_requirements": {
+        "required_test_names": ["test_apples_variable", "test_total_fruit_variable"]
+      },
+      "static_hints": ["apples = 5", "total_fruit = apples + 3"]
+    },
+    {
+      "id": "variables-01",
+      "title": "3. Lasagna Cooking Calculator (Concept Challenge)",
+      "description": "Combine variables and arithmetic to model Guido's Lasagna preparation time.",
+      "order": 3,
+      "difficulty": "beginner",
       "duration_minutes": 10,
+      "type": "challenge",
       "concepts": ["variables"],
       "prerequisites": [],
       "learning_objectives": [
@@ -59,6 +117,61 @@
         "name": "Patchwork Beginner Curriculum — Variable Assignment",
         "url": "",
         "license": "MIT"
+      }
+    },
+    {
+      "id": "variables-practice-1",
+      "title": "4. Cinema Ticket Billing (Practice)",
+      "description": "Apply variables to calculate the total cost for movie tickets and snacks.",
+      "order": 4,
+      "difficulty": "beginner",
+      "duration_minutes": 5,
+      "type": "practice",
+      "concepts": ["variables"],
+      "prerequisites": [],
+      "learning_objectives": [
+        "Calculate multi-item bill totals using variables"
+      ],
+      "starter_code": "ticket_price = 12\npopcorn_price = 8\nnum_tickets = 3\n\n# TODO: Calculate ticket_total = ticket_price * num_tickets\nticket_total = None\n\n# TODO: Calculate grand_total = ticket_total + popcorn_price\ngrand_total = None\n",
+      "tests": [
+        {
+          "name": "test_ticket_total",
+          "unittest_code": "def test_ticket_total(self):\n    self.assertEqual(ticket_total, 36, msg=\"ticket_total should equal 36.\")",
+          "required": true
+        },
+        {
+          "name": "test_grand_total",
+          "unittest_code": "def test_grand_total(self):\n    self.assertEqual(grand_total, 44, msg=\"grand_total should equal 44.\")",
+          "required": true
+        }
+      ],
+      "completion_requirements": {
+        "required_test_names": ["test_ticket_total", "test_grand_total"]
+      }
+    },
+    {
+      "id": "variables-checkpoint",
+      "title": "5. Unit 1 Checkpoint: Variables Mastery",
+      "description": "Verify your understanding of variables and simple expressions before advancing.",
+      "order": 5,
+      "difficulty": "beginner",
+      "duration_minutes": 5,
+      "type": "checkpoint",
+      "concepts": ["variables"],
+      "prerequisites": [],
+      "learning_objectives": [
+        "Demonstrate mastery of variable assignment and math expressions"
+      ],
+      "starter_code": "base = 10\nheight = 5\n\n# TODO: Calculate area = (base * height) / 2 as a float or int\narea = None\n",
+      "tests": [
+        {
+          "name": "test_area",
+          "unittest_code": "def test_area(self):\n    self.assertEqual(area, 25, msg=\"Expected area to equal 25.\")",
+          "required": true
+        }
+      ],
+      "completion_requirements": {
+        "required_test_names": ["test_area"]
       }
     }
   ]

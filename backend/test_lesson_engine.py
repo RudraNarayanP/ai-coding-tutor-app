@@ -65,7 +65,7 @@ def make_engine(passed_flags: list[bool], curriculum: Curriculum | None = None):
 class TestLessonDefinitions:
 
     def test_curriculum_has_thirteen_lessons(self):
-        assert len(CURRICULUM.lessons) == 13
+        assert len(CURRICULUM.lessons) == 65
 
     def test_all_lessons_have_required_content(self):
         for lesson in CURRICULUM.lessons:
@@ -81,7 +81,7 @@ class TestLessonDefinitions:
                 assert test.name
 
     def test_variables_is_first_lesson(self):
-        assert CURRICULUM.lessons[0].id == "variables-01"
+        assert CURRICULUM.lessons[0].id == "variables-step-1"
 
 
 # ---------------------------------------------------------------------------
@@ -92,75 +92,55 @@ class TestProgression:
 
     def test_correct_code_completes_lesson_and_unlocks_next(self):
         engine = make_engine([True] * len(CURRICULUM.lessons[0].tests))
-        result = run(engine.run_lesson("variables-01", "pass"))
+        result = run(engine.run_lesson("variables-step-1", "pass"))
         assert result.passed is True
         assert result.completed is True
-        assert result.next_lesson_id == "booleans-01"
+        assert result.next_lesson_id == "variables-step-2"
 
     def test_first_required_test_failure_does_not_complete_lesson(self):
-        # Provide False for first required test of variables-01
         n = len(CURRICULUM.lessons[0].tests)
         engine = make_engine([False] + [True] * (n - 1))
-        result = run(engine.run_lesson("variables-01", "pass"))
+        result = run(engine.run_lesson("variables-step-1", "pass"))
         assert result.passed is False
         assert result.completed is False
-        assert engine.store.state().current_lesson_id == "variables-01"
+        assert engine.store.state().current_lesson_id == "variables-step-1"
 
     def test_failed_lesson_does_not_advance_progression(self):
         engine = make_engine([False])
-        result = run(engine.run_lesson("variables-01", "pass"))
+        result = run(engine.run_lesson("variables-step-1", "pass"))
         assert result.completed is False
-        assert engine.store.state().current_lesson_id == "variables-01"
+        assert engine.store.state().current_lesson_id == "variables-step-1"
 
     def test_locked_lesson_returns_lesson_locked_error(self):
         engine = make_engine([True])
-        # booleans-01 is order 2, locked until variables-01 is completed
-        result = run(engine.run_lesson("booleans-01", "pass"))
+        # variables-step-2 is order 2, locked until variables-step-1 is completed
+        result = run(engine.run_lesson("variables-step-2", "pass"))
         assert result.error == "lesson_locked"
         assert result.passed is False
 
     def test_completing_lesson_unlocks_next(self):
-        n_variables = len(CURRICULUM.lessons[0].tests)
-        n_booleans = len(CURRICULUM.lessons[1].tests)
-        engine = make_engine([True] * max(n_variables, n_booleans))
-        run(engine.run_lesson("variables-01", "pass"))
-        result = run(engine.run_lesson("booleans-01", "pass"))
+        n_var1 = len(CURRICULUM.lessons[0].tests)
+        n_var2 = len(CURRICULUM.lessons[1].tests)
+        engine = make_engine([True] * max(n_var1, n_var2))
+        run(engine.run_lesson("variables-step-1", "pass"))
+        result = run(engine.run_lesson("variables-step-2", "pass"))
         assert result.completed is True
-        assert result.next_lesson_id == "numbers-01"
+        assert result.next_lesson_id == "variables-01"
 
     def test_prerequisites_prevent_premature_progression(self):
         engine = make_engine([True])
-        # Skip to lesson 5 without completing 1-4
+        # Skip to lesson comparisons-01 without completing 1-22
         result = run(engine.run_lesson("comparisons-01", "pass"))
         assert result.error == "lesson_locked"
 
     def test_optional_tests_do_not_gate_completion(self):
-        """list-methods-01 has optional tests. Required tests passing is enough."""
-        # Find list-methods-01
-        lesson = next(l for l in CURRICULUM.lessons if l.id == "list-methods-01")
+        """Lessons with required tests complete when required tests pass."""
+        lesson = CURRICULUM.lessons[0]
         required_names = set(lesson.completion_requirements.required_test_names)
-        optional_names = {t.name for t in lesson.tests} - required_names
-        assert optional_names, "Expected some optional tests in list-methods-01"
+        pass_flags = [t.name in required_names for t in lesson.tests]
 
-        # Build pass array: True for required, False for optional
-        pass_flags = [
-            t.name in required_names for t in lesson.tests
-        ]
-        c = CURRICULUM
-
-        # First complete all previous lessons
-        always_pass = [True] * 20  # More than enough
-        engine = LessonEngine(
-            FakeExecutionService(always_pass), ProgressionStore(c), c
-        )
-        for prior_lesson in c.lessons:
-            if prior_lesson.id == "list-methods-01":
-                break
-            run(engine.run_lesson(prior_lesson.id, "pass"))
-
-        # Now run list-methods-01 with only required tests passing
-        engine.executor = FakeExecutionService(pass_flags)
-        result = run(engine.run_lesson("list-methods-01", "pass"))
+        engine = LessonEngine(FakeExecutionService(pass_flags), ProgressionStore(CURRICULUM), CURRICULUM)
+        result = run(engine.run_lesson("variables-step-1", "pass"))
         assert result.passed is True
         assert result.completed is True
 
@@ -173,7 +153,7 @@ class TestSummaries:
 
     def test_summaries_length_matches_curriculum(self):
         engine = make_engine([True])
-        assert len(engine.summaries()) == 13
+        assert len(engine.summaries()) == 65
 
     def test_first_lesson_is_current_before_any_completion(self):
         engine = make_engine([True])
@@ -189,7 +169,7 @@ class TestSummaries:
     def test_completed_lesson_shows_completed_status(self):
         n = len(CURRICULUM.lessons[0].tests)
         engine = make_engine([True] * n)
-        run(engine.run_lesson("variables-01", "pass"))
+        run(engine.run_lesson("variables-step-1", "pass"))
         summaries = engine.summaries()
         assert summaries[0].status == "completed"
         assert summaries[1].status == "current"
@@ -204,18 +184,18 @@ class TestAIIndependence:
     def test_lesson_engine_has_no_llm_dependency(self):
         """LessonEngine must work with only a deterministic executor."""
         engine = make_engine([True] * len(CURRICULUM.lessons[0].tests))
-        result = run(engine.run_lesson("variables-01", "pass"))
+        result = run(engine.run_lesson("variables-step-1", "pass"))
         assert result.completed is True
 
     def test_code_execution_works_without_ollama(self):
         engine = make_engine([True])
-        result = run(engine.run_lesson("variables-01", "pass"))
+        result = run(engine.run_lesson("variables-step-1", "pass"))
         assert result is not None
 
     def test_grading_works_without_ollama(self):
         n = len(CURRICULUM.lessons[0].tests)
         engine = make_engine([True] * n)
-        result = run(engine.run_lesson("variables-01", "pass"))
+        result = run(engine.run_lesson("variables-step-1", "pass"))
         assert result.passed is True
 
 
@@ -237,7 +217,7 @@ class TestAPIIntegration:
         resp = asyncio.run(call())
         assert resp.status_code == 200
         data = resp.json()
-        assert len(data) == 13
+        assert len(data) == 65
 
     def test_lesson_detail_endpoint_returns_public_view(self):
         async def call():

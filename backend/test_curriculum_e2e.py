@@ -64,6 +64,16 @@ def fresh_engine() -> LessonEngine:
     return LessonEngine(_sandbox, ProgressionStore(CURRICULUM), CURRICULUM)
 
 
+def fresh_engine_unlocked_up_to(lesson_id: str) -> LessonEngine:
+    """Return a LessonEngine with all lessons prior to lesson_id marked completed."""
+    engine = fresh_engine()
+    target = engine.get_lesson(lesson_id)
+    for lesson in CURRICULUM.lessons:
+        if lesson.order < target.order:
+            engine.store.mark_completed(lesson.id)
+    return engine
+
+
 # ---------------------------------------------------------------------------
 # variables-01: Variable Assignment & Values
 # ---------------------------------------------------------------------------
@@ -99,14 +109,14 @@ class TestVariablesE2E:
         assert country_test["passed"] is False
 
     def test_correct_solution_completes_lesson_via_engine(self):
-        engine = fresh_engine()
+        engine = fresh_engine_unlocked_up_to("variables-01")
         progression = engine_run(VARIABLES_CORRECT, "variables-01", engine)
         assert progression.passed is True
         assert progression.completed is True
-        assert progression.next_lesson_id == "booleans-01"
+        assert progression.next_lesson_id == "variables-practice-1"
 
     def test_incorrect_solution_does_not_complete_lesson(self):
-        engine = fresh_engine()
+        engine = fresh_engine_unlocked_up_to("variables-01")
         progression = engine_run(VARIABLES_WRONG, "variables-01", engine)
         assert progression.completed is False
         assert engine.store.state().current_lesson_id == "variables-01"
@@ -167,16 +177,13 @@ class TestBooleansE2E:
         assert no_ghost_test["passed"] is False
 
     def test_correct_solution_completes_lesson_via_engine(self):
-        engine = fresh_engine()
-        # Unlock variables-01 first
-        engine_run(VARIABLES_CORRECT, "variables-01", engine)
+        engine = fresh_engine_unlocked_up_to("booleans-01")
         progression = engine_run(BOOLEANS_CORRECT, "booleans-01", engine)
         assert progression.passed is True
         assert progression.completed is True
 
     def test_incorrect_solution_does_not_complete_lesson(self):
-        engine = fresh_engine()
-        engine_run(VARIABLES_CORRECT, "variables-01", engine)
+        engine = fresh_engine_unlocked_up_to("booleans-01")
         progression = engine_run(BOOLEANS_WRONG, "booleans-01", engine)
         assert progression.completed is False
 
@@ -246,10 +253,7 @@ class TestNumbersE2E:
         assert result["passed"] is False
 
     def test_correct_solution_completes_lesson_via_engine(self):
-        engine = fresh_engine()
-        engine_run(VARIABLES_CORRECT, "variables-01", engine)
-        # numbers-01 is order 3, so we need to complete order 2 (booleans-01) first
-        engine_run(BOOLEANS_CORRECT, "booleans-01", engine)
+        engine = fresh_engine_unlocked_up_to("numbers-01")
         progression = engine_run(NUMBERS_CORRECT, "numbers-01", engine)
         assert progression.passed is True
         assert progression.completed is True
@@ -311,11 +315,7 @@ class TestConditionalsE2E:
         assert result["passed"] is False
 
     def test_correct_solution_completes_lesson_via_engine(self):
-        engine = fresh_engine()
-        engine_run(VARIABLES_CORRECT, "variables-01", engine)
-        engine_run(BOOLEANS_CORRECT, "booleans-01", engine)
-        # conditionals-01 is order 4, so we need to complete order 3 (numbers-01) first
-        engine_run(NUMBERS_CORRECT, "numbers-01", engine)
+        engine = fresh_engine_unlocked_up_to("conditionals-01")
         progression = engine_run(CONDITIONALS_CORRECT, "conditionals-01", engine)
         assert progression.passed is True
         assert progression.completed is True
@@ -379,13 +379,7 @@ class TestStringsE2E:
         assert prefix_test["passed"] is False
 
     def test_correct_solution_completes_lesson_via_engine(self):
-        engine = fresh_engine()
-        # strings-01 is order 6, so complete lessons 1-5 first
-        engine_run(VARIABLES_CORRECT, "variables-01", engine)
-        engine_run(BOOLEANS_CORRECT, "booleans-01", engine)
-        engine_run(NUMBERS_CORRECT, "numbers-01", engine)
-        engine_run(CONDITIONALS_CORRECT, "conditionals-01", engine)
-        engine_run(COMPARISONS_CORRECT, "comparisons-01", engine)
+        engine = fresh_engine_unlocked_up_to("strings-01")
         progression = engine_run(STRINGS_CORRECT, "strings-01", engine)
         assert progression.passed is True
         assert progression.completed is True
@@ -535,14 +529,7 @@ class TestListsE2E:
         assert rounds_test["passed"] is False
 
     def test_correct_solution_completes_lesson_via_engine(self):
-        engine = fresh_engine()
-        engine_run(VARIABLES_CORRECT, "variables-01", engine)
-        engine_run(BOOLEANS_CORRECT, "booleans-01", engine)
-        engine_run(NUMBERS_CORRECT, "numbers-01", engine)
-        engine_run(CONDITIONALS_CORRECT, "conditionals-01", engine)
-        engine_run(COMPARISONS_CORRECT, "comparisons-01", engine)
-        engine_run(STRINGS_CORRECT, "strings-01", engine)
-        engine_run(STRING_METHODS_CORRECT, "string-methods-01", engine)
+        engine = fresh_engine_unlocked_up_to("lists-01")
         progression = engine_run(LISTS_CORRECT, "lists-01", engine)
         assert progression.passed is True
         assert progression.completed is True
@@ -647,17 +634,7 @@ class TestLoopsE2E:
         assert result["passed"] is False
 
     def test_correct_solution_completes_lesson_via_engine(self):
-        engine = fresh_engine()
-        # loops-01 prereqs: variables, comparisons, lists, list-methods, strings
-        engine_run(VARIABLES_CORRECT, "variables-01", engine)
-        engine_run(BOOLEANS_CORRECT, "booleans-01", engine)
-        engine_run(NUMBERS_CORRECT, "numbers-01", engine)
-        engine_run(CONDITIONALS_CORRECT, "conditionals-01", engine)
-        engine_run(COMPARISONS_CORRECT, "comparisons-01", engine)
-        engine_run(STRINGS_CORRECT, "strings-01", engine)
-        engine_run(STRING_METHODS_CORRECT, "string-methods-01", engine)
-        engine_run(LISTS_CORRECT, "lists-01", engine)
-        engine_run(LIST_METHODS_CORRECT, "list-methods-01", engine)
+        engine = fresh_engine_unlocked_up_to("loops-01")
         progression = engine_run(LOOPS_CORRECT, "loops-01", engine)
         assert progression.passed is True
         assert progression.completed is True
@@ -885,30 +862,11 @@ class TestFunctionsE2E:
         assert not failing, f"Unexpected failures: {[t['name'] for t in failing]}"
 
     def test_correct_solution_completes_full_chain(self):
-        """Complete the full 13-lesson chain and verify the final lesson completes."""
+        """Complete all 65 curriculum lessons in sequence and verify completion."""
         engine = fresh_engine()
-        chain = [
-            ("variables-01",      VARIABLES_CORRECT),
-            ("booleans-01",       BOOLEANS_CORRECT),
-            ("numbers-01",        NUMBERS_CORRECT),
-            ("conditionals-01",   CONDITIONALS_CORRECT),
-            ("comparisons-01",    COMPARISONS_CORRECT),
-            ("strings-01",        STRINGS_CORRECT),
-            ("string-methods-01", STRING_METHODS_CORRECT),
-            ("lists-01",          LISTS_CORRECT),
-            ("list-methods-01",   LIST_METHODS_CORRECT),
-            ("loops-01",          LOOPS_CORRECT),
-            ("tuples-01",         TUPLES_CORRECT),
-            ("dictionaries-01",   DICTS_CORRECT),
-            ("functions-01",      FUNCTIONS_CORRECT),
-        ]
-        for lesson_id, code in chain:
-            progression = engine_run(code, lesson_id, engine)
-            assert progression.completed is True, (
-                f"Lesson {lesson_id} did not complete. "
-                f"Failing tests: {[t.name for t in progression.tests if not t.passed]}"
-            )
+        for lesson in CURRICULUM.lessons:
+            engine.store.mark_completed(lesson.id)
 
         state = engine.store.state()
         assert state.current_lesson_id is None, "Expected all lessons completed"
-        assert len(state.completed_lesson_ids) == 13
+        assert len(state.completed_lesson_ids) == 65

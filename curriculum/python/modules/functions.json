@@ -1,6 +1,6 @@
 {
   "id": "functions",
-  "title": "Functions & Constants",
+  "title": "Unit 13: Functions & Constants",
   "order": 13,
   "concepts": [
     {
@@ -11,12 +11,63 @@
   ],
   "lessons": [
     {
+      "id": "functions-step-1",
+      "title": "1. Function Definition & Return Values",
+      "description": "Functions encapsulate reusable code with `def name(param):` and return values with `return`.",
+      "order": 61,
+      "difficulty": "intermediate",
+      "duration_minutes": 5,
+      "type": "learn",
+      "concepts": ["functions"],
+      "prerequisites": ["variables", "numbers"],
+      "learning_objectives": [
+        "Define functions using def and return values"
+      ],
+      "starter_code": "def double(x):\n    # TODO: Return x * 2\n    pass\n",
+      "tests": [
+        {
+          "name": "test_double",
+          "unittest_code": "def test_double(self):\n    self.assertEqual(double(5), 10)",
+          "required": true
+        }
+      ],
+      "completion_requirements": {
+        "required_test_names": ["test_double"]
+      }
+    },
+    {
+      "id": "functions-step-2",
+      "title": "2. Function Arguments & Docstrings",
+      "description": "Functions accept parameters and document purpose using triple-quoted docstrings `\"\"\"Docstring...\"\"\"`.",
+      "order": 62,
+      "difficulty": "intermediate",
+      "duration_minutes": 5,
+      "type": "learn",
+      "concepts": ["functions"],
+      "prerequisites": ["variables", "numbers"],
+      "learning_objectives": [
+        "Pass multiple parameters and write function docstrings"
+      ],
+      "starter_code": "def area_of_rectangle(width, height):\n    \"\"\"Calculate rectangle area.\"\"\"\n    # TODO: Return width * height\n    pass\n",
+      "tests": [
+        {
+          "name": "test_area_docstring",
+          "unittest_code": "def test_area_docstring(self):\n    self.assertEqual(area_of_rectangle(4, 5), 20)\n    self.assertIsNotNone(area_of_rectangle.__doc__)",
+          "required": true
+        }
+      ],
+      "completion_requirements": {
+        "required_test_names": ["test_area_docstring"]
+      }
+    },
+    {
       "id": "functions-01",
-      "title": "Guido's Gorgeous Lasagna",
+      "title": "3. Guido's Gorgeous Lasagna (Concept Challenge)",
       "description": "Bind names to values with constants, define functions using def and return, accept arguments with parameters, and document code with docstrings.",
-      "order": 13,
+      "order": 63,
       "difficulty": "intermediate",
       "duration_minutes": 25,
+      "type": "challenge",
       "concepts": ["functions"],
       "prerequisites": ["variables", "numbers", "conditionals"],
       "learning_objectives": [
@@ -65,6 +116,56 @@
         "name": "Exercism Python Track — Guido's Gorgeous Lasagna",
         "url": "https://github.com/exercism/python/tree/main/exercises/concept/guidos-gorgeous-lasagna",
         "license": "MIT"
+      }
+    },
+    {
+      "id": "functions-practice-1",
+      "title": "4. Recipe Portions Calculator (Practice)",
+      "description": "Calculate scaled recipe quantities for `servings` people.",
+      "order": 64,
+      "difficulty": "intermediate",
+      "duration_minutes": 5,
+      "type": "practice",
+      "concepts": ["functions"],
+      "prerequisites": ["variables", "numbers"],
+      "learning_objectives": [
+        "Define functions for recipe scaling"
+      ],
+      "starter_code": "def scale_recipe(base_amount, base_servings, target_servings):\n    \"\"\"Return scaled amount for target_servings.\"\"\"\n    # TODO: Return base_amount * (target_servings / base_servings)\n    pass\n",
+      "tests": [
+        {
+          "name": "test_scale_recipe",
+          "unittest_code": "def test_scale_recipe(self):\n    self.assertEqual(scale_recipe(200, 2, 4), 400.0)",
+          "required": true
+        }
+      ],
+      "completion_requirements": {
+        "required_test_names": ["test_scale_recipe"]
+      }
+    },
+    {
+      "id": "functions-checkpoint",
+      "title": "5. Unit 13 Checkpoint: Functions Mastery",
+      "description": "Complete the final curriculum checkpoint.",
+      "order": 65,
+      "difficulty": "intermediate",
+      "duration_minutes": 5,
+      "type": "checkpoint",
+      "concepts": ["functions"],
+      "prerequisites": ["variables", "numbers", "conditionals"],
+      "learning_objectives": [
+        "Master function definition and docstrings"
+      ],
+      "starter_code": "def is_even(n):\n    \"\"\"Return True if n is even.\"\"\"\n    # TODO: Return n % 2 == 0\n    pass\n",
+      "tests": [
+        {
+          "name": "test_is_even",
+          "unittest_code": "def test_is_even(self):\n    self.assertTrue(is_even(4))\n    self.assertFalse(is_even(5))",
+          "required": true
+        }
+      ],
+      "completion_requirements": {
+        "required_test_names": ["test_is_even"]
       }
     }
   ]
