@@ -28,7 +28,9 @@ class ProviderSelection(BaseModel):
     provider: str
 
 
-lesson_engine = LessonEngine(sandbox, ProgressionStore(CURRICULUM), CURRICULUM)
+from pathlib import Path
+progression_path = Path(__file__).resolve().parent / "progression_state.json"
+lesson_engine = LessonEngine(sandbox, ProgressionStore(CURRICULUM, storage_path=progression_path), CURRICULUM)
 
 # Global active provider setting
 current_provider_id = os.getenv("AI_PROVIDER", "ollama").lower().strip()

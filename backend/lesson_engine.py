@@ -14,13 +14,37 @@ class ExecutionService(Protocol):
     async def run(self, payload: dict) -> dict: ...
 
 
+import json
+from pathlib import Path
+
 class ProgressionStore:
-    def __init__(self, curriculum: Curriculum) -> None:
+    def __init__(self, curriculum: Curriculum, storage_path: Path | None = None) -> None:
         self._lessons = curriculum.lessons
         self._lessons_by_id: dict[str, LessonDefinition] = {
             lesson.id: lesson for lesson in self._lessons
         }
+        self.storage_path = storage_path
         self._completed: set[str] = set()
+        self._load()
+
+    def _load(self) -> None:
+        if self.storage_path and self.storage_path.exists():
+            try:
+                data = json.loads(self.storage_path.read_text(encoding="utf-8"))
+                if isinstance(data, list):
+                    valid_ids = {lid for lid in data if lid in self._lessons_by_id}
+                    self._completed.update(valid_ids)
+            except Exception:
+                pass
+
+    def _save(self) -> None:
+        if self.storage_path:
+            try:
+                self.storage_path.write_text(
+                    json.dumps(sorted(self._completed)), encoding="utf-8"
+                )
+            except Exception:
+                pass
 
     def state(self) -> ProgressionState:
         current = next(
@@ -36,7 +60,9 @@ class ProgressionStore:
         )
 
     def mark_completed(self, lesson_id: str) -> None:
-        self._completed.add(lesson_id)
+        if lesson_id in self._lessons_by_id:
+            self._completed.add(lesson_id)
+            self._save()
 
 
 class LessonEngine:

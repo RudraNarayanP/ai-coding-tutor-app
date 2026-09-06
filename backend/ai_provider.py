@@ -37,7 +37,14 @@ SYSTEM_PROMPT = (
 
 
 def build_user_prompt(request: TutorRequest) -> str:
+    unit_title = getattr(request, 'unit_title', '')
+    concept_title = getattr(request, 'concept_title', '')
+    prerequisites = getattr(request, 'prerequisites', [])
+    unit_part = f"Unit: {unit_title}\n" if unit_title else ""
+    concept_part = f"Concept: {concept_title}\n" if concept_title else ""
+    prereq_part = f"Prerequisite concepts: {', '.join(prerequisites)}\n" if prerequisites else ""
     return (
+        f"{unit_part}{concept_part}{prereq_part}"
         f"Lesson: {request.lesson_title} ({request.lesson_id})\n"
         f"Instructions: {request.instructions}\n"
         f"Student code:\n{request.code}\n"
@@ -48,6 +55,16 @@ def build_user_prompt(request: TutorRequest) -> str:
     )
 
 
+# ─── SHARED HTTP CLIENT FOR LATENCY OPTIMIZATION ──────────────────────────────
+_shared_client: httpx.AsyncClient | None = None
+
+def get_shared_client(timeout: float = 30.0) -> httpx.AsyncClient:
+    global _shared_client
+    if _shared_client is None or _shared_client.is_closed:
+        _shared_client = httpx.AsyncClient(timeout=timeout, limits=httpx.Limits(max_keepalive_connections=20, max_connections=100))
+    return _shared_client
+
+
 # ─── 1. OLLAMA PROVIDER ────────────────────────────────────────────────────────
 
 @dataclass
@@ -56,28 +73,28 @@ class OllamaProvider:
     name: str = "Ollama (Local)"
     base_url: str = field(default_factory=lambda: os.getenv("OLLAMA_BASE_URL", "http://localhost:11434").rstrip("/"))
     model: str = field(default_factory=lambda: os.getenv("OLLAMA_MODEL", "llama3.1:8b"))
-    timeout_seconds: float = field(default_factory=lambda: float(os.getenv("OLLAMA_TIMEOUT_SECONDS", "45")))
+    timeout_seconds: float = field(default_factory=lambda: float(os.getenv("OLLAMA_TIMEOUT_SECONDS", "30")))
 
     async def tutor(self, request: TutorRequest) -> str:
         prompt = build_user_prompt(request)
         try:
-            async with httpx.AsyncClient(timeout=self.timeout_seconds) as client:
-                response = await client.post(
-                    f"{self.base_url}/api/chat",
-                    json={
-                        "model": self.model,
-                        "stream": False,
-                        "options": {"num_predict": 300},
-                        "messages": [
-                            {"role": "system", "content": SYSTEM_PROMPT},
-                            {"role": "user", "content": prompt},
-                        ],
-                    },
-                )
-                if response.status_code == 404:
-                    raise AIProviderError("Configured Ollama model is unavailable.", provider="ollama", code="model_missing")
-                response.raise_for_status()
-                payload = response.json()
+            client = get_shared_client(self.timeout_seconds)
+            response = await client.post(
+                f"{self.base_url}/api/chat",
+                json={
+                    "model": self.model,
+                    "stream": False,
+                    "options": {"num_predict": 180},
+                    "messages": [
+                        {"role": "system", "content": SYSTEM_PROMPT},
+                        {"role": "user", "content": prompt},
+                    ],
+                },
+            )
+            if response.status_code == 404:
+                raise AIProviderError("Configured Ollama model is unavailable.", provider="ollama", code="model_missing")
+            response.raise_for_status()
+            payload = response.json()
         except (httpx.HTTPError, ValueError) as exc:
             raise AIProviderError("Ollama returned an invalid or unreachable response.", provider="ollama", code="network_error") from exc
 
@@ -159,7 +176,7 @@ class OpenAICompatibleProvider:
 
         payload = {
             "model": self.model,
-            "max_tokens": 300,
+            "max_tokens": 180,
             "messages": [
                 {"role": "system", "content": SYSTEM_PROMPT},
                 {"role": "user", "content": build_user_prompt(request)},
@@ -167,14 +184,14 @@ class OpenAICompatibleProvider:
         }
 
         try:
-            async with httpx.AsyncClient(timeout=30) as client:
-                res = await client.post(f"{self.base_url}/chat/completions", headers=headers, json=payload)
-                if res.status_code == 401:
-                    raise AIProviderError(f"{self.name} API key is invalid or unauthorized.", provider=self.provider_id, code="invalid_api_key")
-                elif res.status_code == 429:
-                    raise AIProviderError(f"{self.name} rate limit or quota exceeded.", provider=self.provider_id, code="rate_limit")
-                res.raise_for_status()
-                data = res.json()
+            client = get_shared_client(30.0)
+            res = await client.post(f"{self.base_url}/chat/completions", headers=headers, json=payload)
+            if res.status_code == 401:
+                raise AIProviderError(f"{self.name} API key is invalid or unauthorized.", provider=self.provider_id, code="invalid_api_key")
+            elif res.status_code == 429:
+                raise AIProviderError(f"{self.name} rate limit or quota exceeded.", provider=self.provider_id, code="rate_limit")
+            res.raise_for_status()
+            data = res.json()
         except AIProviderError:
             raise
         except Exception as exc:
@@ -233,7 +250,7 @@ class AnthropicProvider:
 
         payload = {
             "model": self.model,
-            "max_tokens": 300,
+            "max_tokens": 180,
             "system": SYSTEM_PROMPT,
             "messages": [
                 {"role": "user", "content": build_user_prompt(request)},
@@ -241,14 +258,14 @@ class AnthropicProvider:
         }
 
         try:
-            async with httpx.AsyncClient(timeout=30) as client:
-                res = await client.post("https://api.anthropic.com/v1/messages", headers=headers, json=payload)
-                if res.status_code == 401:
-                    raise AIProviderError("Anthropic API key is invalid.", provider=self.provider_id, code="invalid_api_key")
-                elif res.status_code == 429:
-                    raise AIProviderError("Anthropic rate limit reached.", provider=self.provider_id, code="rate_limit")
-                res.raise_for_status()
-                data = res.json()
+            client = get_shared_client(30.0)
+            res = await client.post("https://api.anthropic.com/v1/messages", headers=headers, json=payload)
+            if res.status_code == 401:
+                raise AIProviderError("Anthropic API key is invalid.", provider=self.provider_id, code="invalid_api_key")
+            elif res.status_code == 429:
+                raise AIProviderError("Anthropic rate limit reached.", provider=self.provider_id, code="rate_limit")
+            res.raise_for_status()
+            data = res.json()
         except AIProviderError:
             raise
         except Exception as exc:
@@ -309,19 +326,19 @@ class GeminiProvider:
                 "parts": [{"text": build_user_prompt(request)}]
             }],
             "generationConfig": {
-                "maxOutputTokens": 300,
+                "maxOutputTokens": 180,
             }
         }
 
         try:
-            async with httpx.AsyncClient(timeout=30) as client:
-                res = await client.post(url, json=payload)
-                if res.status_code in (400, 401, 403):
-                    raise AIProviderError("Gemini API key is invalid or request denied.", provider=self.provider_id, code="invalid_api_key")
-                elif res.status_code == 429:
-                    raise AIProviderError("Gemini rate limit exceeded.", provider=self.provider_id, code="rate_limit")
-                res.raise_for_status()
-                data = res.json()
+            client = get_shared_client(30.0)
+            res = await client.post(url, json=payload)
+            if res.status_code in (400, 401, 403):
+                raise AIProviderError("Gemini API key is invalid or request denied.", provider=self.provider_id, code="invalid_api_key")
+            elif res.status_code == 429:
+                raise AIProviderError("Gemini rate limit exceeded.", provider=self.provider_id, code="rate_limit")
+            res.raise_for_status()
+            data = res.json()
         except AIProviderError:
             raise
         except Exception as exc:
