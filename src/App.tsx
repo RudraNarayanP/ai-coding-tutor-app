@@ -77,6 +77,51 @@ function LineNumbers({
   )
 }
 
+// ─── Audio Helper ──────────────────────────────────────────────────────────────
+function playFeedbackSound(type: 'success' | 'error', enabled: boolean) {
+  if (!enabled) return
+  try {
+    const AudioCtx =
+      window.AudioContext ||
+      (window as unknown as { webkitAudioContext: typeof AudioContext }).webkitAudioContext
+    if (!AudioCtx) return
+    const ctx = new AudioCtx()
+    if (ctx.state === 'suspended') {
+      ctx.resume()
+    }
+    const now = ctx.currentTime
+    if (type === 'success') {
+      const notes = [523.25, 659.25, 783.99] // C5, E5, G5
+      notes.forEach((freq, idx) => {
+        const osc = ctx.createOscillator()
+        const gain = ctx.createGain()
+        osc.type = 'triangle'
+        osc.frequency.setValueAtTime(freq, now + idx * 0.08)
+        gain.gain.setValueAtTime(0.15, now + idx * 0.08)
+        gain.gain.exponentialRampToValueAtTime(0.001, now + idx * 0.08 + 0.3)
+        osc.connect(gain)
+        gain.connect(ctx.destination)
+        osc.start(now + idx * 0.08)
+        osc.stop(now + idx * 0.08 + 0.35)
+      })
+    } else {
+      const osc = ctx.createOscillator()
+      const gain = ctx.createGain()
+      osc.type = 'sawtooth'
+      osc.frequency.setValueAtTime(180, now)
+      osc.frequency.exponentialRampToValueAtTime(120, now + 0.25)
+      gain.gain.setValueAtTime(0.12, now)
+      gain.gain.exponentialRampToValueAtTime(0.001, now + 0.25)
+      osc.connect(gain)
+      gain.connect(ctx.destination)
+      osc.start(now)
+      osc.stop(now + 0.25)
+    }
+  } catch {
+    // AudioContext silently handled
+  }
+}
+
 // ─── App Component ────────────────────────────────────────────────────────────
 function App() {
   const [lessons, setLessons] = useState<LessonSummary[]>([])
@@ -88,6 +133,10 @@ function App() {
     'Run your code to get immediate feedback from the local sandbox.'
   )
   const [aiEnabled, setAiEnabled] = useState(true)
+  const [soundEnabled, setSoundEnabled] = useState<boolean>(() => {
+    const saved = localStorage.getItem('patchwork_sound_enabled')
+    return saved !== null ? saved === 'true' : true
+  })
   const [providersOverview, setProvidersOverview] = useState<ProvidersOverview | null>(null)
   const [selectedProvider, setSelectedProvider] = useState<string>('ollama')
   const [previousHints, setPreviousHints] = useState<string[]>([])
@@ -121,6 +170,22 @@ function App() {
     syncLineNumbers(0)
   }, [syncLineNumbers])
 
+  // ── Save Sound Preference ─────────────────────────────────────────────────
+  const toggleSound = useCallback(() => {
+    setSoundEnabled((prev) => {
+      const next = !prev
+      localStorage.setItem('patchwork_sound_enabled', String(next))
+      return next
+    })
+  }, [])
+
+  // ── Save Draft Code to localStorage ────────────────────────────────────────
+  useEffect(() => {
+    if (lesson?.id && code !== undefined) {
+      localStorage.setItem(`patchwork_code_${lesson.id}`, code)
+    }
+  }, [lesson?.id, code])
+
   // ── Initial Data Load ──────────────────────────────────────────────────────
   useEffect(() => {
     const load = async () => {
@@ -131,14 +196,27 @@ function App() {
         const summaries = (await summariesResponse.json()) as LessonSummary[]
         if (summaries.length === 0) throw new Error('No lessons available')
         setLessons(summaries)
+
         const completedIds = summaries.filter((l) => l.status === 'completed').map((l) => l.id)
         localStorage.setItem('patchwork_completed_lessons', JSON.stringify(completedIds))
-        const current = summaries.find((l) => l.status === 'current') ?? summaries[0]
-        const lessonResponse = await fetch(`/api/lessons/${current.id}`)
+
+        // Restore last active lesson if unlocked, otherwise current lesson
+        const lastActiveId = localStorage.getItem('patchwork_last_active_lesson')
+        const targetSummary =
+          (lastActiveId && summaries.find((l) => l.id === lastActiveId && l.status !== 'locked')) ||
+          summaries.find((l) => l.status === 'current') ||
+          summaries[0]
+
+        const lessonResponse = await fetch(`/api/lessons/${targetSummary.id}`)
         if (!lessonResponse.ok) throw new Error('Lesson unavailable')
         const selected = (await lessonResponse.json()) as Lesson
         setLesson(selected)
-        setCode(selected.starter_code ?? '')
+
+        // Restore draft code if available, else starter_code
+        const draftCode = localStorage.getItem(`patchwork_code_${selected.id}`)
+        setCode(draftCode !== null ? draftCode : selected.starter_code ?? '')
+        localStorage.setItem('patchwork_last_active_lesson', selected.id)
+
         requestAnimationFrame(resetEditorScroll)
         setBackendError(false)
       } catch {
@@ -201,7 +279,11 @@ function App() {
         if (!response.ok) throw new Error('Lesson unavailable')
         const selected = (await response.json()) as Lesson
         setLesson(selected)
-        setCode(selected.starter_code ?? '')
+
+        const draftCode = localStorage.getItem(`patchwork_code_${selected.id}`)
+        setCode(draftCode !== null ? draftCode : selected.starter_code ?? '')
+        localStorage.setItem('patchwork_last_active_lesson', selected.id)
+
         setResults(null)
         setPreviousHints([])
         setHintLevel(1)
@@ -241,6 +323,12 @@ function App() {
       }
       setResults(execution.tests)
 
+      const passedAllRequired =
+        execution.tests.length > 0 &&
+        execution.tests.every((t) => t.passed || !t.required)
+
+      playFeedbackSound(passedAllRequired ? 'success' : 'error', soundEnabled)
+
       if (execution.completed) {
         setShowCompletion(true)
         setFeedback('🎉 Great! Everything works. Next lesson is unlocked!')
@@ -268,7 +356,7 @@ function App() {
     } finally {
       setIsRunning(false)
     }
-  }, [lesson, code, scrollToResults])
+  }, [lesson, code, soundEnabled, scrollToResults])
 
   // ── Ask Tutor for Hint ─────────────────────────────────────────────────────
   const askTutor = useCallback(async () => {
@@ -316,50 +404,27 @@ function App() {
     }
   }, [lesson, aiEnabled, code, results, previousHints, hintLevel])
 
-  // ── Ask Tutor for Solution ──────────────────────────────────────────────────
+  // ── View Solution ──────────────────────────────────────────────────────────
   const askSolution = useCallback(async () => {
-    if (!lesson || !aiEnabled) return
-    setIsTutorLoading(true)
-    setFeedback('Retrieving solution and explanation from your tutor…')
-    const controller = new AbortController()
-    const timeoutId = setTimeout(() => controller.abort(), 50000)
+    if (!lesson) return
+    setIsLoadingLesson(true)
+    setFeedback('Inserting solution into editor…')
     try {
-      const response = await fetch('/api/tutor', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        signal: controller.signal,
-        body: JSON.stringify({
-          lesson_id: lesson.id,
-          lesson_title: lesson.title,
-          unit_title: lesson.unit_title ?? '',
-          concept_title: lesson.concept_title ?? '',
-          prerequisites: lesson.prerequisites ?? [],
-          instructions: lesson.description,
-          code,
-          test_results: results ?? [],
-          previous_hints: previousHints,
-          hint_level: 4,
-          session_id: 'default',
-          solution_requested: true,
-        }),
-      })
-      if (!response.ok) throw new Error(`HTTP error ${response.status}`)
-      const tutor = (await response.json()) as {
-        available: boolean
-        message: string
-        hint_level: number
-      }
-      setFeedback(tutor.message)
-      if (tutor.available) {
-        setPreviousHints((h) => [...h, tutor.message].slice(-8))
+      const response = await fetch(`/api/lessons/${lesson.id}/solution`)
+      if (!response.ok) throw new Error('Solution unavailable')
+      const data = (await response.json()) as { solution_code: string }
+      if (data.solution_code) {
+        setCode(data.solution_code)
+        setFeedback('💡 Solution inserted into editor! Click "Run code" to verify.')
+      } else {
+        setFeedback('Solution unavailable for this exercise.')
       }
     } catch {
-      setFeedback('AI tutoring is unavailable right now. Check starter code and learning objectives for guidance.')
+      setFeedback('Solution unavailable right now. Try reviewing starter code.')
     } finally {
-      clearTimeout(timeoutId)
-      setIsTutorLoading(false)
+      setIsLoadingLesson(false)
     }
-  }, [lesson, aiEnabled, code, results, previousHints])
+  }, [lesson])
 
   // ── Keyboard shortcuts ─────────────────────────────────────────────────────
   const handleEditorKeyDown = useCallback(
@@ -468,6 +533,16 @@ function App() {
                 : `${currentProviderStatus?.name || selectedProvider} unavailable`}
             </div>
           </div>
+
+          <button
+            className="duo-button duo-button-secondary"
+            style={{ padding: '6px 14px', fontSize: '13px' }}
+            aria-label={soundEnabled ? 'Mute audio feedback' : 'Unmute audio feedback'}
+            onClick={toggleSound}
+            title={soundEnabled ? 'Mute audio' : 'Unmute audio'}
+          >
+            {soundEnabled ? '🔊 Sound' : '🔇 Sound'}
+          </button>
 
           <button
             className="duo-button duo-button-secondary"
@@ -767,9 +842,9 @@ function App() {
             id="solution-button"
             className="duo-button duo-button-secondary duo-button-solution"
             onClick={askSolution}
-            disabled={hintDisabled}
+            disabled={!lesson || isRunning || isLoadingLesson}
             aria-label="View Solution"
-            title="View solution and detailed explanation"
+            title="Insert official solution into code editor"
           >
             View Solution 💡
           </button>

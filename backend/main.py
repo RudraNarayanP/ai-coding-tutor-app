@@ -124,6 +124,15 @@ async def get_lesson(lesson_id: str):
     return PublicLessonView.from_lesson(lesson)
 
 
+@app.get("/api/lessons/{lesson_id}/solution")
+async def get_lesson_solution(lesson_id: str):
+    try:
+        lesson = lesson_engine.get_lesson(lesson_id)
+    except KeyError as exc:
+        raise HTTPException(status_code=404, detail={"error": "lesson_not_found"}) from exc
+    return {"solution_code": lesson_engine.get_solution_code(lesson)}
+
+
 async def submit_lesson(lesson_id: str, request: CodeSubmission) -> ProgressionResult:
     try:
         return await lesson_engine.run_lesson(lesson_id, request.code)

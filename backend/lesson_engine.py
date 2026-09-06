@@ -82,6 +82,13 @@ class LessonEngine:
         except StopIteration:
             raise KeyError(lesson_id)
 
+    def get_solution_code(self, lesson: LessonDefinition) -> str:
+        if lesson.solution_code:
+            return lesson.solution_code
+        if lesson.static_hints:
+            return "\n".join(lesson.static_hints) + "\n"
+        return "# Solution not available.\n"
+
     def summaries(self) -> list[LessonSummary]:
         state = self.store.state()
         return [
