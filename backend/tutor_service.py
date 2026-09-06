@@ -48,10 +48,6 @@ class TutorService:
             return LEVEL_FALLBACKS[request.hint_level]
         return message
 
-    def sanitize(self, message: str, request: TutorRequest) -> str:
-        """Public wrapper around message sanitisation."""
-        return self._sanitize(message, request)
-
     async def tutor(self, request: TutorRequest, active_provider: AIProvider | None = None) -> TutorResponse:
         primary = active_provider or self.provider
         stored = self.sessions.hints_for(request.session_id, request.lesson_id)

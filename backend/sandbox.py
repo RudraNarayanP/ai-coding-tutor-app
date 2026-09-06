@@ -1,6 +1,7 @@
 import asyncio
 import json
 import time
+import uuid
 from dataclasses import dataclass
 
 
@@ -13,8 +14,6 @@ class SandboxError(Exception):
 @dataclass(frozen=True)
 class SandboxLimits:
     timeout_seconds: float = 10
-    # Increase execution timeout to allow Docker container startup and tests to run reliably
-    timeout_seconds: float = 15
     memory: str = "128m"
     cpus: str = "0.5"
     pids: str = "32"
@@ -60,22 +59,27 @@ class DockerSandbox:
         create_args = [
             "create", "--name", container, "--network=none", "--read-only",
             "--tmpfs", "/tmp:exec,size=64m", "--cap-drop=ALL",
-        # Run the student's code in a single `docker run` call to reduce overhead
-        run_args = [
-                    "run", "--rm", "-i", "--network=none", "--read-only",
-            "--tmpfs", "/tmp:rw,noexec,nosuid,size=16m", "--cap-drop=ALL",
             "--security-opt=no-new-privileges", "--user", "10001:10001",
             "--memory", self.limits.memory, "--cpus", self.limits.cpus,
             "--pids-limit", self.limits.pids, "--ulimit", "nofile=64:64",
-            "--ulimit", "fsize=65536:65536",
-            self.image,
-            "python", "-I", "/sandbox/runner.py",
+            "--ulimit", "fsize=65536:65536", "--entrypoint", "python", self.image,
+            "-c", "import time; time.sleep(60)",
         ]
         try:
+            code, _, stderr = await self._docker(*create_args)
+            if code != 0:
+                raise SandboxError(f"Could not create the sandbox container: {stderr.decode(errors='replace')[-500:]}")
             started = time.perf_counter()
-            code, stdout, stderr = await self._docker(*run_args, input_data=json.dumps(payload).encode(), timeout=self.limits.timeout_seconds, timeout_message="Student execution timed out.")
+            code, _, stderr = await self._docker("start", container, timeout=15)
+            if code != 0:
+                raise SandboxError(f"Could not start the sandbox container: {stderr.decode(errors='replace')[-500:]}")
+            try:
+                code, stdout, stderr = await self._docker("exec", "--interactive", container, "python", "-I", "/sandbox/runner.py", input_data=json.dumps(payload).encode(), timeout=self.limits.timeout_seconds, timeout_message="Student execution timed out.")
+            except SandboxError as exc:
+                if exc.status_code == 408:
+                    return {"passed": False, "tests": [], "stdout": "", "stderr": str(exc), "execution_time_ms": round((time.perf_counter() - started) * 1000), "error": "timeout"}
+                raise
             elapsed = round((time.perf_counter() - started) * 1000)
-
             if len(stdout) > self.limits.max_output_bytes:
                 return {"passed": False, "tests": [], "stdout": "", "stderr": "Sandbox output exceeded the 64 KiB limit.", "execution_time_ms": elapsed, "error": "excessive_output"}
             if code != 0:
@@ -86,12 +90,10 @@ class DockerSandbox:
                 return {"passed": False, "tests": [], "stdout": "", "stderr": "Sandbox returned an invalid result.", "execution_time_ms": elapsed, "error": "invalid_sandbox_result"}
             result["execution_time_ms"] = elapsed
             return result
-        except SandboxError as exc:
-            # Timeouts are surfaced as a structured result so the lesson engine
-            # can report them deterministically instead of failing the request.
-            if exc.status_code == 408:
-                return {"passed": False, "tests": [], "stdout": "", "stderr": str(exc), "execution_time_ms": round((time.perf_counter() - started) * 1000), "error": "timeout"}
+        except SandboxError:
             raise
+        finally:
+            await self._docker("rm", "--force", container)
 
 
 sandbox = DockerSandbox()
