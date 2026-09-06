@@ -1,0 +1,146 @@
+{
+  "id": "cpp-basics",
+  "title": "Unit 1: C++ Basics & Primitive Types",
+  "order": 1,
+  "concepts": [
+    {
+      "id": "cpp-variables",
+      "title": "C++ Variables & Fundamental Types",
+      "prerequisites": []
+    }
+  ],
+  "lessons": [
+    {
+      "id": "cpp-variables-step-1",
+      "title": "1. Hello C++ & std::string",
+      "description": "Welcome to C++! C++ is a powerful compiled language. Implement `get_language()` returning `std::string(\"C++\")`.",
+      "order": 1,
+      "difficulty": "beginner",
+      "duration_minutes": 5,
+      "type": "learn",
+      "concepts": ["cpp-variables"],
+      "prerequisites": [],
+      "learning_objectives": [
+        "Return std::string value in C++"
+      ],
+      "starter_code": "#include <string>\n\nstd::string get_language() {\n    // TODO: Return \"C++\"\n    return \"\";\n}\n",
+      "solution_code": "#include <string>\n\nstd::string get_language() {\n    return \"C++\";\n}\n",
+      "tests": [
+        {
+          "name": "test_get_language",
+          "test_code": "assert(get_language() == \"C++\");",
+          "required": true
+        }
+      ],
+      "completion_requirements": {
+        "required_test_names": ["test_get_language"]
+      },
+      "static_hints": ["return \"C++\";"]
+    },
+    {
+      "id": "cpp-variables-step-2",
+      "title": "2. Integers & Arithmetic",
+      "description": "In C++, integer calculations use fundamental types like `int`. Implement `calculate_total(int price, int quantity)`.",
+      "order": 2,
+      "difficulty": "beginner",
+      "duration_minutes": 5,
+      "type": "learn",
+      "concepts": ["cpp-variables"],
+      "prerequisites": [],
+      "learning_objectives": [
+        "Use int primitive arithmetic in C++"
+      ],
+      "starter_code": "int calculate_total(int price, int quantity) {\n    // TODO: Return price * quantity\n    return 0;\n}\n",
+      "solution_code": "int calculate_total(int price, int quantity) {\n    return price * quantity;\n}\n",
+      "tests": [
+        {
+          "name": "test_calculate_total",
+          "test_code": "assert(calculate_total(12, 4) == 48);",
+          "required": true
+        }
+      ],
+      "completion_requirements": {
+        "required_test_names": ["test_calculate_total"]
+      },
+      "static_hints": ["return price * quantity;"]
+    },
+    {
+      "id": "cpp-variables-01",
+      "title": "3. Rocket Payload Fuel Calculator (Concept Challenge)",
+      "description": "Calculate required rocket fuel mass in C++.",
+      "order": 3,
+      "difficulty": "beginner",
+      "duration_minutes": 10,
+      "type": "challenge",
+      "concepts": ["cpp-variables"],
+      "prerequisites": [],
+      "learning_objectives": [
+        "Combine double variables and floating point math in C++"
+      ],
+      "starter_code": "double calculate_fuel(double payload_mass, double distance) {\n    // TODO: Return payload_mass * distance * 0.15\n    return 0.0;\n}\n",
+      "solution_code": "double calculate_fuel(double payload_mass, double distance) {\n    return payload_mass * distance * 0.15;\n}\n",
+      "tests": [
+        {
+          "name": "test_calculate_fuel",
+          "test_code": "assert(std::abs(calculate_fuel(100.0, 50.0) - 750.0) < 0.001);",
+          "required": true
+        }
+      ],
+      "completion_requirements": {
+        "required_test_names": ["test_calculate_fuel"]
+      }
+    },
+    {
+      "id": "cpp-variables-practice-1",
+      "title": "4. Circle Area Calculator (Practice)",
+      "description": "Calculate circle area using pi * radius * radius.",
+      "order": 4,
+      "difficulty": "beginner",
+      "duration_minutes": 5,
+      "type": "practice",
+      "concepts": ["cpp-variables"],
+      "prerequisites": [],
+      "learning_objectives": [
+        "Calculate geometric area in C++"
+      ],
+      "starter_code": "double circle_area(double radius) {\n    const double pi = 3.141592653589793;\n    // TODO: Return pi * radius * radius\n    return 0.0;\n}\n",
+      "solution_code": "double circle_area(double radius) {\n    const double pi = 3.141592653589793;\n    return pi * radius * radius;\n}\n",
+      "tests": [
+        {
+          "name": "test_circle_area",
+          "test_code": "assert(std::abs(circle_area(2.0) - 12.56637) < 0.01);",
+          "required": true
+        }
+      ],
+      "completion_requirements": {
+        "required_test_names": ["test_circle_area"]
+      }
+    },
+    {
+      "id": "cpp-variables-checkpoint",
+      "title": "5. Unit 1 Checkpoint: C++ Variables Mastery",
+      "description": "Verify C++ fundamental type operations.",
+      "order": 5,
+      "difficulty": "beginner",
+      "duration_minutes": 5,
+      "type": "checkpoint",
+      "concepts": ["cpp-variables"],
+      "prerequisites": [],
+      "learning_objectives": [
+        "Pass C++ variables checkpoint"
+      ],
+      "starter_code": "int square(int x) {\n    // TODO: Return x * x\n    return 0;\n}\n",
+      "solution_code": "int square(int x) {\n    return x * x;\n}\n",
+      "tests": [
+        {
+          "name": "test_square",
+          "test_code": "assert(square(6) == 36);",
+          "required": true
+        }
+      ],
+      "completion_requirements": {
+        "required_test_names": ["test_square"]
+      }
+    }
+  ]
+}

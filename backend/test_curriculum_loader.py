@@ -80,15 +80,15 @@ class TestDefaultCurriculumLoads:
 
     def test_correct_module_count(self):
         curriculum = load_default_curriculum()
-        assert len(curriculum.modules) == 13
+        assert len(curriculum.modules) == 14
 
     def test_correct_concept_count(self):
         curriculum = load_default_curriculum()
-        assert len(curriculum.concepts) == 13
+        assert len(curriculum.concepts) == 14
 
     def test_correct_lesson_count(self):
         curriculum = load_default_curriculum()
-        assert len(curriculum.lessons) == 65
+        assert len(curriculum.lessons) == 70
 
     def test_lessons_are_ordered_by_order_field(self):
         curriculum = load_default_curriculum()
@@ -101,7 +101,7 @@ class TestDefaultCurriculumLoads:
 
     def test_functions_lesson_is_functions_01(self):
         curriculum = load_default_curriculum()
-        assert curriculum.lessons[-1].id == "functions-checkpoint"
+        assert curriculum.lessons[-1].id == "classes-checkpoint"
 
     def test_no_duplicate_lesson_ids(self):
         curriculum = load_default_curriculum()
@@ -243,7 +243,7 @@ class TestCurriculumLoaderErrors:
         lesson = base_lesson()
         lesson["tests"] = [{"name": "bad_test", "required": True}]
         module = base_module(lessons=[lesson])
-        with pytest.raises(CurriculumLoadError, match="must have either expected_stdout or unittest_code"):
+        with pytest.raises(CurriculumLoadError, match="must have expected_stdout, unittest_code, or test_code"):
             CurriculumLoader(write_curriculum(tmp_path, base_course(), {"one.json": module})).load()
 
     def test_test_with_both_execution_strategies_raises(self, tmp_path):
@@ -290,7 +290,7 @@ class TestEngineWithLoadedCurriculum:
         """Curriculum must load even when no AI provider is available."""
         # Simply importing and loading proves independence from Ollama
         curriculum = load_default_curriculum()
-        assert len(curriculum.lessons) == 65
+        assert len(curriculum.lessons) == 70
 
     def test_lesson_engine_works_without_ollama(self):
         curriculum = load_default_curriculum()

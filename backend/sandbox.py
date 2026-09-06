@@ -12,6 +12,7 @@ class SandboxError(Exception):
 
 @dataclass(frozen=True)
 class SandboxLimits:
+    timeout_seconds: float = 10
     # Increase execution timeout to allow Docker container startup and tests to run reliably
     timeout_seconds: float = 15
     memory: str = "128m"
@@ -55,6 +56,10 @@ class DockerSandbox:
         if len(code_bytes) > self.limits.max_code_bytes:
             raise SandboxError("Submitted code exceeds the 64 KiB limit.", 413)
         await self._ensure_image()
+        container = f"patchwork-run-{uuid.uuid4().hex}"
+        create_args = [
+            "create", "--name", container, "--network=none", "--read-only",
+            "--tmpfs", "/tmp:exec,size=64m", "--cap-drop=ALL",
         # Run the student's code in a single `docker run` call to reduce overhead
         run_args = [
                     "run", "--rm", "-i", "--network=none", "--read-only",

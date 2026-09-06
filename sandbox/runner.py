@@ -1,32 +1,27 @@
-"""Sandbox runner executed inside the Docker container.
+"""Sandbox runner executed inside the Docker container or local environment.
 
-Supports two test modes, dispatched by the presence of the ``unittest_code`` key
-in each test descriptor:
-
-stdout mode (legacy)
-    The student's code is exec'd; its stdout is compared against ``expected_stdout``.
-
-unittest mode (Exercism-style)
-    The student's code is exec'd into a shared namespace, then each test method body
-    is assembled into a ``unittest.TestCase`` subclass and run individually.  This
-    lets every test method report independently while sharing a single execution of
-    the student's module-level code.
+Supports Python, Java, and C++ test execution:
+- Python: Uses exec() and unittest / stdout runner.
+- Java: Compiles student code with javac, runs test harnesses or stdout matching.
+- C++: Compiles student code with g++ -std=c++20, runs binary test harnesses or stdout matching.
 """
 
 import contextlib
 import io
 import json
+import os
+import re
+import subprocess
 import sys
+import tempfile
 import textwrap
 import time
-import traceback
-import unittest
 
 MAX_OUTPUT_BYTES = 64 * 1024
 
 
 # ---------------------------------------------------------------------------
-# Output limiting
+# Output limiting for Python
 # ---------------------------------------------------------------------------
 
 class LimitedWriter(io.TextIOBase):
@@ -60,15 +55,10 @@ def redirect_stdin(stream: io.TextIOBase):
 
 
 # ---------------------------------------------------------------------------
-# Shared student-code execution
+# Python Runner
 # ---------------------------------------------------------------------------
 
 def exec_student_code(code: str, namespace: dict) -> tuple[str, str, str | None]:
-    """Execute student code once into *namespace*.
-
-    Returns (stdout_str, stderr_str, error_str | None).
-    error_str is None on clean execution, otherwise a short error description.
-    """
     stdout_cap = LimitedWriter()
     stderr_cap = LimitedWriter()
     error = None
@@ -86,12 +76,7 @@ def exec_student_code(code: str, namespace: dict) -> tuple[str, str, str | None]
     return stdout_cap.getvalue(), stderr_cap.getvalue(), error
 
 
-# ---------------------------------------------------------------------------
-# stdout mode
-# ---------------------------------------------------------------------------
-
-def run_stdout_test(code: str, test: dict) -> dict:
-    """Run one stdout-matching test."""
+def run_python_stdout_test(code: str, test: dict) -> dict:
     stdout_cap = LimitedWriter()
     stderr_cap = LimitedWriter()
     started = time.perf_counter()
@@ -129,20 +114,11 @@ def run_stdout_test(code: str, test: dict) -> dict:
     }
 
 
-# ---------------------------------------------------------------------------
-# unittest mode
-# ---------------------------------------------------------------------------
-
-def run_unittest_test(student_code: str, student_ns: dict, exec_error: str | None, test: dict) -> dict:
-    """Run one unittest method body against the pre-executed student namespace.
-
-    *student_ns* is the namespace produced by running the student's code once.
-    *exec_error* is non-None if the student code itself raised an exception.
-    """
+def run_python_unittest_test(student_code: str, student_ns: dict, exec_error: str | None, test: dict) -> dict:
+    import unittest
     started = time.perf_counter()
     name = test["name"]
 
-    # If the student code failed to execute, every test in this lesson fails.
     if exec_error is not None:
         elapsed = round((time.perf_counter() - started) * 1000)
         return {
@@ -154,15 +130,10 @@ def run_unittest_test(student_code: str, student_ns: dict, exec_error: str | Non
             "stderr": "",
         }
 
-    method_body = test["unittest_code"]
-
-    # Handle curriculum files that include the full method definition vs just the body
-    # If the unittest_code starts with "def", extract just the body
+    method_body = test.get("unittest_code") or test.get("test_code") or ""
     dedented = textwrap.dedent(method_body).strip()
     if dedented.startswith("def "):
-        # Extract the body by removing the function definition line and dedenting
         lines = dedented.split("\n")
-        # Find the first line that's not the def line (after the colon)
         body_lines = []
         in_def = True
         for line in lines:
@@ -171,11 +142,8 @@ def run_unittest_test(student_code: str, student_ns: dict, exec_error: str | Non
                     in_def = False
                 continue
             body_lines.append(line)
-        # Dedent the extracted body to remove the original indentation
         method_body = textwrap.dedent("\n".join(body_lines)).strip()
     
-    # Build a TestCase class dynamically.  We indent the method body by 8 spaces
-    # so it sits inside the class/method correctly regardless of the source indentation.
     indented_body = textwrap.indent(method_body, "        ")
     class_src = (
         "import unittest\n"
@@ -185,7 +153,6 @@ def run_unittest_test(student_code: str, student_ns: dict, exec_error: str | Non
         f"{indented_body}\n"
     )
 
-    # The test class lives in a namespace that includes everything the student defined.
     test_ns: dict = dict(student_ns)
     try:
         exec(compile(class_src, f"test_{name}.py", "exec"), test_ns, test_ns)  # noqa: S102
@@ -216,12 +183,8 @@ def run_unittest_test(student_code: str, student_ns: dict, exec_error: str | Non
         if not passed:
             failures = result.failures + result.errors
             if failures:
-                # Extract just the assertion message, not the full traceback
                 raw = failures[0][1]
-                # Try to get the last AssertionError line
                 lines = raw.strip().splitlines()
-                # Find the actual assertion message (last non-empty line)
-                msg_lines = [l for l in lines if l.strip() and not l.startswith(" ")]
                 error_msg = lines[-1].strip() if lines else raw[:500]
     except OutputLimitExceeded:
         error_msg = "Output exceeded the 64 KiB limit."
@@ -239,53 +202,283 @@ def run_unittest_test(student_code: str, student_ns: dict, exec_error: str | Non
     }
 
 
-# ---------------------------------------------------------------------------
-# Dispatcher
-# ---------------------------------------------------------------------------
-
-def run_test(code: str, test: dict) -> dict:
-    """Dispatch to the appropriate test runner based on test type."""
-    if test.get("unittest_code") is not None:
-        # Caller must supply a pre-executed namespace; this path is used
-        # when called directly (not via run_all_tests).
-        ns: dict = {"__name__": "__main__"}
-        _, _, exec_error = exec_student_code(code, ns)
-        return run_unittest_test(code, ns, exec_error, test)
-    return run_stdout_test(code, test)
-
-
-def run_all_tests(code: str, tests: list[dict]) -> list[dict]:
-    """Run all tests, executing student code only once for unittest-mode lessons."""
+def run_python_tests(code: str, tests: list[dict]) -> list[dict]:
     if not tests:
         return []
-
-    has_unittest = any(t.get("unittest_code") is not None for t in tests)
-    has_stdout = any(t.get("unittest_code") is None for t in tests)
+    has_unittest = any(t.get("unittest_code") is not None or t.get("test_code") is not None for t in tests)
+    has_stdout = any(t.get("unittest_code") is None and t.get("test_code") is None for t in tests)
 
     if has_unittest and has_stdout:
-        # Mixed-mode lesson: run each test independently
-        return [run_test(code, t) for t in tests]
-
-    if has_unittest:
-        # Execute student code once, share namespace across all tests
         ns: dict = {"__name__": "__main__"}
         _, _, exec_error = exec_student_code(code, ns)
-        return [run_unittest_test(code, ns, exec_error, t) for t in tests]
+        return [
+            run_python_unittest_test(code, ns, exec_error, t)
+            if (t.get("unittest_code") or t.get("test_code"))
+            else run_python_stdout_test(code, t)
+            for t in tests
+        ]
 
-    # All stdout mode: each test reruns the code (existing behaviour)
-    return [run_stdout_test(code, t) for t in tests]
+    if has_unittest:
+        ns: dict = {"__name__": "__main__"}
+        _, _, exec_error = exec_student_code(code, ns)
+        return [run_python_unittest_test(code, ns, exec_error, t) for t in tests]
+
+    return [run_python_stdout_test(code, t) for t in tests]
 
 
 # ---------------------------------------------------------------------------
-# Entry point
+# Java Runner
 # ---------------------------------------------------------------------------
+
+def extract_java_class_name(code: str) -> str:
+    match = re.search(r"public\s+class\s+([A-Za-z0-9_]+)", code)
+    if match:
+        return match.group(1)
+    match_any = re.search(r"class\s+([A-Za-z0-9_]+)", code)
+    if match_any:
+        return match_any.group(1)
+    return "Solution"
+
+
+def run_java_tests(code: str, tests: list[dict]) -> list[dict]:
+    results = []
+    class_name = extract_java_class_name(code)
+
+    with tempfile.TemporaryDirectory(prefix="patchwork_java_") as tmpdir:
+        student_file = os.path.join(tmpdir, f"{class_name}.java")
+        with open(student_file, "w", encoding="utf-8") as f:
+            f.write(code)
+
+        compile_res = subprocess.run(
+            ["javac", student_file],
+            cwd=tmpdir,
+            capture_output=True,
+            text=True,
+            timeout=10,
+        )
+        if compile_res.returncode != 0:
+            err = compile_res.stderr.strip() or "Java Compilation Error"
+            return [
+                {
+                    "name": t["name"],
+                    "passed": False,
+                    "error": f"Compilation Error: {err[:500]}",
+                    "execution_time_ms": 0,
+                    "stdout": "",
+                    "stderr": err,
+                }
+                for t in tests
+            ]
+
+        for test in tests:
+            started = time.perf_counter()
+            test_body = test.get("test_code") or test.get("unittest_code")
+            if test_body:
+                runner_code = f"""
+public class TestRunner_{test['name']} {{
+    public static void main(String[] args) {{
+        try {{
+            {test_body}
+            System.out.println("TEST_PASSED");
+        }} catch (Throwable e) {{
+            System.err.println(e.getMessage() != null ? e.getMessage() : e.toString());
+            System.exit(1);
+        }}
+    }}
+}}
+"""
+                runner_file = os.path.join(tmpdir, f"TestRunner_{test['name']}.java")
+                with open(runner_file, "w", encoding="utf-8") as f:
+                    f.write(runner_code)
+
+                comp_test = subprocess.run(
+                    ["javac", runner_file],
+                    cwd=tmpdir,
+                    capture_output=True,
+                    text=True,
+                    timeout=10,
+                )
+                if comp_test.returncode != 0:
+                    elapsed = round((time.perf_counter() - started) * 1000)
+                    results.append({
+                        "name": test["name"],
+                        "passed": False,
+                        "error": f"Test Compilation Error: {comp_test.stderr[:300]}",
+                        "execution_time_ms": elapsed,
+                        "stdout": "",
+                        "stderr": comp_test.stderr,
+                    })
+                    continue
+
+                exec_res = subprocess.run(
+                    ["java", f"TestRunner_{test['name']}"],
+                    cwd=tmpdir,
+                    input=test.get("stdin", ""),
+                    capture_output=True,
+                    text=True,
+                    timeout=5,
+                )
+                elapsed = round((time.perf_counter() - started) * 1000)
+                passed = exec_res.returncode == 0
+                error_msg = None if passed else (exec_res.stderr.strip() or "Test execution failed")
+                results.append({
+                    "name": test["name"],
+                    "passed": passed,
+                    "error": error_msg,
+                    "execution_time_ms": elapsed,
+                    "stdout": exec_res.stdout,
+                    "stderr": exec_res.stderr,
+                })
+            else:
+                exec_res = subprocess.run(
+                    ["java", class_name],
+                    cwd=tmpdir,
+                    input=test.get("stdin", ""),
+                    capture_output=True,
+                    text=True,
+                    timeout=5,
+                )
+                elapsed = round((time.perf_counter() - started) * 1000)
+                expected = test.get("expected_stdout")
+                passed = expected is None or exec_res.stdout == expected
+                error_msg = None if passed else f"Expected output {expected!r}, got {exec_res.stdout!r}"
+                results.append({
+                    "name": test["name"],
+                    "passed": passed,
+                    "error": error_msg,
+                    "execution_time_ms": elapsed,
+                    "stdout": exec_res.stdout,
+                    "stderr": exec_res.stderr,
+                })
+
+    return results
+
+
+# ---------------------------------------------------------------------------
+# C++ Runner
+# ---------------------------------------------------------------------------
+
+def run_cpp_tests(code: str, tests: list[dict]) -> list[dict]:
+    results = []
+
+    with tempfile.TemporaryDirectory(prefix="patchwork_cpp_") as tmpdir:
+        for test in tests:
+            started = time.perf_counter()
+            test_body = test.get("test_code") or test.get("unittest_code")
+            source_file = os.path.join(tmpdir, f"test_{test['name']}.cpp")
+            exe_file = os.path.join(tmpdir, f"test_{test['name']}")
+
+            if test_body:
+                full_code = f"""
+#include <iostream>
+#include <string>
+#include <vector>
+#include <map>
+#include <set>
+#include <algorithm>
+#include <cassert>
+#include <cmath>
+#include <stdexcept>
+
+{code}
+
+int main() {{
+    try {{
+        {test_body}
+        return 0;
+    }} catch (const std::exception& e) {{
+        std::cerr << "Exception: " << e.what() << std::endl;
+        return 1;
+    }} catch (...) {{
+        std::cerr << "Unknown exception occurred." << std::endl;
+        return 1;
+    }}
+}}
+"""
+            else:
+                full_code = code
+
+            with open(source_file, "w", encoding="utf-8") as f:
+                f.write(full_code)
+
+            comp_res = subprocess.run(
+                ["g++", "-std=c++20", "-O0", source_file, "-o", exe_file],
+                cwd=tmpdir,
+                capture_output=True,
+                text=True,
+                timeout=10,
+            )
+            if comp_res.returncode != 0:
+                elapsed = round((time.perf_counter() - started) * 1000)
+                err = comp_res.stderr.strip() or "C++ Compilation Error"
+                results.append({
+                    "name": test["name"],
+                    "passed": False,
+                    "error": f"Compilation Error: {err[:500]}",
+                    "execution_time_ms": elapsed,
+                    "stdout": "",
+                    "stderr": err,
+                })
+                continue
+
+            exec_res = subprocess.run(
+                [exe_file],
+                cwd=tmpdir,
+                input=test.get("stdin", ""),
+                capture_output=True,
+                text=True,
+                timeout=5,
+            )
+            elapsed = round((time.perf_counter() - started) * 1000)
+
+            if test_body:
+                passed = exec_res.returncode == 0
+                error_msg = None if passed else (exec_res.stderr.strip() or "Assertion failed")
+                results.append({
+                    "name": test["name"],
+                    "passed": passed,
+                    "error": error_msg,
+                    "execution_time_ms": elapsed,
+                    "stdout": exec_res.stdout,
+                    "stderr": exec_res.stderr,
+                })
+            else:
+                expected = test.get("expected_stdout")
+                passed = expected is None or exec_res.stdout == expected
+                error_msg = None if passed else f"Expected output {expected!r}, got {exec_res.stdout!r}"
+                results.append({
+                    "name": test["name"],
+                    "passed": passed,
+                    "error": error_msg,
+                    "execution_time_ms": elapsed,
+                    "stdout": exec_res.stdout,
+                    "stderr": exec_res.stderr,
+                })
+
+    return results
+
+
+# ---------------------------------------------------------------------------
+# Dispatcher & Entry point
+# ---------------------------------------------------------------------------
+
+def run_all_tests(language: str, code: str, tests: list[dict]) -> list[dict]:
+    lang = (language or "python").lower().strip()
+    if lang == "java":
+        return run_java_tests(code, tests)
+    elif lang in ("cpp", "c++"):
+        return run_cpp_tests(code, tests)
+    else:
+        return run_python_tests(code, tests)
+
 
 def main() -> None:
     try:
         request = json.load(sys.stdin)
+        language = request.get("language", "python")
         code = request["code"]
         tests = request["tests"]
-        results = run_all_tests(code, tests)
+        results = run_all_tests(language, code, tests)
         all_stdout = "\n".join(r["stdout"] for r in results if r["stdout"])
         all_stderr = "\n".join(r["stderr"] for r in results if r["stderr"])
         print(json.dumps({

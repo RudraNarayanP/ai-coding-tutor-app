@@ -1,0 +1,144 @@
+{
+  "id": "java-oop",
+  "title": "Unit 6: Java Classes & Encapsulation",
+  "order": 6,
+  "concepts": [
+    {
+      "id": "java-oop",
+      "title": "Classes, Constructors & Encapsulation",
+      "prerequisites": ["java-methods"]
+    }
+  ],
+  "lessons": [
+    {
+      "id": "java-oop-step-1",
+      "title": "1. Defining Classes & Constructors",
+      "description": "Constructors initialize new objects. Define a `Car` class with `make` and `year` fields and getters.",
+      "order": 26,
+      "difficulty": "intermediate",
+      "duration_minutes": 5,
+      "type": "learn",
+      "concepts": ["java-oop"],
+      "prerequisites": ["java-methods"],
+      "learning_objectives": [
+        "Create constructors and private fields with getters in Java"
+      ],
+      "starter_code": "public class Car {\n    private String make;\n    private int year;\n\n    public Car(String make, int year) {\n        // TODO: Initialize fields\n    }\n\n    public String getMake() { return make; }\n    public int getYear() { return year; }\n}\n",
+      "solution_code": "public class Car {\n    private String make;\n    private int year;\n\n    public Car(String make, int year) {\n        this.make = make;\n        this.year = year;\n    }\n\n    public String getMake() { return make; }\n    public int getYear() { return year; }\n}\n",
+      "tests": [
+        {
+          "name": "test_car",
+          "test_code": "Car c = new Car(\"Toyota\", 2022); if (!\"Toyota\".equals(c.getMake()) || c.getYear() != 2022) throw new AssertionError(\"Expected Toyota 2022\");",
+          "required": true
+        }
+      ],
+      "completion_requirements": {
+        "required_test_names": ["test_car"]
+      }
+    },
+    {
+      "id": "java-oop-step-2",
+      "title": "2. Instance Methods & State",
+      "description": "Add instance methods that alter or inspect object state. Implement `BankAccount` with `deposit` and `withdraw`.",
+      "order": 27,
+      "difficulty": "intermediate",
+      "duration_minutes": 5,
+      "type": "learn",
+      "concepts": ["java-oop"],
+      "prerequisites": ["java-methods"],
+      "learning_objectives": [
+        "Implement state mutation methods with validation"
+      ],
+      "starter_code": "public class BankAccount {\n    private double balance;\n\n    public BankAccount(double initialBalance) {\n        this.balance = initialBalance;\n    }\n\n    public double getBalance() { return balance; }\n\n    public void deposit(double amount) {\n        // TODO: Add amount to balance\n    }\n}\n",
+      "solution_code": "public class BankAccount {\n    private double balance;\n\n    public BankAccount(double initialBalance) {\n        this.balance = initialBalance;\n    }\n\n    public double getBalance() { return balance; }\n\n    public void deposit(double amount) {\n        if (amount > 0) {\n            this.balance += amount;\n        }\n    }\n}\n",
+      "tests": [
+        {
+          "name": "test_deposit",
+          "test_code": "BankAccount acc = new BankAccount(100.0); acc.deposit(50.0); if (Math.abs(acc.getBalance() - 150.0) > 0.001) throw new AssertionError(\"Expected 150.0\");",
+          "required": true
+        }
+      ],
+      "completion_requirements": {
+        "required_test_names": ["test_deposit"]
+      }
+    },
+    {
+      "id": "java-oop-01",
+      "title": "3. Smartphone Battery Model (Concept Challenge)",
+      "description": "Model a Smartphone with battery percentage and drain/charge methods.",
+      "order": 28,
+      "difficulty": "intermediate",
+      "duration_minutes": 10,
+      "type": "challenge",
+      "concepts": ["java-oop"],
+      "prerequisites": ["java-methods"],
+      "learning_objectives": [
+        "Encapsulate state limits between 0 and 100"
+      ],
+      "starter_code": "public class Smartphone {\n    private String model;\n    private int batteryLevel = 100;\n\n    public Smartphone(String model) {\n        this.model = model;\n    }\n\n    public int getBatteryLevel() { return batteryLevel; }\n\n    public void useApp(int hours) {\n        // TODO: Reduce batteryLevel by 15 * hours (min 0)\n    }\n}\n",
+      "solution_code": "public class Smartphone {\n    private String model;\n    private int batteryLevel = 100;\n\n    public Smartphone(String model) {\n        this.model = model;\n    }\n\n    public int getBatteryLevel() { return batteryLevel; }\n\n    public void useApp(int hours) {\n        this.batteryLevel = Math.max(0, this.batteryLevel - 15 * hours);\n    }\n}\n",
+      "tests": [
+        {
+          "name": "test_smartphone",
+          "test_code": "Smartphone phone = new Smartphone(\"Pixel\"); phone.useApp(2); if (phone.getBatteryLevel() != 70) throw new AssertionError(\"Expected 70\");",
+          "required": true
+        }
+      ],
+      "completion_requirements": {
+        "required_test_names": ["test_smartphone"]
+      }
+    },
+    {
+      "id": "java-oop-practice-1",
+      "title": "4. Student Gradebook (Practice)",
+      "description": "Encapsulate student score records.",
+      "order": 29,
+      "difficulty": "intermediate",
+      "duration_minutes": 5,
+      "type": "practice",
+      "concepts": ["java-oop"],
+      "prerequisites": ["java-methods"],
+      "learning_objectives": [
+        "Pass grade letter based on score field"
+      ],
+      "starter_code": "public class Student {\n    private String name;\n    private int score;\n\n    public Student(String name, int score) {\n        this.name = name;\n        this.score = score;\n    }\n\n    public boolean isPassing() {\n        // TODO: Return true if score >= 60\n        return false;\n    }\n}\n",
+      "solution_code": "public class Student {\n    private String name;\n    private int score;\n\n    public Student(String name, int score) {\n        this.name = name;\n        this.score = score;\n    }\n\n    public boolean isPassing() {\n        return this.score >= 60;\n    }\n}\n",
+      "tests": [
+        {
+          "name": "test_passing",
+          "test_code": "Student s = new Student(\"Ada\", 85); if (!s.isPassing()) throw new AssertionError(\"Ada passes\");",
+          "required": true
+        }
+      ],
+      "completion_requirements": {
+        "required_test_names": ["test_passing"]
+      }
+    },
+    {
+      "id": "java-oop-checkpoint",
+      "title": "5. Unit 6 Checkpoint: Java OOP Mastery",
+      "description": "Verify object encapsulation in Java.",
+      "order": 30,
+      "difficulty": "intermediate",
+      "duration_minutes": 5,
+      "type": "checkpoint",
+      "concepts": ["java-oop"],
+      "prerequisites": ["java-methods"],
+      "learning_objectives": [
+        "Pass Java OOP checkpoint"
+      ],
+      "starter_code": "public class Rectangle {\n    private double width;\n    private double height;\n\n    public Rectangle(double width, double height) {\n        this.width = width;\n        this.height = height;\n    }\n\n    public double getArea() {\n        // TODO: Return width * height\n        return 0.0;\n    }\n}\n",
+      "solution_code": "public class Rectangle {\n    private double width;\n    private double height;\n\n    public Rectangle(double width, double height) {\n        this.width = width;\n        this.height = height;\n    }\n\n    public double getArea() {\n        return this.width * this.height;\n    }\n}\n",
+      "tests": [
+        {
+          "name": "test_area",
+          "test_code": "Rectangle r = new Rectangle(4.0, 5.0); if (Math.abs(r.getArea() - 20.0) > 0.001) throw new AssertionError(\"Expected 20.0\");",
+          "required": true
+        }
+      ],
+      "completion_requirements": {
+        "required_test_names": ["test_area"]
+      }
+    }
+  ]
+}

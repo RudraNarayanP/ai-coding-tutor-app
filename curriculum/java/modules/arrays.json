@@ -1,0 +1,144 @@
+{
+  "id": "java-arrays",
+  "title": "Unit 4: Java Arrays",
+  "order": 4,
+  "concepts": [
+    {
+      "id": "java-arrays",
+      "title": "Primitive Arrays & Traversal",
+      "prerequisites": ["java-loops"]
+    }
+  ],
+  "lessons": [
+    {
+      "id": "java-arrays-step-1",
+      "title": "1. Array Sum & Length",
+      "description": "In Java, arrays have fixed size and a `.length` field. Implement `findSum(int[] numbers)`.",
+      "order": 16,
+      "difficulty": "beginner",
+      "duration_minutes": 5,
+      "type": "learn",
+      "concepts": ["java-arrays"],
+      "prerequisites": ["java-loops"],
+      "learning_objectives": [
+        "Iterate over Java primitive array elements"
+      ],
+      "starter_code": "public class Solution {\n    public static int findSum(int[] numbers) {\n        // TODO: Sum all elements in numbers array\n        return 0;\n    }\n}\n",
+      "solution_code": "public class Solution {\n    public static int findSum(int[] numbers) {\n        int sum = 0;\n        for (int num : numbers) {\n            sum += num;\n        }\n        return sum;\n    }\n}\n",
+      "tests": [
+        {
+          "name": "test_find_sum",
+          "test_code": "int[] arr = {10, 20, 30}; if (Solution.findSum(arr) != 60) throw new AssertionError(\"Expected 60\");",
+          "required": true
+        }
+      ],
+      "completion_requirements": {
+        "required_test_names": ["test_find_sum"]
+      }
+    },
+    {
+      "id": "java-arrays-step-2",
+      "title": "2. Finding Min & Max",
+      "description": "Find maximum value in a non-empty array.",
+      "order": 17,
+      "difficulty": "beginner",
+      "duration_minutes": 5,
+      "type": "learn",
+      "concepts": ["java-arrays"],
+      "prerequisites": ["java-loops"],
+      "learning_objectives": [
+        "Track extrema while traversing array"
+      ],
+      "starter_code": "public class Solution {\n    public static int findMax(int[] numbers) {\n        // TODO: Return maximum element in numbers\n        return 0;\n    }\n}\n",
+      "solution_code": "public class Solution {\n    public static int findMax(int[] numbers) {\n        int max = numbers[0];\n        for (int num : numbers) {\n            if (num > max) max = num;\n        }\n        return max;\n    }\n}\n",
+      "tests": [
+        {
+          "name": "test_find_max",
+          "test_code": "int[] arr = {3, 9, 2, 8}; if (Solution.findMax(arr) != 9) throw new AssertionError(\"Expected 9\");",
+          "required": true
+        }
+      ],
+      "completion_requirements": {
+        "required_test_names": ["test_find_max"]
+      }
+    },
+    {
+      "id": "java-arrays-01",
+      "title": "3. Temperature Sensor Analysis (Concept Challenge)",
+      "description": "Calculate average reading and count values above threshold.",
+      "order": 18,
+      "difficulty": "beginner",
+      "duration_minutes": 10,
+      "type": "challenge",
+      "concepts": ["java-arrays"],
+      "prerequisites": ["java-loops"],
+      "learning_objectives": [
+        "Perform statistical array operations in Java"
+      ],
+      "starter_code": "public class Solution {\n    public static int countAboveThreshold(double[] readings, double threshold) {\n        // TODO: Count readings > threshold\n        return 0;\n    }\n}\n",
+      "solution_code": "public class Solution {\n    public static int countAboveThreshold(double[] readings, double threshold) {\n        int count = 0;\n        for (double r : readings) {\n            if (r > threshold) count++;\n        }\n        return count;\n    }\n}\n",
+      "tests": [
+        {
+          "name": "test_readings",
+          "test_code": "double[] r = {22.5, 28.0, 19.1, 31.2}; if (Solution.countAboveThreshold(r, 25.0) != 2) throw new AssertionError(\"Expected 2\");",
+          "required": true
+        }
+      ],
+      "completion_requirements": {
+        "required_test_names": ["test_readings"]
+      }
+    },
+    {
+      "id": "java-arrays-practice-1",
+      "title": "4. Array Reversal (Practice)",
+      "description": "Reverse an array in-place.",
+      "order": 19,
+      "difficulty": "beginner",
+      "duration_minutes": 5,
+      "type": "practice",
+      "concepts": ["java-arrays"],
+      "prerequisites": ["java-loops"],
+      "learning_objectives": [
+        "Swap array elements in-place"
+      ],
+      "starter_code": "public class Solution {\n    public static void reverse(int[] numbers) {\n        // TODO: Reverse numbers in-place\n    }\n}\n",
+      "solution_code": "public class Solution {\n    public static void reverse(int[] numbers) {\n        int left = 0, right = numbers.length - 1;\n        while (left < right) {\n            int temp = numbers[left];\n            numbers[left] = numbers[right];\n            numbers[right] = temp;\n            left++;\n            right--;\n        }\n    }\n}\n",
+      "tests": [
+        {
+          "name": "test_reverse",
+          "test_code": "int[] arr = {1, 2, 3, 4}; Solution.reverse(arr); if (arr[0] != 4 || arr[3] != 1) throw new AssertionError(\"Expected reversed array\");",
+          "required": true
+        }
+      ],
+      "completion_requirements": {
+        "required_test_names": ["test_reverse"]
+      }
+    },
+    {
+      "id": "java-arrays-checkpoint",
+      "title": "5. Unit 4 Checkpoint: Arrays Mastery",
+      "description": "Verify Java array processing skills.",
+      "order": 20,
+      "difficulty": "beginner",
+      "duration_minutes": 5,
+      "type": "checkpoint",
+      "concepts": ["java-arrays"],
+      "prerequisites": ["java-loops"],
+      "learning_objectives": [
+        "Pass Java arrays checkpoint"
+      ],
+      "starter_code": "public class Solution {\n    public static boolean contains(int[] numbers, int target) {\n        // TODO: Return true if target is in numbers\n        return false;\n    }\n}\n",
+      "solution_code": "public class Solution {\n    public static boolean contains(int[] numbers, int target) {\n        for (int num : numbers) {\n            if (num == target) return true;\n        }\n        return false;\n    }\n}\n",
+      "tests": [
+        {
+          "name": "test_contains",
+          "test_code": "int[] arr = {5, 10, 15}; if (!Solution.contains(arr, 10)) throw new AssertionError(\"Expected contains 10\"); if (Solution.contains(arr, 99)) throw new AssertionError(\"Expected not contains 99\");",
+          "required": true
+        }
+      ],
+      "completion_requirements": {
+        "required_test_names": ["test_contains"]
+      }
+    }
+  ]
+}

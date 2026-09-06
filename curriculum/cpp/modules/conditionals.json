@@ -1,0 +1,144 @@
+{
+  "id": "cpp-conditionals",
+  "title": "Unit 2: C++ Conditionals & Boolean Logic",
+  "order": 2,
+  "concepts": [
+    {
+      "id": "cpp-conditionals",
+      "title": "If-Else & Logical Operators in C++",
+      "prerequisites": ["cpp-variables"]
+    }
+  ],
+  "lessons": [
+    {
+      "id": "cpp-conditionals-step-1",
+      "title": "1. If-Else Statements",
+      "description": "C++ uses `if`, `else if`, and `else`. Implement `is_even(int n)` returning `true` if n is divisible by 2.",
+      "order": 6,
+      "difficulty": "beginner",
+      "duration_minutes": 5,
+      "type": "learn",
+      "concepts": ["cpp-conditionals"],
+      "prerequisites": ["cpp-variables"],
+      "learning_objectives": [
+        "Use if-else and % modulo operator in C++"
+      ],
+      "starter_code": "bool is_even(int n) {\n    // TODO: Return true if n % 2 == 0\n    return false;\n}\n",
+      "solution_code": "bool is_even(int n) {\n    return n % 2 == 0;\n}\n",
+      "tests": [
+        {
+          "name": "test_is_even",
+          "test_code": "assert(is_even(4) == true);\nassert(is_even(7) == false);",
+          "required": true
+        }
+      ],
+      "completion_requirements": {
+        "required_test_names": ["test_is_even"]
+      }
+    },
+    {
+      "id": "cpp-conditionals-step-2",
+      "title": "2. Logical Operators (&&, ||, !)",
+      "description": "C++ uses `&&` for AND, `||` for OR, and `!` for NOT. Implement `can_drive(bool has_license, bool is_sober)`.",
+      "order": 7,
+      "difficulty": "beginner",
+      "duration_minutes": 5,
+      "type": "learn",
+      "concepts": ["cpp-conditionals"],
+      "prerequisites": ["cpp-variables"],
+      "learning_objectives": [
+        "Use logical AND && and OR || in C++"
+      ],
+      "starter_code": "bool can_drive(bool has_license, bool is_sober) {\n    // TODO: Return has_license && is_sober\n    return false;\n}\n",
+      "solution_code": "bool can_drive(bool has_license, bool is_sober) {\n    return has_license && is_sober;\n}\n",
+      "tests": [
+        {
+          "name": "test_can_drive",
+          "test_code": "assert(can_drive(true, true) == true);\nassert(can_drive(true, false) == false);",
+          "required": true
+        }
+      ],
+      "completion_requirements": {
+        "required_test_names": ["test_can_drive"]
+      }
+    },
+    {
+      "id": "cpp-conditionals-01",
+      "title": "3. Temperature Alarm (Concept Challenge)",
+      "description": "Return alarm status based on reactor core temperature.",
+      "order": 8,
+      "difficulty": "beginner",
+      "duration_minutes": 10,
+      "type": "challenge",
+      "concepts": ["cpp-conditionals"],
+      "prerequisites": ["cpp-variables"],
+      "learning_objectives": [
+        "Implement multi-stage if-else status checks"
+      ],
+      "starter_code": "#include <string>\n\nstd::string get_alarm_status(double temp) {\n    // TODO: Return \"NORMAL\" if temp < 100.0\n    // Return \"WARNING\" if temp <= 150.0\n    // Return \"CRITICAL\" otherwise\n    return \"\";\n}\n",
+      "solution_code": "#include <string>\n\nstd::string get_alarm_status(double temp) {\n    if (temp < 100.0) return \"NORMAL\";\n    if (temp <= 150.0) return \"WARNING\";\n    return \"CRITICAL\";\n}\n",
+      "tests": [
+        {
+          "name": "test_alarm_status",
+          "test_code": "assert(get_alarm_status(85.0) == \"NORMAL\");\nassert(get_alarm_status(120.0) == \"WARNING\");\nassert(get_alarm_status(200.0) == \"CRITICAL\");",
+          "required": true
+        }
+      ],
+      "completion_requirements": {
+        "required_test_names": ["test_alarm_status"]
+      }
+    },
+    {
+      "id": "cpp-conditionals-practice-1",
+      "title": "4. Triangle Validity (Practice)",
+      "description": "Check if 3 side lengths can form a valid triangle.",
+      "order": 9,
+      "difficulty": "beginner",
+      "duration_minutes": 5,
+      "type": "practice",
+      "concepts": ["cpp-conditionals"],
+      "prerequisites": ["cpp-variables"],
+      "learning_objectives": [
+        "Apply triangle inequality theorem in C++"
+      ],
+      "starter_code": "bool is_valid_triangle(double a, double b, double c) {\n    // TODO: Return true if (a + b > c) && (a + c > b) && (b + c > a)\n    return false;\n}\n",
+      "solution_code": "bool is_valid_triangle(double a, double b, double c) {\n    return (a + b > c) && (a + c > b) && (b + c > a);\n}\n",
+      "tests": [
+        {
+          "name": "test_triangle",
+          "test_code": "assert(is_valid_triangle(3, 4, 5) == true);\nassert(is_valid_triangle(1, 2, 10) == false);",
+          "required": true
+        }
+      ],
+      "completion_requirements": {
+        "required_test_names": ["test_triangle"]
+      }
+    },
+    {
+      "id": "cpp-conditionals-checkpoint",
+      "title": "5. Unit 2 Checkpoint: C++ Conditionals Mastery",
+      "description": "Verify C++ control flow mastery.",
+      "order": 10,
+      "difficulty": "beginner",
+      "duration_minutes": 5,
+      "type": "checkpoint",
+      "concepts": ["cpp-conditionals"],
+      "prerequisites": ["cpp-variables"],
+      "learning_objectives": [
+        "Pass C++ conditionals checkpoint"
+      ],
+      "starter_code": "#include <algorithm>\n\nint max_of_three(int a, int b, int c) {\n    // TODO: Return highest value\n    return 0;\n}\n",
+      "solution_code": "#include <algorithm>\n\nint max_of_three(int a, int b, int c) {\n    return std::max(a, std::max(b, c));\n}\n",
+      "tests": [
+        {
+          "name": "test_max_three",
+          "test_code": "assert(max_of_three(10, 42, 25) == 42);",
+          "required": true
+        }
+      ],
+      "completion_requirements": {
+        "required_test_names": ["test_max_three"]
+      }
+    }
+  ]
+}

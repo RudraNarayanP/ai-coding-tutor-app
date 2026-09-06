@@ -1,0 +1,151 @@
+{
+  "id": "classes",
+  "title": "Unit 14: Classes & Object-Oriented Programming",
+  "order": 14,
+  "concepts": [
+    {
+      "id": "classes",
+      "title": "Classes & Objects",
+      "prerequisites": ["functions", "dictionaries"]
+    }
+  ],
+  "lessons": [
+    {
+      "id": "classes-step-1",
+      "title": "1. Defining a Class & __init__",
+      "description": "In Python, classes are defined using the `class` keyword. The `__init__` constructor initializes object attributes. Create a `Wizard` class with `name` and `health` attributes.",
+      "order": 66,
+      "difficulty": "intermediate",
+      "duration_minutes": 5,
+      "type": "learn",
+      "concepts": ["classes"],
+      "prerequisites": ["functions"],
+      "learning_objectives": [
+        "Define a class with an __init__ constructor method"
+      ],
+      "starter_code": "class Wizard:\n    def __init__(self, name, health=100):\n        # TODO: Assign self.name and self.health\n        pass\n",
+      "solution_code": "class Wizard:\n    def __init__(self, name, health=100):\n        self.name = name\n        self.health = health\n",
+      "tests": [
+        {
+          "name": "test_wizard_init",
+          "unittest_code": "def test_wizard_init(self):\n    w = Wizard(\"Gandalf\", 120)\n    self.assertEqual(w.name, \"Gandalf\")\n    self.assertEqual(w.health, 120)",
+          "required": true
+        }
+      ],
+      "completion_requirements": {
+        "required_test_names": ["test_wizard_init"]
+      },
+      "static_hints": ["self.name = name", "self.health = health"]
+    },
+    {
+      "id": "classes-step-2",
+      "title": "2. Instance Methods",
+      "description": "Instance methods take `self` as their first parameter and can modify or read instance state. Add a `take_damage(amount)` method to `Wizard`.",
+      "order": 67,
+      "difficulty": "intermediate",
+      "duration_minutes": 5,
+      "type": "learn",
+      "concepts": ["classes"],
+      "prerequisites": ["functions"],
+      "learning_objectives": [
+        "Define instance methods that modify instance attributes"
+      ],
+      "starter_code": "class Wizard:\n    def __init__(self, name, health=100):\n        self.name = name\n        self.health = health\n\n    def take_damage(self, amount):\n        # TODO: Subtract amount from self.health\n        pass\n",
+      "solution_code": "class Wizard:\n    def __init__(self, name, health=100):\n        self.name = name\n        self.health = health\n\n    def take_damage(self, amount):\n        self.health = max(0, self.health - amount)\n",
+      "tests": [
+        {
+          "name": "test_take_damage",
+          "unittest_code": "def test_take_damage(self):\n    w = Wizard(\"Merlin\", 100)\n    w.take_damage(30)\n    self.assertEqual(w.health, 70)",
+          "required": true
+        }
+      ],
+      "completion_requirements": {
+        "required_test_names": ["test_take_damage"]
+      },
+      "static_hints": ["self.health -= amount"]
+    },
+    {
+      "id": "classes-01",
+      "title": "3. Space Station Life Support (Concept Challenge)",
+      "description": "Model a SpaceStation with crew count, oxygen level, and life support methods.",
+      "order": 68,
+      "difficulty": "intermediate",
+      "duration_minutes": 10,
+      "type": "challenge",
+      "concepts": ["classes"],
+      "prerequisites": ["functions"],
+      "learning_objectives": [
+        "Build a complete class modeling real-world system state"
+      ],
+      "starter_code": "class SpaceStation:\n    def __init__(self, name, crew_capacity):\n        self.name = name\n        self.crew_capacity = crew_capacity\n        self.crew = []\n        self.oxygen_level = 100\n\n    def add_crew_member(self, member_name):\n        # TODO: Add member_name to self.crew if len(self.crew) < self.crew_capacity\n        pass\n\n    def consume_oxygen(self, hours):\n        # TODO: Deduct 2 * len(self.crew) * hours from self.oxygen_level\n        pass\n",
+      "solution_code": "class SpaceStation:\n    def __init__(self, name, crew_capacity):\n        self.name = name\n        self.crew_capacity = crew_capacity\n        self.crew = []\n        self.oxygen_level = 100\n\n    def add_crew_member(self, member_name):\n        if len(self.crew) < self.crew_capacity:\n            self.crew.append(member_name)\n            return True\n        return False\n\n    def consume_oxygen(self, hours):\n        self.oxygen_level = max(0, self.oxygen_level - 2 * len(self.crew) * hours)\n",
+      "tests": [
+        {
+          "name": "test_add_crew",
+          "unittest_code": "def test_add_crew(self):\n    station = SpaceStation(\"ISS\", 2)\n    station.add_crew_member(\"Alice\")\n    self.assertEqual(station.crew, [\"Alice\"])",
+          "required": true
+        },
+        {
+          "name": "test_consume_oxygen",
+          "unittest_code": "def test_consume_oxygen(self):\n    station = SpaceStation(\"ISS\", 5)\n    station.add_crew_member(\"Alice\")\n    station.add_crew_member(\"Bob\")\n    station.consume_oxygen(5)\n    self.assertEqual(station.oxygen_level, 80)",
+          "required": true
+        }
+      ],
+      "completion_requirements": {
+        "required_test_names": ["test_add_crew", "test_consume_oxygen"]
+      }
+    },
+    {
+      "id": "classes-practice-1",
+      "title": "4. Bank Account Transaction Log (Practice)",
+      "description": "Implement a `BankAccount` class with `deposit`, `withdraw`, and balance history.",
+      "order": 69,
+      "difficulty": "intermediate",
+      "duration_minutes": 5,
+      "type": "practice",
+      "concepts": ["classes"],
+      "prerequisites": ["functions"],
+      "learning_objectives": [
+        "Encapsulate state and transaction logic in a class"
+      ],
+      "starter_code": "class BankAccount:\n    def __init__(self, owner, balance=0):\n        self.owner = owner\n        self.balance = balance\n\n    def deposit(self, amount):\n        # TODO: Add amount to balance and return new balance\n        pass\n\n    def withdraw(self, amount):\n        # TODO: Subtract amount from balance if sufficient funds exist, return True, else False\n        pass\n",
+      "solution_code": "class BankAccount:\n    def __init__(self, owner, balance=0):\n        self.owner = owner\n        self.balance = balance\n\n    def deposit(self, amount):\n        self.balance += amount\n        return self.balance\n\n    def withdraw(self, amount):\n        if self.balance >= amount:\n            self.balance -= amount\n            return True\n        return False\n",
+      "tests": [
+        {
+          "name": "test_bank_account",
+          "unittest_code": "def test_bank_account(self):\n    acc = BankAccount(\"Charlie\", 100)\n    acc.deposit(50)\n    self.assertEqual(acc.balance, 150)\n    self.assertTrue(acc.withdraw(30))\n    self.assertEqual(acc.balance, 120)\n    self.assertFalse(acc.withdraw(500))",
+          "required": true
+        }
+      ],
+      "completion_requirements": {
+        "required_test_names": ["test_bank_account"]
+      }
+    },
+    {
+      "id": "classes-checkpoint",
+      "title": "5. Unit 14 Checkpoint: Classes Mastery",
+      "description": "Verify your understanding of Python classes and object instantiation.",
+      "order": 70,
+      "difficulty": "intermediate",
+      "duration_minutes": 5,
+      "type": "checkpoint",
+      "concepts": ["classes"],
+      "prerequisites": ["functions"],
+      "learning_objectives": [
+        "Pass object-oriented class mastery checkpoint"
+      ],
+      "starter_code": "class Rectangle:\n    def __init__(self, width, height):\n        self.width = width\n        self.height = height\n\n    def area(self):\n        # TODO: Return width * height\n        pass\n",
+      "solution_code": "class Rectangle:\n    def __init__(self, width, height):\n        self.width = width\n        self.height = height\n\n    def area(self):\n        return self.width * self.height\n",
+      "tests": [
+        {
+          "name": "test_rectangle_area",
+          "unittest_code": "def test_rectangle_area(self):\n    r = Rectangle(4, 5)\n    self.assertEqual(r.area(), 20)",
+          "required": true
+        }
+      ],
+      "completion_requirements": {
+        "required_test_names": ["test_rectangle_area"]
+      }
+    }
+  ]
+}

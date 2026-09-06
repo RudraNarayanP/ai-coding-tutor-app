@@ -1,0 +1,144 @@
+{
+  "id": "cpp-loops",
+  "title": "Unit 3: C++ Loops & Iteration",
+  "order": 3,
+  "concepts": [
+    {
+      "id": "cpp-loops",
+      "title": "For & While Loops in C++",
+      "prerequisites": ["cpp-conditionals"]
+    }
+  ],
+  "lessons": [
+    {
+      "id": "cpp-loops-step-1",
+      "title": "1. Standard For Loops",
+      "description": "C++ `for` loops iterate over ranges. Implement `sum_range(int start, int end)`.",
+      "order": 11,
+      "difficulty": "beginner",
+      "duration_minutes": 5,
+      "type": "learn",
+      "concepts": ["cpp-loops"],
+      "prerequisites": ["cpp-conditionals"],
+      "learning_objectives": [
+        "Use for loops in C++"
+      ],
+      "starter_code": "int sum_range(int start, int end) {\n    // TODO: Return sum from start to end inclusive\n    return 0;\n}\n",
+      "solution_code": "int sum_range(int start, int end) {\n    int total = 0;\n    for (int i = start; i <= end; ++i) {\n        total += i;\n    }\n    return total;\n}\n",
+      "tests": [
+        {
+          "name": "test_sum_range",
+          "test_code": "assert(sum_range(1, 5) == 15);",
+          "required": true
+        }
+      ],
+      "completion_requirements": {
+        "required_test_names": ["test_sum_range"]
+      }
+    },
+    {
+      "id": "cpp-loops-step-2",
+      "title": "2. While Loops",
+      "description": "C++ `while` loops repeat while a condition holds true. Implement `count_digits(int n)`.",
+      "order": 12,
+      "difficulty": "beginner",
+      "duration_minutes": 5,
+      "type": "learn",
+      "concepts": ["cpp-loops"],
+      "prerequisites": ["cpp-conditionals"],
+      "learning_objectives": [
+        "Use while loops in C++"
+      ],
+      "starter_code": "#include <cmath>\n\nint count_digits(int n) {\n    if (n == 0) return 1;\n    n = std::abs(n);\n    int count = 0;\n    // TODO: Loop while n > 0\n    return count;\n}\n",
+      "solution_code": "#include <cmath>\n\nint count_digits(int n) {\n    if (n == 0) return 1;\n    n = std::abs(n);\n    int count = 0;\n    while (n > 0) {\n        n /= 10;\n        count++;\n    }\n    return count;\n}\n",
+      "tests": [
+        {
+          "name": "test_count_digits",
+          "test_code": "assert(count_digits(12345) == 5);",
+          "required": true
+        }
+      ],
+      "completion_requirements": {
+        "required_test_names": ["test_count_digits"]
+      }
+    },
+    {
+      "id": "cpp-loops-01",
+      "title": "3. Fibonacci Sequence (Concept Challenge)",
+      "description": "Calculate the Nth Fibonacci number iteratively in C++.",
+      "order": 13,
+      "difficulty": "beginner",
+      "duration_minutes": 10,
+      "type": "challenge",
+      "concepts": ["cpp-loops"],
+      "prerequisites": ["cpp-conditionals"],
+      "learning_objectives": [
+        "Iteratively calculate Fibonacci terms"
+      ],
+      "starter_code": "long long fibonacci(int n) {\n    if (n <= 0) return 0;\n    if (n == 1) return 1;\n    // TODO: Compute Nth fibonacci term using a loop\n    return 0;\n}\n",
+      "solution_code": "long long fibonacci(int n) {\n    if (n <= 0) return 0;\n    if (n == 1) return 1;\n    long long a = 0, b = 1;\n    for (int i = 2; i <= n; ++i) {\n        long long next = a + b;\n        a = b;\n        b = next;\n    }\n    return b;\n}\n",
+      "tests": [
+        {
+          "name": "test_fibonacci",
+          "test_code": "assert(fibonacci(7) == 13);\nassert(fibonacci(10) == 55);",
+          "required": true
+        }
+      ],
+      "completion_requirements": {
+        "required_test_names": ["test_fibonacci"]
+      }
+    },
+    {
+      "id": "cpp-loops-practice-1",
+      "title": "4. Power Calculator (Practice)",
+      "description": "Compute base^exp using a loop.",
+      "order": 14,
+      "difficulty": "beginner",
+      "duration_minutes": 5,
+      "type": "practice",
+      "concepts": ["cpp-loops"],
+      "prerequisites": ["cpp-conditionals"],
+      "learning_objectives": [
+        "Accumulate product in C++ for loop"
+      ],
+      "starter_code": "long long power(int base, int exp) {\n    // TODO: Calculate base^exp\n    return 1;\n}\n",
+      "solution_code": "long long power(int base, int exp) {\n    long long result = 1;\n    for (int i = 0; i < exp; ++i) {\n        result *= base;\n    }\n    return result;\n}\n",
+      "tests": [
+        {
+          "name": "test_power",
+          "test_code": "assert(power(2, 5) == 32);",
+          "required": true
+        }
+      ],
+      "completion_requirements": {
+        "required_test_names": ["test_power"]
+      }
+    },
+    {
+      "id": "cpp-loops-checkpoint",
+      "title": "5. Unit 3 Checkpoint: C++ Loops Mastery",
+      "description": "Verify C++ iteration skills.",
+      "order": 15,
+      "difficulty": "beginner",
+      "duration_minutes": 5,
+      "type": "checkpoint",
+      "concepts": ["cpp-loops"],
+      "prerequisites": ["cpp-conditionals"],
+      "learning_objectives": [
+        "Pass C++ loops checkpoint"
+      ],
+      "starter_code": "int count_multiples(int start, int end, int k) {\n    // TODO: Count numbers between start and end divisible by k\n    return 0;\n}\n",
+      "solution_code": "int count_multiples(int start, int end, int k) {\n    int count = 0;\n    for (int i = start; i <= end; ++i) {\n        if (i % k == 0) count++;\n    }\n    return count;\n}\n",
+      "tests": [
+        {
+          "name": "test_multiples",
+          "test_code": "assert(count_multiples(1, 15, 3) == 5);",
+          "required": true
+        }
+      ],
+      "completion_requirements": {
+        "required_test_names": ["test_multiples"]
+      }
+    }
+  ]
+}

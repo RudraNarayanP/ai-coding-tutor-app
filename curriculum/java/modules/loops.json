@@ -1,0 +1,144 @@
+{
+  "id": "java-loops",
+  "title": "Unit 3: Java Loops & Iteration",
+  "order": 3,
+  "concepts": [
+    {
+      "id": "java-loops",
+      "title": "For & While Loops",
+      "prerequisites": ["java-conditionals"]
+    }
+  ],
+  "lessons": [
+    {
+      "id": "java-loops-step-1",
+      "title": "1. For Loops & Summation",
+      "description": "Java `for` loops iterate over a range. Implement `sumUpTo(int n)` returning 1 + 2 + ... + n.",
+      "order": 11,
+      "difficulty": "beginner",
+      "duration_minutes": 5,
+      "type": "learn",
+      "concepts": ["java-loops"],
+      "prerequisites": ["java-conditionals"],
+      "learning_objectives": [
+        "Use standard for loop syntax in Java"
+      ],
+      "starter_code": "public class Solution {\n    public static int sumUpTo(int n) {\n        // TODO: Calculate sum from 1 to n\n        return 0;\n    }\n}\n",
+      "solution_code": "public class Solution {\n    public static int sumUpTo(int n) {\n        int sum = 0;\n        for (int i = 1; i <= n; i++) {\n            sum += i;\n        }\n        return sum;\n    }\n}\n",
+      "tests": [
+        {
+          "name": "test_sum_up_to",
+          "test_code": "if (Solution.sumUpTo(5) != 15) throw new AssertionError(\"Expected 15\");",
+          "required": true
+        }
+      ],
+      "completion_requirements": {
+        "required_test_names": ["test_sum_up_to"]
+      }
+    },
+    {
+      "id": "java-loops-step-2",
+      "title": "2. While Loops",
+      "description": "Java `while` loops execute while a condition is true. Implement `countDigits(int number)`.",
+      "order": 12,
+      "difficulty": "beginner",
+      "duration_minutes": 5,
+      "type": "learn",
+      "concepts": ["java-loops"],
+      "prerequisites": ["java-conditionals"],
+      "learning_objectives": [
+        "Use while loops for conditional iteration"
+      ],
+      "starter_code": "public class Solution {\n    public static int countDigits(int number) {\n        if (number == 0) return 1;\n        int count = 0;\n        int n = Math.abs(number);\n        // TODO: Use while loop dividing n by 10\n        return count;\n    }\n}\n",
+      "solution_code": "public class Solution {\n    public static int countDigits(int number) {\n        if (number == 0) return 1;\n        int count = 0;\n        int n = Math.abs(number);\n        while (n > 0) {\n            n /= 10;\n            count++;\n        }\n        return count;\n    }\n}\n",
+      "tests": [
+        {
+          "name": "test_count_digits",
+          "test_code": "if (Solution.countDigits(12345) != 5) throw new AssertionError(\"Expected 5\");",
+          "required": true
+        }
+      ],
+      "completion_requirements": {
+        "required_test_names": ["test_count_digits"]
+      }
+    },
+    {
+      "id": "java-loops-01",
+      "title": "3. Factorial Calculator (Concept Challenge)",
+      "description": "Calculate n! using a loop.",
+      "order": 13,
+      "difficulty": "beginner",
+      "duration_minutes": 10,
+      "type": "challenge",
+      "concepts": ["java-loops"],
+      "prerequisites": ["java-conditionals"],
+      "learning_objectives": [
+        "Implement factorial product accumulation"
+      ],
+      "starter_code": "public class Solution {\n    public static long factorial(int n) {\n        // TODO: Return n!\n        return 1;\n    }\n}\n",
+      "solution_code": "public class Solution {\n    public static long factorial(int n) {\n        long result = 1;\n        for (int i = 1; i <= n; i++) {\n            result *= i;\n        }\n        return result;\n    }\n}\n",
+      "tests": [
+        {
+          "name": "test_factorial",
+          "test_code": "if (Solution.factorial(5) != 120) throw new AssertionError(\"5! = 120\"); if (Solution.factorial(0) != 1) throw new AssertionError(\"0! = 1\");",
+          "required": true
+        }
+      ],
+      "completion_requirements": {
+        "required_test_names": ["test_factorial"]
+      }
+    },
+    {
+      "id": "java-loops-practice-1",
+      "title": "4. Prime Number Checker (Practice)",
+      "description": "Determine if an integer is prime.",
+      "order": 14,
+      "difficulty": "beginner",
+      "duration_minutes": 5,
+      "type": "practice",
+      "concepts": ["java-loops"],
+      "prerequisites": ["java-conditionals"],
+      "learning_objectives": [
+        "Implement primality loop test in Java"
+      ],
+      "starter_code": "public class Solution {\n    public static boolean isPrime(int n) {\n        if (n <= 1) return false;\n        // TODO: Loop from 2 up to sqrt(n)\n        return true;\n    }\n}\n",
+      "solution_code": "public class Solution {\n    public static boolean isPrime(int n) {\n        if (n <= 1) return false;\n        for (int i = 2; i * i <= n; i++) {\n            if (n % i == 0) return false;\n        }\n        return true;\n    }\n}\n",
+      "tests": [
+        {
+          "name": "test_is_prime",
+          "test_code": "if (!Solution.isPrime(13)) throw new AssertionError(\"13 is prime\"); if (Solution.isPrime(12)) throw new AssertionError(\"12 is composite\");",
+          "required": true
+        }
+      ],
+      "completion_requirements": {
+        "required_test_names": ["test_is_prime"]
+      }
+    },
+    {
+      "id": "java-loops-checkpoint",
+      "title": "5. Unit 3 Checkpoint: Loops Mastery",
+      "description": "Demonstrate mastery of Java loops.",
+      "order": 15,
+      "difficulty": "beginner",
+      "duration_minutes": 5,
+      "type": "checkpoint",
+      "concepts": ["java-loops"],
+      "prerequisites": ["java-conditionals"],
+      "learning_objectives": [
+        "Pass Java loops checkpoint"
+      ],
+      "starter_code": "public class Solution {\n    public static int countEvensInRange(int start, int end) {\n        // TODO: Count even numbers from start to end inclusive\n        return 0;\n    }\n}\n",
+      "solution_code": "public class Solution {\n    public static int countEvensInRange(int start, int end) {\n        int count = 0;\n        for (int i = start; i <= end; i++) {\n            if (i % 2 == 0) count++;\n        }\n        return count;\n    }\n}\n",
+      "tests": [
+        {
+          "name": "test_count_evens",
+          "test_code": "if (Solution.countEvensInRange(1, 10) != 5) throw new AssertionError(\"Expected 5 evens\");",
+          "required": true
+        }
+      ],
+      "completion_requirements": {
+        "required_test_names": ["test_count_evens"]
+      }
+    }
+  ]
+}

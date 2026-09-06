@@ -1,0 +1,144 @@
+{
+  "id": "cpp-vectors",
+  "title": "Unit 5: C++ std::vector & Containers",
+  "order": 5,
+  "concepts": [
+    {
+      "id": "cpp-vectors",
+      "title": "std::vector & Standard Library Containers",
+      "prerequisites": ["cpp-functions"]
+    }
+  ],
+  "lessons": [
+    {
+      "id": "cpp-vectors-step-1",
+      "title": "1. std::vector Push Back & Traversal",
+      "description": "`std::vector` is the standard dynamic array container in C++. Implement `vector_sum(const std::vector<int>& numbers)`.",
+      "order": 21,
+      "difficulty": "intermediate",
+      "duration_minutes": 5,
+      "type": "learn",
+      "concepts": ["cpp-vectors"],
+      "prerequisites": ["cpp-functions"],
+      "learning_objectives": [
+        "Iterate over std::vector<int> using range-based for loop"
+      ],
+      "starter_code": "#include <vector>\n\nint vector_sum(const std::vector<int>& numbers) {\n    // TODO: Sum all elements in numbers\n    return 0;\n}\n",
+      "solution_code": "#include <vector>\n\nint vector_sum(const std::vector<int>& numbers) {\n    int sum = 0;\n    for (int n : numbers) {\n        sum += n;\n    }\n    return sum;\n}\n",
+      "tests": [
+        {
+          "name": "test_vector_sum",
+          "test_code": "std::vector<int> v = {10, 20, 30}; assert(vector_sum(v) == 60);",
+          "required": true
+        }
+      ],
+      "completion_requirements": {
+        "required_test_names": ["test_vector_sum"]
+      }
+    },
+    {
+      "id": "cpp-vectors-step-2",
+      "title": "2. Filtering Vectors",
+      "description": "Create a new vector containing only even numbers.",
+      "order": 22,
+      "difficulty": "intermediate",
+      "duration_minutes": 5,
+      "type": "learn",
+      "concepts": ["cpp-vectors"],
+      "prerequisites": ["cpp-functions"],
+      "learning_objectives": [
+        "Filter vector elements with push_back"
+      ],
+      "starter_code": "#include <vector>\n\nstd::vector<int> filter_evens(const std::vector<int>& numbers) {\n    std::vector<int> evens;\n    // TODO: Push even numbers into evens\n    return evens;\n}\n",
+      "solution_code": "#include <vector>\n\nstd::vector<int> filter_evens(const std::vector<int>& numbers) {\n    std::vector<int> evens;\n    for (int n : numbers) {\n        if (n % 2 == 0) evens.push_back(n);\n    }\n    return evens;\n}\n",
+      "tests": [
+        {
+          "name": "test_filter_evens",
+          "test_code": "std::vector<int> v = {1, 2, 3, 4, 5, 6};\nstd::vector<int> res = filter_evens(v);\nassert(res.size() == 3 && res[0] == 2 && res[2] == 6);",
+          "required": true
+        }
+      ],
+      "completion_requirements": {
+        "required_test_names": ["test_filter_evens"]
+      }
+    },
+    {
+      "id": "cpp-vectors-01",
+      "title": "3. Sensor Data Outlier Removal (Concept Challenge)",
+      "description": "Find maximum element in a std::vector<double>.",
+      "order": 23,
+      "difficulty": "intermediate",
+      "duration_minutes": 10,
+      "type": "challenge",
+      "concepts": ["cpp-vectors"],
+      "prerequisites": ["cpp-functions"],
+      "learning_objectives": [
+        "Track max element in std::vector<double>"
+      ],
+      "starter_code": "#include <vector>\n#include <stdexcept>\n\ndouble find_max(const std::vector<double>& readings) {\n    if (readings.empty()) return 0.0;\n    // TODO: Return maximum value\n    return 0.0;\n}\n",
+      "solution_code": "#include <vector>\n#include <algorithm>\n\ndouble find_max(const std::vector<double>& readings) {\n    if (readings.empty()) return 0.0;\n    double m = readings[0];\n    for (double r : readings) {\n        if (r > m) m = r;\n    }\n    return m;\n}\n",
+      "tests": [
+        {
+          "name": "test_find_max",
+          "test_code": "std::vector<double> r = {12.5, 45.1, 22.0}; assert(find_max(r) == 45.1);",
+          "required": true
+        }
+      ],
+      "completion_requirements": {
+        "required_test_names": ["test_find_max"]
+      }
+    },
+    {
+      "id": "cpp-vectors-practice-1",
+      "title": "4. Vector Reversal (Practice)",
+      "description": "Reverse a std::vector in C++.",
+      "order": 24,
+      "difficulty": "intermediate",
+      "duration_minutes": 5,
+      "type": "practice",
+      "concepts": ["cpp-vectors"],
+      "prerequisites": ["cpp-functions"],
+      "learning_objectives": [
+        "Use std::reverse or swap with vector"
+      ],
+      "starter_code": "#include <vector>\n#include <algorithm>\n\nvoid reverse_vector(std::vector<int>& numbers) {\n    // TODO: Reverse numbers in-place\n}\n",
+      "solution_code": "#include <vector>\n#include <algorithm>\n\nvoid reverse_vector(std::vector<int>& numbers) {\n    std::reverse(numbers.begin(), numbers.end());\n}\n",
+      "tests": [
+        {
+          "name": "test_reverse_vector",
+          "test_code": "std::vector<int> v = {1, 2, 3}; reverse_vector(v); assert(v[0] == 3 && v[2] == 1);",
+          "required": true
+        }
+      ],
+      "completion_requirements": {
+        "required_test_names": ["test_reverse_vector"]
+      }
+    },
+    {
+      "id": "cpp-vectors-checkpoint",
+      "title": "5. Unit 5 Checkpoint: C++ Vectors Mastery",
+      "description": "Verify C++ vector skills.",
+      "order": 25,
+      "difficulty": "intermediate",
+      "duration_minutes": 5,
+      "type": "checkpoint",
+      "concepts": ["cpp-vectors"],
+      "prerequisites": ["cpp-functions"],
+      "learning_objectives": [
+        "Pass C++ vectors checkpoint"
+      ],
+      "starter_code": "#include <vector>\n\nbool contains_value(const std::vector<int>& vec, int target) {\n    // TODO: Return true if target is in vec\n    return false;\n}\n",
+      "solution_code": "#include <vector>\n\nbool contains_value(const std::vector<int>& vec, int target) {\n    for (int num : vec) {\n        if (num == target) return true;\n    }\n    return false;\n}\n",
+      "tests": [
+        {
+          "name": "test_contains_value",
+          "test_code": "std::vector<int> v = {10, 20, 30}; assert(contains_value(v, 20) == true); assert(contains_value(v, 99) == false);",
+          "required": true
+        }
+      ],
+      "completion_requirements": {
+        "required_test_names": ["test_contains_value"]
+      }
+    }
+  ]
+}

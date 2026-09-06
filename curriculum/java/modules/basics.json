@@ -1,0 +1,146 @@
+{
+  "id": "java-basics",
+  "title": "Unit 1: Java Basics & Variables",
+  "order": 1,
+  "concepts": [
+    {
+      "id": "java-variables",
+      "title": "Java Variables & Primitive Types",
+      "prerequisites": []
+    }
+  ],
+  "lessons": [
+    {
+      "id": "java-variables-step-1",
+      "title": "1. Hello Java & String Variables",
+      "description": "Welcome to Java! Java is a strongly-typed, object-oriented language. Create a class `Solution` with a static method `getLanguage()` returning \"Java\".",
+      "order": 1,
+      "difficulty": "beginner",
+      "duration_minutes": 5,
+      "type": "learn",
+      "concepts": ["java-variables"],
+      "prerequisites": [],
+      "learning_objectives": [
+        "Declare a Java class and return a String literal"
+      ],
+      "starter_code": "public class Solution {\n    public static String getLanguage() {\n        // TODO: Return \"Java\"\n        return null;\n    }\n}\n",
+      "solution_code": "public class Solution {\n    public static String getLanguage() {\n        return \"Java\";\n    }\n}\n",
+      "tests": [
+        {
+          "name": "test_get_language",
+          "test_code": "if (!\"Java\".equals(Solution.getLanguage())) throw new AssertionError(\"Expected Java\");",
+          "required": true
+        }
+      ],
+      "completion_requirements": {
+        "required_test_names": ["test_get_language"]
+      },
+      "static_hints": ["return \"Java\";"]
+    },
+    {
+      "id": "java-variables-step-2",
+      "title": "2. Integers & Arithmetic",
+      "description": "In Java, integers use the `int` primitive type. Create a method `calculateTotal(int price, int quantity)` returning `price * quantity`.",
+      "order": 2,
+      "difficulty": "beginner",
+      "duration_minutes": 5,
+      "type": "learn",
+      "concepts": ["java-variables"],
+      "prerequisites": [],
+      "learning_objectives": [
+        "Use primitive int type and arithmetic in Java"
+      ],
+      "starter_code": "public class Solution {\n    public static int calculateTotal(int price, int quantity) {\n        // TODO: Return price * quantity\n        return 0;\n    }\n}\n",
+      "solution_code": "public class Solution {\n    public static int calculateTotal(int price, int quantity) {\n        return price * quantity;\n    }\n}\n",
+      "tests": [
+        {
+          "name": "test_calculate_total",
+          "test_code": "if (Solution.calculateTotal(15, 3) != 45) throw new AssertionError(\"Expected 45\");",
+          "required": true
+        }
+      ],
+      "completion_requirements": {
+        "required_test_names": ["test_calculate_total"]
+      },
+      "static_hints": ["return price * quantity;"]
+    },
+    {
+      "id": "java-variables-01",
+      "title": "3. Coffee Shop Order Billing (Concept Challenge)",
+      "description": "Calculate total order cost including sales tax.",
+      "order": 3,
+      "difficulty": "beginner",
+      "duration_minutes": 10,
+      "type": "challenge",
+      "concepts": ["java-variables"],
+      "prerequisites": [],
+      "learning_objectives": [
+        "Combine double primitive math and casting in Java"
+      ],
+      "starter_code": "public class Solution {\n    public static double calculateBill(double itemPrice, int count, double taxRate) {\n        // TODO: Return (itemPrice * count) * (1.0 + taxRate)\n        return 0.0;\n    }\n}\n",
+      "solution_code": "public class Solution {\n    public static double calculateBill(double itemPrice, int count, double taxRate) {\n        return (itemPrice * count) * (1.0 + taxRate);\n    }\n}\n",
+      "tests": [
+        {
+          "name": "test_calculate_bill",
+          "test_code": "double bill = Solution.calculateBill(4.0, 2, 0.10); if (Math.abs(bill - 8.80) > 0.001) throw new AssertionError(\"Expected 8.80\");",
+          "required": true
+        }
+      ],
+      "completion_requirements": {
+        "required_test_names": ["test_calculate_bill"]
+      }
+    },
+    {
+      "id": "java-variables-practice-1",
+      "title": "4. Temperature Conversion (Practice)",
+      "description": "Convert Fahrenheit temperature to Celsius.",
+      "order": 4,
+      "difficulty": "beginner",
+      "duration_minutes": 5,
+      "type": "practice",
+      "concepts": ["java-variables"],
+      "prerequisites": [],
+      "learning_objectives": [
+        "Apply formula (F - 32) * 5/9 using doubles"
+      ],
+      "starter_code": "public class Solution {\n    public static double fahrenheitToCelsius(double fahrenheit) {\n        // TODO: Return (fahrenheit - 32.0) * 5.0 / 9.0\n        return 0.0;\n    }\n}\n",
+      "solution_code": "public class Solution {\n    public static double fahrenheitToCelsius(double fahrenheit) {\n        return (fahrenheit - 32.0) * 5.0 / 9.0;\n    }\n}\n",
+      "tests": [
+        {
+          "name": "test_conversion",
+          "test_code": "double c = Solution.fahrenheitToCelsius(212.0); if (Math.abs(c - 100.0) > 0.001) throw new AssertionError(\"Expected 100.0\");",
+          "required": true
+        }
+      ],
+      "completion_requirements": {
+        "required_test_names": ["test_conversion"]
+      }
+    },
+    {
+      "id": "java-variables-checkpoint",
+      "title": "5. Unit 1 Checkpoint: Java Variables Mastery",
+      "description": "Verify Java variable declaration and math operations.",
+      "order": 5,
+      "difficulty": "beginner",
+      "duration_minutes": 5,
+      "type": "checkpoint",
+      "concepts": ["java-variables"],
+      "prerequisites": [],
+      "learning_objectives": [
+        "Pass Java variables checkpoint challenge"
+      ],
+      "starter_code": "public class Solution {\n    public static int square(int n) {\n        // TODO: Return n * n\n        return 0;\n    }\n}\n",
+      "solution_code": "public class Solution {\n    public static int square(int n) {\n        return n * n;\n    }\n}\n",
+      "tests": [
+        {
+          "name": "test_square",
+          "test_code": "if (Solution.square(7) != 49) throw new AssertionError(\"Expected 49\");",
+          "required": true
+        }
+      ],
+      "completion_requirements": {
+        "required_test_names": ["test_square"]
+      }
+    }
+  ]
+}
