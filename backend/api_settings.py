@@ -23,8 +23,12 @@ from .api_key_manager import (
     store_api_key,
     validate_api_key_format,
 )
+from .provider_cache import ProviderCache
 
 logger = logging.getLogger("patchwork-tutor")
+
+# Initialize provider cache
+_provider_cache = ProviderCache(default_ttl=30.0)
 
 # Provider-friendly names for UI
 PROVIDER_DISPLAY_NAMES: dict[str, str] = {
@@ -216,6 +220,11 @@ async def validate_provider_key(provider: str, api_key: str) -> ApiKeyValidation
 
 async def get_provider_info(provider_id: str) -> ProviderInfo:
     """Get comprehensive provider information for the frontend."""
+    # Check cache first
+    cached_info = _provider_cache.get_provider_info(provider_id)
+    if cached_info is not None:
+        return cached_info
+    
     display_name = PROVIDER_DISPLAY_NAMES.get(provider_id, provider_id.title())
     setup_instructions = PROVIDER_SETUP_INSTRUCTIONS.get(provider_id)
 
@@ -249,7 +258,7 @@ async def get_provider_info(provider_id: str) -> ProviderInfo:
         logger.exception(f"Health check failed for {provider_id}")
         error = str(exc)
 
-    return ProviderInfo(
+    result = ProviderInfo(
         id=provider_id,
         name=display_name,
         has_key=has_stored_key,
@@ -261,11 +270,64 @@ async def get_provider_info(provider_id: str) -> ProviderInfo:
         setup_instructions=setup_instructions,
         error=error,
     )
+    
+    # Cache the result
+    _provider_cache.set_provider_info(provider_id, result, ttl=10.0)
+    return result
 
 
 async def get_all_providers_info() -> list[ProviderInfo]:
     """Get information for all providers."""
-    return [await get_provider_info(p) for p in ALL_PROVIDERS]
+    # Check cache first
+    cached_overview = _provider_cache.get_providers_overview()
+    if cached_overview is not None:
+        return cached_overview.providers
+    
+    # Fetch all providers in parallel
+    provider_infos = await asyncio.gather(
+        *[get_provider_info(p) for p in ALL_PROVIDERS],
+        return_exceptions=True
+    )
+    
+    # Handle exceptions and filter out failed providers
+    results = []
+    for i, result in enumerate(provider_infos):
+        if isinstance(result, Exception):
+            logger.error(f"Failed to get info for provider {ALL_PROVIDERS[i]}: {result}")
+            # Create a basic error status for failed providers
+            error_info = ProviderInfo(
+                id=ALL_PROVIDERS[i],
+                name=PROVIDER_DISPLAY_NAMES.get(ALL_PROVIDERS[i], ALL_PROVIDERS[i].title()),
+                has_key=False,
+                key_masked=None,
+                model="",
+                configured=False,
+                available=False,
+                error=str(result)
+            )
+            results.append(error_info)
+        else:
+            results.append(result)
+    
+    # Cache the overview
+    _provider_cache.set_providers_overview(results, ttl=10.0)
+    return results
+
+
+def provider_keys_info() -> dict:
+    """Return metadata about where keys are stored and which providers have stored keys.
+
+    This helps the UI show the user where their keys are and whether keys exist on disk.
+    """
+    from .api_key_manager import _CONFIG_DIR, _ENC_KEYS_FILE, _KEY_FILE, list_providers_with_keys
+
+    keys = list_providers_with_keys()
+    return {
+        "keys_file": str(_ENC_KEYS_FILE),
+        "master_key_file": str(_KEY_FILE),
+        "config_dir": str(_CONFIG_DIR),
+        "providers_with_keys": keys,
+    }
 
 
 def update_provider_key(provider: str, api_key: str, model: str | None = None) -> None:
@@ -277,10 +339,23 @@ def update_provider_key(provider: str, api_key: str, model: str | None = None) -
     if model:
         model_env = f"{provider.upper()}_MODEL"
         os.environ[model_env] = model
+    
+    # Clear cache for this provider when key is updated
+    _provider_cache.delete(provider, "info")
+    _provider_cache.delete(provider, "status")
+    _provider_cache.clear()  # Also clear overview since it depends on individual providers
 
 
 def remove_provider_key(provider: str) -> bool:
     """Remove API key for a provider."""
     key_env = f"{provider.upper()}_API_KEY"
     os.environ.pop(key_env, None)
-    return delete_api_key(provider)
+    result = delete_api_key(provider)
+    
+    # Clear cache for this provider when key is removed
+    if result:
+        _provider_cache.delete(provider, "info")
+        _provider_cache.delete(provider, "status")
+        _provider_cache.clear()  # Also clear overview since it depends on individual providers
+    
+    return result

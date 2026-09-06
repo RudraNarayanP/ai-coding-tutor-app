@@ -82,6 +82,7 @@ export default function Settings({ isOpen, onClose, backendUrl, onBackendUrlChan
   const [validationResult, setValidationResult] = useState<ValidationResult | null>(null)
   const [saving, setSaving] = useState(false)
   const [saveMessage, setSaveMessage] = useState<string | null>(null)
+  const [keysInfo, setKeysInfo] = useState<any | null>(null)
 
   // Fetch settings on mount
   const fetchSettings = useCallback(async () => {
@@ -93,6 +94,17 @@ export default function Settings({ isOpen, onClose, backendUrl, onBackendUrlChan
       if (!response.ok) throw new Error(`HTTP ${response.status}`)
       const data = await response.json() as SettingsResponse
       setSettings(data)
+
+      // Also fetch stored keys metadata
+      try {
+        const kresp = await fetch(`${backendUrl}/api/settings/keys`)
+        if (kresp.ok) {
+          const kdata = await kresp.json()
+          setKeysInfo(kdata)
+        }
+      } catch (e) {
+        // ignore keys fetch errors
+      }
     } catch (err) {
       setError('Failed to load settings. Is the backend running?')
       console.error('Settings fetch error:', err)
@@ -297,13 +309,52 @@ export default function Settings({ isOpen, onClose, backendUrl, onBackendUrlChan
                           setApiKey(e.target.value)
                           setValidationResult(null)
                         }}
-                        placeholder="Enter your API key..."
+                        placeholder={settings.providers.find(p => p.id === activeProvider)?.has_key ? 'Key stored (click 👁️ to reveal)' : 'Enter your API key...'}
                         style={{ flex: 1, padding: '8px', borderRadius: '6px', border: '1px solid #ccc' }}
+                        readOnly={settings.providers.find(p => p.id === activeProvider)?.has_key && !showApiKey}
                       />
                       <button
                         type="button"
                         className="show-key-btn"
-                        onClick={() => setShowApiKey(!showApiKey)}
+                        onClick={async () => {
+                          if (!activeProvider) return
+                          const prov = settings.providers.find(p => p.id === activeProvider)
+                          if (!prov) return
+                          // If provider has a stored key and we don't currently show the key, fetch masked key first
+                          if (prov.has_key && !showApiKey && !apiKey) {
+                            try {
+                              const resp = await fetch(`${backendUrl}/api/settings/providers/${activeProvider}/key`)
+                              if (resp.ok) {
+                                const data = await resp.json()
+                                setApiKey(data.key_masked ?? '')
+                                setShowApiKey(false)
+                                return
+                              }
+                            } catch (e) {
+                              console.error(e)
+                            }
+                          }
+
+                          // If user requests reveal (toggle to show), fetch raw key
+                          if (prov.has_key && !showApiKey && apiKey) {
+                            // confirm reveal
+                            if (!confirm('Reveal API key for editing? This will display the raw key on your screen.')) return
+                            try {
+                              const resp = await fetch(`${backendUrl}/api/settings/providers/${activeProvider}/key?reveal=true`)
+                              if (resp.ok) {
+                                const data = await resp.json()
+                                setApiKey(data.key ?? '')
+                                setShowApiKey(true)
+                                return
+                              }
+                            } catch (e) {
+                              console.error(e)
+                            }
+                          }
+
+                          // Default toggle behavior
+                          setShowApiKey((s) => !s)
+                        }}
                         aria-label={showApiKey ? 'Hide key' : 'Show key'}
                       >
                         {showApiKey ? '🙈' : '👁️'}
@@ -365,14 +416,47 @@ export default function Settings({ isOpen, onClose, backendUrl, onBackendUrlChan
                         ⚡ Set as Active Provider
                       </button>
                     )}
+
                     {settings.providers.find(p => p.id === activeProvider)?.has_key && (
-                      <button
-                        className="btn-danger"
-                        onClick={() => handleDelete(activeProvider)}
-                        disabled={saving}
-                      >
-                        🗑️ Remove Key
-                      </button>
+                      <>
+                        <button
+                          className="btn-secondary"
+                          onClick={async () => {
+                            if (!activeProvider) return
+                            setSaving(true)
+                            setSaveMessage(null)
+                            try {
+                              const url = `${backendUrl}/api/settings/providers/${activeProvider}/validate-stored`
+                              const resp = await fetch(url)
+                              if (resp.ok) {
+                                const data = await resp.json()
+                                setValidationResult(data)
+                                setSaveMessage(data.valid ? 'Stored key validated' : `Stored key invalid: ${data.error || 'unknown'}`)
+                                // Refresh settings to update provider health
+                                await fetchSettings()
+                                onProviderChange?.()
+                              } else {
+                                const err = await resp.json().catch(() => null)
+                                setSaveMessage(`Re-check failed: ${err?.detail?.error || resp.status}`)
+                              }
+                            } catch (e) {
+                              setSaveMessage('Re-check failed')
+                            } finally {
+                              setSaving(false)
+                            }
+                          }}
+                        >
+                          🔁 Re-check Stored Key
+                        </button>
+
+                        <button
+                          className="btn-danger"
+                          onClick={() => handleDelete(activeProvider)}
+                          disabled={saving}
+                        >
+                          🗑️ Remove Key
+                        </button>
+                      </>
                     )}
                   </div>
                 </div>
@@ -393,6 +477,42 @@ export default function Settings({ isOpen, onClose, backendUrl, onBackendUrlChan
                     </div>
                   )}
                 </div>
+              </div>
+
+              {/* Stored keys info (file and providers) */}
+              <div className="settings-section">
+                <h3>🔐 Stored API Keys</h3>
+                <p className="setting-hint">Keys are encrypted on disk. This shows where they are stored and which providers have keys saved.</p>
+                {keysInfo ? (
+                  <div className="current-config">
+                    <div className="config-item">
+                      <span className="config-label">Config directory:</span>
+                      <span className="config-value">{keysInfo.config_dir}</span>
+                    </div>
+                    <div className="config-item">
+                      <span className="config-label">Encrypted keys file:</span>
+                      <span className="config-value">{keysInfo.keys_file}</span>
+                    </div>
+                    <div className="config-item">
+                      <span className="config-label">Master key file:</span>
+                      <span className="config-value">{keysInfo.master_key_file}</span>
+                    </div>
+                    <div style={{ paddingTop: '8px' }}>
+                      <strong>Providers with stored keys:</strong>
+                      <ul style={{ marginTop: '8px' }}>
+                        {keysInfo.providers_with_keys.length === 0 ? (
+                          <li><em>No stored keys</em></li>
+                        ) : (
+                          keysInfo.providers_with_keys.map((p: string) => (
+                            <li key={p}>{p}</li>
+                          ))
+                        )}
+                      </ul>
+                    </div>
+                  </div>
+                ) : (
+                  <div className="settings-loading">Checking local key store…</div>
+                )}
               </div>
             </>
           ) : null}
