@@ -1,5 +1,4 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
-import Settings from './components/Settings'
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 type TestResult = {
@@ -148,8 +147,6 @@ function App() {
   const [sessionNotes, setSessionNotes] = useState<string[]>([])
   const [noteInput, setNoteInput] = useState('')
   const [backendError, setBackendError] = useState(false)
-  const [showSettings, setShowSettings] = useState(false)
-  const [backendUrl, setBackendUrl] = useState('')
 
   const resultsRef = useRef<HTMLDivElement>(null)
   const editorRef = useRef<HTMLTextAreaElement>(null)
@@ -361,99 +358,46 @@ function App() {
     }
   }, [lesson, code, soundEnabled, scrollToResults])
 
-  // ── Ask Tutor for Hint (streaming, with non-streaming fallback) ────────────
+  // ── Ask Tutor for Hint ─────────────────────────────────────────────────────
   const askTutor = useCallback(async () => {
     if (!lesson || !aiEnabled) return
     setIsTutorLoading(true)
     setFeedback('Getting a hint from your tutor…')
     const controller = new AbortController()
     const timeoutId = setTimeout(() => controller.abort(), 50000)
-    const tutorBody = JSON.stringify({
-      lesson_id: lesson.id,
-      lesson_title: lesson.title,
-      unit_title: lesson.unit_title ?? '',
-      concept_title: lesson.concept_title ?? '',
-      prerequisites: lesson.prerequisites ?? [],
-      instructions: lesson.description,
-      code,
-      test_results: results ?? [],
-      previous_hints: previousHints,
-      hint_level: hintLevel,
-      session_id: 'default',
-      solution_requested: false,
-    })
     try {
-      const response = await fetch('/api/tutor/stream', {
+      const response = await fetch('/api/tutor', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         signal: controller.signal,
-        body: tutorBody,
+        body: JSON.stringify({
+          lesson_id: lesson.id,
+          lesson_title: lesson.title,
+          unit_title: lesson.unit_title ?? '',
+          concept_title: lesson.concept_title ?? '',
+          prerequisites: lesson.prerequisites ?? [],
+          instructions: lesson.description,
+          code,
+          test_results: results ?? [],
+          previous_hints: previousHints,
+          hint_level: hintLevel,
+          session_id: 'default',
+          solution_requested: false,
+        }),
       })
       if (!response.ok) throw new Error(`HTTP error ${response.status}`)
-
-      // Consume the server-sent event stream
-      const reader = response.body!.getReader()
-      const decoder = new TextDecoder()
-      let buffer = ''
-      let fullMessage = ''
-      let streamError: string | null = null
-      try {
-        for (;;) {
-          const { value, done } = await reader.read()
-          if (done) break
-          buffer += decoder.decode(value, { stream: true })
-          const events = buffer.split('\n\n')
-          buffer = events.pop() || ''
-          for (const event of events) {
-            if (!event.startsWith('data: ')) continue
-            try {
-              const data = JSON.parse(event.slice(6)) as { type: string; content?: string; message?: string }
-              if (data.type === 'token' && data.content) {
-                fullMessage += data.content
-                setFeedback(fullMessage)
-              } else if (data.type === 'error') {
-                streamError = data.message || 'Stream error'
-              } else if (data.type === 'complete' && data.content) {
-                fullMessage = data.content
-              }
-            } catch {
-              // Malformed JSON chunk — skip it
-            }
-          }
-          if (streamError) break
-        }
-      } finally {
-        reader.releaseLock()
+      const tutor = (await response.json()) as {
+        available: boolean
+        message: string
+        hint_level: number
       }
-      if (streamError) throw new Error(streamError)
-      if (!fullMessage) throw new Error('Empty tutor response')
-
-      setFeedback(fullMessage)
-      setPreviousHints((h) => [...h, fullMessage].slice(-8))
-      setHintLevel(Math.min(hintLevel + 1, 4))
+      setFeedback(tutor.message)
+      if (tutor.available) {
+        setPreviousHints((h) => [...h, tutor.message].slice(-8))
+        setHintLevel(Math.min(tutor.hint_level + 1, 4))
+      }
     } catch {
-      // Fall back to the regular (non-streaming) tutor endpoint
-      try {
-        const fallbackResponse = await fetch('/api/tutor', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          signal: controller.signal,
-          body: tutorBody,
-        })
-        if (!fallbackResponse.ok) throw new Error(`HTTP error ${fallbackResponse.status}`)
-        const tutor = (await fallbackResponse.json()) as {
-          available: boolean
-          message: string
-          hint_level: number
-        }
-        setFeedback(tutor.message)
-        if (tutor.available) {
-          setPreviousHints((h) => [...h, tutor.message].slice(-8))
-          setHintLevel(Math.min(tutor.hint_level + 1, 4))
-        }
-      } catch {
-        setFeedback('AI tutoring is unavailable right now. Deterministic tests are still available.')
-      }
+      setFeedback('AI tutoring is unavailable right now. Deterministic tests are still available.')
     } finally {
       clearTimeout(timeoutId)
       setIsTutorLoading(false)
@@ -608,15 +552,6 @@ function App() {
           >
             {aiEnabled ? 'AI tutor on' : 'AI tutor off'}
           </button>
-
-          <button
-            className="duo-button duo-button-secondary"
-            style={{ padding: '6px 14px', fontSize: '13px' }}
-            aria-label="Open settings"
-            onClick={() => setShowSettings(true)}
-          >
-            ⚙️ Settings
-          </button>
         </div>
       </header>
 
@@ -734,18 +669,7 @@ function App() {
                 <div className="duo-editor-container">
                   <div className="duo-editor-top">
                     <span>exercise.py</span>
-                    <div className="duo-editor-top-right">
-                      <span>Python 3.12</span>
-                      <button
-                        className="duo-editor-quick-run"
-                        onClick={runTests}
-                        disabled={isRunning || isLoadingLesson}
-                        aria-label="Quick run (Ctrl+Enter)"
-                        title="Run code (Ctrl+Enter)"
-                      >
-                        ▶ Run
-                      </button>
-                    </div>
+                    <span>Python 3.12</span>
                   </div>
                   <div className="duo-editor-body">
                     <LineNumbers code={code} />
@@ -936,14 +860,6 @@ function App() {
           {isRunning ? 'Running…' : 'Run code'}
         </button>
       </footer>
-
-      <Settings
-        isOpen={showSettings}
-        onClose={() => setShowSettings(false)}
-        backendUrl={backendUrl}
-        onBackendUrlChange={setBackendUrl}
-        onProviderChange={fetchProvidersHealth}
-      />
     </div>
   )
 }

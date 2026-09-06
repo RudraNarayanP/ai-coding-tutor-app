@@ -189,11 +189,6 @@ class LessonEngine:
                 "tests": [test.model_dump() for test in lesson.tests],
             }
         )
-        return await self._process_execution_result(lesson, execution)
-
-    async def _process_execution_result(self, lesson: LessonDefinition, execution: dict) -> ProgressionResult:
-        """Process an execution dict (from executor) into a ProgressionResult and update progression state."""
-        lesson_id = lesson.id
         result_by_name = {
             result.get("name"): result for result in execution.get("tests", [])
         }

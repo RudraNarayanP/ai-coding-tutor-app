@@ -75,20 +75,19 @@ button:disabled { cursor: not-allowed; }
 .duo-app {
   display: flex;
   flex-direction: column;
-  height: 100vh;
-  max-height: 100vh;
-  overflow: hidden;
+  min-height: 100vh;
 }
 
 .duo-header {
   height: 64px;
-  flex-shrink: 0;
   padding: 0 var(--sp-6);
   background: #ffffff;
   border-bottom: 2px solid var(--line);
   display: flex;
   align-items: center;
   gap: var(--sp-4);
+  position: sticky;
+  top: 0;
   z-index: 100;
 }
 
@@ -171,12 +170,10 @@ button:disabled { cursor: not-allowed; }
 .duo-main-container {
   display: grid;
   grid-template-columns: 280px minmax(0, 1fr);
-  max-width: 1400px;
+  max-width: 1200px;
   width: 100%;
   margin: 0 auto;
   flex: 1;
-  min-height: 0;
-  overflow: hidden;
 }
 
 /* ═══════════════════════════════════════════════════════════
@@ -189,8 +186,6 @@ button:disabled { cursor: not-allowed; }
   flex-direction: column;
   gap: var(--sp-4);
   background: #ffffff;
-  overflow-y: auto;
-  height: 100%;
 }
 
 .duo-sidebar-title {
@@ -270,24 +265,20 @@ button:disabled { cursor: not-allowed; }
    Center Learning Stage
    ═══════════════════════════════════════════════════════════ */
 .duo-stage {
-  padding: var(--sp-5) var(--sp-8);
-  /* add extra bottom padding so fixed footer does not cover content */
-  padding-bottom: calc(var(--sp-6) + 96px);
+  padding: var(--sp-6) var(--sp-8);
   display: flex;
   flex-direction: column;
-  gap: var(--sp-4);
-  max-width: 900px;
+  gap: var(--sp-6);
+  max-width: 800px;
   margin: 0 auto;
   width: 100%;
-  overflow-y: auto;
-  height: 100%;
 }
 
 .duo-card {
   background: #ffffff;
   border: 2px solid var(--line);
   border-radius: var(--r-lg);
-  padding: var(--sp-5);
+  padding: var(--sp-6);
   box-shadow: var(--card-3d);
 }
 
@@ -318,10 +309,10 @@ button:disabled { cursor: not-allowed; }
 }
 
 .duo-instruction {
-  font-size: 16px;
+  font-size: 17px;
   color: var(--ink-soft);
   line-height: 1.5;
-  margin-bottom: var(--sp-4);
+  margin-bottom: var(--sp-6);
 }
 
 /* ═══════════════════════════════════════════════════════════
@@ -332,13 +323,13 @@ button:disabled { cursor: not-allowed; }
   border-radius: var(--r-md);
   overflow: hidden;
   background: #1e293b;
-  margin-bottom: var(--sp-2);
+  margin-bottom: var(--sp-4);
   box-shadow: 0 4px 0 #cbd5e1;
 }
 
 .duo-editor-top {
   background: #0f172a;
-  padding: 8px 14px;
+  padding: 10px 16px;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -348,52 +339,13 @@ button:disabled { cursor: not-allowed; }
   border-bottom: 1px solid #334155;
 }
 
-.duo-editor-top-right {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-
-.duo-editor-quick-run {
-  background: var(--green);
-  color: #ffffff;
-  border: none;
-  border-radius: var(--r-sm);
-  padding: 4px 12px;
-  font-size: 12px;
-  font-weight: 800;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  gap: 5px;
-  box-shadow: 0 2px 0 var(--green-dark);
-  transition: transform 0.08s, background 0.12s;
-}
-
-.duo-editor-quick-run:hover:not(:disabled) {
-  background: #61e002;
-}
-
-.duo-editor-quick-run:active:not(:disabled) {
-  transform: translateY(2px);
-  box-shadow: none;
-}
-
-.duo-editor-quick-run:disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
-}
-
 .duo-editor-body {
   display: flex;
-  height: 240px;
-  min-height: 180px;
-  max-height: 380px;
-  overflow: hidden;
+  min-height: 220px;
 }
 
 .line-numbers {
-  padding: 14px var(--sp-3);
+  padding: 16px var(--sp-3);
   background: #0f172a;
   color: #475569;
   font-family: var(--font-mono);
@@ -417,7 +369,7 @@ button:disabled { cursor: not-allowed; }
 
 .duo-textarea {
   flex: 1;
-  padding: 14px;
+  padding: 16px;
   background: #1e293b;
   color: #f1f5f9;
   font-family: var(--font-mono);
@@ -425,33 +377,22 @@ button:disabled { cursor: not-allowed; }
   line-height: 1.6;
   border: 0;
   outline: 0;
-  resize: none;
+  resize: vertical;
   tab-size: 4;
-  overflow-y: auto;
 }
 
 /* ═══════════════════════════════════════════════════════════
    Bottom Action Bar (Duolingo Primary Action)
    ═══════════════════════════════════════════════════════════ */
 .duo-footer-bar {
-  /* Keep footer always visible: fixed at viewport bottom and centered within max width */
-  position: fixed;
-  left: 0;
-  right: 0;
-  bottom: 0;
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: var(--sp-4);
-  padding: 12px var(--sp-6);
+  padding: var(--sp-4) var(--sp-6);
   background: #ffffff;
   border-top: 2px solid var(--line);
-  box-shadow: 0 -4px 16px rgba(0, 0, 0, 0.08);
-  flex-shrink: 0;
-  z-index: 100;
-  width: 100%;
-  max-width: 1400px;
-  margin: 0 auto;
+  margin-top: auto;
 }
 
 .duo-button {
