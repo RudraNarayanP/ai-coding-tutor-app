@@ -2,17 +2,14 @@
    Patchwork — Duolingo-style Learning Design Tokens
    ═══════════════════════════════════════════════════════════ */
 :root {
-  /* Palette - Duolingo inspired, original Patchwork identity */
   --ink:          #2b2d42;
   --ink-soft:     #4a4e69;
   --muted:        #8d99ae;
-  --muted-lite:   #cad2c5;
   --line:         #e2e8f0;
-  --line-lite:    #f1f5f9;
-  --cream:        #ffffff;
+  --line-dark:    #cbd5e1;
   --bg:           #f8fafc;
 
-  /* Brand Colors */
+  /* Brand Palette */
   --green:        #58cc02;
   --green-dark:   #46a302;
   --green-light:  #d7ffb8;
@@ -23,38 +20,20 @@
   --coral:        #ff4b4b;
   --coral-dark:   #ea2b2b;
 
-  /* State Backgrounds */
-  --success-bg:   #d7ffb8;
-  --success-border:#a5ed6e;
-  --error-bg:     #ffdfe0;
-  --error-border: #ffa8a8;
-  --warning-bg:   #fff3d4;
-  --warning-border:#f8d070;
-
-  /* Spacing */
-  --sp-1: 4px;
-  --sp-2: 8px;
-  --sp-3: 12px;
-  --sp-4: 16px;
-  --sp-5: 20px;
-  --sp-6: 24px;
-  --sp-8: 32px;
-
   /* Typography */
   --font-ui:   'Trebuchet MS', 'Segoe UI', system-ui, -apple-system, sans-serif;
   --font-mono: 'DM Mono', 'Consolas', 'Menlo', 'Courier New', monospace;
 
-  /* Border radius - Playful 3D rounded style */
+  /* Border radius */
   --r-sm: 8px;
   --r-md: 16px;
   --r-lg: 24px;
   --r-full: 9999px;
 
-  /* 3D Button Shadows (Duolingo signature tactile feel) */
+  /* 3D Button Shadows */
   --btn-3d-green:  0 4px 0 #46a302;
   --btn-3d-blue:   0 4px 0 #1899d6;
   --btn-3d-gray:   0 4px 0 #cbd5e1;
-  --btn-3d-coral:  0 4px 0 #ea2b2b;
   --card-3d:       0 4px 0 #e2e8f0;
 
   font-family: var(--font-ui);
@@ -65,27 +44,25 @@
 
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 body { min-width: 320px; background: var(--bg); color: var(--ink); }
-button, input, textarea { font: inherit; }
+button, input, textarea, select { font: inherit; }
 button { cursor: pointer; border: 0; background: none; user-select: none; }
 button:disabled { cursor: not-allowed; }
 
-/* ═══════════════════════════════════════════════════════════
-   App Shell & Layout
-   ═══════════════════════════════════════════════════════════ */
 .duo-app {
   display: flex;
   flex-direction: column;
   min-height: 100vh;
 }
 
+/* ─── Header Bar ───────────────────────────────────────────────────────────── */
 .duo-header {
   height: 64px;
-  padding: 0 var(--sp-6);
+  padding: 0 24px;
   background: #ffffff;
   border-bottom: 2px solid var(--line);
   display: flex;
   align-items: center;
-  gap: var(--sp-4);
+  gap: 16px;
   position: sticky;
   top: 0;
   z-index: 100;
@@ -94,8 +71,8 @@ button:disabled { cursor: not-allowed; }
 .duo-brand {
   display: flex;
   align-items: center;
-  gap: var(--sp-2);
-  font-weight: 800;
+  gap: 8px;
+  font-weight: 900;
   font-size: 22px;
   color: var(--green);
   letter-spacing: -0.5px;
@@ -113,43 +90,52 @@ button:disabled { cursor: not-allowed; }
   box-shadow: 0 3px 0 var(--green-dark);
 }
 
-.duo-header-progress {
-  flex: 1;
-  max-width: 420px;
-  margin: 0 auto;
+.duo-header-stats {
   display: flex;
   align-items: center;
-  gap: var(--sp-3);
+  gap: 12px;
+  margin-left: 24px;
 }
-
-.duo-progress-bar-bg {
-  flex: 1;
-  height: 16px;
-  background: var(--line);
+.duo-stat-badge {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-weight: 800;
+  font-size: 15px;
+  padding: 4px 12px;
   border-radius: var(--r-full);
-  overflow: hidden;
-  position: relative;
+  background: #f1f5f9;
 }
-.duo-progress-bar-fill {
-  height: 100%;
-  background: var(--green);
-  border-radius: var(--r-full);
-  transition: width 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
-}
+.xp-badge { color: var(--orange); }
+.progress-badge { color: var(--blue-dark); }
 
 .duo-header-right {
   display: flex;
   align-items: center;
-  gap: var(--sp-3);
+  gap: 12px;
   margin-left: auto;
+}
+
+.duo-provider-selector {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.duo-select-provider {
+  padding: 6px 10px;
+  border-radius: var(--r-sm);
+  border: 2px solid var(--line);
+  font-size: 13px;
+  font-weight: 700;
+  background: #fff;
 }
 
 .duo-status-badge {
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  padding: 6px var(--sp-3);
-  background: var(--line-lite);
+  padding: 6px 12px;
+  background: #f1f5f9;
   border-radius: var(--r-full);
   font-size: 13px;
   font-weight: 700;
@@ -166,56 +152,114 @@ button:disabled { cursor: not-allowed; }
   box-shadow: 0 0 0 3px var(--green-light);
 }
 
-/* Main Container */
-.duo-main-container {
-  display: grid;
-  grid-template-columns: 280px minmax(0, 1fr);
-  max-width: 1200px;
+.backend-error-banner {
+  background: #ffdfe0;
+  border-bottom: 2px solid #ffa8a8;
+  color: var(--coral-dark);
+  padding: 10px 24px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.inline-link {
+  text-decoration: underline;
+  font-weight: 800;
+}
+
+/* ─── COURSE MAP VIEW ──────────────────────────────────────────────────────── */
+.duo-course-map-container {
+  max-width: 800px;
   width: 100%;
   margin: 0 auto;
-  flex: 1;
-}
-
-/* ═══════════════════════════════════════════════════════════
-   Left Path Navigation (Duolingo Skill Tree)
-   ═══════════════════════════════════════════════════════════ */
-.duo-sidebar {
-  padding: var(--sp-6) var(--sp-4);
-  border-right: 2px solid var(--line);
+  padding: 32px 24px;
   display: flex;
   flex-direction: column;
-  gap: var(--sp-4);
+  gap: 32px;
+}
+
+.duo-map-hero {
   background: #ffffff;
+  border: 2px solid var(--line);
+  border-radius: var(--r-lg);
+  padding: 24px;
+  box-shadow: var(--card-3d);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
 }
-
-.duo-sidebar-title {
-  font-size: 14px;
+.duo-hero-info h2 {
+  font-size: 24px;
   font-weight: 800;
-  color: var(--muted);
-  text-transform: uppercase;
-  letter-spacing: 0.8px;
+  margin-bottom: 4px;
+}
+.duo-hero-info p {
+  color: var(--ink-soft);
+  font-size: 15px;
 }
 
-.duo-path-list {
+.duo-unit-section {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+.duo-unit-header {
+  border-left: 6px solid var(--green);
+  padding-left: 16px;
+}
+.duo-unit-tag {
+  display: inline-block;
+  padding: 2px 10px;
+  color: #ffffff;
+  border-radius: var(--r-full);
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 0.5px;
+  margin-bottom: 4px;
+}
+.duo-unit-title {
+  font-size: 20px;
+  font-weight: 800;
+}
+.duo-unit-desc {
+  font-size: 14px;
+  color: var(--ink-soft);
+}
+
+/* Path Nodes */
+.duo-unit-path-nodes {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: var(--sp-4);
-  padding: var(--sp-2) 0;
+  gap: 24px;
+  position: relative;
+  padding: 16px 0;
 }
+
+.duo-path-node-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  position: relative;
+  width: 100%;
+  max-width: 320px;
+}
+.node-offset-left { justify-content: flex-start; }
+.node-offset-right { justify-content: flex-end; }
 
 .duo-path-node {
-  width: 68px;
-  height: 68px;
+  width: 72px;
+  height: 72px;
   border-radius: 50%;
   display: flex;
-  flex-direction: column;
   align-items: center;
   justify-content: center;
-  font-weight: 800;
-  font-size: 18px;
+  font-size: 22px;
+  font-weight: 900;
   position: relative;
   transition: transform 0.1s, box-shadow 0.1s;
+  flex-shrink: 0;
 }
 
 .duo-path-node.completed {
@@ -233,119 +277,106 @@ button:disabled { cursor: not-allowed; }
   background: var(--line);
   color: var(--muted);
   box-shadow: 0 6px 0 #cbd5e1;
-  cursor: not-allowed;
 }
 
-.duo-path-node:active:not(.locked) {
+.duo-path-node:active:not(:disabled) {
   transform: translateY(4px);
   box-shadow: 0 2px 0 transparent;
 }
 
-.duo-node-tooltip {
-  position: absolute;
-  top: -36px;
-  background: var(--ink);
-  color: #ffffff;
-  padding: 4px 10px;
-  border-radius: var(--r-sm);
-  font-size: 12px;
-  font-weight: 700;
-  white-space: nowrap;
-  pointer-events: none;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-}
-
-@keyframes pulse-ring {
-  0% { box-shadow: 0 6px 0 var(--blue-dark), 0 0 0 0 rgba(28, 176, 246, 0.4); }
-  70% { box-shadow: 0 6px 0 var(--blue-dark), 0 0 0 12px rgba(28, 176, 246, 0); }
-  100% { box-shadow: 0 6px 0 var(--blue-dark), 0 0 0 0 rgba(28, 176, 246, 0); }
-}
-
-/* ═══════════════════════════════════════════════════════════
-   Center Learning Stage
-   ═══════════════════════════════════════════════════════════ */
-.duo-stage {
-  padding: var(--sp-6) var(--sp-8);
-  display: flex;
-  flex-direction: column;
-  gap: var(--sp-6);
-  max-width: 800px;
-  margin: 0 auto;
-  width: 100%;
-}
-
-.duo-card {
+.node-label-card {
   background: #ffffff;
   border: 2px solid var(--line);
-  border-radius: var(--r-lg);
-  padding: var(--sp-6);
-  box-shadow: var(--card-3d);
+  padding: 8px 14px;
+  border-radius: var(--r-md);
+  box-shadow: 0 2px 0 var(--line);
+  display: flex;
+  flex-direction: column;
+}
+.node-title {
+  font-size: 14px;
+  font-weight: 800;
+}
+.node-subtitle {
+  font-size: 12px;
+  color: var(--muted);
 }
 
-.duo-card-header {
+/* ─── EXERCISE SCREEN ──────────────────────────────────────────────────────── */
+.duo-exercise-stage {
+  max-width: 800px;
+  width: 100%;
+  margin: 0 auto;
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  flex: 1;
+}
+
+.duo-exercise-topbar {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-bottom: var(--sp-4);
 }
-
-.duo-lesson-badge {
-  display: inline-block;
-  padding: 4px 12px;
-  background: var(--blue-dark);
-  color: #ffffff;
-  border-radius: var(--r-full);
+.duo-back-link {
+  font-size: 15px;
+  font-weight: 800;
+  color: var(--blue-dark);
+}
+.duo-exercise-badge {
   font-size: 12px;
   font-weight: 800;
-  letter-spacing: 0.5px;
+  color: var(--muted);
+  letter-spacing: 0.8px;
 }
 
-.duo-lesson-title {
-  font-size: 26px;
+.duo-exercise-card {
+  background: #ffffff;
+  border: 2px solid var(--line);
+  border-radius: var(--r-lg);
+  padding: 24px;
+  box-shadow: var(--card-3d);
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.duo-exercise-title {
+  font-size: 24px;
   font-weight: 800;
-  color: var(--ink);
-  letter-spacing: -0.5px;
-  margin-bottom: var(--sp-2);
 }
-
-.duo-instruction {
-  font-size: 17px;
+.duo-exercise-instruction {
+  font-size: 16px;
   color: var(--ink-soft);
   line-height: 1.5;
-  margin-bottom: var(--sp-6);
 }
 
-/* ═══════════════════════════════════════════════════════════
-   Embedded Exercise Editor
-   ═══════════════════════════════════════════════════════════ */
+/* Editor */
 .duo-editor-container {
   border: 2px solid var(--line);
   border-radius: var(--r-md);
   overflow: hidden;
   background: #1e293b;
-  margin-bottom: var(--sp-4);
   box-shadow: 0 4px 0 #cbd5e1;
 }
-
 .duo-editor-top {
   background: #0f172a;
-  padding: 10px 16px;
+  padding: 8px 16px;
   display: flex;
-  align-items: center;
   justify-content: space-between;
   color: #94a3b8;
   font-family: var(--font-mono);
   font-size: 13px;
   border-bottom: 1px solid #334155;
 }
-
 .duo-editor-body {
   display: flex;
-  min-height: 220px;
+  min-height: 180px;
 }
 
 .line-numbers {
-  padding: 16px var(--sp-3);
+  padding: 14px 12px;
   background: #0f172a;
   color: #475569;
   font-family: var(--font-mono);
@@ -357,19 +388,12 @@ button:disabled { cursor: not-allowed; }
   display: flex;
   flex-direction: column;
 }
-
-.line-numbers-content {
-  display: flex;
-  flex-direction: column;
-}
-
-.line-numbers span {
-  display: block;
-}
+.line-numbers-content { display: flex; flex-direction: column; }
+.line-numbers span { display: block; }
 
 .duo-textarea {
   flex: 1;
-  padding: 16px;
+  padding: 14px;
   background: #1e293b;
   color: #f1f5f9;
   font-family: var(--font-mono);
@@ -381,42 +405,104 @@ button:disabled { cursor: not-allowed; }
   tab-size: 4;
 }
 
-/* ═══════════════════════════════════════════════════════════
-   Bottom Action Bar (Duolingo Primary Action)
-   ═══════════════════════════════════════════════════════════ */
+/* Feedback & Tutor */
+.duo-feedback-panel {
+  border-radius: var(--r-md);
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.duo-feedback-panel.success {
+  background: var(--green-light);
+  border: 2px solid #a5ed6e;
+  color: #276700;
+}
+.duo-feedback-panel.error {
+  background: #ffdfe0;
+  border: 2px solid #ffa8a8;
+  color: var(--coral-dark);
+}
+.duo-feedback-title { font-size: 18px; font-weight: 800; }
+.duo-feedback-msg { font-size: 14px; font-weight: 600; }
+
+.duo-test-results-list {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-top: 6px;
+}
+.result-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  font-weight: 600;
+}
+.pass-icon { color: var(--green-dark); font-weight: 900; }
+.fail-icon { color: var(--coral-dark); font-weight: 900; }
+.test-error-detail { color: #991b1b; font-family: var(--font-mono); font-size: 12px; }
+.opt-badge { font-size: 10px; background: rgba(0,0,0,0.08); padding: 2px 6px; border-radius: 4px; }
+
+/* Tutor Box */
+.duo-tutor-box {
+  background: #f1f5f9;
+  border: 2px solid var(--line);
+  border-radius: var(--r-md);
+  padding: 16px;
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+}
+.duo-tutor-avatar {
+  width: 40px;
+  height: 40px;
+  background: var(--purple);
+  color: #fff;
+  border-radius: var(--r-md);
+  display: grid;
+  place-items: center;
+  font-size: 22px;
+  font-weight: 900;
+  box-shadow: 0 3px 0 #b352ff;
+  flex-shrink: 0;
+}
+.duo-tutor-name { font-size: 12px; font-weight: 800; color: var(--purple); text-transform: uppercase; }
+.duo-tutor-text { font-size: 14px; font-weight: 600; color: var(--ink); line-height: 1.4; }
+.ai-unavailable-note { font-size: 12px; color: var(--muted); margin-top: 6px; }
+
+/* Sticky Footer */
 .duo-footer-bar {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: var(--sp-4);
-  padding: var(--sp-4) var(--sp-6);
+  gap: 16px;
+  padding: 16px 24px;
   background: #ffffff;
   border-top: 2px solid var(--line);
   margin-top: auto;
 }
 
+/* Buttons */
 .duo-button {
-  padding: 14px 28px;
+  padding: 12px 24px;
   border-radius: var(--r-md);
-  font-size: 16px;
+  font-size: 15px;
   font-weight: 800;
   text-transform: uppercase;
   letter-spacing: 0.8px;
-  transition: transform 0.1s, box-shadow 0.1s, background 0.15s;
+  transition: transform 0.1s, box-shadow 0.1s;
 }
+.duo-btn-sm { padding: 6px 14px; font-size: 13px; }
+.duo-btn-full { width: 100%; text-align: center; }
 
 .duo-button-primary {
   background: var(--green);
   color: #ffffff;
   box-shadow: var(--btn-3d-green);
 }
-.duo-button-primary:hover:not(:disabled) {
-  background: #61e002;
-}
-.duo-button-primary:active:not(:disabled) {
-  transform: translateY(4px);
-  box-shadow: 0 0 0 transparent;
-}
+.duo-button-primary:hover:not(:disabled) { background: #61e002; }
+.duo-button-primary:active:not(:disabled) { transform: translateY(4px); box-shadow: 0 0 0 transparent; }
 
 .duo-button-secondary {
   background: #ffffff;
@@ -424,13 +510,8 @@ button:disabled { cursor: not-allowed; }
   border: 2px solid var(--line);
   box-shadow: var(--btn-3d-gray);
 }
-.duo-button-secondary:hover:not(:disabled) {
-  background: var(--line-lite);
-}
-.duo-button-secondary:active:not(:disabled) {
-  transform: translateY(4px);
-  box-shadow: 0 0 0 transparent;
-}
+.duo-button-secondary:hover:not(:disabled) { background: #f8fafc; }
+.duo-button-secondary:active:not(:disabled) { transform: translateY(4px); box-shadow: 0 0 0 transparent; }
 
 .duo-button:disabled {
   background: var(--line);
@@ -439,111 +520,54 @@ button:disabled { cursor: not-allowed; }
   cursor: not-allowed;
 }
 
-/* ═══════════════════════════════════════════════════════════
-   Encouraging Educational Feedback Panels
-   ═══════════════════════════════════════════════════════════ */
-.duo-feedback-panel {
-  border-radius: var(--r-md);
-  padding: var(--sp-5);
+/* Modal Overlay */
+.duo-modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(15, 23, 42, 0.6);
+  display: grid;
+  place-items: center;
+  z-index: 200;
+  padding: 24px;
+}
+.duo-completion-card {
+  background: #ffffff;
+  border-radius: var(--r-lg);
+  padding: 32px;
+  max-width: 400px;
+  width: 100%;
+  text-align: center;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.2);
   display: flex;
   flex-direction: column;
-  gap: var(--sp-3);
+  align-items: center;
+  gap: 16px;
   animation: duoPop 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
-
-.duo-feedback-panel.success {
-  background: var(--success-bg);
-  border: 2px solid var(--success-border);
-  color: #276700;
-}
-
-.duo-feedback-panel.error {
-  background: var(--error-bg);
-  border: 2px solid var(--error-border);
-  color: var(--coral-dark);
-}
-
-.duo-feedback-title {
+.modal-icon-header { font-size: 48px; }
+.modal-title { font-size: 24px; font-weight: 900; color: var(--green); }
+.modal-subtitle { font-size: 16px; color: var(--ink-soft); font-weight: 700; }
+.xp-reward-badge {
+  background: var(--warning-bg, #fff3d4);
+  color: var(--orange);
   font-size: 20px;
-  font-weight: 800;
-  display: flex;
-  align-items: center;
-  gap: var(--sp-2);
+  font-weight: 900;
+  padding: 8px 20px;
+  border-radius: var(--r-full);
+  border: 2px solid var(--orange);
 }
 
-.duo-feedback-msg {
-  font-size: 15px;
-  line-height: 1.5;
-  font-weight: 600;
+@keyframes pulse-ring {
+  0% { box-shadow: 0 6px 0 var(--blue-dark), 0 0 0 0 rgba(28, 176, 246, 0.4); }
+  70% { box-shadow: 0 6px 0 var(--blue-dark), 0 0 0 12px rgba(28, 176, 246, 0); }
+  100% { box-shadow: 0 6px 0 var(--blue-dark), 0 0 0 0 rgba(28, 176, 246, 0); }
 }
 
 @keyframes duoPop {
-  0% { transform: scale(0.96); opacity: 0; }
+  0% { transform: scale(0.9); opacity: 0; }
   100% { transform: scale(1); opacity: 1; }
 }
 
-/* Tutor Coach Box */
-.duo-tutor-box {
-  background: #f1f5f9;
-  border: 2px solid var(--line);
-  border-radius: var(--r-md);
-  padding: var(--sp-4);
-  display: flex;
-  gap: var(--sp-3);
-  align-items: flex-start;
-  margin-top: var(--sp-4);
-}
-
-.duo-tutor-avatar {
-  width: 44px;
-  height: 44px;
-  background: var(--purple);
-  color: #ffffff;
-  border-radius: var(--r-md);
-  display: grid;
-  place-items: center;
-  font-size: 24px;
-  font-weight: 800;
-  box-shadow: 0 3px 0 #b352ff;
-  flex-shrink: 0;
-}
-
-.duo-tutor-content {
-  flex: 1;
-}
-
-.duo-tutor-name {
-  font-size: 13px;
-  font-weight: 800;
-  color: var(--purple);
-  text-transform: uppercase;
-  margin-bottom: 2px;
-}
-
-.duo-tutor-text {
-  font-size: 14px;
-  color: var(--ink);
-  line-height: 1.5;
-  font-weight: 600;
-}
-
-/* Responsive */
-@media (max-width: 800px) {
-  .duo-main-container {
-    grid-template-columns: 1fr;
-  }
-  .duo-sidebar {
-    border-right: 0;
-    border-bottom: 2px solid var(--line);
-    padding: var(--sp-4);
-  }
-  .duo-path-list {
-    flex-direction: row;
-    overflow-x: auto;
-    justify-content: flex-start;
-    padding-bottom: var(--sp-3);
-  }
-  .duo-stage {
-    padding: var(--sp-4);
-  }
-}
+.notes-input-row { display: flex; gap: 8px; }
+.duo-note-input { flex: 1; padding: 8px 12px; border-radius: var(--r-sm); border: 1px solid var(--line-dark); }
+.notes-list { margin-top: 8px; padding-left: 20px; font-size: 13px; color: var(--ink-soft); }
