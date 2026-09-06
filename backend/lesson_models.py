@@ -38,6 +38,7 @@ class LessonDefinition(BaseModel):
     difficulty: str = Field(min_length=1, max_length=40)
     duration_minutes: int = Field(ge=1, le=240)
     starter_code: str = Field(max_length=64 * 1024)
+    solution_code: str | None = Field(default=None, max_length=64 * 1024)
     concepts: list[str] = Field(default_factory=list, max_length=20)
     prerequisites: list[str] = Field(default_factory=list, max_length=20)
     learning_objectives: list[str] = Field(default_factory=list, max_length=20)

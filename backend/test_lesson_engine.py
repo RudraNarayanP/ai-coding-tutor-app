@@ -233,6 +233,15 @@ class TestAPIIntegration:
         assert "unittest_code" not in data
         assert "completion_requirements" not in data
 
+    def test_lesson_solution_endpoint_returns_solution_code(self):
+        async def call():
+            async with self._client() as client:
+                return await client.get("/api/lessons/variables-01/solution")
+        resp = asyncio.run(call())
+        assert resp.status_code == 200
+        data = resp.json()
+        assert "solution_code" in data
+
     def test_unknown_lesson_returns_404(self):
         async def call():
             async with self._client() as client:

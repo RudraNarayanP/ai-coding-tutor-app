@@ -83,6 +83,12 @@ function setupFetch({
         json: () => Promise.resolve(lessons),
       })
     }
+    if (url.includes('/solution')) {
+      return Promise.resolve({
+        ok: true,
+        json: () => Promise.resolve({ solution_code: '# Canonical solution\n' }),
+      })
+    }
     if (url.match(/\/api\/lessons\/[\w-]+$/) && !opts) {
       // Determine which lesson to return based on URL
       const id = url.split('/').pop()
@@ -133,6 +139,10 @@ function setupFetch({
   vi.stubGlobal('fetch', fetchMock)
   return fetchMock
 }
+
+beforeEach(() => {
+  localStorage.clear()
+})
 
 afterEach(() => {
   cleanup()
@@ -449,7 +459,7 @@ describe('Hint button behavior', () => {
     expect(tutorCall).toBeDefined()
   })
 
-  it('calls tutor API with solution_requested: true when View Solution is clicked', async () => {
+  it('inserts solution directly into editor when View Solution is clicked', async () => {
     const user = userEvent.setup()
     const fetchMock = setupFetch({ ollamaAvailable: true })
     render(<App />)
@@ -458,18 +468,15 @@ describe('Hint button behavior', () => {
     const solutionBtn = screen.getByRole('button', { name: /View Solution/ })
     await user.click(solutionBtn)
 
-    await waitFor(() =>
-      expect(screen.getByRole('status', { name: /Tutor feedback/ })).toHaveTextContent(
-        'Think about what a variable stores.'
-      )
-    )
+    await waitFor(() => {
+      const editor = screen.getByRole<HTMLTextAreaElement>('textbox', { name: /Code editor/ })
+      expect(editor.value).toContain('# Canonical solution')
+    })
 
-    const tutorCall = (fetchMock as ReturnType<typeof vi.fn>).mock.calls.find(
-      (call) => String(call[0]).includes('/api/tutor')
+    const solutionCall = (fetchMock as ReturnType<typeof vi.fn>).mock.calls.find(
+      (call) => String(call[0]).includes('/solution')
     )
-    expect(tutorCall).toBeDefined()
-    const body = JSON.parse(String(tutorCall![1]?.body))
-    expect(body.solution_requested).toBe(true)
+    expect(solutionCall).toBeDefined()
   })
 })
 
@@ -629,5 +636,35 @@ describe('Session notes', () => {
 
     expect(screen.getByText('Remember to initialize variables')).toBeInTheDocument()
     expect(input).toHaveValue('')
+  })
+})
+
+describe('State Persistence & Sound Settings', () => {
+  it('toggles audio feedback button and persists sound preference in localStorage', async () => {
+    const user = userEvent.setup()
+    setupFetch()
+    render(<App />)
+    await waitFor(() => screen.getByRole('heading', { level: 2, name: 'Variables' }))
+
+    const soundBtn = screen.getByRole('button', { name: /Mute audio feedback/ })
+    expect(soundBtn).toHaveTextContent('🔊 Sound')
+
+    await user.click(soundBtn)
+    expect(soundBtn).toHaveTextContent('🔇 Sound')
+    expect(localStorage.getItem('patchwork_sound_enabled')).toBe('false')
+
+    await user.click(soundBtn)
+    expect(soundBtn).toHaveTextContent('🔊 Sound')
+    expect(localStorage.getItem('patchwork_sound_enabled')).toBe('true')
+  })
+
+  it('restores draft code from localStorage for current lesson', async () => {
+    localStorage.setItem('patchwork_code_lesson-2', 'draft_code = 123\n')
+    setupFetch()
+    render(<App />)
+    await waitFor(() => screen.getByRole('heading', { level: 2, name: 'Variables' }))
+
+    const editor = screen.getByRole<HTMLTextAreaElement>('textbox', { name: /Code editor/ })
+    expect(editor.value).toBe('draft_code = 123\n')
   })
 })
