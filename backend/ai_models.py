@@ -7,6 +7,9 @@ from .lesson_models import TestResult
 class TutorRequest(BaseModel):
     lesson_id: str = Field(min_length=1, max_length=80)
     lesson_title: str = Field(min_length=1, max_length=120)
+    unit_title: str = Field(default="", max_length=120)
+    concept_title: str = Field(default="", max_length=120)
+    prerequisites: list[str] = Field(default_factory=list, max_length=20)
     instructions: str = Field(min_length=1, max_length=2000)
     code: str = Field(max_length=64 * 1024)
     test_results: list[TestResult] = Field(max_length=20)

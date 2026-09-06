@@ -319,6 +319,21 @@ describe('Run button and code editor', () => {
       )).toBe(true)
     )
   })
+
+  it('triggers test execution when Shift+Enter is pressed in the editor', async () => {
+    const fetchMock = setupFetch()
+    render(<App />)
+    await waitFor(() => screen.getByRole('heading', { level: 2, name: 'Variables' }))
+
+    const editor = screen.getByRole<HTMLTextAreaElement>('textbox', { name: /Code editor/ })
+    editor.focus()
+    fireEvent.keyDown(editor, { key: 'Enter', shiftKey: true })
+    await waitFor(() =>
+      expect((fetchMock as ReturnType<typeof vi.fn>).mock.calls.some(
+        ([url]) => String(url).includes('/run')
+      )).toBe(true)
+    )
+  })
 })
 
 describe('Test results rendering', () => {
@@ -432,6 +447,29 @@ describe('Hint button behavior', () => {
       (call) => String(call[0]).includes('/api/tutor')
     )
     expect(tutorCall).toBeDefined()
+  })
+
+  it('calls tutor API with solution_requested: true when View Solution is clicked', async () => {
+    const user = userEvent.setup()
+    const fetchMock = setupFetch({ ollamaAvailable: true })
+    render(<App />)
+    await waitFor(() => screen.getByRole('heading', { level: 2, name: 'Variables' }))
+
+    const solutionBtn = screen.getByRole('button', { name: /View Solution/ })
+    await user.click(solutionBtn)
+
+    await waitFor(() =>
+      expect(screen.getByRole('status', { name: /Tutor feedback/ })).toHaveTextContent(
+        'Think about what a variable stores.'
+      )
+    )
+
+    const tutorCall = (fetchMock as ReturnType<typeof vi.fn>).mock.calls.find(
+      (call) => String(call[0]).includes('/api/tutor')
+    )
+    expect(tutorCall).toBeDefined()
+    const body = JSON.parse(String(tutorCall![1]?.body))
+    expect(body.solution_requested).toBe(true)
   })
 })
 

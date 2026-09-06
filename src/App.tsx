@@ -134,6 +134,8 @@ function App() {
         const summaries = (await summariesResponse.json()) as LessonSummary[]
         if (summaries.length === 0) throw new Error('No lessons available')
         setLessons(summaries)
+        const completedIds = summaries.filter((l) => l.status === 'completed').map((l) => l.id)
+        localStorage.setItem('patchwork_completed_lessons', JSON.stringify(completedIds))
         const current = summaries.find((l) => l.status === 'current') ?? summaries[0]
         const lessonResponse = await fetch(`/api/lessons/${current.id}`)
         if (!lessonResponse.ok) throw new Error('Lesson unavailable')
@@ -260,6 +262,8 @@ function App() {
       if (summariesResponse.ok) {
         const summaries = (await summariesResponse.json()) as LessonSummary[]
         setLessons(summaries)
+        const completedIds = summaries.filter((l) => l.status === 'completed').map((l) => l.id)
+        localStorage.setItem('patchwork_completed_lessons', JSON.stringify(completedIds))
       }
       setTimeout(scrollToResults, 100)
     } catch {
@@ -315,10 +319,55 @@ function App() {
     }
   }, [lesson, aiEnabled, code, results, previousHints, hintLevel])
 
+  // ── Ask Tutor for Solution ──────────────────────────────────────────────────
+  const askSolution = useCallback(async () => {
+    if (!lesson || !aiEnabled) return
+    setIsTutorLoading(true)
+    setFeedback('Retrieving solution and explanation from your tutor…')
+    const controller = new AbortController()
+    const timeoutId = setTimeout(() => controller.abort(), 50000)
+    try {
+      const response = await fetch('/api/tutor', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        signal: controller.signal,
+        body: JSON.stringify({
+          lesson_id: lesson.id,
+          lesson_title: lesson.title,
+          unit_title: lesson.unit_title ?? '',
+          concept_title: lesson.concept_title ?? '',
+          prerequisites: lesson.prerequisites ?? [],
+          instructions: lesson.description,
+          code,
+          test_results: results ?? [],
+          previous_hints: previousHints,
+          hint_level: 4,
+          session_id: 'default',
+          solution_requested: true,
+        }),
+      })
+      if (!response.ok) throw new Error(`HTTP error ${response.status}`)
+      const tutor = (await response.json()) as {
+        available: boolean
+        message: string
+        hint_level: number
+      }
+      setFeedback(tutor.message)
+      if (tutor.available) {
+        setPreviousHints((h) => [...h, tutor.message].slice(-8))
+      }
+    } catch {
+      setFeedback('AI tutoring is unavailable right now. Check starter code and learning objectives for guidance.')
+    } finally {
+      clearTimeout(timeoutId)
+      setIsTutorLoading(false)
+    }
+  }, [lesson, aiEnabled, code, results, previousHints])
+
   // ── Keyboard shortcuts ─────────────────────────────────────────────────────
   const handleEditorKeyDown = useCallback(
     (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
-      if (e.ctrlKey && e.key === 'Enter') {
+      if ((e.shiftKey || e.ctrlKey) && e.key === 'Enter') {
         e.preventDefault()
         runTests()
         return
@@ -580,8 +629,8 @@ function App() {
                       onChange={(e) => setCode(e.target.value)}
                       onKeyDown={handleEditorKeyDown}
                       disabled={isRunning}
-                      placeholder="Write your Python code here…"
-                      aria-label="Code editor — use Ctrl+Enter to run"
+                      placeholder="Write your Python code here… (Press Shift+Enter or Ctrl+Enter to run)"
+                      aria-label="Code editor — use Shift+Enter or Ctrl+Enter to run"
                     />
                   </div>
                 </div>
@@ -714,27 +763,40 @@ function App() {
 
       {/* Bottom Sticky Action Bar */}
       <footer className="duo-footer-bar">
-        <button
-          id="hint-button"
-          className="duo-button duo-button-secondary"
-          onClick={askTutor}
-          disabled={hintDisabled}
-          aria-label={
-            !isAiAvailable
+        <div className="duo-footer-left" style={{ display: 'flex', gap: '12px' }}>
+          <button
+            id="hint-button"
+            className="duo-button duo-button-secondary"
+            onClick={askTutor}
+            disabled={hintDisabled}
+            aria-label={
+              !isAiAvailable
+                ? 'AI tutor unavailable'
+                : !aiEnabled
+                ? 'AI tutor is paused'
+                : 'Request a hint'
+            }
+          >
+            {isTutorLoading
+              ? 'Getting Hint…'
+              : !isAiAvailable
               ? 'AI tutor unavailable'
               : !aiEnabled
               ? 'AI tutor is paused'
-              : 'Request a hint'
-          }
-        >
-          {isTutorLoading
-            ? 'Getting Hint…'
-            : !isAiAvailable
-            ? 'AI tutor unavailable'
-            : !aiEnabled
-            ? 'AI tutor is paused'
-            : 'Request a hint'}
-        </button>
+              : 'Request a hint'}
+          </button>
+
+          <button
+            id="solution-button"
+            className="duo-button duo-button-secondary duo-button-solution"
+            onClick={askSolution}
+            disabled={hintDisabled}
+            aria-label="View Solution"
+            title="View solution and detailed explanation"
+          >
+            View Solution 💡
+          </button>
+        </div>
 
         <button
           id="run-tests-button"
