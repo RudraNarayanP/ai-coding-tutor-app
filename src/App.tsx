@@ -51,6 +51,14 @@ type ProviderStatus = {
   error: string | null
 }
 
+type CourseSummary = {
+  id: string
+  title: string
+  language: string
+  lesson_count: number
+  completed_count: number
+}
+
 type ProvidersOverview = {
   current_provider: string
   fallback_provider: string | null
@@ -124,6 +132,10 @@ function playFeedbackSound(type: 'success' | 'error', enabled: boolean) {
 
 // ─── App Component ────────────────────────────────────────────────────────────
 function App() {
+  const [courses, setCourses] = useState<CourseSummary[]>([])
+  const [selectedLanguage, setSelectedLanguage] = useState<string>(() => {
+    return localStorage.getItem('patchwork_active_language') || 'python'
+  })
   const [lessons, setLessons] = useState<LessonSummary[]>([])
   const [lesson, setLesson] = useState<Lesson | null>(null)
   const [code, setCode] = useState('')
@@ -186,48 +198,73 @@ function App() {
     }
   }, [lesson?.id, code])
 
-  // ── Initial Data Load ──────────────────────────────────────────────────────
-  useEffect(() => {
-    const load = async () => {
-      setIsLoadingLesson(true)
-      try {
-        const summariesResponse = await fetch('/api/lessons')
-        if (!summariesResponse.ok) throw new Error('Lesson service unavailable')
-        const summaries = (await summariesResponse.json()) as LessonSummary[]
-        if (summaries.length === 0) throw new Error('No lessons available')
-        setLessons(summaries)
-
-        const completedIds = summaries.filter((l) => l.status === 'completed').map((l) => l.id)
-        localStorage.setItem('patchwork_completed_lessons', JSON.stringify(completedIds))
-
-        // Restore last active lesson if unlocked, otherwise current lesson
-        const lastActiveId = localStorage.getItem('patchwork_last_active_lesson')
-        const targetSummary =
-          (lastActiveId && summaries.find((l) => l.id === lastActiveId && l.status !== 'locked')) ||
-          summaries.find((l) => l.status === 'current') ||
-          summaries[0]
-
-        const lessonResponse = await fetch(`/api/lessons/${targetSummary.id}`)
-        if (!lessonResponse.ok) throw new Error('Lesson unavailable')
-        const selected = (await lessonResponse.json()) as Lesson
-        setLesson(selected)
-
-        // Restore draft code if available, else starter_code
-        const draftCode = localStorage.getItem(`patchwork_code_${selected.id}`)
-        setCode(draftCode !== null ? draftCode : selected.starter_code ?? '')
-        localStorage.setItem('patchwork_last_active_lesson', selected.id)
-
-        requestAnimationFrame(resetEditorScroll)
-        setBackendError(false)
-      } catch {
-        setBackendError(true)
-        setFeedback('The lesson service is unavailable. Start the local backend to continue.')
-      } finally {
-        setIsLoadingLesson(false)
+  // ── Load Course & Lessons Data ──────────────────────────────────────────────
+  const loadCourseData = useCallback(async (lang: string) => {
+    setIsLoadingLesson(true)
+    try {
+      // 1. Fetch available courses
+      const coursesRes = await fetch('/api/courses')
+      if (coursesRes.ok) {
+        const coursesData = (await coursesRes.json()) as CourseSummary[]
+        setCourses(coursesData)
       }
+
+      // 2. Select course on backend
+      await fetch('/api/courses/select', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ language: lang }),
+      })
+
+      // 3. Fetch lessons for selected language
+      const summariesResponse = await fetch(`/api/lessons?language=${encodeURIComponent(lang)}`)
+      if (!summariesResponse.ok) throw new Error('Lesson service unavailable')
+      const summariesRaw = await summariesResponse.json()
+      const summaries: LessonSummary[] = Array.isArray(summariesRaw) ? summariesRaw : []
+      if (summaries.length === 0) throw new Error('No lessons available')
+      setLessons(summaries)
+
+      const completedIds = summaries.filter((l) => l.status === 'completed').map((l) => l.id)
+      localStorage.setItem(`patchwork_completed_lessons_${lang}`, JSON.stringify(completedIds))
+
+      // Restore last active lesson if unlocked, otherwise current lesson
+      const lastActiveId = localStorage.getItem(`patchwork_last_active_lesson_${lang}`)
+      const targetSummary =
+        (lastActiveId && summaries.find((l) => l.id === lastActiveId && l.status !== 'locked')) ||
+        summaries.find((l) => l.status === 'current') ||
+        summaries[0]
+
+      const lessonResponse = await fetch(`/api/lessons/${targetSummary.id}`)
+      if (!lessonResponse.ok) throw new Error('Lesson unavailable')
+      const selected = (await lessonResponse.json()) as Lesson
+      setLesson(selected)
+
+      // Restore draft code if available, else starter_code
+      const draftCode = localStorage.getItem(`patchwork_code_${selected.id}`)
+      setCode(draftCode !== null ? draftCode : selected.starter_code ?? '')
+      localStorage.setItem(`patchwork_last_active_lesson_${lang}`, selected.id)
+
+      setResults(null)
+      setShowCompletion(false)
+      requestAnimationFrame(resetEditorScroll)
+      setBackendError(false)
+    } catch {
+      setBackendError(true)
+      setFeedback('The lesson service is unavailable. Start the local backend to continue.')
+    } finally {
+      setIsLoadingLesson(false)
     }
-    load()
   }, [resetEditorScroll])
+
+  useEffect(() => {
+    loadCourseData(selectedLanguage)
+  }, [selectedLanguage, loadCourseData])
+
+  const handleCourseChange = async (lang: string) => {
+    if (lang === selectedLanguage) return
+    setSelectedLanguage(lang)
+    localStorage.setItem('patchwork_active_language', lang)
+  }
 
   // ── AI Providers Health Polling ─────────────────────────────────────────────
   const fetchProvidersHealth = useCallback(async () => {
@@ -343,12 +380,17 @@ function App() {
         )
       }
 
-      const summariesResponse = await fetch('/api/lessons')
+      const summariesResponse = await fetch(`/api/lessons?language=${encodeURIComponent(selectedLanguage)}`)
       if (summariesResponse.ok) {
-        const summaries = (await summariesResponse.json()) as LessonSummary[]
+        const summariesRaw = await summariesResponse.json()
+        const summaries: LessonSummary[] = Array.isArray(summariesRaw) ? summariesRaw : []
         setLessons(summaries)
         const completedIds = summaries.filter((l) => l.status === 'completed').map((l) => l.id)
-        localStorage.setItem('patchwork_completed_lessons', JSON.stringify(completedIds))
+        localStorage.setItem(`patchwork_completed_lessons_${selectedLanguage}`, JSON.stringify(completedIds))
+      }
+      const coursesRes = await fetch('/api/courses')
+      if (coursesRes.ok) {
+        setCourses((await coursesRes.json()) as CourseSummary[])
       }
       setTimeout(scrollToResults, 100)
     } catch {
@@ -464,7 +506,8 @@ function App() {
 
   // Group lessons by Unit
   const unitsMap = new Map<string, { id: string; title: string; lessons: LessonSummary[] }>()
-  lessons.forEach((item) => {
+  const safeLessons = Array.isArray(lessons) ? lessons : []
+  safeLessons.forEach((item) => {
     const uid = item.unit_id || 'unit-1'
     const utitle = item.unit_title || 'Unit'
     if (!unitsMap.has(uid)) {
@@ -475,8 +518,8 @@ function App() {
   const unitGroupList = Array.from(unitsMap.values())
 
   // Derived state
-  const completedCount = lessons.filter((l) => l.status === 'completed').length
-  const progressPct = lessons.length ? (completedCount / lessons.length) * 100 : 0
+  const completedCount = safeLessons.filter((l) => l.status === 'completed').length
+  const progressPct = safeLessons.length ? (completedCount / safeLessons.length) * 100 : 0
   const allPassed = results !== null && results.length > 0 && results.every((r) => r.passed || !r.required)
   const failedRequired = results?.filter((r) => !r.passed && r.required) ?? []
   const hintDisabled = !aiEnabled || !isAiAvailable || !lesson || isTutorLoading || isRunning
@@ -571,7 +614,29 @@ function App() {
       <div className="duo-main-container">
         {/* Left Side Skill Tree Path */}
         <aside className="duo-sidebar" aria-label="Course navigation">
-          <div className="duo-sidebar-title">Python Path</div>
+          {/* Course Language Switcher Tabs */}
+          <div className="duo-course-selector" role="tablist" aria-label="Course language selector">
+            {[
+              { lang: 'python', label: 'Python' },
+              { lang: 'java', label: 'Java' },
+              { lang: 'cpp', label: 'C++' },
+            ].map(({ lang, label }) => (
+              <button
+                key={lang}
+                role="tab"
+                aria-selected={selectedLanguage === lang}
+                className={`duo-course-btn ${selectedLanguage === lang ? 'active' : ''}`}
+                onClick={() => handleCourseChange(lang)}
+              >
+                {label}
+              </button>
+            ))}
+          </div>
+
+          <div className="duo-sidebar-title">
+            {selectedLanguage === 'cpp' ? 'C++' : selectedLanguage === 'java' ? 'Java' : 'Python'} Path
+          </div>
+
           <nav className="duo-path-list" aria-label="Lessons">
             {unitGroupList.map((unitGroup) => (
               <div key={unitGroup.id} className="duo-unit-block">
@@ -668,8 +733,8 @@ function App() {
                 {/* Embedded Code Editor */}
                 <div className="duo-editor-container">
                   <div className="duo-editor-top">
-                    <span>exercise.py</span>
-                    <span>Python 3.12</span>
+                    <span>{selectedLanguage === 'java' ? 'Solution.java' : selectedLanguage === 'cpp' ? 'solution.cpp' : 'exercise.py'}</span>
+                    <span>{selectedLanguage === 'java' ? 'Java 21' : selectedLanguage === 'cpp' ? 'C++ 20' : 'Python 3.12'}</span>
                   </div>
                   <div className="duo-editor-body">
                     <LineNumbers code={code} />

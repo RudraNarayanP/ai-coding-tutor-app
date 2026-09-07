@@ -188,6 +188,39 @@ button:disabled { cursor: not-allowed; }
   background: #ffffff;
 }
 
+.duo-course-selector {
+  display: flex;
+  gap: var(--sp-1);
+  background: var(--line-lite);
+  padding: 4px;
+  border-radius: var(--r-md);
+  margin-bottom: var(--sp-2);
+}
+
+.duo-course-btn {
+  flex: 1;
+  padding: 6px 8px;
+  border-radius: var(--r-sm);
+  font-size: 13px;
+  font-weight: 800;
+  color: var(--ink-soft);
+  background: transparent;
+  border: 0;
+  transition: background 0.15s, color 0.15s, box-shadow 0.15s;
+  text-align: center;
+}
+
+.duo-course-btn:hover:not(.active) {
+  background: var(--line);
+  color: var(--ink);
+}
+
+.duo-course-btn.active {
+  background: #ffffff;
+  color: var(--blue-dark);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08);
+}
+
 .duo-sidebar-title {
   font-size: 14px;
   font-weight: 800;

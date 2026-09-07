@@ -76,11 +76,23 @@ function setupFetch({
     }>
   }
 } = {}) {
+  const mockCourses = [
+    { id: 'python-foundations', title: 'Python Foundations', language: 'python', lesson_count: 70, completed_count: 1 },
+    { id: 'java-foundations', title: 'Java Foundations', language: 'java', lesson_count: 30, completed_count: 0 },
+    { id: 'cpp-foundations', title: 'C++ Foundations', language: 'cpp', lesson_count: 30, completed_count: 0 },
+  ]
+
   const fetchMock = vi.fn((url: string, opts?: RequestInit) => {
-    if (url.endsWith('/api/lessons') && !opts) {
+    if (url.includes('/api/courses/select')) {
       return Promise.resolve({
         ok: true,
-        json: () => Promise.resolve(lessons),
+        json: () => Promise.resolve({ status: 'ok' }),
+      })
+    }
+    if (url.includes('/api/courses')) {
+      return Promise.resolve({
+        ok: true,
+        json: () => Promise.resolve(mockCourses),
       })
     }
     if (url.includes('/solution')) {
@@ -94,6 +106,12 @@ function setupFetch({
       const id = url.split('/').pop()
       const l = id === 'lesson-1' ? completedLesson : lesson
       return Promise.resolve({ ok: true, json: () => Promise.resolve(l) })
+    }
+    if (url.includes('/api/lessons') && !url.includes('/run') && !opts) {
+      return Promise.resolve({
+        ok: true,
+        json: () => Promise.resolve(lessons),
+      })
     }
     if (url.includes('/run')) {
       return Promise.resolve({ ok: true, json: () => Promise.resolve(runResult) })
@@ -150,6 +168,31 @@ afterEach(() => {
 })
 
 // ─── Tests ────────────────────────────────────────────────────────────────────
+
+describe('Course track switching', () => {
+  it('allows switching between Python, Java, and C++ courses', async () => {
+    const user = userEvent.setup()
+    setupFetch()
+    render(<App />)
+
+    await waitFor(() => expect(screen.getByRole('heading', { level: 2, name: 'Variables' })).toBeInTheDocument())
+    expect(screen.getByText('Python Path')).toBeInTheDocument()
+
+    // Switch to Java
+    const javaTab = screen.getByRole('tab', { name: 'Java' })
+    await user.click(javaTab)
+
+    await waitFor(() => expect(screen.getByText('Java Path')).toBeInTheDocument())
+    expect(localStorage.getItem('patchwork_active_language')).toBe('java')
+
+    // Switch to C++
+    const cppTab = screen.getByRole('tab', { name: 'C++' })
+    await user.click(cppTab)
+
+    await waitFor(() => expect(screen.getByText('C++ Path')).toBeInTheDocument())
+    expect(localStorage.getItem('patchwork_active_language')).toBe('cpp')
+  })
+})
 
 describe('Lesson navigation', () => {
   it('shows all lessons in the sidebar', async () => {
@@ -268,11 +311,17 @@ describe('Run button and code editor', () => {
             res({ ok: true, json: () => Promise.resolve({ passed: true, completed: false, tests: passingTests }) })
         })
       }
-      if (url.endsWith('/api/lessons') && !opts) {
-        return Promise.resolve({ ok: true, json: () => Promise.resolve(mockLessons) })
+      if (url.includes('/api/courses/select')) {
+        return Promise.resolve({ ok: true, json: () => Promise.resolve({ status: 'ok' }) })
+      }
+      if (url.includes('/api/courses')) {
+        return Promise.resolve({ ok: true, json: () => Promise.resolve([]) })
       }
       if (url.match(/\/api\/lessons\/[\w-]+$/) && !opts) {
         return Promise.resolve({ ok: true, json: () => Promise.resolve(currentLesson) })
+      }
+      if (url.includes('/api/lessons') && !opts) {
+        return Promise.resolve({ ok: true, json: () => Promise.resolve(mockLessons) })
       }
       if (url.includes('/api/health/ollama')) {
         return Promise.resolve({ ok: true, json: () => Promise.resolve({ available: false }) })
@@ -517,14 +566,20 @@ describe('Completion / next-lesson flow', () => {
           json: () => Promise.resolve({ passed: true, completed: true, tests: passingTests }),
         })
       }
-      if (url.endsWith('/api/lessons') && !opts) {
+      if (url.includes('/api/courses/select')) {
+        return Promise.resolve({ ok: true, json: () => Promise.resolve({ status: 'ok' }) })
+      }
+      if (url.includes('/api/courses')) {
+        return Promise.resolve({ ok: true, json: () => Promise.resolve([]) })
+      }
+      if (url.match(/\/api\/lessons\/[\w-]+$/) && !opts) {
+        return Promise.resolve({ ok: true, json: () => Promise.resolve(currentLesson) })
+      }
+      if (url.includes('/api/lessons') && !opts) {
         return Promise.resolve({
           ok: true,
           json: () => Promise.resolve(runCalled ? lessonsAfterCompletion : mockLessons),
         })
-      }
-      if (url.match(/\/api\/lessons\/[\w-]+$/) && !opts) {
-        return Promise.resolve({ ok: true, json: () => Promise.resolve(currentLesson) })
       }
       if (url.includes('/api/health/ollama')) {
         return Promise.resolve({ ok: true, json: () => Promise.resolve({ available: false }) })
@@ -576,11 +631,17 @@ describe('AI unavailable state', () => {
             Promise.resolve({ available: false, message: 'Offline', hint_level: 1 }),
         })
       }
-      if (url.endsWith('/api/lessons') && !opts) {
-        return Promise.resolve({ ok: true, json: () => Promise.resolve(mockLessons) })
+      if (url.includes('/api/courses/select')) {
+        return Promise.resolve({ ok: true, json: () => Promise.resolve({ status: 'ok' }) })
+      }
+      if (url.includes('/api/courses')) {
+        return Promise.resolve({ ok: true, json: () => Promise.resolve([]) })
       }
       if (url.match(/\/api\/lessons\/[\w-]+$/) && !opts) {
         return Promise.resolve({ ok: true, json: () => Promise.resolve(currentLesson) })
+      }
+      if (url.includes('/api/lessons') && !opts) {
+        return Promise.resolve({ ok: true, json: () => Promise.resolve(mockLessons) })
       }
       if (url.includes('/api/ai/providers')) {
         return Promise.resolve({
