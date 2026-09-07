@@ -1,30 +1,25 @@
 /* ═══════════════════════════════════════════════════════════
-   Patchwork — Duolingo Design System
+   Patchwork — Duolingo Design System (Refined Section/Unit Layout)
    ═══════════════════════════════════════════════════════════ */
 @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@700;800;900&family=JetBrains+Mono:wght@600;700&display=swap');
 
 :root {
-  /* Duolingo Brand Palette */
+  /* Brand Palette */
   --ink:          #3c3c3c;
   --ink-soft:     #777777;
   --muted:        #afafaf;
-  --muted-lite:   #e5e5e5;
   --line:         #e5e5e5;
-  --line-dark:    #cecece;
-  --line-lite:    #f7f7f7;
   --bg:           #ffffff;
 
-  /* Duolingo Colors */
+  /* Duolingo Accent Colors */
   --green:        #58cc02;
   --green-dark:   #46a302;
-  --green-light:  #d7ffb8;
   --blue:         #1cb0f6;
   --blue-dark:    #1899d6;
   --blue-light:   #ddf4ff;
   --purple:       #ce82ff;
   --purple-dark:  #a855f7;
   --orange:       #ff9600;
-  --orange-dark:  #e08300;
   --coral:        #ff4b4b;
   --coral-dark:   #ea2b2b;
   --yellow:       #ffc800;
@@ -44,15 +39,13 @@
   --r-sm: 12px;
   --r-md: 16px;
   --r-lg: 20px;
-  --r-xl: 24px;
   --r-full: 9999px;
 
-  /* 3D Button Shadows */
+  /* 3D Tactile Shadows */
   --btn-3d-green:  0 4px 0 #46a302;
   --btn-3d-blue:   0 4px 0 #1899d6;
   --btn-3d-purple: 0 4px 0 #a855f7;
   --btn-3d-gray:   0 4px 0 #cecece;
-  --btn-3d-coral:  0 4px 0 #ea2b2b;
 
   font-family: var(--font-ui);
   color: var(--ink);
@@ -66,21 +59,19 @@ button, input, textarea, select { font: inherit; }
 button { cursor: pointer; border: 0; background: none; user-select: none; }
 button:disabled { cursor: not-allowed; }
 
-/* ═══════════════════════════════════════════════════════════
-   3-COLUMN DUOLINGO LAYOUT
-   ═══════════════════════════════════════════════════════════ */
+/* Main Grid Shell */
 .duo-layout {
   display: flex;
   min-height: 100vh;
   background: #ffffff;
 }
 
-/* 1. Left Navigation Sidebar */
+/* Left Sidebar Navigation */
 .duo-nav-sidebar {
   width: 256px;
   background: #ffffff;
   border-right: 2px solid var(--line);
-  padding: 24px 16px;
+  padding: 20px 16px;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -95,7 +86,7 @@ button:disabled { cursor: not-allowed; }
   display: flex;
   align-items: center;
   gap: 12px;
-  padding: 0 12px 28px 12px;
+  padding: 0 12px 20px 12px;
 }
 
 .duo-logo-text {
@@ -103,7 +94,6 @@ button:disabled { cursor: not-allowed; }
   font-weight: 900;
   color: var(--green);
   letter-spacing: -1px;
-  font-family: var(--font-ui);
 }
 
 .duo-nav-menu {
@@ -148,7 +138,7 @@ button:disabled { cursor: not-allowed; }
   place-items: center;
 }
 
-/* 2. Main Content Viewport */
+/* Main Content Area */
 .duo-main-viewport {
   margin-left: 256px;
   flex: 1;
@@ -159,9 +149,9 @@ button:disabled { cursor: not-allowed; }
   background: #ffffff;
 }
 
-/* Top Sticky Header Bar */
+/* Top Sticky Header */
 .duo-top-header {
-  height: 68px;
+  height: 64px;
   padding: 0 32px;
   display: flex;
   align-items: center;
@@ -198,35 +188,31 @@ button:disabled { cursor: not-allowed; }
   transition: background 0.15s;
 }
 
-.duo-stat-pill:hover {
-  background: #f7f7f7;
-}
-
+.duo-stat-pill:hover { background: #f7f7f7; }
 .duo-stat-pill.streak { color: var(--orange); }
 .duo-stat-pill.gems { color: var(--blue); }
 .duo-stat-pill.hearts { color: var(--coral); }
 .duo-stat-pill.xp { color: var(--yellow-dark); }
 
-/* Page Container Grid (Center Column + Right Sidebar) */
+/* Page Container (Center Path + Right Widgets) */
 .duo-page-container {
   display: flex;
   width: 100%;
-  max-width: 1050px;
+  max-width: 1080px;
   margin: 0 auto;
   padding: 24px;
   gap: 32px;
 }
 
-/* Center Learning Column */
+/* Center Column */
 .duo-center-column {
   flex: 1;
   min-width: 0;
   display: flex;
   flex-direction: column;
-  align-items: center;
 }
 
-/* 3. Right Sidebar Widgets Bar */
+/* Right Sidebar Widgets */
 .duo-right-sidebar {
   width: 320px;
   flex-shrink: 0;
@@ -234,52 +220,11 @@ button:disabled { cursor: not-allowed; }
   flex-direction: column;
   gap: 20px;
   position: sticky;
-  top: 88px;
+  top: 84px;
   height: fit-content;
 }
 
-/* Course Language Selector Box */
-.duo-course-selector-box {
-  background: #ffffff;
-  border: 2px solid var(--line);
-  border-radius: var(--r-md);
-  padding: 16px;
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-  box-shadow: 0 4px 0 var(--line);
-}
-
-.duo-course-tabs {
-  display: flex;
-  gap: 8px;
-}
-
-.duo-course-tab {
-  flex: 1;
-  padding: 10px;
-  border-radius: var(--r-sm);
-  border: 2px solid var(--line);
-  font-weight: 800;
-  font-size: 14px;
-  text-align: center;
-  color: var(--ink-soft);
-  transition: all 0.15s;
-  background: #ffffff;
-}
-
-.duo-course-tab:hover {
-  background: #f7f7f7;
-}
-
-.duo-course-tab.active {
-  border-color: var(--blue-dark);
-  background: var(--blue-light);
-  color: var(--blue-dark);
-  box-shadow: 0 3px 0 var(--blue-dark);
-}
-
-/* Right Sidebar Widget Cards */
+/* Widget Cards */
 .duo-widget-card {
   background: #ffffff;
   border: 2px solid var(--line);
@@ -308,24 +253,71 @@ button:disabled { cursor: not-allowed; }
   letter-spacing: 0.5px;
 }
 
-/* ═══════════════════════════════════════════════════════════
-   1. LEARN VIEW (Path Winding Skill Tree)
-   ═══════════════════════════════════════════════════════════ */
-.duo-learn-view {
+.duo-course-tabs {
   display: flex;
-  flex-direction: column;
-  align-items: center;
-  width: 100%;
+  gap: 8px;
 }
 
-/* Unit Banner Header */
+.duo-course-tab {
+  flex: 1;
+  padding: 8px;
+  border-radius: var(--r-sm);
+  border: 2px solid var(--line);
+  font-weight: 800;
+  font-size: 13px;
+  text-align: center;
+  color: var(--ink-soft);
+  transition: all 0.15s;
+  background: #ffffff;
+}
+
+.duo-course-tab.active {
+  border-color: var(--blue-dark);
+  background: var(--blue-light);
+  color: var(--blue-dark);
+  box-shadow: 0 3px 0 var(--blue-dark);
+}
+
+.duo-quest-item {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 12px;
+  background: #f7f7f7;
+  border-radius: var(--r-md);
+  border: 2px solid var(--line);
+}
+
+.duo-quest-icon { font-size: 24px; }
+
+.duo-quest-body {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.duo-quest-name { font-size: 13px; font-weight: 800; }
+
+.duo-quest-progress-bg {
+  height: 8px;
+  background: #e5e5e5;
+  border-radius: var(--r-full);
+  overflow: hidden;
+}
+
+.duo-quest-progress-fill {
+  height: 100%;
+  background: var(--yellow);
+}
+
+/* Unit Banner Card */
 .duo-unit-banner {
   width: 100%;
   background: var(--green);
   color: #ffffff;
   border-radius: var(--r-md);
-  padding: 20px 24px;
-  margin-bottom: 24px;
+  padding: 18px 20px;
   box-shadow: 0 6px 0 var(--green-dark);
   display: flex;
   justify-content: space-between;
@@ -339,7 +331,7 @@ button:disabled { cursor: not-allowed; }
 }
 
 .duo-unit-subtitle {
-  font-size: 13px;
+  font-size: 12px;
   font-weight: 800;
   text-transform: uppercase;
   letter-spacing: 0.8px;
@@ -347,112 +339,94 @@ button:disabled { cursor: not-allowed; }
 }
 
 .duo-unit-title {
-  font-size: 22px;
+  font-size: 20px;
   font-weight: 900;
 }
 
 .duo-guidebook-btn {
   display: flex;
   align-items: center;
-  gap: 8px;
-  padding: 10px 18px;
+  gap: 6px;
+  padding: 8px 14px;
   background: rgba(255, 255, 255, 0.2);
   border: 2px solid rgba(255, 255, 255, 0.4);
   border-radius: var(--r-sm);
   color: #ffffff;
-  font-size: 14px;
+  font-size: 13px;
   font-weight: 800;
   text-transform: uppercase;
-  transition: background 0.15s;
 }
 
-.duo-guidebook-btn:hover {
-  background: rgba(255, 255, 255, 0.3);
-}
-
-/* Snake Winding Skill Path */
+/* Snake Skill Path Nodes */
 .duo-path-tree {
   display: flex;
   flex-direction: column;
-  align-items: center;
-  gap: 20px;
+  gap: 12px;
   width: 100%;
-  position: relative;
-  padding: 24px 0 32px 0;
+  padding: 16px 0;
 }
 
 .duo-path-row {
   display: flex;
-  justify-content: center;
   width: 100%;
   position: relative;
 }
 
-.node-pos-center { transform: translateX(0); }
-.node-pos-left-1 { transform: translateX(-40px); }
-.node-pos-left-2 { transform: translateX(-70px); }
-.node-pos-right-1 { transform: translateX(40px); }
-.node-pos-right-2 { transform: translateX(70px); }
+.node-pos-center { padding-left: 20px; }
+.node-pos-left-1 { padding-left: 0px; }
+.node-pos-right-1 { padding-left: 40px; }
 
 /* Path Node Button Circle */
 .duo-path-circle-btn {
-  width: 76px;
-  height: 72px;
+  width: 68px;
+  height: 64px;
   border-radius: 50%;
   display: grid;
   place-items: center;
-  font-size: 28px;
+  font-size: 24px;
   position: relative;
   transition: transform 0.1s, box-shadow 0.1s;
   border: 0;
   outline: 0;
   cursor: pointer;
+  flex-shrink: 0;
 }
 
 .duo-path-circle-btn.current {
   background: var(--green);
-  box-shadow: 0 8px 0 var(--green-dark);
+  box-shadow: 0 6px 0 var(--green-dark);
   color: #ffffff;
 }
 
 .duo-path-circle-btn.completed {
   background: var(--yellow);
-  box-shadow: 0 8px 0 var(--yellow-dark);
+  box-shadow: 0 6px 0 var(--yellow-dark);
   color: #ffffff;
 }
 
 .duo-path-circle-btn.locked {
   background: #e5e5e5;
-  box-shadow: 0 8px 0 #cecece;
+  box-shadow: 0 6px 0 #cecece;
   color: #afafaf;
   cursor: not-allowed;
 }
 
-.duo-path-circle-btn.chest {
-  background: #f7f7f7;
-  box-shadow: 0 6px 0 #e5e5e5;
-  border: 2px solid #e5e5e5;
-  border-radius: var(--r-md);
-  width: 80px;
-  height: 68px;
-}
-
 .duo-path-circle-btn:active:not(.locked) {
-  transform: translateY(4px);
+  transform: translateY(3px);
   box-shadow: 0 2px 0 transparent;
 }
 
-/* Active Floating "START" Speech Dialog Box */
+/* Floating "START" Dialog */
 .duo-start-dialog {
   position: absolute;
-  top: -46px;
+  top: -42px;
   left: 50%;
   transform: translateX(-50%);
   background: var(--green);
   color: #ffffff;
-  padding: 6px 14px;
+  padding: 4px 12px;
   border-radius: var(--r-sm);
-  font-size: 13px;
+  font-size: 12px;
   font-weight: 900;
   letter-spacing: 0.5px;
   box-shadow: 0 3px 0 var(--green-dark);
@@ -464,24 +438,20 @@ button:disabled { cursor: not-allowed; }
 .duo-start-dialog::after {
   content: '';
   position: absolute;
-  bottom: -6px;
+  bottom: -5px;
   left: 50%;
   transform: translateX(-50%);
-  width: 0;
-  height: 0;
-  border-left: 6px solid transparent;
-  border-right: 6px solid transparent;
-  border-top: 6px solid var(--green-dark);
+  border-left: 5px solid transparent;
+  border-right: 5px solid transparent;
+  border-top: 5px solid var(--green-dark);
 }
 
 @keyframes duoFloat {
   0%, 100% { transform: translate(-50%, 0); }
-  50% { transform: translate(-50%, -5px); }
+  50% { transform: translate(-50%, -4px); }
 }
 
-/* ═══════════════════════════════════════════════════════════
-   LESSON / EXERCISE STAGE
-   ═══════════════════════════════════════════════════════════ */
+/* Focused Lesson Stage */
 .duo-exercise-stage {
   width: 100%;
   display: flex;
@@ -541,7 +511,7 @@ button:disabled { cursor: not-allowed; }
   margin-bottom: 20px;
 }
 
-/* Sublesson Stepper */
+/* Stepper */
 .duo-sublesson-stepper {
   display: flex;
   align-items: center;
@@ -570,11 +540,6 @@ button:disabled { cursor: not-allowed; }
   background: var(--blue);
   color: #ffffff;
   border-color: var(--blue-dark);
-}
-
-/* Interactive Choices Options */
-.exercise-interactive-box {
-  background: #ffffff;
 }
 
 .exercise-options-grid {
@@ -609,7 +574,7 @@ button:disabled { cursor: not-allowed; }
   box-shadow: 0 4px 0 var(--blue-dark);
 }
 
-/* Editor Container */
+/* Code Editor */
 .duo-editor-container {
   border: 2px solid var(--line);
   border-radius: var(--r-md);
@@ -669,7 +634,7 @@ button:disabled { cursor: not-allowed; }
   tab-size: 4;
 }
 
-/* 3D Tactile Buttons */
+/* Buttons */
 .duo-button {
   padding: 12px 24px;
   border-radius: var(--r-md);
@@ -690,9 +655,7 @@ button:disabled { cursor: not-allowed; }
   box-shadow: var(--btn-3d-green);
 }
 
-.duo-button-primary:hover:not(:disabled) {
-  background: #61e002;
-}
+.duo-button-primary:hover:not(:disabled) { background: #61e002; }
 
 .duo-button-primary:active:not(:disabled) {
   transform: translateY(4px);
@@ -706,10 +669,6 @@ button:disabled { cursor: not-allowed; }
   box-shadow: var(--btn-3d-gray);
 }
 
-.duo-button-secondary:hover:not(:disabled) {
-  background: #f7f7f7;
-}
-
 .duo-button:disabled {
   background: #e5e5e5;
   color: #afafaf;
@@ -717,7 +676,7 @@ button:disabled { cursor: not-allowed; }
   cursor: not-allowed;
 }
 
-/* Feedback Box */
+/* Feedback Drawer */
 .duo-feedback-panel {
   border-radius: var(--r-md);
   padding: 20px;
@@ -739,10 +698,7 @@ button:disabled { cursor: not-allowed; }
   color: var(--coral-dark);
 }
 
-.duo-feedback-title {
-  font-size: 20px;
-  font-weight: 900;
-}
+.duo-feedback-title { font-size: 20px; font-weight: 900; }
 
 @keyframes duoPop {
   0% { transform: scale(0.96); opacity: 0; }
@@ -783,12 +739,7 @@ button:disabled { cursor: not-allowed; }
   margin-bottom: 2px;
 }
 
-.duo-tutor-text {
-  font-size: 15px;
-  color: var(--ink);
-  line-height: 1.5;
-  font-weight: 700;
-}
+.duo-tutor-text { font-size: 15px; color: var(--ink); line-height: 1.5; font-weight: 700; }
 
 /* Bottom Action Bar */
 .duo-footer-bar {
@@ -805,9 +756,7 @@ button:disabled { cursor: not-allowed; }
   z-index: 100;
 }
 
-/* ═══════════════════════════════════════════════════════════
-   2. CHARACTERS / ALPHABET / SYNTAX VIEW
-   ═══════════════════════════════════════════════════════════ */
+/* Characters Tab View */
 .duo-characters-view {
   width: 100%;
   display: flex;
@@ -815,23 +764,9 @@ button:disabled { cursor: not-allowed; }
   gap: 24px;
 }
 
-.duo-char-header {
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-}
-
-.duo-char-title {
-  font-size: 28px;
-  font-weight: 900;
-  color: var(--ink);
-}
-
-.duo-char-subtitle {
-  font-size: 16px;
-  color: var(--ink-soft);
-  font-weight: 600;
-}
+.duo-char-header { display: flex; flex-direction: column; gap: 6px; }
+.duo-char-title { font-size: 28px; font-weight: 900; color: var(--ink); }
+.duo-char-subtitle { font-size: 16px; color: var(--ink-soft); font-weight: 600; }
 
 .duo-char-tabs {
   display: flex;
@@ -871,38 +806,13 @@ button:disabled { cursor: not-allowed; }
   align-items: center;
   gap: 6px;
   box-shadow: 0 4px 0 var(--line);
-  transition: transform 0.15s, border-color 0.15s;
-  cursor: pointer;
 }
 
-.duo-char-card:hover {
-  border-color: var(--blue);
-  transform: translateY(-2px);
-}
+.duo-char-symbol { font-size: 28px; font-weight: 900; color: var(--ink); font-family: var(--font-mono); }
+.duo-char-romaji { font-size: 13px; font-weight: 700; color: var(--ink-soft); }
 
-.duo-char-symbol {
-  font-size: 28px;
-  font-weight: 900;
-  color: var(--ink);
-  font-family: var(--font-mono);
-}
-
-.duo-char-romaji {
-  font-size: 13px;
-  font-weight: 700;
-  color: var(--ink-soft);
-}
-
-/* ═══════════════════════════════════════════════════════════
-   3. LEADERBOARDS VIEW
-   ═══════════════════════════════════════════════════════════ */
-.duo-leaderboard-view {
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-}
-
+/* Leaderboards */
+.duo-leaderboard-view { width: 100%; display: flex; flex-direction: column; gap: 20px; }
 .duo-league-banner {
   background: #fff8e1;
   border: 2px solid #ffe082;
@@ -913,29 +823,11 @@ button:disabled { cursor: not-allowed; }
   gap: 16px;
   box-shadow: 0 4px 0 #ffe082;
 }
+.duo-league-shield { font-size: 48px; }
+.duo-league-details h2 { font-size: 22px; font-weight: 900; color: #b45309; }
+.duo-league-details p { font-size: 14px; font-weight: 700; color: #d97706; }
 
-.duo-league-shield {
-  font-size: 48px;
-}
-
-.duo-league-details h2 {
-  font-size: 22px;
-  font-weight: 900;
-  color: #b45309;
-}
-
-.duo-league-details p {
-  font-size: 14px;
-  font-weight: 700;
-  color: #d97706;
-}
-
-.duo-rank-list {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-}
-
+.duo-rank-list { display: flex; flex-direction: column; gap: 8px; }
 .duo-rank-item {
   display: flex;
   align-items: center;
@@ -946,24 +838,11 @@ button:disabled { cursor: not-allowed; }
   background: #ffffff;
   font-weight: 800;
 }
-
-.duo-rank-item.user-self {
-  background: #f0fdf4;
-  border-color: #86efac;
-}
-
-.duo-rank-num {
-  width: 24px;
-  font-size: 16px;
-  font-weight: 900;
-  color: var(--ink-soft);
-  text-align: center;
-}
-
+.duo-rank-item.user-self { background: #f0fdf4; border-color: #86efac; }
+.duo-rank-num { width: 24px; font-size: 16px; font-weight: 900; color: var(--ink-soft); text-align: center; }
 .duo-rank-num.top-1 { color: #eab308; }
 .duo-rank-num.top-2 { color: #94a3b8; }
 .duo-rank-num.top-3 { color: #b45309; }
-
 .duo-user-avatar-circle {
   width: 38px;
   height: 38px;
@@ -975,28 +854,11 @@ button:disabled { cursor: not-allowed; }
   font-size: 16px;
   font-weight: 900;
 }
+.duo-rank-name { flex: 1; font-size: 15px; color: var(--ink); }
+.duo-rank-xp { font-size: 14px; color: var(--ink-soft); }
 
-.duo-rank-name {
-  flex: 1;
-  font-size: 15px;
-  color: var(--ink);
-}
-
-.duo-rank-xp {
-  font-size: 14px;
-  color: var(--ink-soft);
-}
-
-/* ═══════════════════════════════════════════════════════════
-   4. QUESTS VIEW
-   ═══════════════════════════════════════════════════════════ */
-.duo-quests-view {
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-}
-
+/* Quests */
+.duo-quests-view { width: 100%; display: flex; flex-direction: column; gap: 20px; }
 .duo-quest-card {
   background: #ffffff;
   border: 2px solid var(--line);
@@ -1008,60 +870,9 @@ button:disabled { cursor: not-allowed; }
   box-shadow: 0 4px 0 var(--line);
 }
 
-.duo-quest-item {
-  display: flex;
-  align-items: center;
-  gap: 16px;
-  padding: 14px;
-  background: #f7f7f7;
-  border-radius: var(--r-md);
-  border: 2px solid var(--line);
-}
-
-.duo-quest-icon { font-size: 28px; }
-
-.duo-quest-body {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-}
-
-.duo-quest-name {
-  font-size: 14px;
-  font-weight: 800;
-}
-
-.duo-quest-progress-bg {
-  height: 10px;
-  background: #e5e5e5;
-  border-radius: var(--r-full);
-  overflow: hidden;
-}
-
-.duo-quest-progress-fill {
-  height: 100%;
-  background: var(--yellow);
-}
-
-/* ═══════════════════════════════════════════════════════════
-   5. PROFILE VIEW
-   ═══════════════════════════════════════════════════════════ */
-.duo-profile-view {
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  gap: 24px;
-}
-
-.duo-profile-header {
-  display: flex;
-  align-items: center;
-  gap: 20px;
-  padding-bottom: 20px;
-  border-bottom: 2px solid var(--line);
-}
-
+/* Profile */
+.duo-profile-view { width: 100%; display: flex; flex-direction: column; gap: 24px; }
+.duo-profile-header { display: flex; align-items: center; gap: 20px; padding-bottom: 20px; border-bottom: 2px solid var(--line); }
 .duo-profile-avatar-large {
   width: 80px;
   height: 80px;
@@ -1074,24 +885,10 @@ button:disabled { cursor: not-allowed; }
   font-weight: 900;
   box-shadow: 0 5px 0 var(--green-dark);
 }
+.duo-profile-meta h1 { font-size: 26px; font-weight: 900; }
+.duo-profile-handle { font-size: 14px; font-weight: 700; color: var(--ink-soft); }
 
-.duo-profile-meta h1 {
-  font-size: 26px;
-  font-weight: 900;
-}
-
-.duo-profile-handle {
-  font-size: 14px;
-  font-weight: 700;
-  color: var(--ink-soft);
-}
-
-.duo-stats-grid {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 14px;
-}
-
+.duo-stats-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px; }
 .duo-stat-card {
   border: 2px solid var(--line);
   border-radius: var(--r-md);
@@ -1101,70 +898,32 @@ button:disabled { cursor: not-allowed; }
   gap: 14px;
   box-shadow: 0 4px 0 var(--line);
 }
-
 .duo-stat-card-icon { font-size: 28px; }
+.duo-stat-card-val { font-size: 20px; font-weight: 900; }
+.duo-stat-card-lbl { font-size: 12px; font-weight: 800; color: var(--ink-soft); text-transform: uppercase; }
 
-.duo-stat-card-val {
-  font-size: 20px;
-  font-weight: 900;
-}
-
-.duo-stat-card-lbl {
-  font-size: 12px;
-  font-weight: 800;
-  color: var(--ink-soft);
-  text-transform: uppercase;
-}
-
-/* Modal Overlay */
+/* Modal */
 .modal-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: rgba(0, 0, 0, 0.5);
-  backdrop-filter: blur(4px);
-  display: grid;
-  place-items: center;
-  z-index: 1000;
-  padding: 16px;
+  position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(0, 0, 0, 0.5); backdrop-filter: blur(4px);
+  display: grid; place-items: center; z-index: 1000; padding: 16px;
 }
-
 .modal-card {
-  background: #ffffff;
-  border-radius: var(--r-lg);
-  padding: 28px;
-  max-width: 600px;
-  width: 100%;
-  max-height: 90vh;
-  overflow-y: auto;
+  background: #ffffff; border-radius: var(--r-lg); padding: 28px;
+  max-width: 600px; width: 100%; max-height: 90vh; overflow-y: auto;
   box-shadow: 0 20px 25px -5px rgba(0,0,0,0.2);
 }
 
-/* Responsive adjust */
+/* Responsive */
 @media (max-width: 960px) {
   .duo-right-sidebar { display: none; }
-  .duo-page-container { justify-content: center; padding: 20px; }
+  .duo-page-container { justify-content: center; padding: 16px; }
   .duo-nav-sidebar {
-    width: 100%;
-    height: 64px;
-    top: auto;
-    bottom: 0;
-    flex-direction: row;
-    padding: 8px 16px;
-    border-right: 0;
-    border-top: 2px solid var(--line);
+    width: 100%; height: 60px; top: auto; bottom: 0;
+    flex-direction: row; padding: 8px 16px; border-right: 0; border-top: 2px solid var(--line);
   }
   .duo-logo-area { display: none; }
-  .duo-nav-menu {
-    flex-direction: row;
-    justify-content: space-around;
-    width: 100%;
-  }
+  .duo-nav-menu { flex-direction: row; justify-content: space-around; width: 100%; }
   .duo-nav-item span { display: none; }
-  .duo-main-viewport {
-    margin-left: 0;
-    padding-bottom: 64px;
-  }
+  .duo-main-viewport { margin-left: 0; padding-bottom: 60px; }
 }
