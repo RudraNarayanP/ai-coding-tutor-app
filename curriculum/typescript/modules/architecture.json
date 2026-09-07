@@ -1,0 +1,31 @@
+{
+  "id": "ts-architecture",
+  "title": "Unit 4: Application Architecture",
+  "order": 4,
+  "concepts": [{ "id": "ts-arch", "title": "Typed Application Design", "prerequisites": ["ts-generics"] }],
+  "lessons": [
+    {
+      "id": "ts-04",
+      "title": "4. Enterprise Application Architecture",
+      "description": "Design modular, type-safe API client wrappers and domain interfaces.",
+      "order": 4,
+      "difficulty": "advanced",
+      "duration_minutes": 10,
+      "type": "checkpoint",
+      "section_id": "sec-ts-2",
+      "section_title": "Section 2: Architecture",
+      "test_out_eligible": true,
+      "concepts": ["ts-arch"],
+      "starter_code": "export interface ApiResponse<T> {\n    data: T;\n    status: number;\n}\n\nexport function wrapData<T>(data: T): ApiResponse<T> {\n    return { data, status: 200 };\n}\n",
+      "solution_code": "export interface ApiResponse<T> {\n    data: T;\n    status: number;\n}\n\nexport function wrapData<T>(data: T): ApiResponse<T> {\n    return { data, status: 200 };\n}\n",
+      "tests": [
+        {
+          "name": "test_api_response_wrap",
+          "unittest_code": "const res = solution.wrapData({ ok: true });\nif (res.status !== 200 || !res.data.ok) throw new Error('Wrap failed');",
+          "required": true
+        }
+      ],
+      "completion_requirements": { "required_test_names": ["test_api_response_wrap"] }
+    }
+  ]
+}

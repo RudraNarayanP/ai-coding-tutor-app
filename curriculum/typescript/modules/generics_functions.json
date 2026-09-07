@@ -1,0 +1,30 @@
+{
+  "id": "ts-generics-functions",
+  "title": "Unit 3: Generics & Classes",
+  "order": 3,
+  "concepts": [{ "id": "ts-generics", "title": "Generics & Typed Classes", "prerequisites": ["ts-unions"] }],
+  "lessons": [
+    {
+      "id": "ts-03",
+      "title": "3. Generic Data Structures",
+      "description": "Create reusable generic container classes that work safely with any data type.",
+      "order": 3,
+      "difficulty": "intermediate",
+      "duration_minutes": 5,
+      "type": "learn",
+      "section_id": "sec-ts-2",
+      "section_title": "Section 2: Architecture",
+      "concepts": ["ts-generics"],
+      "starter_code": "export class Box<T> {\n    constructor(public value: T) {}\n    getValue(): T {\n        return this.value;\n    }\n}\n",
+      "solution_code": "export class Box<T> {\n    constructor(public value: T) {}\n    getValue(): T {\n        return this.value;\n    }\n}\n",
+      "tests": [
+        {
+          "name": "test_generic_box",
+          "unittest_code": "const box = new solution.Box<number>(42);\nif (box.getValue() !== 42) throw new Error('Generic Box failed');",
+          "required": true
+        }
+      ],
+      "completion_requirements": { "required_test_names": ["test_generic_box"] }
+    }
+  ]
+}

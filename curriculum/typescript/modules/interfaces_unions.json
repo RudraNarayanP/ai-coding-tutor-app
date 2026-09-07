@@ -1,0 +1,30 @@
+{
+  "id": "ts-interfaces-unions",
+  "title": "Unit 2: Interfaces, Unions & Narrowing",
+  "order": 2,
+  "concepts": [{ "id": "ts-unions", "title": "Interfaces, Union Types & Narrowing", "prerequisites": ["ts-types"] }],
+  "lessons": [
+    {
+      "id": "ts-02",
+      "title": "2. Interfaces & Union Narrowing",
+      "description": "Define interfaces for user records and narrow union types with type guards.",
+      "order": 2,
+      "difficulty": "intermediate",
+      "duration_minutes": 5,
+      "type": "learn",
+      "section_id": "sec-ts-1",
+      "section_title": "Section 1: Type System",
+      "concepts": ["ts-unions"],
+      "starter_code": "export interface User {\n    id: number;\n    name: string;\n}\n\nexport function getId(input: number | User): number {\n    return typeof input === 'number' ? input : input.id;\n}\n",
+      "solution_code": "export interface User {\n    id: number;\n    name: string;\n}\n\nexport function getId(input: number | User): number {\n    return typeof input === 'number' ? input : input.id;\n}\n",
+      "tests": [
+        {
+          "name": "test_get_id",
+          "unittest_code": "if (solution.getId(10) !== 10 || solution.getId({ id: 20, name: 'Bob' }) !== 20) throw new Error('Narrowing failed');",
+          "required": true
+        }
+      ],
+      "completion_requirements": { "required_test_names": ["test_get_id"] }
+    }
+  ]
+}

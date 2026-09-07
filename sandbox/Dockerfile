@@ -4,6 +4,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     default-jdk-headless \
     g++ \
     build-essential \
+    nodejs \
     && rm -rf /var/lib/apt-get/lists/*
 
 RUN useradd --create-home --uid 10001 student

@@ -1,0 +1,24 @@
+{
+  "id": "sql-u6",
+  "title": "Unit 6: Aggregation",
+  "order": 6,
+  "concepts": [{ "id": "sql-agg", "title": "COUNT, SUM, AVG, MIN, MAX", "prerequisites": ["sql-dml"] }],
+  "lessons": [
+    {
+      "id": "sql-06",
+      "title": "6. Aggregate Functions",
+      "description": "Calculate total order revenue with SUM(total_amount) and average order value with AVG(total_amount) from orders.",
+      "order": 6,
+      "difficulty": "intermediate",
+      "duration_minutes": 5,
+      "type": "learn",
+      "section_id": "sec-sql-2",
+      "section_title": "Section 2: Aggregation & Joins",
+      "concepts": ["sql-agg"],
+      "starter_code": "SELECT SUM(total_amount) AS total_revenue, AVG(total_amount) AS avg_order FROM orders;\n",
+      "solution_code": "SELECT SUM(total_amount) AS total_revenue, AVG(total_amount) AS avg_order FROM orders;\n",
+      "tests": [{ "name": "test_order_aggregates", "test_code": "assert len(rows) == 1 and rows[0][0] > 0", "required": true }],
+      "completion_requirements": { "required_test_names": ["test_order_aggregates"] }
+    }
+  ]
+}

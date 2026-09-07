@@ -77,9 +77,9 @@ function setupFetch({
   }
 } = {}) {
   const mockCourses = [
-    { id: 'python-foundations', title: 'Python Foundations', language: 'python', lesson_count: 70, completed_count: 1 },
-    { id: 'java-foundations', title: 'Java Foundations', language: 'java', lesson_count: 30, completed_count: 0 },
-    { id: 'cpp-foundations', title: 'C++ Foundations', language: 'cpp', lesson_count: 30, completed_count: 0 },
+    { id: 'python-foundations', title: 'Python Foundations', language: 'python', lesson_count: 70, completed_count: 1, is_primary: true, tagline: 'AI, automation & general programming' },
+    { id: 'java-foundations', title: 'Java Foundations', language: 'java', lesson_count: 30, completed_count: 0, is_primary: false, tagline: 'Enterprise development' },
+    { id: 'cpp-foundations', title: 'C++ Foundations', language: 'cpp', lesson_count: 30, completed_count: 0, is_primary: true, tagline: 'Systems programming' },
   ]
 
   const fetchMock = vi.fn((url: string, opts?: RequestInit) => {
@@ -176,20 +176,20 @@ describe('Course track switching', () => {
     render(<App />)
 
     await waitFor(() => expect(screen.getByRole('heading', { level: 2, name: 'Variables' })).toBeInTheDocument())
-    expect(screen.getByText('Python Path')).toBeInTheDocument()
+    expect(screen.getByText(/Python Path/)).toBeInTheDocument()
 
     // Switch to Java
-    const javaTab = screen.getByRole('tab', { name: 'Java' })
+    const javaTab = screen.getByRole('tab', { name: /Java/ })
     await user.click(javaTab)
 
-    await waitFor(() => expect(screen.getByText('Java Path')).toBeInTheDocument())
+    await waitFor(() => expect(screen.getByText(/Java Path/)).toBeInTheDocument())
     expect(localStorage.getItem('patchwork_active_language')).toBe('java')
 
     // Switch to C++
-    const cppTab = screen.getByRole('tab', { name: 'C++' })
+    const cppTab = screen.getByRole('tab', { name: /C\+\+/ })
     await user.click(cppTab)
 
-    await waitFor(() => expect(screen.getByText('C++ Path')).toBeInTheDocument())
+    await waitFor(() => expect(screen.getByText(/C\+\+ Path/)).toBeInTheDocument())
     expect(localStorage.getItem('patchwork_active_language')).toBe('cpp')
   })
 })

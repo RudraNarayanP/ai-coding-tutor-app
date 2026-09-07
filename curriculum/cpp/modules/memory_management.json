@@ -1,0 +1,30 @@
+{
+  "id": "cpp-memory-management",
+  "title": "Unit 8: Dynamic Memory & RAII",
+  "order": 8,
+  "concepts": [{ "id": "cpp-raii", "title": "Dynamic Allocation & Smart Pointers", "prerequisites": ["cpp-pointers"] }],
+  "lessons": [
+    {
+      "id": "cpp-mem-01",
+      "title": "1. Smart Pointers & RAII",
+      "description": "Use `std::unique_ptr` and RAII patterns for automated memory management.",
+      "order": 32,
+      "difficulty": "advanced",
+      "duration_minutes": 5,
+      "type": "learn",
+      "section_id": "sec-cpp-2",
+      "section_title": "Section 2: Systems & Memory",
+      "concepts": ["cpp-raii"],
+      "starter_code": "#include <memory>\n\ninline std::unique_ptr<int> makeHeapInt(int value) {\n    return std::make_unique<int>(value);\n}\n",
+      "solution_code": "#include <memory>\n\ninline std::unique_ptr<int> makeHeapInt(int value) {\n    return std::make_unique<int>(value);\n}\n",
+      "tests": [
+        {
+          "name": "test_unique_ptr",
+          "unittest_code": "auto ptr = makeHeapInt(42);\nif (!ptr || *ptr != 42) throw std::runtime_error(\"Smart pointer failed\");",
+          "required": true
+        }
+      ],
+      "completion_requirements": { "required_test_names": ["test_unique_ptr"] }
+    }
+  ]
+}

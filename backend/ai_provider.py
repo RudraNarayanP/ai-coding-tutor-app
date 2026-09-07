@@ -26,7 +26,7 @@ class AIProvider(Protocol):
 
 
 SYSTEM_PROMPT = (
-    "You are a patient coding teacher. Deterministic test results are authoritative and cannot be changed. "
+    "You are a patient coding teacher for Patchwork local learning tutor. Deterministic test results are authoritative and cannot be changed. "
     "Return tutoring prose only. Follow the requested hint level exactly. "
     "Do not provide complete working code unless solution_requested is true.\n"
     "Level 1: explain the concept without naming the exact mistake.\n"
@@ -40,10 +40,32 @@ def build_user_prompt(request: TutorRequest) -> str:
     unit_title = getattr(request, 'unit_title', '')
     concept_title = getattr(request, 'concept_title', '')
     prerequisites = getattr(request, 'prerequisites', [])
+    lesson_id = getattr(request, 'lesson_id', '')
+
+    lang_context = ""
+    if "sql" in lesson_id.lower():
+        lang_context = (
+            "SQL Context:\n"
+            "Database engine: SQLite (in-memory isolated).\n"
+            "Available Seed Tables: customers(id, name, email, country), "
+            "users(id, username, email, created_at, role), "
+            "products(id, name, category, price, stock), "
+            "orders(id, customer_id, product_id, quantity, order_date, total_amount), "
+            "employees(id, first_name, last_name, department, salary), "
+            "courses(id, title, category, price), "
+            "transactions(id, user_id, amount, status, timestamp).\n"
+        )
+    elif "ts" in lesson_id.lower() or "typescript" in lesson_id.lower():
+        lang_context = "Language Context: TypeScript (Static typing over JavaScript runtime).\n"
+    elif "js" in lesson_id.lower() or "javascript" in lesson_id.lower():
+        lang_context = "Language Context: JavaScript (Browser DOM / Node.js runtime).\n"
+
     unit_part = f"Unit: {unit_title}\n" if unit_title else ""
     concept_part = f"Concept: {concept_title}\n" if concept_title else ""
     prereq_part = f"Prerequisite concepts: {', '.join(prerequisites)}\n" if prerequisites else ""
+
     return (
+        f"{lang_context}"
         f"{unit_part}{concept_part}{prereq_part}"
         f"Lesson: {request.lesson_title} ({request.lesson_id})\n"
         f"Instructions: {request.instructions}\n"

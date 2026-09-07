@@ -236,6 +236,9 @@ class CourseSummary(BaseModel):
     language: str
     lesson_count: int
     completed_count: int
+    is_primary: bool = True
+    tagline: str = ""
+    description: str = ""
 
 
 class LessonSummary(BaseModel):

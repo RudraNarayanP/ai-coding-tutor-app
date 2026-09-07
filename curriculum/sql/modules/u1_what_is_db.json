@@ -1,0 +1,76 @@
+{
+  "id": "sql-u1",
+  "title": "Unit 1: What Is a Database?",
+  "order": 1,
+  "concepts": [
+    {
+      "id": "sql-db-basics",
+      "title": "Database Fundamentals",
+      "prerequisites": []
+    }
+  ],
+  "lessons": [
+    {
+      "id": "sql-01",
+      "title": "1. Database Exploration",
+      "description": "Relational databases store structured data in tables composed of rows and columns. Query all columns from the `customers` table.",
+      "order": 1,
+      "difficulty": "beginner",
+      "duration_minutes": 5,
+      "type": "learn",
+      "section_id": "sec-sql-1",
+      "section_title": "Section 1: Querying Data",
+      "test_out_eligible": false,
+      "concepts": ["sql-db-basics"],
+      "prerequisites": [],
+      "learning_objectives": ["Understand tables, rows, and columns", "Execute simple database exploration queries"],
+      "starter_code": "-- Query all columns from customers table\nSELECT * FROM customers;\n",
+      "solution_code": "SELECT * FROM customers;\n",
+      "tests": [
+        {
+          "name": "test_customers_exploration",
+          "test_code": "assert len(rows) >= 4 and columns[0] == 'id'",
+          "required": true
+        }
+      ],
+      "completion_requirements": {
+        "required_test_names": ["test_customers_exploration"]
+      },
+      "sublessons": [
+        {
+          "id": "sql-sub-1a",
+          "title": "Data vs Database",
+          "order": 1,
+          "exercises": [
+            {
+              "id": "sql-ex-1a",
+              "type": "mcq",
+              "question": "What is a row in a relational database table?",
+              "options": ["A single record / entry", "A column name", "A database server", "An index key"],
+              "correct_answer": "A single record / entry",
+              "xp_reward": 10,
+              "explanation": "In relational databases, each row represents an individual record."
+            },
+            {
+              "id": "sql-ex-1b",
+              "type": "fill_blank",
+              "question": "Which SQL keyword retrieves data from a table?",
+              "correct_answer": "SELECT",
+              "xp_reward": 10,
+              "explanation": "SELECT is used to query data from tables."
+            }
+          ]
+        }
+      ],
+      "mastery_exam": [
+        {
+          "id": "sql-m-1a",
+          "type": "mcq",
+          "question": "Which component defines table column names and data types?",
+          "options": ["Schema", "Query log", "Transaction buffer", "View"],
+          "correct_answer": "Schema"
+        }
+      ]
+    }
+  ]
+}

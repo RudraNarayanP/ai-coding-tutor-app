@@ -1,0 +1,31 @@
+{
+  "id": "js-modules-node",
+  "title": "Unit 4: Modules & Node.js",
+  "order": 4,
+  "concepts": [{ "id": "js-node", "title": "Node.js & Web Foundations", "prerequisites": ["js-async"] }],
+  "lessons": [
+    {
+      "id": "js-04",
+      "title": "4. Node.js & Application Foundations",
+      "description": "Build modern JavaScript web application services and module structures.",
+      "order": 4,
+      "difficulty": "intermediate",
+      "duration_minutes": 10,
+      "type": "checkpoint",
+      "section_id": "sec-js-2",
+      "section_title": "Section 2: Async & Node",
+      "test_out_eligible": true,
+      "concepts": ["js-node"],
+      "starter_code": "function createServerConfig(port = 8080) {\n    return { port, env: 'development' };\n}\nmodule.exports = { createServerConfig };\n",
+      "solution_code": "function createServerConfig(port = 8080) {\n    return { port, env: 'development' };\n}\nmodule.exports = { createServerConfig };\n",
+      "tests": [
+        {
+          "name": "test_server_config",
+          "unittest_code": "const cfg = solution.createServerConfig(3000);\nif (cfg.port !== 3000) throw new Error('Port mismatch');",
+          "required": true
+        }
+      ],
+      "completion_requirements": { "required_test_names": ["test_server_config"] }
+    }
+  ]
+}

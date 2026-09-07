@@ -1,0 +1,37 @@
+{
+  "id": "ai-apis-json",
+  "title": "Unit 1: HTTP, JSON & Model APIs",
+  "order": 1,
+  "concepts": [
+    {
+      "id": "ai-model-apis",
+      "title": "Calling Model APIs",
+      "prerequisites": []
+    }
+  ],
+  "lessons": [
+    {
+      "id": "ai-01",
+      "title": "1. Building Model API Request Payloads",
+      "description": "Construct standard Chat Completion JSON request payloads with system and user messages.",
+      "order": 1,
+      "difficulty": "intermediate",
+      "duration_minutes": 5,
+      "type": "learn",
+      "section_id": "sec-ai-1",
+      "section_title": "Section 1: AI Foundations",
+      "test_out_eligible": false,
+      "concepts": ["ai-model-apis"],
+      "starter_code": "import json\n\ndef build_chat_payload(model: str, system_prompt: str, user_prompt: str) -> str:\n    payload = {\n        \"model\": model,\n        \"messages\": [\n            {\"role\": \"system\", \"content\": system_prompt},\n            {\"role\": \"user\", \"content\": user_prompt}\n        ]\n    }\n    return json.dumps(payload)\n",
+      "solution_code": "import json\n\ndef build_chat_payload(model: str, system_prompt: str, user_prompt: str) -> str:\n    payload = {\n        \"model\": model,\n        \"messages\": [\n            {\"role\": \"system\", \"content\": system_prompt},\n            {\"role\": \"user\", \"content\": user_prompt}\n        ]\n    }\n    return json.dumps(payload)\n",
+      "tests": [
+        {
+          "name": "test_build_chat_payload",
+          "unittest_code": "def test_build_chat_payload(self):\n    import json\n    res = json.loads(build_chat_payload('gpt-4o-mini', 'sys', 'usr'))\n    self.assertEqual(res['model'], 'gpt-4o-mini')\n    self.assertEqual(len(res['messages']), 2)",
+          "required": true
+        }
+      ],
+      "completion_requirements": { "required_test_names": ["test_build_chat_payload"] }
+    }
+  ]
+}

@@ -1,0 +1,41 @@
+{
+  "id": "sql-u2",
+  "title": "Unit 2: SELECT",
+  "order": 2,
+  "concepts": [
+    {
+      "id": "sql-select",
+      "title": "SELECT & Column Aliases",
+      "prerequisites": ["sql-db-basics"]
+    }
+  ],
+  "lessons": [
+    {
+      "id": "sql-02",
+      "title": "2. Selecting Columns & DISTINCT",
+      "description": "Select specific columns `name` and `email` from `customers`, and use DISTINCT to find unique countries.",
+      "order": 2,
+      "difficulty": "beginner",
+      "duration_minutes": 5,
+      "type": "learn",
+      "section_id": "sec-sql-1",
+      "section_title": "Section 1: Querying Data",
+      "test_out_eligible": false,
+      "concepts": ["sql-select"],
+      "prerequisites": ["sql-db-basics"],
+      "learning_objectives": ["Select specific columns", "Use AS for aliases", "Use DISTINCT"],
+      "starter_code": "-- TODO: Select distinct country from customers\nSELECT DISTINCT country FROM customers;\n",
+      "solution_code": "SELECT DISTINCT country FROM customers;\n",
+      "tests": [
+        {
+          "name": "test_distinct_countries",
+          "test_code": "assert len(rows) >= 3",
+          "required": true
+        }
+      ],
+      "completion_requirements": {
+        "required_test_names": ["test_distinct_countries"]
+      }
+    }
+  ]
+}

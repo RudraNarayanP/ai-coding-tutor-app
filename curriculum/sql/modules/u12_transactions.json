@@ -1,0 +1,24 @@
+{
+  "id": "sql-u12",
+  "title": "Unit 12: Transactions",
+  "order": 12,
+  "concepts": [{ "id": "sql-tx", "title": "Transactions & Atomicity", "prerequisites": ["sql-design"] }],
+  "lessons": [
+    {
+      "id": "sql-12",
+      "title": "12. Transactions & Atomicity",
+      "description": "Demonstrate ACID atomicity using BEGIN TRANSACTION, UPDATE, and COMMIT.",
+      "order": 12,
+      "difficulty": "advanced",
+      "duration_minutes": 5,
+      "type": "learn",
+      "section_id": "sec-sql-3",
+      "section_title": "Section 3: Advanced SQL & Design",
+      "concepts": ["sql-tx"],
+      "starter_code": "BEGIN TRANSACTION;\nUPDATE employees SET salary = salary * 1.05 WHERE department = 'Engineering';\nCOMMIT;\nSELECT department, AVG(salary) FROM employees WHERE department = 'Engineering';\n",
+      "solution_code": "BEGIN TRANSACTION;\nUPDATE employees SET salary = salary * 1.05 WHERE department = 'Engineering';\nCOMMIT;\nSELECT department, AVG(salary) FROM employees WHERE department = 'Engineering';\n",
+      "tests": [{ "name": "test_transaction_commit", "test_code": "assert len(rows) == 1 and rows[0][1] > 95000", "required": true }],
+      "completion_requirements": { "required_test_names": ["test_transaction_commit"] }
+    }
+  ]
+}

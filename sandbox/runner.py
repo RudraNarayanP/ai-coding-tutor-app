@@ -1,9 +1,12 @@
 """Sandbox runner executed inside the Docker container or local environment.
 
-Supports Python, Java, and C++ test execution:
+Supports Python, Java, C++, SQL, JavaScript, and TypeScript test execution:
 - Python: Uses exec() and unittest / stdout runner.
 - Java: Compiles student code with javac, runs test harnesses or stdout matching.
 - C++: Compiles student code with g++ -std=c++20, runs binary test harnesses or stdout matching.
+- SQL: Executes queries against seeded SQLite database, returns result tables & asserts output/state.
+- JavaScript: Runs student code with Node.js, executes test assertions.
+- TypeScript: Runs student TypeScript code with Node.js (--experimental-strip-types).
 """
 
 import contextlib
@@ -11,6 +14,7 @@ import io
 import json
 import os
 import re
+import sqlite3
 import subprocess
 import sys
 import tempfile
@@ -459,6 +463,348 @@ int main() {{
 
 
 # ---------------------------------------------------------------------------
+# SQL Runner (SQLite In-Memory with Seeded Fixtures)
+# ---------------------------------------------------------------------------
+
+def seed_sqlite_database(conn: sqlite3.Connection) -> None:
+    """Populates standard Patchwork seed datasets into the SQLite database."""
+    cursor = conn.cursor()
+    cursor.executescript("""
+        CREATE TABLE IF NOT EXISTS users (
+            id INTEGER PRIMARY KEY,
+            username TEXT NOT NULL,
+            email TEXT NOT NULL,
+            created_at TEXT NOT NULL,
+            role TEXT NOT NULL
+        );
+
+        INSERT INTO users (id, username, email, created_at, role) VALUES
+            (1, 'alice_dev', 'alice@example.com', '2024-01-10', 'admin'),
+            (2, 'bob_coder', 'bob@example.com', '2024-01-15', 'developer'),
+            (3, 'charlie_data', 'charlie@example.com', '2024-02-01', 'analyst'),
+            (4, 'diana_ai', 'diana@example.com', '2024-02-10', 'developer');
+
+        CREATE TABLE IF NOT EXISTS customers (
+            id INTEGER PRIMARY KEY,
+            name TEXT NOT NULL,
+            email TEXT NOT NULL,
+            country TEXT NOT NULL
+        );
+
+        INSERT INTO customers (id, name, email, country) VALUES
+            (1, 'Alice Smith', 'alice@smith.org', 'USA'),
+            (2, 'Bob Jones', 'bob@jones.ca', 'Canada'),
+            (3, 'Carol Danvers', 'carol@marvel.com', 'USA'),
+            (4, 'David Beckham', 'david@england.uk', 'UK');
+
+        CREATE TABLE IF NOT EXISTS products (
+            id INTEGER PRIMARY KEY,
+            name TEXT NOT NULL,
+            category TEXT NOT NULL,
+            price REAL NOT NULL,
+            stock INTEGER NOT NULL
+        );
+
+        INSERT INTO products (id, name, category, price, stock) VALUES
+            (1, 'Laptop Pro', 'Electronics', 1299.99, 15),
+            (2, 'Mechanical Keyboard', 'Electronics', 99.50, 45),
+            (3, 'Ergonomic Chair', 'Furniture', 299.00, 10),
+            (4, 'Coffee Mug', 'Kitchen', 12.99, 100),
+            (5, 'Monitor 27-inch', 'Electronics', 350.00, 8);
+
+        CREATE TABLE IF NOT EXISTS orders (
+            id INTEGER PRIMARY KEY,
+            customer_id INTEGER NOT NULL,
+            product_id INTEGER NOT NULL,
+            quantity INTEGER NOT NULL,
+            order_date TEXT NOT NULL,
+            total_amount REAL NOT NULL,
+            FOREIGN KEY (customer_id) REFERENCES customers(id),
+            FOREIGN KEY (product_id) REFERENCES products(id)
+        );
+
+        INSERT INTO orders (id, customer_id, product_id, quantity, order_date, total_amount) VALUES
+            (101, 1, 1, 1, '2024-03-01', 1299.99),
+            (102, 1, 2, 2, '2024-03-02', 199.00),
+            (103, 2, 3, 1, '2024-03-02', 299.00),
+            (104, 3, 4, 4, '2024-03-05', 51.96),
+            (105, 1, 4, 1, '2024-03-06', 12.99),
+            (106, 2, 2, 1, '2024-03-07', 99.50);
+
+        CREATE TABLE IF NOT EXISTS employees (
+            id INTEGER PRIMARY KEY,
+            first_name TEXT NOT NULL,
+            last_name TEXT NOT NULL,
+            department TEXT NOT NULL,
+            salary REAL NOT NULL
+        );
+
+        INSERT INTO employees (id, first_name, last_name, department, salary) VALUES
+            (1, 'John', 'Doe', 'Engineering', 95000.00),
+            (2, 'Jane', 'Smith', 'Engineering', 105000.00),
+            (3, 'Sam', 'Wilson', 'Marketing', 65000.00),
+            (4, 'Sarah', 'Connor', 'Security', 88000.00),
+            (5, 'Mike', 'Ross', 'Legal', 92000.00);
+
+        CREATE TABLE IF NOT EXISTS courses (
+            id INTEGER PRIMARY KEY,
+            title TEXT NOT NULL,
+            category TEXT NOT NULL,
+            price REAL NOT NULL
+        );
+
+        INSERT INTO courses (id, title, category, price) VALUES
+            (1, 'Python Fundamentals', 'Programming', 0.00),
+            (2, 'SQL & Databases', 'Data', 0.00),
+            (3, 'C++ Performance', 'Systems', 0.00),
+            (4, 'TypeScript Architecture', 'Web', 0.00);
+
+        CREATE TABLE IF NOT EXISTS transactions (
+            id INTEGER PRIMARY KEY,
+            user_id INTEGER NOT NULL,
+            amount REAL NOT NULL,
+            status TEXT NOT NULL,
+            timestamp TEXT NOT NULL
+        );
+
+        INSERT INTO transactions (id, user_id, amount, status, timestamp) VALUES
+            (1, 1, 50.00, 'completed', '2024-03-01 10:00:00'),
+            (2, 2, 120.00, 'completed', '2024-03-01 11:30:00'),
+            (3, 1, 15.50, 'pending', '2024-03-02 09:15:00'),
+            (4, 3, 200.00, 'failed', '2024-03-02 14:20:00');
+    """)
+    conn.commit()
+
+
+def format_sql_result_table(columns: list[str], rows: list[tuple]) -> str:
+    """Formats SQL columns and rows into a clean ASCII table."""
+    if not columns:
+        return ""
+    col_widths = [len(str(c)) for c in columns]
+    for row in rows:
+        for idx, val in enumerate(row):
+            col_widths[idx] = max(col_widths[idx], len(str(val if val is not None else "NULL")))
+
+    header = " │ ".join(str(col).ljust(col_widths[i]) for i, col in enumerate(columns))
+    divider = "─┼─".join("─" * col_widths[i] for i in range(len(columns)))
+
+    formatted_rows = []
+    for row in rows:
+        row_str = " │ ".join(
+            str(val if val is not None else "NULL").ljust(col_widths[i])
+            for i, val in enumerate(row)
+        )
+        formatted_rows.append(f"│ {row_str} │")
+
+    top_border = "┌─" + "─┬─".join("─" * col_widths[i] for i in range(len(columns))) + "─┐"
+    mid_border = "├─" + divider + "─┤"
+    bot_border = "└─" + "─┴─".join("─" * col_widths[i] for i in range(len(columns))) + "─┘"
+
+    table_lines = [top_border, f"│ {header} │", mid_border] + formatted_rows + [bot_border]
+    return "\n".join(table_lines)
+
+
+def run_sql_tests(code: str, tests: list[dict]) -> list[dict]:
+    results = []
+
+    for test in tests or [{"name": "sql_execution"}]:
+        started = time.perf_counter()
+        conn = sqlite3.connect(":memory:")
+        try:
+            seed_sqlite_database(conn)
+            cursor = conn.cursor()
+
+            # Execute student query/queries
+            statements = [s.strip() for s in code.split(";") if s.strip()]
+            columns = []
+            rows = []
+            last_exec_err = None
+
+            for stmt in statements:
+                try:
+                    cursor.execute(stmt)
+                    if cursor.description:
+                        columns = [col[0] for col in cursor.description]
+                        rows = cursor.fetchall()
+                except Exception as exc:
+                    last_exec_err = str(exc)
+                    break
+
+            conn.commit()
+
+            table_output = format_sql_result_table(columns, rows) if columns else ""
+            elapsed = round((time.perf_counter() - started) * 1000)
+
+            if last_exec_err:
+                results.append({
+                    "name": test["name"],
+                    "passed": False,
+                    "error": f"SQL Error: {last_exec_err}",
+                    "execution_time_ms": elapsed,
+                    "stdout": "",
+                    "stderr": last_exec_err,
+                })
+                conn.close()
+                continue
+
+            test_code = test.get("test_code") or test.get("unittest_code")
+            expected_stdout = test.get("expected_stdout")
+            passed = True
+            error_msg = None
+
+            if test_code:
+                # Run assertion SQL or Python check
+                try:
+                    if test_code.strip().lower().startswith("select"):
+                        cursor.execute(test_code)
+                        res = cursor.fetchall()
+                        passed = bool(res and res[0][0])
+                        if not passed:
+                            error_msg = "Test SQL check failed."
+                    else:
+                        ns = {"conn": conn, "cursor": cursor, "rows": rows, "columns": columns, "assert": assert_fn}
+                        exec(compile(test_code, "test_check.py", "exec"), ns, ns)
+                except Exception as exc:
+                    passed = False
+                    error_msg = f"Check failed: {exc}"
+            elif expected_stdout is not None:
+                passed = (table_output.strip() == expected_stdout.strip())
+                if not passed:
+                    error_msg = f"Expected result table:\n{expected_stdout}\n\nGot:\n{table_output}"
+
+            results.append({
+                "name": test["name"],
+                "passed": passed,
+                "error": error_msg,
+                "execution_time_ms": elapsed,
+                "stdout": table_output,
+                "stderr": "",
+            })
+
+        except Exception as exc:
+            elapsed = round((time.perf_counter() - started) * 1000)
+            results.append({
+                "name": test["name"],
+                "passed": False,
+                "error": f"Database error: {exc}",
+                "execution_time_ms": elapsed,
+                "stdout": "",
+                "stderr": str(exc),
+            })
+        finally:
+            conn.close()
+
+    return results
+
+
+def assert_fn(cond: bool, msg: str = "Assertion failed"):
+    if not cond:
+        raise AssertionError(msg)
+
+
+# ---------------------------------------------------------------------------
+# JavaScript & TypeScript Runner (Node.js)
+# ---------------------------------------------------------------------------
+
+def run_js_ts_tests(language: str, code: str, tests: list[dict]) -> list[dict]:
+    results = []
+    is_ts = language.lower() in ("typescript", "ts")
+
+    with tempfile.TemporaryDirectory(prefix=f"patchwork_{language}_") as tmpdir:
+        ext = ".ts" if is_ts else ".js"
+        student_file = os.path.join(tmpdir, f"solution{ext}")
+        with open(student_file, "w", encoding="utf-8") as f:
+            f.write(code)
+
+        for test in tests or [{"name": "js_ts_execution"}]:
+            started = time.perf_counter()
+            test_body = test.get("test_code") or test.get("unittest_code")
+            runner_file = os.path.join(tmpdir, f"test_{test['name']}{ext}")
+
+            if test_body:
+                full_test_src = f"""
+const solution = require('./solution${ext}');
+try {{
+    {test_body}
+    console.log("TEST_PASSED");
+}} catch (err) {{
+    console.error(err && err.message ? err.message : String(err));
+    process.exit(1);
+}}
+"""
+                # Handle ES module vs CommonJS export fallback
+                if "export " in code or "import " in code:
+                    full_test_src = f"""
+import * as solution from './solution${ext}';
+import { assert_fn } from 'node:assert';
+try {{
+    {test_body}
+    console.log("TEST_PASSED");
+}} catch (err) {{
+    console.error(err && err.message ? err.message : String(err));
+    process.exit(1);
+}}
+"""
+            else:
+                full_test_src = code
+
+            with open(runner_file, "w", encoding="utf-8") as f:
+                f.write(full_test_src)
+
+            cmd = ["node"]
+            if is_ts:
+                cmd.append("--experimental-strip-types")
+            cmd.append(runner_file)
+
+            try:
+                exec_res = subprocess.run(
+                    cmd,
+                    cwd=tmpdir,
+                    input=test.get("stdin", ""),
+                    capture_output=True,
+                    text=True,
+                    timeout=5,
+                )
+                elapsed = round((time.perf_counter() - started) * 1000)
+
+                if test_body:
+                    passed = (exec_res.returncode == 0)
+                    error_msg = None if passed else (exec_res.stderr.strip() or "Test failed")
+                    results.append({
+                        "name": test["name"],
+                        "passed": passed,
+                        "error": error_msg,
+                        "execution_time_ms": elapsed,
+                        "stdout": exec_res.stdout,
+                        "stderr": exec_res.stderr,
+                    })
+                else:
+                    expected = test.get("expected_stdout")
+                    passed = (expected is None or exec_res.stdout == expected)
+                    error_msg = None if passed else f"Expected output {expected!r}, got {exec_res.stdout!r}"
+                    results.append({
+                        "name": test["name"],
+                        "passed": passed,
+                        "error": error_msg,
+                        "execution_time_ms": elapsed,
+                        "stdout": exec_res.stdout,
+                        "stderr": exec_res.stderr,
+                    })
+            except subprocess.TimeoutExpired:
+                elapsed = round((time.perf_counter() - started) * 1000)
+                results.append({
+                    "name": test["name"],
+                    "passed": False,
+                    "error": "Execution timed out (5s limit)",
+                    "execution_time_ms": elapsed,
+                    "stdout": "",
+                    "stderr": "TimeoutExpired",
+                })
+
+    return results
+
+
+# ---------------------------------------------------------------------------
 # Dispatcher & Entry point
 # ---------------------------------------------------------------------------
 
@@ -468,6 +814,10 @@ def run_all_tests(language: str, code: str, tests: list[dict]) -> list[dict]:
         return run_java_tests(code, tests)
     elif lang in ("cpp", "c++"):
         return run_cpp_tests(code, tests)
+    elif lang in ("sql", "sqlite"):
+        return run_sql_tests(code, tests)
+    elif lang in ("javascript", "js", "typescript", "ts"):
+        return run_js_ts_tests(lang, code, tests)
     else:
         return run_python_tests(code, tests)
 
@@ -477,7 +827,7 @@ def main() -> None:
         request = json.load(sys.stdin)
         language = request.get("language", "python")
         code = request["code"]
-        tests = request["tests"]
+        tests = request.get("tests", [])
         results = run_all_tests(language, code, tests)
         all_stdout = "\n".join(r["stdout"] for r in results if r["stdout"])
         all_stderr = "\n".join(r["stderr"] for r in results if r["stderr"])
