@@ -1,4 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
+import { PatchworkCharacter } from './components/PatchworkCharacters'
+import { getGamificationState, recordActivity, activateXpBoost } from './utils/gamification'
+import { playPatchworkSound } from './utils/audio'
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 type TestResult = {
@@ -117,51 +120,6 @@ function LineNumbers({
   )
 }
 
-// ─── Audio Helper ──────────────────────────────────────────────────────────────
-function playFeedbackSound(type: 'success' | 'error', enabled: boolean) {
-  if (!enabled) return
-  try {
-    const AudioCtx =
-      window.AudioContext ||
-      (window as unknown as { webkitAudioContext: typeof AudioContext }).webkitAudioContext
-    if (!AudioCtx) return
-    const ctx = new AudioCtx()
-    if (ctx.state === 'suspended') {
-      ctx.resume()
-    }
-    const now = ctx.currentTime
-    if (type === 'success') {
-      const notes = [523.25, 659.25, 783.99] // C5, E5, G5
-      notes.forEach((freq, idx) => {
-        const osc = ctx.createOscillator()
-        const gain = ctx.createGain()
-        osc.type = 'triangle'
-        osc.frequency.setValueAtTime(freq, now + idx * 0.08)
-        gain.gain.setValueAtTime(0.15, now + idx * 0.08)
-        gain.gain.exponentialRampToValueAtTime(0.001, now + idx * 0.08 + 0.3)
-        osc.connect(gain)
-        gain.connect(ctx.destination)
-        osc.start(now + idx * 0.08)
-        osc.stop(now + idx * 0.08 + 0.35)
-      })
-    } else {
-      const osc = ctx.createOscillator()
-      const gain = ctx.createGain()
-      osc.type = 'sawtooth'
-      osc.frequency.setValueAtTime(180, now)
-      osc.frequency.exponentialRampToValueAtTime(120, now + 0.25)
-      gain.gain.setValueAtTime(0.12, now)
-      gain.gain.exponentialRampToValueAtTime(0.001, now + 0.25)
-      osc.connect(gain)
-      gain.connect(ctx.destination)
-      osc.start(now)
-      osc.stop(now + 0.25)
-    }
-  } catch {
-    // AudioContext silently handled
-  }
-}
-
 // ─── App Component ────────────────────────────────────────────────────────────
 function App() {
   const [courses, setCourses] = useState<CourseSummary[]>([])
@@ -201,9 +159,17 @@ function App() {
   const [testOutSubmissions, setTestOutSubmissions] = useState<Record<string, any>>({})
   const [testOutResult, setTestOutResult] = useState<any>(null)
 
+  // Gamification state
+  const [gamification, setGamification] = useState(getGamificationState())
+  const [consecutiveCorrect, setConsecutiveCorrect] = useState(0)
+  const [charState, setCharState] = useState<'idle' | 'happy' | 'celebrate' | 'thinking' | 'confused' | 'encouraging'>('idle')
+  const [charSpeech, setCharSpeech] = useState<string | undefined>('Let\'s learn together!')
+
   const triggerXpGain = useCallback((amount: number) => {
     if (amount > 0) {
-      setXpGainPopup(amount)
+      const { state, effectiveXp } = recordActivity(amount)
+      setGamification(state)
+      setXpGainPopup(effectiveXp)
       setTimeout(() => setXpGainPopup(null), 1500)
     }
   }, [])
@@ -230,7 +196,7 @@ function App() {
     syncLineNumbers(0)
   }, [syncLineNumbers])
 
-  // ── Save Sound Preference ─────────────────────────────────────────────────
+  // Save Sound Preference
   const toggleSound = useCallback(() => {
     setSoundEnabled((prev) => {
       const next = !prev
@@ -239,32 +205,28 @@ function App() {
     })
   }, [])
 
-  // ── Save Draft Code to localStorage ────────────────────────────────────────
+  // Save Draft Code
   useEffect(() => {
     if (lesson?.id && code !== undefined) {
       localStorage.setItem(`patchwork_code_${lesson.id}`, code)
     }
   }, [lesson?.id, code])
 
-  // ── Load Course & Lessons Data ──────────────────────────────────────────────
+  // Load Course & Lessons Data
   const loadCourseData = useCallback(async (lang: string) => {
     setIsLoadingLesson(true)
     try {
-      // 1. Fetch available courses
       const coursesRes = await fetch('/api/courses')
       if (coursesRes.ok) {
-        const coursesData = (await coursesRes.json()) as CourseSummary[]
-        setCourses(coursesData)
+        setCourses((await coursesRes.json()) as CourseSummary[])
       }
 
-      // 2. Select course on backend
       await fetch('/api/courses/select', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ language: lang }),
       })
 
-      // 3. Fetch lessons for selected language
       const summariesResponse = await fetch(`/api/lessons?language=${encodeURIComponent(lang)}`)
       if (!summariesResponse.ok) throw new Error('Lesson service unavailable')
       const summariesRaw = await summariesResponse.json()
@@ -275,7 +237,6 @@ function App() {
       const completedIds = summaries.filter((l) => l.status === 'completed').map((l) => l.id)
       localStorage.setItem(`patchwork_completed_lessons_${lang}`, JSON.stringify(completedIds))
 
-      // Restore last active lesson if unlocked, otherwise current lesson
       const lastActiveId = localStorage.getItem(`patchwork_last_active_lesson_${lang}`)
       const targetSummary =
         (lastActiveId && summaries.find((l) => l.id === lastActiveId && l.status !== 'locked')) ||
@@ -287,7 +248,6 @@ function App() {
       const selected = (await lessonResponse.json()) as Lesson
       setLesson(selected)
 
-      // Fetch progression (XP & level)
       const progRes = await fetch(`/api/progression?language=${encodeURIComponent(lang)}`)
       if (progRes.ok) {
         const prog = await progRes.json()
@@ -295,7 +255,6 @@ function App() {
         setLevel(prog.level || 1)
       }
 
-      // Restore draft code if available, else starter_code
       const draftCode = localStorage.getItem(`patchwork_code_${selected.id}`)
       setCode(draftCode !== null ? draftCode : selected.starter_code ?? '')
       localStorage.setItem(`patchwork_last_active_lesson_${lang}`, selected.id)
@@ -305,6 +264,8 @@ function App() {
       setActiveSubLessonIndex(0)
       setActiveExerciseIndex(0)
       setExerciseInput({})
+      setCharState('idle')
+      setCharSpeech(`Welcome to ${selected.title}!`)
       requestAnimationFrame(resetEditorScroll)
       setBackendError(false)
     } catch {
@@ -325,7 +286,7 @@ function App() {
     localStorage.setItem('patchwork_active_language', lang)
   }
 
-  // ── AI Providers Health Polling ─────────────────────────────────────────────
+  // AI Providers Health Polling
   const fetchProvidersHealth = useCallback(async () => {
     try {
       const response = await fetch('/api/ai/providers')
@@ -358,15 +319,17 @@ function App() {
         await fetchProvidersHealth()
       }
     } catch {
-      // Ignore selection errors
+      // Ignore
     }
   }
 
-  // ── Navigate to Lesson ──────────────────────────────────────────────────────
+  // Navigate to Lesson
   const loadLesson = useCallback(
     async (item: LessonSummary) => {
       if (item.status === 'locked') {
         setFeedback('Complete earlier lessons to unlock this one.')
+        setCharState('thinking')
+        setCharSpeech('Complete previous lessons first!')
         return
       }
       setIsLoadingLesson(true)
@@ -386,7 +349,9 @@ function App() {
         setShowCompletion(false)
         setSessionNotes([])
         setNoteInput('')
-        setFeedback('Run your code to get immediate feedback from the local sandbox.')
+        setCharState('idle')
+        setCharSpeech(`Let's explore ${selected.title}!`)
+        setFeedback('Run your code or answer the question to continue.')
         setTimeout(() => {
           resetEditorScroll()
           editorRef.current?.focus()
@@ -400,11 +365,13 @@ function App() {
     [resetEditorScroll]
   )
 
-  // ── Run Code in Sandbox ────────────────────────────────────────────────────
+  // Run Code in Sandbox
   const runTests = useCallback(async () => {
     if (!lesson) return
     setIsRunning(true)
     setFeedback('Checking your code in the sandbox…')
+    setCharState('thinking')
+    setCharSpeech('Running tests...')
     try {
       const response = await fetch(`/api/lessons/${lesson.id}/run`, {
         method: 'POST',
@@ -423,10 +390,12 @@ function App() {
         execution.tests.length > 0 &&
         execution.tests.every((t) => t.passed || !t.required)
 
-      playFeedbackSound(passedAllRequired ? 'success' : 'error', soundEnabled)
+      playPatchworkSound(passedAllRequired ? 'success' : 'error', soundEnabled)
 
       if (execution.completed) {
         setShowCompletion(true)
+        setCharState('celebrate')
+        setCharSpeech('🎉 Lesson Mastered! Outstanding job!')
         setFeedback('🎉 Great! Everything works. Next lesson is unlocked!')
         const progRes = await fetch(`/api/progression?language=${encodeURIComponent(selectedLanguage)}`)
         if (progRes.ok) {
@@ -438,8 +407,12 @@ function App() {
           setLevel(prog.level || 1)
         }
       } else if (execution.passed) {
+        setCharState('happy')
+        setCharSpeech('✓ Excellent code!')
         setFeedback('✓ All required checks passed. You are on the right track!')
       } else {
+        setCharState('encouraging')
+        setCharSpeech('Almost there! Check the hint below.')
         const failed = execution.tests.filter((t) => !t.passed && t.required)
         setFeedback(
           failed.length > 0
@@ -451,14 +424,7 @@ function App() {
       const summariesResponse = await fetch(`/api/lessons?language=${encodeURIComponent(selectedLanguage)}`)
       if (summariesResponse.ok) {
         const summariesRaw = await summariesResponse.json()
-        const summaries: LessonSummary[] = Array.isArray(summariesRaw) ? summariesRaw : []
-        setLessons(summaries)
-        const completedIds = summaries.filter((l) => l.status === 'completed').map((l) => l.id)
-        localStorage.setItem(`patchwork_completed_lessons_${selectedLanguage}`, JSON.stringify(completedIds))
-      }
-      const coursesRes = await fetch('/api/courses')
-      if (coursesRes.ok) {
-        setCourses((await coursesRes.json()) as CourseSummary[])
+        setLessons(Array.isArray(summariesRaw) ? summariesRaw : [])
       }
       setTimeout(scrollToResults, 100)
     } catch {
@@ -466,12 +432,14 @@ function App() {
     } finally {
       setIsRunning(false)
     }
-  }, [lesson, code, soundEnabled, scrollToResults])
+  }, [lesson, code, soundEnabled, scrollToResults, xp, selectedLanguage, triggerXpGain])
 
-  // ── Ask Tutor for Hint ─────────────────────────────────────────────────────
+  // Ask Tutor for Hint
   const askTutor = useCallback(async () => {
     if (!lesson || !aiEnabled) return
     setIsTutorLoading(true)
+    setCharState('thinking')
+    setCharSpeech('Consulting tutor AI...')
     setFeedback('Getting a hint from your tutor…')
     const controller = new AbortController()
     const timeoutId = setTimeout(() => controller.abort(), 50000)
@@ -502,6 +470,8 @@ function App() {
         hint_level: number
       }
       setFeedback(tutor.message)
+      setCharState('encouraging')
+      setCharSpeech('Here is a hint!')
       if (tutor.available) {
         setPreviousHints((h) => [...h, tutor.message].slice(-8))
         setHintLevel(Math.min(tutor.hint_level + 1, 4))
@@ -514,7 +484,7 @@ function App() {
     }
   }, [lesson, aiEnabled, code, results, previousHints, hintLevel])
 
-  // ── View Solution ──────────────────────────────────────────────────────────
+  // View Solution
   const askSolution = useCallback(async () => {
     if (!lesson) return
     setIsLoadingLesson(true)
@@ -536,7 +506,7 @@ function App() {
     }
   }, [lesson])
 
-  // ── Exercise Submission Handler (MCQ, Fill Blank, Code Completion, etc.) ────
+  // Submit Interactive Exercise
   const submitSubLessonExercise = useCallback(
     async (exercise: Exercise, sublessonId?: string) => {
       if (!lesson) return
@@ -556,9 +526,25 @@ function App() {
         if (!response.ok) throw new Error('Grading failed')
         const result = await response.json()
 
-        playFeedbackSound(result.passed ? 'success' : 'error', soundEnabled)
+        playPatchworkSound(result.passed ? 'success' : 'error', soundEnabled)
 
         if (result.passed) {
+          const nextConsecutive = consecutiveCorrect + 1
+          setConsecutiveCorrect(nextConsecutive)
+
+          if (nextConsecutive === 3) {
+            setCharState('celebrate')
+            setCharSpeech('🔥 3 in a row! You\'re cooking!')
+            playPatchworkSound('streak_milestone', soundEnabled)
+          } else if (nextConsecutive === 5) {
+            setCharState('celebrate')
+            setCharSpeech('⚡ 5 IN A ROW! UNSTOPPABLE!')
+            playPatchworkSound('streak_milestone', soundEnabled)
+          } else {
+            setCharState('happy')
+            setCharSpeech('Nice answer! Keep going!')
+          }
+
           if (result.xp_awarded > 0) {
             triggerXpGain(result.xp_awarded)
           }
@@ -566,13 +552,15 @@ function App() {
           setLevel(result.level || level)
           setFeedback(`✓ ${result.feedback} ${result.xp_awarded > 0 ? `+${result.xp_awarded} XP!` : ''}`)
 
-          // Refresh lesson & progression summaries
           const summariesResponse = await fetch(`/api/lessons?language=${encodeURIComponent(selectedLanguage)}`)
           if (summariesResponse.ok) {
             const summariesRaw = await summariesResponse.json()
             setLessons(Array.isArray(summariesRaw) ? summariesRaw : [])
           }
         } else {
+          setConsecutiveCorrect(0)
+          setCharState('encouraging')
+          setCharSpeech('Good try! Review and try again.')
           setFeedback(`Not quite: ${result.feedback}`)
         }
       } catch {
@@ -581,10 +569,10 @@ function App() {
         setIsRunning(false)
       }
     },
-    [lesson, code, exerciseInput, soundEnabled, triggerXpGain, xp, level, selectedLanguage]
+    [lesson, code, exerciseInput, soundEnabled, triggerXpGain, xp, level, selectedLanguage, consecutiveCorrect]
   )
 
-  // ── Test-Out Mastery Exam Handler ───────────────────────────────────────────
+  // Test Out Submit
   const handleTestOutSubmit = useCallback(async () => {
     if (!lesson) return
     setIsRunning(true)
@@ -598,7 +586,9 @@ function App() {
       const data = await res.json()
       setTestOutResult(data)
       if (data.passed) {
-        playFeedbackSound('success', soundEnabled)
+        playPatchworkSound('checkpoint_complete', soundEnabled)
+        setCharState('celebrate')
+        setCharSpeech('🏆 TEST OUT PASSED! UNLOCKED NEXT UNIT!')
         if (data.xp_awarded > 0) {
           triggerXpGain(data.xp_awarded)
         }
@@ -611,7 +601,9 @@ function App() {
           setLessons(Array.isArray(summariesRaw) ? summariesRaw : [])
         }
       } else {
-        playFeedbackSound('error', soundEnabled)
+        playPatchworkSound('error', soundEnabled)
+        setCharState('encouraging')
+        setCharSpeech('Keep practicing! You\'ll get it next time.')
       }
     } catch {
       setFeedback('Failed to evaluate mastery exam.')
@@ -620,7 +612,7 @@ function App() {
     }
   }, [lesson, testOutSubmissions, soundEnabled, triggerXpGain, xp, level, selectedLanguage])
 
-  // ── Keyboard shortcuts ─────────────────────────────────────────────────────
+  // Keyboard shortcuts
   const handleEditorKeyDown = useCallback(
     (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
       if ((e.shiftKey || e.ctrlKey) && e.key === 'Enter') {
@@ -656,6 +648,12 @@ function App() {
     if (next) await loadLesson(next)
   }, [lessons, loadLesson])
 
+  const activateBoost = useCallback(() => {
+    const updated = activateXpBoost(15)
+    setGamification(updated)
+    playPatchworkSound('boost_active', soundEnabled)
+  }, [soundEnabled])
+
   // Group lessons by Section -> Unit
   const sectionsMap = new Map<
     string,
@@ -685,16 +683,17 @@ function App() {
     units: Array.from(sec.units.values()),
   }))
 
-  // Derived state
   const completedCount = safeLessons.filter((l) => l.status === 'completed').length
   const progressPct = safeLessons.length ? (completedCount / safeLessons.length) * 100 : 0
   const allPassed = results !== null && results.length > 0 && results.every((r) => r.passed || !r.required)
   const failedRequired = results?.filter((r) => !r.passed && r.required) ?? []
   const hintDisabled = !aiEnabled || !isAiAvailable || !lesson || isTutorLoading || isRunning
 
+  const isBoostActive = gamification.boostExpiresAt && Date.now() < gamification.boostExpiresAt
+
   return (
     <div className="duo-app">
-      {/* Duolingo-style Top Header */}
+      {/* Top Header */}
       <header className="duo-header" role="banner">
         <div className="duo-brand">
           <div className="duo-logo-icon">p</div>
@@ -715,16 +714,30 @@ function App() {
         </div>
 
         <div className="duo-header-right">
+          {/* Streak Badge */}
+          <div className="duo-streak-badge" title="Daily Learning Streak">
+            🔥 {gamification.streakCount || 1}
+          </div>
+
+          {/* XP Boost Button / Badge */}
+          <button
+            className={`duo-boost-badge ${isBoostActive ? 'active' : ''}`}
+            onClick={activateBoost}
+            title={isBoostActive ? '2x XP Boost Active!' : 'Click to activate 2x XP Boost'}
+          >
+            ⚡ {isBoostActive ? '2× BOOST' : 'Boost'}
+          </button>
+
           {/* XP & Level Badge */}
           <div className="duo-xp-badge" aria-label={`XP: ${xp}, Level: ${level}`}>
-            <span>⚡ {xp} XP</span>
+            <span>⭐ {xp} XP</span>
             <span style={{ fontSize: '12px', opacity: 0.8, marginLeft: '4px' }}>Lvl {level}</span>
             {xpGainPopup !== null && (
               <div className="xp-float-anim">+{xpGainPopup} XP!</div>
             )}
           </div>
 
-          {/* AI Provider & Model Selector */}
+          {/* AI Provider Selector */}
           <div className="duo-provider-selector" style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
             <select
               value={selectedProvider}
@@ -759,7 +772,6 @@ function App() {
             style={{ padding: '6px 14px', fontSize: '13px' }}
             aria-label={soundEnabled ? 'Mute audio feedback' : 'Unmute audio feedback'}
             onClick={toggleSound}
-            title={soundEnabled ? 'Mute audio' : 'Unmute audio'}
           >
             {soundEnabled ? '🔊 Sound' : '🔇 Sound'}
           </button>
@@ -787,11 +799,11 @@ function App() {
         </div>
       )}
 
-      {/* Main Learning Workspace */}
+      {/* Workspace */}
       <div className="duo-main-container">
         {/* Left Side Skill Tree Path */}
         <aside className="duo-sidebar" aria-label="Course navigation">
-          {/* Course Language Switcher Tabs */}
+          {/* Language Switcher Tabs */}
           <div className="duo-course-selector" role="tablist" aria-label="Course language selector">
             {[
               { lang: 'python', label: 'Python' },
@@ -812,6 +824,17 @@ function App() {
 
           <div className="duo-sidebar-title">
             {selectedLanguage === 'cpp' ? 'C++' : selectedLanguage === 'java' ? 'Java' : 'Python'} Path
+          </div>
+
+          {/* Daily Goal Bar */}
+          <div className="daily-goal-card" style={{ padding: '10px', background: '#f8fafc', borderRadius: '12px', border: '1px solid #cbd5e1', marginBottom: '8px' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '12px', fontWeight: 800, color: '#4a4e69', marginBottom: '4px' }}>
+              <span>DAILY GOAL</span>
+              <span>{gamification.dailyXp} / {gamification.dailyGoal} XP</span>
+            </div>
+            <div style={{ height: '8px', background: '#e2e8f0', borderRadius: '999px', overflow: 'hidden' }}>
+              <div style={{ height: '100%', background: '#58cc02', width: `${Math.min(100, (gamification.dailyXp / gamification.dailyGoal) * 100)}%` }} />
+            </div>
           </div>
 
           <nav className="duo-path-list" aria-label="Lessons">
@@ -880,20 +903,20 @@ function App() {
           </nav>
         </aside>
 
-        {/* Center Stage: Interactive Learning Moment */}
+        {/* Center Stage */}
         <main className="duo-stage" aria-label="Lesson content">
           {isLoadingLesson ? (
-            <div
-              className="duo-card"
-              style={{ textAlign: 'center', padding: '48px' }}
-              role="status"
-              aria-label="Loading lesson"
-            >
+            <div className="duo-card" style={{ textAlign: 'center', padding: '48px' }} role="status" aria-label="Loading lesson">
               <h2>Loading exercise…</h2>
             </div>
           ) : lesson ? (
             <>
-              {/* Lesson Question Card */}
+              {/* Patchwork Character Header */}
+              <div style={{ marginBottom: '16px' }}>
+                <PatchworkCharacter name="patch" state={charState} speech={charSpeech} />
+              </div>
+
+              {/* Lesson Card */}
               <div className="duo-card">
                 <div className="duo-card-header">
                   <div className="duo-badge-group">
@@ -902,9 +925,6 @@ function App() {
                     </span>
                     {lesson.section_title && (
                       <span className="duo-section-badge">{lesson.section_title}</span>
-                    )}
-                    {lesson.unit_title && (
-                      <span className="duo-unit-badge">{lesson.unit_title}</span>
                     )}
                   </div>
                   <span className="duo-difficulty-badge">{lesson.difficulty}</span>
@@ -920,7 +940,6 @@ function App() {
                         setTestOutResult(null)
                         setShowTestOutModal(true)
                       }}
-                      title="Jump ahead by taking the mastery exam"
                     >
                       ⚡ Test Out / Jump Ahead
                     </button>
@@ -949,7 +968,7 @@ function App() {
                   </div>
                 )}
 
-                {/* Render Active Exercise or Default Code Editor */}
+                {/* Active Exercise */}
                 {(() => {
                   const currentSub = lesson.sublessons?.[activeSubLessonIndex]
                   const currentEx = currentSub?.exercises?.[activeExerciseIndex] || {
@@ -1045,7 +1064,7 @@ function App() {
                     )
                   }
 
-                  // Default Code Editor Renderer
+                  // Default Code Editor
                   return (
                     <div className="duo-editor-container">
                       <div className="duo-editor-top">
@@ -1063,7 +1082,7 @@ function App() {
                           onKeyDown={handleEditorKeyDown}
                           disabled={isRunning}
                           placeholder="Write your code here… (Press Shift+Enter or Ctrl+Enter to run)"
-                          aria-label="Code editor — use Shift+Enter or Ctrl+Enter to run"
+                          aria-label="Code editor"
                         />
                       </div>
                     </div>
@@ -1096,34 +1115,18 @@ function App() {
                     )}
                   </div>
                   {results.map((r) => (
-                    <div
-                      key={r.name}
-                      className="result-row"
-                      style={{ display: 'flex', gap: '8px', alignItems: 'center', fontSize: '13px' }}
-                    >
-                      <span role="img" aria-label={r.passed ? 'Passed' : 'Failed'}>
-                        {r.passed ? '✓' : '×'}
-                      </span>
+                    <div key={r.name} className="result-row" style={{ display: 'flex', gap: '8px', alignItems: 'center', fontSize: '13px' }}>
+                      <span role="img" aria-label={r.passed ? 'Passed' : 'Failed'}>{r.passed ? '✓' : '×'}</span>
                       <span>{r.name}</span>
                       {!r.required && (
-                        <span
-                          className="opt"
-                          style={{
-                            fontSize: '10px',
-                            background: 'rgba(0,0,0,0.1)',
-                            padding: '1px 4px',
-                            borderRadius: '3px',
-                          }}
-                        >
-                          opt
-                        </span>
+                        <span className="opt" style={{ fontSize: '10px', background: 'rgba(0,0,0,0.1)', padding: '1px 4px', borderRadius: '3px' }}>opt</span>
                       )}
                     </div>
                   ))}
                 </div>
               )}
 
-              {/* Tutor Coach Feedback Display */}
+              {/* Tutor Feedback */}
               <aside aria-label="Tutor feedback">
                 <div className="duo-tutor-box" role="status" aria-label="Tutor feedback">
                   <div className="duo-tutor-avatar">p</div>
@@ -1132,7 +1135,7 @@ function App() {
                     <div className="duo-tutor-text">
                       {isTutorLoading
                         ? 'Thinking…'
-                        : feedback ?? (isAiAvailable ? 'Run your code or ask for a hint!' : currentProviderStatus?.reason || 'Provider unavailable.')}
+                        : feedback ?? (isAiAvailable ? 'Run your code or ask for a hint!' : currentProviderStatus?.reason || 'Selected provider is unconfigured.')}
                     </div>
                   </div>
                 </div>
@@ -1143,7 +1146,7 @@ function App() {
                 )}
               </aside>
 
-              {/* Celebratory Completion Overlay */}
+              {/* Lesson Completion Overlay */}
               {showCompletion && (
                 <div className="duo-feedback-panel success" style={{ marginTop: '16px' }}>
                   <div className="duo-feedback-title">
@@ -1158,7 +1161,7 @@ function App() {
                 </div>
               )}
 
-              {/* Session Notes Section */}
+              {/* Notes */}
               <div className="session-notes" style={{ marginTop: '24px' }}>
                 <div style={{ display: 'flex', gap: '8px' }}>
                   <input
@@ -1175,13 +1178,7 @@ function App() {
                     aria-label="Session note"
                     style={{ flex: 1, padding: '8px 12px', borderRadius: '8px', border: '1px solid #cbd5e1' }}
                   />
-                  <button
-                    onClick={addNote}
-                    aria-label="Add note"
-                    style={{ padding: '8px 16px', background: '#58cc02', color: '#fff', borderRadius: '8px', fontWeight: 800 }}
-                  >
-                    +
-                  </button>
+                  <button onClick={addNote} aria-label="Add note" style={{ padding: '8px 16px', background: '#58cc02', color: '#fff', borderRadius: '8px', fontWeight: 800 }}>+</button>
                 </div>
                 {sessionNotes.length > 0 && (
                   <ul style={{ marginTop: '12px', paddingLeft: '20px' }}>
@@ -1196,46 +1193,21 @@ function App() {
         </main>
       </div>
 
-      {/* Test-Out Mastery Exam Modal */}
+      {/* Test-Out Modal */}
       {showTestOutModal && lesson && (
         <div className="modal-overlay" role="dialog" aria-label="Mastery Exam Modal">
           <div className="modal-card">
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
               <h2 style={{ fontSize: '22px', fontWeight: 800 }}>⚡ Mastery Exam: {lesson.title}</h2>
-              <button
-                onClick={() => setShowTestOutModal(false)}
-                style={{ fontSize: '20px', fontWeight: 800, background: 'none', border: 'none', cursor: 'pointer' }}
-              >
-                ✕
-              </button>
+              <button onClick={() => setShowTestOutModal(false)} style={{ fontSize: '20px', fontWeight: 800, background: 'none', border: 'none', cursor: 'pointer' }}>✕</button>
             </div>
-            <p style={{ color: '#4a4e69', marginBottom: '20px' }}>
-              Pass with 80%+ score to test out of this lesson and earn +100 XP!
-            </p>
+            <p style={{ color: '#4a4e69', marginBottom: '20px' }}>Pass with 80%+ score to test out of this lesson and earn +100 XP!</p>
 
             {testOutResult ? (
               <div className={`duo-feedback-panel ${testOutResult.passed ? 'success' : 'error'}`}>
                 <h3>{testOutResult.passed ? '🎉 Congratulations! You Mastered This Concept!' : 'Keep Practicing!'}</h3>
                 <p>Score: {testOutResult.score_pct}% ({testOutResult.passed_count} / {testOutResult.total_questions} correct)</p>
-                {testOutResult.passed ? (
-                  <p style={{ fontWeight: 800 }}>+100 XP Earned! Next lessons unlocked.</p>
-                ) : (
-                  <div>
-                    <p>Recommended areas to review:</p>
-                    <ul>
-                      {testOutResult.weak_areas?.map((wa: string, i: number) => (
-                        <li key={i}>{wa}</li>
-                      ))}
-                    </ul>
-                  </div>
-                )}
-                <button
-                  className="duo-button duo-button-primary"
-                  style={{ marginTop: '16px' }}
-                  onClick={() => setShowTestOutModal(false)}
-                >
-                  Close
-                </button>
+                <button className="duo-button duo-button-primary" style={{ marginTop: '16px' }} onClick={() => setShowTestOutModal(false)}>Close</button>
               </div>
             ) : (
               <div>
@@ -1244,9 +1216,7 @@ function App() {
                   : lesson.sublessons?.flatMap((s) => s.exercises) || []
                 ).map((ex, idx) => (
                   <div key={ex.id} style={{ marginBottom: '20px', padding: '12px', border: '1px solid #cbd5e1', borderRadius: '8px' }}>
-                    <h4 style={{ fontWeight: 800, marginBottom: '8px' }}>
-                      Question {idx + 1}: {ex.question || ex.title}
-                    </h4>
+                    <h4 style={{ fontWeight: 800, marginBottom: '8px' }}>Question {idx + 1}: {ex.question || ex.title}</h4>
                     {ex.options && ex.options.length > 0 ? (
                       <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
                         {ex.options.map((opt) => (
@@ -1285,12 +1255,7 @@ function App() {
                   </div>
                 ))}
 
-                <button
-                  className="duo-button duo-button-primary"
-                  style={{ width: '100%', marginTop: '16px' }}
-                  onClick={handleTestOutSubmit}
-                  disabled={isRunning}
-                >
+                <button className="duo-button duo-button-primary" style={{ width: '100%', marginTop: '16px' }} onClick={handleTestOutSubmit} disabled={isRunning}>
                   {isRunning ? 'Evaluating Exam…' : 'Submit Mastery Exam'}
                 </button>
               </div>
@@ -1299,7 +1264,7 @@ function App() {
         </div>
       )}
 
-      {/* Bottom Sticky Action Bar */}
+      {/* Footer Bar */}
       <footer className="duo-footer-bar">
         <div className="duo-footer-left" style={{ display: 'flex', gap: '12px' }}>
           <button
@@ -1323,19 +1288,16 @@ function App() {
               ? 'AI tutor is paused'
               : 'Request a hint'}
           </button>
-
           <button
             id="solution-button"
             className="duo-button duo-button-secondary duo-button-solution"
             onClick={askSolution}
-            disabled={!lesson || isRunning || isLoadingLesson}
+            disabled={!lesson || isRunning}
             aria-label="View Solution"
-            title="Insert official solution into code editor"
           >
             View Solution 💡
           </button>
         </div>
-
         <button
           id="run-tests-button"
           className="duo-button duo-button-primary"

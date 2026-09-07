@@ -137,6 +137,71 @@ button:disabled { cursor: not-allowed; }
   transition: width 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
+.duo-streak-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 6px 12px;
+  background: #ffedd5;
+  border: 2px solid #fdba74;
+  border-radius: var(--r-full);
+  font-size: 14px;
+  font-weight: 800;
+  color: #c2410c;
+}
+
+.duo-boost-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 6px 12px;
+  background: #f3e8ff;
+  border: 2px solid #d8b4fe;
+  border-radius: var(--r-full);
+  font-size: 13px;
+  font-weight: 800;
+  color: #7e22ce;
+  cursor: pointer;
+}
+
+.duo-boost-badge.active {
+  background: #ce82ff;
+  color: #ffffff;
+  border-color: #a855f7;
+  animation: pulse-ring 2s infinite;
+}
+
+.patch-character-wrapper {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.patch-speech-bubble {
+  background: #ffffff;
+  border: 2px solid var(--line);
+  border-radius: var(--r-md);
+  padding: 10px 16px;
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--ink);
+  box-shadow: var(--card-3d);
+  position: relative;
+}
+
+.patch-speech-bubble::before {
+  content: '';
+  position: absolute;
+  left: -8px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 0;
+  height: 0;
+  border-top: 6px solid transparent;
+  border-bottom: 6px solid transparent;
+  border-right: 8px solid var(--line);
+}
+
 .duo-xp-badge {
   display: inline-flex;
   align-items: center;
