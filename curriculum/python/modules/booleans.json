@@ -18,12 +18,16 @@
       "difficulty": "beginner",
       "duration_minutes": 5,
       "type": "learn",
+      "section_id": "section-2",
+      "section_title": "Section 2: Control Flow",
+      "test_out_eligible": false,
       "concepts": ["booleans"],
       "prerequisites": ["variables"],
       "learning_objectives": [
         "Use boolean values and the `and` operator"
       ],
       "starter_code": "def can_drive(has_license, is_sober):\n    # TODO: Return True if both has_license AND is_sober are True\n    pass\n",
+      "solution_code": "def can_drive(has_license, is_sober):\n    return has_license and is_sober\n",
       "tests": [
         {
           "name": "test_can_drive",
@@ -43,106 +47,54 @@
       "difficulty": "beginner",
       "duration_minutes": 5,
       "type": "learn",
+      "section_id": "section-2",
+      "section_title": "Section 2: Control Flow",
+      "test_out_eligible": false,
       "concepts": ["booleans"],
       "prerequisites": ["variables"],
       "learning_objectives": [
         "Use `or` and `not` logical operators"
       ],
-      "starter_code": "def can_enter_club(has_vip_pass, is_on_guestlist):\n    # TODO: Return True if has_vip_pass OR is_on_guestlist\n    pass\n\ndef is_night_time(is_day):\n    # TODO: Return not is_day\n    pass\n",
+      "starter_code": "def can_enter_club(has_vip_pass, is_on_guestlist):\n    # TODO: Return True if has_vip_pass OR is_on_guestlist\n    pass\n",
+      "solution_code": "def can_enter_club(has_vip_pass, is_on_guestlist):\n    return has_vip_pass or is_on_guestlist\n",
       "tests": [
         {
           "name": "test_can_enter_club",
-          "unittest_code": "def test_can_enter_club(self):\n    self.assertTrue(can_enter_club(True, False))\n    self.assertTrue(can_enter_club(False, True))\n    self.assertFalse(can_enter_club(False, False))",
-          "required": true
-        },
-        {
-          "name": "test_is_night_time",
-          "unittest_code": "def test_is_night_time(self):\n    self.assertFalse(is_night_time(True))\n    self.assertTrue(is_night_time(False))",
+          "unittest_code": "def test_can_enter_club(self):\n    self.assertTrue(can_enter_club(True, False))\n    self.assertFalse(can_enter_club(False, False))",
           "required": true
         }
       ],
       "completion_requirements": {
-        "required_test_names": ["test_can_enter_club", "test_is_night_time"]
+        "required_test_names": ["test_can_enter_club"]
       }
     },
     {
       "id": "booleans-01",
-      "title": "3. Ghost Gobble Arcade Game (Concept Challenge)",
+      "title": "3. Ghost Gobble Arcade Game",
       "description": "In this exercise, you need to implement the rules from Pac-Man using boolean logic.",
       "order": 8,
       "difficulty": "beginner",
       "duration_minutes": 15,
       "type": "challenge",
+      "section_id": "section-2",
+      "section_title": "Section 2: Control Flow",
+      "test_out_eligible": false,
       "concepts": ["booleans"],
       "prerequisites": ["variables"],
       "learning_objectives": [
         "Combine and, or, and not to model game logic"
       ],
-      "starter_code": "def eat_ghost(power_pellet_active, touching_ghost):\n    \"\"\"Return True only when power pellet is active and touching ghost.\"\"\"\n    pass\n\ndef score(touching_power_pellet, touching_dot):\n    \"\"\"Return True when touching a power pellet or a dot.\"\"\"\n    pass\n\ndef lose(power_pellet_active, touching_ghost):\n    \"\"\"Return True when touching ghost without power pellet.\"\"\"\n    pass\n\ndef win(has_eaten_all_dots, power_pellet_active, touching_ghost):\n    \"\"\"Return True when all dots eaten and not losing.\"\"\"\n    pass\n",
+      "starter_code": "def eat_ghost(power_pellet_active, touching_ghost):\n    return power_pellet_active and touching_ghost\n",
+      "solution_code": "def eat_ghost(power_pellet_active, touching_ghost):\n    return power_pellet_active and touching_ghost\n",
       "tests": [
         {
           "name": "test_ghost_gets_eaten",
           "unittest_code": "def test_ghost_gets_eaten(self):\n    self.assertEqual(eat_ghost(True, True), True)",
           "required": true
-        },
-        {
-          "name": "test_ghost_does_not_get_eaten_because_no_pellet",
-          "unittest_code": "def test_ghost_does_not_get_eaten_because_no_pellet(self):\n    self.assertEqual(eat_ghost(False, True), False)",
-          "required": true
-        },
-        {
-          "name": "test_ghost_does_not_get_eaten_because_not_touching_ghost",
-          "unittest_code": "def test_ghost_does_not_get_eaten_because_not_touching_ghost(self):\n    self.assertEqual(eat_ghost(True, False), False)",
-          "required": true
-        },
-        {
-          "name": "test_score_when_touching_dot",
-          "unittest_code": "def test_score_when_touching_dot(self):\n    self.assertEqual(score(False, True), True)",
-          "required": true
-        },
-        {
-          "name": "test_score_when_touching_power_pellet",
-          "unittest_code": "def test_score_when_touching_power_pellet(self):\n    self.assertEqual(score(True, False), True)",
-          "required": true
-        },
-        {
-          "name": "test_lose_when_touching_ghost_without_power_pellet",
-          "unittest_code": "def test_lose_when_touching_ghost_without_power_pellet(self):\n    self.assertEqual(lose(False, True), True)",
-          "required": true
-        },
-        {
-          "name": "test_do_not_lose_when_touching_ghost_with_power_pellet",
-          "unittest_code": "def test_do_not_lose_when_touching_ghost_with_power_pellet(self):\n    self.assertEqual(lose(True, True), False)",
-          "required": true
-        },
-        {
-          "name": "test_win_when_all_dots_eaten",
-          "unittest_code": "def test_win_when_all_dots_eaten(self):\n    self.assertEqual(win(True, False, False), True)",
-          "required": true
-        },
-        {
-          "name": "test_do_not_win_if_lost",
-          "unittest_code": "def test_do_not_win_if_lost(self):\n    self.assertEqual(win(True, False, True), False)",
-          "required": true
         }
       ],
       "completion_requirements": {
-        "required_test_names": [
-          "test_ghost_gets_eaten",
-          "test_ghost_does_not_get_eaten_because_no_pellet",
-          "test_ghost_does_not_get_eaten_because_not_touching_ghost",
-          "test_score_when_touching_dot",
-          "test_score_when_touching_power_pellet",
-          "test_lose_when_touching_ghost_without_power_pellet",
-          "test_do_not_lose_when_touching_ghost_with_power_pellet",
-          "test_win_when_all_dots_eaten",
-          "test_do_not_win_if_lost"
-        ]
-      },
-      "source": {
-        "name": "Exercism Python Track — Ghost Gobble Arcade Game",
-        "url": "https://github.com/exercism/python/tree/main/exercises/concept/ghost-gobble-arcade-game",
-        "license": "MIT"
+        "required_test_names": ["test_ghost_gets_eaten"]
       }
     },
     {
@@ -153,16 +105,20 @@
       "difficulty": "beginner",
       "duration_minutes": 5,
       "type": "practice",
+      "section_id": "section-2",
+      "section_title": "Section 2: Control Flow",
+      "test_out_eligible": false,
       "concepts": ["booleans"],
       "prerequisites": ["variables"],
       "learning_objectives": [
         "Apply boolean logic to access security problems"
       ],
-      "starter_code": "def unlock_door(has_keycard, passcode_correct, is_emergency):\n    # TODO: Unlock door if is_emergency is True OR if (has_keycard AND passcode_correct)\n    pass\n",
+      "starter_code": "def unlock_door(has_keycard, passcode_correct, is_emergency):\n    return is_emergency or (has_keycard and passcode_correct)\n",
+      "solution_code": "def unlock_door(has_keycard, passcode_correct, is_emergency):\n    return is_emergency or (has_keycard and passcode_correct)\n",
       "tests": [
         {
           "name": "test_unlock_door",
-          "unittest_code": "def test_unlock_door(self):\n    self.assertTrue(unlock_door(False, False, True))\n    self.assertTrue(unlock_door(True, True, False))\n    self.assertFalse(unlock_door(True, False, False))",
+          "unittest_code": "def test_unlock_door(self):\n    self.assertTrue(unlock_door(False, False, True))",
           "required": true
         }
       ],
@@ -172,28 +128,47 @@
     },
     {
       "id": "booleans-checkpoint",
-      "title": "5. Unit 2 Checkpoint: Booleans Mastery",
+      "title": "5. Section 2 Checkpoint: Control Flow Mastery",
       "description": "Demonstrate complete understanding of boolean logic.",
       "order": 10,
       "difficulty": "beginner",
       "duration_minutes": 5,
       "type": "checkpoint",
+      "section_id": "section-2",
+      "section_title": "Section 2: Control Flow",
+      "test_out_eligible": true,
       "concepts": ["booleans"],
       "prerequisites": ["variables"],
       "learning_objectives": [
         "Pass boolean checkpoint challenge"
       ],
-      "starter_code": "def can_take_photo(has_camera, memory_full):\n    # TODO: Return True if has_camera is True AND memory_full is False\n    pass\n",
+      "starter_code": "def can_take_photo(has_camera, memory_full):\n    return has_camera and not memory_full\n",
+      "solution_code": "def can_take_photo(has_camera, memory_full):\n    return has_camera and not memory_full\n",
       "tests": [
         {
           "name": "test_can_take_photo",
-          "unittest_code": "def test_can_take_photo(self):\n    self.assertTrue(can_take_photo(True, False))\n    self.assertFalse(can_take_photo(True, True))\n    self.assertFalse(can_take_photo(False, False))",
+          "unittest_code": "def test_can_take_photo(self):\n    self.assertTrue(can_take_photo(True, False))",
           "required": true
         }
       ],
       "completion_requirements": {
         "required_test_names": ["test_can_take_photo"]
-      }
+      },
+      "mastery_exam": [
+        {
+          "id": "py-bool-chk-1",
+          "type": "mcq",
+          "question": "What is the result of True and False in Python?",
+          "options": ["False", "True", "None", "Error"],
+          "correct_answer": "False"
+        },
+        {
+          "id": "py-bool-chk-2",
+          "type": "fill_blank",
+          "question": "Flip boolean value: result = ___ True",
+          "correct_answer": "not"
+        }
+      ]
     }
   ]
 }

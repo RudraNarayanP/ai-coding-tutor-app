@@ -64,6 +64,10 @@ class LessonDefinition(BaseModel):
     order: int = Field(ge=1)
     difficulty: str = Field(min_length=1, max_length=40)
     duration_minutes: int = Field(ge=1, le=240)
+    type: str = Field(default="learn", max_length=40)
+    section_id: str = Field(default="section-1", max_length=80)
+    section_title: str = Field(default="Section 1", max_length=120)
+    test_out_eligible: bool = Field(default=False)
     starter_code: str = Field(default="", max_length=64 * 1024)
     solution_code: str | None = Field(default=None, max_length=64 * 1024)
     concepts: list[str] = Field(default_factory=list, max_length=20)
@@ -137,10 +141,13 @@ class PublicLessonView(BaseModel):
     duration_minutes: int
     starter_code: str
     type: str = "learn"
+    section_id: str | None = None
+    section_title: str | None = None
     unit_id: str | None = None
     unit_title: str | None = None
     concept_id: str | None = None
     concept_title: str | None = None
+    test_out_eligible: bool = False
     concepts: list[str] = []
     prerequisites: list[str] = []
     learning_objectives: list[str] = []
@@ -206,10 +213,13 @@ class PublicLessonView(BaseModel):
             duration_minutes=lesson.duration_minutes,
             starter_code=lesson.starter_code,
             type=getattr(lesson, "type", "learn") or "learn",
+            section_id=getattr(lesson, "section_id", "section-1"),
+            section_title=getattr(lesson, "section_title", "Section 1"),
             unit_id=unit_id,
             unit_title=unit_title,
             concept_id=concept_id,
             concept_title=concept_title,
+            test_out_eligible=getattr(lesson, "test_out_eligible", False),
             concepts=list(lesson.concepts),
             prerequisites=list(lesson.prerequisites),
             learning_objectives=list(lesson.learning_objectives),
@@ -235,9 +245,12 @@ class LessonSummary(BaseModel):
     difficulty: str
     duration_minutes: int
     status: str
+    section_id: str | None = None
+    section_title: str | None = None
     unit_id: str | None = None
     unit_title: str | None = None
     type: str | None = None
+    test_out_eligible: bool = False
 
 
 class TestResult(BaseModel):
