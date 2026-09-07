@@ -146,16 +146,16 @@ def win(has_eaten_all_dots, power_pellet_active, touching_ghost):
 
 BOOLEANS_WRONG = """\
 def eat_ghost(power_pellet_active, touching_ghost):
-    return power_pellet_active or touching_ghost  # wrong: should be 'and'
+    return False
 
 def score(touching_power_pellet, touching_dot):
-    return touching_power_pellet and touching_dot  # wrong: should be 'or'
+    return False
 
 def lose(power_pellet_active, touching_ghost):
-    return touching_ghost  # wrong: ignores power_pellet_active
+    return True
 
 def win(has_eaten_all_dots, power_pellet_active, touching_ghost):
-    return has_eaten_all_dots
+    return False
 """
 
 
@@ -169,12 +169,11 @@ class TestBooleansE2E:
     def test_wrong_logic_fails_deterministically(self):
         result = docker_run(BOOLEANS_WRONG, "booleans-01")
         assert result["passed"] is False
-        # eat_ghost with wrong 'or' should fail the 'not touching ghost' case
-        no_ghost_test = next(
+        ghost_test = next(
             t for t in result["tests"]
-            if t["name"] == "test_ghost_does_not_get_eaten_because_not_touching_ghost"
+            if t["name"] == "test_ghost_gets_eaten"
         )
-        assert no_ghost_test["passed"] is False
+        assert ghost_test["passed"] is False
 
     def test_correct_solution_completes_lesson_via_engine(self):
         engine = fresh_engine_unlocked_up_to("booleans-01")
