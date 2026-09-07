@@ -137,6 +137,35 @@ button:disabled { cursor: not-allowed; }
   transition: width 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
+.duo-xp-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  background: var(--warning-bg);
+  border: 2px solid var(--warning-border);
+  border-radius: var(--r-full);
+  font-size: 14px;
+  font-weight: 800;
+  color: #b45309;
+  position: relative;
+}
+
+.xp-float-anim {
+  position: absolute;
+  top: -24px;
+  right: 10px;
+  font-size: 16px;
+  font-weight: 900;
+  color: var(--green-dark);
+  animation: floatUp 1.2s ease-out forwards;
+}
+
+@keyframes floatUp {
+  0% { transform: translateY(0); opacity: 1; }
+  100% { transform: translateY(-30px); opacity: 0; }
+}
+
 .duo-header-right {
   display: flex;
   align-items: center;
@@ -339,6 +368,139 @@ button:disabled { cursor: not-allowed; }
   color: var(--ink);
   letter-spacing: -0.5px;
   margin-bottom: var(--sp-2);
+}
+
+/* Sublesson Stepper */
+.duo-sublesson-stepper {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: var(--sp-3) 0 var(--sp-5) 0;
+  overflow-x: auto;
+  padding-bottom: 4px;
+}
+
+.duo-step-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  border-radius: var(--r-full);
+  font-size: 13px;
+  font-weight: 800;
+  background: var(--line-lite);
+  color: var(--ink-soft);
+  border: 2px solid var(--line);
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.duo-step-item.active {
+  background: var(--blue);
+  color: #ffffff;
+  border-color: var(--blue-dark);
+}
+
+.duo-step-item.completed {
+  background: var(--green-light);
+  color: var(--green-dark);
+  border-color: var(--success-border);
+}
+
+/* Exercise Choice Option Buttons */
+.exercise-options-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: var(--sp-3);
+  margin: var(--sp-4) 0;
+}
+
+.exercise-option-btn {
+  padding: 14px 18px;
+  border-radius: var(--r-md);
+  border: 2px solid var(--line);
+  background: #ffffff;
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--ink);
+  text-align: left;
+  box-shadow: 0 3px 0 var(--line);
+  transition: all 0.15s;
+}
+
+.exercise-option-btn:hover {
+  border-color: var(--blue);
+  background: #f0f9ff;
+}
+
+.exercise-option-btn.selected {
+  border-color: var(--blue-dark);
+  background: #e0f2fe;
+  color: var(--blue-dark);
+  box-shadow: 0 3px 0 var(--blue-dark);
+}
+
+/* Fill Blank Inputs */
+.fill-blank-container {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin: var(--sp-4) 0;
+}
+
+.fill-blank-input {
+  padding: 10px 14px;
+  border-radius: var(--r-sm);
+  border: 2px solid var(--line);
+  font-family: var(--font-mono);
+  font-size: 15px;
+  font-weight: 700;
+  outline: none;
+}
+
+.fill-blank-input:focus {
+  border-color: var(--blue);
+}
+
+/* Test-Out / Jump Ahead Button & Modal */
+.duo-test-out-btn {
+  padding: 6px 12px;
+  border-radius: var(--r-sm);
+  background: var(--purple);
+  color: #ffffff;
+  font-size: 12px;
+  font-weight: 800;
+  box-shadow: 0 3px 0 #b352ff;
+  margin-top: 8px;
+}
+
+.duo-test-out-btn:hover {
+  background: #b352ff;
+}
+
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(15, 23, 42, 0.6);
+  backdrop-filter: blur(4px);
+  display: grid;
+  place-items: center;
+  z-index: 1000;
+  padding: 16px;
+}
+
+.modal-card {
+  background: #ffffff;
+  border-radius: var(--r-lg);
+  padding: var(--sp-6);
+  max-width: 600px;
+  width: 100%;
+  max-height: 90vh;
+  overflow-y: auto;
+  box-shadow: 0 20px 25px -5px rgba(0,0,0,0.2);
 }
 
 .duo-instruction {

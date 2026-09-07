@@ -35,6 +35,72 @@
       "completion_requirements": {
         "required_test_names": ["test_get_language"]
       },
+      "sublessons": [
+        {
+          "id": "java-var-sub-1",
+          "title": "Java Basics & String Types",
+          "order": 1,
+          "exercises": [
+            {
+              "id": "java-ex-1a",
+              "type": "mcq",
+              "question": "Which keyword is used to return a value from a Java method?",
+              "options": ["return", "yield", "output", "send"],
+              "correct_answer": "return",
+              "xp_reward": 10,
+              "explanation": "In Java, the 'return' keyword sends a result back from a method."
+            },
+            {
+              "id": "java-ex-1b",
+              "type": "fill_blank",
+              "question": "Complete the return statement to return \"Java\":",
+              "starter_code": "return ___;",
+              "blanks": ["\"Java\""],
+              "correct_answer": "\"Java\"",
+              "xp_reward": 10,
+              "explanation": "Java String literals use double quotes, e.g., \"Java\"."
+            }
+          ]
+        },
+        {
+          "id": "java-var-sub-2",
+          "title": "Method Implementation",
+          "order": 2,
+          "exercises": [
+            {
+              "id": "java-ex-2a",
+              "type": "code",
+              "title": "Implement getLanguage()",
+              "question": "Implement static method getLanguage() returning 'Java'.",
+              "starter_code": "public class Solution {\n    public static String getLanguage() {\n        return \"\";\n    }\n}\n",
+              "solution_code": "public class Solution {\n    public static String getLanguage() {\n        return \"Java\";\n    }\n}\n",
+              "tests": [
+                {
+                  "name": "test_get_language",
+                  "test_code": "if (!Solution.getLanguage().equals(\"Java\")) throw new AssertionError();",
+                  "required": true
+                }
+              ],
+              "xp_reward": 15
+            }
+          ]
+        }
+      ],
+      "mastery_exam": [
+        {
+          "id": "java-exam-1",
+          "type": "mcq",
+          "question": "What is the return type of public static String getLanguage()?",
+          "options": ["String", "int", "void", "char"],
+          "correct_answer": "String"
+        },
+        {
+          "id": "java-exam-2",
+          "type": "fill_blank",
+          "question": "Which String literal equals Java?",
+          "correct_answer": "Java"
+        }
+      ],
       "static_hints": ["return \"Java\";"]
     },
     {
