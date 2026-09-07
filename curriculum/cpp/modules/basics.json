@@ -35,6 +35,72 @@
       "completion_requirements": {
         "required_test_names": ["test_get_language"]
       },
+      "sublessons": [
+        {
+          "id": "cpp-var-sub-1",
+          "title": "What is C++?",
+          "order": 1,
+          "exercises": [
+            {
+              "id": "cpp-ex-1a",
+              "type": "mcq",
+              "question": "Which header file is commonly used for string handling in C++?",
+              "options": ["<string>", "<iostream>", "<vector>", "<cmath>"],
+              "correct_answer": "<string>",
+              "xp_reward": 10,
+              "explanation": "<string> defines std::string in C++."
+            },
+            {
+              "id": "cpp-ex-1b",
+              "type": "fill_blank",
+              "question": "Complete the function return statement to return 'C++':",
+              "starter_code": "std::string get_language() {\n    return ___\n}",
+              "blanks": ["\"C++\";"],
+              "correct_answer": "\"C++\";",
+              "xp_reward": 10,
+              "explanation": "In C++, string literals are enclosed in double quotes and terminated with a semicolon."
+            }
+          ]
+        },
+        {
+          "id": "cpp-var-sub-2",
+          "title": "Return Statements",
+          "order": 2,
+          "exercises": [
+            {
+              "id": "cpp-ex-2a",
+              "type": "code",
+              "title": "Implement get_language()",
+              "question": "Implement get_language() returning std::string(\"C++\").",
+              "starter_code": "#include <string>\n\nstd::string get_language() {\n    // TODO: Return \"C++\"\n    return \"\";\n}\n",
+              "solution_code": "#include <string>\n\nstd::string get_language() {\n    return \"C++\";\n}\n",
+              "tests": [
+                {
+                  "name": "test_get_language",
+                  "test_code": "assert(get_language() == \"C++\");",
+                  "required": true
+                }
+              ],
+              "xp_reward": 15
+            }
+          ]
+        }
+      ],
+      "mastery_exam": [
+        {
+          "id": "cpp-exam-1",
+          "type": "mcq",
+          "question": "What is the return type of std::string get_language()?",
+          "options": ["std::string", "int", "void", "char"],
+          "correct_answer": "std::string"
+        },
+        {
+          "id": "cpp-exam-2",
+          "type": "fill_blank",
+          "question": "Which string literal matches 'C++'?",
+          "correct_answer": "C++"
+        }
+      ],
       "static_hints": ["return \"C++\";"]
     },
     {

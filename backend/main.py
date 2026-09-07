@@ -33,6 +33,16 @@ class CourseSelection(BaseModel):
     language: str
 
 
+class ExerciseSubmissionRequest(BaseModel):
+    exercise_id: str
+    sublesson_id: str | None = None
+    payload: dict = Field(default_factory=dict)
+
+
+class TestOutRequest(BaseModel):
+    submissions: dict[str, dict] = Field(default_factory=dict)
+
+
 base_path = Path(__file__).resolve().parent
 loaded_curriculums = load_all_curriculums()
 loaded_stores = {
@@ -202,6 +212,29 @@ async def run_lesson(lesson_id: str, request: CodeSubmission):
     except KeyError as exc:
         raise HTTPException(status_code=404, detail={"error": "lesson_not_found"}) from exc
     return await submit_lesson(lesson_id, request)
+
+
+@app.post("/api/lessons/{lesson_id}/submit-exercise")
+async def submit_exercise(lesson_id: str, request: ExerciseSubmissionRequest):
+    try:
+        lesson_engine.get_lesson(lesson_id)
+    except KeyError as exc:
+        raise HTTPException(status_code=404, detail={"error": "lesson_not_found"}) from exc
+    return await lesson_engine.submit_exercise(
+        lesson_id=lesson_id,
+        sublesson_id=request.sublesson_id,
+        exercise_id=request.exercise_id,
+        payload=request.payload,
+    )
+
+
+@app.post("/api/lessons/{lesson_id}/test-out")
+async def test_out_lesson(lesson_id: str, request: TestOutRequest):
+    try:
+        lesson_engine.get_lesson(lesson_id)
+    except KeyError as exc:
+        raise HTTPException(status_code=404, detail={"error": "lesson_not_found"}) from exc
+    return await lesson_engine.run_test_out(lesson_id=lesson_id, submissions=request.submissions)
 
 
 @app.post("/api/run", response_model=ProgressionResult)

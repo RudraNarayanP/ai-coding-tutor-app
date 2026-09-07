@@ -23,6 +23,29 @@ type LessonSummary = {
   concept_title?: string
 }
 
+type Exercise = {
+  id: string
+  title?: string
+  type: string
+  question?: string
+  options?: string[]
+  correct_answer?: string | string[] | Record<string, string>
+  blanks?: string[]
+  starter_code?: string
+  solution_code?: string
+  hints?: string[]
+  xp_reward?: number
+  explanation?: string
+}
+
+type SubLesson = {
+  id: string
+  title: string
+  description?: string
+  order: number
+  exercises: Exercise[]
+}
+
 type Lesson = {
   id: string
   title: string
@@ -39,6 +62,9 @@ type Lesson = {
   concepts?: string[]
   prerequisites?: string[]
   learning_objectives?: string[]
+  sublessons?: SubLesson[]
+  mastery_exam?: Exercise[]
+  xp_reward?: number
 }
 
 type ProviderStatus = {
@@ -159,6 +185,22 @@ function App() {
   const [sessionNotes, setSessionNotes] = useState<string[]>([])
   const [noteInput, setNoteInput] = useState('')
   const [backendError, setBackendError] = useState(false)
+  const [xp, setXp] = useState(0)
+  const [level, setLevel] = useState(1)
+  const [xpGainPopup, setXpGainPopup] = useState<number | null>(null)
+  const [activeSubLessonIndex, setActiveSubLessonIndex] = useState(0)
+  const [activeExerciseIndex, setActiveExerciseIndex] = useState(0)
+  const [exerciseInput, setExerciseInput] = useState<any>({})
+  const [showTestOutModal, setShowTestOutModal] = useState(false)
+  const [testOutSubmissions, setTestOutSubmissions] = useState<Record<string, any>>({})
+  const [testOutResult, setTestOutResult] = useState<any>(null)
+
+  const triggerXpGain = useCallback((amount: number) => {
+    if (amount > 0) {
+      setXpGainPopup(amount)
+      setTimeout(() => setXpGainPopup(null), 1500)
+    }
+  }, [])
 
   const resultsRef = useRef<HTMLDivElement>(null)
   const editorRef = useRef<HTMLTextAreaElement>(null)
@@ -239,6 +281,14 @@ function App() {
       const selected = (await lessonResponse.json()) as Lesson
       setLesson(selected)
 
+      // Fetch progression (XP & level)
+      const progRes = await fetch(`/api/progression?language=${encodeURIComponent(lang)}`)
+      if (progRes.ok) {
+        const prog = await progRes.json()
+        setXp(prog.xp || 0)
+        setLevel(prog.level || 1)
+      }
+
       // Restore draft code if available, else starter_code
       const draftCode = localStorage.getItem(`patchwork_code_${selected.id}`)
       setCode(draftCode !== null ? draftCode : selected.starter_code ?? '')
@@ -246,6 +296,9 @@ function App() {
 
       setResults(null)
       setShowCompletion(false)
+      setActiveSubLessonIndex(0)
+      setActiveExerciseIndex(0)
+      setExerciseInput({})
       requestAnimationFrame(resetEditorScroll)
       setBackendError(false)
     } catch {
@@ -369,6 +422,15 @@ function App() {
       if (execution.completed) {
         setShowCompletion(true)
         setFeedback('🎉 Great! Everything works. Next lesson is unlocked!')
+        const progRes = await fetch(`/api/progression?language=${encodeURIComponent(selectedLanguage)}`)
+        if (progRes.ok) {
+          const prog = await progRes.json()
+          if (prog.xp > xp) {
+            triggerXpGain(prog.xp - xp)
+          }
+          setXp(prog.xp || 0)
+          setLevel(prog.level || 1)
+        }
       } else if (execution.passed) {
         setFeedback('✓ All required checks passed. You are on the right track!')
       } else {
@@ -468,6 +530,90 @@ function App() {
     }
   }, [lesson])
 
+  // ── Exercise Submission Handler (MCQ, Fill Blank, Code Completion, etc.) ────
+  const submitSubLessonExercise = useCallback(
+    async (exercise: Exercise, sublessonId?: string) => {
+      if (!lesson) return
+      setIsRunning(true)
+      setFeedback('Grading exercise…')
+      try {
+        const payload = exercise.type === 'code' ? { code } : exerciseInput[exercise.id] || {}
+        const response = await fetch(`/api/lessons/${lesson.id}/submit-exercise`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            exercise_id: exercise.id,
+            sublesson_id: sublessonId,
+            payload,
+          }),
+        })
+        if (!response.ok) throw new Error('Grading failed')
+        const result = await response.json()
+
+        playFeedbackSound(result.passed ? 'success' : 'error', soundEnabled)
+
+        if (result.passed) {
+          if (result.xp_awarded > 0) {
+            triggerXpGain(result.xp_awarded)
+          }
+          setXp(result.total_xp || xp)
+          setLevel(result.level || level)
+          setFeedback(`✓ ${result.feedback} ${result.xp_awarded > 0 ? `+${result.xp_awarded} XP!` : ''}`)
+
+          // Refresh lesson & progression summaries
+          const summariesResponse = await fetch(`/api/lessons?language=${encodeURIComponent(selectedLanguage)}`)
+          if (summariesResponse.ok) {
+            const summariesRaw = await summariesResponse.json()
+            setLessons(Array.isArray(summariesRaw) ? summariesRaw : [])
+          }
+        } else {
+          setFeedback(`Not quite: ${result.feedback}`)
+        }
+      } catch {
+        setFeedback('Failed to submit exercise. Please try again.')
+      } finally {
+        setIsRunning(false)
+      }
+    },
+    [lesson, code, exerciseInput, soundEnabled, triggerXpGain, xp, level, selectedLanguage]
+  )
+
+  // ── Test-Out Mastery Exam Handler ───────────────────────────────────────────
+  const handleTestOutSubmit = useCallback(async () => {
+    if (!lesson) return
+    setIsRunning(true)
+    try {
+      const res = await fetch(`/api/lessons/${lesson.id}/test-out`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ submissions: testOutSubmissions }),
+      })
+      if (!res.ok) throw new Error('Test out failed')
+      const data = await res.json()
+      setTestOutResult(data)
+      if (data.passed) {
+        playFeedbackSound('success', soundEnabled)
+        if (data.xp_awarded > 0) {
+          triggerXpGain(data.xp_awarded)
+        }
+        setXp(data.total_xp || xp)
+        setLevel(data.level || level)
+
+        const summariesResponse = await fetch(`/api/lessons?language=${encodeURIComponent(selectedLanguage)}`)
+        if (summariesResponse.ok) {
+          const summariesRaw = await summariesResponse.json()
+          setLessons(Array.isArray(summariesRaw) ? summariesRaw : [])
+        }
+      } else {
+        playFeedbackSound('error', soundEnabled)
+      }
+    } catch {
+      setFeedback('Failed to evaluate mastery exam.')
+    } finally {
+      setIsRunning(false)
+    }
+  }, [lesson, testOutSubmissions, soundEnabled, triggerXpGain, xp, level, selectedLanguage])
+
   // ── Keyboard shortcuts ─────────────────────────────────────────────────────
   const handleEditorKeyDown = useCallback(
     (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
@@ -547,6 +693,15 @@ function App() {
         </div>
 
         <div className="duo-header-right">
+          {/* XP & Level Badge */}
+          <div className="duo-xp-badge" aria-label={`XP: ${xp}, Level: ${level}`}>
+            <span>⚡ {xp} XP</span>
+            <span style={{ fontSize: '12px', opacity: 0.8, marginLeft: '4px' }}>Lvl {level}</span>
+            {xpGainPopup !== null && (
+              <div className="xp-float-anim">+{xpGainPopup} XP!</div>
+            )}
+          </div>
+
           {/* AI Provider & Model Selector */}
           <div className="duo-provider-selector" style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
             <select
@@ -716,41 +871,165 @@ function App() {
                   <span className="duo-difficulty-badge">{lesson.difficulty}</span>
                 </div>
 
-                <h2 className="duo-lesson-title">{lesson.title}</h2>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                  <h2 className="duo-lesson-title">{lesson.title}</h2>
+                  {lesson.sublessons && lesson.sublessons.length > 0 && (
+                    <button
+                      className="duo-test-out-btn"
+                      onClick={() => {
+                        setTestOutSubmissions({})
+                        setTestOutResult(null)
+                        setShowTestOutModal(true)
+                      }}
+                      title="Jump ahead by taking the mastery exam"
+                    >
+                      ⚡ Test Out / Jump Ahead
+                    </button>
+                  )}
+                </div>
+
                 <p className="duo-instruction">{lesson.description}</p>
 
-                {lesson.learning_objectives && lesson.learning_objectives.length > 0 && (
-                  <div className="duo-objectives-box">
-                    <div className="duo-objectives-title">Learning Objectives:</div>
-                    <ul>
-                      {lesson.learning_objectives.map((obj, i) => (
-                        <li key={i}>{obj}</li>
-                      ))}
-                    </ul>
+                {/* Sublesson Stepper */}
+                {lesson.sublessons && lesson.sublessons.length > 0 && (
+                  <div className="duo-sublesson-stepper" role="tablist" aria-label="Sublessons">
+                    {lesson.sublessons.map((sub, sIdx) => (
+                      <button
+                        key={sub.id}
+                        role="tab"
+                        aria-selected={activeSubLessonIndex === sIdx}
+                        className={`duo-step-item ${activeSubLessonIndex === sIdx ? 'active' : ''}`}
+                        onClick={() => {
+                          setActiveSubLessonIndex(sIdx)
+                          setActiveExerciseIndex(0)
+                        }}
+                      >
+                        Step {sIdx + 1}: {sub.title}
+                      </button>
+                    ))}
                   </div>
                 )}
 
-                {/* Embedded Code Editor */}
-                <div className="duo-editor-container">
-                  <div className="duo-editor-top">
-                    <span>{selectedLanguage === 'java' ? 'Solution.java' : selectedLanguage === 'cpp' ? 'solution.cpp' : 'exercise.py'}</span>
-                    <span>{selectedLanguage === 'java' ? 'Java 21' : selectedLanguage === 'cpp' ? 'C++ 20' : 'Python 3.12'}</span>
-                  </div>
-                  <div className="duo-editor-body">
-                    <LineNumbers code={code} />
-                    <textarea
-                      ref={editorRef}
-                      className="duo-textarea"
-                      spellCheck={false}
-                      value={code}
-                      onChange={(e) => setCode(e.target.value)}
-                      onKeyDown={handleEditorKeyDown}
-                      disabled={isRunning}
-                      placeholder="Write your Python code here… (Press Shift+Enter or Ctrl+Enter to run)"
-                      aria-label="Code editor — use Shift+Enter or Ctrl+Enter to run"
-                    />
-                  </div>
-                </div>
+                {/* Render Active Exercise or Default Code Editor */}
+                {(() => {
+                  const currentSub = lesson.sublessons?.[activeSubLessonIndex]
+                  const currentEx = currentSub?.exercises?.[activeExerciseIndex] || {
+                    id: `${lesson.id}-ex-default`,
+                    type: 'code',
+                    question: lesson.description,
+                  }
+
+                  const exType = (currentEx.type || 'code').toLowerCase().trim() || 'code'
+
+                  if (exType === 'mcq' || exType === 'true_false') {
+                    const opts = currentEx.options && currentEx.options.length > 0
+                      ? currentEx.options
+                      : ['True', 'False']
+                    const selectedVal = exerciseInput[currentEx.id]?.answer || ''
+
+                    return (
+                      <div className="exercise-interactive-box" style={{ margin: '16px 0' }}>
+                        <h3 style={{ fontSize: '18px', fontWeight: 800, marginBottom: '12px' }}>
+                          {currentEx.question || currentEx.title || 'Choose the correct answer:'}
+                        </h3>
+                        <div className="exercise-options-grid">
+                          {opts.map((opt) => (
+                            <button
+                              key={opt}
+                              className={`exercise-option-btn ${selectedVal === opt ? 'selected' : ''}`}
+                              onClick={() =>
+                                setExerciseInput((prev: any) => ({
+                                  ...prev,
+                                  [currentEx.id]: { ...prev[currentEx.id], answer: opt },
+                                }))
+                              }
+                            >
+                              {opt}
+                            </button>
+                          ))}
+                        </div>
+                        <button
+                          className="duo-button duo-button-primary"
+                          style={{ marginTop: '16px', padding: '10px 20px', fontSize: '14px' }}
+                          onClick={() => submitSubLessonExercise(currentEx, currentSub?.id)}
+                          disabled={!selectedVal || isRunning}
+                        >
+                          Check Answer ✓
+                        </button>
+                      </div>
+                    )
+                  }
+
+                  if (exType === 'fill_blank' || exType === 'code_completion' || exType === 'output_prediction') {
+                    const val = exerciseInput[currentEx.id]?.answers?.[0] || exerciseInput[currentEx.id]?.answer || ''
+
+                    return (
+                      <div className="exercise-interactive-box" style={{ margin: '16px 0' }}>
+                        <h3 style={{ fontSize: '18px', fontWeight: 800, marginBottom: '12px' }}>
+                          {currentEx.question || currentEx.title || 'Fill in the answer:'}
+                        </h3>
+                        {currentEx.starter_code && (
+                          <pre style={{ background: '#1e293b', color: '#f1f5f9', padding: '12px', borderRadius: '8px', fontFamily: 'var(--font-mono)', fontSize: '14px', marginBottom: '12px' }}>
+                            {currentEx.starter_code}
+                          </pre>
+                        )}
+                        <div className="fill-blank-container">
+                          <input
+                            type="text"
+                            className="fill-blank-input"
+                            placeholder="Type your answer here…"
+                            value={val}
+                            onChange={(e) => {
+                              const inputVal = e.target.value
+                              setExerciseInput((prev: any) => ({
+                                ...prev,
+                                [currentEx.id]: { answer: inputVal, answers: [inputVal] },
+                              }))
+                            }}
+                            onKeyDown={(e) => {
+                              if (e.key === 'Enter') {
+                                e.preventDefault()
+                                submitSubLessonExercise(currentEx, currentSub?.id)
+                              }
+                            }}
+                          />
+                        </div>
+                        <button
+                          className="duo-button duo-button-primary"
+                          style={{ marginTop: '12px', padding: '10px 20px', fontSize: '14px' }}
+                          onClick={() => submitSubLessonExercise(currentEx, currentSub?.id)}
+                          disabled={!val || isRunning}
+                        >
+                          Check Answer ✓
+                        </button>
+                      </div>
+                    )
+                  }
+
+                  // Default Code Editor Renderer
+                  return (
+                    <div className="duo-editor-container">
+                      <div className="duo-editor-top">
+                        <span>{selectedLanguage === 'java' ? 'Solution.java' : selectedLanguage === 'cpp' ? 'solution.cpp' : 'exercise.py'}</span>
+                        <span>{selectedLanguage === 'java' ? 'Java 21' : selectedLanguage === 'cpp' ? 'C++ 20' : 'Python 3.12'}</span>
+                      </div>
+                      <div className="duo-editor-body">
+                        <LineNumbers code={code} />
+                        <textarea
+                          ref={editorRef}
+                          className="duo-textarea"
+                          spellCheck={false}
+                          value={code}
+                          onChange={(e) => setCode(e.target.value)}
+                          onKeyDown={handleEditorKeyDown}
+                          disabled={isRunning}
+                          placeholder="Write your code here… (Press Shift+Enter or Ctrl+Enter to run)"
+                          aria-label="Code editor — use Shift+Enter or Ctrl+Enter to run"
+                        />
+                      </div>
+                    </div>
+                  )
+                })()}
               </div>
 
               {/* Immediate Test Feedback */}
@@ -877,6 +1156,109 @@ function App() {
           ) : null}
         </main>
       </div>
+
+      {/* Test-Out Mastery Exam Modal */}
+      {showTestOutModal && lesson && (
+        <div className="modal-overlay" role="dialog" aria-label="Mastery Exam Modal">
+          <div className="modal-card">
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
+              <h2 style={{ fontSize: '22px', fontWeight: 800 }}>⚡ Mastery Exam: {lesson.title}</h2>
+              <button
+                onClick={() => setShowTestOutModal(false)}
+                style={{ fontSize: '20px', fontWeight: 800, background: 'none', border: 'none', cursor: 'pointer' }}
+              >
+                ✕
+              </button>
+            </div>
+            <p style={{ color: '#4a4e69', marginBottom: '20px' }}>
+              Pass with 80%+ score to test out of this lesson and earn +100 XP!
+            </p>
+
+            {testOutResult ? (
+              <div className={`duo-feedback-panel ${testOutResult.passed ? 'success' : 'error'}`}>
+                <h3>{testOutResult.passed ? '🎉 Congratulations! You Mastered This Concept!' : 'Keep Practicing!'}</h3>
+                <p>Score: {testOutResult.score_pct}% ({testOutResult.passed_count} / {testOutResult.total_questions} correct)</p>
+                {testOutResult.passed ? (
+                  <p style={{ fontWeight: 800 }}>+100 XP Earned! Next lessons unlocked.</p>
+                ) : (
+                  <div>
+                    <p>Recommended areas to review:</p>
+                    <ul>
+                      {testOutResult.weak_areas?.map((wa: string, i: number) => (
+                        <li key={i}>{wa}</li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
+                <button
+                  className="duo-button duo-button-primary"
+                  style={{ marginTop: '16px' }}
+                  onClick={() => setShowTestOutModal(false)}
+                >
+                  Close
+                </button>
+              </div>
+            ) : (
+              <div>
+                {(lesson.mastery_exam && lesson.mastery_exam.length > 0
+                  ? lesson.mastery_exam
+                  : lesson.sublessons?.flatMap((s) => s.exercises) || []
+                ).map((ex, idx) => (
+                  <div key={ex.id} style={{ marginBottom: '20px', padding: '12px', border: '1px solid #cbd5e1', borderRadius: '8px' }}>
+                    <h4 style={{ fontWeight: 800, marginBottom: '8px' }}>
+                      Question {idx + 1}: {ex.question || ex.title}
+                    </h4>
+                    {ex.options && ex.options.length > 0 ? (
+                      <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                        {ex.options.map((opt) => (
+                          <label key={opt} style={{ display: 'flex', gap: '8px', alignItems: 'center', cursor: 'pointer' }}>
+                            <input
+                              type="radio"
+                              name={`exam-${ex.id}`}
+                              value={opt}
+                              checked={testOutSubmissions[ex.id]?.answer === opt}
+                              onChange={() =>
+                                setTestOutSubmissions((prev) => ({
+                                  ...prev,
+                                  [ex.id]: { answer: opt },
+                                }))
+                              }
+                            />
+                            <span>{opt}</span>
+                          </label>
+                        ))}
+                      </div>
+                    ) : (
+                      <input
+                        type="text"
+                        placeholder="Your answer…"
+                        style={{ width: '100%', padding: '8px 12px', border: '1px solid #cbd5e1', borderRadius: '6px' }}
+                        value={testOutSubmissions[ex.id]?.answer || ''}
+                        onChange={(e) => {
+                          const val = e.target.value
+                          setTestOutSubmissions((prev) => ({
+                            ...prev,
+                            [ex.id]: { answer: val, answers: [val] },
+                          }))
+                        }}
+                      />
+                    )}
+                  </div>
+                ))}
+
+                <button
+                  className="duo-button duo-button-primary"
+                  style={{ width: '100%', marginTop: '16px' }}
+                  onClick={handleTestOutSubmit}
+                  disabled={isRunning}
+                >
+                  {isRunning ? 'Evaluating Exam…' : 'Submit Mastery Exam'}
+                </button>
+              </div>
+            )}
+          </div>
+        </div>
+      )}
 
       {/* Bottom Sticky Action Bar */}
       <footer className="duo-footer-bar">

@@ -35,6 +35,72 @@
       "completion_requirements": {
         "required_test_names": ["test_language_variable"]
       },
+      "sublessons": [
+        {
+          "id": "py-var-sub-1",
+          "title": "Python Variable Concepts",
+          "order": 1,
+          "exercises": [
+            {
+              "id": "py-ex-1a",
+              "type": "mcq",
+              "question": "Which symbol is used to assign values to variables in Python?",
+              "options": ["=", "==", "->", ":="],
+              "correct_answer": "=",
+              "xp_reward": 10,
+              "explanation": "The equals sign '=' is the assignment operator in Python."
+            },
+            {
+              "id": "py-ex-1b",
+              "type": "fill_blank",
+              "question": "Assign 'Python' to variable language:",
+              "starter_code": "language = ___",
+              "blanks": ["\"Python\""],
+              "correct_answer": "\"Python\"",
+              "xp_reward": 10,
+              "explanation": "Strings in Python are enclosed in quotes, e.g. \"Python\"."
+            }
+          ]
+        },
+        {
+          "id": "py-var-sub-2",
+          "title": "Variable Practice",
+          "order": 2,
+          "exercises": [
+            {
+              "id": "py-ex-2a",
+              "type": "code",
+              "title": "Assign language variable",
+              "question": "Assign the string 'Python' to a variable named language.",
+              "starter_code": "language = None\n",
+              "solution_code": "language = \"Python\"\n",
+              "tests": [
+                {
+                  "name": "test_language_variable",
+                  "unittest_code": "def test_language_variable(self):\n    self.assertEqual(language, \"Python\", msg=\"Expected variable 'language' to equal 'Python'.\")",
+                  "required": true
+                }
+              ],
+              "xp_reward": 15
+            }
+          ]
+        }
+      ],
+      "mastery_exam": [
+        {
+          "id": "py-exam-1",
+          "type": "mcq",
+          "question": "What type of data is 'Python' in Python?",
+          "options": ["str", "int", "bool", "float"],
+          "correct_answer": "str"
+        },
+        {
+          "id": "py-exam-2",
+          "type": "fill_blank",
+          "question": "Complete variable assignment: x = ___ (assign value 10)",
+          "correct_answer": "10"
+        }
+      ],
       "static_hints": ["Write language = \"Python\""]
     },
     {

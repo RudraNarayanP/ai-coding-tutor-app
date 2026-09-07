@@ -82,4 +82,7 @@ def test_api_courses_endpoint():
             assert len(lessons_data) >= 30
             assert lessons_data[0]["id"].startswith("java-")
 
+            # Restore active language
+            await client.post("/api/courses/select", json={"language": "python"})
+
     asyncio.run(call())

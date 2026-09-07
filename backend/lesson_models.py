@@ -27,6 +27,36 @@ class LessonSource(BaseModel):
     license: str = Field(default="", max_length=80)
 
 
+class MatchingPair(BaseModel):
+    left: str
+    right: str
+
+
+class ExerciseDefinition(BaseModel):
+    id: str = Field(pattern=r"^[a-z0-9-]+$", min_length=1, max_length=80)
+    title: str = Field(default="", max_length=120)
+    type: str = Field(default="code")
+    question: str = Field(default="", max_length=2000)
+    options: list[str] = Field(default_factory=list)
+    correct_answer: str | list[str] | dict[str, str] | None = None
+    blanks: list[str] = Field(default_factory=list)
+    pairs: list[MatchingPair] = Field(default_factory=list)
+    starter_code: str = Field(default="", max_length=64 * 1024)
+    solution_code: str | None = Field(default=None, max_length=64 * 1024)
+    tests: list[DeterministicTestSpec] = Field(default_factory=list)
+    hints: list[str] = Field(default_factory=list)
+    xp_reward: int = Field(default=10, ge=0)
+    explanation: str = Field(default="", max_length=2000)
+
+
+class SubLessonDefinition(BaseModel):
+    id: str = Field(pattern=r"^[a-z0-9-]+$", min_length=1, max_length=80)
+    title: str = Field(min_length=1, max_length=120)
+    description: str = Field(default="", max_length=2000)
+    order: int = Field(default=1, ge=1)
+    exercises: list[ExerciseDefinition] = Field(default_factory=list)
+
+
 class LessonDefinition(BaseModel):
     id: str = Field(pattern=r"^[a-z0-9-]+$", min_length=1, max_length=80)
     title: str = Field(min_length=1, max_length=120)
@@ -34,14 +64,17 @@ class LessonDefinition(BaseModel):
     order: int = Field(ge=1)
     difficulty: str = Field(min_length=1, max_length=40)
     duration_minutes: int = Field(ge=1, le=240)
-    starter_code: str = Field(max_length=64 * 1024)
+    starter_code: str = Field(default="", max_length=64 * 1024)
     solution_code: str | None = Field(default=None, max_length=64 * 1024)
     concepts: list[str] = Field(default_factory=list, max_length=20)
     prerequisites: list[str] = Field(default_factory=list, max_length=20)
     learning_objectives: list[str] = Field(default_factory=list, max_length=20)
-    tests: list[DeterministicTestSpec] = Field(min_length=1, max_length=40)
+    tests: list[DeterministicTestSpec] = Field(default_factory=list, max_length=40)
     completion_requirements: CompletionRequirements = Field(default_factory=CompletionRequirements)
     static_hints: list[str] = Field(default_factory=list, max_length=4)
+    sublessons: list[SubLessonDefinition] = Field(default_factory=list)
+    mastery_exam: list[ExerciseDefinition] = Field(default_factory=list)
+    xp_reward: int = Field(default=25, ge=0)
     source: LessonSource | None = None
 
 
@@ -72,6 +105,27 @@ class Curriculum(BaseModel):
     lessons: tuple[LessonDefinition, ...]
 
 
+class PublicExerciseView(BaseModel):
+    id: str
+    title: str = ""
+    type: str = "code"
+    question: str = ""
+    options: list[str] = []
+    blanks: list[str] = []
+    pairs: list[MatchingPair] = []
+    starter_code: str = ""
+    hints: list[str] = []
+    xp_reward: int = 10
+
+
+class PublicSubLessonView(BaseModel):
+    id: str
+    title: str
+    description: str = ""
+    order: int = 1
+    exercises: list[PublicExerciseView] = []
+
+
 class PublicLessonView(BaseModel):
     """Safe public projection of a lesson returned by the lesson detail API."""
 
@@ -90,6 +144,9 @@ class PublicLessonView(BaseModel):
     concepts: list[str] = []
     prerequisites: list[str] = []
     learning_objectives: list[str] = []
+    sublessons: list[PublicSubLessonView] = []
+    mastery_exam: list[PublicExerciseView] = []
+    xp_reward: int = 25
     source: LessonSource | None = None
 
     @classmethod
@@ -101,6 +158,45 @@ class PublicLessonView(BaseModel):
         concept_id: str | None = None,
         concept_title: str | None = None,
     ) -> "PublicLessonView":
+        sub_views = [
+            PublicSubLessonView(
+                id=s.id,
+                title=s.title,
+                description=s.description,
+                order=s.order,
+                exercises=[
+                    PublicExerciseView(
+                        id=e.id,
+                        title=e.title,
+                        type=e.type,
+                        question=e.question,
+                        options=e.options,
+                        blanks=e.blanks,
+                        pairs=e.pairs,
+                        starter_code=e.starter_code,
+                        hints=e.hints,
+                        xp_reward=e.xp_reward,
+                    )
+                    for e in s.exercises
+                ],
+            )
+            for s in lesson.sublessons
+        ]
+        exam_views = [
+            PublicExerciseView(
+                id=e.id,
+                title=e.title,
+                type=e.type,
+                question=e.question,
+                options=e.options,
+                blanks=e.blanks,
+                pairs=e.pairs,
+                starter_code=e.starter_code,
+                hints=e.hints,
+                xp_reward=e.xp_reward,
+            )
+            for e in lesson.mastery_exam
+        ]
         return cls(
             id=lesson.id,
             title=lesson.title,
@@ -117,6 +213,9 @@ class PublicLessonView(BaseModel):
             concepts=list(lesson.concepts),
             prerequisites=list(lesson.prerequisites),
             learning_objectives=list(lesson.learning_objectives),
+            sublessons=sub_views,
+            mastery_exam=exam_views,
+            xp_reward=lesson.xp_reward,
             source=lesson.source,
         )
 
@@ -166,4 +265,10 @@ class ProgressionResult(BaseModel):
 
 class ProgressionState(BaseModel):
     completed_lesson_ids: list[str] = Field(default_factory=list)
+    mastered_lesson_ids: list[str] = Field(default_factory=list)
+    skipped_lesson_ids: list[str] = Field(default_factory=list)
+    completed_sublesson_ids: list[str] = Field(default_factory=list)
+    completed_exercise_ids: list[str] = Field(default_factory=list)
     current_lesson_id: str | None = None
+    xp: int = 0
+    level: int = 1
