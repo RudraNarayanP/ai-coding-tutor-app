@@ -791,7 +791,7 @@ function App() {
       {/* ─── Main Viewport Area ─────────────────────────────────────────── */}
       <div className="duo-main-viewport">
         {/* Top Sticky Header */}
-        <header className="duo-top-header" role="banner">
+        <header className="duo-top-header" style={{ flexWrap: "wrap", height: "auto", padding: "12px 24px" }} role="banner">
           <div className="duo-header-left">
             {/* Language Switcher Tabs / Dropdown */}
             <div className="duo-course-selector" role="tablist" aria-label="Course language selector" style={{ display: 'flex', gap: '6px' }}>
@@ -1044,7 +1044,7 @@ function App() {
                         {lesson.sublessons.map((sub, sIdx) => (
                           <button
                             key={sub.id}
-                            role="tab"
+                            role="button"
                             aria-selected={activeSubLessonIndex === sIdx}
                             className={`duo-step-item ${activeSubLessonIndex === sIdx ? 'active' : ''}`}
                             onClick={() => {
@@ -1235,7 +1235,72 @@ function App() {
                 </div>
               ) : null}
             </div>
-          </div>
+
+            {/* Right Sidebar Widgets */}
+            <aside className="duo-right-sidebar" aria-label="Course stats and quests">
+              {/* Language Track Selector Widget */}
+              <div className="duo-widget-card">
+                <div className="duo-widget-title">
+                  <span>Active Track</span>
+                  <span className="duo-widget-link">{selectedLanguage.toUpperCase()} TRACK</span>
+                </div>
+                <div className="duo-course-tabs" aria-label="Course track selector">
+                  {[
+                    { lang: 'python', label: 'Python' },
+                    { lang: 'java', label: 'Java' },
+                    { lang: 'cpp', label: 'C++' },
+                  ].map(({ lang, label }) => (
+                    <button
+                      key={lang}
+                      role="button"
+                      aria-selected={selectedLanguage === lang}
+                      className={`duo-course-tab ${selectedLanguage === lang ? "active" : ""}`}
+                      onClick={() => handleCourseChange(lang)}
+                    >
+                      {label}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              {/* Daily Quests Widget */}
+              <div className="duo-widget-card">
+                <div className="duo-widget-title">
+                  <span>Daily Quests</span>
+                  <button className="duo-widget-link" onClick={() => setActiveTab('quests')}>VIEW ALL</button>
+                </div>
+                <div className="duo-quest-item">
+                  <span className="duo-quest-icon">⚡</span>
+                  <div className="duo-quest-body">
+                    <div className="duo-quest-name">Earn {gamification.dailyGoal || 30} XP</div>
+                    <div className="duo-quest-progress-bg">
+                      <div className="duo-quest-progress-fill" style={{ width: "100%" }} />
+                    </div>
+                  </div>
+                </div>
+                <div className="duo-quest-item">
+                  <span className="duo-quest-icon">🎯</span>
+                  <div className="duo-quest-body">
+                    <div className="duo-quest-name">Complete 1 Lesson</div>
+                    <div className="duo-quest-progress-bg">
+                      <div className="duo-quest-progress-fill" style={{ width: "100%" }} />
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Leaderboard Preview Widget */}
+              <div className="duo-widget-card">
+                <div className="duo-widget-title">
+                  <span>Bronze League</span>
+                  <button className="duo-widget-link" onClick={() => setActiveTab('leaderboards')}>VIEW</button>
+                </div>
+                <p style={{ fontSize: '14px', color: 'var(--ink-soft)', fontWeight: 600 }}>
+                  Top 5 learners advance to Silver League on Sunday!
+                </p>
+              </div>
+            </aside>
+</div>
         )}
 
         {/* ─── TAB 2: CHARACTERS / SYNTAX VIEW ──────────────────────────── */}
