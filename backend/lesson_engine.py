@@ -116,7 +116,8 @@ class LessonEngine:
         if lesson.solution_code:
             return lesson.solution_code
         if lesson.static_hints:
-            return "\n".join(lesson.static_hints) + "\n"
+            comments = "\n".join(f"# Hint: {hint}" for hint in lesson.static_hints)
+            return f"{comments}\n"
         return "# Solution not available.\n"
 
     def summaries(self, language: str | None = None) -> list[LessonSummary]:
