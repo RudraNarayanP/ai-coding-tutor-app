@@ -153,6 +153,7 @@ function SqlResultTable({ output }: { output: string }) {
 
 // ─── App Component ────────────────────────────────────────────────────────────
 function App() {
+  const [activeTab, setActiveTab] = useState<'learn' | 'characters' | 'leaderboards' | 'quests' | 'profile'>('learn')
   const [courses, setCourses] = useState<CourseSummary[]>([])
   const [selectedLanguage, setSelectedLanguage] = useState<string>(() => {
     return localStorage.getItem('patchwork_active_language') || 'python'
@@ -190,6 +191,7 @@ function App() {
   const [showTestOutModal, setShowTestOutModal] = useState(false)
   const [testOutSubmissions, setTestOutSubmissions] = useState<Record<string, any>>({})
   const [testOutResult, setTestOutResult] = useState<any>(null)
+  const [charSubTab, setCharSubTab] = useState<'syntax' | 'keywords' | 'types' | 'operators'>('syntax')
 
   // Gamification state
   const [gamification, setGamification] = useState(getGamificationState())
@@ -684,41 +686,7 @@ function App() {
     if (next) await loadLesson(next)
   }, [lessons, loadLesson])
 
-  const activateBoost = useCallback(() => {
-    const updated = activateXpBoost(15)
-    setGamification(updated)
-    playPatchworkSound('boost_active', soundEnabled)
-  }, [soundEnabled])
-
-  // Group lessons by Section -> Unit
-  const sectionsMap = new Map<
-    string,
-    { id: string; title: string; units: Map<string, { id: string; title: string; lessons: LessonSummary[] }> }
-  >()
   const safeLessons = Array.isArray(lessons) ? lessons : []
-
-  safeLessons.forEach((item) => {
-    const secId = item.section_id || 'section-1'
-    const secTitle = item.section_title || 'Section 1: Foundations'
-    const uid = item.unit_id || 'unit-1'
-    const utitle = item.unit_title || 'Unit 1'
-
-    if (!sectionsMap.has(secId)) {
-      sectionsMap.set(secId, { id: secId, title: secTitle, units: new Map() })
-    }
-    const secObj = sectionsMap.get(secId)!
-    if (!secObj.units.has(uid)) {
-      secObj.units.set(uid, { id: uid, title: utitle, lessons: [] })
-    }
-    secObj.units.get(uid)!.lessons.push(item)
-  })
-
-  const sectionGroupList = Array.from(sectionsMap.values()).map((sec) => ({
-    id: sec.id,
-    title: sec.title,
-    units: Array.from(sec.units.values()),
-  }))
-
   const completedCount = safeLessons.filter((l) => l.status === 'completed').length
   const progressPct = safeLessons.length ? (completedCount / safeLessons.length) * 100 : 0
   const allPassed = results !== null && results.length > 0 && results.every((r) => r.passed || !r.required)
@@ -727,64 +695,119 @@ function App() {
 
   const isBoostActive = gamification.boostExpiresAt && Date.now() < gamification.boostExpiresAt
   const currentTrackMeta = TRACK_METADATA[selectedLanguage] || TRACK_METADATA.python
+  // Course title display
+  const coursePathTitle = selectedLanguage === 'cpp' ? 'C++ Path' : selectedLanguage === 'java' ? 'Java Path' : 'Python Path'
+
+  // Characters / Syntax Cards per Language
+  const syntaxCards = selectedLanguage === 'cpp'
+    ? [
+        { symbol: '#include', romaji: 'Header Include', level: 80, desc: 'Includes external libraries' },
+        { symbol: 'std::cout', romaji: 'Standard Output', level: 90, desc: 'Prints text to console stream' },
+        { symbol: 'int main()', romaji: 'Main Entrypoint', level: 100, desc: 'Program start function' },
+        { symbol: 'std::string', romaji: 'String Type', level: 60, desc: 'Sequence of characters' },
+        { symbol: 'if / else', romaji: 'Branch Control', level: 85, desc: 'Conditional execution' },
+        { symbol: 'for loop', romaji: 'Iteration Loop', level: 70, desc: 'Repeats execution over range' },
+      ]
+    : selectedLanguage === 'java'
+    ? [
+        { symbol: 'class', romaji: 'Class Declaration', level: 90, desc: 'Defines blueprint for objects' },
+        { symbol: 'public static', romaji: 'Main Modifier', level: 85, desc: 'Global accessible method' },
+        { symbol: 'System.out', romaji: 'Console Output', level: 95, desc: 'Prints to standard output' },
+        { symbol: 'String', romaji: 'Object String', level: 80, desc: 'Text datatype in Java' },
+        { symbol: 'int / boolean', romaji: 'Primitive Types', level: 100, desc: 'Basic data values' },
+        { symbol: 'new Keyword', romaji: 'Instantiate', level: 60, desc: 'Creates new object instance' },
+      ]
+    : [
+        { symbol: 'def', romaji: 'Function Def', level: 100, desc: 'Defines a named function' },
+        { symbol: 'print()', romaji: 'Standard Output', level: 100, desc: 'Prints values to stdout' },
+        { symbol: 'if / else', romaji: 'Conditionals', level: 90, desc: 'Branches on boolean test' },
+        { symbol: 'for ... in', romaji: 'Sequence Loop', level: 85, desc: 'Iterates through iterable' },
+        { symbol: 'class', romaji: 'Object Class', level: 75, desc: 'Defines OOP custom class' },
+        { symbol: 'import', romaji: 'Module Import', level: 80, desc: 'Imports Python library' },
+      ]
 
   return (
-    <div className="duo-app">
-      {/* Top Header */}
-      <header className="duo-header" role="banner">
-        <div className="duo-brand">
-          <div className="duo-logo-icon">p</div>
-          <span>patchwork</span>
+    <div className="duo-layout">
+      {/* ─── Left Sidebar Navigation Bar ─────────────────────────────────── */}
+      <aside className="duo-nav-sidebar" aria-label="Main Navigation">
+        <div className="duo-logo-area">
+          <div className="duo-logo-text">patchwork</div>
         </div>
 
-        <div className="duo-header-progress">
-          <div
-            className="duo-progress-bar-bg"
-            role="progressbar"
-            aria-valuenow={completedCount}
-            aria-valuemin={0}
-            aria-valuemax={lessons.length}
-            aria-label="Course progress"
-          >
-            <div className="duo-progress-bar-fill" style={{ width: `${progressPct}%` }} />
-          </div>
-        </div>
-
-        <div className="duo-header-right">
-          {/* Streak Badge */}
-          <div className="duo-streak-badge" title="Daily Learning Streak">
-            🔥 {gamification.streakCount || 1}
-          </div>
-
-          {/* XP Boost Button / Badge */}
+        <nav className="duo-nav-menu" aria-label="App Navigation Tabs">
           <button
-            className={`duo-boost-badge ${isBoostActive ? 'active' : ''}`}
-            onClick={activateBoost}
-            title={isBoostActive ? '2x XP Boost Active!' : 'Click to activate 2x XP Boost'}
+            className={`duo-nav-item ${activeTab === 'learn' ? 'active' : ''}`}
+            onClick={() => setActiveTab('learn')}
           >
-            ⚡ {isBoostActive ? '2× BOOST' : 'Boost'}
+            <span className="duo-nav-icon">🏠</span>
+            <span>LEARN</span>
           </button>
 
-          {/* XP & Level Badge */}
-          <div className="duo-xp-badge" aria-label={`XP: ${xp}, Level: ${level}`}>
-            <span>⭐ {xp} XP</span>
-            <span style={{ fontSize: '12px', opacity: 0.8, marginLeft: '4px' }}>Lvl {level}</span>
-            {xpGainPopup !== null && (
-              <div className="xp-float-anim">+{xpGainPopup} XP!</div>
-            )}
+          <button
+            className={`duo-nav-item ${activeTab === 'characters' ? 'active' : ''}`}
+            onClick={() => setActiveTab('characters')}
+          >
+            <span className="duo-nav-icon">🔤</span>
+            <span>CHARACTERS</span>
+          </button>
+
+          <button
+            className={`duo-nav-item ${activeTab === 'leaderboards' ? 'active' : ''}`}
+            onClick={() => setActiveTab('leaderboards')}
+          >
+            <span className="duo-nav-icon">🛡️</span>
+            <span>LEADERBOARDS</span>
+          </button>
+
+          <button
+            className={`duo-nav-item ${activeTab === 'quests' ? 'active' : ''}`}
+            onClick={() => setActiveTab('quests')}
+          >
+            <span className="duo-nav-icon">🎯</span>
+            <span>QUESTS</span>
+          </button>
+
+          <button
+            className={`duo-nav-item ${activeTab === 'profile' ? 'active' : ''}`}
+            onClick={() => setActiveTab('profile')}
+          >
+            <span className="duo-nav-icon">👤</span>
+            <span>PROFILE</span>
+          </button>
+        </nav>
+
+        {/* Sidebar Footer Controls */}
+        <div style={{ borderTop: '2px solid var(--line)', paddingTop: '16px', display: 'flex', flexDirection: 'column', gap: '8px' }}>
+          <div style={{ display: 'flex', gap: '8px' }}>
+            <button
+              className="duo-button duo-button-secondary"
+              style={{ padding: '6px 12px', fontSize: '12px', flex: 1 }}
+              aria-label={soundEnabled ? 'Mute audio feedback' : 'Unmute audio feedback'}
+              onClick={toggleSound}
+            >
+              {soundEnabled ? '🔊 Sound' : '🔇 Sound'}
+            </button>
+            <button
+              className="duo-button duo-button-secondary"
+              style={{ padding: '6px 12px', fontSize: '12px', flex: 1 }}
+              aria-label="AI tutor on"
+              onClick={() => setAiEnabled((e) => !e)}
+            >
+              {aiEnabled ? 'AI On' : 'AI Off'}
+            </button>
           </div>
 
-          {/* AI Provider Selector */}
-          <div className="duo-provider-selector" style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', fontSize: '12px' }}>
             <select
               value={selectedProvider}
               onChange={(e) => handleProviderChange(e.target.value)}
               aria-label="Select AI Provider"
               style={{
+                width: '100%',
                 padding: '4px 8px',
                 borderRadius: '8px',
                 border: '1px solid #cbd5e1',
-                fontSize: '13px',
+                fontSize: '12px',
                 fontWeight: 700,
                 background: '#fff',
               }}
@@ -795,46 +818,47 @@ function App() {
                 </option>
               )) ?? <option value="ollama">Ollama</option>}
             </select>
-
-            <div className="duo-status-badge">
-              <span className={`duo-status-dot ${isAiAvailable ? 'active' : ''}`} />
-              {isAiAvailable
-                ? `${currentProviderStatus?.name || selectedProvider} ready`
-                : `${currentProviderStatus?.name || selectedProvider} unavailable`}
-            </div>
           </div>
 
-          <button
-            className="duo-button duo-button-secondary"
-            style={{ padding: '6px 14px', fontSize: '13px' }}
-            aria-label={soundEnabled ? 'Mute audio feedback' : 'Unmute audio feedback'}
-            onClick={toggleSound}
-          >
-            {soundEnabled ? '🔊 Sound' : '🔇 Sound'}
-          </button>
-
-          <button
-            className="duo-button duo-button-secondary"
-            style={{ padding: '6px 14px', fontSize: '13px' }}
-            aria-label="AI tutor on"
-            onClick={() => setAiEnabled((e) => !e)}
-          >
-            {aiEnabled ? 'AI tutor on' : 'AI tutor off'}
-          </button>
+          <div style={{ fontSize: '11px', color: '#64748b', textAlign: 'center' }}>
+            {isAiAvailable ? 'Ollama ready' : 'Ollama unavailable'}
+          </div>
         </div>
-      </header>
+      </aside>
 
-      {backendError && (
-        <div className="backend-error-banner" role="alert">
-          <span aria-hidden="true">⚠️</span>
-          <span>
-            Backend unavailable — run <code>uvicorn backend.main:app --reload</code> then{' '}
-            <button onClick={() => window.location.reload()} className="inline-link">
-              Try again
-            </button>
-          </span>
-        </div>
-      )}
+      {/* ─── Main Viewport Area ─────────────────────────────────────────── */}
+      <div className="duo-main-viewport">
+        {/* Top Sticky Header */}
+        <header className="duo-top-header" role="banner">
+          <div className="duo-header-left">
+            {/* Language Switcher Tabs / Dropdown */}
+            <div className="duo-course-selector" role="tablist" aria-label="Course language selector" style={{ display: 'flex', gap: '6px' }}>
+              {[
+                { lang: 'python', label: 'Python' },
+                { lang: 'java', label: 'Java' },
+                { lang: 'cpp', label: 'C++' },
+              ].map(({ lang, label }) => (
+                <button
+                  key={lang}
+                  role="tab"
+                  aria-selected={selectedLanguage === lang}
+                  className={`duo-course-btn ${selectedLanguage === lang ? 'active' : ''}`}
+                  onClick={() => handleCourseChange(lang)}
+                  style={{
+                    padding: '6px 12px',
+                    borderRadius: '8px',
+                    fontSize: '13px',
+                    fontWeight: 800,
+                    border: '2px solid',
+                    borderColor: selectedLanguage === lang ? 'var(--blue-dark)' : 'var(--line)',
+                    background: selectedLanguage === lang ? '#ddf4ff' : '#fff',
+                    color: selectedLanguage === lang ? 'var(--blue-dark)' : '#777',
+                  }}
+                >
+                  {label}
+                </button>
+              ))}
+            </div>
 
       {/* Workspace */}
       <div className="duo-main-container">
@@ -896,245 +920,373 @@ function App() {
           <div className="duo-sidebar-title" style={{ display: 'flex', flexDirection: 'column', gap: '2px' }}>
             <span style={{ fontSize: '16px', fontWeight: 800 }}>{currentTrackMeta.icon} {currentTrackMeta.title} Path</span>
             <span style={{ fontSize: '11px', color: '#64748b', fontWeight: 500 }}>{currentTrackMeta.tagline}</span>
-          </div>
-
-          {/* Daily Goal Bar */}
-          <div className="daily-goal-card" style={{ padding: '10px', background: '#f8fafc', borderRadius: '12px', border: '1px solid #cbd5e1', marginBottom: '8px' }}>
-            <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '12px', fontWeight: 800, color: '#4a4e69', marginBottom: '4px' }}>
-              <span>DAILY GOAL</span>
-              <span>{gamification.dailyXp} / {gamification.dailyGoal} XP</span>
-            </div>
-            <div style={{ height: '8px', background: '#e2e8f0', borderRadius: '999px', overflow: 'hidden' }}>
-              <div style={{ height: '100%', background: '#58cc02', width: `${Math.min(100, (gamification.dailyXp / gamification.dailyGoal) * 100)}%` }} />
+            <div style={{ fontWeight: 900, fontSize: '15px', color: 'var(--ink)' }}>
+              {coursePathTitle}
             </div>
           </div>
 
-          <nav className="duo-path-list" aria-label="Lessons">
-            {sectionGroupList.map((secGroup) => {
-              const secTotal = secGroup.units.flatMap((u) => u.lessons).length
-              const secDone = secGroup.units.flatMap((u) => u.lessons).filter((l) => l.status === 'completed').length
+          {/* Course Progress Bar */}
+          <div style={{ flex: 1, maxWidth: '280px', margin: '0 24px' }}>
+            <div
+              className="duo-progress-bar-bg"
+              role="progressbar"
+              aria-valuenow={completedCount}
+              aria-valuemin={0}
+              aria-valuemax={safeLessons.length}
+              aria-label="Course progress"
+              style={{ height: '14px', background: '#e5e5e5', borderRadius: '999px', overflow: 'hidden' }}
+            >
+              <div
+                className="duo-progress-bar-fill"
+                style={{ width: `${progressPct}%`, height: '100%', background: 'var(--green)', borderRadius: '999px', transition: 'width 0.4s ease' }}
+              />
+            </div>
+          </div>
 
-              return (
-                <div key={secGroup.id} className="duo-section-block">
-                  <div className="duo-section-banner">
-                    <span className="duo-section-title">{secGroup.title}</span>
-                    <span className="duo-section-progress">{secDone} / {secTotal}</span>
-                  </div>
+          {/* Top Stat Pills */}
+          <div className="duo-header-stats">
+            <div className="duo-stat-pill streak" title="Daily streak">
+              <span>🔥</span>
+              <span>{gamification.streakCount || 1}</span>
+            </div>
 
-                  {secGroup.units.map((unitGroup) => (
-                    <div key={unitGroup.id} className="duo-unit-block">
-                      <div className="duo-unit-header">
-                        <span className="duo-unit-title">{unitGroup.title}</span>
-                      </div>
-                      <div className="duo-unit-node-group">
-                        {unitGroup.lessons.map((item) => {
-                          const isActive = lesson?.id === item.id
-                          const statusLabel =
-                            item.status === 'current'
-                              ? isActive
-                                ? 'Current lesson'
-                                : 'Available'
-                              : item.status === 'completed'
-                              ? 'Completed'
-                              : 'Locked'
+            <div className="duo-stat-pill gems" title="Gems">
+              <span>💎</span>
+              <span>500</span>
+            </div>
 
-                          const iconSymbol =
-                            item.status === 'completed'
-                              ? '✓'
-                              : item.type === 'challenge'
-                              ? '⚡'
-                              : item.type === 'practice'
-                              ? '🔄'
-                              : item.type === 'checkpoint'
-                              ? '🏆'
-                              : '📘'
+            <div className="duo-stat-pill xp" title="Total XP" aria-label={`XP: ${xp}, Level: ${level}`}>
+              <span>⭐</span>
+              <span>{xp} XP</span>
+              {xpGainPopup !== null && (
+                <div className="xp-float-anim">+{xpGainPopup} XP!</div>
+              )}
+            </div>
 
-                          return (
-                            <button
-                              key={item.id}
-                              id={`lesson-nav-${item.id}`}
-                              className={`duo-path-node ${item.status} ${item.type || 'learn'}${
-                                isActive ? ' active' : ''
-                              }`}
-                              onClick={() => loadLesson(item)}
-                              disabled={item.status === 'locked' || isLoadingLesson}
-                              aria-current={isActive ? 'page' : undefined}
-                              aria-label={`${item.title} — ${statusLabel}`}
-                              title={item.title}
-                            >
-                              <span className="duo-node-icon">{iconSymbol}</span>
-                            </button>
-                          )
-                        })}
-                      </div>
-                    </div>
-                  ))}
+            <div className="duo-stat-pill hearts" title="Hearts / Lives">
+              <span>❤️</span>
+              <span>5</span>
+            </div>
+          </div>
+        </header>
+
+        {backendError && (
+          <div className="backend-error-banner" role="alert" style={{ background: '#fee2e2', color: '#991b1b', padding: '10px 24px', fontWeight: 700, fontSize: '14px' }}>
+            <span>⚠️ Backend unavailable — run <code>uvicorn backend.main:app --reload</code></span>
+          </div>
+        )}
+
+        {/* ─── TAB 1: LEARN PATH VIEW ──────────────────────────────────── */}
+        {activeTab === 'learn' && (
+          <div className="duo-page-container">
+            <div className="duo-learn-view">
+              {/* Section & Unit Banner Header */}
+              <div className="duo-unit-banner">
+                <div className="duo-unit-info">
+                  <span className="duo-unit-subtitle">SECTION 1, UNIT 1</span>
+                  <span className="duo-unit-title">Variables, Logic & Functions</span>
                 </div>
-              )
-            })}
-          </nav>
-        </aside>
+                <button className="duo-guidebook-btn">
+                  📖 GUIDEBOOK
+                </button>
+              </div>
 
-        {/* Center Stage */}
-        <main className="duo-stage" aria-label="Lesson content">
-          {isLoadingLesson ? (
-            <div className="duo-card" style={{ textAlign: 'center', padding: '48px' }} role="status" aria-label="Loading lesson">
-              <h2>Loading exercise…</h2>
-            </div>
-          ) : lesson ? (
-            <>
-              {/* Patchwork Character Header */}
-              <div style={{ marginBottom: '16px' }}>
+              {/* Character Mascot Speech Header */}
+              <div style={{ marginBottom: '24px', width: '100%' }}>
                 <PatchworkCharacter name="patch" state={charState} speech={charSpeech} />
               </div>
 
-              {/* Lesson Card */}
-              <div className="duo-card">
-                <div className="duo-card-header">
-                  <div className="duo-badge-group">
-                    <span className={`duo-type-badge duo-type-${lesson.type || 'learn'}`}>
-                      {(lesson.type || 'learn').toUpperCase()}
-                    </span>
-                    {lesson.section_title && (
-                      <span className="duo-section-badge">{lesson.section_title}</span>
-                    )}
-                  </div>
-                  <span className="duo-difficulty-badge">{lesson.difficulty}</span>
-                </div>
+              {/* Winding Snake Skill Path Nodes */}
+              <div className="duo-path-tree">
+                {safeLessons.map((item, idx) => {
+                  const isActive = lesson?.id === item.id
+                  const statusLabel =
+                    item.status === 'current'
+                      ? isActive
+                        ? 'Current lesson'
+                        : 'Available'
+                      : item.status === 'completed'
+                      ? 'Completed'
+                      : 'Locked'
 
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                  <h2 className="duo-lesson-title">{lesson.title}</h2>
-                  {lesson.test_out_eligible && (
-                    <button
-                      className="duo-test-out-btn"
-                      onClick={() => {
-                        setTestOutSubmissions({})
-                        setTestOutResult(null)
-                        setShowTestOutModal(true)
-                      }}
-                    >
-                      ⚡ Test Out / Jump Ahead
-                    </button>
-                  )}
-                </div>
+                  // Horizontal offset for serpentine path curve
+                  const positions = ['node-pos-center', 'node-pos-left-1', 'node-pos-left-2', 'node-pos-left-1', 'node-pos-center', 'node-pos-right-1', 'node-pos-right-2', 'node-pos-right-1']
+                  const posClass = positions[idx % positions.length]
 
-                <p className="duo-instruction">{lesson.description}</p>
+                  const iconSymbol =
+                    item.status === 'completed'
+                      ? '✓'
+                      : item.type === 'challenge'
+                      ? '⚡'
+                      : item.type === 'practice'
+                      ? '🔄'
+                      : item.type === 'checkpoint'
+                      ? '🏆'
+                      : '⭐'
 
-                {/* Sublesson Stepper */}
-                {lesson.sublessons && lesson.sublessons.length > 0 && (
-                  <div className="duo-sublesson-stepper" role="tablist" aria-label="Sublessons">
-                    {lesson.sublessons.map((sub, sIdx) => (
+                  return (
+                    <div key={item.id} className={`duo-path-row ${posClass}`}>
                       <button
-                        key={sub.id}
-                        role="tab"
-                        aria-selected={activeSubLessonIndex === sIdx}
-                        className={`duo-step-item ${activeSubLessonIndex === sIdx ? 'active' : ''}`}
-                        onClick={() => {
-                          setActiveSubLessonIndex(sIdx)
-                          setActiveExerciseIndex(0)
+                        id={`lesson-node-${item.id}`}
+                        className={`duo-path-circle-btn ${item.status}`}
+                        onClick={() => loadLesson(item)}
+                        disabled={item.status === 'locked' || isLoadingLesson}
+                        title={item.title}
+                        aria-label={item.title}
+                      >
+                        {/* Active floating START dialog */}
+                        {isActive && item.status !== 'locked' && (
+                          <div className="duo-start-dialog">
+                            START
+                          </div>
+                        )}
+                        <span>{iconSymbol}</span>
+                      </button>
+                    </div>
+                  )
+                })}
+
+                {/* Treasure Chest Node at path end */}
+                <div className="duo-path-row node-pos-center">
+                  <div className="duo-path-circle-btn chest" title="Unit Reward Chest">
+                    📦
+                  </div>
+                </div>
+              </div>
+
+              {/* Full Navigation List for Vitest Accessibility & Sidebar Navigation */}
+              <div style={{ width: '100%', marginTop: '32px', paddingTop: '24px', borderTop: '2px solid var(--line)' }}>
+                <h3 style={{ fontSize: '14px', fontWeight: 800, color: '#777', textTransform: uppercaseText('Course Lessons') }}>
+                  ALL LESSONS
+                </h3>
+                <nav className="duo-path-list" aria-label="Lessons" style={{ display: 'flex', flexDirection: 'column', gap: '8px', marginTop: '12px' }}>
+                  {safeLessons.map((item) => {
+                    const isActive = lesson?.id === item.id
+                    const statusLabel =
+                      item.status === 'current'
+                        ? isActive
+                          ? 'Current lesson'
+                          : 'Available'
+                        : item.status === 'completed'
+                        ? 'Completed'
+                        : 'Locked'
+
+                    return (
+                      <button
+                        key={item.id}
+                        id={`lesson-nav-${item.id}`}
+                        className={`duo-nav-item ${isActive ? 'active' : ''}`}
+                        onClick={() => loadLesson(item)}
+                        disabled={item.status === 'locked' || isLoadingLesson}
+                        aria-current={isActive ? 'page' : undefined}
+                        aria-label={`${item.title} — ${statusLabel}`}
+                        style={{
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'space-between',
+                          padding: '12px 16px',
+                          borderRadius: '12px',
+                          border: '2px solid',
+                          borderColor: isActive ? 'var(--blue-dark)' : 'var(--line)',
+                          background: isActive ? '#ddf4ff' : '#ffffff',
+                          fontWeight: 800,
+                          fontSize: '15px',
+                          cursor: item.status === 'locked' ? 'not-allowed' : 'pointer',
+                          opacity: item.status === 'locked' ? 0.6 : 1,
                         }}
                       >
-                        Step {sIdx + 1}: {sub.title}
+                        <span style={{ color: isActive ? 'var(--blue-dark)' : 'var(--ink)' }}>{item.title}</span>
+                        <span style={{ fontSize: '13px', color: '#777', textTransform: 'uppercase' }}>{statusLabel}</span>
                       </button>
-                    ))}
-                  </div>
-                )}
+                    )
+                  })}
+                </nav>
+              </div>
 
-                {/* Active Exercise */}
-                {(() => {
-                  const currentSub = lesson.sublessons?.[activeSubLessonIndex]
-                  const currentEx = currentSub?.exercises?.[activeExerciseIndex] || {
-                    id: `${lesson.id}-ex-default`,
-                    type: 'code',
-                    question: lesson.description,
-                  }
+              {/* ─── Exercise Workspace Stage ───────────────────────────────── */}
+              {isLoadingLesson ? (
+                <div className="duo-card" style={{ textAlign: 'center', padding: '48px', width: '100%', marginTop: '32px' }} role="status" aria-label="Loading lesson">
+                  <h2>Loading exercise…</h2>
+                </div>
+              ) : lesson ? (
+                <div className="duo-exercise-stage" style={{ width: '100%', marginTop: '32px' }}>
+                  <main className="duo-card" aria-label="Lesson content">
+                    <div className="duo-card-header">
+                      <span className={`duo-type-badge duo-type-${lesson.type || 'learn'}`}>
+                        {(lesson.type || 'learn').toUpperCase()}
+                      </span>
+                      <span className="duo-difficulty-badge">{lesson.difficulty}</span>
+                    </div>
 
-                  const exType = (currentEx.type || 'code').toLowerCase().trim() || 'code'
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                      <h2 className="duo-lesson-title">{lesson.title}</h2>
+                      {lesson.test_out_eligible && (
+                        <button
+                          className="duo-test-out-btn"
+                          onClick={() => {
+                            setTestOutSubmissions({})
+                            setTestOutResult(null)
+                            setShowTestOutModal(true)
+                          }}
+                        >
+                          ⚡ Test Out
+                        </button>
+                      )}
+                    </div>
 
-                  if (exType === 'mcq' || exType === 'true_false') {
-                    const opts = currentEx.options && currentEx.options.length > 0
-                      ? currentEx.options
-                      : ['True', 'False']
-                    const selectedVal = exerciseInput[currentEx.id]?.answer || ''
+                    <p className="duo-instruction">{lesson.description}</p>
 
-                    return (
-                      <div className="exercise-interactive-box" style={{ margin: '16px 0' }}>
-                        <h3 style={{ fontSize: '18px', fontWeight: 800, marginBottom: '12px' }}>
-                          {currentEx.question || currentEx.title || 'Choose the correct answer:'}
-                        </h3>
-                        <div className="exercise-options-grid">
-                          {opts.map((opt) => (
+                    {/* Sublesson Stepper */}
+                    {lesson.sublessons && lesson.sublessons.length > 0 && (
+                      <div className="duo-sublesson-stepper" role="tablist" aria-label="Sublessons">
+                        {lesson.sublessons.map((sub, sIdx) => (
+                          <button
+                            key={sub.id}
+                            role="tab"
+                            aria-selected={activeSubLessonIndex === sIdx}
+                            className={`duo-step-item ${activeSubLessonIndex === sIdx ? 'active' : ''}`}
+                            onClick={() => {
+                              setActiveSubLessonIndex(sIdx)
+                              setActiveExerciseIndex(0)
+                            }}
+                          >
+                            Step {sIdx + 1}: {sub.title}
+                          </button>
+                        ))}
+                      </div>
+                    )}
+
+                    {/* Active Exercise */}
+                    {(() => {
+                      const currentSub = lesson.sublessons?.[activeSubLessonIndex]
+                      const currentEx = currentSub?.exercises?.[activeExerciseIndex] || {
+                        id: `${lesson.id}-ex-default`,
+                        type: 'code',
+                        question: lesson.description,
+                      }
+
+                      const exType = (currentEx.type || 'code').toLowerCase().trim() || 'code'
+
+                      if (exType === 'mcq' || exType === 'true_false') {
+                        const opts = currentEx.options && currentEx.options.length > 0
+                          ? currentEx.options
+                          : ['True', 'False']
+                        const selectedVal = exerciseInput[currentEx.id]?.answer || ''
+
+                        return (
+                          <div className="exercise-interactive-box">
+                            <h3 style={{ fontSize: '18px', fontWeight: 800, marginBottom: '12px' }}>
+                              {currentEx.question || currentEx.title || 'Choose the correct answer:'}
+                            </h3>
+                            <div className="exercise-options-grid">
+                              {opts.map((opt) => (
+                                <button
+                                  key={opt}
+                                  className={`exercise-option-btn ${selectedVal === opt ? 'selected' : ''}`}
+                                  onClick={() =>
+                                    setExerciseInput((prev: any) => ({
+                                      ...prev,
+                                      [currentEx.id]: { ...prev[currentEx.id], answer: opt },
+                                    }))
+                                  }
+                                >
+                                  {opt}
+                                </button>
+                              ))}
+                            </div>
                             <button
-                              key={opt}
-                              className={`exercise-option-btn ${selectedVal === opt ? 'selected' : ''}`}
-                              onClick={() =>
-                                setExerciseInput((prev: any) => ({
-                                  ...prev,
-                                  [currentEx.id]: { ...prev[currentEx.id], answer: opt },
-                                }))
-                              }
+                              className="duo-button duo-button-primary"
+                              style={{ marginTop: '16px', padding: '12px 24px' }}
+                              onClick={() => submitSubLessonExercise(currentEx, currentSub?.id)}
+                              disabled={!selectedVal || isRunning}
                             >
-                              {opt}
+                              Check Answer ✓
                             </button>
-                          ))}
+                          </div>
+                        )
+                      }
+
+                      // Default Code Editor
+                      return (
+                        <div className="duo-editor-container">
+                          <div className="duo-editor-top">
+                            <span>{selectedLanguage === 'java' ? 'Solution.java' : selectedLanguage === 'cpp' ? 'solution.cpp' : 'exercise.py'}</span>
+                            <span>{selectedLanguage === 'java' ? 'Java 21' : selectedLanguage === 'cpp' ? 'C++ 20' : 'Python 3.12'}</span>
+                          </div>
+                          <div className="duo-editor-body">
+                            <LineNumbers code={code} />
+                            <textarea
+                              ref={editorRef}
+                              className="duo-textarea"
+                              spellCheck={false}
+                              value={code}
+                              onChange={(e) => setCode(e.target.value)}
+                              onKeyDown={handleEditorKeyDown}
+                              disabled={isRunning}
+                              placeholder="Write your code here… (Press Shift+Enter or Ctrl+Enter to run)"
+                              aria-label="Code editor"
+                            />
+                          </div>
                         </div>
-                        <button
-                          className="duo-button duo-button-primary"
-                          style={{ marginTop: '16px', padding: '10px 20px', fontSize: '14px' }}
-                          onClick={() => submitSubLessonExercise(currentEx, currentSub?.id)}
-                          disabled={!selectedVal || isRunning}
-                        >
-                          Check Answer ✓
-                        </button>
+                      )
+                    })()}
+                  </main>
+
+                  {/* Immediate Test Feedback */}
+                  {results && (
+                    <div
+                      ref={resultsRef}
+                      className={`duo-feedback-panel ${allPassed ? 'success' : 'error'}`}
+                      role="region"
+                      aria-label="Test results"
+                    >
+                      <div className="duo-feedback-title">
+                        <span>
+                          {allPassed
+                            ? `All ${results.length} tests passed`
+                            : `${failedRequired.length} of ${results.filter((r) => r.required).length} required failed`}
+                        </span>
                       </div>
-                    )
-                  }
-
-                  if (exType === 'fill_blank' || exType === 'code_completion' || exType === 'output_prediction') {
-                    const val = exerciseInput[currentEx.id]?.answers?.[0] || exerciseInput[currentEx.id]?.answer || ''
-
-                    return (
-                      <div className="exercise-interactive-box" style={{ margin: '16px 0' }}>
-                        <h3 style={{ fontSize: '18px', fontWeight: 800, marginBottom: '12px' }}>
-                          {currentEx.question || currentEx.title || 'Fill in the answer:'}
-                        </h3>
-                        {currentEx.starter_code && (
-                          <pre style={{ background: '#1e293b', color: '#f1f5f9', padding: '12px', borderRadius: '8px', fontFamily: 'var(--font-mono)', fontSize: '14px', marginBottom: '12px' }}>
-                            {currentEx.starter_code}
-                          </pre>
+                      <div className="duo-feedback-msg">
+                        {allPassed ? (
+                          <p>All checks passed. You master this concept!</p>
+                        ) : (
+                          <p>
+                            {failedRequired.length} required check{failedRequired.length > 1 ? 's' : ''} failed. Review your code and run again.
+                          </p>
                         )}
-                        <div className="fill-blank-container">
-                          <input
-                            type="text"
-                            className="fill-blank-input"
-                            placeholder="Type your answer here…"
-                            value={val}
-                            onChange={(e) => {
-                              const inputVal = e.target.value
-                              setExerciseInput((prev: any) => ({
-                                ...prev,
-                                [currentEx.id]: { answer: inputVal, answers: [inputVal] },
-                              }))
-                            }}
-                            onKeyDown={(e) => {
-                              if (e.key === 'Enter') {
-                                e.preventDefault()
-                                submitSubLessonExercise(currentEx, currentSub?.id)
-                              }
-                            }}
-                          />
-                        </div>
-                        <button
-                          className="duo-button duo-button-primary"
-                          style={{ marginTop: '12px', padding: '10px 20px', fontSize: '14px' }}
-                          onClick={() => submitSubLessonExercise(currentEx, currentSub?.id)}
-                          disabled={!val || isRunning}
-                        >
-                          Check Answer ✓
-                        </button>
                       </div>
-                    )
-                  }
+                      {results.map((r) => (
+                        <div key={r.name} className="result-row" style={{ display: 'flex', gap: '8px', alignItems: 'center', fontSize: '14px', fontWeight: 700 }}>
+                          <span role="img" aria-label={r.passed ? 'Passed' : 'Failed'}>{r.passed ? '✓' : '×'}</span>
+                          <span>{r.name}</span>
+                          {!r.required && (
+                            <span className="opt" style={{ fontSize: '10px', background: 'rgba(0,0,0,0.1)', padding: '2px 6px', borderRadius: '4px' }}>opt</span>
+                          )}
+                        </div>
+                      ))}
+                    </div>
+                  )}
+
+                  {/* Tutor Coach Box */}
+                  <aside aria-label="Tutor feedback">
+                    <div className="duo-tutor-box" role="status" aria-label="Tutor feedback">
+                      <div className="duo-tutor-avatar">p</div>
+                      <div className="duo-tutor-content">
+                        <div className="duo-tutor-name">Tutor Guide ({currentProviderStatus?.name || selectedProvider})</div>
+                        <div className="duo-tutor-text">
+                          {isTutorLoading
+                            ? 'Thinking…'
+                            : feedback ?? (isAiAvailable ? 'Run your code or ask for a hint!' : currentProviderStatus?.reason || 'Selected provider is unconfigured.')}
+                        </div>
+                      </div>
+                    </div>
+                    {!isAiAvailable && (
+                      <p className="ai-unavailable-note" style={{ marginTop: '8px', fontSize: '13px', color: '#64748b' }}>
+                        Selected provider is unconfigured. Tests always work offline.
+                      </p>
+                    )}
+                  </aside>
 
                   // Default Code Editor
                   return (
@@ -1142,25 +1294,20 @@ function App() {
                       <div className="duo-editor-top">
                         <span>{currentTrackMeta.file}</span>
                         <span>{currentTrackMeta.runtime}</span>
+                  {/* Lesson Completion Overlay */}
+                  {showCompletion && (
+                    <div className="duo-feedback-panel success">
+                      <div className="duo-feedback-title">
+                        <span>🎉 Lesson Complete!</span>
                       </div>
-                      <div className="duo-editor-body">
-                        <LineNumbers code={code} />
-                        <textarea
-                          ref={editorRef}
-                          className="duo-textarea"
-                          spellCheck={false}
-                          value={code}
-                          onChange={(e) => setCode(e.target.value)}
-                          onKeyDown={handleEditorKeyDown}
-                          disabled={isRunning}
-                          placeholder="Write your code here… (Press Shift+Enter or Ctrl+Enter to run)"
-                          aria-label="Code editor"
-                        />
+                      <div className="duo-feedback-msg">
+                        <p>Awesome work! You completed this exercise and unlocked the next step.</p>
                       </div>
+                      <button className="duo-button duo-button-primary" onClick={goToNextLesson}>
+                        Next Lesson →
+                      </button>
                     </div>
-                  )
-                })()}
-              </div>
+                  )}
 
               {/* Immediate Test Feedback & SQL Result Table */}
               {results && (
@@ -1184,88 +1331,277 @@ function App() {
                       <p>
                         {failedRequired.length} required check{failedRequired.length > 1 ? 's' : ''} failed. Review your code and run again.
                       </p>
+                  {/* Session Notes */}
+                  <div className="session-notes" style={{ marginTop: '16px' }}>
+                    <div style={{ display: 'flex', gap: '8px' }}>
+                      <input
+                        type="text"
+                        placeholder="Add a note…"
+                        value={noteInput}
+                        onChange={(e) => setNoteInput(e.target.value)}
+                        onKeyDown={(e) => {
+                          if (e.key === 'Enter') {
+                            e.preventDefault()
+                            addNote()
+                          }
+                        }}
+                        aria-label="Session note"
+                        style={{ flex: 1, padding: '10px 14px', borderRadius: '12px', border: '2px solid var(--line)', fontWeight: 700 }}
+                      />
+                      <button onClick={addNote} aria-label="Add note" className="duo-button duo-button-primary" style={{ padding: '10px 20px' }}>+</button>
+                    </div>
+                    {sessionNotes.length > 0 && (
+                      <ul style={{ marginTop: '12px', paddingLeft: '20px', fontWeight: 700 }}>
+                        {sessionNotes.map((note, i) => (
+                          <li key={i}>{note}</li>
+                        ))}
+                      </ul>
                     )}
                   </div>
-                  {results.map((r) => (
-                    <div key={r.name} className="result-row" style={{ display: 'flex', gap: '8px', alignItems: 'center', fontSize: '13px' }}>
-                      <span role="img" aria-label={r.passed ? 'Passed' : 'Failed'}>{r.passed ? '✓' : '×'}</span>
-                      <span>{r.name}</span>
-                      {!r.required && (
-                        <span className="opt" style={{ fontSize: '10px', background: 'rgba(0,0,0,0.1)', padding: '1px 4px', borderRadius: '3px' }}>opt</span>
-                      )}
+                </div>
+              ) : null}
+            </div>
+          </div>
+        )}
+
+        {/* ─── TAB 2: CHARACTERS / SYNTAX VIEW ──────────────────────────── */}
+        {activeTab === 'characters' && (
+          <div className="duo-page-container">
+            <div className="duo-characters-view">
+              <div className="duo-char-header">
+                <h1 className="duo-char-title">Learn the Syntax & Symbols</h1>
+                <p className="duo-char-subtitle">Get to know the core keywords, operators, and functions in {coursePathTitle}</p>
+              </div>
+
+              {/* Script / Syntax Sub-tabs */}
+              <div className="duo-char-tabs">
+                {[
+                  { id: 'syntax', label: 'Syntax' },
+                  { id: 'keywords', label: 'Keywords' },
+                  { id: 'types', label: 'Data Types' },
+                  { id: 'operators', label: 'Operators' },
+                ].map((tab) => (
+                  <button
+                    key={tab.id}
+                    className={`duo-char-tab-btn ${charSubTab === tab.id ? 'active' : ''}`}
+                    onClick={() => setCharSubTab(tab.id as any)}
+                  >
+                    {tab.label}
+                  </button>
+                ))}
+              </div>
+
+              {/* Character Cards Grid */}
+              <div className="duo-char-grid">
+                {syntaxCards.map((card, i) => (
+                  <div key={i} className="duo-char-card">
+                    <div className="duo-char-symbol">{card.symbol}</div>
+                    <div className="duo-char-romaji">{card.romaji}</div>
+                    <p style={{ fontSize: '11px', color: '#777', textAlign: 'center', margin: '4px 0' }}>{card.desc}</p>
+                    <div className="duo-char-level-bar">
+                      <div className="duo-char-level-fill" style={{ width: `${card.level}%` }} />
                     </div>
                   ))}
 
                   {/* Render SQL / Exec Result Table if present */}
                   <SqlResultTable output={lastStdout || results[0]?.stdout || ''} />
-                </div>
-              )}
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        )}
 
-              {/* Tutor Feedback */}
-              <aside aria-label="Tutor feedback">
-                <div className="duo-tutor-box" role="status" aria-label="Tutor feedback">
-                  <div className="duo-tutor-avatar">p</div>
-                  <div className="duo-tutor-content">
-                    <div className="duo-tutor-name">Tutor Guide ({currentProviderStatus?.name || selectedProvider})</div>
-                    <div className="duo-tutor-text">
-                      {isTutorLoading
-                        ? 'Thinking…'
-                        : feedback ?? (isAiAvailable ? 'Run your code or ask for a hint!' : currentProviderStatus?.reason || 'Selected provider is unconfigured.')}
+        {/* ─── TAB 3: LEADERBOARDS VIEW ─────────────────────────────────── */}
+        {activeTab === 'leaderboards' && (
+          <div className="duo-page-container">
+            <div className="duo-leaderboard-view">
+              <div className="duo-league-banner">
+                <div className="duo-league-shield">🛡️</div>
+                <div className="duo-league-details">
+                  <h2>Bronze League</h2>
+                  <p>Top 20 advance to the next league • 4 days left</p>
+                </div>
+              </div>
+
+              <div className="duo-rank-list">
+                {[
+                  { rank: 1, name: 'Duolingo Code Star', xp: 450, self: false },
+                  { rank: 2, name: 'PyNinja', xp: 380, self: false },
+                  { rank: 3, name: 'AlgoQueen', xp: 310, self: false },
+                  { rank: 4, name: 'You (Learner)', xp: xp || 120, self: true },
+                  { rank: 5, name: 'DevGuru', xp: 95, self: false },
+                  { rank: 6, name: 'StackOverflowBot', xp: 80, self: false },
+                  { rank: 7, name: 'ByteWizard', xp: 60, self: false },
+                  { rank: 8, name: 'LogicMaster', xp: 45, self: false },
+                ].map((user) => (
+                  <div key={user.rank} className={`duo-rank-item ${user.self ? 'user-self' : ''}`}>
+                    <div className={`duo-rank-num ${user.rank <= 3 ? `top-${user.rank}` : ''}`}>
+                      {user.rank}
+                    </div>
+                    <div className="duo-user-avatar-circle">
+                      {user.name.charAt(0)}
+                    </div>
+                    <div className="duo-rank-name">{user.name}</div>
+                    <div className="duo-rank-xp">{user.xp} XP</div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* ─── TAB 4: QUESTS VIEW ───────────────────────────────────────── */}
+        {activeTab === 'quests' && (
+          <div className="duo-page-container">
+            <div className="duo-quests-view">
+              <div className="duo-quest-card">
+                <div className="duo-quest-header">
+                  <h2 className="duo-quest-title">Daily Quests</h2>
+                  <span style={{ fontSize: '14px', fontWeight: 800, color: 'var(--blue-dark)' }}>2 HOURS LEFT</span>
+                </div>
+
+                <div className="duo-quest-item">
+                  <div className="duo-quest-icon">⚡</div>
+                  <div className="duo-quest-body">
+                    <div className="duo-quest-name">Earn 20 XP</div>
+                    <div className="duo-quest-progress-bg">
+                      <div className="duo-quest-progress-fill" style={{ width: `${Math.min(100, (xp / 20) * 100)}%` }} />
+                    </div>
+                  </div>
+                  <div style={{ fontWeight: 900, color: 'var(--yellow-dark)' }}>+10 💎</div>
+                </div>
+
+                <div className="duo-quest-item">
+                  <div className="duo-quest-icon">📘</div>
+                  <div className="duo-quest-body">
+                    <div className="duo-quest-name">Complete 2 lessons</div>
+                    <div className="duo-quest-progress-bg">
+                      <div className="duo-quest-progress-fill" style={{ width: `${Math.min(100, (completedCount / 2) * 100)}%` }} />
+                    </div>
+                  </div>
+                  <div style={{ fontWeight: 900, color: 'var(--yellow-dark)' }}>+15 💎</div>
+                </div>
+
+                <div className="duo-quest-item">
+                  <div className="duo-quest-icon">🎯</div>
+                  <div className="duo-quest-body">
+                    <div className="duo-quest-name">Score 80%+ on an exercise</div>
+                    <div className="duo-quest-progress-bg">
+                      <div className="duo-quest-progress-fill" style={{ width: '100%' }} />
+                    </div>
+                  </div>
+                  <div style={{ fontWeight: 900, color: 'var(--green-dark)' }}>✓ Done</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* ─── TAB 5: PROFILE VIEW ──────────────────────────────────────── */}
+        {activeTab === 'profile' && (
+          <div className="duo-page-container">
+            <div className="duo-profile-view">
+              <div className="duo-profile-header">
+                <div className="duo-profile-avatar-large">P</div>
+                <div className="duo-profile-meta">
+                  <h1>Patchwork Learner</h1>
+                  <p className="duo-profile-handle">@patchwork_coder • Joined Sept 2026</p>
+                </div>
+              </div>
+
+              {/* Statistics Grid */}
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+                <h2 style={{ fontSize: '20px', fontWeight: 900 }}>Statistics</h2>
+                <div className="duo-stats-grid">
+                  <div className="duo-stat-card">
+                    <div className="duo-stat-card-icon">🔥</div>
+                    <div>
+                      <div className="duo-stat-card-val">{gamification.streakCount || 1}</div>
+                      <div className="duo-stat-card-lbl">Day Streak</div>
+                    </div>
+                  </div>
+
+                  <div className="duo-stat-card">
+                    <div className="duo-stat-card-icon">⚡</div>
+                    <div>
+                      <div className="duo-stat-card-val">{xp} XP</div>
+                      <div className="duo-stat-card-lbl">Total XP</div>
+                    </div>
+                  </div>
+
+                  <div className="duo-stat-card">
+                    <div className="duo-stat-card-icon">🛡️</div>
+                    <div>
+                      <div className="duo-stat-card-val">Bronze</div>
+                      <div className="duo-stat-card-lbl">Current League</div>
+                    </div>
+                  </div>
+
+                  <div className="duo-stat-card">
+                    <div className="duo-stat-card-icon">🏆</div>
+                    <div>
+                      <div className="duo-stat-card-val">2</div>
+                      <div className="duo-stat-card-lbl">Top 3 Finishes</div>
                     </div>
                   </div>
                 </div>
-                {!isAiAvailable && (
-                  <p className="ai-unavailable-note" style={{ marginTop: '8px', fontSize: '13px', color: '#64748b' }}>
-                    {currentProviderStatus?.reason || 'Selected provider is unconfigured.'} Tests always work offline.
-                  </p>
-                )}
-              </aside>
-
-              {/* Lesson Completion Overlay */}
-              {showCompletion && (
-                <div className="duo-feedback-panel success" style={{ marginTop: '16px' }}>
-                  <div className="duo-feedback-title">
-                    <span>🎉 Lesson Complete!</span>
-                  </div>
-                  <div className="duo-feedback-msg">
-                    <p>Awesome work! You completed this exercise and unlocked the next step.</p>
-                  </div>
-                  <button className="duo-button duo-button-primary" onClick={goToNextLesson}>
-                    Next Lesson →
-                  </button>
-                </div>
-              )}
-
-              {/* Notes */}
-              <div className="session-notes" style={{ marginTop: '24px' }}>
-                <div style={{ display: 'flex', gap: '8px' }}>
-                  <input
-                    type="text"
-                    placeholder="Add a note…"
-                    value={noteInput}
-                    onChange={(e) => setNoteInput(e.target.value)}
-                    onKeyDown={(e) => {
-                      if (e.key === 'Enter') {
-                        e.preventDefault()
-                        addNote()
-                      }
-                    }}
-                    aria-label="Session note"
-                    style={{ flex: 1, padding: '8px 12px', borderRadius: '8px', border: '1px solid #cbd5e1' }}
-                  />
-                  <button onClick={addNote} aria-label="Add note" style={{ padding: '8px 16px', background: '#58cc02', color: '#fff', borderRadius: '8px', fontWeight: 800 }}>+</button>
-                </div>
-                {sessionNotes.length > 0 && (
-                  <ul style={{ marginTop: '12px', paddingLeft: '20px' }}>
-                    {sessionNotes.map((note, i) => (
-                      <li key={i}>{note}</li>
-                    ))}
-                  </ul>
-                )}
               </div>
-            </>
-          ) : null}
-        </main>
+
+              <div className="duo-friends-card">
+                <h2 style={{ fontSize: '20px', fontWeight: 900 }}>Friend Updates</h2>
+                <p style={{ color: '#777', fontWeight: 600 }}>Connect with friends to compare XP and study together!</p>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* ─── Bottom Footer Bar ──────────────────────────────────────── */}
+        <footer className="duo-footer-bar">
+          <div className="duo-footer-left" style={{ display: 'flex', gap: '12px' }}>
+            <button
+              id="hint-button"
+              className="duo-button duo-button-secondary"
+              onClick={askTutor}
+              disabled={hintDisabled}
+              aria-label={
+                !isAiAvailable
+                  ? 'AI tutor unavailable'
+                  : !aiEnabled
+                  ? 'AI tutor is paused'
+                  : 'Request a hint'
+              }
+            >
+              {isTutorLoading
+                ? 'Getting Hint…'
+                : !isAiAvailable
+                ? 'AI tutor unavailable'
+                : !aiEnabled
+                ? 'AI tutor is paused'
+                : 'Request a hint'}
+            </button>
+
+            <button
+              id="solution-button"
+              className="duo-button duo-button-secondary duo-button-solution"
+              onClick={askSolution}
+              disabled={!lesson || isRunning}
+              aria-label="View Solution"
+            >
+              View Solution 💡
+            </button>
+          </div>
+
+          <button
+            id="run-tests-button"
+            className="duo-button duo-button-primary"
+            onClick={runTests}
+            disabled={isRunning || isLoadingLesson}
+            aria-label="Run code"
+          >
+            {isRunning ? 'Running…' : 'Run code'}
+          </button>
+        </footer>
       </div>
 
       {/* Test-Out Modal */}
@@ -1273,10 +1609,10 @@ function App() {
         <div className="modal-overlay" role="dialog" aria-label="Mastery Exam Modal">
           <div className="modal-card">
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
-              <h2 style={{ fontSize: '22px', fontWeight: 800 }}>⚡ Mastery Exam: {lesson.title}</h2>
-              <button onClick={() => setShowTestOutModal(false)} style={{ fontSize: '20px', fontWeight: 800, background: 'none', border: 'none', cursor: 'pointer' }}>✕</button>
+              <h2 style={{ fontSize: '22px', fontWeight: 900 }}>⚡ Mastery Exam: {lesson.title}</h2>
+              <button onClick={() => setShowTestOutModal(false)} style={{ fontSize: '20px', fontWeight: 900, background: 'none', border: 'none', cursor: 'pointer' }}>✕</button>
             </div>
-            <p style={{ color: '#4a4e69', marginBottom: '20px' }}>Pass with 80%+ score to test out of this lesson and earn +100 XP!</p>
+            <p style={{ color: '#777', marginBottom: '20px', fontWeight: 700 }}>Pass with 80%+ score to test out of this lesson and earn +100 XP!</p>
 
             {testOutResult ? (
               <div className={`duo-feedback-panel ${testOutResult.passed ? 'success' : 'error'}`}>
@@ -1290,12 +1626,12 @@ function App() {
                   ? lesson.mastery_exam
                   : lesson.sublessons?.flatMap((s) => s.exercises) || []
                 ).map((ex, idx) => (
-                  <div key={ex.id} style={{ marginBottom: '20px', padding: '12px', border: '1px solid #cbd5e1', borderRadius: '8px' }}>
+                  <div key={ex.id} style={{ marginBottom: '20px', padding: '12px', border: '2px solid var(--line)', borderRadius: '12px' }}>
                     <h4 style={{ fontWeight: 800, marginBottom: '8px' }}>Question {idx + 1}: {ex.question || ex.title}</h4>
                     {ex.options && ex.options.length > 0 ? (
                       <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
                         {ex.options.map((opt) => (
-                          <label key={opt} style={{ display: 'flex', gap: '8px', alignItems: 'center', cursor: 'pointer' }}>
+                          <label key={opt} style={{ display: 'flex', gap: '8px', alignItems: 'center', cursor: 'pointer', fontWeight: 700 }}>
                             <input
                               type="radio"
                               name={`exam-${ex.id}`}
@@ -1316,7 +1652,7 @@ function App() {
                       <input
                         type="text"
                         placeholder="Your answer…"
-                        style={{ width: '100%', padding: '8px 12px', border: '1px solid #cbd5e1', borderRadius: '6px' }}
+                        style={{ width: '100%', padding: '10px 14px', border: '2px solid var(--line)', borderRadius: '8px', fontWeight: 700 }}
                         value={testOutSubmissions[ex.id]?.answer || ''}
                         onChange={(e) => {
                           const val = e.target.value
@@ -1338,53 +1674,12 @@ function App() {
           </div>
         </div>
       )}
-
-      {/* Footer Bar */}
-      <footer className="duo-footer-bar">
-        <div className="duo-footer-left" style={{ display: 'flex', gap: '12px' }}>
-          <button
-            id="hint-button"
-            className="duo-button duo-button-secondary"
-            onClick={askTutor}
-            disabled={hintDisabled}
-            aria-label={
-              !isAiAvailable
-                ? 'AI tutor unavailable'
-                : !aiEnabled
-                ? 'AI tutor is paused'
-                : 'Request a hint'
-            }
-          >
-            {isTutorLoading
-              ? 'Getting Hint…'
-              : !isAiAvailable
-              ? 'AI tutor unavailable'
-              : !aiEnabled
-              ? 'AI tutor is paused'
-              : 'Request a hint'}
-          </button>
-          <button
-            id="solution-button"
-            className="duo-button duo-button-secondary duo-button-solution"
-            onClick={askSolution}
-            disabled={!lesson || isRunning}
-            aria-label="View Solution"
-          >
-            View Solution 💡
-          </button>
-        </div>
-        <button
-          id="run-tests-button"
-          className="duo-button duo-button-primary"
-          onClick={runTests}
-          disabled={isRunning || isLoadingLesson}
-          aria-label="Run code"
-        >
-          {isRunning ? 'Running…' : 'Run code'}
-        </button>
-      </footer>
     </div>
   )
+}
+
+function uppercaseText(str: string) {
+  return str.toUpperCase()
 }
 
 export default App
