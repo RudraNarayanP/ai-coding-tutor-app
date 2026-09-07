@@ -174,7 +174,10 @@ class OpenAICompatibleProvider:
 
     @property
     def api_key(self) -> str:
-        return os.getenv(self.api_key_env, "").strip()
+        key = os.getenv(self.api_key_env, "").strip()
+        if not key and self.provider_id == "openrouter":
+            return "free"
+        return key
 
     @property
     def model(self) -> str:

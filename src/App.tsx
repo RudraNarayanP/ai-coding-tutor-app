@@ -194,6 +194,21 @@ function App() {
     }
   }, [])
 
+  // ─── Select AI Provider ────────────────────────────────────────────────────
+  const handleProviderSelection = async (prov: string) => {
+    setSelectedProvider(prov)
+    try {
+      await fetch('/api/ai/select', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ provider: prov }),
+      })
+      fetchProviders()
+    } catch {
+      // ignore
+    }
+  }
+
   // ─── Fetch Provider Status ─────────────────────────────────────────────────
   const fetchProviders = useCallback(async () => {
     try {
@@ -601,7 +616,7 @@ function App() {
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', fontSize: '12px' }}>
             <select
               value={selectedProvider}
-              onChange={(e) => setSelectedProvider(e.target.value)}
+              onChange={(e) => handleProviderSelection(e.target.value)}
               aria-label="Select AI Provider"
               style={{
                 width: '100%',
@@ -915,6 +930,48 @@ function App() {
                     </ul>
                   )}
                 </div>
+
+                {/* Course Navigation Bar in Focused Lesson View */}
+                <div className="duo-sidebar-lessons-nav" style={{ marginTop: '24px' }}>
+                  <h3 style={{ fontSize: '13px', fontWeight: 800, color: 'var(--ink-soft)', textTransform: 'uppercase', marginBottom: '8px' }}>Course Navigation</h3>
+                  <nav aria-label="Lessons" style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
+                    {safeLessons.map((item) => {
+                      const isActive = lesson?.id === item.id
+                      let statusLabel = 'Available'
+                      if (item.status === 'completed') statusLabel = 'Completed'
+                      else if (item.status === 'locked') statusLabel = 'Locked'
+                      else if (item.status === 'current' || isActive) statusLabel = 'Current lesson'
+
+                      return (
+                        <button
+                          key={item.id}
+                          id={`lesson-nav-${item.id}`}
+                          className={`duo-nav-item ${isActive ? 'active' : ''}`}
+                          onClick={() => loadLesson(item, true)}
+                          disabled={item.status === 'locked' || isLoadingLesson}
+                          aria-current={isActive ? 'page' : undefined}
+                          aria-label={`${item.title} — ${statusLabel}`}
+                          style={{
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'space-between',
+                            padding: '8px 12px',
+                            fontSize: '13px',
+                            fontWeight: 800,
+                            borderRadius: '8px',
+                            border: '2px solid',
+                            borderColor: isActive ? 'var(--blue-dark)' : 'var(--line)',
+                            background: isActive ? '#ddf4ff' : '#fff',
+                            cursor: item.status === 'locked' ? 'not-allowed' : 'pointer'
+                          }}
+                        >
+                          <span>{item.title}</span>
+                          <span style={{ fontSize: '11px', opacity: 0.7 }}>{statusLabel}</span>
+                        </button>
+                      )
+                    })}
+                  </nav>
+                </div>
               </div>
             ) : (
               /* ─── COURSE MAP VIEW (COMPACT UNITS) ────────────────────────── */
@@ -1026,51 +1083,51 @@ function App() {
                       Top 5 learners advance to Silver League on Sunday!
                     </p>
                   </div>
+
+                  {/* Navigation Element inside Right Sidebar */}
+                  <div className="duo-sidebar-lessons-nav" style={{ marginTop: '12px' }}>
+                    <h3 style={{ fontSize: '13px', fontWeight: 800, color: 'var(--ink-soft)', textTransform: 'uppercase', marginBottom: '8px' }}>Course Navigation</h3>
+                    <nav aria-label="Lessons" style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
+                      {safeLessons.map((item) => {
+                        const isActive = lesson?.id === item.id
+                        let statusLabel = 'Available'
+                        if (item.status === 'completed') statusLabel = 'Completed'
+                        else if (item.status === 'locked') statusLabel = 'Locked'
+                        else if (item.status === 'current' || isActive) statusLabel = 'Current lesson'
+
+                        return (
+                          <button
+                            key={item.id}
+                            id={`lesson-nav-${item.id}`}
+                            className={`duo-nav-item ${isActive ? 'active' : ''}`}
+                            onClick={() => loadLesson(item, true)}
+                            disabled={item.status === 'locked' || isLoadingLesson}
+                            aria-current={isActive ? 'page' : undefined}
+                            aria-label={`${item.title} — ${statusLabel}`}
+                            style={{
+                              display: 'flex',
+                              alignItems: 'center',
+                              justifyContent: 'space-between',
+                              padding: '8px 12px',
+                              fontSize: '13px',
+                              fontWeight: 800,
+                              borderRadius: '8px',
+                              border: '2px solid',
+                              borderColor: isActive ? 'var(--blue-dark)' : 'var(--line)',
+                              background: isActive ? '#ddf4ff' : '#fff',
+                              cursor: item.status === 'locked' ? 'not-allowed' : 'pointer'
+                            }}
+                          >
+                            <span>{item.title}</span>
+                            <span style={{ fontSize: '11px', opacity: 0.7 }}>{statusLabel}</span>
+                          </button>
+                        )
+                      })}
+                    </nav>
+                  </div>
                 </aside>
               </>
             )}
-
-            {/* Navigation Element for Vitest & Accessibility */}
-            <div className="duo-sidebar-lessons-nav" style={{ marginTop: '24px' }}>
-              <h3 style={{ fontSize: '13px', fontWeight: 800, color: 'var(--ink-soft)', textTransform: 'uppercase', marginBottom: '8px' }}>Course Navigation</h3>
-              <nav aria-label="Lessons" style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
-                {safeLessons.map((item) => {
-                  const isActive = lesson?.id === item.id
-                  let statusLabel = 'Available'
-                  if (item.status === 'completed') statusLabel = 'Completed'
-                  else if (item.status === 'locked') statusLabel = 'Locked'
-                  else if (item.status === 'current' || isActive) statusLabel = 'Current lesson'
-
-                  return (
-                    <button
-                      key={item.id}
-                      id={`lesson-nav-${item.id}`}
-                      className={`duo-nav-item ${isActive ? 'active' : ''}`}
-                      onClick={() => loadLesson(item, true)}
-                      disabled={item.status === 'locked' || isLoadingLesson}
-                      aria-current={isActive ? 'page' : undefined}
-                      aria-label={`${item.title} — ${statusLabel}`}
-                      style={{
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'space-between',
-                        padding: '8px 12px',
-                        fontSize: '13px',
-                        fontWeight: 800,
-                        borderRadius: '8px',
-                        border: '2px solid',
-                        borderColor: isActive ? 'var(--blue-dark)' : 'var(--line)',
-                        background: isActive ? '#ddf4ff' : '#fff',
-                        cursor: item.status === 'locked' ? 'not-allowed' : 'pointer'
-                      }}
-                    >
-                      <span>{item.title}</span>
-                      <span style={{ fontSize: '11px', opacity: 0.7 }}>{statusLabel}</span>
-                    </button>
-                  )
-                })}
-              </nav>
-            </div>
           </div>
         )}
 

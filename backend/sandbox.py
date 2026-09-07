@@ -29,7 +29,7 @@ class DockerSandbox:
         self.limits = limits or SandboxLimits()
         self._image_ready = asyncio.Lock()
 
-    async def _docker(self, *args: str, input_data: bytes | None = None, timeout: float = 15, timeout_message: str = "Docker operation timed out.") -> tuple[int, bytes, bytes]:
+    async def _docker(self, *args: str, input_data: bytes | None = None, timeout: float = 30, timeout_message: str = "Docker operation timed out.") -> tuple[int, bytes, bytes]:
         def invoke() -> subprocess.CompletedProcess[bytes]:
             return subprocess.run(
                 ["docker", *args],
@@ -76,7 +76,7 @@ class DockerSandbox:
             if code != 0:
                 raise SandboxError(f"Could not create the sandbox container: {stderr.decode(errors='replace')[-500:]}")
             started = time.perf_counter()
-            code, _, stderr = await self._docker("start", container, timeout=15)
+            code, _, stderr = await self._docker("start", container, timeout=30)
             if code != 0:
                 raise SandboxError(f"Could not start the sandbox container: {stderr.decode(errors='replace')[-500:]}")
             try:
