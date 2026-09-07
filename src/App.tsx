@@ -17,10 +17,13 @@ type LessonSummary = {
   duration_minutes: number
   status: 'completed' | 'current' | 'locked'
   type?: 'learn' | 'practice' | 'checkpoint' | 'challenge'
+  section_id?: string
+  section_title?: string
   unit_id?: string
   unit_title?: string
   concept_id?: string
   concept_title?: string
+  test_out_eligible?: boolean
 }
 
 type Exercise = {
@@ -55,10 +58,13 @@ type Lesson = {
   duration_minutes: number
   starter_code: string
   type?: 'learn' | 'practice' | 'checkpoint' | 'challenge'
+  section_id?: string
+  section_title?: string
   unit_id?: string
   unit_title?: string
   concept_id?: string
   concept_title?: string
+  test_out_eligible?: boolean
   concepts?: string[]
   prerequisites?: string[]
   learning_objectives?: string[]
@@ -650,18 +656,34 @@ function App() {
     if (next) await loadLesson(next)
   }, [lessons, loadLesson])
 
-  // Group lessons by Unit
-  const unitsMap = new Map<string, { id: string; title: string; lessons: LessonSummary[] }>()
+  // Group lessons by Section -> Unit
+  const sectionsMap = new Map<
+    string,
+    { id: string; title: string; units: Map<string, { id: string; title: string; lessons: LessonSummary[] }> }
+  >()
   const safeLessons = Array.isArray(lessons) ? lessons : []
+
   safeLessons.forEach((item) => {
+    const secId = item.section_id || 'section-1'
+    const secTitle = item.section_title || 'Section 1: Foundations'
     const uid = item.unit_id || 'unit-1'
-    const utitle = item.unit_title || 'Unit'
-    if (!unitsMap.has(uid)) {
-      unitsMap.set(uid, { id: uid, title: utitle, lessons: [] })
+    const utitle = item.unit_title || 'Unit 1'
+
+    if (!sectionsMap.has(secId)) {
+      sectionsMap.set(secId, { id: secId, title: secTitle, units: new Map() })
     }
-    unitsMap.get(uid)!.lessons.push(item)
+    const secObj = sectionsMap.get(secId)!
+    if (!secObj.units.has(uid)) {
+      secObj.units.set(uid, { id: uid, title: utitle, lessons: [] })
+    }
+    secObj.units.get(uid)!.lessons.push(item)
   })
-  const unitGroupList = Array.from(unitsMap.values())
+
+  const sectionGroupList = Array.from(sectionsMap.values()).map((sec) => ({
+    id: sec.id,
+    title: sec.title,
+    units: Array.from(sec.units.values()),
+  }))
 
   // Derived state
   const completedCount = safeLessons.filter((l) => l.status === 'completed').length
@@ -793,54 +815,68 @@ function App() {
           </div>
 
           <nav className="duo-path-list" aria-label="Lessons">
-            {unitGroupList.map((unitGroup) => (
-              <div key={unitGroup.id} className="duo-unit-block">
-                <div className="duo-unit-header">
-                  <span className="duo-unit-title">{unitGroup.title}</span>
-                </div>
-                <div className="duo-unit-node-group">
-                  {unitGroup.lessons.map((item) => {
-                    const isActive = lesson?.id === item.id
-                    const statusLabel =
-                      item.status === 'current'
-                        ? isActive
-                          ? 'Current lesson'
-                          : 'Available'
-                        : item.status === 'completed'
-                        ? 'Completed'
-                        : 'Locked'
+            {sectionGroupList.map((secGroup) => {
+              const secTotal = secGroup.units.flatMap((u) => u.lessons).length
+              const secDone = secGroup.units.flatMap((u) => u.lessons).filter((l) => l.status === 'completed').length
 
-                    const iconSymbol =
-                      item.status === 'completed'
-                        ? '✓'
-                        : item.type === 'challenge'
-                        ? '🏆'
-                        : item.type === 'practice'
-                        ? '🎯'
-                        : item.type === 'checkpoint'
-                        ? '🏁'
-                        : item.order
+              return (
+                <div key={secGroup.id} className="duo-section-block">
+                  <div className="duo-section-banner">
+                    <span className="duo-section-title">{secGroup.title}</span>
+                    <span className="duo-section-progress">{secDone} / {secTotal}</span>
+                  </div>
 
-                    return (
-                      <button
-                        key={item.id}
-                        id={`lesson-nav-${item.id}`}
-                        className={`duo-path-node ${item.status} ${item.type || 'learn'}${
-                          isActive ? ' active' : ''
-                        }`}
-                        onClick={() => loadLesson(item)}
-                        disabled={item.status === 'locked' || isLoadingLesson}
-                        aria-current={isActive ? 'page' : undefined}
-                        aria-label={`${item.title} — ${statusLabel}`}
-                        title={item.title}
-                      >
-                        <span className="duo-node-icon">{iconSymbol}</span>
-                      </button>
-                    )
-                  })}
+                  {secGroup.units.map((unitGroup) => (
+                    <div key={unitGroup.id} className="duo-unit-block">
+                      <div className="duo-unit-header">
+                        <span className="duo-unit-title">{unitGroup.title}</span>
+                      </div>
+                      <div className="duo-unit-node-group">
+                        {unitGroup.lessons.map((item) => {
+                          const isActive = lesson?.id === item.id
+                          const statusLabel =
+                            item.status === 'current'
+                              ? isActive
+                                ? 'Current lesson'
+                                : 'Available'
+                              : item.status === 'completed'
+                              ? 'Completed'
+                              : 'Locked'
+
+                          const iconSymbol =
+                            item.status === 'completed'
+                              ? '✓'
+                              : item.type === 'challenge'
+                              ? '⚡'
+                              : item.type === 'practice'
+                              ? '🔄'
+                              : item.type === 'checkpoint'
+                              ? '🏆'
+                              : '📘'
+
+                          return (
+                            <button
+                              key={item.id}
+                              id={`lesson-nav-${item.id}`}
+                              className={`duo-path-node ${item.status} ${item.type || 'learn'}${
+                                isActive ? ' active' : ''
+                              }`}
+                              onClick={() => loadLesson(item)}
+                              disabled={item.status === 'locked' || isLoadingLesson}
+                              aria-current={isActive ? 'page' : undefined}
+                              aria-label={`${item.title} — ${statusLabel}`}
+                              title={item.title}
+                            >
+                              <span className="duo-node-icon">{iconSymbol}</span>
+                            </button>
+                          )
+                        })}
+                      </div>
+                    </div>
+                  ))}
                 </div>
-              </div>
-            ))}
+              )
+            })}
           </nav>
         </aside>
 
@@ -864,6 +900,9 @@ function App() {
                     <span className={`duo-type-badge duo-type-${lesson.type || 'learn'}`}>
                       {(lesson.type || 'learn').toUpperCase()}
                     </span>
+                    {lesson.section_title && (
+                      <span className="duo-section-badge">{lesson.section_title}</span>
+                    )}
                     {lesson.unit_title && (
                       <span className="duo-unit-badge">{lesson.unit_title}</span>
                     )}
@@ -873,7 +912,7 @@ function App() {
 
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                   <h2 className="duo-lesson-title">{lesson.title}</h2>
-                  {lesson.sublessons && lesson.sublessons.length > 0 && (
+                  {lesson.test_out_eligible && (
                     <button
                       className="duo-test-out-btn"
                       onClick={() => {

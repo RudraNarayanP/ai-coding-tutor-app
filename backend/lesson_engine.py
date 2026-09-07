@@ -190,6 +190,9 @@ class LessonEngine:
         for lesson in curr.lessons:
             uid, utitle = lesson_unit_map.get(lesson.id, ("unit-1", "Unit 1"))
             ltype = getattr(lesson, "type", "learn") or "learn"
+            sec_id = getattr(lesson, "section_id", "section-1")
+            sec_title = getattr(lesson, "section_title", "Section 1")
+            test_out = getattr(lesson, "test_out_eligible", False)
             status = (
                 "completed"
                 if lesson.id in state.completed_lesson_ids
@@ -205,9 +208,12 @@ class LessonEngine:
                     difficulty=lesson.difficulty,
                     duration_minutes=lesson.duration_minutes,
                     status=status,
+                    section_id=sec_id,
+                    section_title=sec_title,
                     unit_id=uid,
                     unit_title=utitle,
                     type=ltype,
+                    test_out_eligible=test_out,
                 )
             )
         return result
@@ -411,6 +417,9 @@ class LessonEngine:
         lesson = self.get_lesson(lesson_id)
         lang = self.get_lesson_language(lesson_id)
         store = self.stores.get(lang, self.store)
+
+        if not getattr(lesson, "test_out_eligible", False):
+            return {"passed": False, "error": "This lesson does not support test-out.", "score_pct": 0}
 
         if not self._is_unlocked(lesson_id):
             return {"passed": False, "error": "Prerequisite lessons must be completed before testing out.", "score_pct": 0}

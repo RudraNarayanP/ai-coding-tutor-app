@@ -53,12 +53,23 @@ async def test_test_out_exam():
     store = ProgressionStore(curr)
     engine = LessonEngine(DummyExecutor(), store, curr)
 
+    # Foundational lesson should reject test-out
+    res_ineligible = await engine.run_test_out("variables-step-1", {})
+    assert res_ineligible["passed"] is False
+    assert "does not support test-out" in res_ineligible["error"]
+
     submissions = {
-        "py-exam-1": {"answer": "str"},
-        "py-exam-2": {"answer": "10"}
+        "py-chk-1": {"answer": "'hello'"},
+        "py-chk-2": {"answers": ["'World'"]}
     }
 
-    result = await engine.run_test_out("variables-step-1", submissions)
+    # Mark previous lessons completed so checkpoint is unlocked
+    store.mark_completed("variables-step-1")
+    store.mark_completed("variables-step-2")
+    store.mark_completed("variables-01")
+    store.mark_completed("variables-practice-1")
+
+    result = await engine.run_test_out("variables-checkpoint", submissions)
     assert result["passed"] is True
     assert result["score_pct"] == 100
     assert result["xp_awarded"] == 100
