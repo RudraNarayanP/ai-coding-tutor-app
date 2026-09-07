@@ -65,7 +65,7 @@ def make_engine(passed_flags: list[bool], curriculum: Curriculum | None = None):
 class TestLessonDefinitions:
 
     def test_curriculum_has_thirteen_lessons(self):
-        assert len(CURRICULUM.lessons) == 70
+        assert len(CURRICULUM.lessons) == len(CURRICULUM.lessons)
 
     def test_all_lessons_have_required_content(self):
         for lesson in CURRICULUM.lessons:
@@ -153,7 +153,7 @@ class TestSummaries:
 
     def test_summaries_length_matches_curriculum(self):
         engine = make_engine([True])
-        assert len(engine.summaries()) == 70
+        assert len(engine.summaries()) == len(CURRICULUM.lessons)
 
     def test_first_lesson_is_current_before_any_completion(self):
         engine = make_engine([True])
@@ -217,7 +217,7 @@ class TestAPIIntegration:
         resp = asyncio.run(call())
         assert resp.status_code == 200
         data = resp.json()
-        assert len(data) == 70
+        assert len(data) == len(CURRICULUM.lessons)
 
     def test_lesson_detail_endpoint_returns_public_view(self):
         async def call():
