@@ -1,0 +1,30 @@
+{
+  "id": "python-automation",
+  "title": "Unit 15: File Automation & Scripting",
+  "order": 15,
+  "concepts": [{ "id": "py-auto", "title": "File I/O & Script Automation", "prerequisites": ["variables"] }],
+  "lessons": [
+    {
+      "id": "py-automation-01",
+      "title": "1. Script Automation & File Processing",
+      "description": "Automate text file filtering and line processing in Python.",
+      "order": 71,
+      "difficulty": "intermediate",
+      "duration_minutes": 5,
+      "type": "learn",
+      "section_id": "sec-py-3",
+      "section_title": "Section 3: Practical Python",
+      "concepts": ["py-auto"],
+      "starter_code": "def filter_log_lines(lines: list[str], keyword: str) -> list[str]:\n    return [line for line in lines if keyword in line]\n",
+      "solution_code": "def filter_log_lines(lines: list[str], keyword: str) -> list[str]:\n    return [line for line in lines if keyword in line]\n",
+      "tests": [
+        {
+          "name": "test_filter_log_lines",
+          "unittest_code": "def test_filter_log_lines(self):\n    res = filter_log_lines(['INFO: ok', 'ERROR: fail'], 'ERROR')\n    self.assertEqual(res, ['ERROR: fail'])",
+          "required": true
+        }
+      ],
+      "completion_requirements": { "required_test_names": ["test_filter_log_lines"] }
+    }
+  ]
+}

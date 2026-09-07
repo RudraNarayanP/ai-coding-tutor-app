@@ -1,0 +1,30 @@
+{
+  "id": "js-browser-dom",
+  "title": "Unit 2: Browser & DOM Manipulation",
+  "order": 2,
+  "concepts": [{ "id": "js-dom", "title": "DOM & Event Handling", "prerequisites": ["js-vars"] }],
+  "lessons": [
+    {
+      "id": "js-02",
+      "title": "2. DOM & Event Fundamentals",
+      "description": "Understand document query selectors, element creation, and event listeners.",
+      "order": 2,
+      "difficulty": "beginner",
+      "duration_minutes": 5,
+      "type": "learn",
+      "section_id": "sec-js-1",
+      "section_title": "Section 1: JS Core",
+      "concepts": ["js-dom"],
+      "starter_code": "const createButton = (text) => ({\n    tag: 'button',\n    textContent: text,\n    disabled: false\n});\nmodule.exports = { createButton };\n",
+      "solution_code": "const createButton = (text) => ({\n    tag: 'button',\n    textContent: text,\n    disabled: false\n});\nmodule.exports = { createButton };\n",
+      "tests": [
+        {
+          "name": "test_create_button",
+          "unittest_code": "const { createButton } = solution;\nif (createButton('Click Me').textContent !== 'Click Me') throw new Error('Button text mismatch');",
+          "required": true
+        }
+      ],
+      "completion_requirements": { "required_test_names": ["test_create_button"] }
+    }
+  ]
+}

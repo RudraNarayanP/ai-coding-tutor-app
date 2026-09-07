@@ -1,0 +1,30 @@
+{
+  "id": "ai-llm-patterns",
+  "title": "Unit 2: Structured Outputs & Tool Calling",
+  "order": 2,
+  "concepts": [{ "id": "ai-tools", "title": "Structured Outputs & Tool Function Definitions", "prerequisites": ["ai-model-apis"] }],
+  "lessons": [
+    {
+      "id": "ai-02",
+      "title": "2. Function & Tool Definitions for LLMs",
+      "description": "Define structured JSON tool specs that allow LLMs to trigger local function execution.",
+      "order": 2,
+      "difficulty": "advanced",
+      "duration_minutes": 5,
+      "type": "learn",
+      "section_id": "sec-ai-1",
+      "section_title": "Section 1: AI Foundations",
+      "concepts": ["ai-tools"],
+      "starter_code": "def get_sql_query_tool_spec() -> dict:\n    return {\n        \"type\": \"function\",\n        \"function\": {\n            \"name\": \"run_sql_query\",\n            \"description\": \"Run a read-only SQL query against database\",\n            \"parameters\": {\n                \"type\": \"object\",\n                \"properties\": {\n                    \"query\": {\"type\": \"string\", \"description\": \"SQL query to execute\"}\n                },\n                \"required\": [\"query\"]\n            }\n        }\n    }\n",
+      "solution_code": "def get_sql_query_tool_spec() -> dict:\n    return {\n        \"type\": \"function\",\n        \"function\": {\n            \"name\": \"run_sql_query\",\n            \"description\": \"Run a read-only SQL query against database\",\n            \"parameters\": {\n                \"type\": \"object\",\n                \"properties\": {\n                    \"query\": {\"type\": \"string\", \"description\": \"SQL query to execute\"}\n                },\n                \"required\": [\"query\"]\n            }\n        }\n    }\n",
+      "tests": [
+        {
+          "name": "test_tool_spec",
+          "unittest_code": "def test_tool_spec(self):\n    spec = get_sql_query_tool_spec()\n    self.assertEqual(spec['function']['name'], 'run_sql_query')",
+          "required": true
+        }
+      ],
+      "completion_requirements": { "required_test_names": ["test_tool_spec"] }
+    }
+  ]
+}

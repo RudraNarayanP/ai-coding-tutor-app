@@ -1,0 +1,31 @@
+{
+  "id": "cpp-algorithms-performance",
+  "title": "Unit 9: Algorithms & Systems Performance",
+  "order": 9,
+  "concepts": [{ "id": "cpp-perf", "title": "Modern C++ STL & Performance", "prerequisites": ["cpp-raii"] }],
+  "lessons": [
+    {
+      "id": "cpp-perf-01",
+      "title": "1. Modern C++ STL Algorithms",
+      "description": "Utilize modern C++20 algorithms, ranges, and lambdas for high performance execution.",
+      "order": 33,
+      "difficulty": "advanced",
+      "duration_minutes": 10,
+      "type": "checkpoint",
+      "section_id": "sec-cpp-2",
+      "section_title": "Section 2: Systems & Memory",
+      "test_out_eligible": true,
+      "concepts": ["cpp-perf"],
+      "starter_code": "#include <vector>\n#include <algorithm>\n\ninline void sortVector(std::vector<int>& vec) {\n    std::sort(vec.begin(), vec.end());\n}\n",
+      "solution_code": "#include <vector>\n#include <algorithm>\n\ninline void sortVector(std::vector<int>& vec) {\n    std::sort(vec.begin(), vec.end());\n}\n",
+      "tests": [
+        {
+          "name": "test_sort_vec",
+          "unittest_code": "std::vector<int> v = {3, 1, 2};\nsortVector(v);\nif (v[0] != 1 || v[2] != 3) throw std::runtime_error(\"Sort failed\");",
+          "required": true
+        }
+      ],
+      "completion_requirements": { "required_test_names": ["test_sort_vec"] }
+    }
+  ]
+}

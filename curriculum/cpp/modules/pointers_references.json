@@ -1,0 +1,30 @@
+{
+  "id": "cpp-pointers-references",
+  "title": "Unit 7: Pointers & References",
+  "order": 7,
+  "concepts": [{ "id": "cpp-pointers", "title": "Memory Addresses & References", "prerequisites": ["cpp-variables"] }],
+  "lessons": [
+    {
+      "id": "cpp-ptr-01",
+      "title": "1. Pointers & References in C++",
+      "description": "Understand raw pointers, address-of operator `&`, dereference `*`, and references `&`.",
+      "order": 31,
+      "difficulty": "intermediate",
+      "duration_minutes": 5,
+      "type": "learn",
+      "section_id": "sec-cpp-2",
+      "section_title": "Section 2: Systems & Memory",
+      "concepts": ["cpp-pointers"],
+      "starter_code": "inline void swapValues(int& a, int& b) {\n    int temp = a;\n    a = b;\n    b = temp;\n}\n",
+      "solution_code": "inline void swapValues(int& a, int& b) {\n    int temp = a;\n    a = b;\n    b = temp;\n}\n",
+      "tests": [
+        {
+          "name": "test_swap_ref",
+          "unittest_code": "int x = 10, y = 20;\nswapValues(x, y);\nif (x != 20 || y != 10) throw std::runtime_error(\"Swap failed\");",
+          "required": true
+        }
+      ],
+      "completion_requirements": { "required_test_names": ["test_swap_ref"] }
+    }
+  ]
+}

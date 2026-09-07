@@ -1,0 +1,24 @@
+{
+  "id": "sql-u9",
+  "title": "Unit 9: NULL & CASE",
+  "order": 9,
+  "concepts": [{ "id": "sql-case", "title": "NULL Handling & CASE", "prerequisites": ["sql-joins"] }],
+  "lessons": [
+    {
+      "id": "sql-09",
+      "title": "9. NULL & CASE Statements",
+      "description": "Categorize product prices as 'Budget' (price < 50) or 'Premium' (price >= 50) using CASE.",
+      "order": 9,
+      "difficulty": "intermediate",
+      "duration_minutes": 5,
+      "type": "learn",
+      "section_id": "sec-sql-2",
+      "section_title": "Section 2: Aggregation & Joins",
+      "concepts": ["sql-case"],
+      "starter_code": "SELECT name, price, CASE WHEN price < 50 THEN 'Budget' ELSE 'Premium' END AS price_tier FROM products;\n",
+      "solution_code": "SELECT name, price, CASE WHEN price < 50 THEN 'Budget' ELSE 'Premium' END AS price_tier FROM products;\n",
+      "tests": [{ "name": "test_case_tier", "test_code": "assert len(rows) >= 5 and columns[2] == 'price_tier'", "required": true }],
+      "completion_requirements": { "required_test_names": ["test_case_tier"] }
+    }
+  ]
+}

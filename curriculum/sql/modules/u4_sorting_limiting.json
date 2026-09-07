@@ -1,0 +1,24 @@
+{
+  "id": "sql-u4",
+  "title": "Unit 4: Sorting & Limiting",
+  "order": 4,
+  "concepts": [{ "id": "sql-order-limit", "title": "ORDER BY and LIMIT", "prerequisites": ["sql-where"] }],
+  "lessons": [
+    {
+      "id": "sql-04",
+      "title": "4. ORDER BY & LIMIT",
+      "description": "Sort products by price descending and limit to top 3 products.",
+      "order": 4,
+      "difficulty": "beginner",
+      "duration_minutes": 5,
+      "type": "learn",
+      "section_id": "sec-sql-1",
+      "section_title": "Section 1: Querying Data",
+      "concepts": ["sql-order-limit"],
+      "starter_code": "SELECT name, price FROM products ORDER BY price DESC LIMIT 3;\n",
+      "solution_code": "SELECT name, price FROM products ORDER BY price DESC LIMIT 3;\n",
+      "tests": [{ "name": "test_top_products", "test_code": "assert len(rows) == 3", "required": true }],
+      "completion_requirements": { "required_test_names": ["test_top_products"] }
+    }
+  ]
+}

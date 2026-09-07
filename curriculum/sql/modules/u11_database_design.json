@@ -1,0 +1,24 @@
+{
+  "id": "sql-u11",
+  "title": "Unit 11: Database Design",
+  "order": 11,
+  "concepts": [{ "id": "sql-design", "title": "Keys & Constraints", "prerequisites": ["sql-ctes"] }],
+  "lessons": [
+    {
+      "id": "sql-11",
+      "title": "11. Primary Keys & Constraints",
+      "description": "Create a table `projects` with `id INTEGER PRIMARY KEY`, `title TEXT NOT NULL`, `budget REAL CHECK (budget >= 0)`.",
+      "order": 11,
+      "difficulty": "advanced",
+      "duration_minutes": 5,
+      "type": "learn",
+      "section_id": "sec-sql-3",
+      "section_title": "Section 3: Advanced SQL & Design",
+      "concepts": ["sql-design"],
+      "starter_code": "CREATE TABLE projects (\n    id INTEGER PRIMARY KEY,\n    title TEXT NOT NULL,\n    budget REAL CHECK (budget >= 0)\n);\nSELECT name FROM sqlite_master WHERE type='table' AND name='projects';\n",
+      "solution_code": "CREATE TABLE projects (\n    id INTEGER PRIMARY KEY,\n    title TEXT NOT NULL,\n    budget REAL CHECK (budget >= 0)\n);\nSELECT name FROM sqlite_master WHERE type='table' AND name='projects';\n",
+      "tests": [{ "name": "test_create_projects_table", "test_code": "assert len(rows) == 1 and rows[0][0] == 'projects'", "required": true }],
+      "completion_requirements": { "required_test_names": ["test_create_projects_table"] }
+    }
+  ]
+}

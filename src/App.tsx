@@ -10,6 +10,8 @@ type TestResult = {
   required: boolean
   description: string
   error: string | null
+  stdout?: string
+  stderr?: string
 }
 
 type LessonSummary = {
@@ -92,12 +94,26 @@ type CourseSummary = {
   language: string
   lesson_count: number
   completed_count: number
+  is_primary?: boolean
+  tagline?: string
+  description?: string
 }
 
 type ProvidersOverview = {
   current_provider: string
   fallback_provider: string | null
   providers: ProviderStatus[]
+}
+
+// ─── Track Metadata ────────────────────────────────────────────────────────────
+const TRACK_METADATA: Record<string, { icon: string; title: string; tagline: string; isPrimary: boolean; file: string; runtime: string }> = {
+  python: { icon: '🐍', title: 'Python', tagline: 'AI, automation & general programming', isPrimary: true, file: 'exercise.py', runtime: 'Python 3.12' },
+  cpp: { icon: '⚡', title: 'C++', tagline: 'Performance, systems & deep programming', isPrimary: true, file: 'solution.cpp', runtime: 'C++ 20' },
+  javascript: { icon: '🌐', title: 'JavaScript', tagline: 'Web & application development', isPrimary: true, file: 'script.js', runtime: 'Node.js' },
+  typescript: { icon: '🔷', title: 'TypeScript', tagline: 'Typed modern application development', isPrimary: true, file: 'solution.ts', runtime: 'TypeScript' },
+  sql: { icon: '🗄️', title: 'SQL', tagline: 'Databases & data', isPrimary: true, file: 'query.sql', runtime: 'SQLite' },
+  java: { icon: '☕', title: 'Java', tagline: 'Enterprise & object-oriented development', isPrimary: false, file: 'Solution.java', runtime: 'Java 21' },
+  ai: { icon: '🤖', title: 'AI Specialization', tagline: 'AI application development & LLM patterns', isPrimary: false, file: 'app.py', runtime: 'Python AI SDK' },
 }
 
 // ─── Line Numbers ─────────────────────────────────────────────────────────────
@@ -120,6 +136,21 @@ function LineNumbers({
   )
 }
 
+// ─── SQL Result Table Renderer ────────────────────────────────────────────────
+function SqlResultTable({ output }: { output: string }) {
+  if (!output || (!output.includes('┌') && !output.includes('│'))) {
+    return null
+  }
+  return (
+    <div className="sql-result-table-card" style={{ marginTop: '12px', background: '#0f172a', border: '1px solid #334155', borderRadius: '8px', padding: '12px', color: '#38bdf8', fontFamily: 'var(--font-mono)', fontSize: '13px', overflowX: 'auto' }}>
+      <div style={{ fontSize: '12px', fontWeight: 800, color: '#94a3b8', marginBottom: '8px', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
+        📊 Database Returned:
+      </div>
+      <pre style={{ margin: 0, whiteSpace: 'pre', color: '#f8fafc' }}>{output}</pre>
+    </div>
+  )
+}
+
 // ─── App Component ────────────────────────────────────────────────────────────
 function App() {
   const [activeTab, setActiveTab] = useState<'learn' | 'characters' | 'leaderboards' | 'quests' | 'profile'>('learn')
@@ -131,6 +162,7 @@ function App() {
   const [lesson, setLesson] = useState<Lesson | null>(null)
   const [code, setCode] = useState('')
   const [results, setResults] = useState<TestResult[] | null>(null)
+  const [lastStdout, setLastStdout] = useState<string>('')
   const [hintLevel, setHintLevel] = useState(1)
   const [feedback, setFeedback] = useState(
     'Run your code to get immediate feedback from the local sandbox.'
@@ -262,6 +294,7 @@ function App() {
       localStorage.setItem(`patchwork_last_active_lesson_${lang}`, selected.id)
 
       setResults(null)
+      setLastStdout('')
       setShowCompletion(false)
       setActiveSubLessonIndex(0)
       setActiveExerciseIndex(0)
@@ -343,9 +376,10 @@ function App() {
 
         const draftCode = localStorage.getItem(`patchwork_code_${selected.id}`)
         setCode(draftCode !== null ? draftCode : selected.starter_code ?? '')
-        localStorage.setItem('patchwork_last_active_lesson', selected.id)
+        localStorage.setItem(`patchwork_last_active_lesson_${selectedLanguage}`, selected.id)
 
         setResults(null)
+        setLastStdout('')
         setPreviousHints([])
         setHintLevel(1)
         setShowCompletion(false)
@@ -364,7 +398,7 @@ function App() {
         setIsLoadingLesson(false)
       }
     },
-    [resetEditorScroll]
+    [resetEditorScroll, selectedLanguage]
   )
 
   // Run Code in Sandbox
@@ -385,8 +419,10 @@ function App() {
         passed: boolean
         completed: boolean
         tests: TestResult[]
+        stdout?: string
       }
       setResults(execution.tests)
+      setLastStdout(execution.stdout || execution.tests?.[0]?.stdout || '')
 
       const passedAllRequired =
         execution.tests.length > 0 &&
@@ -657,6 +693,8 @@ function App() {
   const failedRequired = results?.filter((r) => !r.passed && r.required) ?? []
   const hintDisabled = !aiEnabled || !isAiAvailable || !lesson || isTutorLoading || isRunning
 
+  const isBoostActive = gamification.boostExpiresAt && Date.now() < gamification.boostExpiresAt
+  const currentTrackMeta = TRACK_METADATA[selectedLanguage] || TRACK_METADATA.python
   // Course title display
   const coursePathTitle = selectedLanguage === 'cpp' ? 'C++ Path' : selectedLanguage === 'java' ? 'Java Path' : 'Python Path'
 
@@ -822,6 +860,66 @@ function App() {
               ))}
             </div>
 
+      {/* Workspace */}
+      <div className="duo-main-container">
+        {/* Left Side Skill Tree Path */}
+        <aside className="duo-sidebar" aria-label="Course navigation">
+          {/* Primary Track Selector */}
+          <div style={{ marginBottom: '8px' }}>
+            <div style={{ fontSize: '11px', fontWeight: 800, color: '#64748b', textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: '6px' }}>
+              Primary Tracks
+            </div>
+            <div className="duo-course-selector" role="tablist" aria-label="Primary course selector" style={{ flexWrap: 'wrap', gap: '4px' }}>
+              {[
+                { lang: 'python', label: '🐍 Python' },
+                { lang: 'cpp', label: '⚡ C++' },
+                { lang: 'javascript', label: '🌐 JS' },
+                { lang: 'typescript', label: '🔷 TS' },
+                { lang: 'sql', label: '🗄️ SQL' },
+              ].map(({ lang, label }) => (
+                <button
+                  key={lang}
+                  role="tab"
+                  aria-selected={selectedLanguage === lang}
+                  className={`duo-course-btn ${selectedLanguage === lang ? 'active' : ''}`}
+                  onClick={() => handleCourseChange(lang)}
+                  title={TRACK_METADATA[lang]?.tagline}
+                  style={{ flex: '1 1 auto', padding: '6px 8px', fontSize: '12px' }}
+                >
+                  {label}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          {/* Secondary & Specialization Tracks */}
+          <div style={{ marginBottom: '12px' }}>
+            <div style={{ fontSize: '11px', fontWeight: 800, color: '#64748b', textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: '6px' }}>
+              Secondary & Specializations
+            </div>
+            <div className="duo-course-selector" role="tablist" aria-label="Secondary course selector" style={{ flexWrap: 'wrap', gap: '4px' }}>
+              {[
+                { lang: 'java', label: '☕ Java' },
+                { lang: 'ai', label: '🤖 AI App Dev' },
+              ].map(({ lang, label }) => (
+                <button
+                  key={lang}
+                  role="tab"
+                  aria-selected={selectedLanguage === lang}
+                  className={`duo-course-btn ${selectedLanguage === lang ? 'active' : ''}`}
+                  onClick={() => handleCourseChange(lang)}
+                  title={TRACK_METADATA[lang]?.tagline}
+                  style={{ flex: '1 1 auto', padding: '6px 8px', fontSize: '12px' }}
+                >
+                  {label}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          <div className="duo-sidebar-title" style={{ display: 'flex', flexDirection: 'column', gap: '2px' }}>
+            <span style={{ fontSize: '16px', fontWeight: 800 }}>{currentTrackMeta.icon} {currentTrackMeta.title} Path</span>
+            <span style={{ fontSize: '11px', color: '#64748b', fontWeight: 500 }}>{currentTrackMeta.tagline}</span>
             <div style={{ fontWeight: 900, fontSize: '15px', color: 'var(--ink)' }}>
               {coursePathTitle}
             </div>
@@ -1190,6 +1288,12 @@ function App() {
                     )}
                   </aside>
 
+                  // Default Code Editor
+                  return (
+                    <div className="duo-editor-container">
+                      <div className="duo-editor-top">
+                        <span>{currentTrackMeta.file}</span>
+                        <span>{currentTrackMeta.runtime}</span>
                   {/* Lesson Completion Overlay */}
                   {showCompletion && (
                     <div className="duo-feedback-panel success">
@@ -1205,6 +1309,28 @@ function App() {
                     </div>
                   )}
 
+              {/* Immediate Test Feedback & SQL Result Table */}
+              {results && (
+                <div
+                  ref={resultsRef}
+                  className={`duo-feedback-panel ${allPassed ? 'success' : 'error'}`}
+                  role="region"
+                  aria-label="Test results"
+                >
+                  <div className="duo-feedback-title">
+                    <span>
+                      {allPassed
+                        ? `All ${results.length} tests passed`
+                        : `${failedRequired.length} of ${results.filter((r) => r.required).length} required failed`}
+                    </span>
+                  </div>
+                  <div className="duo-feedback-msg">
+                    {allPassed ? (
+                      <p>All checks passed. You master this concept!</p>
+                    ) : (
+                      <p>
+                        {failedRequired.length} required check{failedRequired.length > 1 ? 's' : ''} failed. Review your code and run again.
+                      </p>
                   {/* Session Notes */}
                   <div className="session-notes" style={{ marginTop: '16px' }}>
                     <div style={{ display: 'flex', gap: '8px' }}>
@@ -1275,6 +1401,10 @@ function App() {
                     <div className="duo-char-level-bar">
                       <div className="duo-char-level-fill" style={{ width: `${card.level}%` }} />
                     </div>
+                  ))}
+
+                  {/* Render SQL / Exec Result Table if present */}
+                  <SqlResultTable output={lastStdout || results[0]?.stdout || ''} />
                   </div>
                 ))}
               </div>

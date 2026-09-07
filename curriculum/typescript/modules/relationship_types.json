@@ -1,0 +1,37 @@
+{
+  "id": "ts-relationship-types",
+  "title": "Unit 1: Static Typing & Primitive Types",
+  "order": 1,
+  "concepts": [
+    {
+      "id": "ts-types",
+      "title": "JS Relationship & Type Annotations",
+      "prerequisites": []
+    }
+  ],
+  "lessons": [
+    {
+      "id": "ts-01",
+      "title": "1. TypeScript & Static Typing",
+      "description": "TypeScript builds on top of JavaScript by adding explicit type annotations.",
+      "order": 1,
+      "difficulty": "beginner",
+      "duration_minutes": 5,
+      "type": "learn",
+      "section_id": "sec-ts-1",
+      "section_title": "Section 1: Type System",
+      "test_out_eligible": false,
+      "concepts": ["ts-types"],
+      "starter_code": "export function formatGreeting(name: string, isDeveloper: boolean): string {\n    return `Hello ${name}${isDeveloper ? ' (Dev)' : ''}`;\n}\n",
+      "solution_code": "export function formatGreeting(name: string, isDeveloper: boolean): string {\n    return `Hello ${name}${isDeveloper ? ' (Dev)' : ''}`;\n}\n",
+      "tests": [
+        {
+          "name": "test_format_greeting",
+          "unittest_code": "if (solution.formatGreeting('Alice', true) !== 'Hello Alice (Dev)') throw new Error('Format error');",
+          "required": true
+        }
+      ],
+      "completion_requirements": { "required_test_names": ["test_format_greeting"] }
+    }
+  ]
+}

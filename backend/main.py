@@ -68,6 +68,44 @@ def get_fallback_provider() -> AIProvider | None:
 
 tutor_service = TutorService(provider=get_current_provider(), fallback_provider=get_fallback_provider())
 
+COURSE_METADATA = {
+    "python": {
+        "is_primary": True,
+        "tagline": "AI, automation & general programming",
+        "description": "Python fundamentals, data structures, algorithms, automation, backend, and AI/ML foundations.",
+    },
+    "cpp": {
+        "is_primary": True,
+        "tagline": "Performance, systems & deep programming",
+        "description": "C++ fundamentals, memory, pointers/references, performance, systems concepts, and modern C++.",
+    },
+    "javascript": {
+        "is_primary": True,
+        "tagline": "Web & application development",
+        "description": "JavaScript fundamentals, browser/DOM, events, async programming, modules, APIs, Node.js, and web application foundations.",
+    },
+    "typescript": {
+        "is_primary": True,
+        "tagline": "Typed modern application development",
+        "description": "JavaScript relationship, static typing, interfaces, unions, narrowing, generics, classes, modules, and application architecture.",
+    },
+    "sql": {
+        "is_primary": True,
+        "tagline": "Databases & data",
+        "description": "Relational database fundamentals, tables, SELECT, JOINs, aggregation, subqueries, CTEs, transactions, views, indexes, and window functions.",
+    },
+    "java": {
+        "is_primary": False,
+        "tagline": "Enterprise & object-oriented development",
+        "description": "Java fundamentals, object-oriented programming, methods, arrays, classes, and enterprise patterns.",
+    },
+    "ai": {
+        "is_primary": False,
+        "tagline": "AI application development & LLM patterns",
+        "description": "HTTP/APIs, JSON, env vars, calling model APIs, structured outputs, prompt design, tool calling, embeddings, RAG, and storing AI data in SQL.",
+    },
+}
+
 
 @app.get("/api/health")
 async def health():
@@ -135,6 +173,11 @@ async def get_courses():
     for lang, curr in lesson_engine.curriculums.items():
         store = lesson_engine.stores.get(lang, lesson_engine.store)
         state = store.state()
+        meta = COURSE_METADATA.get(lang, {
+            "is_primary": False,
+            "tagline": "Programming & Development",
+            "description": f"{curr.course.title} course track.",
+        })
         courses.append(
             CourseSummary(
                 id=curr.course.id,
@@ -142,6 +185,9 @@ async def get_courses():
                 language=curr.course.language,
                 lesson_count=len(curr.lessons),
                 completed_count=len(state.completed_lesson_ids),
+                is_primary=meta["is_primary"],
+                tagline=meta["tagline"],
+                description=meta["description"],
             )
         )
     return courses

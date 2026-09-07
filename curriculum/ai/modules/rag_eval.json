@@ -1,0 +1,31 @@
+{
+  "id": "ai-rag-eval",
+  "title": "Unit 3: RAG, Embeddings & SQL Conversation Logs",
+  "order": 3,
+  "concepts": [{ "id": "ai-rag", "title": "RAG, Persistence & Evaluation", "prerequisites": ["ai-tools"] }],
+  "lessons": [
+    {
+      "id": "ai-03",
+      "title": "3. Storing AI Conversations & RAG Context in SQL",
+      "description": "Store user conversations and model outputs in SQL tables for evaluation and retrieval.",
+      "order": 3,
+      "difficulty": "advanced",
+      "duration_minutes": 10,
+      "type": "checkpoint",
+      "section_id": "sec-ai-2",
+      "section_title": "Section 2: Production AI Apps",
+      "test_out_eligible": true,
+      "concepts": ["ai-rag"],
+      "starter_code": "def format_conversation_log(user_id: int, prompt: str, response: str) -> dict:\n    return {\n        \"user_id\": user_id,\n        \"prompt\": prompt,\n        \"response\": response,\n        \"tokens\": len(prompt.split()) + len(response.split())\n    }\n",
+      "solution_code": "def format_conversation_log(user_id: int, prompt: str, response: str) -> dict:\n    return {\n        \"user_id\": user_id,\n        \"prompt\": prompt,\n        \"response\": response,\n        \"tokens\": len(prompt.split()) + len(response.split())\n    }\n",
+      "tests": [
+        {
+          "name": "test_conversation_log",
+          "unittest_code": "def test_conversation_log(self):\n    log = format_conversation_log(1, 'Hello AI', 'Hello Human')\n    self.assertEqual(log['user_id'], 1)\n    self.assertGreater(log['tokens'], 0)",
+          "required": true
+        }
+      ],
+      "completion_requirements": { "required_test_names": ["test_conversation_log"] }
+    }
+  ]
+}

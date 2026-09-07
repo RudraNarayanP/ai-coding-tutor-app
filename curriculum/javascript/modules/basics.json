@@ -1,0 +1,55 @@
+{
+  "id": "js-basics",
+  "title": "Unit 1: JavaScript Fundamentals",
+  "order": 1,
+  "concepts": [
+    {
+      "id": "js-vars",
+      "title": "Variables & Control Flow",
+      "prerequisites": []
+    }
+  ],
+  "lessons": [
+    {
+      "id": "js-01",
+      "title": "1. Modern JavaScript Variables & Functions",
+      "description": "Learn `const`, `let`, arrow functions, and arrays in modern JavaScript.",
+      "order": 1,
+      "difficulty": "beginner",
+      "duration_minutes": 5,
+      "type": "learn",
+      "section_id": "sec-js-1",
+      "section_title": "Section 1: JS Core",
+      "test_out_eligible": false,
+      "concepts": ["js-vars"],
+      "starter_code": "const calculateTotal = (price, tax) => price + (price * tax);\nmodule.exports = { calculateTotal };\n",
+      "solution_code": "const calculateTotal = (price, tax) => price + (price * tax);\nmodule.exports = { calculateTotal };\n",
+      "tests": [
+        {
+          "name": "test_calculate_total",
+          "unittest_code": "const { assert } = require('node:assert');\nconst { calculateTotal } = solution;\nif (calculateTotal(100, 0.1) !== 110) throw new Error('Expected 110');",
+          "required": true
+        }
+      ],
+      "completion_requirements": {
+        "required_test_names": ["test_calculate_total"]
+      },
+      "sublessons": [
+        {
+          "id": "js-sub-1",
+          "title": "const vs let",
+          "order": 1,
+          "exercises": [
+            {
+              "id": "js-ex-1",
+              "type": "mcq",
+              "question": "Which keyword defines block-scoped variables that cannot be reassigned?",
+              "options": ["const", "let", "var", "function"],
+              "correct_answer": "const"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,24 @@
+{
+  "id": "sql-u7",
+  "title": "Unit 7: GROUP BY",
+  "order": 7,
+  "concepts": [{ "id": "sql-group-by", "title": "GROUP BY and HAVING", "prerequisites": ["sql-agg"] }],
+  "lessons": [
+    {
+      "id": "sql-07",
+      "title": "7. GROUP BY & HAVING",
+      "description": "Group orders by customer_id and select customer_id and COUNT(*) as order_count where order_count > 1 using HAVING.",
+      "order": 7,
+      "difficulty": "intermediate",
+      "duration_minutes": 5,
+      "type": "learn",
+      "section_id": "sec-sql-2",
+      "section_title": "Section 2: Aggregation & Joins",
+      "concepts": ["sql-group-by"],
+      "starter_code": "SELECT customer_id, COUNT(*) AS order_count FROM orders GROUP BY customer_id HAVING order_count > 1;\n",
+      "solution_code": "SELECT customer_id, COUNT(*) AS order_count FROM orders GROUP BY customer_id HAVING order_count > 1;\n",
+      "tests": [{ "name": "test_group_by_customer", "test_code": "assert all(r[1] > 1 for r in rows)", "required": true }],
+      "completion_requirements": { "required_test_names": ["test_group_by_customer"] }
+    }
+  ]
+}

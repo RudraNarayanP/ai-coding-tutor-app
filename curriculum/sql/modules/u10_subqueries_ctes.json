@@ -1,0 +1,24 @@
+{
+  "id": "sql-u10",
+  "title": "Unit 10: Subqueries & CTEs",
+  "order": 10,
+  "concepts": [{ "id": "sql-ctes", "title": "Subqueries and WITH CTEs", "prerequisites": ["sql-case"] }],
+  "lessons": [
+    {
+      "id": "sql-10",
+      "title": "10. Subqueries & Common Table Expressions",
+      "description": "Use a WITH CTE named `high_spenders` to select customer_ids where SUM(total_amount) > 100.",
+      "order": 10,
+      "difficulty": "advanced",
+      "duration_minutes": 10,
+      "type": "learn",
+      "section_id": "sec-sql-3",
+      "section_title": "Section 3: Advanced SQL & Design",
+      "concepts": ["sql-ctes"],
+      "starter_code": "WITH high_spenders AS (\n  SELECT customer_id, SUM(total_amount) AS total_spent FROM orders GROUP BY customer_id HAVING total_spent > 100\n)\nSELECT * FROM high_spenders;\n",
+      "solution_code": "WITH high_spenders AS (\n  SELECT customer_id, SUM(total_amount) AS total_spent FROM orders GROUP BY customer_id HAVING total_spent > 100\n)\nSELECT * FROM high_spenders;\n",
+      "tests": [{ "name": "test_high_spenders_cte", "test_code": "assert len(rows) >= 1 and rows[0][1] > 100", "required": true }],
+      "completion_requirements": { "required_test_names": ["test_high_spenders_cte"] }
+    }
+  ]
+}

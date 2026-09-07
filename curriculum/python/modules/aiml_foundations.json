@@ -1,0 +1,30 @@
+{
+  "id": "python-aiml-foundations",
+  "title": "Unit 17: AI/ML Foundations & Vector Operations",
+  "order": 17,
+  "concepts": [{ "id": "py-aiml", "title": "Vector Math & Dot Products", "prerequisites": ["py-backend"] }],
+  "lessons": [
+    {
+      "id": "py-aiml-01",
+      "title": "1. Dot Product & Similarity",
+      "description": "Calculate dot product between two numerical feature vectors in Python.",
+      "order": 73,
+      "difficulty": "intermediate",
+      "duration_minutes": 5,
+      "type": "learn",
+      "section_id": "sec-py-3",
+      "section_title": "Section 3: Practical Python",
+      "concepts": ["py-aiml"],
+      "starter_code": "def dot_product(vec_a: list[float], vec_b: list[float]) -> float:\n    return sum(a * b for a, b in zip(vec_a, vec_b))\n",
+      "solution_code": "def dot_product(vec_a: list[float], vec_b: list[float]) -> float:\n    return sum(a * b for a, b in zip(vec_a, vec_b))\n",
+      "tests": [
+        {
+          "name": "test_dot_product",
+          "unittest_code": "def test_dot_product(self):\n    self.assertEqual(dot_product([1.0, 2.0], [3.0, 4.0]), 11.0)",
+          "required": true
+        }
+      ],
+      "completion_requirements": { "required_test_names": ["test_dot_product"] }
+    }
+  ]
+}
