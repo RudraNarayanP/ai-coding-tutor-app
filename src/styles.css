@@ -914,6 +914,19 @@ button:disabled { cursor: not-allowed; }
   box-shadow: 0 20px 25px -5px rgba(0,0,0,0.2);
 }
 
+/* Visually Hidden Utility for Accessibility and Tests */
+.visually-hidden {
+  position: absolute !important;
+  width: 1px !important;
+  height: 1px !important;
+  padding: 0 !important;
+  margin: -1px !important;
+  overflow: hidden !important;
+  clip: rect(0, 0, 0, 0) !important;
+  white-space: nowrap !important;
+  border: 0 !important;
+}
+
 /* Responsive */
 @media (max-width: 960px) {
   .duo-right-sidebar { display: none; }
