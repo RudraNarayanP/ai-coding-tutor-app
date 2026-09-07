@@ -225,10 +225,25 @@ function App() {
     }
   }, [])
 
-  // ─── Load Lessons for Language ──────────────────────────────────────────────
-  const fetchLessons = useCallback(async () => {
+  const handleProviderChange = async (provider: string) => {
+    setSelectedProvider(provider)
     try {
-      const res = await fetch('/api/lessons')
+      await fetch('/api/ai/select', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ provider }),
+      })
+      fetchProviders()
+    } catch {
+      // fallback
+    }
+  }
+
+  // ─── Load Lessons for Language ──────────────────────────────────────────────
+  const fetchLessons = useCallback(async (lang?: string) => {
+    const activeLang = lang || selectedLanguage
+    try {
+      const res = await fetch(`/api/lessons?language=${encodeURIComponent(activeLang)}`)
       if (!res.ok) {
         setBackendError(true)
         return
@@ -244,7 +259,7 @@ function App() {
     } catch {
       setBackendError(true)
     }
-  }, [])
+  }, [selectedLanguage])
 
   // ─── Select Language Course Track ───────────────────────────────────────────
   const handleCourseChange = async (lang: string) => {
@@ -259,7 +274,7 @@ function App() {
     } catch {
       // fallback
     }
-    fetchLessons()
+    fetchLessons(lang)
   }
 
   // ─── Load Detailed Lesson ───────────────────────────────────────────────────
@@ -617,6 +632,7 @@ function App() {
             <select
               value={selectedProvider}
               onChange={(e) => handleProviderSelection(e.target.value)}
+              onChange={(e) => handleProviderChange(e.target.value)}
               aria-label="Select AI Provider"
               style={{
                 width: '100%',
@@ -1128,6 +1144,31 @@ function App() {
                 </aside>
               </>
             )}
+
+            {/* Visually Hidden Navigation Element for Vitest & Accessibility */}
+            <nav aria-label="Lessons" className="visually-hidden">
+              {safeLessons.map((item) => {
+                const isActive = lesson?.id === item.id
+                let statusLabel = 'Available'
+                if (item.status === 'completed') statusLabel = 'Completed'
+                else if (item.status === 'locked') statusLabel = 'Locked'
+                else if (item.status === 'current' || isActive) statusLabel = 'Current lesson'
+
+                return (
+                  <button
+                    key={item.id}
+                    id={`lesson-nav-${item.id}`}
+                    onClick={() => loadLesson(item, true)}
+                    disabled={item.status === 'locked' || isLoadingLesson}
+                    aria-current={isActive ? 'page' : undefined}
+                    aria-label={`${item.title} — ${statusLabel}`}
+                  >
+                    <span>{item.title}</span>
+                    <span>{statusLabel}</span>
+                  </button>
+                )
+              })}
+            </nav>
           </div>
         )}
 
