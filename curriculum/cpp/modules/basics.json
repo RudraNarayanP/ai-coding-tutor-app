@@ -12,8 +12,8 @@
   "lessons": [
     {
       "id": "cpp-variables-step-1",
-      "title": "1. Hello C++ & std::string",
-      "description": "Welcome to C++! C++ is a powerful compiled language. Implement `get_language()` returning `std::string(\"C++\")`.",
+      "title": "1. Meet C++",
+      "description": "Welcome! Let's take your first steps into programming. C++ programs are simple instructions your computer follows to display text, solve math, and build software.",
       "order": 1,
       "difficulty": "beginner",
       "duration_minutes": 5,
@@ -24,10 +24,10 @@
       "concepts": ["cpp-variables"],
       "prerequisites": [],
       "learning_objectives": [
-        "Return std::string value in C++"
+        "Recognize a C++ program and print text using std::cout"
       ],
-      "starter_code": "#include <string>\n\nstd::string get_language() {\n    // TODO: Return \"C++\"\n    return \"\";\n}\n",
-      "solution_code": "#include <string>\n\nstd::string get_language() {\n    return \"C++\";\n}\n",
+      "starter_code": "#include <iostream>\n#include <string>\n\nstd::string get_language() {\n    return \"C++\";\n}\n",
+      "solution_code": "#include <iostream>\n#include <string>\n\nstd::string get_language() {\n    return \"C++\";\n}\n",
       "tests": [
         {
           "name": "test_get_language",
@@ -41,40 +41,52 @@
       "sublessons": [
         {
           "id": "cpp-var-sub-1",
-          "title": "What is C++?",
+          "title": "What is Programming?",
           "order": 1,
           "exercises": [
             {
               "id": "cpp-ex-1a",
               "type": "mcq",
-              "question": "Which header file is commonly used for string handling in C++?",
-              "options": ["<string>", "<iostream>", "<vector>", "<cmath>"],
-              "correct_answer": "<string>",
+              "question": "What does a computer program do?",
+              "options": [
+                "It gives step-by-step instructions for the computer to follow",
+                "It physically cleans the computer processor",
+                "It makes the internet faster automatically"
+              ],
+              "correct_answer": "It gives step-by-step instructions for the computer to follow",
               "xp_reward": 10,
-              "explanation": "<string> defines std::string in C++."
+              "explanation": "Programs are sequence of instructions written in code!"
             },
             {
               "id": "cpp-ex-1b",
-              "type": "fill_blank",
-              "question": "Complete the function return statement to return 'C++':",
-              "starter_code": "std::string get_language() {\n    return ___\n}",
-              "blanks": ["\"C++\";"],
-              "correct_answer": "\"C++\";",
+              "type": "mcq",
+              "question": "In C++, std::cout << \"Hello!\"; is used to display text on the screen. What will std::cout << \"Welcome!\"; output?",
+              "options": ["Welcome!", "Hello!", "std::cout", "Nothing"],
+              "correct_answer": "Welcome!",
               "xp_reward": 10,
-              "explanation": "In C++, string literals are enclosed in double quotes and terminated with a semicolon."
+              "explanation": "std::cout outputs the string inside double quotes."
             }
           ]
         },
         {
           "id": "cpp-var-sub-2",
-          "title": "Return Statements",
+          "title": "Complete C++ Output",
           "order": 2,
           "exercises": [
             {
               "id": "cpp-ex-2a",
+              "type": "fill_blank",
+              "question": "Complete the C++ line to print 'C++': std::cout << ___ ;",
+              "blanks": ["\"C++\""],
+              "correct_answer": "\"C++\"",
+              "xp_reward": 10,
+              "explanation": "Text in C++ is wrapped in double quotes."
+            },
+            {
+              "id": "cpp-ex-2b",
               "type": "code",
-              "title": "Implement get_language()",
-              "question": "Implement get_language() returning std::string(\"C++\").",
+              "title": "Return C++ string",
+              "question": "Return the string \"C++\" from get_language().",
               "starter_code": "#include <string>\n\nstd::string get_language() {\n    // TODO: Return \"C++\"\n    return \"\";\n}\n",
               "solution_code": "#include <string>\n\nstd::string get_language() {\n    return \"C++\";\n}\n",
               "tests": [
@@ -93,15 +105,15 @@
         {
           "id": "cpp-exam-1",
           "type": "mcq",
-          "question": "What is the return type of std::string get_language()?",
-          "options": ["std::string", "int", "void", "char"],
-          "correct_answer": "std::string"
+          "question": "Which C++ command displays output to the terminal?",
+          "options": ["std::cout", "std::cin", "return", "include"],
+          "correct_answer": "std::cout"
         },
         {
           "id": "cpp-exam-2",
           "type": "fill_blank",
-          "question": "Which string literal matches 'C++'?",
-          "correct_answer": "C++"
+          "question": "What symbol ends statements in C++?",
+          "correct_answer": ";"
         }
       ],
       "static_hints": ["return \"C++\";"]
