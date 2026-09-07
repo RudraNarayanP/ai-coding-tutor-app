@@ -1,6 +1,5 @@
 import asyncio
 import json
-import subprocess
 import time
 import uuid
 from dataclasses import dataclass
@@ -30,20 +29,15 @@ class DockerSandbox:
         self._image_ready = asyncio.Lock()
 
     async def _docker(self, *args: str, input_data: bytes | None = None, timeout: float = 15, timeout_message: str = "Docker operation timed out.") -> tuple[int, bytes, bytes]:
-        def invoke() -> subprocess.CompletedProcess[bytes]:
-            return subprocess.run(
-                ["docker", *args],
-                input=input_data,
-                capture_output=True,
-                timeout=timeout,
-            )
-
         try:
-            completed = await asyncio.to_thread(invoke)
-            return completed.returncode or 0, completed.stdout, completed.stderr
+            process = await asyncio.create_subprocess_exec("docker", *args, stdin=asyncio.subprocess.PIPE if input_data is not None else None, stdout=asyncio.subprocess.PIPE, stderr=asyncio.subprocess.PIPE)
+            stdout, stderr = await asyncio.wait_for(process.communicate(input_data), timeout=timeout)
+            return process.returncode or 0, stdout, stderr
         except FileNotFoundError as exc:
             raise SandboxError("Docker is unavailable on this machine.") from exc
-        except subprocess.TimeoutExpired as exc:
+        except asyncio.TimeoutError as exc:
+            process.kill()
+            await process.communicate()
             raise SandboxError(timeout_message, 408) from exc
 
     async def _ensure_image(self) -> None:
