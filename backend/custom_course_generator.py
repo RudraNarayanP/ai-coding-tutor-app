@@ -1,9 +1,16 @@
 import json
+import os
 import re
+import shutil
+import time
 import uuid
-from typing import Any
+from dataclasses import dataclass, field
+from pathlib import Path
+from typing import Any, Literal
+
 from pydantic import BaseModel, Field
 
+from .ai_provider import AIProvider, AIProviderError, get_ai_provider
 from .lesson_models import (
     ConceptDefinition,
     CourseDefinition,
@@ -14,16 +21,877 @@ from .lesson_models import (
     ModuleReference,
     SubLessonDefinition,
 )
+from .source_ingestion import SourceDocument, SourceIngestionService, VideoSegment, IngestionError
+
+
+class GenerationError(ValueError):
+    """User-facing course generation error."""
+    pass
+
+
+# ─── DATA MODELS ───────────────────────────────────────────────────────────────
 
 class CourseGenerationRequest(BaseModel):
-    material_type: str = Field(pattern=r"^(youtube_url|transcript|file_upload)$")
-    content: str = Field(default="")
+    material_type: str = Field(pattern=r"^(youtube_url|youtube_playlist|transcript|file_upload)$")
+    content: str = Field(default="", max_length=50_000)
     title: str = Field(default="", max_length=120)
     filename: str | None = None
+    difficulty: str | None = Field(default=None, pattern=r"^(beginner|intermediate|advanced)$")
+    practice_intensity: str | None = Field(default=None, pattern=r"^(light|balanced|heavy)$")
+    force_duplicate: bool = False
+
+
+@dataclass
+class StageStatus:
+    name: str
+    label: str
+    state: Literal["pending", "active", "done", "error"] = "pending"
+    started_at: float | None = None
+    completed_at: float | None = None
+
+
+@dataclass
+class ConceptNode:
+    id: str                          # slug, e.g. "gradient-descent"
+    label: str                       # human-readable, e.g. "Gradient Descent"
+    description: str                 # 1-2 sentences
+    source_segments: list[int]       # VideoSegment position numbers
+    difficulty: str                  # "foundational" | "core" | "advanced"
+    domain_tags: list[str]
+    learning_objectives: list[str]
+
+
+@dataclass
+class ConceptGraph:
+    nodes: list[ConceptNode]
+    edges: list[tuple[str, str]]     # (prerequisite_id, dependent_id)
+    detected_domain: str
+    detected_difficulty: str         # "beginner" | "intermediate" | "advanced"
+    source_summary: str
+
+
+@dataclass
+class LessonSlot:
+    type: str                        # "learn" | "practice" | "review" | "challenge" | "checkpoint"
+    concept_ids: list[str]
+    learning_objectives: list[str]
+    difficulty: str
+    duration_minutes: int
+    test_out_eligible: bool
+    suggested_exercise_types: list[str]
+
+
+@dataclass
+class UnitBlueprint:
+    title: str
+    concept_ids: list[str]
+    lesson_slots: list[LessonSlot]
+    pedagogical_rationale: str
+
+
+@dataclass
+class CurriculumBlueprint:
+    units: list[UnitBlueprint]
+    total_lessons: int
+    domain: str
+    sequencing_rationale: str
+
+
+@dataclass
+class ValidationResult:
+    valid: bool
+    violations: list[str]
+    retry_hint: str
+
+
+class GeneratedCourseMetadata(BaseModel):
+    course_id: str
+    source_type: str
+    source_url: str = ""
+    source_hash: str
+    title: str
+    description: str = ""
+    language: str                     # domain or language key
+    generated_at: float
+    status: str                       # "draft" | "active" | "error"
+    difficulty: str = "beginner"
+    practice_intensity: str = "balanced"
+    unit_count: int = 0
+    lesson_count: int = 0
+    topics: list[str] = Field(default_factory=list)
+    source_summary: str = ""
+    sequencing_rationale: str = ""
+    domain: str = "general"
+    access_level: str = "full"
+    access_notes: list[str] = Field(default_factory=list)
+
+
+class GeneratedCoursePreview(BaseModel):
+    course_id: str
+    title: str
+    source_name: str
+    source_url: str
+    unit_count: int
+    lesson_count: int
+    exercise_count: int
+    checkpoint_count: int
+    topics: list[str]
+    difficulty: str
+    domain: str
+    language: str
+    estimated_minutes: int
+    sequencing_rationale: str
+    access_notes: list[str] = Field(default_factory=list)
+
+
+@dataclass
+class GenerationJob:
+    job_id: str
+    request: CourseGenerationRequest
+    status: Literal["queued", "generating", "draft", "active", "error"] = "queued"
+    stages: list[StageStatus] = field(default_factory=list)
+    course_id: str | None = None
+    error: str | None = None
+    created_at: float = field(default_factory=time.time)
+    preview: GeneratedCoursePreview | None = None
+    draft_path: Path | None = None
+
+
+class RegenerateLessonRequest(BaseModel):
+    lesson_id: str
+    pedagogical_style: str = Field(
+        default="conceptual",
+        pattern=r"^(conceptual|mathematical|practical|visual|socratic)$"
+    )
+
+
+class RegenerateUnitRequest(BaseModel):
+    unit_id: str
+    pedagogical_style: str = Field(
+        default="conceptual",
+        pattern=r"^(conceptual|mathematical|practical|visual|socratic)$"
+    )
+
 
 def slugify(text: str) -> str:
     s = re.sub(r"[^\w\s-]", "", text.lower()).strip()
     return re.sub(r"[-\s]+", "-", s)[:50] or "custom-step"
+
+
+# ─── INPUT VALIDATOR ───────────────────────────────────────────────────────────
+
+class InputValidator:
+    ALLOWED_URL_HOSTS = {"www.youtube.com", "youtube.com", "m.youtube.com", "youtu.be", "www.youtu.be"}
+    MAX_TRANSCRIPT_CHARS = 50_000
+
+    @classmethod
+    def validate(cls, req: CourseGenerationRequest) -> None:
+        if req.material_type in ("youtube_url", "youtube_playlist"):
+            if not req.content.strip():
+                raise ValueError("YouTube URL cannot be empty.")
+            try:
+                from urllib.parse import urlparse
+                parsed = urlparse(req.content.strip())
+                if parsed.netloc not in cls.ALLOWED_URL_HOSTS:
+                    raise ValueError(f"URL domain '{parsed.netloc}' is not allowed. Only YouTube URLs are supported.")
+            except Exception as exc:
+                if isinstance(exc, ValueError):
+                    raise exc
+                raise ValueError("Invalid URL format.")
+        elif req.material_type in ("transcript", "file_upload"):
+            if not req.content.strip() and not req.title.strip():
+                raise ValueError("Pasted transcript or notes content cannot be empty.")
+            if len(req.content) > cls.MAX_TRANSCRIPT_CHARS:
+                raise ValueError(f"Content exceeds maximum length of {cls.MAX_TRANSCRIPT_CHARS} characters.")
+
+
+# ─── LEARNING DOMAIN CLASSIFIER ───────────────────────────────────────────────
+
+class LearningDomain:
+    PROGRAMMING       = "programming"
+    MATHEMATICS       = "mathematics"
+    LANGUAGE_LEARNING = "language_learning"
+    SYSTEMS           = "systems"
+    DATA_SCIENCE      = "data_science"
+    SCIENCE           = "science"
+    THEORY            = "theory"
+    GENERAL           = "general"
+
+
+DOMAIN_EXERCISE_POOLS: dict[str, list[str]] = {
+    LearningDomain.PROGRAMMING: [
+        "code_completion", "debugging", "output_prediction", "fill_blank",
+        "mcq", "identify_mistake", "trace_execution", "tiny_coding",
+    ],
+    LearningDomain.MATHEMATICS: [
+        "calculation", "proof_step_ordering", "fill_blank", "mcq",
+        "identify_mistake", "worked_example_completion", "true_false",
+    ],
+    LearningDomain.LANGUAGE_LEARNING: [
+        "recognition", "recall", "sentence_construction", "matching",
+        "ordering", "fill_blank", "select_multiple", "true_false",
+    ],
+    LearningDomain.SYSTEMS: [
+        "trace_execution", "scheduling_simulation", "mcq", "ordering",
+        "debugging", "code_completion", "short_answer", "scenario_question",
+    ],
+    LearningDomain.DATA_SCIENCE: [
+        "output_prediction", "code_completion", "mcq", "fill_blank",
+        "interpretation", "identify_mistake", "calculation",
+    ],
+    LearningDomain.SCIENCE: [
+        "prediction", "classification", "interpretation", "mcq",
+        "ordering", "true_false", "short_answer", "fill_blank",
+    ],
+    LearningDomain.THEORY: [
+        "proof_step_ordering", "mcq", "true_false", "fill_blank",
+        "counterexample", "short_answer", "identify_mistake",
+    ],
+    LearningDomain.GENERAL: [
+        "mcq", "true_false", "fill_blank", "matching",
+        "ordering", "select_multiple", "short_answer", "scenario_question",
+    ],
+}
+
+
+class LearningDomainClassifier:
+    def classify(self, graph: ConceptGraph) -> str:
+        d = (graph.detected_domain or "").lower().strip()
+        if d in DOMAIN_EXERCISE_POOLS:
+            return d
+
+        # Keyword matching fallback
+        all_text = " ".join([n.label + " " + n.description + " " + " ".join(n.domain_tags) for n in graph.nodes]).lower()
+        if any(w in all_text for w in ["python", "code", "function", "variable", "class", "javascript", "c++", "algorithm"]):
+            return LearningDomain.PROGRAMMING
+        elif any(w in all_text for w in ["calculus", "derivative", "equation", "proof", "math", "matrix", "algebra"]):
+            return LearningDomain.MATHEMATICS
+        elif any(w in all_text for w in ["grammar", "vocabulary", "verb", "language", "spanish", "french", "sentence"]):
+            return LearningDomain.LANGUAGE_LEARNING
+        elif any(w in all_text for w in ["kernel", "memory", "network", "tcp", "operating system", "cpu", "process"]):
+            return LearningDomain.SYSTEMS
+        elif any(w in all_text for w in ["pandas", "dataframe", "regression", "model", "neural network", "dataset"]):
+            return LearningDomain.DATA_SCIENCE
+        elif any(w in all_text for w in ["physics", "chemistry", "biology", "molecule", "atom", "gene"]):
+            return LearningDomain.SCIENCE
+        elif any(w in all_text for w in ["automata", "turing", "logic", "boolean", "graph theory", "complexity"]):
+            return LearningDomain.THEORY
+        return LearningDomain.GENERAL
+
+    def select_exercise_types(
+        self,
+        domain: str,
+        lesson_type: str,
+        learning_objectives: list[str],
+        n: int = 3,
+    ) -> list[str]:
+        pool = DOMAIN_EXERCISE_POOLS.get(domain, DOMAIN_EXERCISE_POOLS[LearningDomain.GENERAL])
+        objs = " ".join(learning_objectives).lower()
+
+        selected: list[str] = []
+        if lesson_type == "checkpoint":
+            if domain == LearningDomain.PROGRAMMING:
+                selected.append("tiny_coding")
+            elif domain == LearningDomain.MATHEMATICS:
+                selected.append("calculation")
+            else:
+                selected.append("short_answer")
+        elif lesson_type == "learn":
+            selected.append("mcq")
+            if "fill_blank" in pool:
+                selected.append("fill_blank")
+        elif lesson_type == "practice":
+            if "implement" in objs and "code_completion" in pool:
+                selected.append("code_completion")
+            elif "calculate" in objs and "calculation" in pool:
+                selected.append("calculation")
+            elif "identify" in objs and "identify_mistake" in pool:
+                selected.append("identify_mistake")
+
+        for ex in pool:
+            if len(selected) >= n:
+                break
+            if ex not in selected:
+                selected.append(ex)
+
+        return selected[:n]
+
+
+# ─── CONCEPT GRAPH BUILDER ────────────────────────────────────────────────────
+
+class ConceptGraphBuilder:
+    def __init__(self, provider: AIProvider) -> None:
+        self.provider = provider
+
+    async def build(self, doc: SourceDocument) -> ConceptGraph:
+        prompt = self._build_prompt(doc)
+        system = (
+            "You are an expert curriculum architect. Analyze the provided educational source material. "
+            "Extract concepts and build a DAG prerequisite concept graph. "
+            "Return JSON matching schema:\n"
+            "{\n"
+            '  "detected_domain": "programming|mathematics|language_learning|systems|data_science|science|theory|general",\n'
+            '  "detected_difficulty": "beginner|intermediate|advanced",\n'
+            '  "source_summary": "2-3 sentence summary",\n'
+            '  "nodes": [\n'
+            '    {"id": "concept-slug", "label": "Title", "description": "...", "source_segments": [1], "difficulty": "foundational|core|advanced", "domain_tags": ["..."], "learning_objectives": ["..."]}\n'
+            '  ],\n'
+            '  "edges": [["prereq-id", "dependent-id"]]\n'
+            "}"
+        )
+
+        try:
+            raw = await self.provider.generate_structured(system=system, user=prompt, max_tokens=3000)
+            return self._parse_response(raw)
+        except Exception as exc:
+            # Fallback deterministic graph if LLM generation fails or returns malformed JSON
+            return self._fallback_graph(doc)
+
+    def _build_prompt(self, doc: SourceDocument) -> str:
+        parts = [f"Title: {doc.title}", f"Access Level: {doc.access_level}"]
+        if doc.segments:
+            parts.append("Video Segments:")
+            for s in doc.segments[:15]:
+                trunc_t = s.transcript[:1500] if s.transcript else "Transcript unavailable"
+                parts.append(f"Position {s.position}: {s.title}\nDescription: {s.description_snippet[:200]}\nTranscript: {trunc_t}")
+        else:
+            parts.append(f"Source Text:\n{doc.plain_text[:12000]}")
+        return "\n\n".join(parts)
+
+    def _parse_response(self, raw: str) -> ConceptGraph:
+        json_str = raw
+        if "```json" in raw:
+            json_str = raw.split("```json")[1].split("```")[0].strip()
+        elif "```" in raw:
+            json_str = raw.split("```")[1].split("```")[0].strip()
+
+        data = json.loads(json_str)
+        nodes = []
+        for n in data.get("nodes", []):
+            nodes.append(
+                ConceptNode(
+                    id=slugify(n.get("id", "concept")),
+                    label=n.get("label", "Concept"),
+                    description=n.get("description", "Concept description"),
+                    source_segments=n.get("source_segments", [1]),
+                    difficulty=n.get("difficulty", "core"),
+                    domain_tags=n.get("domain_tags", []),
+                    learning_objectives=n.get("learning_objectives", ["Understand the concept"]),
+                )
+            )
+
+        edges = [tuple(e) for e in data.get("edges", []) if len(e) == 2]
+        return ConceptGraph(
+            nodes=nodes,
+            edges=edges,
+            detected_domain=data.get("detected_domain", "general"),
+            detected_difficulty=data.get("detected_difficulty", "beginner"),
+            source_summary=data.get("source_summary", "Extracted source material concepts."),
+        )
+
+    def _fallback_graph(self, doc: SourceDocument) -> ConceptGraph:
+        c1 = ConceptNode(
+            id="core-foundations",
+            label=f"Foundations of {doc.title[:40]}",
+            description="Core principles and fundamental terminology.",
+            source_segments=[1],
+            difficulty="foundational",
+            domain_tags=["foundations"],
+            learning_objectives=["Understand core concepts"],
+        )
+        c2 = ConceptNode(
+            id="practical-application",
+            label="Practical Application & Implementation",
+            description="Applying foundational principles to practical scenarios.",
+            source_segments=[1],
+            difficulty="core",
+            domain_tags=["application"],
+            learning_objectives=["Apply learned concepts to practice"],
+        )
+        c3 = ConceptNode(
+            id="mastery-and-synthesis",
+            label="Advanced Mastery & Synthesis",
+            description="End-to-end evaluation and complex problem solving.",
+            source_segments=[1],
+            difficulty="advanced",
+            domain_tags=["mastery"],
+            learning_objectives=["Master advanced techniques"],
+        )
+        return ConceptGraph(
+            nodes=[c1, c2, c3],
+            edges=[("core-foundations", "practical-application"), ("practical-application", "mastery-and-synthesis")],
+            detected_domain="general",
+            detected_difficulty="beginner",
+            source_summary=f"Course concepts for {doc.title}.",
+        )
+
+
+# ─── CURRICULUM SEQUENCER ─────────────────────────────────────────────────────
+
+class CurriculumSequencer:
+    def __init__(self, provider: AIProvider) -> None:
+        self.provider = provider
+        self.classifier = LearningDomainClassifier()
+
+    async def sequence(self, graph: ConceptGraph, retry_hint: str = "") -> CurriculumBlueprint:
+        prompt = self._build_prompt(graph, retry_hint)
+        system = (
+            "You are a master learning experience designer. Group concepts into units and sequence them into a mastery path. "
+            "Output valid JSON matching schema:\n"
+            "{\n"
+            '  "sequencing_rationale": "...",\n'
+            '  "units": [\n'
+            '    {\n'
+            '      "title": "Unit 1: ...",\n'
+            '      "concept_ids": ["c1", "c2"],\n'
+            '      "pedagogical_rationale": "...",\n'
+            '      "lesson_slots": [\n'
+            '        {"type": "learn|practice|review|checkpoint", "concept_ids": ["c1"], "learning_objectives": ["..."], "difficulty": "beginner", "duration_minutes": 5, "test_out_eligible": false}\n'
+            '      ]\n'
+            '    }\n'
+            '  ]\n'
+            "}"
+        )
+
+        try:
+            raw = await self.provider.generate_structured(system=system, user=prompt, max_tokens=3500)
+            return self._parse_response(raw, graph)
+        except Exception:
+            return self._fallback_blueprint(graph)
+
+    def _build_prompt(self, graph: ConceptGraph, retry_hint: str) -> str:
+        nodes_info = "\n".join([f"- {n.id}: {n.label} ({n.difficulty})" for n in graph.nodes])
+        edges_info = "\n".join([f"- {e[0]} -> {e[1]}" for e in graph.edges])
+        prompt = f"Concepts:\n{nodes_info}\n\nPrerequisite Edges:\n{edges_info}\nDomain: {graph.detected_domain}\n"
+        if retry_hint:
+            prompt += f"\nRETRY INSTRUCTION: Previous attempt had violations: {retry_hint}. Fix these constraints."
+        return prompt
+
+    def _parse_response(self, raw: str, graph: ConceptGraph) -> CurriculumBlueprint:
+        json_str = raw
+        if "```json" in raw:
+            json_str = raw.split("```json")[1].split("```")[0].strip()
+        elif "```" in raw:
+            json_str = raw.split("```")[1].split("```")[0].strip()
+
+        data = json.loads(json_str)
+        domain = self.classifier.classify(graph)
+
+        units = []
+        total_lessons = 0
+        for u in data.get("units", []):
+            u_concepts = u.get("concept_ids", [])
+            slots = []
+            for s in u.get("lesson_slots", []):
+                s_type = s.get("type", "learn")
+                s_concepts = s.get("concept_ids", u_concepts)
+                s_objs = s.get("learning_objectives", ["Master lesson topic"])
+                s_exercise_types = self.classifier.select_exercise_types(
+                    domain=domain,
+                    lesson_type=s_type,
+                    learning_objectives=s_objs,
+                )
+                slots.append(
+                    LessonSlot(
+                        type=s_type,
+                        concept_ids=s_concepts,
+                        learning_objectives=s_objs,
+                        difficulty=s.get("difficulty", "beginner"),
+                        duration_minutes=s.get("duration_minutes", 5),
+                        test_out_eligible=s_type == "checkpoint",
+                        suggested_exercise_types=s_exercise_types,
+                    )
+                )
+                total_lessons += 1
+
+            units.append(
+                UnitBlueprint(
+                    title=u.get("title", f"Unit {len(units)+1}"),
+                    concept_ids=u_concepts,
+                    lesson_slots=slots,
+                    pedagogical_rationale=u.get("pedagogical_rationale", "Sequenced for mastery."),
+                )
+            )
+
+        return CurriculumBlueprint(
+            units=units,
+            total_lessons=total_lessons,
+            domain=domain,
+            sequencing_rationale=data.get("sequencing_rationale", "Structured in progressive difficulty order."),
+        )
+
+    def _fallback_blueprint(self, graph: ConceptGraph) -> CurriculumBlueprint:
+        domain = self.classifier.classify(graph)
+        all_ids = [n.id for n in graph.nodes]
+        slots = [
+            LessonSlot("learn", all_ids[:1], ["Learn core principles"], "beginner", 5, False, self.classifier.select_exercise_types(domain, "learn", [])),
+            LessonSlot("practice", all_ids[1:2] or all_ids[:1], ["Practice application"], "beginner", 8, False, self.classifier.select_exercise_types(domain, "practice", [])),
+            LessonSlot("review", all_ids[1:2] or all_ids[:1], ["Review key concepts"], "intermediate", 6, False, self.classifier.select_exercise_types(domain, "review", [])),
+            LessonSlot("checkpoint", all_ids, ["Evaluate mastery"], "intermediate", 10, True, self.classifier.select_exercise_types(domain, "checkpoint", [])),
+        ]
+        u1 = UnitBlueprint(
+            title=f"Unit 1: Mastery of {graph.source_summary[:30]}",
+            concept_ids=all_ids,
+            lesson_slots=slots,
+            pedagogical_rationale="Fallback structured unit.",
+        )
+        return CurriculumBlueprint(
+            units=[u1],
+            total_lessons=len(slots),
+            domain=domain,
+            sequencing_rationale="Progressive sequence from basics to checkpoint evaluation.",
+        )
+
+
+# ─── STRUCTURE VALIDATOR ───────────────────────────────────────────────────────
+
+class StructureValidator:
+    MAX_UNITS = 12
+    MIN_UNITS = 1
+    MAX_LESSONS_PER_UNIT = 10
+    MIN_LESSONS_PER_UNIT = 2
+    MAX_TOTAL_LESSONS = 80
+
+    def validate(self, blueprint: CurriculumBlueprint, graph: ConceptGraph) -> ValidationResult:
+        violations = []
+        if len(blueprint.units) < self.MIN_UNITS or len(blueprint.units) > self.MAX_UNITS:
+            violations.append(f"Unit count {len(blueprint.units)} out of bounds [{self.MIN_UNITS}, {self.MAX_UNITS}].")
+
+        valid_node_ids = {n.id for n in graph.nodes}
+        for idx, unit in enumerate(blueprint.units, start=1):
+            if len(unit.lesson_slots) < self.MIN_LESSONS_PER_UNIT or len(unit.lesson_slots) > self.MAX_LESSONS_PER_UNIT:
+                violations.append(f"Unit {idx} lesson count {len(unit.lesson_slots)} out of bounds [{self.MIN_LESSONS_PER_UNIT}, {self.MAX_LESSONS_PER_UNIT}].")
+
+            has_learn = any(s.type == "learn" for s in unit.lesson_slots)
+            if not has_learn:
+                violations.append(f"Unit {idx} has no learn slots.")
+
+        if blueprint.total_lessons > self.MAX_TOTAL_LESSONS:
+            violations.append(f"Total lesson count {blueprint.total_lessons} exceeds maximum {self.MAX_TOTAL_LESSONS}.")
+
+        retry_hint = "; ".join(violations) if violations else ""
+        return ValidationResult(valid=len(violations) == 0, violations=violations, retry_hint=retry_hint)
+
+    def enforce_schema_invariants(self, blueprint: CurriculumBlueprint) -> CurriculumBlueprint:
+        for unit in blueprint.units:
+            if not unit.lesson_slots or unit.lesson_slots[-1].type != "checkpoint":
+                unit.lesson_slots.append(
+                    LessonSlot(
+                        type="checkpoint",
+                        concept_ids=unit.concept_ids,
+                        learning_objectives=["Section mastery evaluation"],
+                        difficulty="intermediate",
+                        duration_minutes=10,
+                        test_out_eligible=True,
+                        suggested_exercise_types=["short_answer" if blueprint.domain != "programming" else "tiny_coding"],
+                    )
+                )
+        blueprint.total_lessons = sum(len(u.lesson_slots) for u in blueprint.units)
+        return blueprint
+
+
+# ─── CURRICULUM GENERATOR ─────────────────────────────────────────────────────
+
+PEDAGOGICAL_STYLE_INSTRUCTIONS: dict[str, str] = {
+    "conceptual": "Focus on building deep intuition. Use analogies, comparisons, and 'why does this work?' explanations.",
+    "mathematical": "Be rigorous and precise. Include formal definitions, step-by-step derivations, and quantitative examples.",
+    "practical": "Lead with working examples and real-world applications. Maximize hands-on exercises.",
+    "visual": "Describe concepts in terms of visual models, diagrams, and spatial reasoning.",
+    "socratic": "Teach through questions. Guide the learner to discover concepts by answering progressive questions.",
+}
+
+
+class CurriculumGenerator:
+    def __init__(self, provider: AIProvider) -> None:
+        self.provider = provider
+
+    async def generate_unit(
+        self,
+        unit_blueprint: UnitBlueprint,
+        graph: ConceptGraph,
+        doc: SourceDocument,
+        course_id: str,
+        unit_index: int,
+    ) -> ModuleDefinition:
+        unit_id = f"{course_id}-mod-{unit_index}"
+        concepts = [
+            ConceptDefinition(id=f"{course_id}-concept-{cid}", title=cid.replace("-", " ").title(), prerequisites=[])
+            for cid in unit_blueprint.concept_ids
+        ]
+
+        lessons: list[LessonDefinition] = []
+        for l_idx, slot in enumerate(unit_blueprint.lesson_slots, start=1):
+            lesson_id = f"{course_id}-m{unit_index}-l{l_idx}"
+            lesson = self._build_lesson_definition(
+                lesson_id=lesson_id,
+                course_id=course_id,
+                unit_id=unit_id,
+                unit_title=unit_blueprint.title,
+                order=(unit_index - 1) * 10 + l_idx,
+                slot=slot,
+                domain=graph.detected_domain,
+            )
+            lessons.append(lesson)
+
+        return ModuleDefinition(
+            id=unit_id,
+            title=unit_blueprint.title,
+            order=unit_index,
+            concepts=concepts,
+            lessons=lessons,
+        )
+
+    def _build_lesson_definition(
+        self,
+        lesson_id: str,
+        course_id: str,
+        unit_id: str,
+        unit_title: str,
+        order: int,
+        slot: LessonSlot,
+        domain: str,
+    ) -> LessonDefinition:
+        c_title = slot.concept_ids[0].replace("-", " ").title() if slot.concept_ids else "Topic"
+        ex_type = "multiple_choice"
+        if domain == "programming" and slot.type in ("practice", "checkpoint"):
+            ex_type = "tiny_coding"
+
+        exercises = [
+            ExerciseDefinition(
+                id=f"{lesson_id}-ex-1",
+                title=f"{slot.type.title()} Exercise 1",
+                type=ex_type,
+                question=f"Mastery check for {c_title}: What is the core principle?",
+                options=[f"Core principle of {c_title}", "Incorrect choice A", "Incorrect choice B"],
+                correct_answer=f"Core principle of {c_title}",
+                starter_code="# Write your solution or note here\n" if ex_type == "tiny_coding" else None,
+                solution_code="print('ok')\n" if ex_type == "tiny_coding" else None,
+                xp_reward=15,
+            )
+        ]
+
+        sublessons = [
+            SubLessonDefinition(
+                id=f"{lesson_id}-sub-1",
+                title=f"{c_title} Step 1",
+                description="Interactive lesson step",
+                order=1,
+                exercises=exercises,
+            )
+        ]
+
+        return LessonDefinition(
+            id=lesson_id,
+            title=f"{order}. {slot.type.title()}: {c_title}",
+            description=f"Master {c_title} through {slot.type} exercises.",
+            order=order,
+            difficulty=slot.difficulty,
+            duration_minutes=slot.duration_minutes,
+            type=slot.type,
+            section_id=unit_id,
+            section_title=unit_title,
+            test_out_eligible=slot.test_out_eligible,
+            concepts=[f"{course_id}-concept-{cid}" for cid in slot.concept_ids],
+            learning_objectives=slot.learning_objectives,
+            starter_code=f"# Solution code for {c_title}\nprint('{c_title}')\n",
+            sublessons=sublessons,
+            xp_reward=20,
+        )
+
+    async def regenerate_lesson(
+        self,
+        lesson_id: str,
+        concept_ids: list[str],
+        graph: ConceptGraph,
+        doc: SourceDocument,
+        pedagogical_style: str,
+        course_id: str,
+    ) -> LessonDefinition:
+        style_instr = PEDAGOGICAL_STYLE_INSTRUCTIONS.get(pedagogical_style, "")
+        slot = LessonSlot(
+            type="practice",
+            concept_ids=concept_ids,
+            learning_objectives=[f"Regenerated in {pedagogical_style} style: {style_instr[:50]}"],
+            difficulty="intermediate",
+            duration_minutes=8,
+            test_out_eligible=False,
+            suggested_exercise_types=["multiple_choice"],
+        )
+        return self._build_lesson_definition(
+            lesson_id=lesson_id,
+            course_id=course_id,
+            unit_id=f"{course_id}-mod-1",
+            unit_title="Unit 1",
+            order=1,
+            slot=slot,
+            domain=graph.detected_domain,
+        )
+
+    async def regenerate_unit(
+        self,
+        unit_blueprint: UnitBlueprint,
+        graph: ConceptGraph,
+        doc: SourceDocument,
+        pedagogical_style: str,
+        course_id: str,
+        unit_index: int,
+    ) -> ModuleDefinition:
+        return await self.generate_unit(unit_blueprint, graph, doc, course_id, unit_index)
+
+
+# ─── COURSE SERIALIZER ─────────────────────────────────────────────────────────
+
+class CourseSerializer:
+    def __init__(self, curriculum_root: Path) -> None:
+        self.root = curriculum_root
+
+    @property
+    def drafts_dir(self) -> Path:
+        p = self.root / "generated" / ".drafts"
+        p.mkdir(parents=True, exist_ok=True)
+        return p
+
+    @property
+    def active_dir(self) -> Path:
+        p = self.root / "generated"
+        p.mkdir(parents=True, exist_ok=True)
+        return p
+
+    def write_draft(self, curriculum: Curriculum, metadata: GeneratedCourseMetadata) -> Path:
+        course_dir = self.drafts_dir / metadata.course_id
+        if course_dir.exists():
+            shutil.rmtree(course_dir)
+        course_dir.mkdir(parents=True, exist_ok=True)
+        (course_dir / "modules").mkdir(parents=True, exist_ok=True)
+
+        # Write course.json
+        with (course_dir / "course.json").open("w", encoding="utf-8") as f:
+            json.dump(curriculum.course.model_dump(), f, indent=2)
+
+        # Write modules
+        for mod in curriculum.modules:
+            with (course_dir / "modules" / f"{mod.id}.json").open("w", encoding="utf-8") as f:
+                json.dump(mod.model_dump(), f, indent=2)
+
+        # Write _metadata.json
+        metadata.status = "draft"
+        with (course_dir / "_metadata.json").open("w", encoding="utf-8") as f:
+            json.dump(metadata.model_dump(), f, indent=2)
+
+        return course_dir
+
+    def confirm_draft(self, course_id: str) -> Path:
+        draft_path = self.drafts_dir / course_id
+        if not draft_path.exists():
+            raise FileNotFoundError(f"Draft course {course_id} not found.")
+
+        target_path = self.active_dir / course_id
+        if target_path.exists():
+            shutil.rmtree(target_path)
+
+        shutil.move(str(draft_path), str(target_path))
+
+        # Update metadata to active
+        meta_file = target_path / "_metadata.json"
+        if meta_file.exists():
+            with meta_file.open("r", encoding="utf-8") as f:
+                data = json.load(f)
+            data["status"] = "active"
+            with meta_file.open("w", encoding="utf-8") as f:
+                json.dump(data, f, indent=2)
+
+        return target_path
+
+    def delete(self, course_id: str) -> None:
+        active_path = self.active_dir / course_id
+        if active_path.exists():
+            shutil.rmtree(active_path)
+        draft_path = self.drafts_dir / course_id
+        if draft_path.exists():
+            shutil.rmtree(draft_path)
+
+    def list_active(self) -> list[GeneratedCourseMetadata]:
+        res = []
+        if not self.active_dir.exists():
+            return res
+        for item in self.active_dir.iterdir():
+            if item.is_dir() and not item.name.startswith("."):
+                meta_file = item / "_metadata.json"
+                if meta_file.exists():
+                    try:
+                        with meta_file.open("r", encoding="utf-8") as f:
+                            res.append(GeneratedCourseMetadata.model_validate_json(f.read()))
+                    except Exception:
+                        pass
+        return res
+
+    def load_metadata(self, course_id: str) -> GeneratedCourseMetadata:
+        path = self.active_dir / course_id / "_metadata.json"
+        if not path.exists():
+            path = self.drafts_dir / course_id / "_metadata.json"
+        if not path.exists():
+            raise FileNotFoundError(f"Metadata for course {course_id} not found.")
+        with path.open("r", encoding="utf-8") as f:
+            return GeneratedCourseMetadata.model_validate_json(f.read())
+
+
+# ─── DUPLICATE DETECTOR ────────────────────────────────────────────────────────
+
+class DuplicateDetector:
+    def __init__(self, serializer: CourseSerializer) -> None:
+        self.serializer = serializer
+
+    def find_duplicate(self, source_hash: str) -> GeneratedCourseMetadata | None:
+        for meta in self.serializer.list_active():
+            if meta.source_hash == source_hash:
+                return meta
+        return None
+
+
+# ─── GENERATED COURSE STORE ────────────────────────────────────────────────────
+
+class GeneratedCourseStore:
+    def __init__(self) -> None:
+        self.jobs: dict[str, GenerationJob] = {}
+        self.user_counts: dict[str, int] = {}
+
+    def create_job(self, req: CourseGenerationRequest) -> GenerationJob:
+        job_id = f"job-{uuid.uuid4().hex[:10]}"
+        stages = [
+            StageStatus("reading_source", "Reading source"),
+            StageStatus("understanding_topics", "Understanding topics"),
+            StageStatus("building_prerequisites", "Building prerequisites"),
+            StageStatus("designing_units", "Designing units"),
+            StageStatus("creating_exercises", "Creating exercises"),
+            StageStatus("creating_checkpoints", "Creating checkpoints"),
+            StageStatus("finalizing_course", "Finalizing course"),
+        ]
+        job = GenerationJob(job_id=job_id, request=req, stages=stages)
+        self.jobs[job_id] = job
+        return job
+
+    def get_job(self, job_id: str) -> GenerationJob | None:
+        return self.jobs.get(job_id)
+
+    def check_rate_limit(self, key: str = "default", max_per_day: int = 10) -> bool:
+        return self.user_counts.get(key, 0) < max_per_day
+
+    def record_generation(self, key: str = "default") -> None:
+        self.user_counts[key] = self.user_counts.get(key, 0) + 1
+
+    def sweep_abandoned_drafts(self, serializer: CourseSerializer) -> int:
+        removed = 0
+        if not serializer.drafts_dir.exists():
+            return 0
+        active_job_course_ids = {j.course_id for j in self.jobs.values() if j.course_id}
+        for item in serializer.drafts_dir.iterdir():
+            if item.is_dir() and item.name not in active_job_course_ids:
+                shutil.rmtree(item)
+                removed += 1
+        return removed
+
+
+# ─── LEGACY COMPATIBILITY HELPER ──────────────────────────────────────────────
 
 def build_custom_curriculum_from_text(
     title: str,
@@ -45,7 +913,6 @@ def build_custom_curriculum_from_text(
 
     lessons: list[LessonDefinition] = []
 
-    # 1. Learn Step
     lessons.append(
         LessonDefinition(
             id=f"{course_id}-step-1",
@@ -83,7 +950,6 @@ def build_custom_curriculum_from_text(
         )
     )
 
-    # 2. Practice Step
     lessons.append(
         LessonDefinition(
             id=f"{course_id}-step-2",
@@ -102,7 +968,6 @@ def build_custom_curriculum_from_text(
         )
     )
 
-    # 3. Review Step
     lessons.append(
         LessonDefinition(
             id=f"{course_id}-step-3",
@@ -120,7 +985,6 @@ def build_custom_curriculum_from_text(
         )
     )
 
-    # 4. Challenge Step
     lessons.append(
         LessonDefinition(
             id=f"{course_id}-step-4",
@@ -138,7 +1002,6 @@ def build_custom_curriculum_from_text(
         )
     )
 
-    # 5. Checkpoint Step
     lessons.append(
         LessonDefinition(
             id=f"{course_id}-step-5",

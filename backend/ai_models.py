@@ -17,6 +17,8 @@ class TutorRequest(BaseModel):
     hint_level: int = Field(ge=1, le=4)
     session_id: str = Field(default="default", min_length=1, max_length=80)
     solution_requested: bool = False
+    source_summary: str = Field(default="", max_length=5000)
+    generated_course_id: str | None = Field(default=None, max_length=120)
 
 
 class TutorResponse(BaseModel):

@@ -156,7 +156,7 @@ def load_all_curriculums() -> dict[str, Curriculum]:
     curriculums: dict[str, Curriculum] = {}
     if curriculum_dir.exists():
         for path in curriculum_dir.iterdir():
-            if path.is_dir() and (path / "course.json").exists():
+            if path.is_dir() and not path.name.startswith(".") and (path / "course.json").exists():
                 try:
                     loader = CurriculumLoader(path)
                     curr = loader.load()
@@ -164,6 +164,20 @@ def load_all_curriculums() -> dict[str, Curriculum]:
                     curriculums[lang] = curr
                 except Exception as exc:
                     print(f"Warning: Failed to load curriculum at {path}: {exc}")
+
+        # Scan active generated courses in curriculum/generated/ (skipping .drafts/)
+        generated_dir = curriculum_dir / "generated"
+        if generated_dir.exists():
+            for gpath in generated_dir.iterdir():
+                if gpath.is_dir() and not gpath.name.startswith(".") and (gpath / "course.json").exists():
+                    try:
+                        loader = CurriculumLoader(gpath)
+                        curr = loader.load()
+                        cid = curr.course.id.lower().strip()
+                        curriculums[cid] = curr
+                    except Exception as exc:
+                        print(f"Warning: Failed to load generated curriculum at {gpath}: {exc}")
+
     if "python" not in curriculums:
         curriculums["python"] = load_default_curriculum()
     return curriculums

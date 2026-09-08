@@ -22,6 +22,7 @@ class AIProvider(Protocol):
     provider_id: str
 
     async def tutor(self, request: TutorRequest) -> str: ...
+    async def generate_structured(self, system: str, user: str, max_tokens: int = 4000) -> str: ...
     async def health(self) -> ProviderStatus: ...
 
 
@@ -41,8 +42,12 @@ def build_user_prompt(request: TutorRequest) -> str:
     concept_title = getattr(request, 'concept_title', '')
     prerequisites = getattr(request, 'prerequisites', [])
     lesson_id = getattr(request, 'lesson_id', '')
+    source_summary = getattr(request, 'source_summary', '')
+    generated_course_id = getattr(request, 'generated_course_id', None)
 
     lang_context = ""
+    if generated_course_id or source_summary:
+        lang_context = f"Custom Generated Course Context ({generated_course_id or 'active'}):\nSummary: {source_summary}\n"
     if "sql" in lesson_id.lower():
         lang_context = (
             "SQL Context:\n"
@@ -110,6 +115,33 @@ class OllamaProvider:
                     "messages": [
                         {"role": "system", "content": SYSTEM_PROMPT},
                         {"role": "user", "content": prompt},
+                    ],
+                },
+            )
+            if response.status_code == 404:
+                raise AIProviderError("Configured Ollama model is unavailable.", provider="ollama", code="model_missing")
+            response.raise_for_status()
+            payload = response.json()
+        except (httpx.HTTPError, ValueError) as exc:
+            raise AIProviderError("Ollama returned an invalid or unreachable response.", provider="ollama", code="network_error") from exc
+
+        message = payload.get("message", {}).get("content") if isinstance(payload, dict) else None
+        if not isinstance(message, str) or not message.strip():
+            raise AIProviderError("Ollama returned an invalid response.", provider="ollama", code="invalid_response")
+        return message.strip()
+
+    async def generate_structured(self, system: str, user: str, max_tokens: int = 4000) -> str:
+        try:
+            client = get_shared_client(self.timeout_seconds)
+            response = await client.post(
+                f"{self.base_url}/api/chat",
+                json={
+                    "model": self.model,
+                    "stream": False,
+                    "options": {"num_predict": max_tokens, "temperature": 0.0},
+                    "messages": [
+                        {"role": "system", "content": system},
+                        {"role": "user", "content": user},
                     ],
                 },
             )
@@ -230,6 +262,48 @@ class OpenAICompatibleProvider:
             pass
         raise AIProviderError(f"{self.name} returned an unexpected response format.", provider=self.provider_id, code="malformed_response")
 
+    async def generate_structured(self, system: str, user: str, max_tokens: int = 4000) -> str:
+        if not self.api_key:
+            raise AIProviderError(f"{self.name} API key is not configured.", provider=self.provider_id, code="missing_api_key")
+
+        headers = {
+            "Authorization": f"Bearer {self.api_key}",
+            "Content-Type": "application/json",
+            **self.headers_extra,
+        }
+
+        payload = {
+            "model": self.model,
+            "max_tokens": max_tokens,
+            "temperature": 0.0,
+            "messages": [
+                {"role": "system", "content": system},
+                {"role": "user", "content": user},
+            ],
+        }
+
+        try:
+            client = get_shared_client(60.0)
+            res = await client.post(f"{self.base_url}/chat/completions", headers=headers, json=payload)
+            if res.status_code == 401:
+                raise AIProviderError(f"{self.name} API key is invalid or unauthorized.", provider=self.provider_id, code="invalid_api_key")
+            elif res.status_code == 429:
+                raise AIProviderError(f"{self.name} rate limit or quota exceeded.", provider=self.provider_id, code="rate_limit")
+            res.raise_for_status()
+            data = res.json()
+        except AIProviderError:
+            raise
+        except Exception as exc:
+            raise AIProviderError(f"{self.name} request failed or timed out.", provider=self.provider_id, code="network_error") from exc
+
+        try:
+            message = data["choices"][0]["message"]["content"]
+            if isinstance(message, str) and message.strip():
+                return message.strip()
+        except (KeyError, IndexError, TypeError):
+            pass
+        raise AIProviderError(f"{self.name} returned an unexpected response format.", provider=self.provider_id, code="malformed_response")
+
     async def health(self) -> ProviderStatus:
         if not self.api_key:
             return ProviderStatus(
@@ -304,6 +378,48 @@ class AnthropicProvider:
             pass
         raise AIProviderError("Anthropic returned an invalid response format.", provider=self.provider_id, code="malformed_response")
 
+    async def generate_structured(self, system: str, user: str, max_tokens: int = 4000) -> str:
+        if not self.api_key:
+            raise AIProviderError("Anthropic API key is not configured.", provider=self.provider_id, code="missing_api_key")
+
+        headers = {
+            "x-api-key": self.api_key,
+            "anthropic-version": "2023-06-01",
+            "Content-Type": "application/json",
+        }
+
+        payload = {
+            "model": self.model,
+            "max_tokens": max_tokens,
+            "temperature": 0.0,
+            "system": system,
+            "messages": [
+                {"role": "user", "content": user},
+            ],
+        }
+
+        try:
+            client = get_shared_client(60.0)
+            res = await client.post("https://api.anthropic.com/v1/messages", headers=headers, json=payload)
+            if res.status_code == 401:
+                raise AIProviderError("Anthropic API key is invalid.", provider=self.provider_id, code="invalid_api_key")
+            elif res.status_code == 429:
+                raise AIProviderError("Anthropic rate limit reached.", provider=self.provider_id, code="rate_limit")
+            res.raise_for_status()
+            data = res.json()
+        except AIProviderError:
+            raise
+        except Exception as exc:
+            raise AIProviderError("Anthropic API request failed.", provider=self.provider_id, code="network_error") from exc
+
+        try:
+            content = data["content"][0]["text"]
+            if isinstance(content, str) and content.strip():
+                return content.strip()
+        except (KeyError, IndexError, TypeError):
+            pass
+        raise AIProviderError("Anthropic returned an invalid response format.", provider=self.provider_id, code="malformed_response")
+
     async def health(self) -> ProviderStatus:
         if not self.api_key:
             return ProviderStatus(
@@ -357,6 +473,47 @@ class GeminiProvider:
 
         try:
             client = get_shared_client(30.0)
+            res = await client.post(url, json=payload)
+            if res.status_code in (400, 401, 403):
+                raise AIProviderError("Gemini API key is invalid or request denied.", provider=self.provider_id, code="invalid_api_key")
+            elif res.status_code == 429:
+                raise AIProviderError("Gemini rate limit exceeded.", provider=self.provider_id, code="rate_limit")
+            res.raise_for_status()
+            data = res.json()
+        except AIProviderError:
+            raise
+        except Exception as exc:
+            raise AIProviderError("Gemini API request failed.", provider=self.provider_id, code="network_error") from exc
+
+        try:
+            text = data["candidates"][0]["content"]["parts"][0]["text"]
+            if isinstance(text, str) and text.strip():
+                return text.strip()
+        except (KeyError, IndexError, TypeError):
+            pass
+        raise AIProviderError("Gemini returned an invalid response format.", provider=self.provider_id, code="malformed_response")
+
+    async def generate_structured(self, system: str, user: str, max_tokens: int = 4000) -> str:
+        if not self.api_key:
+            raise AIProviderError("Gemini API key is not configured.", provider=self.provider_id, code="missing_api_key")
+
+        url = f"https://generativelanguage.googleapis.com/v1beta/models/{self.model}:generateContent?key={self.api_key}"
+
+        payload = {
+            "system_instruction": {
+                "parts": [{"text": system}]
+            },
+            "contents": [{
+                "parts": [{"text": user}]
+            }],
+            "generationConfig": {
+                "maxOutputTokens": max_tokens,
+                "temperature": 0.0,
+            }
+        }
+
+        try:
+            client = get_shared_client(60.0)
             res = await client.post(url, json=payload)
             if res.status_code in (400, 401, 403):
                 raise AIProviderError("Gemini API key is invalid or request denied.", provider=self.provider_id, code="invalid_api_key")
