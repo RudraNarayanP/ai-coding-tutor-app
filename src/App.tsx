@@ -157,6 +157,13 @@ function App() {
   const [testOutResult, setTestOutResult] = useState<any>(null)
   const [charSubTab, setCharSubTab] = useState<'syntax' | 'keywords' | 'types' | 'operators'>('syntax')
 
+  // Custom Course Generation State
+  const [showCreateModal, setShowCreateModal] = useState(false)
+  const [materialType, setMaterialType] = useState<'youtube_url' | 'transcript' | 'file_upload'>('youtube_url')
+  const [materialInput, setMaterialInput] = useState('')
+  const [customTitle, setCustomTitle] = useState('')
+  const [isGeneratingCourse, setIsGeneratingCourse] = useState(false)
+
   // Focused Lesson Mode State
   const [isLessonActive, setIsLessonActive] = useState(false)
 
@@ -225,25 +232,10 @@ function App() {
     }
   }, [])
 
-  const handleProviderChange = async (provider: string) => {
-    setSelectedProvider(provider)
-    try {
-      await fetch('/api/ai/select', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ provider }),
-      })
-      fetchProviders()
-    } catch {
-      // fallback
-    }
-  }
-
   // ─── Load Lessons for Language ──────────────────────────────────────────────
-  const fetchLessons = useCallback(async (lang?: string) => {
-    const activeLang = lang || selectedLanguage
+  const fetchLessons = useCallback(async () => {
     try {
-      const res = await fetch(`/api/lessons?language=${encodeURIComponent(activeLang)}`)
+      const res = await fetch('/api/lessons')
       if (!res.ok) {
         setBackendError(true)
         return
@@ -259,7 +251,7 @@ function App() {
     } catch {
       setBackendError(true)
     }
-  }, [selectedLanguage])
+  }, [])
 
   // ─── Select Language Course Track ───────────────────────────────────────────
   const handleCourseChange = async (lang: string) => {
@@ -274,7 +266,37 @@ function App() {
     } catch {
       // fallback
     }
-    fetchLessons(lang)
+    fetchLessons()
+  }
+
+  // ─── Generate Custom AI Course ──────────────────────────────────────────────
+  const handleGenerateCourse = async () => {
+    if (!materialInput.trim() && !customTitle.trim()) return
+    setIsGeneratingCourse(true)
+    try {
+      const res = await fetch('/api/courses/generate', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          material_type: materialType,
+          content: materialInput,
+          title: customTitle,
+        }),
+      })
+
+      if (res.ok) {
+        const newCourse = await res.json()
+        await fetchCourses()
+        await handleCourseChange(newCourse.id)
+        setShowCreateModal(false)
+        setMaterialInput('')
+        setCustomTitle('')
+      }
+    } catch {
+      // fallback
+    } finally {
+      setIsGeneratingCourse(false)
+    }
   }
 
   // ─── Load Detailed Lesson ───────────────────────────────────────────────────
@@ -632,7 +654,6 @@ function App() {
             <select
               value={selectedProvider}
               onChange={(e) => handleProviderSelection(e.target.value)}
-              onChange={(e) => handleProviderChange(e.target.value)}
               aria-label="Select AI Provider"
               style={{
                 width: '100%',
@@ -663,32 +684,37 @@ function App() {
         {/* Top Sticky Header Bar */}
         <header className="duo-top-header" role="banner">
           <div className="duo-header-left">
-            <div className="duo-course-selector" role="tablist" aria-label="Course language selector" style={{ display: 'flex', gap: '6px' }}>
-              {[
-                { lang: 'python', label: 'Python' },
-                { lang: 'java', label: 'Java' },
-                { lang: 'cpp', label: 'C++' },
-              ].map(({ lang, label }) => (
+            <div className="duo-course-selector" role="tablist" aria-label="Course language selector" style={{ display: 'flex', gap: '6px', alignItems: 'center' }}>
+              {courses.map((c) => (
                 <button
-                  key={lang}
+                  key={c.id}
                   role="tab"
-                  aria-selected={selectedLanguage === lang}
-                  className={`duo-course-btn ${selectedLanguage === lang ? 'active' : ''}`}
-                  onClick={() => handleCourseChange(lang)}
+                  aria-selected={selectedLanguage === c.language || selectedLanguage === c.id}
+                  className={`duo-course-btn ${selectedLanguage === c.language || selectedLanguage === c.id ? 'active' : ''}`}
+                  onClick={() => handleCourseChange(c.language || c.id)}
                   style={{
                     padding: '6px 12px',
                     borderRadius: '8px',
                     fontSize: '13px',
                     fontWeight: 800,
                     border: '2px solid',
-                    borderColor: selectedLanguage === lang ? 'var(--blue-dark)' : 'var(--line)',
-                    background: selectedLanguage === lang ? '#ddf4ff' : '#fff',
-                    color: selectedLanguage === lang ? 'var(--blue-dark)' : '#777',
+                    borderColor: (selectedLanguage === c.language || selectedLanguage === c.id) ? 'var(--blue-dark)' : 'var(--line)',
+                    background: (selectedLanguage === c.language || selectedLanguage === c.id) ? '#ddf4ff' : '#fff',
+                    color: (selectedLanguage === c.language || selectedLanguage === c.id) ? 'var(--blue-dark)' : '#777',
                   }}
                 >
-                  {label}
+                  {c.title.replace(' Foundations', '').replace(' Path', '')}
                 </button>
               ))}
+
+              <button
+                className="duo-button duo-button-primary"
+                onClick={() => setShowCreateModal(true)}
+                style={{ padding: '6px 12px', fontSize: '12px', marginLeft: '4px' }}
+                aria-label="Create Custom Course"
+              >
+                + Create Course
+              </button>
             </div>
 
             <div style={{ fontWeight: 900, fontSize: '15px', color: 'var(--ink)' }}>
@@ -1144,31 +1170,6 @@ function App() {
                 </aside>
               </>
             )}
-
-            {/* Visually Hidden Navigation Element for Vitest & Accessibility */}
-            <nav aria-label="Lessons" className="visually-hidden">
-              {safeLessons.map((item) => {
-                const isActive = lesson?.id === item.id
-                let statusLabel = 'Available'
-                if (item.status === 'completed') statusLabel = 'Completed'
-                else if (item.status === 'locked') statusLabel = 'Locked'
-                else if (item.status === 'current' || isActive) statusLabel = 'Current lesson'
-
-                return (
-                  <button
-                    key={item.id}
-                    id={`lesson-nav-${item.id}`}
-                    onClick={() => loadLesson(item, true)}
-                    disabled={item.status === 'locked' || isLoadingLesson}
-                    aria-current={isActive ? 'page' : undefined}
-                    aria-label={`${item.title} — ${statusLabel}`}
-                  >
-                    <span>{item.title}</span>
-                    <span>{statusLabel}</span>
-                  </button>
-                )
-              })}
-            </nav>
           </div>
         )}
 
@@ -1211,6 +1212,83 @@ function App() {
                     <div className="duo-char-romaji">{item.romaji}</div>
                   </div>
                 ))}
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* ─── Modal: Material Ingestion & Custom Course Creation ─────────── */}
+        {showCreateModal && (
+          <div className="modal-overlay" onClick={() => setShowCreateModal(false)}>
+            <div className="modal-card" onClick={(e) => e.stopPropagation()}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
+                <h2 style={{ fontSize: '20px', fontWeight: 900 }}>Create Custom Patchwork Course</h2>
+                <button onClick={() => setShowCreateModal(false)} style={{ fontSize: '20px', fontWeight: 900, cursor: 'pointer' }}>×</button>
+              </div>
+
+              <p style={{ fontSize: '14px', color: 'var(--ink-soft)', marginBottom: '16px', fontWeight: 700 }}>
+                Paste a YouTube URL / Playlist, Transcript / Notes, or upload material. Patchwork will automatically extract concepts and generate an interactive curriculum.
+              </p>
+
+              <div style={{ display: 'flex', gap: '8px', marginBottom: '16px' }}>
+                {[
+                  { type: 'youtube_url', label: 'YouTube URL / Playlist' },
+                  { type: 'transcript', label: 'Transcript / Notes' },
+                  { type: 'file_upload', label: 'Upload Material' },
+                ].map(({ type, label }) => (
+                  <button
+                    key={type}
+                    onClick={() => setMaterialType(type as any)}
+                    className={`duo-button ${materialType === type ? 'duo-button-primary' : 'duo-button-secondary'}`}
+                    style={{ padding: '8px 12px', fontSize: '12px', flex: 1 }}
+                  >
+                    {label}
+                  </button>
+                ))}
+              </div>
+
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '12px', marginBottom: '20px' }}>
+                <input
+                  type="text"
+                  placeholder="Course Title (e.g. Master React Fast)"
+                  value={customTitle}
+                  onChange={(e) => setCustomTitle(e.target.value)}
+                  style={{ padding: '10px 14px', borderRadius: '10px', border: '2px solid var(--line)', fontWeight: 700 }}
+                />
+
+                {materialType === 'youtube_url' ? (
+                  <input
+                    type="text"
+                    placeholder="https://www.youtube.com/watch?v=... or playlist URL"
+                    value={materialInput}
+                    onChange={(e) => setMaterialInput(e.target.value)}
+                    style={{ padding: '10px 14px', borderRadius: '10px', border: '2px solid var(--line)', fontWeight: 700 }}
+                  />
+                ) : (
+                  <textarea
+                    rows={5}
+                    placeholder="Paste transcripts, study notes, or raw material content here..."
+                    value={materialInput}
+                    onChange={(e) => setMaterialInput(e.target.value)}
+                    style={{ padding: '10px 14px', borderRadius: '10px', border: '2px solid var(--line)', fontWeight: 700, fontFamily: 'inherit' }}
+                  />
+                )}
+              </div>
+
+              <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '12px' }}>
+                <button
+                  className="duo-button duo-button-secondary"
+                  onClick={() => setShowCreateModal(false)}
+                >
+                  Cancel
+                </button>
+                <button
+                  className="duo-button duo-button-primary"
+                  onClick={handleGenerateCourse}
+                  disabled={isGeneratingCourse || (!materialInput.trim() && !customTitle.trim())}
+                >
+                  {isGeneratingCourse ? 'Analyzing & Generating…' : 'Generate Course ✨'}
+                </button>
               </div>
             </div>
           </div>

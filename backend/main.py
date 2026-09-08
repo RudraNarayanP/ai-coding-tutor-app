@@ -9,6 +9,7 @@ from pathlib import Path
 from .curriculum_loader import load_all_curriculums
 from .lesson_engine import LessonEngine, ProgressionStore
 from .lesson_models import CourseSummary, LessonSummary, ProgressionResult, ProgressionState, PublicLessonView
+from .custom_course_generator import CourseGenerationRequest, build_custom_curriculum_from_text
 from .sandbox import SandboxError, sandbox
 from .tutor_service import TutorService
 
@@ -289,6 +290,48 @@ async def run_current_lesson(request: CodeSubmission):
     if current_lesson_id is None:
         raise HTTPException(status_code=409, detail={"error": "course_complete"})
     return await submit_lesson(current_lesson_id, request)
+
+
+@app.post("/api/courses/generate", response_model=CourseSummary)
+async def generate_course(req: CourseGenerationRequest):
+    if not req.content and not req.title:
+        raise HTTPException(status_code=400, detail={"error": "missing_material_content"})
+
+    custom_curr = build_custom_curriculum_from_text(
+        title=req.title,
+        content=req.content,
+        material_type=req.material_type
+    )
+
+    lang = custom_curr.course.language
+    lang_key = custom_curr.course.id
+
+    # Register generated curriculum in lesson_engine
+    lesson_engine.curriculums[lang_key] = custom_curr
+    lesson_engine.stores[lang_key] = ProgressionStore(
+        custom_curr,
+        storage_path=base_path / f"progression_state_{lang_key}.json"
+    )
+    lesson_engine.active_language = lang_key
+
+    return CourseSummary(
+        id=custom_curr.course.id,
+        title=custom_curr.course.title,
+        language=custom_curr.course.id,
+        lesson_count=len(custom_curr.lessons),
+        completed_count=0,
+        is_primary=True,
+        tagline="Custom AI Generated Path",
+        description=f"Generated from {req.material_type.replace('_', ' ')} material.",
+    )
+
+
+@app.post("/api/progression/reset")
+async def reset_progression(language: str | None = None):
+    lang = (language or lesson_engine.active_language).lower().strip()
+    store = lesson_engine.stores.get(lang, lesson_engine.store)
+    store.reset()
+    return {"status": "ok", "language": lang, "state": store.state()}
 
 
 @app.post("/api/tutor", response_model=TutorResponse)
