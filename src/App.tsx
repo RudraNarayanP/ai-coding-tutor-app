@@ -830,101 +830,6 @@ function App() {
       <div className="duo-main-viewport">
         {/* Top Sticky Header */}
         <header className="duo-top-header" role="banner">
-          <div className="duo-header-left">
-            {/* Language Switcher Tabs / Dropdown */}
-            <div className="duo-course-selector" role="tablist" aria-label="Course language selector" style={{ display: 'flex', gap: '6px' }}>
-              {[
-                { lang: 'python', label: 'Python' },
-                { lang: 'java', label: 'Java' },
-                { lang: 'cpp', label: 'C++' },
-              ].map(({ lang, label }) => (
-                <button
-                  key={lang}
-                  role="tab"
-                  aria-selected={selectedLanguage === lang}
-                  className={`duo-course-btn ${selectedLanguage === lang ? 'active' : ''}`}
-                  onClick={() => handleCourseChange(lang)}
-                  style={{
-                    padding: '6px 12px',
-                    borderRadius: '8px',
-                    fontSize: '13px',
-                    fontWeight: 800,
-                    border: '2px solid',
-                    borderColor: selectedLanguage === lang ? 'var(--blue-dark)' : 'var(--line)',
-                    background: selectedLanguage === lang ? '#ddf4ff' : '#fff',
-                    color: selectedLanguage === lang ? 'var(--blue-dark)' : '#777',
-                  }}
-                >
-                  {label}
-                </button>
-              ))}
-            </div>
-
-      {/* Workspace */}
-      <div className="duo-main-container">
-        {/* Left Side Skill Tree Path */}
-        <aside className="duo-sidebar" aria-label="Course navigation">
-          {/* Primary Track Selector */}
-          <div style={{ marginBottom: '8px' }}>
-            <div style={{ fontSize: '11px', fontWeight: 800, color: '#64748b', textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: '6px' }}>
-              Primary Tracks
-            </div>
-            <div className="duo-course-selector" role="tablist" aria-label="Primary course selector" style={{ flexWrap: 'wrap', gap: '4px' }}>
-              {[
-                { lang: 'python', label: '🐍 Python' },
-                { lang: 'cpp', label: '⚡ C++' },
-                { lang: 'javascript', label: '🌐 JS' },
-                { lang: 'typescript', label: '🔷 TS' },
-                { lang: 'sql', label: '🗄️ SQL' },
-              ].map(({ lang, label }) => (
-                <button
-                  key={lang}
-                  role="tab"
-                  aria-selected={selectedLanguage === lang}
-                  className={`duo-course-btn ${selectedLanguage === lang ? 'active' : ''}`}
-                  onClick={() => handleCourseChange(lang)}
-                  title={TRACK_METADATA[lang]?.tagline}
-                  style={{ flex: '1 1 auto', padding: '6px 8px', fontSize: '12px' }}
-                >
-                  {label}
-                </button>
-              ))}
-            </div>
-          </div>
-
-          {/* Secondary & Specialization Tracks */}
-          <div style={{ marginBottom: '12px' }}>
-            <div style={{ fontSize: '11px', fontWeight: 800, color: '#64748b', textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: '6px' }}>
-              Secondary & Specializations
-            </div>
-            <div className="duo-course-selector" role="tablist" aria-label="Secondary course selector" style={{ flexWrap: 'wrap', gap: '4px' }}>
-              {[
-                { lang: 'java', label: '☕ Java' },
-                { lang: 'ai', label: '🤖 AI App Dev' },
-              ].map(({ lang, label }) => (
-                <button
-                  key={lang}
-                  role="tab"
-                  aria-selected={selectedLanguage === lang}
-                  className={`duo-course-btn ${selectedLanguage === lang ? 'active' : ''}`}
-                  onClick={() => handleCourseChange(lang)}
-                  title={TRACK_METADATA[lang]?.tagline}
-                  style={{ flex: '1 1 auto', padding: '6px 8px', fontSize: '12px' }}
-                >
-                  {label}
-                </button>
-              ))}
-            </div>
-          </div>
-
-          <div className="duo-sidebar-title" style={{ display: 'flex', flexDirection: 'column', gap: '2px' }}>
-            <span style={{ fontSize: '16px', fontWeight: 800 }}>{currentTrackMeta.icon} {currentTrackMeta.title} Path</span>
-            <span style={{ fontSize: '11px', color: '#64748b', fontWeight: 500 }}>{currentTrackMeta.tagline}</span>
-            <div style={{ fontWeight: 900, fontSize: '15px', color: 'var(--ink)' }}>
-              {coursePathTitle}
-            </div>
-          </div>
-
           {/* Course Progress Bar */}
           <div style={{ flex: 1, maxWidth: '280px', margin: '0 24px' }}>
             <div
@@ -975,6 +880,69 @@ function App() {
             <span>⚠️ Backend unavailable — run <code>uvicorn backend.main:app --reload</code></span>
           </div>
         )}
+
+        {/* Workspace */}
+        <div className="duo-main-container">
+          {/* Left Side Skill Tree Path */}
+          <aside className="duo-sidebar" aria-label="Course navigation">
+            {/* Primary Track Selector */}
+            <div style={{ marginBottom: '8px' }}>
+              <div style={{ fontSize: '11px', fontWeight: 800, color: '#64748b', textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: '6px' }}>
+                Primary Tracks
+              </div>
+              <div className="duo-course-selector" role="tablist" aria-label="Primary course selector" style={{ flexWrap: 'wrap', gap: '4px' }}>
+                {[
+                  { lang: 'python', label: '🐍 Python' },
+                  { lang: 'cpp', label: '⚡ C++' },
+                  { lang: 'javascript', label: '🌐 JS' },
+                  { lang: 'typescript', label: '🔷 TS' },
+                  { lang: 'sql', label: '🗄️ SQL' },
+                ].map(({ lang, label }) => (
+                  <button
+                    key={lang}
+                    role="tab"
+                    aria-selected={selectedLanguage === lang}
+                    className={`duo-course-btn ${selectedLanguage === lang ? 'active' : ''}`}
+                    onClick={() => handleCourseChange(lang)}
+                    title={TRACK_METADATA[lang]?.tagline}
+                    style={{ flex: '1 1 auto', padding: '6px 8px', fontSize: '12px' }}
+                  >
+                    {label}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            {/* Secondary & Specialization Tracks */}
+            <div style={{ marginBottom: '12px' }}>
+              <div style={{ fontSize: '11px', fontWeight: 800, color: '#64748b', textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: '6px' }}>
+                Secondary & Specializations
+              </div>
+              <div className="duo-course-selector" role="tablist" aria-label="Secondary course selector" style={{ flexWrap: 'wrap', gap: '4px' }}>
+                {[
+                  { lang: 'java', label: '☕ Java' },
+                  { lang: 'ai', label: '🤖 AI App Dev' },
+                ].map(({ lang, label }) => (
+                  <button
+                    key={lang}
+                    role="tab"
+                    aria-selected={selectedLanguage === lang}
+                    className={`duo-course-btn ${selectedLanguage === lang ? 'active' : ''}`}
+                    onClick={() => handleCourseChange(lang)}
+                    title={TRACK_METADATA[lang]?.tagline}
+                    style={{ flex: '1 1 auto', padding: '6px 8px', fontSize: '12px' }}
+                  >
+                    {label}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            <div className="duo-sidebar-title" style={{ display: 'flex', flexDirection: 'column', gap: '2px' }}>
+              <span style={{ fontSize: '16px', fontWeight: 800 }}>{currentTrackMeta.icon} {currentTrackMeta.title} Path</span>
+              <span style={{ fontSize: '11px', color: '#64748b', fontWeight: 500 }}>{currentTrackMeta.tagline}</span>
+            </div>
+          </aside>
 
         {/* ─── TAB 1: LEARN PATH VIEW ──────────────────────────────────── */}
         {activeTab === 'learn' && (
@@ -1210,8 +1178,8 @@ function App() {
                       return (
                         <div className="duo-editor-container">
                           <div className="duo-editor-top">
-                            <span>{selectedLanguage === 'java' ? 'Solution.java' : selectedLanguage === 'cpp' ? 'solution.cpp' : 'exercise.py'}</span>
-                            <span>{selectedLanguage === 'java' ? 'Java 21' : selectedLanguage === 'cpp' ? 'C++ 20' : 'Python 3.12'}</span>
+                            <span>{currentTrackMeta.file}</span>
+                            <span>{currentTrackMeta.runtime}</span>
                           </div>
                           <div className="duo-editor-body">
                             <LineNumbers code={code} />
@@ -1268,6 +1236,9 @@ function App() {
                     </div>
                   )}
 
+                  {/* Render SQL / Exec Result Table if present */}
+                  <SqlResultTable output={lastStdout || results?.[0]?.stdout || ''} />
+
                   {/* Tutor Coach Box */}
                   <aside aria-label="Tutor feedback">
                     <div className="duo-tutor-box" role="status" aria-label="Tutor feedback">
@@ -1288,12 +1259,6 @@ function App() {
                     )}
                   </aside>
 
-                  // Default Code Editor
-                  return (
-                    <div className="duo-editor-container">
-                      <div className="duo-editor-top">
-                        <span>{currentTrackMeta.file}</span>
-                        <span>{currentTrackMeta.runtime}</span>
                   {/* Lesson Completion Overlay */}
                   {showCompletion && (
                     <div className="duo-feedback-panel success">
@@ -1309,28 +1274,6 @@ function App() {
                     </div>
                   )}
 
-              {/* Immediate Test Feedback & SQL Result Table */}
-              {results && (
-                <div
-                  ref={resultsRef}
-                  className={`duo-feedback-panel ${allPassed ? 'success' : 'error'}`}
-                  role="region"
-                  aria-label="Test results"
-                >
-                  <div className="duo-feedback-title">
-                    <span>
-                      {allPassed
-                        ? `All ${results.length} tests passed`
-                        : `${failedRequired.length} of ${results.filter((r) => r.required).length} required failed`}
-                    </span>
-                  </div>
-                  <div className="duo-feedback-msg">
-                    {allPassed ? (
-                      <p>All checks passed. You master this concept!</p>
-                    ) : (
-                      <p>
-                        {failedRequired.length} required check{failedRequired.length > 1 ? 's' : ''} failed. Review your code and run again.
-                      </p>
                   {/* Session Notes */}
                   <div className="session-notes" style={{ marginTop: '16px' }}>
                     <div style={{ display: 'flex', gap: '8px' }}>
@@ -1401,10 +1344,6 @@ function App() {
                     <div className="duo-char-level-bar">
                       <div className="duo-char-level-fill" style={{ width: `${card.level}%` }} />
                     </div>
-                  ))}
-
-                  {/* Render SQL / Exec Result Table if present */}
-                  <SqlResultTable output={lastStdout || results[0]?.stdout || ''} />
                   </div>
                 ))}
               </div>
@@ -1602,6 +1541,8 @@ function App() {
             {isRunning ? 'Running…' : 'Run code'}
           </button>
         </footer>
+        </div>
+
       </div>
 
       {/* Test-Out Modal */}

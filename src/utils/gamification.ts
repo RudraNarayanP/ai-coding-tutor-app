@@ -9,6 +9,31 @@ export interface GamificationState {
 
 const STORAGE_KEY = 'patchwork_gamification_v1'
 
+// ─── Level math ──────────────────────────────────────────────────────────────
+// Levels grow quadratically so early levels feel fast and later levels feel
+// like real milestones. xpForLevel(N) is the cumulative XP needed to reach N.
+
+export function xpForLevel(level: number): number {
+  if (level <= 1) return 0
+  // Each level needs 60 + 40*(N-1) XP.
+  let total = 0
+  for (let i = 1; i < level; i++) total += 60 + 40 * (i - 1)
+  return total
+}
+
+export function levelFromXp(xp: number): number {
+  let level = 1
+  while (xp >= xpForLevel(level + 1)) level += 1
+  return level
+}
+
+export function xpIntoLevel(xp: number): { level: number; current: number; needed: number } {
+  const level = levelFromXp(xp)
+  const base = xpForLevel(level)
+  const next = xpForLevel(level + 1)
+  return { level, current: Math.max(0, xp - base), needed: Math.max(1, next - base) }
+}
+
 export function getGamificationState(): GamificationState {
   try {
     const raw = localStorage.getItem(STORAGE_KEY)
@@ -102,4 +127,22 @@ export function activateXpBoost(durationMinutes: number = 15): GamificationState
   current.boostExpiresAt = Date.now() + durationMinutes * 60 * 1000
   saveGamificationState(current)
   return current
+}
+
+export function toggleSound(current: boolean): boolean {
+  try {
+    const next = !current
+    localStorage.setItem('patchwork_sound_enabled', String(next))
+    return next
+  } catch {
+    return current
+  }
+}
+
+export function getSoundEnabled(): boolean {
+  try {
+    return localStorage.getItem('patchwork_sound_enabled') !== 'false'
+  } catch {
+    return true
+  }
 }
