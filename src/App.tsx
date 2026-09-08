@@ -10,7 +10,7 @@ import {
   recordActivity,
   activateXpBoost,
   getHearts,
-  loseHeart,
+loseHeart,
   restoreHearts,
   setUnlimitedHearts as applyUnlimitedHearts,
   saveGameState,
@@ -174,6 +174,12 @@ function App() {
   const [testOutResult, setTestOutResult] = useState<any>(null)
   const [charSubTab, setCharSubTab] = useState<'syntax' | 'keywords' | 'types' | 'operators'>('syntax')
 
+  // Gamification & Hearts State
+  const [hearts, setHearts] = useState<number>(() => getHearts())
+  const [unlimitedHearts, setUnlimitedHeartsState] = useState<boolean>(() => getUnlimitedHearts())
+  const [gems, setGems] = useState<number>(() => getGems())
+  const [showOutofHeartsModal, setShowOutofHeartsModal] = useState(false)
+
   // Custom Course Generation State
   const [showCreateModal, setShowCreateModal] = useState(false)
   const [materialType, setMaterialType] = useState<'youtube_url' | 'transcript' | 'file_upload'>('youtube_url')
@@ -328,6 +334,20 @@ function App() {
     }
   }, [])
 
+  // ─── Fetch Progression State for Active Language ──────────────────────────────
+  const fetchProgression = useCallback(async () => {
+    try {
+      const res = await fetch(`/api/progression?language=${encodeURIComponent(selectedLanguage)}`)
+      if (res.ok) {
+        const data = await res.json()
+        setXp(data.xp || 0)
+        setLevel(data.level || Math.floor((data.xp || 0) / 100) + 1)
+      }
+    } catch {
+      // ignore
+    }
+  }, [selectedLanguage])
+
   // ─── Load Lessons for Language ──────────────────────────────────────────────
   // Landing on the HOME page is intentional: lessons are only opened when the
   // learner clicks a node, never implicitly on load or course switch.
@@ -341,7 +361,7 @@ function App() {
       const data: LessonSummary[] = await res.json()
       setLessons(data)
       setBackendError(false)
-      // Note: DO NOT auto-open a lesson here. The course map (home) is shown
+// Note: DO NOT auto-open a lesson here. The course map (home) is shown
       // so the learner can choose Unit 1, Unit 2, etc. themselves.
     } catch {
       setBackendError(true)
@@ -352,6 +372,7 @@ function App() {
   const handleCourseChange = async (lang: string) => {
     setSelectedLanguage(lang)
     localStorage.setItem('patchwork_active_language', lang)
+    setIsLessonActive(false)
     try {
       await fetch('/api/courses/select', {
         method: 'POST',
@@ -425,7 +446,7 @@ function App() {
       const draftKey = `patchwork_code_${data.id}`
       const savedDraft = localStorage.getItem(draftKey)
       setCode(savedDraft !== null ? savedDraft : data.starter_code || '')
-      setIsLessonActive(true)
+setIsLessonActive(true)
       saveGameState({ currentLessonId: data.id })
     } catch {
       setLesson({
@@ -438,7 +459,7 @@ function App() {
         starter_code: '# Write your solution here\n',
       })
       setCode('# Write your solution here\n')
-      setIsLessonActive(true)
+setIsLessonActive(true)
       saveGameState({ currentLessonId: summary.id })
     } finally {
       setIsLoadingLesson(false)
@@ -457,7 +478,8 @@ function App() {
     fetchCourses()
     fetchProviders()
     fetchLessons()
-  }, [fetchCourses, fetchProviders, fetchLessons])
+    fetchProgression()
+  }, [fetchCourses, fetchProviders, fetchLessons, fetchProgression])
 
   // Persist hearts/unlimited setting whenever they change
   useEffect(() => {
@@ -502,7 +524,7 @@ function App() {
         setGamification(activity.state)
         triggerXpGain(15)
 
-        // Lesson-level code lesson completed. Show the celebration screen.
+// Lesson-level code lesson completed. Show the celebration screen.
         const nextId =
           data.next_lesson_id ||
           (() => {
@@ -516,7 +538,7 @@ function App() {
         setCharSpeech('Some test checks failed. Take a look at the details below!')
         setConsecutiveCorrect(0)
 
-        // Duolingo-style: every mistake costs one heart.
+// Duolingo-style: every mistake costs one heart.
         const heartState = loseHeart()
         setHearts(heartState.hearts)
         if (heartState.hearts <= 0 && !heartState.unlimitedHearts) {
@@ -663,7 +685,7 @@ function App() {
         playPatchworkSound('error', soundEnabled)
         setCharState('confused')
         setCharSpeech(data.feedback || data.explanation || 'Not quite right. Try again!')
-        setExercisePhase('incorrect')
+setExercisePhase('incorrect')
         setExerciseFeedback({
           passed: false,
           feedback: data.feedback || 'Not quite right.',
@@ -1017,7 +1039,7 @@ function App() {
           </div>
 
           <div className="duo-header-stats">
-            <div className="duo-stat-pill streak" title="Daily streak"><span>🔥 {gamification.streakCount || 0}</span></div>
+<div className="duo-stat-pill streak" title="Daily streak"><span>🔥 {gamification.streakCount || 0}</span></div>
             <div className="duo-stat-pill gems" title="Gems"><span>💎 {gamification.dailyXp || 0}</span></div>
             <div className="duo-stat-pill xp" title="Total XP" aria-label={`XP: ${xp}, Level: ${level}`}><span>⭐ {xp} XP</span></div>
             <div className="duo-stat-pill hearts" title="Hearts"><span>❤️ {unlimitedHearts ? '∞' : hearts}</span></div>
@@ -1530,14 +1552,14 @@ function App() {
               <div className="duo-league-banner">
                 <div className="duo-league-shield">🛡️</div>
                 <div className="duo-league-details">
-                  <h2>{xp >= 500 ? 'Silver League' : xp >= 200 ? 'Bronze League' : 'Copper League'}</h2>
+<h2>{xp >= 500 ? 'Silver League' : xp >= 200 ? 'Bronze League' : 'Copper League'}</h2>
                   <p>Rank up by earning XP. Level {level} • {xp} XP — {xpForLevel(level + 1) - xp} XP to Level {level + 1}</p>
                 </div>
               </div>
 
               {/* Real local leaderboard (single player) */}
               <div className="duo-rank-list">
-                <div className="duo-rank-item user-self">
+<div className="duo-rank-item user-self">
                   <div className={`duo-rank-num top-1`}>1</div>
                   <div className="duo-user-avatar-circle">P</div>
                   <div className="duo-rank-name">You (Patchwork Learner)</div>
@@ -1579,6 +1601,24 @@ function App() {
                 <div style={{ marginTop: '12px', fontSize: '12px', color: 'var(--ink-soft)', fontWeight: 600 }}>
                   Keep a daily streak going — complete lessons each day to keep your 🔥 alive.
                 </div>
+                    { name: 'Alex Coder', base: 120 },
+                    { name: 'DevSamurai', base: 80 },
+                    { name: 'CodeNinja', base: 40 },
+                  ]
+                  const userItem = { name: 'Patchwork Learner (You)', xp: xp, isUser: true }
+                  const allItems = [...peers.map(p => ({ name: p.name, xp: p.base, isUser: false })), userItem]
+                  allItems.sort((a, b) => b.xp - a.xp)
+
+                  return allItems.map((u, idx) => (
+                    <div key={u.name} className={`duo-rank-item ${u.isUser ? 'user-self' : ''}`}>
+                      <div className={`duo-rank-num top-${idx + 1}`}>{idx + 1}</div>
+                      <div className="duo-user-avatar-circle">{u.name[0]}</div>
+                      <div className="duo-rank-name">{u.name}</div>
+                      <div className="duo-rank-xp">{u.xp} XP</div>
+                    </div>
+                  ))
+                })()}
+>>>>>>> origin/main
               </div>
             </div>
           </div>
@@ -1707,6 +1747,40 @@ function App() {
           </button>
         </footer>
       </div>
+
+      {showOutofHeartsModal && (
+        <div className="modal-overlay" onClick={() => setShowOutofHeartsModal(false)}>
+          <div className="modal-card" onClick={(e) => e.stopPropagation()} style={{ textAlign: 'center', maxWidth: '400px' }}>
+            <div style={{ fontSize: '48px', marginBottom: '12px' }}>💔</div>
+            <h2 style={{ fontSize: '22px', fontWeight: 900, marginBottom: '12px' }}>You are Out of Hearts!</h2>
+            <p style={{ fontSize: '14px', color: 'var(--ink-soft)', marginBottom: '20px', fontWeight: 700 }}>
+              Practice past material or refill hearts to keep learning, or turn on Unlimited Hearts in Settings!
+            </p>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+              <button
+                className="duo-button duo-button-primary"
+                onClick={() => {
+                  setHearts(5)
+                  saveHearts(5)
+                  setShowOutofHeartsModal(false)
+                }}
+              >
+                Refill 5 Hearts ❤️
+              </button>
+              <button
+                className="duo-button duo-button-secondary"
+                onClick={() => {
+                  setUnlimitedHeartsState(true)
+                  setUnlimitedHearts(true)
+                  setShowOutofHeartsModal(false)
+                }}
+              >
+                Enable Unlimited Hearts ∞
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
 
       <GuidebookPanel
         isOpen={isGuidebookOpen}
