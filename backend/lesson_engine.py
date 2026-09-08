@@ -299,6 +299,11 @@ class LessonEngine:
         ex_type = exercise.type.lower().strip()
         expected = exercise.correct_answer
 
+        if ex_type in ("mcq", "true_false", "output_prediction", "debugging", "short_answer"):
+            ans_raw = user_input.get("answer")
+            ans = str(ans_raw).strip() if ans_raw is not None else ""
+            exp = str(expected).strip() if expected is not None else ""
+            passed = (ans.lower() == exp.lower()) if exp else True
         if ex_type in ("mcq", "true_false", "output_prediction", "debugging", "identify_error"):
             ans = str(user_input.get("answer", "")).strip()
             exp = str(expected or "").strip()
@@ -317,6 +322,11 @@ class LessonEngine:
             return passed, feedback
 
         elif ex_type in ("fill_blank", "code_completion"):
+            answers = user_input.get("answers")
+            if answers is None:
+                answers = user_input.get("answer", [])
+            if isinstance(answers, (str, int, float, bool)):
+                answers = [answers]
             raw_ans = user_input.get("answers", None)
             if raw_ans is None:
                 raw_ans = user_input.get("answer", [])
@@ -332,6 +342,10 @@ class LessonEngine:
             if isinstance(expected, list):
                 exp_norm = [str(e).strip().lower() for e in expected]
                 passed = (answers_norm == exp_norm)
+            elif isinstance(expected, (str, int, float, bool)):
+                passed = (len(answers_norm) == 1 and answers_norm[0] == str(expected).strip().lower())
+            else:
+                passed = True
             elif isinstance(expected, str):
                 passed = (len(answers_norm) >= 1 and answers_norm[0] == expected.strip().lower())
             else:
@@ -341,6 +355,13 @@ class LessonEngine:
             return passed, feedback
 
         elif ex_type == "select_multiple":
+            raw_user = user_input.get("answers") or user_input.get("answer") or []
+            if isinstance(raw_user, (str, int, float, bool)):
+                raw_user = [raw_user]
+            selected = set(str(s).strip().lower() for s in raw_user)
+            exp_list = expected if isinstance(expected, list) else ([expected] if expected is not None else [])
+            exp_set = set(str(e).strip().lower() for e in exp_list)
+            passed = (selected == exp_set)
             raw_sel = user_input.get("answers", None)
             if raw_sel is None:
                 raw_sel = user_input.get("answer", None)
@@ -363,6 +384,10 @@ class LessonEngine:
             return passed, feedback
 
         elif ex_type == "ordering":
+            order = user_input.get("order") or user_input.get("answers") or []
+            order_norm = [str(o).strip() for o in order]
+            exp_list = expected if isinstance(expected, list) else ([expected] if expected is not None else [])
+            exp_norm = [str(e).strip() for e in exp_list]
             raw_order = user_input.get("order", None)
             if raw_order is None:
                 raw_order = user_input.get("answers", [])
@@ -380,6 +405,8 @@ class LessonEngine:
             return passed, feedback
 
         elif ex_type == "matching":
+            user_pairs = user_input.get("pairs") or user_input.get("answers") or []
+            target = {p.left.strip().lower(): p.right.strip().lower() for p in exercise.pairs}
             user_pairs = user_input.get("pairs", [])
             target = {}
             if exercise.pairs:
@@ -394,13 +421,14 @@ class LessonEngine:
                         got[str(p.get("left", "")).strip().lower()] = str(p.get("right", "")).strip().lower()
             elif isinstance(user_pairs, dict):
                 got = {str(k).strip().lower(): str(v).strip().lower() for k, v in user_pairs.items()}
+            passed = (got == target)
 
             passed = (got == target) if target else True
             feedback = "All pairs matched!" if passed else (exercise.explanation or "Some pairs do not match.")
             return passed, feedback
 
-        elif ex_type == "code":
-            code = user_input.get("code", "")
+        elif ex_type in ("code", "tiny_coding", "identify_mistake"):
+            code = str(user_input.get("code") or user_input.get("answer") or "")
             if exercise.tests:
                 res = await self.executor.run({"language": language, "code": code, "tests": [t.model_dump() for t in exercise.tests]})
                 passed = bool(res.get("passed", False))
@@ -408,7 +436,7 @@ class LessonEngine:
                 return passed, feedback
             else:
                 passed = bool(code.strip())
-                feedback = "Code submitted!" if passed else "Please enter code."
+                feedback = "Submitted successfully!" if passed else "Please provide an answer."
                 return passed, feedback
 
         # Generic fallback comparison

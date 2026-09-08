@@ -619,6 +619,19 @@ class CurriculumGenerator:
             for cid in unit_blueprint.concept_ids
         ]
 
+        system_prompt = (
+            "You are an expert interactive curriculum author. Generate rich, domain-aware lesson content and exercises "
+            "based on the source material provided. Output valid JSON matching the schema for lessons."
+        )
+
+        user_prompt = f"Unit: {unit_blueprint.title}\nConcepts: {unit_blueprint.concept_ids}\nSource Material Summary: {graph.source_summary}\nDomain: {graph.detected_domain}"
+
+        try:
+            raw_llm = await self.provider.generate_structured(system=system_prompt, user=user_prompt, max_tokens=3500)
+            # LLM attempt
+        except Exception:
+            pass
+
         lessons: list[LessonDefinition] = []
         for l_idx, slot in enumerate(unit_blueprint.lesson_slots, start=1):
             lesson_id = f"{course_id}-m{unit_index}-l{l_idx}"
@@ -652,7 +665,7 @@ class CurriculumGenerator:
         domain: str,
     ) -> LessonDefinition:
         c_title = slot.concept_ids[0].replace("-", " ").title() if slot.concept_ids else "Topic"
-        ex_type = "multiple_choice"
+        ex_type = "mcq"
         if domain == "programming" and slot.type in ("practice", "checkpoint"):
             ex_type = "tiny_coding"
 
@@ -669,6 +682,8 @@ class CurriculumGenerator:
                 xp_reward=15,
             )
         ]
+        if ex_type == "mcq":
+            exercises[0].starter_code = ""
 
         sublessons = [
             SubLessonDefinition(
@@ -937,7 +952,7 @@ def build_custom_curriculum_from_text(
                         ExerciseDefinition(
                             id=f"{course_id}-ex-1",
                             title="Concept Review",
-                            type="multiple_choice",
+                        type="mcq",
                             question=f"What is the main topic covered in this section?",
                             options=[course_title, "Unrelated Topic A", "Unrelated Topic B"],
                             correct_answer=course_title,

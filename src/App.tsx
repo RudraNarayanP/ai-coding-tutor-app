@@ -466,6 +466,57 @@ function App() {
   // ─── Submit Interactive Sublesson Exercise ──────────────────────────────────
   const submitSubLessonExercise = async (ex: Exercise, subLessonId?: string) => {
     if (!lesson) return
+    const currentInput = exerciseInput[ex.id] || {}
+    const payload = {
+      answer: currentInput.answer,
+      answers: currentInput.answers,
+      order: currentInput.order,
+      pairs: currentInput.pairs,
+      code: currentInput.code,
+    }
+
+    try {
+      const res = await fetch(`/api/lessons/${lesson.id}/submit-exercise`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          exercise_id: ex.id,
+          sublesson_id: subLessonId,
+          payload,
+        }),
+      })
+
+      if (!res.ok) throw new Error('Submission failed')
+      const data = await res.json()
+
+      if (data.passed) {
+        playPatchworkSound('success', soundEnabled)
+        triggerXpGain(data.xp_awarded || ex.xp_reward || 10)
+        if (typeof data.total_xp === 'number') {
+          setXp(data.total_xp)
+          setLevel(data.level || Math.floor(data.total_xp / 100) + 1)
+        }
+        setCharState('happy')
+        setCharSpeech(data.feedback || 'Correct answer!')
+
+        if (lesson?.sublessons) {
+          if (activeExerciseIndex < (lesson.sublessons[activeSubLessonIndex]?.exercises.length || 1) - 1) {
+            setActiveExerciseIndex((prev) => prev + 1)
+          } else if (activeSubLessonIndex < lesson.sublessons.length - 1) {
+            setActiveSubLessonIndex((prev) => prev + 1)
+            setActiveExerciseIndex(0)
+          } else {
+            setShowCompletion(true)
+          }
+        }
+      } else {
+        playPatchworkSound('error', soundEnabled)
+        setCharState('confused')
+        setCharSpeech(data.feedback || 'Not quite right. Try another answer!')
+      }
+    } catch {
+      setCharState('confused')
+      setCharSpeech('Error connecting to exercise grading service.')
     const inputState = exerciseInput[ex.id] || {}
     const exType = (ex.type || 'code').toLowerCase().trim()
     let payload: Record<string, any> = {}
