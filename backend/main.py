@@ -9,7 +9,27 @@ from pathlib import Path
 from .curriculum_loader import load_all_curriculums
 from .lesson_engine import LessonEngine, ProgressionStore
 from .lesson_models import CourseSummary, LessonSummary, ProgressionResult, ProgressionState, PublicLessonView
-from .custom_course_generator import CourseGenerationRequest, build_custom_curriculum_from_text
+import asyncio
+from .custom_course_generator import (
+    CourseGenerationRequest,
+    CourseSerializer,
+    DuplicateDetector,
+    GeneratedCourseMetadata,
+    GeneratedCoursePreview,
+    GeneratedCourseStore,
+    GenerationJob,
+    InputValidator,
+    SourceIngestionService,
+    ConceptGraphBuilder,
+    CurriculumSequencer,
+    StructureValidator,
+    CurriculumGenerator,
+    RegenerateLessonRequest,
+    RegenerateUnitRequest,
+    IngestionError,
+    GenerationError,
+    build_custom_curriculum_from_text,
+)
 from .sandbox import SandboxError, sandbox
 from .tutor_service import TutorService
 
@@ -45,6 +65,15 @@ class TestOutRequest(BaseModel):
 
 
 base_path = Path(__file__).resolve().parent
+curriculum_root = base_path.parent / "curriculum"
+course_serializer = CourseSerializer(curriculum_root)
+generated_store = GeneratedCourseStore()
+duplicate_detector = DuplicateDetector(course_serializer)
+ingestion_service = SourceIngestionService()
+
+# Startup sweep of abandoned drafts
+generated_store.sweep_abandoned_drafts(course_serializer)
+
 loaded_curriculums = load_all_curriculums()
 loaded_stores = {
     lang: ProgressionStore(curr, storage_path=base_path / f"progression_state_{lang}.json")
@@ -292,38 +321,276 @@ async def run_current_lesson(request: CodeSubmission):
     return await submit_lesson(current_lesson_id, request)
 
 
-@app.post("/api/courses/generate", response_model=CourseSummary)
+async def run_generation_pipeline(job: GenerationJob) -> None:
+    job.status = "generating"
+    provider = get_current_provider()
+
+    try:
+        # Stage 1: Reading source
+        s0 = job.stages[0]
+        s0.state = "active"
+        doc = await ingestion_service.ingest(
+            material_type=job.request.material_type,
+            content=job.request.content,
+            title=job.request.title,
+            filename=job.request.filename,
+        )
+        s0.state = "done"
+
+        # Stage 2 & 3: Understanding topics & Building prerequisites
+        s1, s2 = job.stages[1], job.stages[2]
+        s1.state = "active"
+        graph_builder = ConceptGraphBuilder(provider)
+        graph = await graph_builder.build(doc)
+        s1.state = "done"
+        s2.state = "done"
+
+        # Stage 4: Designing units
+        s3 = job.stages[3]
+        s3.state = "active"
+        sequencer = CurriculumSequencer(provider)
+        validator = StructureValidator()
+
+        blueprint = await sequencer.sequence(graph)
+        val_res = validator.validate(blueprint, graph)
+        if not val_res.valid:
+            blueprint = await sequencer.sequence(graph, retry_hint=val_res.retry_hint)
+            val_res = validator.validate(blueprint, graph)
+
+        blueprint = validator.enforce_schema_invariants(blueprint)
+        s3.state = "done"
+
+        # Stage 5 & 6: Creating exercises & Creating checkpoints
+        s4, s5 = job.stages[4], job.stages[5]
+        s4.state = "active"
+        generator = CurriculumGenerator(provider)
+
+        course_id = f"custom-{uuid.uuid4().hex[:8]}"
+        modules = []
+        for u_idx, u_bp in enumerate(blueprint.units, start=1):
+            mod = await generator.generate_unit(
+                unit_blueprint=u_bp,
+                graph=graph,
+                doc=doc,
+                course_id=course_id,
+                unit_index=u_idx,
+            )
+            modules.append(mod)
+        s4.state = "done"
+        s5.state = "done"
+
+        # Stage 7: Finalizing course
+        s6 = job.stages[6]
+        s6.state = "active"
+
+        all_lessons = [l for m in modules for l in m.lessons]
+        all_concepts = {c.id: c for m in modules for c in m.concepts}
+        course_def = CourseDefinition(
+            id=course_id,
+            title=doc.title or job.request.title or "Custom AI Course",
+            language=course_id,
+            modules=[ModuleReference(id=m.id, path=f"modules/{m.id}.json") for m in modules],
+        )
+
+        curriculum = Curriculum(
+            course=course_def,
+            modules=modules,
+            concepts=all_concepts,
+            lessons=tuple(all_lessons),
+        )
+
+        metadata = GeneratedCourseMetadata(
+            course_id=course_id,
+            source_type=job.request.material_type,
+            source_url=job.request.content if job.request.material_type in ("youtube_url", "youtube_playlist") else "",
+            source_hash=doc.source_hash,
+            title=course_def.title,
+            description=f"Generated from {job.request.material_type.replace('_', ' ')} source material.",
+            language=course_id,
+            generated_at=time.time(),
+            status="draft",
+            difficulty=job.request.difficulty or graph.detected_difficulty,
+            practice_intensity=job.request.practice_intensity or "balanced",
+            unit_count=len(modules),
+            lesson_count=len(all_lessons),
+            topics=[n.label for n in graph.nodes],
+            source_summary=graph.source_summary,
+            sequencing_rationale=blueprint.sequencing_rationale,
+            domain=graph.detected_domain,
+            access_level=doc.access_level,
+            access_notes=doc.access_notes,
+        )
+
+        draft_path = course_serializer.write_draft(curriculum, metadata)
+        job.draft_path = draft_path
+        job.course_id = course_id
+
+        total_exercises = sum(len(sub.exercises) for l in all_lessons for sub in (l.sublessons or []))
+        checkpoint_count = sum(1 for l in all_lessons if l.type == "checkpoint")
+
+        job.preview = GeneratedCoursePreview(
+            course_id=course_id,
+            title=metadata.title,
+            source_name=doc.title,
+            source_url=metadata.source_url,
+            unit_count=metadata.unit_count,
+            lesson_count=metadata.lesson_count,
+            exercise_count=total_exercises,
+            checkpoint_count=checkpoint_count,
+            topics=metadata.topics,
+            difficulty=metadata.difficulty,
+            domain=metadata.domain,
+            language=course_id,
+            estimated_minutes=sum(l.duration_minutes for l in all_lessons),
+            sequencing_rationale=metadata.sequencing_rationale,
+            access_notes=doc.access_notes,
+        )
+
+        s6.state = "done"
+        job.status = "draft"
+    except Exception as exc:
+        job.status = "error"
+        job.error = str(exc)
+        for s in job.stages:
+            if s.state == "active":
+                s.state = "error"
+
+
+@app.post("/api/generate-course")
 async def generate_course(req: CourseGenerationRequest):
-    if not req.content and not req.title:
-        raise HTTPException(status_code=400, detail={"error": "missing_material_content"})
+    try:
+        InputValidator.validate(req)
+    except ValueError as exc:
+        raise HTTPException(status_code=400, detail={"error": "invalid_input", "message": str(exc)})
 
-    custom_curr = build_custom_curriculum_from_text(
-        title=req.title,
-        content=req.content,
-        material_type=req.material_type
+    # Duplicate detection check unless forced
+    if not req.force_duplicate:
+        s_hash = SourceIngestionService.compute_source_hash(req.material_type, req.content or req.title)
+        existing = duplicate_detector.find_duplicate(s_hash)
+        if existing:
+            raise HTTPException(
+                status_code=409,
+                detail={
+                    "error": "duplicate_source",
+                    "existing_course_id": existing.course_id,
+                    "existing_title": existing.title,
+                },
+            )
+
+    job = generated_store.create_job(req)
+    asyncio.create_task(run_generation_pipeline(job))
+    return {"job_id": job.job_id, "status": job.status}
+
+
+@app.get("/api/generate-course/{job_id}/status")
+async def get_generation_status(job_id: str):
+    job = generated_store.get_job(job_id)
+    if not job:
+        raise HTTPException(status_code=404, detail={"error": "job_not_found"})
+    return {
+        "job_id": job.job_id,
+        "status": job.status,
+        "stages": [
+            {"name": s.name, "label": s.label, "state": s.state} for s in job.stages
+        ],
+        "course_id": job.course_id,
+        "preview": job.preview.model_dump() if job.preview else None,
+        "error": job.error,
+    }
+
+
+@app.post("/api/generate-course/{job_id}/confirm")
+async def confirm_generation_course(job_id: str):
+    job = generated_store.get_job(job_id)
+    if not job or not job.course_id or job.status != "draft":
+        raise HTTPException(status_code=404, detail={"error": "draft_not_found_or_invalid"})
+
+    active_path = course_serializer.confirm_draft(job.course_id)
+    loader = CurriculumLoader(active_path)
+    curr = loader.load()
+
+    cid = curr.course.id.lower().strip()
+    lesson_engine.curriculums[cid] = curr
+    lesson_engine.stores[cid] = ProgressionStore(
+        curr,
+        storage_path=base_path / f"progression_state_generated_{cid}.json"
     )
+    lesson_engine.active_language = cid
+    job.status = "active"
 
-    lang = custom_curr.course.language
-    lang_key = custom_curr.course.id
-
-    # Register generated curriculum in lesson_engine
-    lesson_engine.curriculums[lang_key] = custom_curr
-    lesson_engine.stores[lang_key] = ProgressionStore(
-        custom_curr,
-        storage_path=base_path / f"progression_state_{lang_key}.json"
-    )
-    lesson_engine.active_language = lang_key
-
+    meta = course_serializer.load_metadata(cid)
     return CourseSummary(
-        id=custom_curr.course.id,
-        title=custom_curr.course.title,
-        language=custom_curr.course.id,
-        lesson_count=len(custom_curr.lessons),
+        id=curr.course.id,
+        title=curr.course.title,
+        language=curr.course.id,
+        lesson_count=len(curr.lessons),
         completed_count=0,
-        is_primary=True,
-        tagline="Custom AI Generated Path",
-        description=f"Generated from {req.material_type.replace('_', ' ')} material.",
+        is_primary=False,
+        tagline="My AI Courses",
+        description=meta.description or f"AI Custom Course: {curr.course.title}",
     )
+
+
+@app.get("/api/generated-courses")
+async def get_generated_courses():
+    active_metas = course_serializer.list_active()
+    return active_metas
+
+
+@app.get("/api/generated-courses/{course_id}")
+async def get_generated_course_detail(course_id: str):
+    try:
+        meta = course_serializer.load_metadata(course_id)
+        curr = lesson_engine.curriculums.get(course_id)
+        summary = None
+        if curr:
+            summary = CourseSummary(
+                id=curr.course.id,
+                title=curr.course.title,
+                language=curr.course.id,
+                lesson_count=len(curr.lessons),
+                completed_count=len(lesson_engine.stores[course_id].state().completed_lesson_ids) if course_id in lesson_engine.stores else 0,
+                is_primary=False,
+                tagline="My AI Courses",
+                description=meta.description,
+            )
+        return {"metadata": meta, "summary": summary}
+    except FileNotFoundError:
+        raise HTTPException(status_code=404, detail={"error": "course_not_found"})
+
+
+@app.delete("/api/generated-courses/{course_id}")
+async def delete_generated_course(course_id: str):
+    course_serializer.delete(course_id)
+    if course_id in lesson_engine.curriculums:
+        del lesson_engine.curriculums[course_id]
+    if course_id in lesson_engine.stores:
+        del lesson_engine.stores[course_id]
+    p_state = base_path / f"progression_state_generated_{course_id}.json"
+    if p_state.exists():
+        p_state.unlink()
+    return {"status": "ok", "deleted_course_id": course_id}
+
+
+@app.post("/api/generated-courses/{course_id}/regenerate-lesson")
+async def regenerate_course_lesson(course_id: str, req: RegenerateLessonRequest):
+    curr = lesson_engine.curriculums.get(course_id)
+    if not curr:
+        raise HTTPException(status_code=404, detail={"error": "generated_course_not_found"})
+
+    generator = CurriculumGenerator(get_current_provider())
+    dummy_doc = SourceDocument("transcript", "", "dummy_hash", curr.course.title)
+    dummy_graph = ConceptGraph([], [], "general", "beginner", "")
+
+    new_lesson = await generator.regenerate_lesson(
+        lesson_id=req.lesson_id,
+        concept_ids=["core-concept"],
+        graph=dummy_graph,
+        doc=dummy_doc,
+        pedagogical_style=req.pedagogical_style,
+        course_id=course_id,
+    )
+    return new_lesson
 
 
 @app.post("/api/progression/reset")

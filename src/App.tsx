@@ -1,5 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { PatchworkCharacter } from './components/PatchworkCharacters'
+import { GuidebookPanel } from './components/GuidebookPanel'
+import { CreatePage } from './components/CreatePage'
 import { getGamificationState, recordActivity, activateXpBoost } from './utils/gamification'
 import { playPatchworkSound } from './utils/audio'
 
@@ -118,7 +120,8 @@ function LineNumbers({ code }: { code: string }) {
 
 // ─── App Component ────────────────────────────────────────────────────────────
 function App() {
-  const [activeTab, setActiveTab] = useState<'learn' | 'characters' | 'leaderboards' | 'quests' | 'profile'>('learn')
+  const [activeTab, setActiveTab] = useState<'learn' | 'create' | 'leaderboards' | 'quests' | 'profile'>('learn')
+  const [isGuidebookOpen, setIsGuidebookOpen] = useState(false)
   const [courses, setCourses] = useState<CourseSummary[]>([])
   const [selectedLanguage, setSelectedLanguage] = useState<string>(() => {
     return localStorage.getItem('patchwork_active_language') || 'python'
@@ -585,14 +588,14 @@ function App() {
           </button>
 
           <button
-            className={`duo-nav-item ${activeTab === 'characters' ? 'active' : ''}`}
+            className={`duo-nav-item ${activeTab === 'create' ? 'active' : ''}`}
             onClick={() => {
-              setActiveTab('characters')
+              setActiveTab('create')
               setIsLessonActive(false)
             }}
           >
-            <span className="duo-nav-icon">🔤</span>
-            <span>CHARACTERS</span>
+            <span className="duo-nav-icon">✨</span>
+            <span>CREATE</span>
           </button>
 
           <button
@@ -776,8 +779,17 @@ function App() {
                   <div style={{ fontWeight: 900, fontSize: '18px', color: 'var(--ink)' }}>
                     {lesson.title}
                   </div>
-                  <div className="duo-type-badge duo-type-practice">
-                    +15 XP
+                    <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
+                      <button
+                        className="duo-button duo-button-secondary"
+                        onClick={() => setIsGuidebookOpen(true)}
+                        style={{ padding: '6px 12px', fontSize: '13px' }}
+                      >
+                        📖 Guidebook
+                      </button>
+                      <div className="duo-type-badge duo-type-practice">
+                        +15 XP
+                      </div>
                   </div>
                 </div>
 
@@ -1026,7 +1038,7 @@ function App() {
                           <span className="duo-unit-subtitle">UNIT {uIdx + 1}</span>
                           <span className="duo-unit-title">{unit.title}</span>
                         </div>
-                        <button className="duo-guidebook-btn">📖 GUIDEBOOK</button>
+                        <button className="duo-guidebook-btn" onClick={() => setIsGuidebookOpen(true)}>📖 GUIDEBOOK</button>
                       </div>
 
                       {/* Serpentine Node Path inside Unit */}
@@ -1173,48 +1185,16 @@ function App() {
           </div>
         )}
 
-        {/* ─── TAB 2: CHARACTERS / SYNTAX VIEW ──────────────────────────── */}
-        {activeTab === 'characters' && (
-          <div className="duo-page-container">
-            {(!lesson || isLoadingLesson) && (
-              <div role="status" aria-label="Loading lesson" style={{ position: "fixed", top: "12px", right: "24px", background: "var(--yellow)", color: "#000", padding: "8px 16px", borderRadius: "20px", fontWeight: 900, zIndex: 9999 }}>
-                Loading lesson…
-              </div>
-            )}
-            <div className="duo-characters-view">
-              <div className="duo-char-header">
-                <h1 className="duo-char-title">{coursePathTitle} Reference & Syntax</h1>
-                <p className="duo-char-subtitle">Get to know the core keywords, operators, and functions in {coursePathTitle}</p>
-              </div>
-
-              <div className="duo-char-tabs">
-                {(['syntax', 'keywords', 'types', 'operators'] as const).map((tab) => (
-                  <button
-                    key={tab}
-                    className={`duo-char-tab-btn ${charSubTab === tab ? 'active' : ''}`}
-                    onClick={() => setCharSubTab(tab)}
-                  >
-                    {tab.toUpperCase()}
-                  </button>
-                ))}
-              </div>
-
-              <div className="duo-char-grid">
-                {[
-                  { symbol: 'def / fn', romaji: 'Function Def', level: 100 },
-                  { symbol: 'if / else', romaji: 'Branching', level: 90 },
-                  { symbol: 'for / while', romaji: 'Loops', level: 85 },
-                  { symbol: 'class', romaji: 'Object Def', level: 75 },
-                  { symbol: 'import / include', romaji: 'Modules', level: 80 },
-                ].map((item) => (
-                  <div key={item.symbol} className="duo-char-card">
-                    <div className="duo-char-symbol">{item.symbol}</div>
-                    <div className="duo-char-romaji">{item.romaji}</div>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </div>
+        {/* ─── TAB 2: CREATE AI COURSE VIEW ──────────────────────────── */}
+        {activeTab === 'create' && (
+          <CreatePage
+            onCourseReady={async (cid) => {
+              await fetchCourses()
+              await handleCourseChange(cid)
+              setActiveTab('learn')
+              setIsLessonActive(false)
+            }}
+          />
         )}
 
         {/* ─── Modal: Material Ingestion & Custom Course Creation ─────────── */}
@@ -1439,6 +1419,13 @@ function App() {
           </button>
         </footer>
       </div>
+
+      <GuidebookPanel
+        isOpen={isGuidebookOpen}
+        onClose={() => setIsGuidebookOpen(false)}
+        language={selectedLanguage}
+        conceptTitle={lesson?.concept_title}
+      />
     </div>
   )
 }
