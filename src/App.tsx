@@ -3,7 +3,17 @@ import { PatchworkCharacter } from './components/PatchworkCharacters'
 import { GuidebookPanel } from './components/GuidebookPanel'
 import { CreatePage } from './components/CreatePage'
 import { api, type ExerciseResult, type TestOutResult } from './api'
-import { getGamificationState, recordActivity, activateXpBoost } from './utils/gamification'
+import {
+  getGamificationState,
+  recordActivity,
+  activateXpBoost,
+  getHearts,
+  saveHearts,
+  getUnlimitedHearts,
+  setUnlimitedHearts,
+  getGems,
+  saveGems,
+} from './utils/gamification'
 import { playPatchworkSound } from './utils/audio'
 
 // ─── Types ────────────────────────────────────────────────────────────────────
@@ -162,6 +172,12 @@ function App() {
   const [testOutResult, setTestOutResult] = useState<any>(null)
   const [charSubTab, setCharSubTab] = useState<'syntax' | 'keywords' | 'types' | 'operators'>('syntax')
 
+  // Gamification & Hearts State
+  const [hearts, setHearts] = useState<number>(() => getHearts())
+  const [unlimitedHearts, setUnlimitedHeartsState] = useState<boolean>(() => getUnlimitedHearts())
+  const [gems, setGems] = useState<number>(() => getGems())
+  const [showOutofHeartsModal, setShowOutofHeartsModal] = useState(false)
+
   // Custom Course Generation State
   const [showCreateModal, setShowCreateModal] = useState(false)
   const [materialType, setMaterialType] = useState<'youtube_url' | 'transcript' | 'file_upload'>('youtube_url')
@@ -237,6 +253,20 @@ function App() {
     }
   }, [])
 
+  // ─── Fetch Progression State for Active Language ──────────────────────────────
+  const fetchProgression = useCallback(async () => {
+    try {
+      const res = await fetch(`/api/progression?language=${encodeURIComponent(selectedLanguage)}`)
+      if (res.ok) {
+        const data = await res.json()
+        setXp(data.xp || 0)
+        setLevel(data.level || Math.floor((data.xp || 0) / 100) + 1)
+      }
+    } catch {
+      // ignore
+    }
+  }, [selectedLanguage])
+
   // ─── Load Lessons for Language ──────────────────────────────────────────────
   const fetchLessons = useCallback(async () => {
     try {
@@ -251,7 +281,7 @@ function App() {
 
       const current = data.find((l) => l.status === 'current') || data[0]
       if (current) {
-        loadLesson(current)
+        loadLesson(current, false)
       }
     } catch {
       setBackendError(true)
@@ -262,6 +292,7 @@ function App() {
   const handleCourseChange = async (lang: string) => {
     setSelectedLanguage(lang)
     localStorage.setItem('patchwork_active_language', lang)
+    setIsLessonActive(false)
     try {
       await fetch('/api/courses/select', {
         method: 'POST',
@@ -326,7 +357,9 @@ function App() {
       const draftKey = `patchwork_code_${data.id}`
       const savedDraft = localStorage.getItem(draftKey)
       setCode(savedDraft !== null ? savedDraft : data.starter_code || '')
-      setIsLessonActive(true)
+      if (openWorkspace) {
+        setIsLessonActive(true)
+      }
     } catch {
       setLesson({
         id: summary.id,
@@ -338,7 +371,9 @@ function App() {
         starter_code: '# Write your solution here\n',
       })
       setCode('# Write your solution here\n')
-      setIsLessonActive(true)
+      if (openWorkspace) {
+        setIsLessonActive(true)
+      }
     } finally {
       setIsLoadingLesson(false)
     }
@@ -348,7 +383,8 @@ function App() {
     fetchCourses()
     fetchProviders()
     fetchLessons()
-  }, [fetchCourses, fetchProviders, fetchLessons])
+    fetchProgression()
+  }, [fetchCourses, fetchProviders, fetchLessons, fetchProgression])
 
   // Save code drafts
   useEffect(() => {
@@ -390,12 +426,24 @@ function App() {
 
         if (data.completed || true) {
           setShowCompletion(true)
+          const nextGems = gems + 10
+          setGems(nextGems)
+          saveGems(nextGems)
         }
       } else {
         playPatchworkSound('error', soundEnabled)
         setCharState('confused')
         setCharSpeech('Some test checks failed. Take a look at the details below!')
         setConsecutiveCorrect(0)
+
+        if (!unlimitedHearts) {
+          const nextHearts = Math.max(0, hearts - 1)
+          setHearts(nextHearts)
+          saveHearts(nextHearts)
+          if (nextHearts === 0) {
+            setShowOutofHeartsModal(true)
+          }
+        }
       }
     } catch {
       setFeedback('Error connecting to code execution sandbox.')
@@ -515,6 +563,15 @@ function App() {
         playPatchworkSound('error', soundEnabled)
         setCharState('confused')
         setCharSpeech(data.feedback || data.explanation || 'Not quite right. Try again!')
+
+        if (!unlimitedHearts) {
+          const nextHearts = Math.max(0, hearts - 1)
+          setHearts(nextHearts)
+          saveHearts(nextHearts)
+          if (nextHearts === 0) {
+            setShowOutofHeartsModal(true)
+          }
+        }
       }
     } catch {
       playPatchworkSound('error', soundEnabled)
@@ -796,9 +853,9 @@ function App() {
 
           <div className="duo-header-stats">
             <div className="duo-stat-pill streak" title="Daily streak"><span>🔥 {gamification.streakCount || 1}</span></div>
-            <div className="duo-stat-pill gems" title="Gems"><span>💎 500</span></div>
+            <div className="duo-stat-pill gems" title="Gems"><span>💎 {gems}</span></div>
             <div className="duo-stat-pill xp" title="Total XP" aria-label={`XP: ${xp}, Level: ${level}`}><span>⭐ {xp} XP</span></div>
-            <div className="duo-stat-pill hearts" title="Hearts"><span>❤️ 5</span></div>
+            <div className="duo-stat-pill hearts" title="Hearts"><span>❤️ {unlimitedHearts ? '∞' : hearts}</span></div>
           </div>
         </header>
 
@@ -1496,24 +1553,30 @@ function App() {
                 <div className="duo-league-shield">🛡️</div>
                 <div className="duo-league-details">
                   <h2>Bronze League</h2>
-                  <p>Top 5 learners advance to the next league!</p>
+                  <p>Top 5 learners advance to Silver League on Sunday!</p>
                 </div>
               </div>
 
               <div className="duo-rank-list">
-                {[
-                  { rank: 1, name: 'Alex Coder', xp: 450, isUser: false },
-                  { rank: 2, name: 'Patchwork Learner (You)', xp: xp, isUser: true },
-                  { rank: 3, name: 'DevSamurai', xp: 320, isUser: false },
-                  { rank: 4, name: 'CodeNinja', xp: 210, isUser: false },
-                ].map((u) => (
-                  <div key={u.rank} className={`duo-rank-item ${u.isUser ? 'user-self' : ''}`}>
-                    <div className={`duo-rank-num top-${u.rank}`}>{u.rank}</div>
-                    <div className="duo-user-avatar-circle">{u.name[0]}</div>
-                    <div className="duo-rank-name">{u.name}</div>
-                    <div className="duo-rank-xp">{u.xp} XP</div>
-                  </div>
-                ))}
+                {(() => {
+                  const peers = [
+                    { name: 'Alex Coder', base: 120 },
+                    { name: 'DevSamurai', base: 80 },
+                    { name: 'CodeNinja', base: 40 },
+                  ]
+                  const userItem = { name: 'Patchwork Learner (You)', xp: xp, isUser: true }
+                  const allItems = [...peers.map(p => ({ name: p.name, xp: p.base, isUser: false })), userItem]
+                  allItems.sort((a, b) => b.xp - a.xp)
+
+                  return allItems.map((u, idx) => (
+                    <div key={u.name} className={`duo-rank-item ${u.isUser ? 'user-self' : ''}`}>
+                      <div className={`duo-rank-num top-${idx + 1}`}>{idx + 1}</div>
+                      <div className="duo-user-avatar-circle">{u.name[0]}</div>
+                      <div className="duo-rank-name">{u.name}</div>
+                      <div className="duo-rank-xp">{u.xp} XP</div>
+                    </div>
+                  ))
+                })()}
               </div>
             </div>
           </div>
@@ -1628,6 +1691,40 @@ function App() {
           </button>
         </footer>
       </div>
+
+      {showOutofHeartsModal && (
+        <div className="modal-overlay" onClick={() => setShowOutofHeartsModal(false)}>
+          <div className="modal-card" onClick={(e) => e.stopPropagation()} style={{ textAlign: 'center', maxWidth: '400px' }}>
+            <div style={{ fontSize: '48px', marginBottom: '12px' }}>💔</div>
+            <h2 style={{ fontSize: '22px', fontWeight: 900, marginBottom: '12px' }}>You are Out of Hearts!</h2>
+            <p style={{ fontSize: '14px', color: 'var(--ink-soft)', marginBottom: '20px', fontWeight: 700 }}>
+              Practice past material or refill hearts to keep learning, or turn on Unlimited Hearts in Settings!
+            </p>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+              <button
+                className="duo-button duo-button-primary"
+                onClick={() => {
+                  setHearts(5)
+                  saveHearts(5)
+                  setShowOutofHeartsModal(false)
+                }}
+              >
+                Refill 5 Hearts ❤️
+              </button>
+              <button
+                className="duo-button duo-button-secondary"
+                onClick={() => {
+                  setUnlimitedHeartsState(true)
+                  setUnlimitedHearts(true)
+                  setShowOutofHeartsModal(false)
+                }}
+              >
+                Enable Unlimited Hearts ∞
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
 
       <GuidebookPanel
         isOpen={isGuidebookOpen}

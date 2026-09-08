@@ -146,3 +146,53 @@ export function getSoundEnabled(): boolean {
     return true
   }
 }
+
+export function getHearts(): number {
+  try {
+    const raw = localStorage.getItem('patchwork_hearts_count')
+    return raw !== null ? parseInt(raw, 10) : 5
+  } catch {
+    return 5
+  }
+}
+
+export function saveHearts(count: number): void {
+  try {
+    localStorage.setItem('patchwork_hearts_count', String(Math.max(0, count)))
+  } catch {
+    // ignore
+  }
+}
+
+export function getUnlimitedHearts(): boolean {
+  try {
+    return localStorage.getItem('patchwork_unlimited_hearts') === 'true'
+  } catch {
+    return false
+  }
+}
+
+export function setUnlimitedHearts(enabled: boolean): void {
+  try {
+    localStorage.setItem('patchwork_unlimited_hearts', String(enabled))
+  } catch {
+    // ignore
+  }
+}
+
+export function getGems(): number {
+  try {
+    const raw = localStorage.getItem('patchwork_gems_count')
+    return raw !== null ? parseInt(raw, 10) : 0
+  } catch {
+    return 0
+  }
+}
+
+export function saveGems(count: number): void {
+  try {
+    localStorage.setItem('patchwork_gems_count', String(Math.max(0, count)))
+  } catch {
+    // ignore
+  }
+}

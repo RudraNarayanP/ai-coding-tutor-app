@@ -169,14 +169,19 @@ afterEach(() => {
 
 // ─── Tests ────────────────────────────────────────────────────────────────────
 
+async function openCurrentLesson(user: ReturnType<typeof userEvent.setup>) {
+  const currentBtn = await screen.findByRole('button', { name: /Variables — Current lesson/ })
+  await user.click(currentBtn)
+  await waitFor(() => screen.getByRole('heading', { level: 2, name: 'Variables' }))
+}
+
 describe('Course track switching', () => {
   it('allows switching between Python, Java, and C++ courses', async () => {
     const user = userEvent.setup()
     setupFetch()
     render(<App />)
 
-    await waitFor(() => expect(screen.getByRole('heading', { level: 2, name: 'Variables' })).toBeInTheDocument())
-    expect(screen.getByText('Python Path')).toBeInTheDocument()
+    await waitFor(() => expect(screen.getByText('Python Path')).toBeInTheDocument())
 
     // Switch to Java
     const javaTab = screen.getByRole('tab', { name: 'Java' })
@@ -198,7 +203,7 @@ describe('Lesson navigation', () => {
   it('shows all lessons in the sidebar', async () => {
     setupFetch()
     render(<App />)
-    await waitFor(() => expect(screen.getByRole('heading', { level: 2, name: 'Variables' })).toBeInTheDocument())
+    await waitFor(() => expect(screen.getByText('Python Path')).toBeInTheDocument())
 
     expect(screen.getByRole('button', { name: /Hello, World! — Completed/ })).toBeInTheDocument()
     expect(screen.getByRole('button', { name: /Variables — Current lesson/ })).toBeInTheDocument()
@@ -223,10 +228,10 @@ describe('Lesson navigation', () => {
   })
 
   it('marks the active lesson with aria-current="page"', async () => {
+    const user = userEvent.setup()
     setupFetch()
     render(<App />)
-    // Wait for lesson content to load (lesson state is set after fetch completes)
-    await waitFor(() => screen.getByRole('heading', { level: 2, name: /Variables/ }))
+    await openCurrentLesson(user)
 
     const navButton = screen.getByRole('button', { name: /Variables — Current lesson/ })
     expect(navButton).toHaveAttribute('aria-current', 'page')
@@ -235,7 +240,7 @@ describe('Lesson navigation', () => {
   it('locks locked lessons — button is disabled', async () => {
     setupFetch()
     render(<App />)
-    await waitFor(() => screen.getByRole('heading', { level: 2, name: 'Variables' }))
+    await waitFor(() => expect(screen.getByText('Python Path')).toBeInTheDocument())
 
     const loopsBtn = screen.getByRole('button', { name: /Loops — Locked/ })
     expect(loopsBtn).toBeDisabled()
@@ -245,8 +250,7 @@ describe('Lesson navigation', () => {
     const user = userEvent.setup()
     setupFetch()
     render(<App />)
-    // Wait for initial lesson to load
-    await waitFor(() => screen.getByRole('heading', { level: 2, name: /Variables/ }))
+    await waitFor(() => expect(screen.getByText('Python Path')).toBeInTheDocument())
 
     const helloBtn = screen.getByRole('button', { name: /Hello, World! — Completed/ })
     await user.click(helloBtn)
@@ -257,12 +261,10 @@ describe('Lesson navigation', () => {
   })
 
   it('shows a locked feedback message when locked lesson is clicked', async () => {
-    const user = userEvent.setup()
     setupFetch()
     render(<App />)
-    await waitFor(() => screen.getByRole('heading', { level: 2, name: 'Variables' }))
+    await waitFor(() => expect(screen.getByText('Python Path')).toBeInTheDocument())
 
-    // Try clicking — it's disabled, so no navigation but let's verify the disabled state
     const loopsBtn = screen.getByRole('button', { name: /Loops — Locked/ })
     expect(loopsBtn).toBeDisabled()
   })
@@ -270,7 +272,7 @@ describe('Lesson navigation', () => {
   it('shows course progress bar', async () => {
     setupFetch()
     render(<App />)
-    await waitFor(() => screen.getByRole('heading', { level: 2, name: 'Variables' }))
+    await waitFor(() => expect(screen.getByText('Python Path')).toBeInTheDocument())
 
     const progressbar = screen.getByRole('progressbar', { name: /Course progress/ })
     expect(progressbar).toHaveAttribute('aria-valuenow', '1')
@@ -282,18 +284,15 @@ describe('Run button and code editor', () => {
   it('run button is disabled before lesson loads', async () => {
     setupFetch()
     render(<App />)
-    // The run button only appears after the loading state resolves;
-    // test that it is disabled when lesson is null (initial state) by
-    // waiting for the button to appear and verifying it becomes enabled
-    // once loaded. A separate assertion checks the loading spinner is shown first.
     const loadingEl = screen.getByRole('status', { name: /Loading lesson/ })
     expect(loadingEl).toBeInTheDocument()
   })
 
   it('run button is enabled after lesson loads', async () => {
+    const user = userEvent.setup()
     setupFetch()
     render(<App />)
-    await waitFor(() => screen.getByRole('heading', { level: 2, name: 'Variables' }))
+    await openCurrentLesson(user)
 
     const runBtn = screen.getByRole('button', { name: /Run code/ })
     expect(runBtn).toBeEnabled()
@@ -301,7 +300,6 @@ describe('Run button and code editor', () => {
 
   it('run button shows "Running" text and is disabled while running', async () => {
     const user = userEvent.setup()
-    // Make run take longer to observe intermediate state
     let resolveRun!: (v: unknown) => void
     const fetchMock = setupFetch()
     fetchMock.mockImplementation((url: string, opts?: RequestInit) => {
@@ -330,7 +328,7 @@ describe('Run button and code editor', () => {
     })
 
     render(<App />)
-    await waitFor(() => screen.getByRole('heading', { level: 2, name: 'Variables' }))
+    await openCurrentLesson(user)
 
     const runBtn = screen.getByRole('button', { name: /Run code/ })
     await user.click(runBtn)
@@ -343,9 +341,10 @@ describe('Run button and code editor', () => {
   })
 
   it('editor textarea is present and editable', async () => {
+    const user = userEvent.setup()
     setupFetch()
     render(<App />)
-    await waitFor(() => screen.getByRole('heading', { level: 2, name: 'Variables' }))
+    await openCurrentLesson(user)
 
     const editor = screen.getByRole('textbox', { name: /Code editor/ })
     expect(editor).toBeInTheDocument()
@@ -353,17 +352,20 @@ describe('Run button and code editor', () => {
   })
 
   it('editor line numbers render properly', async () => {
+    const user = userEvent.setup()
     setupFetch()
     const { container } = render(<App />)
+    await openCurrentLesson(user)
     await waitFor(() => expect(screen.getByText('exercise.py')).toBeInTheDocument())
 
     expect(container.querySelector('.line-numbers')).toBeInTheDocument()
   })
 
   it('preserves Tab indentation and Ctrl+Enter test execution in the textarea editor', async () => {
+    const user = userEvent.setup()
     const fetchMock = setupFetch()
     render(<App />)
-    await waitFor(() => screen.getByRole('heading', { level: 2, name: 'Variables' }))
+    await openCurrentLesson(user)
 
     const editor = screen.getByRole<HTMLTextAreaElement>('textbox', { name: /Code editor/ })
     editor.focus()
@@ -380,9 +382,10 @@ describe('Run button and code editor', () => {
   })
 
   it('triggers test execution when Shift+Enter is pressed in the editor', async () => {
+    const user = userEvent.setup()
     const fetchMock = setupFetch()
     render(<App />)
-    await waitFor(() => screen.getByRole('heading', { level: 2, name: 'Variables' }))
+    await openCurrentLesson(user)
 
     const editor = screen.getByRole<HTMLTextAreaElement>('textbox', { name: /Code editor/ })
     editor.focus()
@@ -400,7 +403,7 @@ describe('Test results rendering', () => {
     const user = userEvent.setup()
     setupFetch({ runResult: { passed: true, completed: false, tests: passingTests } })
     render(<App />)
-    await waitFor(() => screen.getByRole('heading', { level: 2, name: 'Variables' }))
+    await openCurrentLesson(user)
 
     await user.click(screen.getByRole('button', { name: /Run code/ }))
 
@@ -413,7 +416,7 @@ describe('Test results rendering', () => {
     const user = userEvent.setup()
     setupFetch({ runResult: { passed: false, completed: false, tests: failingTests } })
     render(<App />)
-    await waitFor(() => screen.getByRole('heading', { level: 2, name: 'Variables' }))
+    await openCurrentLesson(user)
 
     await user.click(screen.getByRole('button', { name: /Run code/ }))
 
@@ -426,7 +429,7 @@ describe('Test results rendering', () => {
     const user = userEvent.setup()
     setupFetch({ runResult: { passed: false, completed: false, tests: failingTests } })
     render(<App />)
-    await waitFor(() => screen.getByRole('heading', { level: 2, name: 'Variables' }))
+    await openCurrentLesson(user)
 
     await user.click(screen.getByRole('button', { name: /Run code/ }))
     await waitFor(() => screen.getByRole('region', { name: /Test results/ }))
@@ -434,7 +437,6 @@ describe('Test results rendering', () => {
     const region = screen.getByRole('region', { name: /Test results/ })
     expect(within(region).getByText('test_variable_exists')).toBeInTheDocument()
     expect(within(region).getByText('test_variable_is_string')).toBeInTheDocument()
-    // One failed, one passed
     const failed = within(region).getAllByRole('img', { name: 'Failed' })
     const passed = within(region).getAllByRole('img', { name: 'Passed' })
     expect(failed).toHaveLength(1)
@@ -445,7 +447,7 @@ describe('Test results rendering', () => {
     const user = userEvent.setup()
     setupFetch({ runResult: { passed: false, completed: false, tests: mixedTests } })
     render(<App />)
-    await waitFor(() => screen.getByRole('heading', { level: 2, name: 'Variables' }))
+    await openCurrentLesson(user)
 
     await user.click(screen.getByRole('button', { name: /Run code/ }))
     await waitFor(() => screen.getByRole('region', { name: /Test results/ }))
@@ -457,18 +459,20 @@ describe('Test results rendering', () => {
 
 describe('Hint button behavior', () => {
   it('hint button is disabled when AI is unavailable', async () => {
+    const user = userEvent.setup()
     setupFetch({ ollamaAvailable: false })
     render(<App />)
-    await waitFor(() => screen.getByRole('heading', { level: 2, name: 'Variables' }))
+    await openCurrentLesson(user)
 
     const hintBtn = screen.getByRole('button', { name: /AI tutor unavailable/ })
     expect(hintBtn).toBeDisabled()
   })
 
   it('shows AI unavailable note when Ollama is offline', async () => {
+    const user = userEvent.setup()
     setupFetch({ ollamaAvailable: false })
     render(<App />)
-    await waitFor(() => screen.getByRole('heading', { level: 2, name: 'Variables' }))
+    await openCurrentLesson(user)
 
     expect(screen.getByText(/Selected provider is unconfigured/)).toBeInTheDocument()
   })
@@ -477,9 +481,8 @@ describe('Hint button behavior', () => {
     const user = userEvent.setup()
     setupFetch({ ollamaAvailable: true })
     render(<App />)
-    await waitFor(() => screen.getByRole('heading', { level: 2, name: 'Variables' }))
+    await openCurrentLesson(user)
 
-    // Toggle AI off
     const toggle = screen.getByRole('button', { name: /AI tutor on/ })
     await user.click(toggle)
 
@@ -491,7 +494,7 @@ describe('Hint button behavior', () => {
     const user = userEvent.setup()
     const fetchMock = setupFetch({ ollamaAvailable: true })
     render(<App />)
-    await waitFor(() => screen.getByRole('heading', { level: 2, name: 'Variables' }))
+    await openCurrentLesson(user)
 
     const hintBtn = screen.getByRole('button', { name: /Request a hint/ })
     await user.click(hintBtn)
@@ -512,7 +515,7 @@ describe('Hint button behavior', () => {
     const user = userEvent.setup()
     const fetchMock = setupFetch({ ollamaAvailable: true })
     render(<App />)
-    await waitFor(() => screen.getByRole('heading', { level: 2, name: 'Variables' }))
+    await openCurrentLesson(user)
 
     const solutionBtn = screen.getByRole('button', { name: /View Solution/ })
     await user.click(solutionBtn)
@@ -536,7 +539,7 @@ describe('Completion / next-lesson flow', () => {
       runResult: { passed: true, completed: true, tests: passingTests },
     })
     render(<App />)
-    await waitFor(() => screen.getByRole('heading', { level: 2, name: /Variables/ }))
+    await openCurrentLesson(user)
 
     await user.click(screen.getByRole('button', { name: /Run code/ }))
 
@@ -588,7 +591,7 @@ describe('Completion / next-lesson flow', () => {
     })
 
     render(<App />)
-    await waitFor(() => screen.getByRole('heading', { level: 2, name: 'Variables' }))
+    await openCurrentLesson(user)
     await user.click(screen.getByRole('button', { name: /Run code/ }))
     await waitFor(() => screen.getByText(/Lesson Complete!/))
 
@@ -603,17 +606,19 @@ describe('Completion / next-lesson flow', () => {
 
 describe('AI unavailable state', () => {
   it('shows "Ollama offline" in the status bar when unavailable', async () => {
+    const user = userEvent.setup()
     setupFetch({ ollamaAvailable: false })
     render(<App />)
-    await waitFor(() => screen.getByRole('heading', { level: 2, name: 'Variables' }))
+    await openCurrentLesson(user)
 
     expect(screen.getByText(/Ollama unavailable/)).toBeInTheDocument()
   })
 
   it('shows "Ollama ready" in the status bar when available', async () => {
+    const user = userEvent.setup()
     setupFetch({ ollamaAvailable: true })
     render(<App />)
-    await waitFor(() => screen.getByRole('heading', { level: 2, name: 'Variables' }))
+    await openCurrentLesson(user)
 
     expect(screen.getByText(/Ollama ready/)).toBeInTheDocument()
   })
@@ -622,7 +627,6 @@ describe('AI unavailable state', () => {
     const user = userEvent.setup()
     setupFetch({ ollamaAvailable: true })
 
-    // Override tutor call to simulate unavailability
     const fetchMock = vi.fn((url: string, opts?: RequestInit) => {
       if (url.includes('/api/tutor')) {
         return Promise.resolve({
@@ -670,9 +674,8 @@ describe('AI unavailable state', () => {
     vi.stubGlobal('fetch', fetchMock)
 
     render(<App />)
-    await waitFor(() => screen.getByRole('heading', { level: 2, name: /Variables/ }))
+    await openCurrentLesson(user)
 
-    // AI should start as available
     const hintBtn = screen.getByRole('button', { name: /Request a hint/ })
     await user.click(hintBtn)
 
@@ -689,7 +692,7 @@ describe('Session notes', () => {
     const user = userEvent.setup()
     setupFetch()
     render(<App />)
-    await waitFor(() => screen.getByRole('heading', { level: 2, name: 'Variables' }))
+    await openCurrentLesson(user)
 
     const input = screen.getByRole('textbox', { name: /Session note/ })
     await user.type(input, 'Remember to initialize variables')
@@ -705,7 +708,7 @@ describe('State Persistence & Sound Settings', () => {
     const user = userEvent.setup()
     setupFetch()
     render(<App />)
-    await waitFor(() => screen.getByRole('heading', { level: 2, name: 'Variables' }))
+    await waitFor(() => expect(screen.getByText('Python Path')).toBeInTheDocument())
 
     const soundBtn = screen.getByRole('button', { name: /Mute audio feedback/ })
     expect(soundBtn).toHaveTextContent('🔊 Sound')
@@ -720,10 +723,11 @@ describe('State Persistence & Sound Settings', () => {
   })
 
   it('restores draft code from localStorage for current lesson', async () => {
+    const user = userEvent.setup()
     localStorage.setItem('patchwork_code_lesson-2', 'draft_code = 123\n')
     setupFetch()
     render(<App />)
-    await waitFor(() => screen.getByRole('heading', { level: 2, name: 'Variables' }))
+    await openCurrentLesson(user)
 
     const editor = screen.getByRole<HTMLTextAreaElement>('textbox', { name: /Code editor/ })
     expect(editor.value).toBe('draft_code = 123\n')
