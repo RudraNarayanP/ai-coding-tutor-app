@@ -462,37 +462,59 @@ function App() {
   }
 
   // ─── Submit Interactive Sublesson Exercise ──────────────────────────────────
-  const submitSubLessonExercise = (ex: Exercise, subLessonId?: string) => {
-    const userAns = exerciseInput[ex.id]?.answer
-    if (!userAns) return
-
-    let isCorrect = false
-    if (typeof ex.correct_answer === 'string') {
-      isCorrect = userAns.trim().toLowerCase() === ex.correct_answer.trim().toLowerCase()
-    } else if (Array.isArray(ex.correct_answer)) {
-      isCorrect = ex.correct_answer.includes(userAns)
+  const submitSubLessonExercise = async (ex: Exercise, subLessonId?: string) => {
+    if (!lesson) return
+    const currentInput = exerciseInput[ex.id] || {}
+    const payload = {
+      answer: currentInput.answer,
+      answers: currentInput.answers,
+      order: currentInput.order,
+      pairs: currentInput.pairs,
+      code: currentInput.code,
     }
 
-    if (isCorrect) {
-      playPatchworkSound('success', soundEnabled)
-      triggerXpGain(ex.xp_reward || 10)
-      setCharState('happy')
-      setCharSpeech('Correct answer! +10 XP earned!')
+    try {
+      const res = await fetch(`/api/lessons/${lesson.id}/submit-exercise`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          exercise_id: ex.id,
+          sublesson_id: subLessonId,
+          payload,
+        }),
+      })
 
-      if (lesson?.sublessons) {
-        if (activeExerciseIndex < (lesson.sublessons[activeSubLessonIndex]?.exercises.length || 1) - 1) {
-          setActiveExerciseIndex((prev) => prev + 1)
-        } else if (activeSubLessonIndex < lesson.sublessons.length - 1) {
-          setActiveSubLessonIndex((prev) => prev + 1)
-          setActiveExerciseIndex(0)
-        } else {
-          setShowCompletion(true)
+      if (!res.ok) throw new Error('Submission failed')
+      const data = await res.json()
+
+      if (data.passed) {
+        playPatchworkSound('success', soundEnabled)
+        triggerXpGain(data.xp_awarded || ex.xp_reward || 10)
+        if (typeof data.total_xp === 'number') {
+          setXp(data.total_xp)
+          setLevel(data.level || Math.floor(data.total_xp / 100) + 1)
         }
+        setCharState('happy')
+        setCharSpeech(data.feedback || 'Correct answer!')
+
+        if (lesson?.sublessons) {
+          if (activeExerciseIndex < (lesson.sublessons[activeSubLessonIndex]?.exercises.length || 1) - 1) {
+            setActiveExerciseIndex((prev) => prev + 1)
+          } else if (activeSubLessonIndex < lesson.sublessons.length - 1) {
+            setActiveSubLessonIndex((prev) => prev + 1)
+            setActiveExerciseIndex(0)
+          } else {
+            setShowCompletion(true)
+          }
+        }
+      } else {
+        playPatchworkSound('error', soundEnabled)
+        setCharState('confused')
+        setCharSpeech(data.feedback || 'Not quite right. Try another answer!')
       }
-    } else {
-      playPatchworkSound('error', soundEnabled)
+    } catch {
       setCharState('confused')
-      setCharSpeech('Not quite right. Try another answer!')
+      setCharSpeech('Error connecting to exercise grading service.')
     }
   }
 

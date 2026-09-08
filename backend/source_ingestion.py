@@ -43,10 +43,6 @@ class SourceIngestionService:
     def __init__(self, http_client: httpx.AsyncClient | None = None) -> None:
         self.http_client = http_client
 
-    async def _get_client() -> httpx.AsyncClient:
-        if self.http_client and not self.http_client.is_closed:
-            return self.http_client
-        return httpx.AsyncClient(timeout=20.0, follow_redirects=True)
 
     @staticmethod
     def extract_youtube_video_id(url: str) -> str | None:

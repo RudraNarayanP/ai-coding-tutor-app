@@ -75,10 +75,12 @@ ingestion_service = SourceIngestionService()
 generated_store.sweep_abandoned_drafts(course_serializer)
 
 loaded_curriculums = load_all_curriculums()
-loaded_stores = {
-    lang: ProgressionStore(curr, storage_path=base_path / f"progression_state_{lang}.json")
-    for lang, curr in loaded_curriculums.items()
-}
+loaded_stores = {}
+for lang, curr in loaded_curriculums.items():
+    if lang.startswith("custom-"):
+        loaded_stores[lang] = ProgressionStore(curr, storage_path=base_path / f"progression_state_generated_{lang}.json")
+    else:
+        loaded_stores[lang] = ProgressionStore(curr, storage_path=base_path / f"progression_state_{lang}.json")
 
 lesson_engine = LessonEngine(
     executor=sandbox,
@@ -572,6 +574,30 @@ async def delete_generated_course(course_id: str):
     return {"status": "ok", "deleted_course_id": course_id}
 
 
+@app.put("/api/generated-courses/{course_id}")
+async def update_generated_course_metadata(course_id: str, updates: dict):
+    try:
+        meta = course_serializer.load_metadata(course_id)
+        if "title" in updates and updates["title"]:
+            meta.title = updates["title"]
+        if "difficulty" in updates and updates["difficulty"]:
+            meta.difficulty = updates["difficulty"]
+        if "practice_intensity" in updates and updates["practice_intensity"]:
+            meta.practice_intensity = updates["practice_intensity"]
+
+        # Persist updated metadata
+        meta_path = course_serializer.active_dir / course_id / "_metadata.json"
+        if not meta_path.exists():
+            meta_path = course_serializer.drafts_dir / course_id / "_metadata.json"
+        if meta_path.exists():
+            with meta_path.open("w", encoding="utf-8") as f:
+                f.write(meta.model_dump_json(indent=2))
+
+        return {"status": "ok", "metadata": meta}
+    except FileNotFoundError:
+        raise HTTPException(status_code=404, detail={"error": "course_not_found"})
+
+
 @app.post("/api/generated-courses/{course_id}/regenerate-lesson")
 async def regenerate_course_lesson(course_id: str, req: RegenerateLessonRequest):
     curr = lesson_engine.curriculums.get(course_id)
@@ -590,7 +616,65 @@ async def regenerate_course_lesson(course_id: str, req: RegenerateLessonRequest)
         pedagogical_style=req.pedagogical_style,
         course_id=course_id,
     )
+
+    # Persist updated lesson into module file
+    active_path = course_serializer.active_dir / course_id
+    if active_path.exists():
+        for mod in curr.modules:
+            for idx, l in enumerate(mod.lessons):
+                if l.id == req.lesson_id:
+                    mod.lessons[idx] = new_lesson
+                    mod_file = active_path / "modules" / f"{mod.id}.json"
+                    with mod_file.open("w", encoding="utf-8") as f:
+                        f.write(mod.model_dump_json(indent=2))
+                    break
+
+        # Reload curriculum in lesson_engine
+        loader = CurriculumLoader(active_path)
+        lesson_engine.curriculums[course_id] = loader.load()
+
     return new_lesson
+
+
+@app.post("/api/generated-courses/{course_id}/regenerate-unit")
+async def regenerate_course_unit(course_id: str, req: RegenerateUnitRequest):
+    curr = lesson_engine.curriculums.get(course_id)
+    if not curr:
+        raise HTTPException(status_code=404, detail={"error": "generated_course_not_found"})
+
+    generator = CurriculumGenerator(get_current_provider())
+    dummy_doc = SourceDocument("transcript", "", "dummy_hash", curr.course.title)
+    dummy_graph = ConceptGraph([], [], "general", "beginner", "")
+    unit_bp = UnitBlueprint(
+        title=f"Unit {req.unit_id}",
+        concept_ids=["core-concept"],
+        lesson_slots=[],
+        pedagogical_rationale="Regenerated unit.",
+    )
+
+    new_module = await generator.regenerate_unit(
+        unit_blueprint=unit_bp,
+        graph=dummy_graph,
+        doc=dummy_doc,
+        pedagogical_style=req.pedagogical_style,
+        course_id=course_id,
+        unit_index=1,
+    )
+
+    # Persist updated module to disk
+    active_path = course_serializer.active_dir / course_id
+    if active_path.exists():
+        mod_file = active_path / "modules" / f"{req.unit_id}.json"
+        if not mod_file.exists():
+            mod_file = active_path / "modules" / f"{new_module.id}.json"
+        with mod_file.open("w", encoding="utf-8") as f:
+            f.write(new_module.model_dump_json(indent=2))
+
+        # Reload curriculum in lesson_engine
+        loader = CurriculumLoader(active_path)
+        lesson_engine.curriculums[course_id] = loader.load()
+
+    return new_module
 
 
 @app.post("/api/progression/reset")
