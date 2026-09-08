@@ -2,6 +2,7 @@ import { useCallback, useEffect, useRef, useState } from 'react'
 import { PatchworkCharacter } from './components/PatchworkCharacters'
 import { GuidebookPanel } from './components/GuidebookPanel'
 import { CreatePage } from './components/CreatePage'
+import { api, type ExerciseResult, type TestOutResult } from './api'
 import { getGamificationState, recordActivity, activateXpBoost } from './utils/gamification'
 import { playPatchworkSound } from './utils/audio'
 
@@ -39,6 +40,7 @@ type Exercise = {
   options?: string[]
   correct_answer?: string | string[] | Record<string, string>
   blanks?: string[]
+  pairs?: { left: string; right: string }[]
   starter_code?: string
   solution_code?: string
   hints?: string[]
@@ -515,6 +517,84 @@ function App() {
     } catch {
       setCharState('confused')
       setCharSpeech('Error connecting to exercise grading service.')
+    const inputState = exerciseInput[ex.id] || {}
+    const exType = (ex.type || 'code').toLowerCase().trim()
+    let payload: Record<string, any> = {}
+
+    if (['mcq', 'true_false', 'output_prediction', 'debugging', 'identify_error'].includes(exType)) {
+      payload = { answer: inputState.answer || '' }
+    } else if (['fill_blank', 'code_completion'].includes(exType)) {
+      payload = { answers: inputState.answers || (inputState.answer ? [inputState.answer] : []) }
+    } else if (exType === 'select_multiple') {
+      payload = { answers: inputState.answers || inputState.selected || [] }
+    } else if (exType === 'ordering') {
+      payload = { order: inputState.order || inputState.answers || [] }
+    } else if (exType === 'matching') {
+      payload = { pairs: inputState.pairs || [] }
+    } else if (exType === 'code') {
+      payload = { code: inputState.code || code }
+    } else {
+      payload = { answer: inputState.answer || '' }
+    }
+
+    try {
+      const res = await api.submitExercise(lesson.id, ex.id, subLessonId, payload)
+      if (!res.ok) throw new Error('Submission failed')
+      const data: ExerciseResult = await res.json()
+
+      if (data.passed) {
+        playPatchworkSound('success', soundEnabled)
+        setCharState('happy')
+        setCharSpeech(data.feedback || 'Correct answer!')
+        if (data.xp_awarded) {
+          triggerXpGain(data.xp_awarded)
+        }
+
+        if (lesson.sublessons && lesson.sublessons.length > 0) {
+          const currentSub = lesson.sublessons[activeSubLessonIndex]
+          if (activeExerciseIndex < (currentSub?.exercises.length || 1) - 1) {
+            setActiveExerciseIndex((prev) => prev + 1)
+          } else if (activeSubLessonIndex < lesson.sublessons.length - 1) {
+            setActiveSubLessonIndex((prev) => prev + 1)
+            setActiveExerciseIndex(0)
+          } else {
+            setShowCompletion(true)
+          }
+        }
+        fetchLessons()
+      } else {
+        playPatchworkSound('error', soundEnabled)
+        setCharState('confused')
+        setCharSpeech(data.feedback || data.explanation || 'Not quite right. Try again!')
+      }
+    } catch {
+      playPatchworkSound('error', soundEnabled)
+      setFeedback('Failed to submit exercise to grading server.')
+    }
+  }
+
+  // ─── Run Test Out Exam ──────────────────────────────────────────────────────
+  const handleRunTestOut = async () => {
+    if (!lesson) return
+    try {
+      const res = await api.testOut(lesson.id, testOutSubmissions)
+      if (res.ok) {
+        const data: TestOutResult = await res.json()
+        setTestOutResult(data)
+        if (data.passed) {
+          playPatchworkSound('success', soundEnabled)
+          triggerXpGain(data.xp_awarded || 100)
+          setCharState('celebrate')
+          setCharSpeech('Test out passed! You mastered this unit!')
+          fetchLessons()
+        } else {
+          playPatchworkSound('error', soundEnabled)
+          setCharState('confused')
+          setCharSpeech(data.error || 'Test out attempt did not reach passing score. Practice the material and try again!')
+        }
+      }
+    } catch {
+      // fallback
     }
   }
 
@@ -840,8 +920,9 @@ function App() {
                       const currentEx = currentSub?.exercises[activeExerciseIndex]
 
                       if (!currentEx) return null
+                      const exType = (currentEx.type || 'code').toLowerCase().trim()
                       const opts = currentEx.options || []
-                      const selectedVal = exerciseInput[currentEx.id]?.answer
+                      const exState = exerciseInput[currentEx.id] || {}
 
                       return (
                         <div className="exercise-interactive-box">
@@ -861,15 +942,16 @@ function App() {
                           </div>
 
                           <h3 style={{ fontSize: '18px', fontWeight: 800, marginBottom: '12px' }}>
-                            {currentEx.question || currentEx.title || 'Choose the correct answer:'}
+                            {currentEx.question || currentEx.title || 'Complete the exercise:'}
                           </h3>
 
-                          {opts.length > 0 ? (
+                          {/* 1. MCQ / True-False / Output Prediction / Debugging / Identify Error */}
+                          {['mcq', 'true_false', 'output_prediction', 'debugging', 'identify_error'].includes(exType) && (
                             <div className="exercise-options-grid">
-                              {opts.map((opt) => (
+                              {(opts.length > 0 ? opts : exType === 'true_false' ? ['True', 'False'] : []).map((opt) => (
                                 <button
                                   key={opt}
-                                  className={`exercise-option-btn ${selectedVal === opt ? 'selected' : ''}`}
+                                  className={`exercise-option-btn ${exState.answer === opt ? 'selected' : ''}`}
                                   onClick={() =>
                                     setExerciseInput((prev: any) => ({
                                       ...prev,
@@ -881,13 +963,169 @@ function App() {
                                 </button>
                               ))}
                             </div>
-                          ) : null}
+                          )}
+
+                          {/* 2. Fill Blank / Code Completion */}
+                          {['fill_blank', 'code_completion'].includes(exType) && (
+                            <div className="exercise-fill-blank-container" style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                              {((currentEx.blanks && currentEx.blanks.length > 0) ? currentEx.blanks : ['_']).map((_, idx) => (
+                                <div key={idx} style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                                  <label style={{ fontWeight: 700, fontSize: '14px' }}>Blank {idx + 1}:</label>
+                                  <input
+                                    type="text"
+                                    className="exercise-blank-input"
+                                    value={exState.answers?.[idx] || exState.answer || ''}
+                                    placeholder="Type answer here..."
+                                    onChange={(e) => {
+                                      const val = e.target.value
+                                      setExerciseInput((prev: any) => {
+                                        const curAns = [...(prev[currentEx.id]?.answers || [])]
+                                        curAns[idx] = val
+                                        return {
+                                          ...prev,
+                                          [currentEx.id]: { ...prev[currentEx.id], answers: curAns, answer: curAns[0] }
+                                        }
+                                      })
+                                    }}
+                                    style={{ padding: '8px 12px', borderRadius: '8px', border: '2px solid var(--line)', fontWeight: 700, fontSize: '14px' }}
+                                  />
+                                </div>
+                              ))}
+                            </div>
+                          )}
+
+                          {/* 3. Select Multiple */}
+                          {exType === 'select_multiple' && (
+                            <div className="exercise-options-grid">
+                              {opts.map((opt) => {
+                                const selectedSet = new Set(exState.answers || [])
+                                const isSelected = selectedSet.has(opt)
+                                return (
+                                  <button
+                                    key={opt}
+                                    className={`exercise-option-btn ${isSelected ? 'selected' : ''}`}
+                                    onClick={() => {
+                                      const nextSet = new Set(selectedSet)
+                                      if (isSelected) nextSet.delete(opt)
+                                      else nextSet.add(opt)
+                                      setExerciseInput((prev: any) => ({
+                                        ...prev,
+                                        [currentEx.id]: { ...prev[currentEx.id], answers: Array.from(nextSet) }
+                                      }))
+                                    }}
+                                  >
+                                    {isSelected ? '☑ ' : '☐ '}{opt}
+                                  </button>
+                                )
+                              })}
+                            </div>
+                          )}
+
+                          {/* 4. Ordering */}
+                          {exType === 'ordering' && (
+                            <div className="exercise-ordering-container" style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                              {(() => {
+                                const currentOrder = exState.order || opts
+                                return currentOrder.map((item: string, idx: number) => (
+                                  <div key={`${item}-${idx}`} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '8px 12px', background: '#f8fafc', borderRadius: '8px', border: '1px solid #cbd5e1' }}>
+                                    <span style={{ fontWeight: 700, fontSize: '14px' }}>{idx + 1}. {item}</span>
+                                    <div style={{ display: 'flex', gap: '4px' }}>
+                                      <button
+                                        disabled={idx === 0}
+                                        onClick={() => {
+                                          const nextArr = [...currentOrder]
+                                          ;[nextArr[idx - 1], nextArr[idx]] = [nextArr[idx], nextArr[idx - 1]]
+                                          setExerciseInput((prev: any) => ({
+                                            ...prev,
+                                            [currentEx.id]: { ...prev[currentEx.id], order: nextArr }
+                                          }))
+                                        }}
+                                        style={{ padding: '4px 8px', fontSize: '12px', fontWeight: 800 }}
+                                      >
+                                        ▲
+                                      </button>
+                                      <button
+                                        disabled={idx === currentOrder.length - 1}
+                                        onClick={() => {
+                                          const nextArr = [...currentOrder]
+                                          ;[nextArr[idx], nextArr[idx + 1]] = [nextArr[idx + 1], nextArr[idx]]
+                                          setExerciseInput((prev: any) => ({
+                                            ...prev,
+                                            [currentEx.id]: { ...prev[currentEx.id], order: nextArr }
+                                          }))
+                                        }}
+                                        style={{ padding: '4px 8px', fontSize: '12px', fontWeight: 800 }}
+                                      >
+                                        ▼
+                                      </button>
+                                    </div>
+                                  </div>
+                                ))
+                              })()}
+                            </div>
+                          )}
+
+                          {/* 5. Matching */}
+                          {exType === 'matching' && currentEx.pairs && (
+                            <div className="exercise-matching-container" style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                              {currentEx.pairs.map((pair: { left: string; right: string }, idx: number) => {
+                                const userPairs = exState.pairs || []
+                                const currentMatched = userPairs.find((p: any) => p.left === pair.left)?.right || ''
+                                const rightOptions = (currentEx.pairs || []).map((p: { left: string; right: string }) => p.right)
+                                return (
+                                  <div key={idx} style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                                    <span style={{ fontWeight: 700, minWidth: '120px' }}>{pair.left}</span>
+                                    <span style={{ fontWeight: 800 }}>➔</span>
+                                    <select
+                                      value={currentMatched}
+                                      onChange={(e) => {
+                                        const selectedRight = e.target.value
+                                        setExerciseInput((prev: any) => {
+                                          const curPairs = [...(prev[currentEx.id]?.pairs || [])].filter((p: any) => p.left !== pair.left)
+                                          if (selectedRight) curPairs.push({ left: pair.left, right: selectedRight })
+                                          return {
+                                            ...prev,
+                                            [currentEx.id]: { ...prev[currentEx.id], pairs: curPairs }
+                                          }
+                                        })
+                                      }}
+                                      style={{ padding: '6px 12px', borderRadius: '8px', border: '2px solid var(--line)', fontWeight: 700 }}
+                                    >
+                                      <option value="">Select match...</option>
+                                      {rightOptions.map((r: string) => (
+                                        <option key={r} value={r}>{r}</option>
+                                      ))}
+                                    </select>
+                                  </div>
+                                )
+                              })}
+                            </div>
+                          )}
+
+                          {/* 6. Code Exercise */}
+                          {exType === 'code' && (
+                            <div className="exercise-code-container">
+                              <textarea
+                                rows={6}
+                                value={exState.code !== undefined ? exState.code : (currentEx.starter_code || '')}
+                                onChange={(e) => {
+                                  const val = e.target.value
+                                  setExerciseInput((prev: any) => ({
+                                    ...prev,
+                                    [currentEx.id]: { ...prev[currentEx.id], code: val }
+                                  }))
+                                }}
+                                style={{ width: '100%', fontFamily: 'monospace', padding: '10px', borderRadius: '8px', border: '2px solid var(--line)' }}
+                                placeholder="Enter your code solution here..."
+                              />
+                            </div>
+                          )}
 
                           <button
                             className="duo-button duo-button-primary"
                             style={{ marginTop: '16px', padding: '12px 24px' }}
                             onClick={() => submitSubLessonExercise(currentEx, currentSub?.id)}
-                            disabled={!selectedVal || isRunning}
+                            disabled={isRunning}
                           >
                             Check Answer ✓
                           </button>
