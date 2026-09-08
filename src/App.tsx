@@ -1,9 +1,24 @@
-import { useCallback, useEffect, useRef, useState } from 'react'
+ import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { PatchworkCharacter } from './components/PatchworkCharacters'
 import { GuidebookPanel } from './components/GuidebookPanel'
 import { CreatePage } from './components/CreatePage'
-import { api, type ExerciseResult, type TestOutResult } from './api'
-import { getGamificationState, recordActivity, activateXpBoost } from './utils/gamification'
+import Settings from './components/Settings'
+import ExercisePanel from './components/ExercisePanel'
+import { api, type ExerciseResult, type LessonProgress, type TestOutResult } from './api'
+import {
+  getGamificationState,
+  recordActivity,
+  activateXpBoost,
+  getHearts,
+  loseHeart,
+  restoreHearts,
+  setUnlimitedHearts as applyUnlimitedHearts,
+  saveGameState,
+  restoreGameState,
+  getDailyProgress,
+  xpForLevel,
+  levelFromXp,
+} from './utils/gamification'
 import { playPatchworkSound } from './utils/audio'
 
 // ─── Types ────────────────────────────────────────────────────────────────────
@@ -147,15 +162,12 @@ function App() {
   const [isRunning, setIsRunning] = useState(false)
   const [isLoadingLesson, setIsLoadingLesson] = useState(false)
   const [isTutorLoading, setIsTutorLoading] = useState(false)
-  const [showCompletion, setShowCompletion] = useState(false)
   const [sessionNotes, setSessionNotes] = useState<string[]>([])
   const [noteInput, setNoteInput] = useState('')
   const [backendError, setBackendError] = useState(false)
   const [xp, setXp] = useState(0)
   const [level, setLevel] = useState(1)
   const [xpGainPopup, setXpGainPopup] = useState<number | null>(null)
-  const [activeSubLessonIndex, setActiveSubLessonIndex] = useState(0)
-  const [activeExerciseIndex, setActiveExerciseIndex] = useState(0)
   const [exerciseInput, setExerciseInput] = useState<any>({})
   const [showTestOutModal, setShowTestOutModal] = useState(false)
   const [testOutSubmissions, setTestOutSubmissions] = useState<Record<string, any>>({})
@@ -178,12 +190,44 @@ function App() {
   const [charState, setCharState] = useState<'idle' | 'happy' | 'celebrate' | 'thinking' | 'confused' | 'encouraging'>('idle')
   const [charSpeech, setCharSpeech] = useState<string | undefined>('Let\'s learn together!')
 
+  // ─── Core learning-loop state ──────────────────────────────────────────────
+  // The backend is the single authoritative source for persisted progress.
+  // `lessonProgress` mirrors GET /api/lessons/{id}/progress. The "current
+  // exercise" is DERIVED from it (first exercise not yet completed) — we never
+  // store an exercise index, so the UI can never desync from real progress.
+  const [lessonProgress, setLessonProgress] = useState<LessonProgress | null>(null)
+  // Ephemeral per-exercise interaction state (frontend-owned):
+  //   answering  → learner is composing an answer
+  //   checking   → submission in flight (buttons locked, no double submits)
+  //   correct    → positive feedback + CONTINUE
+  //   incorrect  → negative feedback + TRY AGAIN
+  type ExercisePhase = 'answering' | 'checking' | 'correct' | 'incorrect'
+  const [exercisePhase, setExercisePhase] = useState<ExercisePhase>('answering')
+  const [exerciseFeedback, setExerciseFeedback] = useState<{
+    passed: boolean
+    feedback: string
+    explanation?: string
+    xpAwarded: number
+    attempts: number
+  } | null>(null)
+  // Lesson-complete celebration (ephemeral; completion itself is persisted by the backend)
+  const [celebration, setCelebration] = useState<{ xpEarned: number; nextLessonId: string | null } | null>(null)
+
+  // Hearts (Duolingo-style) + Settings modal
+  const [hearts, setHearts] = useState<number>(() => getHearts())
+  const [unlimitedHearts, setUnlimitedHearts] = useState<boolean>(
+    () => getGamificationState().unlimitedHearts
+  )
+  const [showSettings, setShowSettings] = useState(false)
+
   const triggerXpGain = useCallback((amount: number) => {
     if (amount > 0) {
       setXpGainPopup(amount)
       setXp((prev) => {
         const nextXp = prev + amount
-        setLevel(Math.floor(nextXp / 100) + 1)
+        const nextLevel = levelFromXp(nextXp)
+        setLevel(nextLevel)
+        saveGameState({ xp: nextXp, level: nextLevel })
         return nextXp
       })
       setTimeout(() => setXpGainPopup(null), 2000)
@@ -192,6 +236,53 @@ function App() {
 
   const editorRef = useRef<HTMLTextAreaElement>(null)
   const resultsRef = useRef<HTMLDivElement>(null)
+
+  // ─── Derived lesson progression (single source of truth: backend) ───────────
+  // Canonical exercise order = sublessons flattened in curriculum order.
+  const allExercises = useMemo(() => {
+    if (!lesson?.sublessons) return []
+    return lesson.sublessons.flatMap((sub) =>
+      sub.exercises.map((ex) => ({ ...ex, sublessonId: sub.id, sublessonTitle: sub.title }))
+    )
+  }, [lesson])
+
+  const completedExerciseIds = useMemo(
+    () => new Set(lessonProgress?.completed_exercise_ids ?? []),
+    [lessonProgress]
+  )
+
+  // The current exercise is the FIRST exercise not yet completed.
+  const currentExerciseIndex = useMemo(
+    () => allExercises.findIndex((ex) => !completedExerciseIds.has(ex.id)),
+    [allExercises, completedExerciseIds]
+  )
+  const currentExercise = currentExerciseIndex >= 0 ? allExercises[currentExerciseIndex] : null
+
+  // Lesson complete = lesson has exercises AND every one of them is completed.
+  const lessonHasExercises = allExercises.length > 0
+  const lessonComplete = lessonHasExercises && currentExercise === null
+
+  const exercisePosition = lessonHasExercises && currentExerciseIndex >= 0 ? currentExerciseIndex + 1 : 0
+  const exerciseTotal = allExercises.length
+  const completedExerciseCount = useMemo(
+    () => allExercises.filter((ex) => completedExerciseIds.has(ex.id)).length,
+    [allExercises, completedExerciseIds]
+  )
+
+  // Fetch the authoritative progress for the open lesson.
+  const fetchLessonProgress = useCallback(async (lessonId: string) => {
+    const prog = await api.lessonProgress(lessonId)
+    if (prog) setLessonProgress(prog)
+    return prog
+  }, [])
+
+  // Reset the ephemeral interaction state whenever the current exercise changes
+  // (next exercise after CONTINUE, retry after TRY AGAIN, or a brand-new lesson).
+  // This guarantees stale answers/feedback can never leak between exercises.
+  useEffect(() => {
+    setExercisePhase('answering')
+    setExerciseFeedback(null)
+  }, [currentExercise?.id])
 
   // ─── Fetch Courses ──────────────────────────────────────────────────────────
   const fetchCourses = useCallback(async () => {
@@ -238,6 +329,8 @@ function App() {
   }, [])
 
   // ─── Load Lessons for Language ──────────────────────────────────────────────
+  // Landing on the HOME page is intentional: lessons are only opened when the
+  // learner clicks a node, never implicitly on load or course switch.
   const fetchLessons = useCallback(async () => {
     try {
       const res = await fetch('/api/lessons')
@@ -248,11 +341,8 @@ function App() {
       const data: LessonSummary[] = await res.json()
       setLessons(data)
       setBackendError(false)
-
-      const current = data.find((l) => l.status === 'current') || data[0]
-      if (current) {
-        loadLesson(current)
-      }
+      // Note: DO NOT auto-open a lesson here. The course map (home) is shown
+      // so the learner can choose Unit 1, Unit 2, etc. themselves.
     } catch {
       setBackendError(true)
     }
@@ -271,6 +361,10 @@ function App() {
     } catch {
       // fallback
     }
+    // Always land back on the home / course map after switching tracks.
+    setLesson(null)
+    setIsLessonActive(false)
+    setShowCompletion(false)
     fetchLessons()
   }
 
@@ -309,24 +403,30 @@ function App() {
     setIsLoadingLesson(true)
     setResults(null)
     setFeedback('Run your code to get immediate feedback from the local sandbox.')
-    setShowCompletion(false)
     setHintLevel(1)
     setPreviousHints([])
-    setActiveSubLessonIndex(0)
-    setActiveExerciseIndex(0)
     setExerciseInput({})
     setCharState('idle')
+    setLessonProgress(null)
+    setExercisePhase('answering')
+    setExerciseFeedback(null)
+    setCelebration(null)
 
     try {
-      const res = await fetch(`/api/lessons/${summary.id}`)
+      const [res, prog] = await Promise.all([
+        fetch(`/api/lessons/${summary.id}`),
+        api.lessonProgress(summary.id),
+      ])
       if (!res.ok) throw new Error('Lesson fetch failed')
       const data: Lesson = await res.json()
       setLesson(data)
+      if (prog) setLessonProgress(prog)
 
       const draftKey = `patchwork_code_${data.id}`
       const savedDraft = localStorage.getItem(draftKey)
       setCode(savedDraft !== null ? savedDraft : data.starter_code || '')
       setIsLessonActive(true)
+      saveGameState({ currentLessonId: data.id })
     } catch {
       setLesson({
         id: summary.id,
@@ -339,16 +439,30 @@ function App() {
       })
       setCode('# Write your solution here\n')
       setIsLessonActive(true)
+      saveGameState({ currentLessonId: summary.id })
     } finally {
       setIsLoadingLesson(false)
     }
   }
 
   useEffect(() => {
+    // Restore persisted game state (XP, level, hearts) from previous sessions
+    const saved = restoreGameState()
+    if (saved) {
+      if (typeof saved.xp === 'number') setXp(saved.xp)
+      if (typeof saved.level === 'number') setLevel(saved.level)
+      if (typeof saved.hearts === 'number') setHearts(saved.hearts)
+      if (typeof saved.unlimitedHearts === 'boolean') setUnlimitedHearts(saved.unlimitedHearts)
+    }
     fetchCourses()
     fetchProviders()
     fetchLessons()
   }, [fetchCourses, fetchProviders, fetchLessons])
+
+  // Persist hearts/unlimited setting whenever they change
+  useEffect(() => {
+    saveGameState({ hearts, unlimitedHearts })
+  }, [hearts, unlimitedHearts])
 
   // Save code drafts
   useEffect(() => {
@@ -388,14 +502,26 @@ function App() {
         setGamification(activity.state)
         triggerXpGain(15)
 
-        if (data.completed || true) {
-          setShowCompletion(true)
-        }
+        // Lesson-level code lesson completed. Show the celebration screen.
+        const nextId =
+          data.next_lesson_id ||
+          (() => {
+            const idx = lessons.findIndex((l) => l.id === lesson?.id)
+            return idx >= 0 && idx < lessons.length - 1 ? lessons[idx + 1].id : null
+          })()
+        setCelebration({ xpEarned: 15, nextLessonId: nextId ?? null })
       } else {
         playPatchworkSound('error', soundEnabled)
         setCharState('confused')
         setCharSpeech('Some test checks failed. Take a look at the details below!')
         setConsecutiveCorrect(0)
+
+        // Duolingo-style: every mistake costs one heart.
+        const heartState = loseHeart()
+        setHearts(heartState.hearts)
+        if (heartState.hearts <= 0 && !heartState.unlimitedHearts) {
+          setCharSpeech('Out of hearts! Enable Unlimited Hearts in Settings or review the guidebook and try again.')
+        }
       }
     } catch {
       setFeedback('Error connecting to code execution sandbox.')
@@ -464,59 +590,13 @@ function App() {
   }
 
   // ─── Submit Interactive Sublesson Exercise ──────────────────────────────────
-  const submitSubLessonExercise = async (ex: Exercise, subLessonId?: string) => {
+  const submitSubLessonExercise = async (ex: Exercise & { sublessonId?: string }) => {
     if (!lesson) return
-    const currentInput = exerciseInput[ex.id] || {}
-    const payload = {
-      answer: currentInput.answer,
-      answers: currentInput.answers,
-      order: currentInput.order,
-      pairs: currentInput.pairs,
-      code: currentInput.code,
-    }
+    // Hard guard: submissions are only valid from the 'answering' phase.
+    // This makes double-clicks and stale submissions impossible.
+    if (exercisePhase !== 'answering') return
+    if (completedExerciseIds.has(ex.id)) return // already graded — never re-award XP
 
-    try {
-      const res = await fetch(`/api/lessons/${lesson.id}/submit-exercise`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          exercise_id: ex.id,
-          sublesson_id: subLessonId,
-          payload,
-        }),
-      })
-
-      if (!res.ok) throw new Error('Submission failed')
-      const data = await res.json()
-
-      if (data.passed) {
-        playPatchworkSound('success', soundEnabled)
-        triggerXpGain(data.xp_awarded || ex.xp_reward || 10)
-        if (typeof data.total_xp === 'number') {
-          setXp(data.total_xp)
-          setLevel(data.level || Math.floor(data.total_xp / 100) + 1)
-        }
-        setCharState('happy')
-        setCharSpeech(data.feedback || 'Correct answer!')
-
-        if (lesson?.sublessons) {
-          if (activeExerciseIndex < (lesson.sublessons[activeSubLessonIndex]?.exercises.length || 1) - 1) {
-            setActiveExerciseIndex((prev) => prev + 1)
-          } else if (activeSubLessonIndex < lesson.sublessons.length - 1) {
-            setActiveSubLessonIndex((prev) => prev + 1)
-            setActiveExerciseIndex(0)
-          } else {
-            setShowCompletion(true)
-          }
-        }
-      } else {
-        playPatchworkSound('error', soundEnabled)
-        setCharState('confused')
-        setCharSpeech(data.feedback || 'Not quite right. Try another answer!')
-      }
-    } catch {
-      setCharState('confused')
-      setCharSpeech('Error connecting to exercise grading service.')
     const inputState = exerciseInput[ex.id] || {}
     const exType = (ex.type || 'code').toLowerCase().trim()
     let payload: Record<string, any> = {}
@@ -537,40 +617,113 @@ function App() {
       payload = { answer: inputState.answer || '' }
     }
 
+    setExercisePhase('checking')
     try {
-      const res = await api.submitExercise(lesson.id, ex.id, subLessonId, payload)
+      const res = await api.submitExercise(lesson.id, ex.id, ex.sublessonId, payload)
       if (!res.ok) throw new Error('Submission failed')
       const data: ExerciseResult = await res.json()
+
+      // Sync authoritative progress from the grading response itself.
+      if (data.progress) {
+        setLessonProgress((prev) =>
+          prev
+            ? {
+                ...prev,
+                completed_exercise_ids: Array.from(
+                  new Set([...prev.completed_exercise_ids, ...(data.passed ? [ex.id] : [])])
+                ),
+                attempt_counts: { ...prev.attempt_counts, [ex.id]: data.attempt_count ?? 1 },
+                last_results: { ...prev.last_results, [ex.id]: data.passed ? 'correct' : 'incorrect' },
+                progress: data.progress ?? prev.progress,
+                lesson_completed: data.lesson_completed ?? prev.lesson_completed,
+                next_action: data.lesson_completed ? 'lesson_complete' : 'answer',
+                next_lesson_id: data.next_lesson_id ?? prev.next_lesson_id,
+              }
+            : prev
+        )
+      }
 
       if (data.passed) {
         playPatchworkSound('success', soundEnabled)
         setCharState('happy')
         setCharSpeech(data.feedback || 'Correct answer!')
+        setExercisePhase('correct')
+        setExerciseFeedback({
+          passed: true,
+          feedback: data.feedback || 'Correct!',
+          explanation: data.explanation || undefined,
+          xpAwarded: data.xp_awarded || 0,
+          attempts: data.attempt_count || 1,
+        })
         if (data.xp_awarded) {
           triggerXpGain(data.xp_awarded)
-        }
-
-        if (lesson.sublessons && lesson.sublessons.length > 0) {
-          const currentSub = lesson.sublessons[activeSubLessonIndex]
-          if (activeExerciseIndex < (currentSub?.exercises.length || 1) - 1) {
-            setActiveExerciseIndex((prev) => prev + 1)
-          } else if (activeSubLessonIndex < lesson.sublessons.length - 1) {
-            setActiveSubLessonIndex((prev) => prev + 1)
-            setActiveExerciseIndex(0)
-          } else {
-            setShowCompletion(true)
-          }
         }
         fetchLessons()
       } else {
         playPatchworkSound('error', soundEnabled)
         setCharState('confused')
         setCharSpeech(data.feedback || data.explanation || 'Not quite right. Try again!')
+        setExercisePhase('incorrect')
+        setExerciseFeedback({
+          passed: false,
+          feedback: data.feedback || 'Not quite right.',
+          explanation: data.explanation || undefined,
+          xpAwarded: 0,
+          attempts: data.attempt_count || 1,
+        })
+
+        // Wrong answers cost one heart too.
+        const heartState = loseHeart()
+        setHearts(heartState.hearts)
+        if (heartState.hearts <= 0 && !heartState.unlimitedHearts) {
+          setCharSpeech('Out of hearts! Enable Unlimited Hearts in Settings or review the guidebook and try again.')
+        }
       }
     } catch {
       playPatchworkSound('error', soundEnabled)
       setFeedback('Failed to submit exercise to grading server.')
+      setExercisePhase('answering')
     }
+  }
+
+  // ─── Primary CTA: CONTINUE (after a correct answer) ─────────────────────────
+  // The backend has already persisted completion; the derived progression now
+  // points at the next exercise automatically. We only clear ephemeral state.
+  const continueToNextExercise = () => {
+    const wasLessonComplete = lessonComplete
+    const earnedXp = exerciseFeedback?.xpAwarded ?? 0
+    setExerciseInput((prev: any) => {
+      if (!currentExercise) return prev
+      const next = { ...prev }
+      delete next[currentExercise.id]
+      return next
+    })
+    setExercisePhase('answering')
+    setExerciseFeedback(null)
+
+    if (wasLessonComplete) {
+      const nextId =
+        lessonProgress?.next_lesson_id ||
+        (() => {
+          const idx = lessons.findIndex((l) => l.id === lesson?.id)
+          return idx >= 0 && idx < lessons.length - 1 ? lessons[idx + 1].id : null
+        })()
+      setCelebration({ xpEarned: earnedXp, nextLessonId: nextId ?? null })
+    }
+  }
+
+  // ─── Primary CTA: TRY AGAIN (after an incorrect answer) ─────────────────────
+  const retryCurrentExercise = () => {
+    if (!currentExercise) return
+    setExerciseInput((prev: any) => {
+      const next = { ...prev }
+      delete next[currentExercise.id]
+      return next
+    })
+    setExercisePhase('answering')
+    setExerciseFeedback(null)
+    setCharState('encouraging')
+    setCharSpeech('Take another look — you\'ve got this!')
   }
 
   // ─── Run Test Out Exam ──────────────────────────────────────────────────────
@@ -600,14 +753,19 @@ function App() {
 
   // ─── Next Lesson Navigation ─────────────────────────────────────────────────
   const goToNextLesson = () => {
-    const safeLessons = Array.isArray(lessons) ? lessons : []
-    const currentIndex = safeLessons.findIndex((l) => l.id === lesson?.id)
-    if (currentIndex >= 0 && currentIndex < safeLessons.length - 1) {
-      const nextSummary = safeLessons[currentIndex + 1]
-      loadLesson(nextSummary, true)
-    } else {
-      setIsLessonActive(false)
+    const nextId = celebration?.nextLessonId
+    if (nextId) {
+      const nextSummary = lessons.find((l) => l.id === nextId)
+      if (nextSummary) {
+        setCelebration(null)
+        loadLesson(nextSummary, true)
+        return
+      }
     }
+    // No next lesson — return to the course map.
+    setCelebration(null)
+    setIsLessonActive(false)
+    setLesson(null)
   }
 
   // ─── Add Note ──────────────────────────────────────────────────────────────
@@ -656,6 +814,9 @@ function App() {
 
   // Language Track Display Name
   const coursePathTitle = selectedLanguage === 'cpp' ? 'C++ Path' : selectedLanguage === 'java' ? 'Java Path' : 'Python Path'
+
+  // Strict daily progression (Day N of the course)
+  const dailyProgress = getDailyProgress()
 
   // Group lessons by Unit
   const unitsMap = new Map<string, { id: string; title: string; lessons: LessonSummary[] }>()
@@ -778,6 +939,16 @@ function App() {
             </select>
           </div>
 
+          <div style={{ display: 'flex', gap: '8px' }}>
+            <button
+              className="duo-button duo-button-secondary"
+              style={{ padding: '6px 12px', fontSize: '12px', flex: 1 }}
+              onClick={() => setShowSettings(true)}
+            >
+              ⚙️ Settings
+            </button>
+          </div>
+
           <div style={{ fontSize: '11px', color: '#64748b', textAlign: 'center' }}>
             {isAiAvailable ? 'Ollama ready' : 'Ollama unavailable'}
           </div>
@@ -846,10 +1017,10 @@ function App() {
           </div>
 
           <div className="duo-header-stats">
-            <div className="duo-stat-pill streak" title="Daily streak"><span>🔥 {gamification.streakCount || 1}</span></div>
-            <div className="duo-stat-pill gems" title="Gems"><span>💎 500</span></div>
+            <div className="duo-stat-pill streak" title="Daily streak"><span>🔥 {gamification.streakCount || 0}</span></div>
+            <div className="duo-stat-pill gems" title="Gems"><span>💎 {gamification.dailyXp || 0}</span></div>
             <div className="duo-stat-pill xp" title="Total XP" aria-label={`XP: ${xp}, Level: ${level}`}><span>⭐ {xp} XP</span></div>
-            <div className="duo-stat-pill hearts" title="Hearts"><span>❤️ 5</span></div>
+            <div className="duo-stat-pill hearts" title="Hearts"><span>❤️ {unlimitedHearts ? '∞' : hearts}</span></div>
           </div>
         </header>
 
@@ -862,7 +1033,7 @@ function App() {
         {/* ─── TAB 1: LEARN PATH VIEW (COURSE MAP OR FOCUSED LESSON) ──────────────────── */}
         {activeTab === 'learn' && (
           <div className="duo-page-container">
-            {(!lesson || isLoadingLesson) && (
+            {isLoadingLesson && (
               <div role="status" aria-label="Loading lesson" style={{ position: "fixed", top: "12px", right: "24px", background: "var(--yellow)", color: "#000", padding: "8px 16px", borderRadius: "20px", fontWeight: 900, zIndex: 9999 }}>
                 Loading lesson…
               </div>
@@ -913,250 +1084,22 @@ function App() {
                     <PatchworkCharacter name="patch" state={charState} speech={charSpeech} />
                   </div>
 
-                  {/* Render Sublesson Step / Exercise */}
-                  {(() => {
-                    if (lesson.sublessons && lesson.sublessons.length > 0) {
-                      const currentSub = lesson.sublessons[activeSubLessonIndex]
-                      const currentEx = currentSub?.exercises[activeExerciseIndex]
-
-                      if (!currentEx) return null
-                      const exType = (currentEx.type || 'code').toLowerCase().trim()
-                      const opts = currentEx.options || []
-                      const exState = exerciseInput[currentEx.id] || {}
-
-                      return (
-                        <div className="exercise-interactive-box">
-                          <div className="duo-sublesson-stepper">
-                            {lesson.sublessons.map((sub, sIdx) => (
-                              <button
-                                key={sub.id}
-                                className={`duo-step-item ${sIdx === activeSubLessonIndex ? 'active' : ''}`}
-                                onClick={() => {
-                                  setActiveSubLessonIndex(sIdx)
-                                  setActiveExerciseIndex(0)
-                                }}
-                              >
-                                <span>Step {sIdx + 1}</span>
-                              </button>
-                            ))}
-                          </div>
-
-                          <h3 style={{ fontSize: '18px', fontWeight: 800, marginBottom: '12px' }}>
-                            {currentEx.question || currentEx.title || 'Complete the exercise:'}
-                          </h3>
-
-                          {/* 1. MCQ / True-False / Output Prediction / Debugging / Identify Error */}
-                          {['mcq', 'true_false', 'output_prediction', 'debugging', 'identify_error'].includes(exType) && (
-                            <div className="exercise-options-grid">
-                              {(opts.length > 0 ? opts : exType === 'true_false' ? ['True', 'False'] : []).map((opt) => (
-                                <button
-                                  key={opt}
-                                  className={`exercise-option-btn ${exState.answer === opt ? 'selected' : ''}`}
-                                  onClick={() =>
-                                    setExerciseInput((prev: any) => ({
-                                      ...prev,
-                                      [currentEx.id]: { ...prev[currentEx.id], answer: opt },
-                                    }))
-                                  }
-                                >
-                                  {opt}
-                                </button>
-                              ))}
-                            </div>
-                          )}
-
-                          {/* 2. Fill Blank / Code Completion */}
-                          {['fill_blank', 'code_completion'].includes(exType) && (
-                            <div className="exercise-fill-blank-container" style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-                              {((currentEx.blanks && currentEx.blanks.length > 0) ? currentEx.blanks : ['_']).map((_, idx) => (
-                                <div key={idx} style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                                  <label style={{ fontWeight: 700, fontSize: '14px' }}>Blank {idx + 1}:</label>
-                                  <input
-                                    type="text"
-                                    className="exercise-blank-input"
-                                    value={exState.answers?.[idx] || exState.answer || ''}
-                                    placeholder="Type answer here..."
-                                    onChange={(e) => {
-                                      const val = e.target.value
-                                      setExerciseInput((prev: any) => {
-                                        const curAns = [...(prev[currentEx.id]?.answers || [])]
-                                        curAns[idx] = val
-                                        return {
-                                          ...prev,
-                                          [currentEx.id]: { ...prev[currentEx.id], answers: curAns, answer: curAns[0] }
-                                        }
-                                      })
-                                    }}
-                                    style={{ padding: '8px 12px', borderRadius: '8px', border: '2px solid var(--line)', fontWeight: 700, fontSize: '14px' }}
-                                  />
-                                </div>
-                              ))}
-                            </div>
-                          )}
-
-                          {/* 3. Select Multiple */}
-                          {exType === 'select_multiple' && (
-                            <div className="exercise-options-grid">
-                              {opts.map((opt) => {
-                                const selectedSet = new Set(exState.answers || [])
-                                const isSelected = selectedSet.has(opt)
-                                return (
-                                  <button
-                                    key={opt}
-                                    className={`exercise-option-btn ${isSelected ? 'selected' : ''}`}
-                                    onClick={() => {
-                                      const nextSet = new Set(selectedSet)
-                                      if (isSelected) nextSet.delete(opt)
-                                      else nextSet.add(opt)
-                                      setExerciseInput((prev: any) => ({
-                                        ...prev,
-                                        [currentEx.id]: { ...prev[currentEx.id], answers: Array.from(nextSet) }
-                                      }))
-                                    }}
-                                  >
-                                    {isSelected ? '☑ ' : '☐ '}{opt}
-                                  </button>
-                                )
-                              })}
-                            </div>
-                          )}
-
-                          {/* 4. Ordering */}
-                          {exType === 'ordering' && (
-                            <div className="exercise-ordering-container" style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-                              {(() => {
-                                const currentOrder = exState.order || opts
-                                return currentOrder.map((item: string, idx: number) => (
-                                  <div key={`${item}-${idx}`} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '8px 12px', background: '#f8fafc', borderRadius: '8px', border: '1px solid #cbd5e1' }}>
-                                    <span style={{ fontWeight: 700, fontSize: '14px' }}>{idx + 1}. {item}</span>
-                                    <div style={{ display: 'flex', gap: '4px' }}>
-                                      <button
-                                        disabled={idx === 0}
-                                        onClick={() => {
-                                          const nextArr = [...currentOrder]
-                                          ;[nextArr[idx - 1], nextArr[idx]] = [nextArr[idx], nextArr[idx - 1]]
-                                          setExerciseInput((prev: any) => ({
-                                            ...prev,
-                                            [currentEx.id]: { ...prev[currentEx.id], order: nextArr }
-                                          }))
-                                        }}
-                                        style={{ padding: '4px 8px', fontSize: '12px', fontWeight: 800 }}
-                                      >
-                                        ▲
-                                      </button>
-                                      <button
-                                        disabled={idx === currentOrder.length - 1}
-                                        onClick={() => {
-                                          const nextArr = [...currentOrder]
-                                          ;[nextArr[idx], nextArr[idx + 1]] = [nextArr[idx + 1], nextArr[idx]]
-                                          setExerciseInput((prev: any) => ({
-                                            ...prev,
-                                            [currentEx.id]: { ...prev[currentEx.id], order: nextArr }
-                                          }))
-                                        }}
-                                        style={{ padding: '4px 8px', fontSize: '12px', fontWeight: 800 }}
-                                      >
-                                        ▼
-                                      </button>
-                                    </div>
-                                  </div>
-                                ))
-                              })()}
-                            </div>
-                          )}
-
-                          {/* 5. Matching */}
-                          {exType === 'matching' && currentEx.pairs && (
-                            <div className="exercise-matching-container" style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-                              {currentEx.pairs.map((pair: { left: string; right: string }, idx: number) => {
-                                const userPairs = exState.pairs || []
-                                const currentMatched = userPairs.find((p: any) => p.left === pair.left)?.right || ''
-                                const rightOptions = (currentEx.pairs || []).map((p: { left: string; right: string }) => p.right)
-                                return (
-                                  <div key={idx} style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-                                    <span style={{ fontWeight: 700, minWidth: '120px' }}>{pair.left}</span>
-                                    <span style={{ fontWeight: 800 }}>➔</span>
-                                    <select
-                                      value={currentMatched}
-                                      onChange={(e) => {
-                                        const selectedRight = e.target.value
-                                        setExerciseInput((prev: any) => {
-                                          const curPairs = [...(prev[currentEx.id]?.pairs || [])].filter((p: any) => p.left !== pair.left)
-                                          if (selectedRight) curPairs.push({ left: pair.left, right: selectedRight })
-                                          return {
-                                            ...prev,
-                                            [currentEx.id]: { ...prev[currentEx.id], pairs: curPairs }
-                                          }
-                                        })
-                                      }}
-                                      style={{ padding: '6px 12px', borderRadius: '8px', border: '2px solid var(--line)', fontWeight: 700 }}
-                                    >
-                                      <option value="">Select match...</option>
-                                      {rightOptions.map((r: string) => (
-                                        <option key={r} value={r}>{r}</option>
-                                      ))}
-                                    </select>
-                                  </div>
-                                )
-                              })}
-                            </div>
-                          )}
-
-                          {/* 6. Code Exercise */}
-                          {exType === 'code' && (
-                            <div className="exercise-code-container">
-                              <textarea
-                                rows={6}
-                                value={exState.code !== undefined ? exState.code : (currentEx.starter_code || '')}
-                                onChange={(e) => {
-                                  const val = e.target.value
-                                  setExerciseInput((prev: any) => ({
-                                    ...prev,
-                                    [currentEx.id]: { ...prev[currentEx.id], code: val }
-                                  }))
-                                }}
-                                style={{ width: '100%', fontFamily: 'monospace', padding: '10px', borderRadius: '8px', border: '2px solid var(--line)' }}
-                                placeholder="Enter your code solution here..."
-                              />
-                            </div>
-                          )}
-
-                          <button
-                            className="duo-button duo-button-primary"
-                            style={{ marginTop: '16px', padding: '12px 24px' }}
-                            onClick={() => submitSubLessonExercise(currentEx, currentSub?.id)}
-                            disabled={isRunning}
-                          >
-                            Check Answer ✓
-                          </button>
-                        </div>
-                      )
-                    }
-
-                    // Default Code Editor Workspace
-                    return (
-                      <div className="duo-editor-container">
-                        <div className="duo-editor-top">
-                          <span>{selectedLanguage === 'java' ? 'Solution.java' : selectedLanguage === 'cpp' ? 'solution.cpp' : 'exercise.py'}</span>
-                          <span>{selectedLanguage === 'java' ? 'Java 21' : selectedLanguage === 'cpp' ? 'C++ 20' : 'Python 3.12'}</span>
-                        </div>
-                        <div className="duo-editor-body">
-                          <LineNumbers code={code} />
-                          <textarea
-                            ref={editorRef}
-                            className="duo-textarea"
-                            spellCheck={false}
-                            value={code}
-                            onChange={(e) => setCode(e.target.value)}
-                            onKeyDown={handleEditorKeyDown}
-                            disabled={isRunning}
-                            placeholder="Write your code here… (Press Shift+Enter or Ctrl+Enter to run)"
-                            aria-label="Code editor"
-                          />
-                        </div>
-                      </div>
-                    )
-                  })()}
+                  {/* Interactive Exercise — phase-driven learning loop */}
+                  {lessonHasExercises && !lessonComplete && currentExercise && (
+                      <ExercisePanel
+                      exercise={currentExercise}
+                      exerciseInput={exerciseInput}
+                      exercisePhase={exercisePhase}
+                      exerciseFeedback={exerciseFeedback}
+                      exercisePosition={exercisePosition}
+                      exerciseTotal={exerciseTotal}
+                      completedExerciseCount={completedExerciseCount}
+                      onInputChange={setExerciseInput}
+                      onSubmit={() => submitSubLessonExercise({ ...currentExercise, sublessonId: currentExercise.sublessonId })}
+                      onContinue={continueToNextExercise}
+                      onRetry={retryCurrentExercise}
+                    />
+                  )}
                 </main>
 
                 {/* Immediate Test Results */}
@@ -1204,16 +1147,37 @@ function App() {
                   )}
                 </aside>
 
-                {/* Completion Banner */}
-                {showCompletion && (
-                  <div className="duo-feedback-panel success">
+                {/* Lesson-Complete Celebration */}
+                {celebration && (
+                  <div className="duo-feedback-panel success" role="status">
                     <div className="duo-feedback-title">
                       <span>🎉 Lesson Complete!</span>
                     </div>
-                    <p style={{ fontWeight: 700 }}>Awesome work! You completed this exercise and unlocked the next step.</p>
-                    <button className="duo-button duo-button-primary" onClick={goToNextLesson}>
-                      Next Lesson →
-                    </button>
+                    <p style={{ fontWeight: 700, marginBottom: '8px' }}>
+                      Awesome work! You completed every exercise in this lesson.
+                    </p>
+                    {celebration.xpEarned > 0 && (
+                      <p style={{ fontWeight: 700, color: '#16a34a', marginBottom: '16px' }}>
+                        +{celebration.xpEarned} XP earned
+                      </p>
+                    )}
+                    <div style={{ display: 'flex', gap: '12px' }}>
+                      {celebration.nextLessonId ? (
+                        <button className="duo-button duo-button-primary" onClick={goToNextLesson}>
+                          Next Lesson →
+                        </button>
+                      ) : null}
+                      <button
+                        className="duo-button duo-button-secondary"
+                        onClick={() => {
+                          setCelebration(null)
+                          setIsLessonActive(false)
+                          setLesson(null)
+                        }}
+                      >
+                        Back to Course
+                      </button>
+                    </div>
                   </div>
                 )}
 
@@ -1291,6 +1255,26 @@ function App() {
               /* ─── COURSE MAP VIEW (COMPACT UNITS) ────────────────────────── */
               <>
                 <div className="duo-center-column">
+                  {/* Strict daily progression hero card */}
+                  <div className="duo-widget-card" style={{ width: '100%', marginBottom: '24px' }}>
+                    <div className="duo-widget-title">
+                      <span>📅 Day {dailyProgress.currentDay} — Daily Progress</span>
+                      <span className="duo-widget-link">{selectedLanguage.toUpperCase()} TRACK</span>
+                    </div>
+                    <div className="duo-quest-progress-bg">
+                      <div className="duo-quest-progress-fill" style={{ width: `${progressPct}%` }} />
+                    </div>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: '8px', fontSize: '12px', fontWeight: 700 }}>
+                      <span>{completedCount} of {safeLessons.length} lessons done</span>
+                      <span>{Math.round(progressPct)}%</span>
+                    </div>
+                    <div style={{ display: 'flex', gap: '12px', marginTop: '12px', fontSize: '13px', fontWeight: 800 }}>
+                      <span>🔥 Streak: {gamification.streakCount || 0} days</span>
+                      <span>❤️ {unlimitedHearts ? '∞' : hearts} hearts</span>
+                      <span>⭐ {xp} XP • Level {level}</span>
+                    </div>
+                  </div>
+
                   {unitGroups.map((unit, uIdx) => (
                     <div key={unit.id} className="duo-widget-card" style={{ width: '100%', marginBottom: '32px' }}>
                       <div className="duo-unit-banner" style={{ background: uIdx % 2 === 0 ? 'var(--green)' : 'var(--blue)', boxShadow: uIdx % 2 === 0 ? '0 6px 0 var(--green-dark)' : '0 6px 0 var(--blue-dark)' }}>
@@ -1537,7 +1521,7 @@ function App() {
         {/* ─── TAB 3: LEADERBOARDS VIEW ──────────────────────────────────── */}
         {activeTab === 'leaderboards' && (
           <div className="duo-page-container">
-            {(!lesson || isLoadingLesson) && (
+            {isLoadingLesson && (
               <div role="status" aria-label="Loading lesson" style={{ position: "fixed", top: "12px", right: "24px", background: "var(--yellow)", color: "#000", padding: "8px 16px", borderRadius: "20px", fontWeight: 900, zIndex: 9999 }}>
                 Loading lesson…
               </div>
@@ -1546,25 +1530,55 @@ function App() {
               <div className="duo-league-banner">
                 <div className="duo-league-shield">🛡️</div>
                 <div className="duo-league-details">
-                  <h2>Bronze League</h2>
-                  <p>Top 5 learners advance to the next league!</p>
+                  <h2>{xp >= 500 ? 'Silver League' : xp >= 200 ? 'Bronze League' : 'Copper League'}</h2>
+                  <p>Rank up by earning XP. Level {level} • {xp} XP — {xpForLevel(level + 1) - xp} XP to Level {level + 1}</p>
                 </div>
               </div>
 
+              {/* Real local leaderboard (single player) */}
               <div className="duo-rank-list">
-                {[
-                  { rank: 1, name: 'Alex Coder', xp: 450, isUser: false },
-                  { rank: 2, name: 'Patchwork Learner (You)', xp: xp, isUser: true },
-                  { rank: 3, name: 'DevSamurai', xp: 320, isUser: false },
-                  { rank: 4, name: 'CodeNinja', xp: 210, isUser: false },
-                ].map((u) => (
-                  <div key={u.rank} className={`duo-rank-item ${u.isUser ? 'user-self' : ''}`}>
-                    <div className={`duo-rank-num top-${u.rank}`}>{u.rank}</div>
-                    <div className="duo-user-avatar-circle">{u.name[0]}</div>
-                    <div className="duo-rank-name">{u.name}</div>
-                    <div className="duo-rank-xp">{u.xp} XP</div>
+                <div className="duo-rank-item user-self">
+                  <div className={`duo-rank-num top-1`}>1</div>
+                  <div className="duo-user-avatar-circle">P</div>
+                  <div className="duo-rank-name">You (Patchwork Learner)</div>
+                  <div className="duo-rank-xp">{xp} XP</div>
+                </div>
+              </div>
+
+              <div className="duo-widget-card" style={{ marginTop: '16px' }}>
+                <div className="duo-widget-title">
+                  <span>📊 Your Stats</span>
+                  <span className="duo-widget-link">TRACK: {selectedLanguage.toUpperCase()}</span>
+                </div>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', marginTop: '12px', fontSize: '14px', fontWeight: 800 }}>
+                  <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                    <span>🔥 Day Streak</span>
+                    <span>{gamification.streakCount || 0} days</span>
                   </div>
-                ))}
+                  <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                    <span>📅 Current Day</span>
+                    <span>Day {dailyProgress.currentDay}</span>
+                  </div>
+                  <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                    <span>⚡ XP Today</span>
+                    <span>{gamification.dailyXp} / {gamification.dailyGoal}</span>
+                  </div>
+                  <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                    <span>⭐ Total XP</span>
+                    <span>{xp}</span>
+                  </div>
+                  <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                    <span>🏅 Level</span>
+                    <span>{level}</span>
+                  </div>
+                  <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                    <span>❤️ Hearts</span>
+                    <span>{unlimitedHearts ? '∞ (Unlimited)' : `${hearts} / ${gamification.maxHearts || 5}`}</span>
+                  </div>
+                </div>
+                <div style={{ marginTop: '12px', fontSize: '12px', color: 'var(--ink-soft)', fontWeight: 600 }}>
+                  Keep a daily streak going — complete lessons each day to keep your 🔥 alive.
+                </div>
               </div>
             </div>
           </div>
@@ -1573,7 +1587,7 @@ function App() {
         {/* ─── TAB 4: QUESTS VIEW ────────────────────────────────────────── */}
         {activeTab === 'quests' && (
           <div className="duo-page-container">
-            {(!lesson || isLoadingLesson) && (
+            {isLoadingLesson && (
               <div role="status" aria-label="Loading lesson" style={{ position: "fixed", top: "12px", right: "24px", background: "var(--yellow)", color: "#000", padding: "8px 16px", borderRadius: "20px", fontWeight: 900, zIndex: 9999 }}>
                 Loading lesson…
               </div>
@@ -1598,7 +1612,7 @@ function App() {
         {/* ─── TAB 5: PROFILE VIEW ───────────────────────────────────────── */}
         {activeTab === 'profile' && (
           <div className="duo-page-container">
-            {(!lesson || isLoadingLesson) && (
+            {isLoadingLesson && (
               <div role="status" aria-label="Loading lesson" style={{ position: "fixed", top: "12px", right: "24px", background: "var(--yellow)", color: "#000", padding: "8px 16px", borderRadius: "20px", fontWeight: 900, zIndex: 9999 }}>
                 Loading lesson…
               </div>
@@ -1616,7 +1630,7 @@ function App() {
                 <div className="duo-stat-card">
                   <div className="duo-stat-card-icon">🔥</div>
                   <div>
-                    <div className="duo-stat-card-val">{gamification.streakCount || 1}</div>
+                    <div className="duo-stat-card-val">{gamification.streakCount || 0}</div>
                     <div className="duo-stat-card-lbl">Day Streak</div>
                   </div>
                 </div>
@@ -1625,6 +1639,20 @@ function App() {
                   <div>
                     <div className="duo-stat-card-val">{xp} XP</div>
                     <div className="duo-stat-card-lbl">Total XP</div>
+                  </div>
+                </div>
+                <div className="duo-stat-card">
+                  <div className="duo-stat-card-icon">❤️</div>
+                  <div>
+                    <div className="duo-stat-card-val">{unlimitedHearts ? '∞' : hearts}</div>
+                    <div className="duo-stat-card-lbl">Hearts</div>
+                  </div>
+                </div>
+                <div className="duo-stat-card">
+                  <div className="duo-stat-card-icon">📅</div>
+                  <div>
+                    <div className="duo-stat-card-val">{dailyProgress.currentDay}</div>
+                    <div className="duo-stat-card-lbl">Current Day</div>
                   </div>
                 </div>
               </div>
@@ -1685,6 +1713,33 @@ function App() {
         onClose={() => setIsGuidebookOpen(false)}
         language={selectedLanguage}
         conceptTitle={lesson?.concept_title}
+      />
+
+      {/* ─── Settings Modal (providers + gameplay) ─────────────────────────── */}
+      <Settings
+        isOpen={showSettings}
+        onClose={() => setShowSettings(false)}
+        backendUrl=""
+        onBackendUrlChange={() => {}}
+        unlimitedHearts={unlimitedHearts}
+        hearts={hearts}
+        onToggleUnlimitedHearts={(value) => {
+          const next = applyUnlimitedHearts(value)
+          setUnlimitedHearts(next.unlimitedHearts)
+          setHearts(next.hearts)
+        }}
+        onRestoreHearts={() => {
+          const next = restoreHearts(1)
+          setHearts(next.hearts)
+        }}
+        gamification={{
+          xp,
+          level,
+          streak: gamification.streakCount || 0,
+          currentDay: dailyProgress.currentDay,
+          dailyXp: gamification.dailyXp || 0,
+          dailyGoal: gamification.dailyGoal || 30,
+        }}
       />
     </div>
   )

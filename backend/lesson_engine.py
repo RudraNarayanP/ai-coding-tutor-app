@@ -29,6 +29,8 @@ class ProgressionStore:
         self._skipped: set[str] = set()
         self._completed_sublessons: set[str] = set()
         self._completed_exercises: set[str] = set()
+        self._attempts: dict[str, int] = {}
+        self._last_results: dict[str, str] = {}
         self._xp: int = 0
         self._level: int = 1
         self._load()
@@ -46,6 +48,10 @@ class ProgressionStore:
                     self._skipped.update(data.get("skipped_lesson_ids", []))
                     self._completed_sublessons.update(data.get("completed_sublesson_ids", []))
                     self._completed_exercises.update(data.get("completed_exercise_ids", []))
+                    self._attempts.update(
+                        {k: int(v) for k, v in (data.get("attempt_counts") or {}).items()}
+                    )
+                    self._last_results.update(data.get("last_results") or {})
                     self._xp = int(data.get("xp", 0))
                     self._level = int(data.get("level", 1))
             except Exception:
@@ -60,6 +66,8 @@ class ProgressionStore:
                     "skipped_lesson_ids": sorted(self._skipped),
                     "completed_sublesson_ids": sorted(self._completed_sublessons),
                     "completed_exercise_ids": sorted(self._completed_exercises),
+                    "attempt_counts": dict(self._attempts),
+                    "last_results": dict(self._last_results),
                     "xp": self._xp,
                     "level": self._level,
                 }
@@ -100,6 +108,35 @@ class ProgressionStore:
 
     def mark_sublesson_completed(self, sublesson_id: str) -> None:
         self._completed_sublessons.add(sublesson_id)
+        self._save()
+
+    def mark_exercise_completed(self, exercise_id: str) -> None:
+        self._completed_exercises.add(exercise_id)
+        self._save()
+
+    def record_attempt(self, exercise_id: str, passed: bool) -> int:
+        """Record a grading attempt for an exercise and persist it. Returns the attempt count."""
+        self._attempts[exercise_id] = self._attempts.get(exercise_id, 0) + 1
+        self._last_results[exercise_id] = "correct" if passed else "incorrect"
+        self._save()
+        return self._attempts[exercise_id]
+
+    def attempt_count(self, exercise_id: str) -> int:
+        return self._attempts.get(exercise_id, 0)
+
+    def last_result(self, exercise_id: str) -> str | None:
+        return self._last_results.get(exercise_id)
+
+    def reset(self) -> None:
+        self._completed.clear()
+        self._mastered.clear()
+        self._skipped.clear()
+        self._completed_sublessons.clear()
+        self._completed_exercises.clear()
+        self._attempts.clear()
+        self._last_results.clear()
+        self._xp = 0
+        self._level = 1
         self._save()
 
     def mark_completed(self, lesson_id: str) -> None:
@@ -322,11 +359,6 @@ class LessonEngine:
             return passed, feedback
 
         elif ex_type in ("fill_blank", "code_completion"):
-            answers = user_input.get("answers")
-            if answers is None:
-                answers = user_input.get("answer", [])
-            if isinstance(answers, (str, int, float, bool)):
-                answers = [answers]
             raw_ans = user_input.get("answers", None)
             if raw_ans is None:
                 raw_ans = user_input.get("answer", [])
@@ -344,10 +376,6 @@ class LessonEngine:
                 passed = (answers_norm == exp_norm)
             elif isinstance(expected, (str, int, float, bool)):
                 passed = (len(answers_norm) == 1 and answers_norm[0] == str(expected).strip().lower())
-            else:
-                passed = True
-            elif isinstance(expected, str):
-                passed = (len(answers_norm) >= 1 and answers_norm[0] == expected.strip().lower())
             else:
                 passed = True
 
@@ -475,6 +503,7 @@ class LessonEngine:
 
         passed, feedback = await self.grade_exercise(target_ex, payload, lang)
         xp_awarded = 0
+        attempt_count = store.record_attempt(exercise_id, passed)
 
         if passed:
             already_done = exercise_id in store.state().completed_exercise_ids
@@ -499,14 +528,59 @@ class LessonEngine:
                         xp_awarded += store.add_xp(lesson.xp_reward or 25)
 
         state = store.state()
+        progress = self.lesson_progress(lesson_id)
         return {
             "exercise_id": exercise_id,
             "passed": passed,
+            "state": "correct" if passed else "incorrect",
+            "attempt_count": attempt_count,
             "feedback": feedback,
             "xp_awarded": xp_awarded,
             "total_xp": state.xp,
             "level": state.level,
             "explanation": target_ex.explanation,
+            "next_action": progress["next_action"],
+            "lesson_completed": progress["lesson_completed"],
+            "next_lesson_id": progress["next_lesson_id"],
+            "progress": progress["progress"],
+        }
+
+    def lesson_progress(self, lesson_id: str) -> dict:
+        """Authoritative lesson progress derived from the progression store.
+
+        The current exercise is the first exercise (in canonical flattened order)
+        that is not yet completed. If every exercise is completed the lesson is
+        complete. `next_action` tells the client what the learner should do next.
+        """
+        lesson = self.get_lesson(lesson_id)
+        lang = self.get_lesson_language(lesson_id)
+        store = self.stores.get(lang, self.store)
+        state = store.state()
+
+        all_exercises = [ex for sub in lesson.sublessons for ex in sub.exercises]
+        completed = set(state.completed_exercise_ids)
+        remaining = [ex for ex in all_exercises if ex.id not in completed]
+
+        lesson_completed = bool(all_exercises) and not remaining
+        # Lessons without sublesson exercises (pure code lessons) complete via run_lesson.
+        if not all_exercises:
+            lesson_completed = lesson_id in state.completed_lesson_ids
+
+        next_lesson_id = state.current_lesson_id if lesson_completed else None
+
+        return {
+            "lesson_id": lesson_id,
+            "total_exercises": len(all_exercises),
+            "completed_exercise_ids": sorted(completed & {ex.id for ex in all_exercises}),
+            "attempt_counts": {k: v for k, v in store._attempts.items() if k in {ex.id for ex in all_exercises}},
+            "last_results": {k: v for k, v in store._last_results.items() if k in {ex.id for ex in all_exercises}},
+            "lesson_completed": lesson_completed,
+            "next_action": "lesson_complete" if lesson_completed else "answer",
+            "next_lesson_id": next_lesson_id,
+            "progress": {
+                "completed": len(all_exercises) - len(remaining),
+                "total": len(all_exercises),
+            },
         }
 
     async def run_test_out(self, lesson_id: str, submissions: dict) -> dict:

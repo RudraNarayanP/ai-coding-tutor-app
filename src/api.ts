@@ -122,11 +122,29 @@ export type RunResult = {
 export type ExerciseResult = {
   exercise_id: string
   passed: boolean
+  state?: 'correct' | 'incorrect'
+  attempt_count?: number
   feedback: string
   xp_awarded: number
   total_xp: number
   level: number
   explanation?: string
+  next_action?: 'continue' | 'retry' | 'lesson_complete'
+  lesson_completed?: boolean
+  next_lesson_id?: string | null
+  progress?: { completed: number; total: number }
+}
+
+export type LessonProgress = {
+  lesson_id: string
+  total_exercises: number
+  completed_exercise_ids: string[]
+  attempt_counts: Record<string, number>
+  last_results: Record<string, 'correct' | 'incorrect'>
+  lesson_completed: boolean
+  next_action: 'answer' | 'lesson_complete'
+  next_lesson_id: string | null
+  progress: { completed: number; total: number }
 }
 
 export type TestOutResult = {
@@ -188,6 +206,8 @@ export const api = {
     request<LessonSummary[]>(`/api/lessons?language=${encodeURIComponent(language)}`),
 
   lesson: (id: string) => request<LessonView>(`/api/lessons/${id}`),
+
+  lessonProgress: (id: string) => request<LessonProgress>(`/api/lessons/${id}/progress`),
 
   lessonSolution: (id: string) =>
     request<{ solution_code: string }>(`/api/lessons/${id}/solution`),

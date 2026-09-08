@@ -207,9 +207,13 @@ class OpenAICompatibleProvider:
     @property
     def api_key(self) -> str:
         key = os.getenv(self.api_key_env, "").strip()
-        if not key and self.provider_id == "openrouter":
-            return "free"
-        return key
+        if key:
+            return key
+        try:
+            from .api_key_manager import get_api_key
+            return (get_api_key(self.provider_id) or "").strip()
+        except Exception:
+            return ""
 
     @property
     def model(self) -> str:
@@ -311,6 +315,7 @@ class OpenAICompatibleProvider:
                 name=self.name,
                 available=False,
                 model=self.model,
+                configured=False,
                 reason=f"{self.api_key_env} environment variable not set",
                 error="missing_api_key",
             )
@@ -319,6 +324,7 @@ class OpenAICompatibleProvider:
             name=self.name,
             available=True,
             model=self.model,
+            configured=True,
         )
 
 
@@ -331,7 +337,14 @@ class AnthropicProvider:
 
     @property
     def api_key(self) -> str:
-        return os.getenv("ANTHROPIC_API_KEY", "").strip()
+        key = os.getenv("ANTHROPIC_API_KEY", "").strip()
+        if key:
+            return key
+        try:
+            from .api_key_manager import get_api_key
+            return (get_api_key("anthropic") or "").strip()
+        except Exception:
+            return ""
 
     @property
     def model(self) -> str:
@@ -427,6 +440,7 @@ class AnthropicProvider:
                 name=self.name,
                 available=False,
                 model=self.model,
+                configured=False,
                 reason="ANTHROPIC_API_KEY environment variable not set",
                 error="missing_api_key",
             )
@@ -435,6 +449,7 @@ class AnthropicProvider:
             name=self.name,
             available=True,
             model=self.model,
+            configured=True,
         )
 
 
@@ -447,7 +462,14 @@ class GeminiProvider:
 
     @property
     def api_key(self) -> str:
-        return os.getenv("GEMINI_API_KEY", "").strip()
+        key = os.getenv("GEMINI_API_KEY", "").strip()
+        if key:
+            return key
+        try:
+            from .api_key_manager import get_api_key
+            return (get_api_key("gemini") or "").strip()
+        except Exception:
+            return ""
 
     @property
     def model(self) -> str:
@@ -541,6 +563,7 @@ class GeminiProvider:
                 name=self.name,
                 available=False,
                 model=self.model,
+                configured=False,
                 reason="GEMINI_API_KEY environment variable not set",
                 error="missing_api_key",
             )
@@ -549,6 +572,7 @@ class GeminiProvider:
             name=self.name,
             available=True,
             model=self.model,
+            configured=True,
         )
 
 

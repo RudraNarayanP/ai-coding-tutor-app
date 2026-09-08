@@ -288,3 +288,17 @@ class ProgressionState(BaseModel):
     current_lesson_id: str | None = None
     xp: int = 0
     level: int = 1
+
+
+class LessonProgress(BaseModel):
+    """Authoritative per-lesson progress derived from the progression store."""
+
+    lesson_id: str
+    total_exercises: int = 0
+    completed_exercise_ids: list[str] = Field(default_factory=list)
+    attempt_counts: dict[str, int] = Field(default_factory=dict)
+    last_results: dict[str, str] = Field(default_factory=dict)
+    lesson_completed: bool = False
+    next_action: str = "answer"  # "answer" | "lesson_complete"
+    next_lesson_id: str | None = None
+    progress: dict = Field(default_factory=dict)  # {"completed": int, "total": int}

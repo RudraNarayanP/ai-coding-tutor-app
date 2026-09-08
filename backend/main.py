@@ -1,3 +1,5 @@
+import asyncio
+import logging
 import os
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
@@ -5,11 +7,26 @@ from pydantic import BaseModel, Field
 
 from .ai_models import OllamaHealth, ProvidersOverview, ProviderStatus, TutorRequest, TutorResponse
 from .ai_provider import AIProvider, ALL_PROVIDERS, OllamaProvider, get_ai_provider
+from .api_settings import (
+    ApiKeyValidationResult,
+    ProviderInfo,
+    get_all_providers_info,
+    get_provider_info,
+    remove_provider_key,
+    update_provider_key,
+    validate_provider_key,
+)
 from pathlib import Path
 from .curriculum_loader import load_all_curriculums
 from .lesson_engine import LessonEngine, ProgressionStore
-from .lesson_models import CourseSummary, LessonSummary, ProgressionResult, ProgressionState, PublicLessonView
-import asyncio
+from .lesson_models import (
+    CourseSummary,
+    LessonProgress,
+    LessonSummary,
+    ProgressionResult,
+    ProgressionState,
+    PublicLessonView,
+)
 from .custom_course_generator import (
     CourseGenerationRequest,
     CourseSerializer,
@@ -32,6 +49,8 @@ from .custom_course_generator import (
 )
 from .sandbox import SandboxError, sandbox
 from .tutor_service import TutorService
+
+logger = logging.getLogger("patchwork-tutor")
 
 app = FastAPI(title="Patchwork AI Tutor")
 app.add_middleware(
@@ -313,6 +332,16 @@ async def test_out_lesson(lesson_id: str, request: TestOutRequest):
     except KeyError as exc:
         raise HTTPException(status_code=404, detail={"error": "lesson_not_found"}) from exc
     return await lesson_engine.run_test_out(lesson_id=lesson_id, submissions=request.submissions)
+
+
+@app.get("/api/lessons/{lesson_id}/progress", response_model=LessonProgress)
+async def get_lesson_progress(lesson_id: str):
+    """Authoritative lesson progress: completed exercises, attempts, and next action."""
+    try:
+        lesson_engine.get_lesson(lesson_id)
+    except KeyError as exc:
+        raise HTTPException(status_code=404, detail={"error": "lesson_not_found"}) from exc
+    return lesson_engine.lesson_progress(lesson_id)
 
 
 @app.post("/api/run", response_model=ProgressionResult)
@@ -688,3 +717,169 @@ async def reset_progression(language: str | None = None):
 @app.post("/api/tutor", response_model=TutorResponse)
 async def tutor(request: TutorRequest):
     return await tutor_service.tutor(request, active_provider=get_current_provider())
+
+
+# ─── API Settings Endpoints ─────────────────────────────────────────────────
+
+class SettingsSaveRequest(BaseModel):
+    api_key: str = Field(..., min_length=1, max_length=500)
+    model: str | None = None
+
+
+class SettingsResponse(BaseModel):
+    providers: list[ProviderInfo]
+    current_provider: str
+    fallback_provider: str | None = None
+
+
+@app.get("/api/settings", response_model=SettingsResponse)
+async def get_settings():
+    """Get all provider settings and current configuration."""
+    try:
+        async with asyncio.timeout(15):
+            providers = await get_all_providers_info()
+            return SettingsResponse(
+                providers=providers,
+                current_provider=current_provider_id,
+                fallback_provider=fallback_provider_id,
+            )
+    except asyncio.TimeoutError as exc:
+        raise HTTPException(status_code=504, detail={"error": "settings_timeout"}) from exc
+    except Exception as exc:
+        logger.exception("get_settings error")
+        raise HTTPException(status_code=500, detail={"error": "settings_error", "message": type(exc).__name__}) from exc
+
+
+@app.get("/api/settings/providers/{provider}", response_model=ProviderInfo)
+async def get_provider_settings(provider: str):
+    """Get settings for a specific provider."""
+    normalized = provider.strip().lower()
+    if normalized not in ALL_PROVIDERS:
+        raise HTTPException(
+            status_code=400,
+            detail={"error": "invalid_provider", "message": f"Unknown provider: {provider}"}
+        )
+    try:
+        async with asyncio.timeout(10):
+            return await get_provider_info(normalized)
+    except asyncio.TimeoutError as exc:
+        raise HTTPException(status_code=504, detail={"error": "provider_timeout"}) from exc
+    except Exception as exc:
+        logger.exception(f"get_provider_settings error for {provider}")
+        raise HTTPException(status_code=500, detail={"error": "provider_error", "message": type(exc).__name__}) from exc
+
+
+@app.post("/api/settings/providers/{provider}/validate", response_model=ApiKeyValidationResult)
+async def validate_key(provider: str, request: SettingsSaveRequest):
+    """Validate an API key without saving it."""
+    normalized = provider.strip().lower()
+    if normalized not in ALL_PROVIDERS:
+        raise HTTPException(
+            status_code=400,
+            detail={"error": "invalid_provider", "message": f"Unknown provider: {provider}"}
+        )
+
+    try:
+        async with asyncio.timeout(15):
+            result = await validate_provider_key(normalized, request.api_key)
+            return result
+    except asyncio.TimeoutError as exc:
+        raise HTTPException(status_code=504, detail={"error": "validation_timeout"}) from exc
+    except Exception as exc:
+        logger.exception(f"validate_key error for {provider}")
+        raise HTTPException(status_code=500, detail={"error": "validation_error", "message": type(exc).__name__}) from exc
+
+
+@app.post("/api/settings/providers/{provider}/save")
+async def save_provider_settings(provider: str, request: SettingsSaveRequest):
+    """Save API key and model for a provider."""
+    normalized = provider.strip().lower()
+    if normalized not in ALL_PROVIDERS:
+        raise HTTPException(
+            status_code=400,
+            detail={"error": "invalid_provider", "message": f"Unknown provider: {provider}"}
+        )
+
+    try:
+        # First validate the key
+        async with asyncio.timeout(15):
+            validation = await validate_provider_key(normalized, request.api_key)
+            if not validation.valid:
+                raise HTTPException(
+                    status_code=400,
+                    detail={"error": "invalid_key", "message": validation.error}
+                )
+
+        # Save the key
+        update_provider_key(normalized, request.api_key, request.model)
+
+        # Refresh tutor_service provider
+        global current_provider_id
+        tutor_service.provider = get_current_provider()
+
+        return {
+            "success": True,
+            "provider": normalized,
+            "key_masked": validation.key_masked,
+            "message": f"{normalized.title()} API key saved successfully"
+        }
+    except HTTPException:
+        raise
+    except asyncio.TimeoutError as exc:
+        raise HTTPException(status_code=504, detail={"error": "save_timeout"}) from exc
+    except Exception as exc:
+        logger.exception(f"save_provider_settings error for {provider}")
+        raise HTTPException(status_code=500, detail={"error": "save_error", "message": type(exc).__name__}) from exc
+
+
+@app.delete("/api/settings/providers/{provider}/key")
+async def delete_provider_key(provider: str):
+    """Delete API key for a provider."""
+    normalized = provider.strip().lower()
+    if normalized not in ALL_PROVIDERS:
+        raise HTTPException(
+            status_code=400,
+            detail={"error": "invalid_provider", "message": f"Unknown provider: {provider}"}
+        )
+
+    try:
+        removed = remove_provider_key(normalized)
+        if removed:
+            tutor_service.provider = get_current_provider()
+
+        return {
+            "success": True,
+            "provider": normalized,
+            "message": f"{normalized.title()} API key removed"
+        }
+    except Exception as exc:
+        logger.exception(f"delete_provider_key error for {provider}")
+        raise HTTPException(status_code=500, detail={"error": "delete_error", "message": type(exc).__name__}) from exc
+
+
+# ─── Progression Reset Endpoint ──────────────────────────────────────────────
+
+@app.post("/api/progression/reset")
+async def reset_progression(language: str | None = None):
+    """Reset course progression. If language is specified, resets only that language; otherwise resets all."""
+    targets = [language.lower().strip()] if language else list(lesson_engine.stores.keys())
+    reset_langs = []
+    for lang in targets:
+        if lang in lesson_engine.stores:
+            store = lesson_engine.stores[lang]
+            store.reset()
+            reset_langs.append(lang)
+
+    # Also clean generic progression_state.json if it exists
+    generic_file = base_path / "progression_state.json"
+    if generic_file.exists():
+        try:
+            generic_file.write_text("[]", encoding="utf-8")
+        except Exception:
+            pass
+
+    return {
+        "success": True,
+        "reset_languages": reset_langs,
+        "message": "Progression reset successfully.",
+    }
