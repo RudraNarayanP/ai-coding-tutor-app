@@ -369,13 +369,19 @@ class LessonEngine:
             else:
                 answers = [str(raw_ans)]
 
-            answers_norm = [str(a).strip().lower() for a in answers]
+            def normalize_val(val: str) -> str:
+                s = str(val).strip()
+                if (s.startswith('"') and s.endswith('"')) or (s.startswith("'") and s.endswith("'")):
+                    s = s[1:-1].strip()
+                return s.lower()
+
+            answers_norm = [normalize_val(a) for a in answers]
 
             if isinstance(expected, list):
-                exp_norm = [str(e).strip().lower() for e in expected]
+                exp_norm = [normalize_val(e) for e in expected]
                 passed = (answers_norm == exp_norm)
             elif isinstance(expected, (str, int, float, bool)):
-                passed = (len(answers_norm) == 1 and answers_norm[0] == str(expected).strip().lower())
+                passed = (len(answers_norm) == 1 and answers_norm[0] == normalize_val(expected))
             else:
                 passed = True
 

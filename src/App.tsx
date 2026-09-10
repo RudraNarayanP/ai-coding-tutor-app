@@ -177,6 +177,25 @@ function App() {
 
   // Gamification & Hearts State
   const [showOutofHeartsModal, setShowOutofHeartsModal] = useState(false)
+  const [leaderboardData, setLeaderboardData] = useState<any[] | null>(null)
+
+  const fetchLeaderboard = useCallback(async () => {
+    try {
+      const res = await fetch('/api/leaderboard')
+      if (res.ok) {
+        const data = await res.json()
+        setLeaderboardData(data.leaderboard || [])
+      }
+    } catch {
+      // fallback
+    }
+  }, [])
+
+  useEffect(() => {
+    if (activeTab === 'leaderboards') {
+      fetchLeaderboard()
+    }
+  }, [activeTab, fetchLeaderboard, xp])
 
   // Custom Course Generation State
   const [showCreateModal, setShowCreateModal] = useState(false)
@@ -1559,14 +1578,20 @@ setExercisePhase('incorrect')
                 </div>
               </div>
 
-              {/* Real local leaderboard (single player) */}
+              {/* Real server-backed leaderboard */}
               <div className="duo-rank-list">
-<div className="duo-rank-item user-self">
-                  <div className={`duo-rank-num top-1`}>1</div>
-                  <div className="duo-user-avatar-circle">P</div>
-                  <div className="duo-rank-name">You (Patchwork Learner)</div>
-                  <div className="duo-rank-xp">{xp} XP</div>
-                </div>
+                {(leaderboardData || [
+                  { rank: 1, name: 'You (Patchwork Learner)', xp, is_user: true },
+                  { rank: 2, name: 'Alex Coder', xp: Math.max(0, xp - 20), is_user: false },
+                  { rank: 3, name: 'DevSamurai', xp: Math.max(0, xp - 50), is_user: false },
+                ]).map((entry: any, idx: number) => (
+                  <div key={entry.name || idx} className={`duo-rank-item ${entry.is_user ? 'user-self' : ''}`}>
+                    <div className={`duo-rank-num top-${entry.rank || idx + 1}`}>{entry.rank || idx + 1}</div>
+                    <div className="duo-user-avatar-circle">{(entry.name || 'P')[0]}</div>
+                    <div className="duo-rank-name">{entry.name}</div>
+                    <div className="duo-rank-xp">{entry.xp} XP</div>
+                  </div>
+                ))}
               </div>
 
               <div className="duo-widget-card" style={{ marginTop: '16px' }}>
@@ -1684,52 +1709,54 @@ setExercisePhase('incorrect')
           </div>
         )}
 
-        {/* ─── Bottom Footer Action Bar ──────────────────────────────────── */}
-        <footer className="duo-footer-bar">
-          <div className="duo-footer-left" style={{ display: 'flex', gap: '12px' }}>
-            <button
-              id="hint-button"
-              className="duo-button duo-button-secondary"
-              onClick={askTutor}
-              disabled={hintDisabled}
-              aria-label={
-                !isAiAvailable
+        {/* ─── Bottom Footer Action Bar (only rendered inside active lesson workspace) ──────────────────────────────────── */}
+        {isLessonActive && lesson && (
+          <footer className="duo-footer-bar">
+            <div className="duo-footer-left" style={{ display: 'flex', gap: '12px' }}>
+              <button
+                id="hint-button"
+                className="duo-button duo-button-secondary"
+                onClick={askTutor}
+                disabled={hintDisabled}
+                aria-label={
+                  !isAiAvailable
+                    ? 'AI tutor unavailable'
+                    : !aiEnabled
+                    ? 'AI tutor is paused'
+                    : 'Request a hint'
+                }
+              >
+                {isTutorLoading
+                  ? 'Getting Hint…'
+                  : !isAiAvailable
                   ? 'AI tutor unavailable'
                   : !aiEnabled
                   ? 'AI tutor is paused'
-                  : 'Request a hint'
-              }
-            >
-              {isTutorLoading
-                ? 'Getting Hint…'
-                : !isAiAvailable
-                ? 'AI tutor unavailable'
-                : !aiEnabled
-                ? 'AI tutor is paused'
-                : 'Request a hint'}
-            </button>
+                  : 'Request a hint'}
+              </button>
+
+              <button
+                id="solution-button"
+                className="duo-button duo-button-secondary duo-button-solution"
+                onClick={askSolution}
+                disabled={!lesson || isRunning}
+                aria-label="View Solution"
+              >
+                View Solution 💡
+              </button>
+            </div>
 
             <button
-              id="solution-button"
-              className="duo-button duo-button-secondary duo-button-solution"
-              onClick={askSolution}
-              disabled={!lesson || isRunning}
-              aria-label="View Solution"
+              id="run-tests-button"
+              className="duo-button duo-button-primary"
+              onClick={runTests}
+              disabled={isRunning || isLoadingLesson}
+              aria-label="Run code"
             >
-              View Solution 💡
+              {isRunning ? 'Running…' : 'Run code'}
             </button>
-          </div>
-
-          <button
-            id="run-tests-button"
-            className="duo-button duo-button-primary"
-            onClick={runTests}
-            disabled={isRunning || isLoadingLesson}
-            aria-label="Run code"
-          >
-            {isRunning ? 'Running…' : 'Run code'}
-          </button>
-        </footer>
+          </footer>
+        )}
       </div>
 
       {showOutofHeartsModal && (

@@ -12,10 +12,12 @@ interface Props {
   onSubmit: () => void
   onContinue: () => void
   onRetry: () => void
+  onRunCode?: () => void
+  isRunningCode?: boolean
 }
 
 const ExercisePanel: React.FC<Props> = (props) => {
-  const {exercise, exerciseInput, exercisePhase, exerciseFeedback, exercisePosition, exerciseTotal, completedExerciseCount, onInputChange, onSubmit, onContinue, onRetry} = props
+  const {exercise, exerciseInput, exercisePhase, exerciseFeedback, exercisePosition, exerciseTotal, completedExerciseCount, onInputChange, onSubmit, onContinue, onRetry, onRunCode, isRunningCode} = props
   const exType = (exercise.type || 'code').toLowerCase().trim()
   const opts = exercise.options || []
   const exState = exerciseInput[exercise.id] || {}
@@ -70,7 +72,7 @@ const ExercisePanel: React.FC<Props> = (props) => {
 
   const renderMcq = () => (
     <div className="exercise-options-grid">
-      {(opts.length > 0 ? opts : exType === 'true_false' ? ['True', 'False'] : []).map((opt) => (
+      {(opts.length > 0 ? opts : exType === 'true_false' ? ['True', 'False'] : []).map((opt: string) => (
         <button key={opt}
           className={`exercise-option-btn ${exState.answer === opt ? 'selected' : ''}`}
           disabled={disabled}
@@ -82,7 +84,7 @@ const ExercisePanel: React.FC<Props> = (props) => {
 
   const renderFillBlank = () => (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-      {((exercise.blanks && exercise.blanks.length > 0) ? exercise.blanks : ['_']).map((_, idx) => (
+      {((exercise.blanks && exercise.blanks.length > 0) ? exercise.blanks : ['_']).map((_: string, idx: number) => (
         <div key={idx} style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
           <label style={{ fontWeight: 700, fontSize: '14px' }}>Blank {idx + 1}:</label>
           <input type="text" value={exState.answers?.[idx] || exState.answer || ''}
@@ -104,7 +106,7 @@ const ExercisePanel: React.FC<Props> = (props) => {
 
   const renderSelectMultiple = () => (
     <div className="exercise-options-grid">
-      {opts.map((opt) => {
+      {opts.map((opt: string) => {
         const s = new Set<string>(exState.answers || []); const sel = s.has(opt)
         return (
           <button key={opt} className={`exercise-option-btn ${sel ? 'selected' : ''}`}
