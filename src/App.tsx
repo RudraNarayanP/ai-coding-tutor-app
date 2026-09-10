@@ -5,7 +5,7 @@ import { CreatePage } from './components/CreatePage'
 import Settings from './components/Settings'
 import ExercisePanel from './components/ExercisePanel'
 import { CodeEditor } from './components/CodeEditor'
-import { api, type ExerciseResult, type LessonProgress, type TestOutResult } from './api'
+import { api, type ExerciseResult, type LeaderboardEntry, type LessonProgress, type TestOutResult } from './api'
 import {
   getGamificationState,
   recordActivity,
@@ -168,6 +168,7 @@ function App() {
   const [backendError, setBackendError] = useState(false)
   const [xp, setXp] = useState(0)
   const [level, setLevel] = useState(1)
+  const [leaderboardEntries, setLeaderboardEntries] = useState<LeaderboardEntry[]>([])
   const [xpGainPopup, setXpGainPopup] = useState<number | null>(null)
   const [exerciseInput, setExerciseInput] = useState<any>({})
   const [showTestOutModal, setShowTestOutModal] = useState(false)
@@ -287,6 +288,24 @@ function App() {
     setExercisePhase('answering')
     setExerciseFeedback(null)
   }, [currentExercise?.id])
+
+  // ─── Fetch Leaderboard ──────────────────────────────────────────────────────
+  const fetchLeaderboard = useCallback(async () => {
+    try {
+      const data = await api.leaderboard()
+      if (data) {
+        setLeaderboardEntries(data)
+      }
+    } catch {
+      // ignore
+    }
+  }, [])
+
+  useEffect(() => {
+    if (activeTab === 'leaderboards') {
+      fetchLeaderboard()
+    }
+  }, [activeTab, xp, fetchLeaderboard])
 
   // ─── Fetch Courses ──────────────────────────────────────────────────────────
   const fetchCourses = useCallback(async () => {
@@ -1559,14 +1578,37 @@ setExercisePhase('incorrect')
                 </div>
               </div>
 
-              {/* Real local leaderboard (single player) */}
+              {/* Server-Side Multi-User Leaderboard */}
               <div className="duo-rank-list">
-<div className="duo-rank-item user-self">
-                  <div className={`duo-rank-num top-1`}>1</div>
-                  <div className="duo-user-avatar-circle">P</div>
-                  <div className="duo-rank-name">You (Patchwork Learner)</div>
-                  <div className="duo-rank-xp">{xp} XP</div>
-                </div>
+                {leaderboardEntries.length > 0 ? (
+                  leaderboardEntries.map((entry) => (
+                    <div
+                      key={entry.user_id}
+                      className={`duo-rank-item ${entry.is_current_user ? 'user-self' : ''}`}
+                      style={entry.is_current_user ? { border: '2px solid #22c55e', background: '#f0fdf4' } : {}}
+                    >
+                      <div className={`duo-rank-num ${entry.rank <= 3 ? `top-${entry.rank}` : ''}`}>
+                        {entry.rank === 1 ? '🥇' : entry.rank === 2 ? '🥈' : entry.rank === 3 ? '🥉' : entry.rank}
+                      </div>
+                      <div className="duo-user-avatar-circle">
+                        {entry.username ? entry.username.replace('[Demo] ', '').charAt(0).toUpperCase() : 'U'}
+                      </div>
+                      <div className="duo-rank-name" style={{ flex: 1, fontWeight: entry.is_current_user ? 800 : 600 }}>
+                        {entry.username} {entry.is_current_user ? '(You)' : ''}
+                      </div>
+                      <div className="duo-rank-xp" style={{ fontWeight: 800 }}>
+                        {entry.xp} XP
+                      </div>
+                    </div>
+                  ))
+                ) : (
+                  <div className="duo-rank-item user-self">
+                    <div className="duo-rank-num top-1">1</div>
+                    <div className="duo-user-avatar-circle">P</div>
+                    <div className="duo-rank-name">You (Patchwork Learner)</div>
+                    <div className="duo-rank-xp">{xp} XP</div>
+                  </div>
+                )}
               </div>
 
               <div className="duo-widget-card" style={{ marginTop: '16px' }}>
@@ -1685,51 +1727,53 @@ setExercisePhase('incorrect')
         )}
 
         {/* ─── Bottom Footer Action Bar ──────────────────────────────────── */}
-        <footer className="duo-footer-bar">
-          <div className="duo-footer-left" style={{ display: 'flex', gap: '12px' }}>
-            <button
-              id="hint-button"
-              className="duo-button duo-button-secondary"
-              onClick={askTutor}
-              disabled={hintDisabled}
-              aria-label={
-                !isAiAvailable
+        {activeTab === 'learn' && isLessonActive && (
+          <footer className="duo-footer-bar">
+            <div className="duo-footer-left" style={{ display: 'flex', gap: '12px' }}>
+              <button
+                id="hint-button"
+                className="duo-button duo-button-secondary"
+                onClick={askTutor}
+                disabled={hintDisabled}
+                aria-label={
+                  !isAiAvailable
+                    ? 'AI tutor unavailable'
+                    : !aiEnabled
+                    ? 'AI tutor is paused'
+                    : 'Request a hint'
+                }
+              >
+                {isTutorLoading
+                  ? 'Getting Hint…'
+                  : !isAiAvailable
                   ? 'AI tutor unavailable'
                   : !aiEnabled
                   ? 'AI tutor is paused'
-                  : 'Request a hint'
-              }
-            >
-              {isTutorLoading
-                ? 'Getting Hint…'
-                : !isAiAvailable
-                ? 'AI tutor unavailable'
-                : !aiEnabled
-                ? 'AI tutor is paused'
-                : 'Request a hint'}
-            </button>
+                  : 'Request a hint'}
+              </button>
+
+              <button
+                id="solution-button"
+                className="duo-button duo-button-secondary duo-button-solution"
+                onClick={askSolution}
+                disabled={!lesson || isRunning}
+                aria-label="View Solution"
+              >
+                View Solution 💡
+              </button>
+            </div>
 
             <button
-              id="solution-button"
-              className="duo-button duo-button-secondary duo-button-solution"
-              onClick={askSolution}
-              disabled={!lesson || isRunning}
-              aria-label="View Solution"
+              id="run-tests-button"
+              className="duo-button duo-button-primary"
+              onClick={runTests}
+              disabled={isRunning || isLoadingLesson}
+              aria-label="Run code"
             >
-              View Solution 💡
+              {isRunning ? 'Running…' : 'Run code'}
             </button>
-          </div>
-
-          <button
-            id="run-tests-button"
-            className="duo-button duo-button-primary"
-            onClick={runTests}
-            disabled={isRunning || isLoadingLesson}
-            aria-label="Run code"
-          >
-            {isRunning ? 'Running…' : 'Run code'}
-          </button>
-        </footer>
+          </footer>
+        )}
       </div>
 
       {showOutofHeartsModal && (

@@ -32,6 +32,18 @@ async def test_fill_blank_grading():
     failed, _ = await engine.grade_exercise(ex, {"answers": ["20"]}, "python")
     assert failed is False
 
+    # Test quote normalization and statement assignment prefix stripping
+    ex_py = ExerciseDefinition(id="py-ex-1b", type="fill_blank", correct_answer="\"Python\"", starter_code="language = ___")
+
+    p1, _ = await engine.grade_exercise(ex_py, {"answers": ["language = \"Python\""]}, "python")
+    assert p1 is True
+
+    p2, _ = await engine.grade_exercise(ex_py, {"answers": ["'Python'"]}, "python")
+    assert p2 is True
+
+    p3, _ = await engine.grade_exercise(ex_py, {"answers": ["Python"]}, "python")
+    assert p3 is True
+
 @pytest.mark.asyncio
 async def test_submit_exercise_and_xp():
     curr = load_default_curriculum()

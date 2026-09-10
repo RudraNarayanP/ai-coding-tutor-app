@@ -369,13 +369,36 @@ class LessonEngine:
             else:
                 answers = [str(raw_ans)]
 
-            answers_norm = [str(a).strip().lower() for a in answers]
+            def norm_exp(v):
+                s = str(v).strip()
+                if (s.startswith('"') and s.endswith('"')) or (s.startswith("'") and s.endswith("'")):
+                    s = s[1:-1].strip()
+                return s.lower()
+
+            def norm_ans(ans_v, exp_v):
+                s = str(ans_v).strip()
+                e_str = str(exp_v).strip() if exp_v is not None else ""
+                if "=" in s and "=" not in e_str:
+                    s = s.split("=", 1)[1].strip()
+                if (s.startswith('"') and s.endswith('"')) or (s.startswith("'") and s.endswith("'")):
+                    s = s[1:-1].strip()
+                return s.lower()
 
             if isinstance(expected, list):
-                exp_norm = [str(e).strip().lower() for e in expected]
-                passed = (answers_norm == exp_norm)
+                exp_norm = [norm_exp(e) for e in expected]
+                ans_norm = [
+                    norm_ans(answers[i], expected[i]) if i < len(expected) else norm_ans(answers[i], "")
+                    for i in range(len(answers))
+                ]
+                raw_ans_norm = [str(a).strip().lower() for a in answers]
+                raw_exp_norm = [str(e).strip().lower() for e in expected]
+                passed = (raw_ans_norm == raw_exp_norm) or (ans_norm == exp_norm)
             elif isinstance(expected, (str, int, float, bool)):
-                passed = (len(answers_norm) == 1 and answers_norm[0] == str(expected).strip().lower())
+                exp_norm = norm_exp(expected)
+                ans_norm = norm_ans(answers[0], expected) if answers else ""
+                raw_ans0 = str(answers[0]).strip().lower() if answers else ""
+                raw_exp = str(expected).strip().lower()
+                passed = (raw_ans0 == raw_exp) or (ans_norm == exp_norm)
             else:
                 passed = True
 

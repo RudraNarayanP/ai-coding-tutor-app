@@ -12,6 +12,8 @@ interface Props {
   onSubmit: () => void
   onContinue: () => void
   onRetry: () => void
+  onRunCode?: () => void
+  isRunningCode?: boolean
 }
 
 const ExercisePanel: React.FC<Props> = (props) => {
@@ -70,7 +72,7 @@ const ExercisePanel: React.FC<Props> = (props) => {
 
   const renderMcq = () => (
     <div className="exercise-options-grid">
-      {(opts.length > 0 ? opts : exType === 'true_false' ? ['True', 'False'] : []).map((opt) => (
+      {(opts.length > 0 ? opts : exType === 'true_false' ? ['True', 'False'] : []).map((opt: string) => (
         <button key={opt}
           className={`exercise-option-btn ${exState.answer === opt ? 'selected' : ''}`}
           disabled={disabled}
@@ -82,7 +84,7 @@ const ExercisePanel: React.FC<Props> = (props) => {
 
   const renderFillBlank = () => (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-      {((exercise.blanks && exercise.blanks.length > 0) ? exercise.blanks : ['_']).map((_, idx) => (
+      {((exercise.blanks && exercise.blanks.length > 0) ? exercise.blanks : ['_']).map((_: any, idx: number) => (
         <div key={idx} style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
           <label style={{ fontWeight: 700, fontSize: '14px' }}>Blank {idx + 1}:</label>
           <input type="text" value={exState.answers?.[idx] || exState.answer || ''}
@@ -104,7 +106,7 @@ const ExercisePanel: React.FC<Props> = (props) => {
 
   const renderSelectMultiple = () => (
     <div className="exercise-options-grid">
-      {opts.map((opt) => {
+      {opts.map((opt: string) => {
         const s = new Set<string>(exState.answers || []); const sel = s.has(opt)
         return (
           <button key={opt} className={`exercise-option-btn ${sel ? 'selected' : ''}`}
@@ -126,6 +128,21 @@ const ExercisePanel: React.FC<Props> = (props) => {
       <h3 style={{ fontSize: '18px', fontWeight: 800, marginBottom: '12px' }}>
         {exercise.question || exercise.title || 'Complete the exercise:'}
       </h3>
+      {(exercise.starter_code || exercise.code) && (
+        <pre style={{
+          background: 'var(--bg-code, #1e293b)',
+          color: '#f8fafc',
+          padding: '12px 16px',
+          borderRadius: '8px',
+          fontFamily: 'var(--font-mono, monospace)',
+          fontSize: '14px',
+          marginBottom: '16px',
+          overflowX: 'auto',
+          whiteSpace: 'pre-wrap'
+        }}>
+          <code>{exercise.starter_code || exercise.code}</code>
+        </pre>
+      )}
       {['mcq', 'true_false', 'output_prediction', 'debugging', 'identify_error'].includes(exType) && renderMcq()}
       {['fill_blank', 'code_completion'].includes(exType) && renderFillBlank()}
       {exType === 'select_multiple' && renderSelectMultiple()}

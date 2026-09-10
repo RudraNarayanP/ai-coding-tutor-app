@@ -1,6 +1,8 @@
 import asyncio
 import logging
 import os
+import time
+import uuid
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel, Field
@@ -19,32 +21,39 @@ from .api_settings import (
 from pathlib import Path
 from .curriculum_loader import load_all_curriculums
 from .lesson_engine import LessonEngine, ProgressionStore
+from .user_store import LeaderboardEntry, UserProfile, UserStore
 from .lesson_models import (
+    CourseDefinition,
     CourseSummary,
+    Curriculum,
     LessonProgress,
     LessonSummary,
+    ModuleReference,
     ProgressionResult,
     ProgressionState,
     PublicLessonView,
 )
 from .custom_course_generator import (
+    ConceptGraph,
+    ConceptGraphBuilder,
     CourseGenerationRequest,
     CourseSerializer,
+    CurriculumGenerator,
+    CurriculumSequencer,
     DuplicateDetector,
     GeneratedCourseMetadata,
     GeneratedCoursePreview,
     GeneratedCourseStore,
+    GenerationError,
     GenerationJob,
+    IngestionError,
     InputValidator,
-    SourceIngestionService,
-    ConceptGraphBuilder,
-    CurriculumSequencer,
-    StructureValidator,
-    CurriculumGenerator,
     RegenerateLessonRequest,
     RegenerateUnitRequest,
-    IngestionError,
-    GenerationError,
+    SourceDocument,
+    SourceIngestionService,
+    StructureValidator,
+    UnitBlueprint,
     build_custom_curriculum_from_text,
 )
 from .sandbox import SandboxError, sandbox
@@ -83,6 +92,13 @@ class TestOutRequest(BaseModel):
     submissions: dict[str, dict] = Field(default_factory=dict)
 
 
+class ProfileUpdateRequest(BaseModel):
+    user_id: str = "default_user"
+    username: str | None = None
+    streak: int | None = None
+    xp: int | None = None
+
+
 base_path = Path(__file__).resolve().parent
 curriculum_root = base_path.parent / "curriculum"
 course_serializer = CourseSerializer(curriculum_root)
@@ -100,6 +116,8 @@ for lang, curr in loaded_curriculums.items():
         loaded_stores[lang] = ProgressionStore(curr, storage_path=base_path / f"progression_state_generated_{lang}.json")
     else:
         loaded_stores[lang] = ProgressionStore(curr, storage_path=base_path / f"progression_state_{lang}.json")
+
+user_store = UserStore(storage_path=base_path / "users_state.json")
 
 lesson_engine = LessonEngine(
     executor=sandbox,
@@ -312,26 +330,61 @@ async def run_lesson(lesson_id: str, request: CodeSubmission):
 
 
 @app.post("/api/lessons/{lesson_id}/submit-exercise")
-async def submit_exercise(lesson_id: str, request: ExerciseSubmissionRequest):
+async def submit_exercise(lesson_id: str, request: ExerciseSubmissionRequest, user_id: str = "default_user"):
     try:
         lesson_engine.get_lesson(lesson_id)
     except KeyError as exc:
         raise HTTPException(status_code=404, detail={"error": "lesson_not_found"}) from exc
-    return await lesson_engine.submit_exercise(
+    res = await lesson_engine.submit_exercise(
         lesson_id=lesson_id,
         sublesson_id=request.sublesson_id,
         exercise_id=request.exercise_id,
         payload=request.payload,
     )
+    if res.get("xp_awarded", 0) > 0:
+        user_store.update_user_xp(user_id, res["xp_awarded"])
+    return res
 
 
 @app.post("/api/lessons/{lesson_id}/test-out")
-async def test_out_lesson(lesson_id: str, request: TestOutRequest):
+async def test_out_lesson(lesson_id: str, request: TestOutRequest, user_id: str = "default_user"):
     try:
         lesson_engine.get_lesson(lesson_id)
     except KeyError as exc:
         raise HTTPException(status_code=404, detail={"error": "lesson_not_found"}) from exc
-    return await lesson_engine.run_test_out(lesson_id=lesson_id, submissions=request.submissions)
+    res = await lesson_engine.run_test_out(lesson_id=lesson_id, submissions=request.submissions)
+    if res.get("xp_awarded", 0) > 0:
+        user_store.update_user_xp(user_id, res["xp_awarded"])
+    return res
+
+
+@app.get("/api/leaderboard", response_model=list[LeaderboardEntry])
+async def get_leaderboard(user_id: str = "default_user"):
+    active_xp = lesson_engine.store.state().xp
+    user = user_store.get_or_create_user(user_id)
+    if active_xp > user.xp:
+        user_store.set_user_xp(user_id, active_xp)
+    return user_store.get_leaderboard(current_user_id=user_id)
+
+
+@app.get("/api/user/profile", response_model=UserProfile)
+async def get_user_profile(user_id: str = "default_user"):
+    active_xp = lesson_engine.store.state().xp
+    user = user_store.get_or_create_user(user_id)
+    if active_xp > user.xp:
+        user = user_store.set_user_xp(user_id, active_xp)
+    return user
+
+
+@app.post("/api/user/profile", response_model=UserProfile)
+async def update_user_profile(req: ProfileUpdateRequest):
+    if req.xp is not None:
+        user_store.set_user_xp(req.user_id, req.xp)
+    return user_store.update_profile(
+        user_id=req.user_id,
+        username=req.username,
+        streak=req.streak,
+    )
 
 
 @app.get("/api/lessons/{lesson_id}/progress", response_model=LessonProgress)

@@ -170,6 +170,26 @@ export type ProgressionState = {
   level: number
 }
 
+export type LeaderboardEntry = {
+  rank: number
+  user_id: string
+  username: string
+  xp: number
+  level: number
+  streak: number
+  is_demo: boolean
+  is_current_user: boolean
+}
+
+export type UserProfile = {
+  user_id: string
+  username: string
+  xp: number
+  level: number
+  streak: number
+  is_demo: boolean
+}
+
 // ─── Small fetch helper ───────────────────────────────────────────────────────
 
 async function request<T>(url: string, opts?: RequestInit): Promise<T | null> {
@@ -250,4 +270,13 @@ export const api = {
 
   progression: (language: string) =>
     request<ProgressionState>(`/api/progression?language=${encodeURIComponent(language)}`),
+
+  leaderboard: (userId: string = 'default_user') =>
+    request<LeaderboardEntry[]>(`/api/leaderboard?user_id=${encodeURIComponent(userId)}`),
+
+  userProfile: (userId: string = 'default_user') =>
+    request<UserProfile>(`/api/user/profile?user_id=${encodeURIComponent(userId)}`),
+
+  updateUserProfile: (payload: { user_id?: string; username?: string; streak?: number; xp?: number }) =>
+    post('/api/user/profile', payload),
 }
