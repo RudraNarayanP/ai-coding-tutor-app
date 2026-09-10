@@ -3,6 +3,7 @@ import React from 'react'
 interface CodeEditorProps {
   value: string
   onChange: (value: string) => void
+  onKeyDown?: (e: React.KeyboardEvent<HTMLTextAreaElement>) => void
   disabled?: boolean
   filename?: string
 }
@@ -16,12 +17,16 @@ interface CodeEditorProps {
 export const CodeEditor: React.FC<CodeEditorProps> = ({
   value,
   onChange,
+  onKeyDown,
   disabled = false,
   filename = 'exercise.py',
 }) => {
   const lineCount = value.split('\n').length
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
+    if (onKeyDown) {
+      onKeyDown(e)
+    }
     // Expose a run callback via a custom event so App stays in control.
     if ((e.ctrlKey && e.key === 'Enter') || (e.shiftKey && e.key === 'Enter')) {
       e.preventDefault()
