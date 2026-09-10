@@ -677,7 +677,7 @@ class CurriculumGenerator:
                 question=f"Mastery check for {c_title}: What is the core principle?",
                 options=[f"Core principle of {c_title}", "Incorrect choice A", "Incorrect choice B"],
                 correct_answer=f"Core principle of {c_title}",
-                starter_code="# Write your solution or note here\n" if ex_type == "tiny_coding" else None,
+                starter_code="# Write your solution or note here\n" if ex_type == "tiny_coding" else "",
                 solution_code="print('ok')\n" if ex_type == "tiny_coding" else None,
                 xp_reward=15,
             )

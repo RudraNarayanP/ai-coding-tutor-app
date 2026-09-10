@@ -1,4 +1,4 @@
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, field_validator
 
 
 class ConceptDefinition(BaseModel):
@@ -48,6 +48,20 @@ class ExerciseDefinition(BaseModel):
     xp_reward: int = Field(default=10, ge=0)
     explanation: str = Field(default="", max_length=2000)
 
+    @field_validator("title", "type", "question", "starter_code", "explanation", mode="before")
+    @classmethod
+    def coerce_none_to_str(cls, v: str | None) -> str:
+        if v is None:
+            return ""
+        return str(v)
+
+    @field_validator("options", "blanks", "pairs", "tests", "hints", mode="before")
+    @classmethod
+    def coerce_none_to_list(cls, v: list | None) -> list:
+        if v is None:
+            return []
+        return v
+
 
 class SubLessonDefinition(BaseModel):
     id: str = Field(pattern=r"^[a-z0-9-]+$", min_length=1, max_length=80)
@@ -80,6 +94,20 @@ class LessonDefinition(BaseModel):
     mastery_exam: list[ExerciseDefinition] = Field(default_factory=list)
     xp_reward: int = Field(default=25, ge=0)
     source: LessonSource | None = None
+
+    @field_validator("starter_code", "section_id", "section_title", mode="before")
+    @classmethod
+    def coerce_none_to_str_lesson(cls, v: str | None) -> str:
+        if v is None:
+            return ""
+        return str(v)
+
+    @field_validator("concepts", "prerequisites", "learning_objectives", "tests", "static_hints", "sublessons", "mastery_exam", mode="before")
+    @classmethod
+    def coerce_none_to_list_lesson(cls, v: list | None) -> list:
+        if v is None:
+            return []
+        return v
 
 
 class ModuleDefinition(BaseModel):

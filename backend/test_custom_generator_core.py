@@ -59,6 +59,23 @@ def test_learning_domain_classifier():
     assert "calculation" in exercises
 
 
+def test_exercise_definition_none_coercion():
+    from backend.lesson_models import ExerciseDefinition
+    ex = ExerciseDefinition(
+        id="ex-none-test",
+        title=None,
+        type="mcq",
+        question="Test Question",
+        starter_code=None,
+        explanation=None,
+        options=None,
+    )
+    assert ex.starter_code == ""
+    assert ex.title == ""
+    assert ex.explanation == ""
+    assert ex.options == []
+
+
 def test_structure_validator():
     validator = StructureValidator()
     graph = ConceptGraph(
