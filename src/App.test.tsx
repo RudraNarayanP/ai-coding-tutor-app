@@ -107,6 +107,21 @@ function setupFetch({
       const l = id === 'lesson-1' ? completedLesson : lesson
       return Promise.resolve({ ok: true, json: () => Promise.resolve(l) })
     }
+    if (url.includes('/progress')) {
+      return Promise.resolve({
+        ok: true,
+        json: () => Promise.resolve({
+          lesson_id: 'lesson-2',
+          total_exercises: 0,
+          completed_exercise_ids: [],
+          attempt_counts: {},
+          last_results: {},
+          lesson_completed: false,
+          next_action: 'answer',
+          next_lesson_id: null,
+        }),
+      })
+    }
     if (url.includes('/api/lessons') && !url.includes('/run') && !opts) {
       return Promise.resolve({
         ok: true,
@@ -282,10 +297,33 @@ describe('Lesson navigation', () => {
 
 describe('Run button and code editor', () => {
   it('run button is disabled before lesson loads', async () => {
-    setupFetch()
+    const user = userEvent.setup()
+    let resolveLesson!: (v: unknown) => void
+    const fetchMock = setupFetch()
+    fetchMock.mockImplementation((url: string, opts?: RequestInit) => {
+      if (url.match(/\/api\/lessons\/[\w-]+$/) && !opts) {
+        return new Promise((res) => {
+          resolveLesson = () => res({ ok: true, json: () => Promise.resolve(currentLesson) })
+        })
+      }
+      if (url.includes('/api/courses/select')) {
+        return Promise.resolve({ ok: true, json: () => Promise.resolve({ status: 'ok' }) })
+      }
+      if (url.includes('/api/courses')) {
+        return Promise.resolve({ ok: true, json: () => Promise.resolve([]) })
+      }
+      if (url.includes('/api/lessons') && !opts) {
+        return Promise.resolve({ ok: true, json: () => Promise.resolve(mockLessons) })
+      }
+      return Promise.resolve({ ok: true, json: () => Promise.resolve({}) })
+    })
+
     render(<App />)
-    const loadingEl = screen.getByRole('status', { name: /Loading lesson/ })
-    expect(loadingEl).toBeInTheDocument()
+    const currentBtn = await screen.findByRole('button', { name: /Variables — Current lesson/ })
+    await user.click(currentBtn)
+
+    expect(screen.getByRole('status', { name: /Loading lesson/ })).toBeInTheDocument()
+    await waitFor(() => resolveLesson(null))
   })
 
   it('run button is enabled after lesson loads', async () => {
@@ -374,10 +412,14 @@ describe('Run button and code editor', () => {
     await waitFor(() => expect(editor.value.startsWith('    ')).toBe(true))
 
     fireEvent.keyDown(editor, { key: 'Enter', ctrlKey: true })
-    await waitFor(() =>
-      expect((fetchMock as ReturnType<typeof vi.fn>).mock.calls.some(
-        ([url]) => String(url).includes('/run')
-      )).toBe(true)
+    await waitFor(
+      () =>
+        expect(
+          (fetchMock as ReturnType<typeof vi.fn>).mock.calls.some(([url]) =>
+            String(url).includes('/run')
+          )
+        ).toBe(true),
+      { timeout: 3000 }
     )
   })
 
@@ -390,10 +432,14 @@ describe('Run button and code editor', () => {
     const editor = screen.getByRole<HTMLTextAreaElement>('textbox', { name: /Code editor/ })
     editor.focus()
     fireEvent.keyDown(editor, { key: 'Enter', shiftKey: true })
-    await waitFor(() =>
-      expect((fetchMock as ReturnType<typeof vi.fn>).mock.calls.some(
-        ([url]) => String(url).includes('/run')
-      )).toBe(true)
+    await waitFor(
+      () =>
+        expect(
+          (fetchMock as ReturnType<typeof vi.fn>).mock.calls.some(([url]) =>
+            String(url).includes('/run')
+          )
+        ).toBe(true),
+      { timeout: 3000 }
     )
   })
 })

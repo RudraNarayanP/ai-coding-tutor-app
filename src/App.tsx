@@ -4,6 +4,7 @@ import { GuidebookPanel } from './components/GuidebookPanel'
 import { CreatePage } from './components/CreatePage'
 import Settings from './components/Settings'
 import ExercisePanel from './components/ExercisePanel'
+import { CodeEditor } from './components/CodeEditor'
 import { api, type ExerciseResult, type LessonProgress, type TestOutResult } from './api'
 import {
   getGamificationState,
@@ -175,9 +176,6 @@ function App() {
   const [charSubTab, setCharSubTab] = useState<'syntax' | 'keywords' | 'types' | 'operators'>('syntax')
 
   // Gamification & Hearts State
-  const [hearts, setHearts] = useState<number>(() => getHearts())
-  const [unlimitedHearts, setUnlimitedHeartsState] = useState<boolean>(() => getUnlimitedHearts())
-  const [gems, setGems] = useState<number>(() => getGems())
   const [showOutofHeartsModal, setShowOutofHeartsModal] = useState(false)
 
   // Custom Course Generation State
@@ -385,7 +383,7 @@ function App() {
     // Always land back on the home / course map after switching tracks.
     setLesson(null)
     setIsLessonActive(false)
-    setShowCompletion(false)
+    setCelebration(null)
     fetchLessons()
   }
 
@@ -494,7 +492,7 @@ setIsLessonActive(true)
   }, [code, lesson])
 
   // ─── Run Code & Tests ───────────────────────────────────────────────────────
-  const runTests = async () => {
+  const runTests = useCallback(async () => {
     if (!lesson) return
     setIsRunning(true)
     setResults(null)
@@ -554,7 +552,7 @@ setIsLessonActive(true)
         resultsRef.current?.scrollIntoView({ behavior: 'smooth' })
       }, 100)
     }
-  }
+  }, [lesson, code, soundEnabled, triggerXpGain, lessons])
 
   // ─── Ask AI Tutor ──────────────────────────────────────────────────────────
   const askTutor = async () => {
@@ -1107,8 +1105,8 @@ setExercisePhase('incorrect')
                   </div>
 
                   {/* Interactive Exercise — phase-driven learning loop */}
-                  {lessonHasExercises && !lessonComplete && currentExercise && (
-                      <ExercisePanel
+                  {lessonHasExercises && !lessonComplete && currentExercise ? (
+                    <ExercisePanel
                       exercise={currentExercise}
                       exerciseInput={exerciseInput}
                       exercisePhase={exercisePhase}
@@ -1120,7 +1118,11 @@ setExercisePhase('incorrect')
                       onSubmit={() => submitSubLessonExercise({ ...currentExercise, sublessonId: currentExercise.sublessonId })}
                       onContinue={continueToNextExercise}
                       onRetry={retryCurrentExercise}
+                      onRunCode={runTests}
+                      isRunningCode={isRunning}
                     />
+                  ) : (
+                    <CodeEditor value={code} onChange={setCode} filename="exercise.py" onKeyDown={handleEditorKeyDown} />
                   )}
                 </main>
 
@@ -1601,24 +1603,6 @@ setExercisePhase('incorrect')
                 <div style={{ marginTop: '12px', fontSize: '12px', color: 'var(--ink-soft)', fontWeight: 600 }}>
                   Keep a daily streak going — complete lessons each day to keep your 🔥 alive.
                 </div>
-                    { name: 'Alex Coder', base: 120 },
-                    { name: 'DevSamurai', base: 80 },
-                    { name: 'CodeNinja', base: 40 },
-                  ]
-                  const userItem = { name: 'Patchwork Learner (You)', xp: xp, isUser: true }
-                  const allItems = [...peers.map(p => ({ name: p.name, xp: p.base, isUser: false })), userItem]
-                  allItems.sort((a, b) => b.xp - a.xp)
-
-                  return allItems.map((u, idx) => (
-                    <div key={u.name} className={`duo-rank-item ${u.isUser ? 'user-self' : ''}`}>
-                      <div className={`duo-rank-num top-${idx + 1}`}>{idx + 1}</div>
-                      <div className="duo-user-avatar-circle">{u.name[0]}</div>
-                      <div className="duo-rank-name">{u.name}</div>
-                      <div className="duo-rank-xp">{u.xp} XP</div>
-                    </div>
-                  ))
-                })()}
->>>>>>> origin/main
               </div>
             </div>
           </div>
@@ -1761,7 +1745,7 @@ setExercisePhase('incorrect')
                 className="duo-button duo-button-primary"
                 onClick={() => {
                   setHearts(5)
-                  saveHearts(5)
+                  saveGameState({ hearts: 5 })
                   setShowOutofHeartsModal(false)
                 }}
               >
@@ -1770,7 +1754,6 @@ setExercisePhase('incorrect')
               <button
                 className="duo-button duo-button-secondary"
                 onClick={() => {
-                  setUnlimitedHeartsState(true)
                   setUnlimitedHearts(true)
                   setShowOutofHeartsModal(false)
                 }}
