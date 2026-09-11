@@ -600,6 +600,29 @@ PEDAGOGICAL_STYLE_INSTRUCTIONS: dict[str, str] = {
     "socratic": "Teach through questions. Guide the learner to discover concepts by answering progressive questions.",
 }
 
+DIFFICULTY_PROMPT_REQUIREMENTS: dict[str, str] = {
+    "beginner": (
+        "TARGET AUDIENCE: High-school student or introductory learner.\n"
+        "COMPLEXITY: Clear definitions, direct recall, single-concept focus, and straightforward explanations.\n"
+        "QUESTION STYLE: Direct and intuitive with unambiguous correct answers and clear distractors."
+    ),
+    "intermediate": (
+        "TARGET AUDIENCE: Undergraduate student or practical practitioner.\n"
+        "COMPLEXITY: Multi-step reasoning, concept application, practical scenario analysis, connecting 2-3 concepts.\n"
+        "QUESTION STYLE: Analytical questions requiring interpretation of code/text/formulas, non-trivial plausible distractors."
+    ),
+    "advanced": (
+        "TARGET AUDIENCE: Advanced undergraduate or graduate student.\n"
+        "COMPLEXITY: Advanced synthesis, edge-case evaluation, deep theoretical mechanism analysis.\n"
+        "QUESTION STYLE: Sophisticated multi-part reasoning, analyzing subtle failure modes, detailed domain terminology."
+    ),
+    "expert": (
+        "TARGET AUDIENCE: PhD-level researcher or senior domain expert.\n"
+        "COMPLEXITY: Research-grade precision, cutting-edge theoretical frameworks, novel problem solving, interdisciplinary trade-offs.\n"
+        "QUESTION STYLE: High-level technical analysis, exact scientific nomenclature, 120+ character comprehensive options with subtle expert-level distinctions."
+    ),
+}
+
 
 class CurriculumGenerator:
     def __init__(self, provider: AIProvider) -> None:
@@ -612,6 +635,7 @@ class CurriculumGenerator:
         doc: SourceDocument,
         course_id: str,
         unit_index: int,
+        pedagogical_style: str = "conceptual",
     ) -> ModuleDefinition:
         unit_id = f"{course_id}-mod-{unit_index}"
         concepts = [
@@ -619,6 +643,88 @@ class CurriculumGenerator:
             for cid in unit_blueprint.concept_ids
         ]
 
+        # Assemble rich source context directly from video transcripts/segments or plain text
+        source_context_snippets = []
+        if doc.segments:
+            for s in doc.segments:
+                t_snip = s.transcript[:2000] if s.transcript else s.description_snippet[:500]
+                if t_snip:
+                    source_context_snippets.append(f"Segment [{s.position}] {s.title}:\n{t_snip}")
+        if not source_context_snippets and doc.plain_text:
+            source_context_snippets.append(doc.plain_text[:8000])
+
+        source_context = "\n\n".join(source_context_snippets)[:10000] or graph.source_summary
+
+        style_instruction = PEDAGOGICAL_STYLE_INSTRUCTIONS.get(pedagogical_style, "")
+
+        system_prompt = (
+            "You are a world-class curriculum author and assessment designer. "
+            "Generate rich, domain-aware lesson content and exercises derived directly from the provided source context.\n"
+            "Respond ONLY with a valid JSON array of objects representing the lessons in this unit.\n"
+            "Do NOT wrap the response in markdown codeblock markers unless necessary, and ensure valid JSON syntax."
+        )
+
+        slots_info = []
+        for l_idx, slot in enumerate(unit_blueprint.lesson_slots, start=1):
+            lesson_id = f"{course_id}-m{unit_index}-l{l_idx}"
+            diff_req = DIFFICULTY_PROMPT_REQUIREMENTS.get(slot.difficulty, DIFFICULTY_PROMPT_REQUIREMENTS["beginner"])
+            slots_info.append(
+                f"Lesson ID: {lesson_id}\n"
+                f"Type: {slot.type}\n"
+                f"Difficulty: {slot.difficulty}\n"
+                f"Concepts: {slot.concept_ids}\n"
+                f"Learning Objectives: {slot.learning_objectives}\n"
+                f"Exercise Types: {slot.suggested_exercise_types}\n"
+                f"Difficulty Scaling Rules:\n{diff_req}\n"
+            )
+
+        user_prompt = (
+            f"Course ID: {course_id}\n"
+            f"Unit Title: {unit_blueprint.title}\n"
+            f"Domain: {graph.detected_domain}\n"
+            f"Pedagogical Style: {pedagogical_style} - {style_instruction}\n\n"
+            f"--- SOURCE CONTEXT ---\n{source_context}\n\n"
+            f"--- LESSON SLOTS TO GENERATE ---\n"
+            + "\n".join(slots_info)
+            + "\n\n"
+            "OUTPUT JSON SCHEMA:\n"
+            "[\n"
+            "  {\n"
+            '    "id": "lesson_id",\n'
+            '    "title": "Lesson Title",\n'
+            '    "description": "Comprehensive description tied to source content",\n'
+            '    "starter_code": "code snippet or note",\n'
+            '    "exercises": [\n'
+            "      {\n"
+            '        "id": "ex_id",\n'
+            '        "title": "Exercise Title",\n'
+            '        "type": "mcq|fill_blank|tiny_coding|code_completion|short_answer",\n'
+            '        "question": "Clear, context-grounded question citing facts/concepts from source material",\n'
+            '        "options": ["Correct option", "Plausible distractor A", "Plausible distractor B"],\n'
+            '        "correct_answer": "Correct option",\n'
+            '        "explanation": "Detailed pedagogical explanation citing why the answer is correct",\n'
+            '        "starter_code": "",\n'
+            '        "solution_code": ""\n'
+            "      }\n"
+            "    ]\n"
+            "  }\n"
+            "]"
+        )
+
+        generated_lessons_map: dict[str, dict[str, Any]] = {}
+        try:
+            raw_llm = await self.provider.generate_structured(system=system_prompt, user=user_prompt, max_tokens=3500)
+            cleaned = raw_llm.strip()
+            if "```json" in cleaned:
+                cleaned = cleaned.split("```json")[1].split("```")[0].strip()
+            elif "```" in cleaned:
+                cleaned = cleaned.split("```")[1].split("```")[0].strip()
+
+            parsed_array = json.loads(cleaned)
+            if isinstance(parsed_array, list):
+                for item in parsed_array:
+                    if isinstance(item, dict) and "id" in item:
+                        generated_lessons_map[item["id"]] = item
         # Extract transcript / source text relevant to this unit
         source_text_snippet = doc.plain_text[:8000] if doc.plain_text else ""
         if doc.segments:
@@ -678,6 +784,7 @@ class CurriculumGenerator:
         lessons: list[LessonDefinition] = []
         for l_idx, slot in enumerate(unit_blueprint.lesson_slots, start=1):
             lesson_id = f"{course_id}-m{unit_index}-l{l_idx}"
+            llm_lesson_data = generated_lessons_map.get(lesson_id)
             llm_lesson_item = None
             if llm_data and l_idx - 1 < len(llm_data):
                 llm_lesson_item = llm_data[l_idx - 1]
@@ -690,6 +797,8 @@ class CurriculumGenerator:
                 order=(unit_index - 1) * 10 + l_idx,
                 slot=slot,
                 domain=graph.detected_domain,
+                source_context=source_context,
+                llm_data=llm_lesson_data,
                 doc_title=doc.title,
                 llm_item=llm_lesson_item,
             )
@@ -729,6 +838,38 @@ class CurriculumGenerator:
         order: int,
         slot: LessonSlot,
         domain: str,
+        source_context: str = "",
+        llm_data: dict[str, Any] | None = None,
+    ) -> LessonDefinition:
+        c_title = slot.concept_ids[0].replace("-", " ").title() if slot.concept_ids else "Topic"
+
+        # Parse exercises from LLM data if available and valid
+        exercises: list[ExerciseDefinition] = []
+        if llm_data and isinstance(llm_data.get("exercises"), list) and len(llm_data["exercises"]) > 0:
+            for ex_idx, raw_ex in enumerate(llm_data["exercises"], start=1):
+                if isinstance(raw_ex, dict):
+                    ex_type = raw_ex.get("type", "mcq")
+                    q_text = raw_ex.get("question") or f"Mastery check for {c_title}"
+                    opts = raw_ex.get("options") or []
+                    corr = raw_ex.get("correct_answer") or (opts[0] if opts else "Correct answer")
+                    expl = raw_ex.get("explanation") or f"Explanation of {c_title}."
+
+                    exercises.append(
+                        ExerciseDefinition(
+                            id=f"{lesson_id}-ex-{ex_idx}",
+                            title=raw_ex.get("title") or f"{slot.type.title()} Exercise {ex_idx}",
+                            type=ex_type,
+                            question=q_text,
+                            options=opts,
+                            correct_answer=corr,
+                            explanation=expl,
+                            starter_code=raw_ex.get("starter_code") or "",
+                            solution_code=raw_ex.get("solution_code") or None,
+                            xp_reward=15,
+                        )
+                    )
+
+        # Fallback exercise generation incorporating source context and difficulty scaling
         doc_title: str = "",
         llm_item: dict | None = None,
     ) -> LessonDefinition:
@@ -793,6 +934,55 @@ class CurriculumGenerator:
             if domain == "programming" and slot.type in ("practice", "checkpoint"):
                 ex_type = "tiny_coding"
 
+            # Extract context snippets for realistic question phrasing
+            clean_context = source_context.replace("\n", " ").strip() if source_context else ""
+            context_snippet = clean_context[:120] if clean_context else f"key principles of {c_title}"
+
+            difficulty = slot.difficulty or "beginner"
+            if difficulty == "expert":
+                question_text = f"Regarding {c_title} and research findings from source context ('{context_snippet}...'), which precise theoretical mechanism holds?"
+                options = [
+                    f"Option A: According to the source analysis, {c_title} exhibits high-order theoretical properties under specified operational boundary conditions.",
+                    f"Option B: {c_title} unconditionally simplifies to linear approximations regardless of boundary constraints.",
+                    f"Option C: The source text indicates that {c_title} operates independently of surrounding systems.",
+                ]
+                correct_answer = options[0]
+                explanation = f"In-depth analysis of {c_title} demonstrates the validity of Option A based on source material principles."
+            elif difficulty == "advanced":
+                question_text = f"In the context of {c_title} ('{context_snippet}...'), which analysis correctly evaluates key trade-offs?"
+                options = [
+                    f"Primary mechanism of {c_title} optimizing efficiency and consistency as stated in source material",
+                    f"Secondary misconfiguration of {c_title} leading to non-deterministic failure",
+                    f"Legacy implementation of {c_title} disregarding system boundary constraints",
+                ]
+                correct_answer = options[0]
+                explanation = f"Evaluating {c_title} in this scenario confirms Option 1 as the correct design choice."
+            elif difficulty == "intermediate":
+                question_text = f"Based on the course material for {c_title}, which statement best describes its practical application?"
+                options = [
+                    f"It applies {c_title} directly to resolve key requirements described in the material.",
+                    f"It replaces {c_title} with unrelated conceptual frameworks.",
+                    f"It neglects {c_title} entirely during system execution.",
+                ]
+                correct_answer = options[0]
+                explanation = f"{c_title} is specifically applied to address core requirements in the source material."
+            else: # beginner
+                question_text = f"What is the key concept of {c_title} presented in the lesson material?"
+                options = [
+                    f"Core concept of {c_title}",
+                    f"Unrelated concept A for {c_title}",
+                    f"Unrelated concept B for {c_title}",
+                ]
+                correct_answer = options[0]
+                explanation = f"The lesson material defines {c_title} by its core fundamental principles."
+
+            starter_code = ""
+            solution_code = None
+            if ex_type == "tiny_coding":
+                starter_code = f"# Write solution for {c_title}\n"
+                solution_code = f"print('{c_title} ok')\n"
+
+            exercises = [
             if ex_type == "mcq":
                 q_text = f"In the context of {topic_name}, what is the main purpose of {c_title}?"
                 c_ans = f"It provides the primary mechanism for managing {c_title.lower()} operations."
@@ -811,6 +1001,15 @@ class CurriculumGenerator:
                     id=f"{lesson_id}-ex-1",
                     title=f"{slot.type.title()} Exercise 1",
                     type=ex_type,
+                    question=question_text,
+                    options=options,
+                    correct_answer=correct_answer,
+                    explanation=explanation,
+                    starter_code=starter_code,
+                    solution_code=solution_code,
+                    xp_reward=15,
+                )
+            ]
                     question=q_text,
                     options=opts if ex_type == "mcq" else [],
                     correct_answer=c_ans,
@@ -823,15 +1022,19 @@ class CurriculumGenerator:
         sublessons = [
             SubLessonDefinition(
                 id=f"{lesson_id}-sub-1",
-                title=f"{c_title} Step 1",
-                description="Interactive lesson step",
+                title=(llm_data.get("title") if llm_data else None) or f"{c_title} Step 1",
+                description=(llm_data.get("description") if llm_data else None) or f"Interactive lesson step covering {c_title}",
                 order=1,
                 exercises=exercises,
             )
         ]
 
+        starter_code = (llm_data.get("starter_code") if llm_data else None) or f"# Code snippet for {c_title}\nprint('{c_title}')\n"
+
         return LessonDefinition(
             id=lesson_id,
+            title=(llm_data.get("title") if llm_data else None) or f"{order}. {slot.type.title()}: {c_title}",
+            description=(llm_data.get("description") if llm_data else None) or f"Master {c_title} through {slot.type} exercises.",
             title=lesson_title,
             description=lesson_desc,
             order=order,
