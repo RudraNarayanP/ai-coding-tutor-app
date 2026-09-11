@@ -725,70 +725,13 @@ class CurriculumGenerator:
                 for item in parsed_array:
                     if isinstance(item, dict) and "id" in item:
                         generated_lessons_map[item["id"]] = item
-        # Extract transcript / source text relevant to this unit
-        source_text_snippet = doc.plain_text[:8000] if doc.plain_text else ""
-        if doc.segments:
-            relevant_segs = [s for s in doc.segments if any(cid in s.title.lower() or cid in s.description_snippet.lower() for cid in unit_blueprint.concept_ids)]
-            if not relevant_segs:
-                relevant_segs = doc.segments[:5]
-            source_text_snippet = "\n\n".join([f"Segment '{s.title}': {s.transcript or s.description_snippet}" for s in relevant_segs])[:8000]
-
-        system_prompt = (
-            "You are an expert interactive curriculum author. Generate rich, authentic, domain-aware lesson content and exercises "
-            "directly derived from the provided source transcript/document material.\n"
-            "CRITICAL INSTRUCTIONS FOR QUESTIONS & OPTIONS:\n"
-            "- Questions MUST test specific facts, mechanics, code patterns, equations, or concepts mentioned in the source material.\n"
-            "- Options MUST be realistic, plausible choices related to the topic. NEVER output placeholder text like 'Incorrect choice A' or 'Option 1'.\n"
-            "- Provide accurate correct answers and detailed explanations.\n"
-            "Return valid JSON matching this schema:\n"
-            "{\n"
-            '  "lessons": [\n'
-            '    {\n'
-            '      "slot_type": "learn|practice|review|checkpoint",\n'
-            '      "title": "Lesson Title",\n'
-            '      "description": "Lesson description...",\n'
-            '      "starter_code": "# code snippet\\n",\n'
-            '      "exercises": [\n'
-            '        {\n'
-            '          "title": "Exercise Title",\n'
-            '          "type": "mcq|fill_blank|code_completion|tiny_coding|true_false",\n'
-            '          "question": "Specific question directly testing material?",\n'
-            '          "options": ["Correct Answer Choice", "Plausible Distractor 1", "Plausible Distractor 2"],\n'
-            '          "correct_answer": "Correct Answer Choice",\n'
-            '          "explanation": "Detailed explanation of why this answer is correct...",\n'
-            '          "starter_code": "# starter code if applicable\\n",\n'
-            '          "solution_code": "# solution code if applicable\\n"\n'
-            '        }\n'
-            '      ]\n'
-            '    }\n'
-            '  ]\n'
-            "}"
-        )
-
-        user_prompt = (
-            f"Course Title: {doc.title}\n"
-            f"Unit Title: {unit_blueprint.title}\n"
-            f"Unit Concepts: {unit_blueprint.concept_ids}\n"
-            f"Domain: {graph.detected_domain}\n"
-            f"Lesson Slots to Generate: {[s.type for s in unit_blueprint.lesson_slots]}\n\n"
-            f"SOURCE TRANSCRIPT / MATERIAL:\n{source_text_snippet}"
-        )
-
-        llm_data = None
-        try:
-            raw_llm = await self.provider.generate_structured(system=system_prompt, user=user_prompt, max_tokens=3500)
-            llm_data = self._parse_generated_lessons(raw_llm)
         except Exception:
-            llm_data = None
+            pass
 
         lessons: list[LessonDefinition] = []
         for l_idx, slot in enumerate(unit_blueprint.lesson_slots, start=1):
             lesson_id = f"{course_id}-m{unit_index}-l{l_idx}"
             llm_lesson_data = generated_lessons_map.get(lesson_id)
-            llm_lesson_item = None
-            if llm_data and l_idx - 1 < len(llm_data):
-                llm_lesson_item = llm_data[l_idx - 1]
-
             lesson = self._build_lesson_definition(
                 lesson_id=lesson_id,
                 course_id=course_id,
@@ -799,8 +742,6 @@ class CurriculumGenerator:
                 domain=graph.detected_domain,
                 source_context=source_context,
                 llm_data=llm_lesson_data,
-                doc_title=doc.title,
-                llm_item=llm_lesson_item,
             )
             lessons.append(lesson)
 
@@ -811,23 +752,6 @@ class CurriculumGenerator:
             concepts=concepts,
             lessons=lessons,
         )
-
-    def _parse_generated_lessons(self, raw: str) -> list[dict] | None:
-        json_str = raw
-        if "```json" in raw:
-            json_str = raw.split("```json")[1].split("```")[0].strip()
-        elif "```" in raw:
-            json_str = raw.split("```")[1].split("```")[0].strip()
-
-        try:
-            data = json.loads(json_str)
-            if isinstance(data, dict) and "lessons" in data:
-                return data["lessons"]
-            if isinstance(data, list):
-                return data
-        except Exception:
-            return None
-        return None
 
     def _build_lesson_definition(
         self,
@@ -870,65 +794,6 @@ class CurriculumGenerator:
                     )
 
         # Fallback exercise generation incorporating source context and difficulty scaling
-        doc_title: str = "",
-        llm_item: dict | None = None,
-    ) -> LessonDefinition:
-        c_title = slot.concept_ids[0].replace("-", " ").title() if slot.concept_ids else "Topic"
-        topic_name = doc_title or c_title
-
-        lesson_title = f"{order}. {slot.type.title()}: {c_title}"
-        lesson_desc = f"Master {c_title} through {slot.type} exercises."
-        starter_code = f"# Solution code for {c_title}\nprint('{c_title}')\n"
-        exercises = []
-
-        if llm_item and isinstance(llm_item, dict):
-            if llm_item.get("title"):
-                lesson_title = f"{order}. {llm_item['title']}"
-            if llm_item.get("description"):
-                lesson_desc = llm_item["description"]
-            if llm_item.get("starter_code"):
-                starter_code = llm_item["starter_code"]
-
-            raw_exs = llm_item.get("exercises", [])
-            for e_idx, raw_ex in enumerate(raw_exs, start=1):
-                if not isinstance(raw_ex, dict):
-                    continue
-                q_text = raw_ex.get("question", "").strip()
-                opts = raw_ex.get("options", [])
-                ans = raw_ex.get("correct_answer", "").strip()
-
-                # Ensure options do not contain placeholder strings
-                clean_opts = [str(o) for o in opts if "incorrect choice" not in str(o).lower() and "option " not in str(o).lower()]
-                if ans and ans not in clean_opts:
-                    clean_opts.insert(0, ans)
-
-                if len(clean_opts) < 2:
-                    clean_opts = [
-                        ans or f"Primary mechanism of {c_title}",
-                        f"Secondary fallback configuration in {c_title}",
-                        f"Legacy implementation pattern for {c_title}",
-                    ]
-
-                ex_type = raw_ex.get("type", "mcq")
-                if ex_type not in ("mcq", "fill_blank", "code_completion", "tiny_coding", "true_false", "matching", "ordering"):
-                    ex_type = "mcq"
-
-                exercises.append(
-                    ExerciseDefinition(
-                        id=f"{lesson_id}-ex-{e_idx}",
-                        title=raw_ex.get("title") or f"{slot.type.title()} Exercise {e_idx}",
-                        type=ex_type,
-                        question=q_text or f"According to the lesson on {c_title}, which statement best describes its core function?",
-                        options=clean_opts,
-                        correct_answer=ans or clean_opts[0],
-                        explanation=raw_ex.get("explanation") or f"This directly relates to {c_title} as covered in {topic_name}.",
-                        starter_code=raw_ex.get("starter_code") or ("" if ex_type == "mcq" else "# Enter your solution\n"),
-                        solution_code=raw_ex.get("solution_code") or ("print('ok')\n" if ex_type in ("tiny_coding", "code_completion") else None),
-                        xp_reward=15,
-                    )
-                )
-
-        # Fallback if no valid LLM exercises parsed
         if not exercises:
             ex_type = "mcq"
             if domain == "programming" and slot.type in ("practice", "checkpoint"):
@@ -967,14 +832,14 @@ class CurriculumGenerator:
                 correct_answer = options[0]
                 explanation = f"{c_title} is specifically applied to address core requirements in the source material."
             else: # beginner
-                question_text = f"What is the key concept of {c_title} presented in the lesson material?"
+                question_text = f"Based on the course material, what is the primary role of {c_title} ('{context_snippet}...')?"
                 options = [
-                    f"Core concept of {c_title}",
-                    f"Unrelated concept A for {c_title}",
-                    f"Unrelated concept B for {c_title}",
+                    f"To establish the fundamental working principles and core rules of {c_title} as described in the material.",
+                    f"To replace {c_title} with an incompatible secondary paradigm.",
+                    f"To bypass execution and ignore the core requirements of {c_title}.",
                 ]
                 correct_answer = options[0]
-                explanation = f"The lesson material defines {c_title} by its core fundamental principles."
+                explanation = f"The course material establishes {c_title} as a fundamental principle within this topic."
 
             starter_code = ""
             solution_code = None
@@ -983,20 +848,6 @@ class CurriculumGenerator:
                 solution_code = f"print('{c_title} ok')\n"
 
             exercises = [
-            if ex_type == "mcq":
-                q_text = f"In the context of {topic_name}, what is the main purpose of {c_title}?"
-                c_ans = f"It provides the primary mechanism for managing {c_title.lower()} operations."
-                opts = [
-                    c_ans,
-                    f"It acts as a secondary backup when {c_title.lower()} fails.",
-                    f"It is a legacy syntax component replaced by modern alternatives.",
-                ]
-            else:
-                q_text = f"Implement a basic code example demonstrating {c_title} in Python:"
-                c_ans = "print('ok')"
-                opts = [c_ans, "print('error')", "pass"]
-
-            exercises.append(
                 ExerciseDefinition(
                     id=f"{lesson_id}-ex-1",
                     title=f"{slot.type.title()} Exercise 1",
@@ -1010,14 +861,6 @@ class CurriculumGenerator:
                     xp_reward=15,
                 )
             ]
-                    question=q_text,
-                    options=opts if ex_type == "mcq" else [],
-                    correct_answer=c_ans,
-                    starter_code="# Write your solution or note here\n" if ex_type == "tiny_coding" else "",
-                    solution_code="print('ok')\n" if ex_type == "tiny_coding" else None,
-                    xp_reward=15,
-                )
-            )
 
         sublessons = [
             SubLessonDefinition(
@@ -1035,8 +878,6 @@ class CurriculumGenerator:
             id=lesson_id,
             title=(llm_data.get("title") if llm_data else None) or f"{order}. {slot.type.title()}: {c_title}",
             description=(llm_data.get("description") if llm_data else None) or f"Master {c_title} through {slot.type} exercises.",
-            title=lesson_title,
-            description=lesson_desc,
             order=order,
             difficulty=slot.difficulty,
             duration_minutes=slot.duration_minutes,
