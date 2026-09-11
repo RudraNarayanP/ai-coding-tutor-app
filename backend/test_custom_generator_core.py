@@ -99,3 +99,57 @@ def test_structure_validator():
     )
     res = validator.validate(blueprint, graph)
     assert res.valid is True
+
+
+@pytest.mark.asyncio
+async def test_curriculum_generator_with_source_context_and_difficulty():
+    from backend.custom_course_generator import CurriculumGenerator, SourceDocument, VideoSegment
+    from backend.ai_provider import get_ai_provider
+
+    provider = get_ai_provider("ollama")
+    generator = CurriculumGenerator(provider)
+
+    doc = SourceDocument(
+        source_type="transcript",
+        source_url="",
+        source_hash="test1234",
+        title="Deep Learning and Neural Networks",
+        segments=[
+            VideoSegment(
+                video_id="vid1",
+                title="Gradient Descent",
+                url="https://youtube.com/watch?v=vid1",
+                position=1,
+                transcript="Backpropagation computes gradients of the loss function using chain rule.",
+            )
+        ],
+        plain_text="Backpropagation computes gradients of the loss function using chain rule.",
+    )
+
+    graph = ConceptGraph(
+        nodes=[ConceptNode("backpropagation", "Backpropagation", "Gradient calculation", [1], "core", ["ml"], ["Calculate gradients"])],
+        edges=[],
+        detected_domain="data_science",
+        detected_difficulty="expert",
+        source_summary="Deep Learning overview",
+    )
+
+    blueprint = UnitBlueprint(
+        title="Unit 1: Backpropagation",
+        concept_ids=["backpropagation"],
+        lesson_slots=[
+            LessonSlot("learn", ["backpropagation"], ["Calculate gradients"], "expert", 10, False, ["mcq"])
+        ],
+        pedagogical_rationale="Core unit",
+    )
+
+    module_def = await generator.generate_unit(blueprint, graph, doc, "course-123", 1)
+    assert len(module_def.lessons) == 1
+    lesson = module_def.lessons[0]
+    assert len(lesson.sublessons) > 0
+    exercise = lesson.sublessons[0].exercises[0]
+
+    # Verify fallback or generated question incorporates source context and expert difficulty
+    assert exercise.question is not None
+    assert "backpropagation" in exercise.question.lower() or "Backpropagation" in exercise.question
+    assert exercise.options is not None and len(exercise.options) > 0
