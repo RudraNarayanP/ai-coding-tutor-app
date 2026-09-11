@@ -1290,9 +1290,13 @@ def build_custom_curriculum_from_text(
                         ExerciseDefinition(
                             id=f"{course_id}-ex-1",
                             title="Concept Review",
-                        type="mcq",
+                            type="mcq",
                             question=f"What is the main topic covered in this section?",
-                            options=[course_title, "Unrelated Topic A", "Unrelated Topic B"],
+                            options=[
+                                course_title,
+                                f"Advanced performance optimization in {course_title}",
+                                f"Alternative legacy configurations for {course_title}"
+                            ],
                             correct_answer=course_title,
                             xp_reward=10,
                         )
