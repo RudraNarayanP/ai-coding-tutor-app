@@ -53,6 +53,7 @@ from .custom_course_generator import (
     SourceDocument,
     SourceIngestionService,
     StructureValidator,
+    QualityGate,
     UnitBlueprint,
     build_custom_curriculum_from_text,
 )
@@ -483,6 +484,8 @@ async def run_generation_pipeline(job: GenerationJob) -> None:
             lessons=tuple(all_lessons),
         )
 
+        QualityGate.validate_or_raise(curriculum, doc)
+
         metadata = GeneratedCourseMetadata(
             course_id=course_id,
             source_type=job.request.material_type,
@@ -539,6 +542,11 @@ async def run_generation_pipeline(job: GenerationJob) -> None:
             if s.state == "active":
                 s.state = "error"
 
+
+@app.post("/api/courses/generate")
+async def generate_course_alias(req: CourseGenerationRequest):
+    """Alias endpoint for course generation."""
+    return await generate_course(req)
 
 @app.post("/api/generate-course")
 async def generate_course(req: CourseGenerationRequest):
@@ -759,12 +767,7 @@ async def regenerate_course_unit(course_id: str, req: RegenerateUnitRequest):
     return new_module
 
 
-@app.post("/api/progression/reset")
-async def reset_progression(language: str | None = None):
-    lang = (language or lesson_engine.active_language).lower().strip()
-    store = lesson_engine.stores.get(lang, lesson_engine.store)
-    store.reset()
-    return {"status": "ok", "language": lang, "state": store.state()}
+
 
 
 @app.post("/api/tutor", response_model=TutorResponse)
