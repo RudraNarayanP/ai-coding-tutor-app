@@ -19,7 +19,7 @@ from .api_settings import (
     validate_provider_key,
 )
 from pathlib import Path
-from .curriculum_loader import load_all_curriculums
+from .curriculum_loader import CurriculumLoader, load_all_curriculums
 from .lesson_engine import LessonEngine, ProgressionStore
 from .user_store import LeaderboardEntry, UserProfile, UserStore
 from .lesson_models import (
