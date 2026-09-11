@@ -1,3 +1,4 @@
+import logging
 import base64
 import hashlib
 import json
@@ -247,15 +248,34 @@ class SourceIngestionService:
 
     def _try_transcript_api(self, video_id: str) -> tuple[str, str]:
         try:
+            import youtube_transcript_api
             from youtube_transcript_api import YouTubeTranscriptApi
-            # youtube-transcript-api
-            fetched = YouTubeTranscriptApi.get_transcript(video_id)
-            text_lines = [item["text"] for item in fetched if "text" in item]
-            full_text = " ".join(text_lines).strip()
-            if full_text:
-                return full_text, "api"
-        except Exception:
-            pass
+            fetched = None
+
+            if hasattr(YouTubeTranscriptApi, "get_transcript") and callable(getattr(YouTubeTranscriptApi, "get_transcript")):
+                fetched = YouTubeTranscriptApi.get_transcript(video_id)
+            elif hasattr(YouTubeTranscriptApi, "fetch"):
+                api = YouTubeTranscriptApi()
+                fetched = api.fetch(video_id)
+            elif hasattr(youtube_transcript_api, "YouTubeTranscriptApi"):
+                api = YouTubeTranscriptApi()
+                if hasattr(api, "fetch"):
+                    fetched = api.fetch(video_id)
+                elif hasattr(api, "get_transcript"):
+                    fetched = api.get_transcript(video_id)
+
+            if fetched is not None:
+                text_lines = []
+                for item in fetched:
+                    if isinstance(item, dict) and "text" in item:
+                        text_lines.append(str(item["text"]))
+                    elif hasattr(item, "text"):
+                        text_lines.append(str(getattr(item, "text")))
+                full_text = " ".join(text_lines).strip()
+                if full_text:
+                    return full_text, "api"
+        except Exception as exc:
+            logger.warning(f"YouTubeTranscriptApi failed for video {video_id}: {exc}")
         return "", "none"
 
     def _try_ytdlp(self, video_id: str) -> tuple[str, str]:
@@ -334,3 +354,5 @@ class SourceIngestionService:
             access_level="text_only",
             access_notes=[],
         )
+
+logger = logging.getLogger("patchwork.ingestion")

@@ -1,3 +1,4 @@
+import logging
 import json
 import os
 import re
@@ -342,10 +343,15 @@ class ConceptGraphBuilder:
 
         try:
             raw = await self.provider.generate_structured(system=system, user=prompt, max_tokens=3000)
-            return self._parse_response(raw)
+            cg = self._parse_response(raw)
+            if not cg.nodes:
+                raise GenerationError("No valid concept nodes extracted from source material.")
+            return cg
         except Exception as exc:
-            # Fallback deterministic graph if LLM generation fails or returns malformed JSON
-            return self._fallback_graph(doc)
+            logger.warning(f"ConceptGraphBuilder error: {exc}")
+            if isinstance(exc, GenerationError):
+                raise exc
+            raise GenerationError(f"Failed to extract structured concepts from source material: {exc}")
 
     def _build_prompt(self, doc: SourceDocument) -> str:
         parts = [f"Title: {doc.title}", f"Access Level: {doc.access_level}"]
@@ -544,6 +550,77 @@ class CurriculumSequencer:
 
 
 # ─── STRUCTURE VALIDATOR ───────────────────────────────────────────────────────
+
+
+
+# ─── QUALITY GATE ─────────────────────────────────────────────────────────────
+
+class QualityGate:
+    """Quality gate validator ensuring generated curricula meet grounding and validity requirements."""
+
+    PLACEHOLDER_SUBSTRINGS = (
+        "unrelated concept",
+        "option 1",
+        "option 2",
+        "incorrect choice",
+        "placeholder",
+        "dummy",
+        "sample course",
+    )
+
+    @classmethod
+    def validate_or_raise(cls, curriculum: Curriculum, doc: SourceDocument) -> None:
+        violations = []
+
+        if not curriculum.course.title or len(curriculum.course.title.strip()) < 3:
+            violations.append("Course title is missing or too short.")
+
+        if not curriculum.modules:
+            violations.append("Course contains no units/modules.")
+
+        total_exercises = 0
+        for mod in curriculum.modules:
+            if not mod.lessons:
+                violations.append(f"Unit '{mod.title}' contains no lessons.")
+            for lesson in mod.lessons:
+                sublessons = getattr(lesson, "sublessons", [])
+                if not sublessons and not getattr(lesson, "mastery_exam", []):
+                    violations.append(f"Lesson '{lesson.title}' has no sublessons or exercises.")
+
+                for sub in sublessons:
+                    for ex in sub.exercises:
+                        total_exercises += 1
+                        q_lower = ex.question.lower()
+                        if not ex.question.strip():
+                            violations.append(f"Exercise in '{lesson.title}' has an empty question.")
+
+                        for ph in cls.PLACEHOLDER_SUBSTRINGS:
+                            if ph in q_lower:
+                                violations.append(f"Exercise question in '{lesson.title}' contains placeholder phrase: '{ph}'.")
+                            for opt in ex.options:
+                                if ph in opt.lower():
+                                    violations.append(f"Exercise option in '{lesson.title}' contains placeholder phrase: '{ph}'.")
+
+                        if ex.type.lower() in ("mcq", "true_false"):
+                            if not ex.options or len(ex.options) < 2:
+                                violations.append(f"MCQ exercise in '{lesson.title}' has fewer than 2 options.")
+                            if ex.correct_answer and ex.options:
+                                corr_clean = str(ex.correct_answer).strip().lower()
+                                opts_clean = [str(o).strip().lower() for o in ex.options]
+                                if corr_clean not in opts_clean and not corr_clean.isdigit():
+                                    violations.append(f"MCQ correct_answer '{ex.correct_answer}' not in options.")
+
+                        if ex.type.lower() in ("tiny_coding", "code_completion", "code", "debugging"):
+                            if not ex.starter_code or not ex.starter_code.strip():
+                                ex.starter_code = "# Write your code solution below\n"
+
+        if total_exercises == 0:
+            violations.append("Generated course contains zero exercises.")
+
+        if violations:
+            logger.warning(f"QualityGate rejected curriculum for '{curriculum.course.title}': {violations}")
+            raise GenerationError(f"Course quality validation failed: {'; '.join(violations)}")
+
 
 class StructureValidator:
     MAX_UNITS = 12
@@ -918,11 +995,11 @@ class CurriculumGenerator:
                 correct_answer = options[0]
                 explanation = f"{c_title} is specifically applied to address core requirements in the source material."
             else: # beginner
-                question_text = f"What is the key concept of {c_title} presented in the lesson material?"
+                question_text = f"What is the key principle of {c_title} presented in the lesson material?"
                 options = [
-                    f"Core concept of {c_title}",
-                    f"Unrelated concept A for {c_title}",
-                    f"Unrelated concept B for {c_title}",
+                    f"The core mechanism and definition of {c_title}",
+                    f"An alternative configuration unrelated to {c_title}",
+                    f"A deprecated legacy behavior superseded by {c_title}",
                 ]
                 correct_answer = options[0]
                 explanation = f"The lesson material defines {c_title} by its core fundamental principles."
@@ -1323,3 +1400,5 @@ def build_custom_curriculum_from_text(
         concepts=concepts_dict,
         lessons=tuple(lessons),
     )
+
+logger = logging.getLogger("patchwork.generator")

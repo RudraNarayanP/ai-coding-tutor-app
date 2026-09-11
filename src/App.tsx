@@ -1024,7 +1024,7 @@ setExercisePhase('incorrect')
 
               <button
                 className="duo-button duo-button-primary"
-                onClick={() => setShowCreateModal(true)}
+                onClick={() => setActiveTab("create")}
                 style={{ padding: '6px 12px', fontSize: '12px', marginLeft: '4px' }}
                 aria-label="Create Custom Course"
               >

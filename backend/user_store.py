@@ -1,3 +1,4 @@
+import logging
 import json
 import time
 from pathlib import Path
@@ -39,8 +40,8 @@ class UserStore:
                 for item in data:
                     u = UserProfile(**item)
                     self._users[u.user_id] = u
-            except Exception:
-                pass
+            except Exception as exc:
+                logger.warning(f"UserStore error: {exc}")
 
         if not self._users:
             self._seed_default_users()
@@ -78,8 +79,8 @@ class UserStore:
             try:
                 payload = [u.model_dump() for u in self._users.values()]
                 self.storage_path.write_text(json.dumps(payload, indent=2), encoding="utf-8")
-            except Exception:
-                pass
+            except Exception as exc:
+                logger.warning(f"UserStore error: {exc}")
 
     def get_or_create_user(self, user_id: str, username: str | None = None) -> UserProfile:
         if user_id in self._users:
@@ -149,3 +150,5 @@ class UserStore:
                 )
             )
         return entries
+
+logger = logging.getLogger("patchwork.user_store")
