@@ -660,6 +660,10 @@ class CurriculumGenerator:
         system_prompt = (
             "You are a world-class curriculum author and assessment designer. "
             "Generate rich, domain-aware lesson content and exercises derived directly from the provided source context.\n"
+            "CRITICAL INSTRUCTIONS FOR QUESTIONS & OPTIONS:\n"
+            "- Questions MUST test specific facts, mechanics, code patterns, equations, or concepts mentioned in the source material.\n"
+            "- Options MUST be realistic, plausible choices related to the topic. NEVER output placeholder text like 'Incorrect choice A' or 'Option 1'.\n"
+            "- Provide accurate correct answers and detailed explanations.\n"
             "Respond ONLY with a valid JSON array of objects representing the lessons in this unit.\n"
             "Do NOT wrap the response in markdown codeblock markers unless necessary, and ensure valid JSON syntax."
         )
@@ -712,74 +716,16 @@ class CurriculumGenerator:
         )
 
         generated_lessons_map: dict[str, dict[str, Any]] = {}
-        try:
-            raw_llm = await self.provider.generate_structured(system=system_prompt, user=user_prompt, max_tokens=3500)
-            cleaned = raw_llm.strip()
-            if "```json" in cleaned:
-                cleaned = cleaned.split("```json")[1].split("```")[0].strip()
-            elif "```" in cleaned:
-                cleaned = cleaned.split("```")[1].split("```")[0].strip()
-
-            parsed_array = json.loads(cleaned)
-            if isinstance(parsed_array, list):
-                for item in parsed_array:
-                    if isinstance(item, dict) and "id" in item:
-                        generated_lessons_map[item["id"]] = item
-        # Extract transcript / source text relevant to this unit
-        source_text_snippet = doc.plain_text[:8000] if doc.plain_text else ""
-        if doc.segments:
-            relevant_segs = [s for s in doc.segments if any(cid in s.title.lower() or cid in s.description_snippet.lower() for cid in unit_blueprint.concept_ids)]
-            if not relevant_segs:
-                relevant_segs = doc.segments[:5]
-            source_text_snippet = "\n\n".join([f"Segment '{s.title}': {s.transcript or s.description_snippet}" for s in relevant_segs])[:8000]
-
-        system_prompt = (
-            "You are an expert interactive curriculum author. Generate rich, authentic, domain-aware lesson content and exercises "
-            "directly derived from the provided source transcript/document material.\n"
-            "CRITICAL INSTRUCTIONS FOR QUESTIONS & OPTIONS:\n"
-            "- Questions MUST test specific facts, mechanics, code patterns, equations, or concepts mentioned in the source material.\n"
-            "- Options MUST be realistic, plausible choices related to the topic. NEVER output placeholder text like 'Incorrect choice A' or 'Option 1'.\n"
-            "- Provide accurate correct answers and detailed explanations.\n"
-            "Return valid JSON matching this schema:\n"
-            "{\n"
-            '  "lessons": [\n'
-            '    {\n'
-            '      "slot_type": "learn|practice|review|checkpoint",\n'
-            '      "title": "Lesson Title",\n'
-            '      "description": "Lesson description...",\n'
-            '      "starter_code": "# code snippet\\n",\n'
-            '      "exercises": [\n'
-            '        {\n'
-            '          "title": "Exercise Title",\n'
-            '          "type": "mcq|fill_blank|code_completion|tiny_coding|true_false",\n'
-            '          "question": "Specific question directly testing material?",\n'
-            '          "options": ["Correct Answer Choice", "Plausible Distractor 1", "Plausible Distractor 2"],\n'
-            '          "correct_answer": "Correct Answer Choice",\n'
-            '          "explanation": "Detailed explanation of why this answer is correct...",\n'
-            '          "starter_code": "# starter code if applicable\\n",\n'
-            '          "solution_code": "# solution code if applicable\\n"\n'
-            '        }\n'
-            '      ]\n'
-            '    }\n'
-            '  ]\n'
-            "}"
-        )
-
-        user_prompt = (
-            f"Course Title: {doc.title}\n"
-            f"Unit Title: {unit_blueprint.title}\n"
-            f"Unit Concepts: {unit_blueprint.concept_ids}\n"
-            f"Domain: {graph.detected_domain}\n"
-            f"Lesson Slots to Generate: {[s.type for s in unit_blueprint.lesson_slots]}\n\n"
-            f"SOURCE TRANSCRIPT / MATERIAL:\n{source_text_snippet}"
-        )
-
         llm_data = None
         try:
             raw_llm = await self.provider.generate_structured(system=system_prompt, user=user_prompt, max_tokens=3500)
             llm_data = self._parse_generated_lessons(raw_llm)
         except Exception:
             llm_data = None
+        if isinstance(llm_data, list):
+            for item in llm_data:
+                if isinstance(item, dict) and "id" in item:
+                    generated_lessons_map[item["id"]] = item
 
         lessons: list[LessonDefinition] = []
         for l_idx, slot in enumerate(unit_blueprint.lesson_slots, start=1):
@@ -840,36 +786,6 @@ class CurriculumGenerator:
         domain: str,
         source_context: str = "",
         llm_data: dict[str, Any] | None = None,
-    ) -> LessonDefinition:
-        c_title = slot.concept_ids[0].replace("-", " ").title() if slot.concept_ids else "Topic"
-
-        # Parse exercises from LLM data if available and valid
-        exercises: list[ExerciseDefinition] = []
-        if llm_data and isinstance(llm_data.get("exercises"), list) and len(llm_data["exercises"]) > 0:
-            for ex_idx, raw_ex in enumerate(llm_data["exercises"], start=1):
-                if isinstance(raw_ex, dict):
-                    ex_type = raw_ex.get("type", "mcq")
-                    q_text = raw_ex.get("question") or f"Mastery check for {c_title}"
-                    opts = raw_ex.get("options") or []
-                    corr = raw_ex.get("correct_answer") or (opts[0] if opts else "Correct answer")
-                    expl = raw_ex.get("explanation") or f"Explanation of {c_title}."
-
-                    exercises.append(
-                        ExerciseDefinition(
-                            id=f"{lesson_id}-ex-{ex_idx}",
-                            title=raw_ex.get("title") or f"{slot.type.title()} Exercise {ex_idx}",
-                            type=ex_type,
-                            question=q_text,
-                            options=opts,
-                            correct_answer=corr,
-                            explanation=expl,
-                            starter_code=raw_ex.get("starter_code") or "",
-                            solution_code=raw_ex.get("solution_code") or None,
-                            xp_reward=15,
-                        )
-                    )
-
-        # Fallback exercise generation incorporating source context and difficulty scaling
         doc_title: str = "",
         llm_item: dict | None = None,
     ) -> LessonDefinition:
@@ -879,8 +795,18 @@ class CurriculumGenerator:
         lesson_title = f"{order}. {slot.type.title()}: {c_title}"
         lesson_desc = f"Master {c_title} through {slot.type} exercises."
         starter_code = f"# Solution code for {c_title}\nprint('{c_title}')\n"
-        exercises = []
+        exercises: list[ExerciseDefinition] = []
 
+        # Structured per-lesson LLM payload (difficulty-scaled generation)
+        if llm_data and isinstance(llm_data, dict):
+            if llm_data.get("title"):
+                lesson_title = f"{order}. {llm_data['title']}"
+            if llm_data.get("description"):
+                lesson_desc = llm_data["description"]
+            if llm_data.get("starter_code"):
+                starter_code = llm_data["starter_code"]
+
+        # Transcript-driven quiz item with plausible distractors
         if llm_item and isinstance(llm_item, dict):
             if llm_item.get("title"):
                 lesson_title = f"{order}. {llm_item['title']}"
@@ -928,7 +854,32 @@ class CurriculumGenerator:
                     )
                 )
 
-        # Fallback if no valid LLM exercises parsed
+        # Structured exercises from the difficulty-scaled LLM payload
+        if not exercises and llm_data and isinstance(llm_data.get("exercises"), list) and len(llm_data["exercises"]) > 0:
+            for ex_idx, raw_ex in enumerate(llm_data["exercises"], start=1):
+                if isinstance(raw_ex, dict):
+                    ex_type = raw_ex.get("type", "mcq")
+                    q_text = raw_ex.get("question") or f"Mastery check for {c_title}"
+                    opts = raw_ex.get("options") or []
+                    corr = raw_ex.get("correct_answer") or (opts[0] if opts else "Correct answer")
+                    expl = raw_ex.get("explanation") or f"Explanation of {c_title}."
+
+                    exercises.append(
+                        ExerciseDefinition(
+                            id=f"{lesson_id}-ex-{ex_idx}",
+                            title=raw_ex.get("title") or f"{slot.type.title()} Exercise {ex_idx}",
+                            type=ex_type,
+                            question=q_text,
+                            options=opts,
+                            correct_answer=corr,
+                            explanation=expl,
+                            starter_code=raw_ex.get("starter_code") or "",
+                            solution_code=raw_ex.get("solution_code") or None,
+                            xp_reward=15,
+                        )
+                    )
+
+        # Fallback exercise generation incorporating source context and difficulty scaling
         if not exercises:
             ex_type = "mcq"
             if domain == "programming" and slot.type in ("practice", "checkpoint"):
@@ -976,25 +927,11 @@ class CurriculumGenerator:
                 correct_answer = options[0]
                 explanation = f"The lesson material defines {c_title} by its core fundamental principles."
 
-            starter_code = ""
-            solution_code = None
+            ex_starter_code = ""
+            ex_solution_code = None
             if ex_type == "tiny_coding":
-                starter_code = f"# Write solution for {c_title}\n"
-                solution_code = f"print('{c_title} ok')\n"
-
-            exercises = [
-            if ex_type == "mcq":
-                q_text = f"In the context of {topic_name}, what is the main purpose of {c_title}?"
-                c_ans = f"It provides the primary mechanism for managing {c_title.lower()} operations."
-                opts = [
-                    c_ans,
-                    f"It acts as a secondary backup when {c_title.lower()} fails.",
-                    f"It is a legacy syntax component replaced by modern alternatives.",
-                ]
-            else:
-                q_text = f"Implement a basic code example demonstrating {c_title} in Python:"
-                c_ans = "print('ok')"
-                opts = [c_ans, "print('error')", "pass"]
+                ex_starter_code = "# Write your solution or note here\n"
+                ex_solution_code = f"print('{c_title} ok')\n"
 
             exercises.append(
                 ExerciseDefinition(
@@ -1005,16 +942,8 @@ class CurriculumGenerator:
                     options=options,
                     correct_answer=correct_answer,
                     explanation=explanation,
-                    starter_code=starter_code,
-                    solution_code=solution_code,
-                    xp_reward=15,
-                )
-            ]
-                    question=q_text,
-                    options=opts if ex_type == "mcq" else [],
-                    correct_answer=c_ans,
-                    starter_code="# Write your solution or note here\n" if ex_type == "tiny_coding" else "",
-                    solution_code="print('ok')\n" if ex_type == "tiny_coding" else None,
+                    starter_code=ex_starter_code,
+                    solution_code=ex_solution_code,
                     xp_reward=15,
                 )
             )
@@ -1022,19 +951,15 @@ class CurriculumGenerator:
         sublessons = [
             SubLessonDefinition(
                 id=f"{lesson_id}-sub-1",
-                title=(llm_data.get("title") if llm_data else None) or f"{c_title} Step 1",
-                description=(llm_data.get("description") if llm_data else None) or f"Interactive lesson step covering {c_title}",
+                title=(llm_data.get("title") if isinstance(llm_data, dict) else None) or (llm_item.get("title") if isinstance(llm_item, dict) else None) or f"{c_title} Step 1",
+                description=(llm_data.get("description") if isinstance(llm_data, dict) else None) or (llm_item.get("description") if isinstance(llm_item, dict) else None) or f"Interactive lesson step covering {c_title}",
                 order=1,
                 exercises=exercises,
             )
         ]
 
-        starter_code = (llm_data.get("starter_code") if llm_data else None) or f"# Code snippet for {c_title}\nprint('{c_title}')\n"
-
         return LessonDefinition(
             id=lesson_id,
-            title=(llm_data.get("title") if llm_data else None) or f"{order}. {slot.type.title()}: {c_title}",
-            description=(llm_data.get("description") if llm_data else None) or f"Master {c_title} through {slot.type} exercises.",
             title=lesson_title,
             description=lesson_desc,
             order=order,
