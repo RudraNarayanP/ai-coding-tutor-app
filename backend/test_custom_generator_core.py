@@ -169,7 +169,7 @@ async def test_build_lesson_definition_tiny_coding_keeps_starter_code():
         slot=_make_slot("checkpoint"),
         domain="programming",
     )
-    assert lesson.sublessons[0].exercises[0].starter_code.startswith("# Write your solution")
+    assert lesson.sublessons[0].exercises[0].starter_code.startswith("# Write")
 
 
 @pytest.mark.asyncio
@@ -224,3 +224,85 @@ async def test_curriculum_generator_with_source_context_and_difficulty():
     assert exercise.question is not None
     assert "backpropagation" in exercise.question.lower() or "Backpropagation" in exercise.question
     assert exercise.options is not None and len(exercise.options) > 0
+
+
+def test_quality_validator_rejects_generic_template():
+    from backend.custom_course_generator import CourseQualityValidator, ExerciseDefinition
+
+    ex_generic = ExerciseDefinition(
+        id="ex-generic",
+        title="Generic Ex",
+        type="mcq",
+        question="What is the key principle of Python presented in the lesson material?",
+        options=[
+            "The core mechanism and definition of Python",
+            "An alternative configuration unrelated to Python",
+            "A deprecated legacy behavior superseded by Python",
+        ],
+        correct_answer="The core mechanism and definition of Python",
+        explanation="The lesson material defines Python by its core fundamental principles.",
+    )
+
+    res = CourseQualityValidator.evaluate_exercise(
+        ex_generic, source_context="Python list comprehensions allow concise syntax.", domain="programming"
+    )
+    assert res.passed is False
+    assert res.score.overall_score < 70.0
+    assert len(res.feedback) > 0
+
+
+def test_quality_validator_passes_specific_content_bound_exercise():
+    from backend.custom_course_generator import CourseQualityValidator, ExerciseDefinition
+
+    ex_specific = ExerciseDefinition(
+        id="ex-specific",
+        title="Specific Ex",
+        type="mcq",
+        question="According to the Python lesson, which syntax demonstrates list comprehension to square numbers?",
+        options=[
+            "[x**2 for x in numbers]",
+            "map(lambda x: x**2, numbers)",
+            "for x in numbers: square(x)",
+            "list.square(numbers)",
+        ],
+        correct_answer="[x**2 for x in numbers]",
+        explanation="Python list comprehensions use brackets [expr for item in iterable] to construct new lists from existing iterables.",
+    )
+
+    res = CourseQualityValidator.evaluate_exercise(
+        ex_specific, source_context="Python list comprehensions allow concise syntax.", domain="programming"
+    )
+    assert res.passed is True
+    assert res.score.overall_score >= 70.0
+
+
+def test_source_content_extracted_fallback():
+    from backend.custom_course_generator import CurriculumGenerator, LessonSlot
+
+    generator = CurriculumGenerator(provider=object())
+    slot = LessonSlot("practice", ["list-comprehensions"], ["Filtering"], "intermediate", 5, False, ["mcq"])
+
+    ex = generator._generate_content_extracted_exercise(
+        lesson_id="test-lesson-1",
+        c_title="List Comprehensions",
+        slot=slot,
+        domain="programming",
+        source_context="Python list comprehensions allow concise syntax to filter and transform iterables using brackets.",
+    )
+
+    assert ex.question is not None
+    assert "List Comprehensions" in ex.question or "list comprehensions" in ex.question or "source material" in ex.question
+    assert len(ex.options) == 4
+    assert ex.correct_answer in ex.options
+
+
+def test_system_prompt_builder_domain_specialization_and_few_shot():
+    from backend.custom_course_generator import CurriculumGenerator
+
+    generator = CurriculumGenerator(provider=object())
+    prompt = generator._build_system_prompt("programming")
+
+    assert "DOMAIN SPECIALIZATION (PROGRAMMING)" in prompt
+    assert "FEW-SHOT EXAMPLES OF QUESTION QUALITY" in prompt
+    assert "EXCELLENT QUESTION EXAMPLE" in prompt
+    assert "TERRIBLE QUESTION EXAMPLE" in prompt

@@ -622,6 +622,137 @@ class QualityGate:
             raise GenerationError(f"Course quality validation failed: {'; '.join(violations)}")
 
 
+class GenerationErrorType:
+    LLM_RETURNED_EMPTY = "llm_returned_empty"
+    LLM_RETURNED_INVALID_JSON = "llm_returned_invalid_json"
+    QUALITY_CHECK_FAILED = "quality_check_failed"
+    CONTENT_EXTRACTION_FAILED = "content_extraction_failed"
+    DOMAIN_VALIDATION_FAILED = "domain_validation_failed"
+
+
+GENERIC_QUESTION_PATTERNS = [
+    re.compile(r"primary mechanism of .* optimizing efficiency", re.IGNORECASE),
+    re.compile(r"secondary misconfiguration of .* leading to", re.IGNORECASE),
+    re.compile(r"legacy implementation of .* disregarding", re.IGNORECASE),
+    re.compile(r"option [a-d]: according to the source", re.IGNORECASE),
+    re.compile(r"the core mechanism and definition of", re.IGNORECASE),
+    re.compile(r"an alternative configuration unrelated to", re.IGNORECASE),
+    re.compile(r"a deprecated legacy behavior superseded by", re.IGNORECASE),
+    re.compile(r"high-order theoretical properties under specified operational boundary", re.IGNORECASE),
+    re.compile(r"unconditionally simplifies to linear approximations", re.IGNORECASE),
+    re.compile(r"operates independently of surrounding systems", re.IGNORECASE),
+    re.compile(r"incorrect choice", re.IGNORECASE),
+]
+
+
+@dataclass
+class QualityScore:
+    content_specificity: float  # 0-100
+    domain_accuracy: float      # 0-100
+    option_plausibility: float  # 0-100
+    explanation_quality: float  # 0-100
+    overall_score: float        # 0-100
+
+
+@dataclass
+class QualityCheckResult:
+    score: QualityScore
+    passed: bool
+    feedback: list[str] = field(default_factory=list)
+
+
+class CourseQualityValidator:
+    THRESHOLD = 70.0
+
+    @classmethod
+    def evaluate_exercise(cls, exercise: Any, source_context: str = "", domain: str = "general") -> QualityCheckResult:
+        feedback = []
+        q_text = getattr(exercise, "question", "") or ""
+        opts = getattr(exercise, "options", []) or []
+        corr = getattr(exercise, "correct_answer", "") or ""
+        expl = getattr(exercise, "explanation", "") or ""
+
+        # 1. Content Specificity (0-100)
+        specificity = 100.0
+        for pattern in GENERIC_QUESTION_PATTERNS:
+            if pattern.search(q_text):
+                specificity -= 40.0
+                feedback.append(f"Question contains generic template pattern matching '{pattern.pattern}'.")
+            for opt in opts:
+                if pattern.search(str(opt)):
+                    specificity -= 25.0
+                    feedback.append(f"Option contains generic template pattern matching '{pattern.pattern}'.")
+
+        if source_context and len(source_context.strip()) > 30:
+            words = set(re.findall(r"\b[A-Za-z0-9_]{4,}\b", q_text + " " + " ".join([str(o) for o in opts])))
+            ctx_words = set(re.findall(r"\b[A-Za-z0-9_]{4,}\b", source_context))
+            overlap = words.intersection(ctx_words)
+            if not overlap:
+                specificity -= 30.0
+                feedback.append("Question and options share no key vocabulary terms with the source context.")
+
+        specificity = max(0.0, min(100.0, specificity))
+
+        # 2. Domain Accuracy (0-100)
+        domain_acc = 100.0
+        if not opts and getattr(exercise, "type", "mcq") == "mcq":
+            domain_acc -= 50.0
+            feedback.append("MCQ exercise has no options.")
+        if corr and opts and corr not in opts:
+            domain_acc -= 40.0
+            feedback.append("Correct answer is not present in options list.")
+        if len(q_text.strip()) < 10:
+            domain_acc -= 30.0
+            feedback.append("Question text is too short or empty.")
+
+        domain_acc = max(0.0, min(100.0, domain_acc))
+
+        # 3. Option Plausibility (0-100)
+        plausibility = 100.0
+        if opts:
+            placeholder_count = sum(1 for o in opts if re.match(r"^option\s+[a-d1-4]$", str(o).strip(), re.I))
+            if placeholder_count > 0:
+                plausibility -= 40.0
+                feedback.append("Options contain generic placeholder labels.")
+            for pattern in GENERIC_QUESTION_PATTERNS:
+                for opt in opts:
+                    if pattern.search(str(opt)):
+                        plausibility -= 20.0
+            if len(opts) != len(set(opts)):
+                plausibility -= 30.0
+                feedback.append("Options contain duplicate choices.")
+            lengths = [len(str(o).strip()) for o in opts]
+            if max(lengths) == min(lengths) and max(lengths) < 15:
+                plausibility -= 20.0
+                feedback.append("Options are unnaturally short and identical in length.")
+
+        plausibility = max(0.0, min(100.0, plausibility))
+
+        # 4. Explanation Quality (0-100)
+        explanation_q = 100.0
+        if not expl.strip() or len(expl.strip()) < 10:
+            explanation_q -= 50.0
+            feedback.append("Explanation is missing or too short.")
+        elif "explanation of" in expl.lower() or ("this directly relates to" in expl.lower() and len(expl.strip()) < 35):
+            explanation_q -= 30.0
+            feedback.append("Explanation is generic placeholder phrasing.")
+
+        explanation_q = max(0.0, min(100.0, explanation_q))
+
+        overall = (specificity * 0.4) + (domain_acc * 0.3) + (plausibility * 0.2) + (explanation_q * 0.1)
+        passed = overall >= cls.THRESHOLD
+
+        score = QualityScore(
+            content_specificity=round(specificity, 2),
+            domain_accuracy=round(domain_acc, 2),
+            option_plausibility=round(plausibility, 2),
+            explanation_quality=round(explanation_q, 2),
+            overall_score=round(overall, 2),
+        )
+        return QualityCheckResult(score=score, passed=passed, feedback=feedback)
+
+
+
 class StructureValidator:
     MAX_UNITS = 12
     MIN_UNITS = 1
@@ -705,6 +836,69 @@ class CurriculumGenerator:
     def __init__(self, provider: AIProvider) -> None:
         self.provider = provider
 
+    def _build_system_prompt(self, domain: str) -> str:
+        domain_guidelines = {
+            "programming": (
+                "DOMAIN SPECIALIZATION (PROGRAMMING):\n"
+                "- Extract function names, syntax patterns, parameters, return types, and code snippets from the source text.\n"
+                "- Generate valid code-completion or tiny_coding exercises where appropriate.\n"
+                "- Distractors must be plausible syntax errors, wrong methods, or alternative language constructs.\n"
+            ),
+            "mathematics": (
+                "DOMAIN SPECIALIZATION (MATHEMATICS):\n"
+                "- Extract exact formulas, equations, variables, theorems, and quantitative steps from the source context.\n"
+                "- Ensure mathematical precision and correct notation.\n"
+                "- Distractors must reflect common calculation mistakes or misapplied theorems.\n"
+            ),
+            "science": (
+                "DOMAIN SPECIALIZATION (SCIENCE):\n"
+                "- Extract specific scientific principles, empirical data, experimental setups, units, and phenomena.\n"
+                "- Distractors must be scientifically plausible misinterpretations or common misconceptions.\n"
+            ),
+        }
+
+        selected_domain_rule = domain_guidelines.get(domain.lower(), (
+            "DOMAIN SPECIALIZATION (GENERAL):\n"
+            "- Extract specific facts, dates, terminology, definitions, and logical arguments directly from the source context.\n"
+            "- Distractors must be plausible related concepts rather than generic placeholders.\n"
+        ))
+
+        few_shot_examples = (
+            "FEW-SHOT EXAMPLES OF QUESTION QUALITY:\n\n"
+            "EXCELLENT QUESTION EXAMPLE:\n"
+            "Question: 'In the provided Python lesson, which syntax correctly demonstrates list comprehension to filter even numbers from items?'\n"
+            "Options: [\n"
+            "  '[x for x in items if x % 2 == 0]',\n"
+            "  '[x if x % 2 == 0 for x in items]',\n"
+            "  'filter(lambda x: x % 2 == 0, items)',\n"
+            "  'items.filter(x => x % 2 == 0)'\n"
+            "]\n"
+            "Correct Answer: '[x for x in items if x % 2 == 0]'\n"
+            "Explanation: 'List comprehensions put the conditional if clause at the end of the expression: [expr for item in iterable if condition].'\n\n"
+            "TERRIBLE QUESTION EXAMPLE (REJECTED AS MEDIOCRE & UNACCEPTABLE):\n"
+            "Question: 'What is the key principle of list comprehensions presented in the lesson material?'\n"
+            "Options: [\n"
+            "  'The core mechanism and definition of list comprehensions',\n"
+            "  'An alternative configuration unrelated to list comprehensions',\n"
+            "  'A deprecated legacy behavior superseded by list comprehensions'\n"
+            "]\n"
+            "Explanation: 'The lesson material defines list comprehensions by its core fundamental principles.'\n"
+            "Why this failed: Completely generic template wording with no code syntax, no specific facts, and useless placeholder options.\n"
+        )
+
+        return (
+            "You are a world-class curriculum author and assessment designer following Michael Jackson-level perfectionist standards.\n"
+            "Generate rich, domain-aware lesson content and exercises derived directly from the provided source context.\n\n"
+            "CRITICAL INSTRUCTIONS FOR QUESTIONS & OPTIONS:\n"
+            "- Questions MUST test specific facts, mechanics, code patterns, equations, or concepts explicitly mentioned in the source context.\n"
+            "- Options MUST be realistic, plausible choices related to the topic. NEVER output placeholder text like 'Incorrect choice A', 'Option 1', or 'Primary mechanism of [concept]'.\n"
+            "- Provide accurate correct answers and detailed explanations citing specific source details.\n\n"
+            f"{selected_domain_rule}\n"
+            f"{few_shot_examples}\n"
+            "Respond ONLY with a valid JSON array of objects representing the lessons in this unit.\n"
+            "Ensure valid JSON syntax."
+        )
+
     async def generate_unit(
         self,
         unit_blueprint: UnitBlueprint,
@@ -734,16 +928,7 @@ class CurriculumGenerator:
 
         style_instruction = PEDAGOGICAL_STYLE_INSTRUCTIONS.get(pedagogical_style, "")
 
-        system_prompt = (
-            "You are a world-class curriculum author and assessment designer. "
-            "Generate rich, domain-aware lesson content and exercises derived directly from the provided source context.\n"
-            "CRITICAL INSTRUCTIONS FOR QUESTIONS & OPTIONS:\n"
-            "- Questions MUST test specific facts, mechanics, code patterns, equations, or concepts mentioned in the source material.\n"
-            "- Options MUST be realistic, plausible choices related to the topic. NEVER output placeholder text like 'Incorrect choice A' or 'Option 1'.\n"
-            "- Provide accurate correct answers and detailed explanations.\n"
-            "Respond ONLY with a valid JSON array of objects representing the lessons in this unit.\n"
-            "Do NOT wrap the response in markdown codeblock markers unless necessary, and ensure valid JSON syntax."
-        )
+        system_prompt = self._build_system_prompt(graph.detected_domain)
 
         slots_info = []
         for l_idx, slot in enumerate(unit_blueprint.lesson_slots, start=1):
@@ -794,11 +979,78 @@ class CurriculumGenerator:
 
         generated_lessons_map: dict[str, dict[str, Any]] = {}
         llm_data = None
-        try:
-            raw_llm = await self.provider.generate_structured(system=system_prompt, user=user_prompt, max_tokens=3500)
-            llm_data = self._parse_generated_lessons(raw_llm)
-        except Exception:
-            llm_data = None
+        attempt_feedback: list[str] = []
+        best_llm_data = None
+        best_score = -1.0
+
+        for attempt in range(1, 4):
+            current_user_prompt = user_prompt
+            if attempt_feedback:
+                current_user_prompt += (
+                    f"\n\n--- PREVIOUS ATTEMPT FEEDBACK (ATTEMPT {attempt - 1} FAILED QUALITY CHECK) ---\n"
+                    + "\n".join(f"- {f}" for f in attempt_feedback)
+                    + "\nPLEASE REWRITE QUESTIONS AND CHOICE OPTIONS TO BE DEEPLY SPECIFIC TO SOURCE CONTEXT AND ELIMINATE ALL GENERIC PLACEHOLDERS."
+                )
+
+            try:
+                raw_llm = await self.provider.generate_structured(
+                    system=system_prompt, user=current_user_prompt, max_tokens=3500
+                )
+                candidate_data = self._parse_generated_lessons(raw_llm)
+                if not candidate_data:
+                    attempt_feedback = ["LLM output could not be parsed as a valid JSON array of lessons."]
+                    continue
+
+                eval_scores: list[float] = []
+                eval_feedback: list[str] = []
+                cand_map = {item["id"]: item for item in candidate_data if isinstance(item, dict) and "id" in item}
+                for l_idx, slot in enumerate(unit_blueprint.lesson_slots, start=1):
+                    lesson_id = f"{course_id}-m{unit_index}-l{l_idx}"
+                    cand_item = cand_map.get(lesson_id) or (candidate_data[l_idx - 1] if l_idx - 1 < len(candidate_data) else None)
+                    lesson_obj = self._build_lesson_definition(
+                        lesson_id=lesson_id,
+                        course_id=course_id,
+                        unit_id=unit_id,
+                        unit_title=unit_blueprint.title,
+                        order=(unit_index - 1) * 10 + l_idx,
+                        slot=slot,
+                        domain=graph.detected_domain,
+                        source_context=source_context,
+                        llm_data=cand_item if isinstance(cand_item, dict) else None,
+                        doc_title=doc.title,
+                        llm_item=cand_item if isinstance(cand_item, dict) else None,
+                    )
+                    for sub in lesson_obj.sublessons:
+                        for ex in sub.exercises:
+                            q_res = CourseQualityValidator.evaluate_exercise(ex, source_context, graph.detected_domain)
+                            eval_scores.append(q_res.score.overall_score)
+                            eval_feedback.extend(q_res.feedback)
+
+                avg_score = sum(eval_scores) / max(1, len(eval_scores))
+                if avg_score > best_score:
+                    best_score = avg_score
+                    best_llm_data = candidate_data
+
+                if avg_score >= CourseQualityValidator.THRESHOLD:
+                    logger.info(f"Generation attempt {attempt} passed quality check with score {avg_score:.1f}/100")
+                    llm_data = candidate_data
+                    break
+                else:
+                    attempt_feedback = list(dict.fromkeys(eval_feedback))[:5]
+                    logger.warning(
+                        f"Generation attempt {attempt} failed quality check (score: {avg_score:.1f}/{CourseQualityValidator.THRESHOLD}). "
+                        f"Error type: {GenerationErrorType.QUALITY_CHECK_FAILED}. Feedback: {attempt_feedback}"
+                    )
+            except Exception as exc:
+                attempt_feedback = [f"LLM execution error: {str(exc)}"]
+                logger.warning(f"Generation attempt {attempt} encountered exception: {exc}")
+
+        if not llm_data:
+            logger.warning(
+                f"Unit generation fell back to best available candidate (score: {best_score:.1f}/100) after 3 attempts. "
+                f"Error type: {GenerationErrorType.QUALITY_CHECK_FAILED}"
+            )
+            llm_data = best_llm_data
         if isinstance(llm_data, list):
             for item in llm_data:
                 if isinstance(item, dict) and "id" in item:
@@ -833,6 +1085,58 @@ class CurriculumGenerator:
             order=unit_index,
             concepts=concepts,
             lessons=lessons,
+        )
+
+    def _generate_content_extracted_exercise(
+        self,
+        lesson_id: str,
+        c_title: str,
+        slot: LessonSlot,
+        domain: str,
+        source_context: str,
+    ) -> ExerciseDefinition:
+        clean = re.sub(r"\s+", " ", source_context).strip() if source_context else ""
+        sentences = [s.strip() for s in re.split(r"[.!?]+", clean) if len(s.strip()) > 20]
+        matching = [s for s in sentences if c_title.lower() in s.lower()]
+        target_sentence = matching[0] if matching else (sentences[0] if sentences else f"Core mechanism and application of {c_title}")
+
+        if len(target_sentence) > 160:
+            target_sentence = target_sentence[:157] + "..."
+
+        words = [w for w in re.findall(r"\b[A-Za-z]{4,}\b", target_sentence) if w.lower() not in c_title.lower()]
+        unique_words = list(dict.fromkeys(words))
+
+        ex_type = "mcq"
+        if domain == "programming" and slot.type in ("practice", "checkpoint"):
+            ex_type = "tiny_coding"
+
+        question_text = f"Based on the source material covering {c_title}, which statement accurately reflects the presented content?"
+        correct_answer = f'"...{target_sentence}..." is explicitly stated as key to {c_title}.'
+
+        distractor_1 = f'The source material explicitly refutes that "{target_sentence}".'
+        distractor_2 = f'The concept of {c_title} is described as operating independently of {unique_words[0] if len(unique_words) > 0 else "surrounding components"}.'
+        distractor_3 = f'The material substitutes {c_title} with {unique_words[1] if len(unique_words) > 1 else "legacy patterns"} in standard execution.'
+
+        options = [correct_answer, distractor_1, distractor_2, distractor_3]
+        explanation = f'The source material specifically states: "{target_sentence}".'
+
+        starter_code = ""
+        solution_code = None
+        if ex_type == "tiny_coding":
+            starter_code = f"# Write a solution applying {c_title}\n"
+            solution_code = f"print('{c_title} ok')\n"
+
+        return ExerciseDefinition(
+            id=f"{lesson_id}-ex-1",
+            title=f"{slot.type.title()} Exercise 1",
+            type=ex_type,
+            question=question_text,
+            options=options,
+            correct_answer=correct_answer,
+            explanation=explanation,
+            starter_code=starter_code,
+            solution_code=solution_code,
+            xp_reward=15,
         )
 
     def _parse_generated_lessons(self, raw: str) -> list[dict] | None:
@@ -956,72 +1260,15 @@ class CurriculumGenerator:
                         )
                     )
 
-        # Fallback exercise generation incorporating source context and difficulty scaling
+                # Fallback content-bound exercise extraction from source material
         if not exercises:
-            ex_type = "mcq"
-            if domain == "programming" and slot.type in ("practice", "checkpoint"):
-                ex_type = "tiny_coding"
-
-            # Extract context snippets for realistic question phrasing
-            clean_context = source_context.replace("\n", " ").strip() if source_context else ""
-            context_snippet = clean_context[:120] if clean_context else f"key principles of {c_title}"
-
-            difficulty = slot.difficulty or "beginner"
-            if difficulty == "expert":
-                question_text = f"Regarding {c_title} and research findings from source context ('{context_snippet}...'), which precise theoretical mechanism holds?"
-                options = [
-                    f"Option A: According to the source analysis, {c_title} exhibits high-order theoretical properties under specified operational boundary conditions.",
-                    f"Option B: {c_title} unconditionally simplifies to linear approximations regardless of boundary constraints.",
-                    f"Option C: The source text indicates that {c_title} operates independently of surrounding systems.",
-                ]
-                correct_answer = options[0]
-                explanation = f"In-depth analysis of {c_title} demonstrates the validity of Option A based on source material principles."
-            elif difficulty == "advanced":
-                question_text = f"In the context of {c_title} ('{context_snippet}...'), which analysis correctly evaluates key trade-offs?"
-                options = [
-                    f"Primary mechanism of {c_title} optimizing efficiency and consistency as stated in source material",
-                    f"Secondary misconfiguration of {c_title} leading to non-deterministic failure",
-                    f"Legacy implementation of {c_title} disregarding system boundary constraints",
-                ]
-                correct_answer = options[0]
-                explanation = f"Evaluating {c_title} in this scenario confirms Option 1 as the correct design choice."
-            elif difficulty == "intermediate":
-                question_text = f"Based on the course material for {c_title}, which statement best describes its practical application?"
-                options = [
-                    f"It applies {c_title} directly to resolve key requirements described in the material.",
-                    f"It replaces {c_title} with unrelated conceptual frameworks.",
-                    f"It neglects {c_title} entirely during system execution.",
-                ]
-                correct_answer = options[0]
-                explanation = f"{c_title} is specifically applied to address core requirements in the source material."
-            else: # beginner
-                question_text = f"What is the key principle of {c_title} presented in the lesson material?"
-                options = [
-                    f"The core mechanism and definition of {c_title}",
-                    f"An alternative configuration unrelated to {c_title}",
-                    f"A deprecated legacy behavior superseded by {c_title}",
-                ]
-                correct_answer = options[0]
-                explanation = f"The lesson material defines {c_title} by its core fundamental principles."
-
-            ex_starter_code = ""
-            ex_solution_code = None
-            if ex_type == "tiny_coding":
-                ex_starter_code = "# Write your solution or note here\n"
-                ex_solution_code = f"print('{c_title} ok')\n"
-
             exercises.append(
-                ExerciseDefinition(
-                    id=f"{lesson_id}-ex-1",
-                    title=f"{slot.type.title()} Exercise 1",
-                    type=ex_type,
-                    question=question_text,
-                    options=options,
-                    correct_answer=correct_answer,
-                    explanation=explanation,
-                    starter_code=ex_starter_code,
-                    solution_code=ex_solution_code,
-                    xp_reward=15,
+                self._generate_content_extracted_exercise(
+                    lesson_id=lesson_id,
+                    c_title=c_title,
+                    slot=slot,
+                    domain=domain,
+                    source_context=source_context,
                 )
             )
 
