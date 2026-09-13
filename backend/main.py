@@ -3,12 +3,14 @@ import logging
 import os
 import time
 import uuid
+from contextlib import asynccontextmanager
+from pathlib import Path
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel, Field
 
 from .ai_models import OllamaHealth, ProvidersOverview, ProviderStatus, TutorRequest, TutorResponse
-from .ai_provider import AIProvider, ALL_PROVIDERS, OllamaProvider, get_ai_provider
+from .ai_provider import AIProvider, ALL_PROVIDERS, OllamaProvider, get_ai_provider, close_shared_client
 from .api_settings import (
     ApiKeyValidationResult,
     ProviderInfo,
@@ -18,7 +20,6 @@ from .api_settings import (
     update_provider_key,
     validate_provider_key,
 )
-from pathlib import Path
 from .curriculum_loader import CurriculumLoader, load_all_curriculums
 from .lesson_engine import LessonEngine, ProgressionStore
 from .user_store import LeaderboardEntry, UserProfile, UserStore
@@ -62,7 +63,12 @@ from .tutor_service import TutorService
 
 logger = logging.getLogger("patchwork-tutor")
 
-app = FastAPI(title="Patchwork AI Tutor")
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    yield
+    await close_shared_client()
+
+app = FastAPI(title="Patchwork AI Tutor", lifespan=lifespan)
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
@@ -126,7 +132,8 @@ lesson_engine = LessonEngine(
     stores=loaded_stores,
 )
 
-# Global active provider setting
+# Global active provider setting and lock for thread/async safety
+provider_lock = asyncio.Lock()
 current_provider_id = os.getenv("AI_PROVIDER", "ollama").lower().strip()
 fallback_provider_id = os.getenv("AI_FALLBACK_PROVIDER", "").lower().strip() or None
 
@@ -203,16 +210,19 @@ async def ollama_health():
 
 @app.get("/api/ai/providers", response_model=ProvidersOverview)
 async def get_ai_providers():
+    async with provider_lock:
+        curr_id = current_provider_id
+        fb_id = fallback_provider_id
     statuses: list[ProviderStatus] = []
     for pid in ALL_PROVIDERS:
         prov = get_ai_provider(pid)
         st = await prov.health()
-        st.is_current = (pid == current_provider_id)
+        st.is_current = (pid == curr_id)
         statuses.append(st)
 
     return ProvidersOverview(
-        current_provider=current_provider_id,
-        fallback_provider=fallback_provider_id,
+        current_provider=curr_id,
+        fallback_provider=fb_id,
         providers=statuses,
     )
 
@@ -228,11 +238,16 @@ async def get_ai_health():
 @app.post("/api/ai/select", response_model=ProviderStatus)
 async def select_ai_provider(req: ProviderSelection):
     global current_provider_id
-    if req.provider.lower() not in ALL_PROVIDERS:
+    target_pid = req.provider.lower().strip()
+    if target_pid not in ALL_PROVIDERS:
         raise HTTPException(status_code=400, detail={"error": "unknown_provider"})
-    current_provider_id = req.provider.lower()
-    tutor_service.provider = get_current_provider()
-    st = await tutor_service.provider.health()
+
+    async with provider_lock:
+        current_provider_id = target_pid
+        new_provider = get_current_provider()
+        tutor_service.provider = new_provider
+
+    st = await new_provider.health()
     st.is_current = True
     return st
 
@@ -436,9 +451,13 @@ async def run_generation_pipeline(job: GenerationJob) -> None:
         sequencer = CurriculumSequencer(provider)
         validator = StructureValidator()
 
+        MAX_RETRIES = 2
+        retry_count = 0
         blueprint = await sequencer.sequence(graph)
         val_res = validator.validate(blueprint, graph)
-        if not val_res.valid:
+        while not val_res.valid and retry_count < MAX_RETRIES:
+            retry_count += 1
+            await asyncio.sleep(0.5 * (2 ** retry_count))
             blueprint = await sequencer.sequence(graph, retry_hint=val_res.retry_hint)
             val_res = validator.validate(blueprint, graph)
 
@@ -570,7 +589,24 @@ async def generate_course(req: CourseGenerationRequest):
             )
 
     job = generated_store.create_job(req)
-    asyncio.create_task(run_generation_pipeline(job))
+    task = asyncio.create_task(run_generation_pipeline(job))
+
+    def _on_task_done(t: asyncio.Task) -> None:
+        try:
+            exc = t.exception()
+            if exc:
+                logger.error(f"Generation pipeline task failed for job {job.job_id}: {exc}", exc_info=exc)
+                job.status = "error"
+                job.error = str(exc)
+                for s in job.stages:
+                    if s.state == "active":
+                        s.state = "error"
+        except asyncio.CancelledError:
+            logger.warning(f"Generation pipeline task cancelled for job {job.job_id}")
+            job.status = "error"
+            job.error = "Generation task was cancelled"
+
+    task.add_done_callback(_on_task_done)
     return {"job_id": job.job_id, "status": job.status}
 
 
@@ -794,10 +830,13 @@ async def get_settings():
     try:
         async with asyncio.timeout(15):
             providers = await get_all_providers_info()
+            async with provider_lock:
+                curr_id = current_provider_id
+                fb_id = fallback_provider_id
             return SettingsResponse(
                 providers=providers,
-                current_provider=current_provider_id,
-                fallback_provider=fallback_provider_id,
+                current_provider=curr_id,
+                fallback_provider=fb_id,
             )
     except asyncio.TimeoutError as exc:
         raise HTTPException(status_code=504, detail={"error": "settings_timeout"}) from exc
@@ -871,7 +910,8 @@ async def save_provider_settings(provider: str, request: SettingsSaveRequest):
 
         # Refresh tutor_service provider
         global current_provider_id
-        tutor_service.provider = get_current_provider()
+        async with provider_lock:
+            tutor_service.provider = get_current_provider()
 
         return {
             "success": True,
@@ -901,7 +941,8 @@ async def delete_provider_key(provider: str):
     try:
         removed = remove_provider_key(normalized)
         if removed:
-            tutor_service.provider = get_current_provider()
+            async with provider_lock:
+                tutor_service.provider = get_current_provider()
 
         return {
             "success": True,
@@ -931,8 +972,8 @@ async def reset_progression(language: str | None = None):
     if generic_file.exists():
         try:
             generic_file.write_text("[]", encoding="utf-8")
-        except Exception:
-            pass
+        except Exception as exc:
+            logger.warning(f"Failed to reset generic progression file: {exc}")
 
     return {
         "success": True,

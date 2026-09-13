@@ -1,3 +1,27 @@
+let sharedAudioCtx: AudioContext | null = null
+
+function getAudioContext(): AudioContext | null {
+  if (typeof window === 'undefined') return null
+  if (!sharedAudioCtx || sharedAudioCtx.state === 'closed') {
+    const AudioCtx =
+      window.AudioContext ||
+      (window as unknown as { webkitAudioContext: typeof AudioContext }).webkitAudioContext
+    if (!AudioCtx) return null
+    try {
+      sharedAudioCtx = new AudioCtx()
+    } catch (err) {
+      console.warn('Failed to initialize AudioContext:', err)
+      return null
+    }
+  }
+  if (sharedAudioCtx.state === 'suspended') {
+    sharedAudioCtx.resume().catch((err) => {
+      console.warn('Failed to resume AudioContext:', err)
+    })
+  }
+  return sharedAudioCtx
+}
+
 export function playPatchworkSound(
   type:
     | 'success'
@@ -11,14 +35,8 @@ export function playPatchworkSound(
 ) {
   if (!enabled) return
   try {
-    const AudioCtx =
-      window.AudioContext ||
-      (window as unknown as { webkitAudioContext: typeof AudioContext }).webkitAudioContext
-    if (!AudioCtx) return
-    const ctx = new AudioCtx()
-    if (ctx.state === 'suspended') {
-      ctx.resume()
-    }
+    const ctx = getAudioContext()
+    if (!ctx) return
     const now = ctx.currentTime
 
     if (type === 'success') {
@@ -76,7 +94,7 @@ export function playPatchworkSound(
         osc.stop(now + idx * 0.1 + 0.65)
       })
     }
-  } catch {
-    // AudioContext silently handled
+  } catch (err) {
+    console.warn('Audio playback error:', err)
   }
 }

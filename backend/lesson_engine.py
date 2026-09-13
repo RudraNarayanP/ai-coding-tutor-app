@@ -15,10 +15,13 @@ class ExecutionService(Protocol):
 
 
 import json
+import os
+import threading
 from pathlib import Path
 
 class ProgressionStore:
     def __init__(self, curriculum: Curriculum, storage_path: Path | None = None) -> None:
+        self._lock = threading.Lock()
         self._lessons = curriculum.lessons
         self._lessons_by_id: dict[str, LessonDefinition] = {
             lesson.id: lesson for lesson in self._lessons
@@ -37,63 +40,68 @@ class ProgressionStore:
 
     def _load(self) -> None:
         if self.storage_path and self.storage_path.exists():
-            try:
-                data = json.loads(self.storage_path.read_text(encoding="utf-8"))
-                if isinstance(data, list):
-                    valid_ids = {lid for lid in data if lid in self._lessons_by_id}
-                    self._completed.update(valid_ids)
-                elif isinstance(data, dict):
-                    self._completed.update(data.get("completed_lesson_ids", []))
-                    self._mastered.update(data.get("mastered_lesson_ids", []))
-                    self._skipped.update(data.get("skipped_lesson_ids", []))
-                    self._completed_sublessons.update(data.get("completed_sublesson_ids", []))
-                    self._completed_exercises.update(data.get("completed_exercise_ids", []))
-                    self._attempts.update(
-                        {k: int(v) for k, v in (data.get("attempt_counts") or {}).items()}
-                    )
-                    self._last_results.update(data.get("last_results") or {})
-                    self._xp = int(data.get("xp", 0))
-                    self._level = int(data.get("level", 1))
-            except Exception:
-                pass
+            with self._lock:
+                try:
+                    data = json.loads(self.storage_path.read_text(encoding="utf-8"))
+                    if isinstance(data, list):
+                        valid_ids = {lid for lid in data if lid in self._lessons_by_id}
+                        self._completed.update(valid_ids)
+                    elif isinstance(data, dict):
+                        self._completed.update(data.get("completed_lesson_ids", []))
+                        self._mastered.update(data.get("mastered_lesson_ids", []))
+                        self._skipped.update(data.get("skipped_lesson_ids", []))
+                        self._completed_sublessons.update(data.get("completed_sublesson_ids", []))
+                        self._completed_exercises.update(data.get("completed_exercise_ids", []))
+                        self._attempts.update(
+                            {k: int(v) for k, v in (data.get("attempt_counts") or {}).items()}
+                        )
+                        self._last_results.update(data.get("last_results") or {})
+                        self._xp = int(data.get("xp", 0))
+                        self._level = int(data.get("level", 1))
+                except Exception:
+                    pass
 
     def _save(self) -> None:
         if self.storage_path:
-            try:
-                payload = {
-                    "completed_lesson_ids": sorted(self._completed),
-                    "mastered_lesson_ids": sorted(self._mastered),
-                    "skipped_lesson_ids": sorted(self._skipped),
-                    "completed_sublesson_ids": sorted(self._completed_sublessons),
-                    "completed_exercise_ids": sorted(self._completed_exercises),
-                    "attempt_counts": dict(self._attempts),
-                    "last_results": dict(self._last_results),
-                    "xp": self._xp,
-                    "level": self._level,
-                }
-                self.storage_path.write_text(json.dumps(payload, indent=2), encoding="utf-8")
-            except Exception:
-                pass
+            with self._lock:
+                try:
+                    payload = {
+                        "completed_lesson_ids": sorted(self._completed),
+                        "mastered_lesson_ids": sorted(self._mastered),
+                        "skipped_lesson_ids": sorted(self._skipped),
+                        "completed_sublesson_ids": sorted(self._completed_sublessons),
+                        "completed_exercise_ids": sorted(self._completed_exercises),
+                        "attempt_counts": dict(self._attempts),
+                        "last_results": dict(self._last_results),
+                        "xp": self._xp,
+                        "level": self._level,
+                    }
+                    tmp_path = self.storage_path.with_suffix(f".tmp_{os.getpid()}_{id(self)}")
+                    tmp_path.write_text(json.dumps(payload, indent=2), encoding="utf-8")
+                    tmp_path.replace(self.storage_path)
+                except Exception:
+                    pass
 
     def state(self) -> ProgressionState:
-        done_set = self._completed | self._mastered | self._skipped
-        current = next(
-            (lesson.id for lesson in self._lessons if lesson.id not in done_set),
-            None,
-        )
-        return ProgressionState(
-            completed_lesson_ids=sorted(
-                [lid for lid in self._completed if lid in self._lessons_by_id],
-                key=lambda lesson_id: self._lessons_by_id[lesson_id].order,
-            ),
-            mastered_lesson_ids=sorted(self._mastered),
-            skipped_lesson_ids=sorted(self._skipped),
-            completed_sublesson_ids=sorted(self._completed_sublessons),
-            completed_exercise_ids=sorted(self._completed_exercises),
-            current_lesson_id=current,
-            xp=self._xp,
-            level=max(1, self._xp // 100 + 1),
-        )
+        with self._lock:
+            done_set = self._completed | self._mastered | self._skipped
+            current = next(
+                (lesson.id for lesson in self._lessons if lesson.id not in done_set),
+                None,
+            )
+            return ProgressionState(
+                completed_lesson_ids=sorted(
+                    [lid for lid in self._completed if lid in self._lessons_by_id],
+                    key=lambda lesson_id: self._lessons_by_id[lesson_id].order,
+                ),
+                mastered_lesson_ids=sorted(self._mastered),
+                skipped_lesson_ids=sorted(self._skipped),
+                completed_sublesson_ids=sorted(self._completed_sublessons),
+                completed_exercise_ids=sorted(self._completed_exercises),
+                current_lesson_id=current,
+                xp=self._xp,
+                level=max(1, self._xp // 100 + 1),
+            )
 
     def add_xp(self, amount: int) -> int:
         if amount > 0:
@@ -108,10 +116,6 @@ class ProgressionStore:
 
     def mark_sublesson_completed(self, sublesson_id: str) -> None:
         self._completed_sublessons.add(sublesson_id)
-        self._save()
-
-    def mark_exercise_completed(self, exercise_id: str) -> None:
-        self._completed_exercises.add(exercise_id)
         self._save()
 
     def record_attempt(self, exercise_id: str, passed: bool) -> int:

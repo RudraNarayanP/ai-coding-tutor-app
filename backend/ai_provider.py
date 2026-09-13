@@ -1,5 +1,6 @@
 import os
 import json
+import logging
 from dataclasses import dataclass, field
 from typing import Protocol, Any
 from urllib.parse import urlparse
@@ -7,6 +8,8 @@ from urllib.parse import urlparse
 import httpx
 
 from .ai_models import OllamaHealth, ProviderStatus, TutorRequest
+
+logger = logging.getLogger("patchwork.ai_provider")
 
 
 class AIProviderError(Exception):
@@ -85,11 +88,17 @@ def build_user_prompt(request: TutorRequest) -> str:
 # ─── SHARED HTTP CLIENT FOR LATENCY OPTIMIZATION ──────────────────────────────
 _shared_client: httpx.AsyncClient | None = None
 
-def get_shared_client(timeout: float = 30.0) -> httpx.AsyncClient:
+def get_shared_client() -> httpx.AsyncClient:
     global _shared_client
     if _shared_client is None or _shared_client.is_closed:
-        _shared_client = httpx.AsyncClient(timeout=timeout, limits=httpx.Limits(max_keepalive_connections=20, max_connections=100))
+        _shared_client = httpx.AsyncClient(limits=httpx.Limits(max_keepalive_connections=20, max_connections=100))
     return _shared_client
+
+async def close_shared_client() -> None:
+    global _shared_client
+    if _shared_client is not None and not _shared_client.is_closed:
+        await _shared_client.aclose()
+        _shared_client = None
 
 
 # ─── 1. OLLAMA PROVIDER ────────────────────────────────────────────────────────
@@ -105,7 +114,7 @@ class OllamaProvider:
     async def tutor(self, request: TutorRequest) -> str:
         prompt = build_user_prompt(request)
         try:
-            client = get_shared_client(self.timeout_seconds)
+            client = get_shared_client()
             response = await client.post(
                 f"{self.base_url}/api/chat",
                 json={
@@ -117,6 +126,7 @@ class OllamaProvider:
                         {"role": "user", "content": prompt},
                     ],
                 },
+                timeout=self.timeout_seconds,
             )
             if response.status_code == 404:
                 raise AIProviderError("Configured Ollama model is unavailable.", provider="ollama", code="model_missing")
@@ -132,7 +142,7 @@ class OllamaProvider:
 
     async def generate_structured(self, system: str, user: str, max_tokens: int = 4000) -> str:
         try:
-            client = get_shared_client(self.timeout_seconds)
+            client = get_shared_client()
             response = await client.post(
                 f"{self.base_url}/api/chat",
                 json={
@@ -144,6 +154,7 @@ class OllamaProvider:
                         {"role": "user", "content": user},
                     ],
                 },
+                timeout=self.timeout_seconds,
             )
             if response.status_code == 404:
                 raise AIProviderError("Configured Ollama model is unavailable.", provider="ollama", code="model_missing")
@@ -245,8 +256,8 @@ class OpenAICompatibleProvider:
         }
 
         try:
-            client = get_shared_client(30.0)
-            res = await client.post(f"{self.base_url}/chat/completions", headers=headers, json=payload)
+            client = get_shared_client()
+            res = await client.post(f"{self.base_url}/chat/completions", headers=headers, json=payload, timeout=30.0)
             if res.status_code == 401:
                 raise AIProviderError(f"{self.name} API key is invalid or unauthorized.", provider=self.provider_id, code="invalid_api_key")
             elif res.status_code == 429:
@@ -287,8 +298,8 @@ class OpenAICompatibleProvider:
         }
 
         try:
-            client = get_shared_client(60.0)
-            res = await client.post(f"{self.base_url}/chat/completions", headers=headers, json=payload)
+            client = get_shared_client()
+            res = await client.post(f"{self.base_url}/chat/completions", headers=headers, json=payload, timeout=60.0)
             if res.status_code == 401:
                 raise AIProviderError(f"{self.name} API key is invalid or unauthorized.", provider=self.provider_id, code="invalid_api_key")
             elif res.status_code == 429:
@@ -370,8 +381,8 @@ class AnthropicProvider:
         }
 
         try:
-            client = get_shared_client(30.0)
-            res = await client.post("https://api.anthropic.com/v1/messages", headers=headers, json=payload)
+            client = get_shared_client()
+            res = await client.post("https://api.anthropic.com/v1/messages", headers=headers, json=payload, timeout=30.0)
             if res.status_code == 401:
                 raise AIProviderError("Anthropic API key is invalid.", provider=self.provider_id, code="invalid_api_key")
             elif res.status_code == 429:
@@ -412,8 +423,8 @@ class AnthropicProvider:
         }
 
         try:
-            client = get_shared_client(60.0)
-            res = await client.post("https://api.anthropic.com/v1/messages", headers=headers, json=payload)
+            client = get_shared_client()
+            res = await client.post("https://api.anthropic.com/v1/messages", headers=headers, json=payload, timeout=60.0)
             if res.status_code == 401:
                 raise AIProviderError("Anthropic API key is invalid.", provider=self.provider_id, code="invalid_api_key")
             elif res.status_code == 429:
@@ -494,8 +505,8 @@ class GeminiProvider:
         }
 
         try:
-            client = get_shared_client(30.0)
-            res = await client.post(url, json=payload)
+            client = get_shared_client()
+            res = await client.post(url, json=payload, timeout=30.0)
             if res.status_code in (400, 401, 403):
                 raise AIProviderError("Gemini API key is invalid or request denied.", provider=self.provider_id, code="invalid_api_key")
             elif res.status_code == 429:
@@ -535,8 +546,8 @@ class GeminiProvider:
         }
 
         try:
-            client = get_shared_client(60.0)
-            res = await client.post(url, json=payload)
+            client = get_shared_client()
+            res = await client.post(url, json=payload, timeout=60.0)
             if res.status_code in (400, 401, 403):
                 raise AIProviderError("Gemini API key is invalid or request denied.", provider=self.provider_id, code="invalid_api_key")
             elif res.status_code == 429:
