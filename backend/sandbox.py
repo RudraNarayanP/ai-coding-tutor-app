@@ -1,9 +1,12 @@
 import asyncio
 import json
+import logging
 import subprocess
 import time
 import uuid
 from dataclasses import dataclass
+
+logger = logging.getLogger("patchwork.sandbox")
 
 
 class SandboxError(Exception):
@@ -28,6 +31,7 @@ class DockerSandbox:
     def __init__(self, limits: SandboxLimits | None = None) -> None:
         self.limits = limits or SandboxLimits()
         self._image_ready = asyncio.Lock()
+        self._cleaned_orphans = False
 
     async def _docker(self, *args: str, input_data: bytes | None = None, timeout: float = 30, timeout_message: str = "Docker operation timed out.") -> tuple[int, bytes, bytes]:
         def invoke() -> subprocess.CompletedProcess[bytes]:
@@ -46,8 +50,24 @@ class DockerSandbox:
         except subprocess.TimeoutExpired as exc:
             raise SandboxError(timeout_message, 408) from exc
 
+    async def cleanup_orphaned_containers(self) -> None:
+        """Remove any leftover container instances matching patchwork-run-*."""
+        try:
+            code, stdout, _ = await self._docker("ps", "-a", "-q", "--filter", "name=patchwork-run-")
+            if code == 0 and stdout.strip():
+                container_ids = [cid.strip() for cid in stdout.decode("utf-8").split() if cid.strip()]
+                if container_ids:
+                    logger.info(f"Cleaning up {len(container_ids)} orphaned sandbox container(s)")
+                    await self._docker("rm", "--force", *container_ids)
+        except Exception as exc:
+            logger.warning(f"Orphaned container cleanup error: {exc}")
+
     async def _ensure_image(self) -> None:
         async with self._image_ready:
+            if not self._cleaned_orphans:
+                await self.cleanup_orphaned_containers()
+                self._cleaned_orphans = True
+
             code, _, _ = await self._docker("image", "inspect", self.image)
             if code == 0:
                 return
@@ -99,7 +119,10 @@ class DockerSandbox:
         except SandboxError:
             raise
         finally:
-            await self._docker("rm", "--force", container)
+            try:
+                await self._docker("rm", "--force", container)
+            except Exception as exc:
+                logger.warning(f"Failed to force remove container {container}: {exc}")
 
 
 sandbox = DockerSandbox()

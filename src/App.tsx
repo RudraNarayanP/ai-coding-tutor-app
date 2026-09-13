@@ -1,3 +1,4 @@
+import { safeGetItem, safeSetItem } from './utils/storage'
  import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { PatchworkCharacter } from './components/PatchworkCharacters'
 import { GuidebookPanel } from './components/GuidebookPanel'
@@ -142,7 +143,7 @@ function App() {
   const [isGuidebookOpen, setIsGuidebookOpen] = useState(false)
   const [courses, setCourses] = useState<CourseSummary[]>([])
   const [selectedLanguage, setSelectedLanguage] = useState<string>(() => {
-    return localStorage.getItem('patchwork_active_language') || 'python'
+    return safeGetItem('patchwork_active_language') || 'python'
   })
   const [lessons, setLessons] = useState<LessonSummary[]>([])
   const [lesson, setLesson] = useState<Lesson | null>(null)
@@ -154,7 +155,7 @@ function App() {
   )
   const [aiEnabled, setAiEnabled] = useState(true)
   const [soundEnabled, setSoundEnabled] = useState<boolean>(() => {
-    const saved = localStorage.getItem('patchwork_sound_enabled')
+    const saved = safeGetItem('patchwork_sound_enabled')
     return saved !== null ? saved === 'true' : true
   })
   const [providersOverview, setProvidersOverview] = useState<ProvidersOverview | null>(null)
@@ -296,8 +297,8 @@ function App() {
       if (data) {
         setLeaderboardEntries(data)
       }
-    } catch {
-      // ignore
+    } catch (err) {
+      console.error('API request failed:', err)
     }
   }, [])
 
@@ -315,8 +316,8 @@ function App() {
         const data = await res.json()
         setCourses(data)
       }
-    } catch {
-      // ignore
+    } catch (err) {
+      console.error('API request failed:', err)
     }
   }, [])
 
@@ -330,8 +331,8 @@ function App() {
         body: JSON.stringify({ provider: prov }),
       })
       fetchProviders()
-    } catch {
-      // ignore
+    } catch (err) {
+      console.error('API request failed:', err)
     }
   }
 
@@ -346,8 +347,8 @@ function App() {
           setSelectedProvider(data.current_provider)
         }
       }
-    } catch {
-      // ignore
+    } catch (err) {
+      console.error('API request failed:', err)
     }
   }, [])
 
@@ -360,8 +361,8 @@ function App() {
         setXp(data.xp || 0)
         setLevel(data.level || Math.floor((data.xp || 0) / 100) + 1)
       }
-    } catch {
-      // ignore
+    } catch (err) {
+      console.error('API request failed:', err)
     }
   }, [selectedLanguage])
 
@@ -388,7 +389,7 @@ function App() {
   // ─── Select Language Course Track ───────────────────────────────────────────
   const handleCourseChange = async (lang: string) => {
     setSelectedLanguage(lang)
-    localStorage.setItem('patchwork_active_language', lang)
+    safeSetItem('patchwork_active_language', lang)
     setIsLessonActive(false)
     try {
       await fetch('/api/courses/select', {
@@ -396,8 +397,8 @@ function App() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ language: lang }),
       })
-    } catch {
-      // fallback
+    } catch (err) {
+      console.error('Operation failed:', err)
     }
     // Always land back on the home / course map after switching tracks.
     setLesson(null)
@@ -429,8 +430,8 @@ function App() {
         setMaterialInput('')
         setCustomTitle('')
       }
-    } catch {
-      // fallback
+    } catch (err) {
+      console.error('Operation failed:', err)
     } finally {
       setIsGeneratingCourse(false)
     }
@@ -461,7 +462,7 @@ function App() {
       if (prog) setLessonProgress(prog)
 
       const draftKey = `patchwork_code_${data.id}`
-      const savedDraft = localStorage.getItem(draftKey)
+      const savedDraft = safeGetItem(draftKey)
       setCode(savedDraft !== null ? savedDraft : data.starter_code || '')
 setIsLessonActive(true)
       saveGameState({ currentLessonId: data.id })
@@ -506,7 +507,7 @@ setIsLessonActive(true)
   // Save code drafts
   useEffect(() => {
     if (lesson?.id) {
-      localStorage.setItem(`patchwork_code_${lesson.id}`, code)
+      safeSetItem(`patchwork_code_${lesson.id}`, code)
     }
   }, [code, lesson])
 
@@ -562,7 +563,8 @@ setIsLessonActive(true)
           setCharSpeech('Out of hearts! Enable Unlimited Hearts in Settings or review the guidebook and try again.')
         }
       }
-    } catch {
+    } catch (err) {
+      console.error('Error executing code:', err)
       setFeedback('Error connecting to code execution sandbox.')
       setCharState('confused')
     } finally {
@@ -604,7 +606,8 @@ setIsLessonActive(true)
       } else {
         setFeedback('AI tutor service is currently offline.')
       }
-    } catch {
+    } catch (err) {
+      console.error('Error reaching AI tutor:', err)
       setFeedback('Failed to reach AI tutor service.')
     } finally {
       setIsTutorLoading(false)
@@ -623,8 +626,8 @@ setIsLessonActive(true)
         setCharState('happy')
         setCharSpeech('Here is the canonical solution for this challenge!')
       }
-    } catch {
-      // ignore
+    } catch (err) {
+      console.error('API request failed:', err)
     }
   }
 
@@ -718,7 +721,8 @@ setExercisePhase('incorrect')
           setCharSpeech('Out of hearts! Enable Unlimited Hearts in Settings or review the guidebook and try again.')
         }
       }
-    } catch {
+    } catch (err) {
+      console.error('Error submitting exercise:', err)
       playPatchworkSound('error', soundEnabled)
       setFeedback('Failed to submit exercise to grading server.')
       setExercisePhase('answering')
@@ -785,8 +789,8 @@ setExercisePhase('incorrect')
           setCharSpeech(data.error || 'Test out attempt did not reach passing score. Practice the material and try again!')
         }
       }
-    } catch {
-      // fallback
+    } catch (err) {
+      console.error('Operation failed:', err)
     }
   }
 
@@ -819,7 +823,7 @@ setExercisePhase('incorrect')
   const toggleSound = () => {
     const next = !soundEnabled
     setSoundEnabled(next)
-    localStorage.setItem('patchwork_sound_enabled', String(next))
+    safeSetItem('patchwork_sound_enabled', String(next))
   }
 
   const handleEditorKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
@@ -845,11 +849,11 @@ setExercisePhase('incorrect')
   const progressPct = safeLessons.length ? (completedCount / safeLessons.length) * 100 : 0
 
   const isAiAvailable = providersOverview?.providers?.some((p) => p.is_current && p.available) ?? false
-  const currentProviderStatus = providersOverview?.providers?.find((p) => p.is_current)
+  const currentProviderStatus = providersOverview?.providers?.find((p) => p?.is_current)
   const hintDisabled = isRunning || !aiEnabled || !isAiAvailable
 
-  const failedRequired = results ? results.filter((r) => r.required && !r.passed) : []
-  const allPassed = results ? results.length > 0 && failedRequired.length === 0 : false
+  const failedRequired = results ? results.filter((r) => r?.required && !r?.passed) : []
+  const allPassed = results && results.length > 0 ? failedRequired.length === 0 : false
 
   // Language Track Display Name
   const coursePathTitle = selectedLanguage === 'cpp' ? 'C++ Path' : selectedLanguage === 'java' ? 'Java Path' : 'Python Path'
@@ -1000,7 +1004,7 @@ setExercisePhase('incorrect')
         <header className="duo-top-header" role="banner">
           <div className="duo-header-left">
             <div className="duo-course-selector" role="tablist" aria-label="Course language selector" style={{ display: 'flex', gap: '6px', alignItems: 'center' }}>
-              {courses.map((c) => (
+              {(courses ?? []).map((c) => (
                 <button
                   key={c.id}
                   role="tab"
@@ -1160,7 +1164,7 @@ setExercisePhase('incorrect')
                           : `${failedRequired.length} of ${results.filter((r) => r.required).length} required failed`}
                       </span>
                     </div>
-                    {results.map((r) => (
+                    {(results ?? []).map((r) => (
                       <div key={r.name} style={{ display: 'flex', gap: '8px', alignItems: 'center', fontSize: '14px', fontWeight: 700 }}>
                         <span role="img" aria-label={r.passed ? 'Passed' : 'Failed'}>{r.passed ? '✓' : '×'}</span>
                         <span>{r.name}</span>
@@ -1245,7 +1249,7 @@ setExercisePhase('incorrect')
                   </div>
                   {sessionNotes.length > 0 && (
                     <ul style={{ marginTop: '12px', paddingLeft: '20px', fontWeight: 700 }}>
-                      {sessionNotes.map((note, i) => (
+                      {(sessionNotes ?? []).map((note, i) => (
                         <li key={i}>{note}</li>
                       ))}
                     </ul>
@@ -1330,7 +1334,7 @@ setExercisePhase('incorrect')
 
                       {/* Serpentine Node Path inside Unit */}
                       <div className="duo-path-tree">
-                        {unit.lessons.map((item, idx) => {
+                        {(unit?.lessons ?? []).map((item, idx) => {
                           const isActive = lesson?.id === item.id
                           const positions = ['node-pos-center', 'node-pos-left-1', 'node-pos-right-1', 'node-pos-center']
                           const posClass = positions[idx % positions.length]
@@ -1581,7 +1585,7 @@ setExercisePhase('incorrect')
               {/* Server-Side Multi-User Leaderboard */}
               <div className="duo-rank-list">
                 {leaderboardEntries.length > 0 ? (
-                  leaderboardEntries.map((entry) => (
+                  (leaderboardEntries ?? []).map((entry) => (
                     <div
                       key={entry.user_id}
                       className={`duo-rank-item ${entry.is_current_user ? 'user-self' : ''}`}

@@ -1,3 +1,5 @@
+import { safeGetItem, safeSetItem } from './storage'
+
 export interface GamificationState {
   streakCount: number
   lastActiveDate: string | null
@@ -22,12 +24,9 @@ const STORAGE_KEY = 'patchwork_gamification_v1'
 const GAME_STATE_KEY = 'patchwork_game_state_v1'
 
 // ─── Level math ──────────────────────────────────────────────────────────────
-// Levels grow quadratically so early levels feel fast and later levels feel
-// like real milestones. xpForLevel(N) is the cumulative XP needed to reach N.
 
 export function xpForLevel(level: number): number {
   if (level <= 1) return 0
-  // Each level needs 60 + 40*(N-1) XP.
   let total = 0
   for (let i = 1; i < level; i++) total += 60 + 40 * (i - 1)
   return total
@@ -75,19 +74,19 @@ export interface GameSaveData {
 
 export function loadFullGameState(): Partial<GamificationState> | null {
   try {
-    const raw = localStorage.getItem(GAME_STATE_KEY)
+    const raw = safeGetItem(GAME_STATE_KEY)
     if (raw) return JSON.parse(raw) as Partial<GamificationState>
-  } catch {
-    // Fallback
+  } catch (err) {
+    console.warn('Error loading full game state:', err)
   }
   return null
 }
 
 export function saveFullGameState(state: Partial<GamificationState>): void {
   try {
-    localStorage.setItem(GAME_STATE_KEY, JSON.stringify(state))
-  } catch {
-    // Silent catch
+    safeSetItem(GAME_STATE_KEY, JSON.stringify(state))
+  } catch (err) {
+    console.warn('Error saving full game state:', err)
   }
 }
 
@@ -95,9 +94,9 @@ export function saveGameState(data: Partial<GameSaveData>): void {
   try {
     const existing = loadFullGameState() || {}
     const merged = { ...existing, ...data }
-    localStorage.setItem(GAME_STATE_KEY, JSON.stringify(merged))
-  } catch {
-    // Silent catch
+    safeSetItem(GAME_STATE_KEY, JSON.stringify(merged))
+  } catch (err) {
+    console.warn('Error saving game state:', err)
   }
 }
 
@@ -130,7 +129,7 @@ function normalizeState(raw: Record<string, any>, today: string): GamificationSt
 
 export function getGamificationState(): GamificationState {
   try {
-    const raw = localStorage.getItem(STORAGE_KEY)
+    const raw = safeGetItem(STORAGE_KEY)
     if (raw) {
       const parsed = JSON.parse(raw)
       const today = getCurrentDate()
@@ -152,8 +151,8 @@ export function getGamificationState(): GamificationState {
       }
       return state
     }
-  } catch {
-    // Fallback
+  } catch (err) {
+    console.warn('Error reading gamification state:', err)
   }
 
   const today = getCurrentDate()
@@ -177,9 +176,9 @@ export function getGamificationState(): GamificationState {
 
 export function saveGamificationState(state: GamificationState): void {
   try {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(state))
-  } catch {
-    // Silent catch
+    safeSetItem(STORAGE_KEY, JSON.stringify(state))
+  } catch (err) {
+    console.warn('Error saving gamification state:', err)
   }
 }
 
@@ -310,17 +309,19 @@ export function activateXpBoost(durationMinutes: number = 15): GamificationState
 export function toggleSound(current: boolean): boolean {
   try {
     const next = !current
-    localStorage.setItem('patchwork_sound_enabled', String(next))
+    safeSetItem('patchwork_sound_enabled', String(next))
     return next
-  } catch {
+  } catch (err) {
+    console.warn('Error toggling sound setting:', err)
     return current
   }
 }
 
 export function getSoundEnabled(): boolean {
   try {
-    return localStorage.getItem('patchwork_sound_enabled') !== 'false'
-  } catch {
+    return safeGetItem('patchwork_sound_enabled') !== 'false'
+  } catch (err) {
+    console.warn("Error reading sound setting:", err)
     return true
   }
 }

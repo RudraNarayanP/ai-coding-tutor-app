@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react'
-import { GuidebookPanel } from './GuidebookPanel'
 
 export interface CreatePageProps {
   onCourseReady: (courseId: string) => void
@@ -40,9 +39,7 @@ export const CreatePage: React.FC<CreatePageProps> = ({ onCourseReady }) => {
   // Edit controls state
   const [editTitle, setEditTitle] = useState('')
   const [editDifficulty, setEditDifficulty] = useState('beginner')
-  const [editIntensity, setEditIntensity] = useState('balanced')
   const [editPedagogicalStyle, setEditPedagogicalStyle] = useState('conceptual')
-  const [topicsList, setTopicsList] = useState<string[]>([])
 
   // Submit Course Generation Request
   const handleStartGeneration = async (forceDuplicate = false) => {
@@ -84,41 +81,55 @@ export const CreatePage: React.FC<CreatePageProps> = ({ onCourseReady }) => {
       const data = await res.json()
       setJobId(data.job_id)
       setStep('generating')
-    } catch {
+    } catch (err) {
+      console.error('Error starting generation:', err)
       setErrorMessage('Network error initiating course generation.')
     }
   }
 
-  // Poll Job Status during 'generating' step
+  // Poll Job Status during 'generating' step safely without memory leaks
   useEffect(() => {
     if (step !== 'generating' || !jobId) return
 
-    const interval = setInterval(async () => {
+    let isMounted = true
+
+    const pollStatus = async () => {
       try {
         const res = await fetch(`/api/generate-course/${jobId}/status`)
+        if (!isMounted) return
+
         if (res.ok) {
           const data = await res.json()
+          if (!isMounted) return
+
           setStages(data.stages || [])
 
           if (data.status === 'draft' && data.preview) {
             setPreview(data.preview)
             setEditTitle(data.preview.title)
             setEditDifficulty(data.preview.difficulty || 'beginner')
-            setTopicsList(data.preview.topics || [])
             setStep('preview')
-            clearInterval(interval)
           } else if (data.status === 'error') {
             setErrorMessage(data.error || 'Course generation failed.')
             setStep('input')
-            clearInterval(interval)
           }
+        } else {
+          console.error(`Polling status failed with status: ${res.status}`)
         }
-      } catch {
-        // continue polling
+      } catch (err) {
+        if (isMounted) {
+          console.error('Error polling generation status:', err)
+        }
       }
-    }, 1500)
+    }
 
-    return () => clearInterval(interval)
+    pollStatus()
+    const interval = setInterval(pollStatus, 1500)
+
+    return () => {
+      isMounted = false
+      clearInterval(interval)
+    }
   }, [step, jobId])
 
   // Confirm Draft Course
@@ -134,7 +145,8 @@ export const CreatePage: React.FC<CreatePageProps> = ({ onCourseReady }) => {
       } else {
         setErrorMessage('Failed to confirm and active course.')
       }
-    } catch {
+    } catch (err) {
+      console.error('Error confirming course:', err)
       setErrorMessage('Network error confirming course.')
     }
   }
