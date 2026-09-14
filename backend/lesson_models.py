@@ -313,6 +313,7 @@ class ProgressionState(BaseModel):
     skipped_lesson_ids: list[str] = Field(default_factory=list)
     completed_sublesson_ids: list[str] = Field(default_factory=list)
     completed_exercise_ids: list[str] = Field(default_factory=list)
+    completed_material_ids: list[str] = Field(default_factory=list)
     current_lesson_id: str | None = None
     xp: int = 0
     level: int = 1

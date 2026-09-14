@@ -1,3 +1,5 @@
+from .materials import Material, MaterialCompletionRequest, MaterialCompletionResponse
+from .materials_data import MATERIALS
 import asyncio
 import logging
 import os
@@ -286,6 +288,51 @@ async def get_courses():
         )
     return courses
 
+
+
+@app.get("/api/materials", response_model=list[Material])
+async def list_materials(language: str | None = None, stage: str | None = None, concept: str | None = None):
+    results = MATERIALS
+    if language:
+        results = [m for m in results if m.language.lower().strip() == language.lower().strip()]
+    if stage:
+        results = [m for m in results if m.recommended_stage.lower().strip() == stage.lower().strip()]
+    if concept:
+        results = [m for m in results if concept in m.concept_tags]
+    return results
+
+
+@app.post("/api/materials/{material_id}/complete", response_model=MaterialCompletionResponse)
+async def complete_material(material_id: str, payload: MaterialCompletionRequest):
+    mat = next((m for m in MATERIALS if m.id == material_id), None)
+    if not mat:
+        raise HTTPException(status_code=404, detail={"error": "material_not_found"})
+
+    lang = mat.language.lower().strip()
+    store = lesson_engine.stores.get(lang, lesson_engine.store)
+
+    passed = True
+    feedback = "Material completed!"
+    if mat.companion_question:
+        user_ans = (payload.user_answer or "").strip()
+        exp_ans = mat.companion_question.correct_answer.strip()
+        passed = (user_ans.lower() == exp_ans.lower())
+        feedback = "Correct! Material completed." if passed else "Incorrect answer. Try again!"
+
+    xp_awarded = 0
+    if passed:
+        already_done = material_id in store.state().completed_material_ids
+        store.mark_material_completed(material_id)
+        if not already_done:
+            xp_awarded = store.add_xp(mat.xp_reward)
+
+    return MaterialCompletionResponse(
+        material_id=material_id,
+        passed=passed,
+        feedback=feedback,
+        xp_awarded=xp_awarded,
+        total_xp=store.state().xp
+    )
 
 @app.post("/api/courses/select")
 async def select_course(req: CourseSelection):
