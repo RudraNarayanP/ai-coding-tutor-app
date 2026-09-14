@@ -17,6 +17,10 @@ export type ProjectMilestone = {
   source_quote: string
   microstep: Microstep
   why: string
+  hook: string
+  teach: string
+  example: string
+  celebrate: string
   xp_reward: number
 }
 

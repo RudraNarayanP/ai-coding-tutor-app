@@ -430,6 +430,15 @@ _MICRO_OBSERVATIONS = [
     "Time to build:",
 ]
 
+_CELEBRATIONS = [
+    "Nailed it! 🎯",
+    "Milestone cleared — keep rolling! 🔥",
+    "That's another piece of the project done! ✅",
+    "Boom. On to the next one! 🚀",
+    "Great work — your project just grew! 🌱",
+    "Verified and shipped! ⚡",
+]
+
 
 def plan_project(doc: SourceDocument, title: str, course_id: str) -> ProjectCourse:
     """Build a source-grounded ProjectCourse from an ingested source document.
@@ -637,6 +646,7 @@ def _plan_from_chapters(doc: SourceDocument, chapters: list[str], title: str, co
                     hint=_chapter_hint(check),
                 ),
                 why=f"This is a real chapter of the video — building it moves your project toward the source's final result.",
+                celebrate=_CELEBRATIONS[idx % len(_CELEBRATIONS)],
                 checks=[check],
                 xp_reward=25,
             )

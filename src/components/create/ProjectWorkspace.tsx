@@ -37,6 +37,7 @@ export const ProjectWorkspace: React.FC<ProjectWorkspaceProps> = ({ courseId, on
   const [askingAi, setAskingAi] = useState(false)
   const [question, setQuestion] = useState('')
   const [expandedWhy, setExpandedWhy] = useState<string | null>(null)
+  const [showExample, setShowExample] = useState(false)
   const [celebrate, setCelebrate] = useState(false)
 
   const saveTimer = useRef<ReturnType<typeof setTimeout> | null>(null)
@@ -57,6 +58,12 @@ export const ProjectWorkspace: React.FC<ProjectWorkspaceProps> = ({ courseId, on
       mounted = false
     }
   }, [courseId])
+
+  // Collapse the "Show example" panel whenever the active step changes.
+  const currentStepKey = project?.milestones.find((m) => m.status === 'current')?.id ?? null
+  useEffect(() => {
+    setShowExample(false)
+  }, [currentStepKey])
 
   // ── Autosave (debounced) ───────────────────────────────────────────────────
   const scheduleSave = useCallback(
@@ -172,6 +179,7 @@ export const ProjectWorkspace: React.FC<ProjectWorkspaceProps> = ({ courseId, on
     project.milestones.find((m) => m.status === 'current') ||
     project.milestones.find((m) => m.status !== 'completed') ||
     null
+  const currentMilestoneId = currentMilestone?.id ?? null
   const passedTests = checks.filter((c) => c.passed).length
 
   return (
@@ -293,31 +301,43 @@ export const ProjectWorkspace: React.FC<ProjectWorkspaceProps> = ({ courseId, on
         <aside className="pw-guide" aria-label="AI guidance">
           {currentMilestone ? (
             <div className="pw-microstep">
-              <span className="pw-microstep-label">Current step</span>
-              <h3 className="pw-microstep-title">{currentMilestone.title}</h3>
-              {currentMilestone.microstep.observation && (
-                <p className="pw-observation">{currentMilestone.microstep.observation}</p>
-              )}
+              <span className="pw-microstep-label">
+                Step {currentMilestone.order} · +{currentMilestone.xp_reward} XP
+              </span>
+              <h3 className="pw-microstep-title">
+                {currentMilestone.hook || currentMilestone.title}
+              </h3>
+              {currentMilestone.teach && <p className="pw-teach">{currentMilestone.teach}</p>}
               {currentMilestone.microstep.action && (
                 <p className="pw-action">
-                  <strong>Next:</strong> {currentMilestone.microstep.action}
+                  <strong>Do this:</strong> {currentMilestone.microstep.action}
                 </p>
               )}
               {currentMilestone.microstep.hint && (
                 <p className="pw-hint">💡 {currentMilestone.microstep.hint}</p>
               )}
-              <button
-                className="pw-why"
-                onClick={() => setExpandedWhy(expandedWhy === currentMilestone.id ? null : currentMilestone.id)}
-              >
-                {expandedWhy === currentMilestone.id ? 'Hide' : 'Why?'}
-              </button>
+              <div className="pw-microstep-controls">
+                {currentMilestone.example && (
+                  <button className="pw-why" onClick={() => setShowExample((v) => !v)}>
+                    {showExample ? 'Hide example' : 'Show example'}
+                  </button>
+                )}
+                <button
+                  className="pw-why"
+                  onClick={() => setExpandedWhy(expandedWhy === currentMilestone.id ? null : currentMilestone.id)}
+                >
+                  {expandedWhy === currentMilestone.id ? 'Hide' : 'Why?'}
+                </button>
+              </div>
+              {showExample && currentMilestone.example && (
+                <pre className="pw-example">{currentMilestone.example}</pre>
+              )}
               {expandedWhy === currentMilestone.id && (
                 <div className="pw-why-body">
                   {currentMilestone.why && <p>{currentMilestone.why}</p>}
-                  {currentMilestone.source_grounded_description && (
+                  {currentMilestone.source_quote && (
                     <p className="pw-source-note">
-                      <strong>From the source:</strong> {currentMilestone.source_grounded_description}
+                      <strong>From the source:</strong> “{currentMilestone.source_quote}”
                     </p>
                   )}
                 </div>
@@ -336,11 +356,15 @@ export const ProjectWorkspace: React.FC<ProjectWorkspaceProps> = ({ courseId, on
               <p className="pw-verify-feedback">{nextResult.feedback}</p>
               {nextResult.advanced.length > 0 && (
                 <ul className="pw-advanced">
-                  {nextResult.advanced.map((a) => (
-                    <li key={a.milestone_id}>
-                      ✓ {a.title} {a.xp_awarded > 0 ? `(+${a.xp_awarded} XP)` : '(already done)'}
-                    </li>
-                  ))}
+                  {nextResult.advanced.map((a) => {
+                    const done = project.milestones.find((m) => m.id === a.milestone_id)
+                    return (
+                      <li key={a.milestone_id}>
+                        {done?.celebrate ? done.celebrate : '✓'} {a.title}{' '}
+                        {a.xp_awarded > 0 ? `(+${a.xp_awarded} XP)` : '(already done)'}
+                      </li>
+                    )
+                  })}
                 </ul>
               )}
               {checks.length > 0 && nextResult.status === 'incomplete' && (

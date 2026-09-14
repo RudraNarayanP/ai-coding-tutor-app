@@ -62,6 +62,12 @@ class Milestone(BaseModel):
     source_quote: str = Field(default="", max_length=2000)
     microstep: Microstep = Field(default_factory=Microstep)
     why: str = Field(default="", max_length=2000)
+    # Rich, engaging teaching content (LLM-enriched, source-grounded; falls back
+    # to concise deterministic copy).
+    hook: str = Field(default="", max_length=200)
+    teach: str = Field(default="", max_length=1200)
+    example: str = Field(default="", max_length=1200)
+    celebrate: str = Field(default="", max_length=200)
     checks: list[VerificationCheck] = Field(default_factory=list)
     xp_reward: int = Field(default=20, ge=0, le=200)
 
@@ -134,6 +140,10 @@ class ProjectMilestoneView(BaseModel):
     source_quote: str = ""
     microstep: Microstep
     why: str = ""
+    hook: str = ""
+    teach: str = ""
+    example: str = ""
+    celebrate: str = ""
     xp_reward: int
 
 
@@ -180,6 +190,10 @@ class ProjectView(BaseModel):
                     source_quote=m.source_quote,
                     microstep=m.microstep,
                     why=m.why,
+                    hook=m.hook,
+                    teach=m.teach,
+                    example=m.example,
+                    celebrate=m.celebrate,
                     xp_reward=m.xp_reward,
                 )
             )

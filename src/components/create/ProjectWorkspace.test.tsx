@@ -27,17 +27,23 @@ const baseProject: ProjectView = {
     {
       id: 'm1', order: 1, title: 'Set up the project', status: 'completed',
       source_grounded_description: '', source_quote: '', why: '', xp_reward: 10,
+      hook: '', teach: '', example: '', celebrate: 'Nailed it! 🎯',
       microstep: { observation: '', action: '', hint: '' },
     },
     {
       id: 'm2', order: 2, title: 'Import collections', status: 'current',
       source_grounded_description: 'First, import the collections module.',
       source_quote: 'First, import the collections module.', why: 'You need it to count.', xp_reward: 20,
+      hook: 'Bring in the counting toolkit.',
+      teach: 'The collections module gives you Counter, a ready-made word tallier. It saves you from hand-rolling a dict.',
+      example: 'from collections import Counter',
+      celebrate: 'Toolkit imported! 🧰',
       microstep: { observation: 'Next step from the source:', action: 'Import the collections module.', hint: 'Add import collections.' },
     },
     {
       id: 'm3', order: 3, title: 'Define count_words', status: 'pending',
       source_grounded_description: '', source_quote: '', why: '', xp_reward: 20,
+      hook: '', teach: '', example: '', celebrate: '',
       microstep: { observation: '', action: '', hint: '' },
     },
   ],
@@ -67,6 +73,10 @@ describe('ProjectWorkspace', () => {
     expect(screen.getByText('Define count_words')).toBeInTheDocument()
     // Microstep guidance for the current milestone
     expect(screen.getByText(/Import the collections module\./)).toBeInTheDocument()
+    // Rich, engaging content: hook headline + teach explanation + Show example
+    expect(screen.getByText('Bring in the counting toolkit.')).toBeInTheDocument()
+    expect(screen.getByText(/ready-made word tallier/)).toBeInTheDocument()
+    expect(screen.getByText('Show example')).toBeInTheDocument()
     // Progress + editor + NEXT
     expect(screen.getByText('33% complete')).toBeInTheDocument()
     expect(screen.getByLabelText('Editor for main.py')).toBeInTheDocument()

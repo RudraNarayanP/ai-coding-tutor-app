@@ -12,6 +12,7 @@ from .project_models import (
     ProjectView,
     WorkspaceFile,
 )
+from .project_enrich import enrich_project
 from .project_planner import ProjectGroundingError, plan_project
 from .project_store import ProjectStore
 from .project_verifier import evaluate_milestone, run_workspace
@@ -27,6 +28,7 @@ async def build_project(
     title: str,
     filename: str | None,
     course_id: str,
+    provider=None,
 ) -> ProjectCourse:
     """Ingest a source and build a persistent, source-grounded guided project.
 
@@ -51,6 +53,11 @@ async def build_project(
             "\"Paste Transcript / Notes\" option here to build the guided project."
         )
     project = plan_project(doc, title=title, course_id=course_id)
+    # Best-effort: make the course rich/engaging via the LLM. Never blocks creation.
+    try:
+        await enrich_project(provider, project)
+    except Exception:  # noqa: BLE001
+        pass
     return store.create(project)
 
 

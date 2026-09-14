@@ -974,6 +974,7 @@ async def create_project(req: ProjectCreateRequest):
             title=req.title,
             filename=req.filename,
             course_id=course_id,
+            provider=get_current_provider(),
         )
     except IngestionError as exc:
         raise HTTPException(status_code=400, detail={"error": "ingestion_failed", "message": str(exc)})
