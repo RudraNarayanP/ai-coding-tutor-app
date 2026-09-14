@@ -180,7 +180,7 @@ const ExercisePanel: React.FC<Props> = (props) => {
           value={value}
           disabled={disabled}
           spellCheck={false}
-          rows={10}
+          rows={Math.min(10, Math.max(3, (value || starter).split("\n").length + 2))}
           aria-label="Your code answer"
           placeholder="Write your code here…"
           onChange={(e) => setState({ code: e.target.value })}

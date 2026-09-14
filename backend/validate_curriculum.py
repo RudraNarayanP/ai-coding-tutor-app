@@ -64,12 +64,28 @@ def validate_all_curriculums() -> bool:
                     ex_type = ex.type.lower().strip()
                     exp = ex.correct_answer
 
+                    # Check placeholder or empty question
+                    q_text = (ex.question or ex.title or "").strip()
+                    if not q_text or "placeholder" in q_text.lower() or q_text.lower() == "todo":
+                        errors.append(f"[{lang}/{lesson.id}/{ex.id}] Question text is empty or placeholder.")
+
+                    # Check pre-solved starter code
+                    starter = (ex.starter_code or getattr(ex, "code", "") or "").strip()
+                    solution = (ex.solution_code or "").strip()
+                    if starter and solution and starter == solution:
+                        errors.append(f"[{lang}/{lesson.id}/{ex.id}] Pre-solved code detected: starter_code matches solution_code.")
+                    if starter and isinstance(exp, str) and exp.strip() and starter == exp.strip():
+                        errors.append(f"[{lang}/{lesson.id}/{ex.id}] Pre-solved code detected: starter_code matches correct_answer.")
+
                     if ex_type in ("mcq", "true_false", "output_prediction", "debugging", "identify_error"):
                         if exp is None or exp == "":
                             errors.append(f"[{lang}/{lesson.id}/{ex.id}] Type '{ex_type}' missing correct_answer.")
-                        if ex_type == "mcq" and ex.options and isinstance(exp, str):
-                            if exp not in ex.options and not exp.isdigit() and exp.lower() not in [o.lower() for o in ex.options]:
-                                errors.append(f"[{lang}/{lesson.id}/{ex.id}] MCQ answer '{exp}' not found in options {ex.options}.")
+                        if ex_type == "mcq":
+                            if not ex.options or len(ex.options) < 2:
+                                errors.append(f"[{lang}/{lesson.id}/{ex.id}] MCQ requires at least 2 options.")
+                            elif isinstance(exp, str):
+                                if exp not in ex.options and not exp.isdigit() and exp.lower() not in [o.lower() for o in ex.options]:
+                                    errors.append(f"[{lang}/{lesson.id}/{ex.id}] MCQ answer '{exp}' not found in options {ex.options}.")
 
                     elif ex_type in ("fill_blank", "code_completion"):
                         if exp is None or (isinstance(exp, list) and len(exp) == 0):
@@ -78,6 +94,8 @@ def validate_all_curriculums() -> bool:
                     elif ex_type == "select_multiple":
                         if exp is None or (isinstance(exp, list) and len(exp) == 0):
                             errors.append(f"[{lang}/{lesson.id}/{ex.id}] Type select_multiple missing correct_answer.")
+                        if not ex.options or len(ex.options) < 2:
+                            errors.append(f"[{lang}/{lesson.id}/{ex.id}] Select_multiple requires options.")
 
                     elif ex_type == "ordering":
                         if not isinstance(exp, list) or len(exp) == 0:
