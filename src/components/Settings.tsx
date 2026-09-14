@@ -24,7 +24,6 @@ interface ProviderInfo {
 interface SettingsResponse {
   providers: ProviderInfo[]
   current_provider: string
-  fallback_provider: string | null
 }
 
 interface ValidationResult {
@@ -470,12 +469,7 @@ export default function Settings({
                     <span className="config-label">Active Provider:</span>
                     <span className="config-value">{settings.current_provider}</span>
                   </div>
-                  {settings.fallback_provider && (
-                    <div className="config-item">
-                      <span className="config-label">Fallback Provider:</span>
-                      <span className="config-value">{settings.fallback_provider}</span>
-                    </div>
-                  )}
+
                 </div>
               </div>
             </>

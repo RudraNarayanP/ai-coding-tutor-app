@@ -139,12 +139,7 @@ class SourceIngestionService:
         source_hash = self.compute_source_hash("youtube_playlist", url)
         video_ids = await self._fetch_playlist_video_ids(playlist_id)
         if not video_ids:
-            # Fallback if playlist page parsing failed: check if single video ID present
-            v_id = self.extract_youtube_video_id(url)
-            if v_id:
-                video_ids = [v_id]
-            else:
-                raise IngestionError(f"Could not retrieve video list from playlist {playlist_id}.")
+            raise IngestionError(f"Could not retrieve video list from playlist {playlist_id}.")
 
         # Enforce max video count cap (e.g. 25 videos)
         MAX_PLAYLIST_VIDEOS = 25
@@ -229,10 +224,7 @@ class SourceIngestionService:
         except Exception:
             pass
 
-        # Level 1 & 2: Subtitle/transcript fetching
         transcript, t_source = self._try_transcript_api(video_id)
-        if not transcript:
-            transcript, t_source = self._try_ytdlp(video_id)
 
         return VideoSegment(
             video_id=video_id,
@@ -278,27 +270,7 @@ class SourceIngestionService:
             logger.warning(f"YouTubeTranscriptApi failed for video {video_id}: {exc}")
         return "", "none"
 
-    def _try_ytdlp(self, video_id: str) -> tuple[str, str]:
-        try:
-            import yt_dlp
-            # yt-dlp fallback if installed
-            ydl_opts = {
-                "skip_download": True,
-                "writesubtitles": True,
-                "writeautomaticsub": True,
-                "subtitleslangs": ["en"],
-                "quiet": True,
-            }
-            with yt_dlp.YoutubeDL(ydl_opts) as ydl:
-                info = ydl.extract_info(f"https://www.youtube.com/watch?v={video_id}", download=False)
-                # Parse subs if present
-                subs = info.get("subtitles") or info.get("automatic_captions")
-                if subs and "en" in subs:
-                    # Return basic snippet
-                    return f"Transcript for video {video_id}", "yt-dlp"
-        except Exception:
-            pass
-        return "", "none"
+
 
     async def _ingest_transcript(self, text: str, title: str) -> SourceDocument:
         clean_text = text.strip()

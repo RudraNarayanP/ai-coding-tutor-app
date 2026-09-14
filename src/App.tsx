@@ -120,7 +120,6 @@ type CourseSummary = {
 
 type ProvidersOverview = {
   current_provider: string
-  fallback_provider: string | null
   providers: ProviderStatus[]
 }
 
