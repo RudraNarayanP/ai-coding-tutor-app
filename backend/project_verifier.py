@@ -14,8 +14,11 @@ Nothing here mutates the learner's workspace; the learner owns the code.
 from __future__ import annotations
 
 import ast
+import io
 import json
+import re
 import sys
+import tokenize
 
 from .project_models import (
     Milestone,
@@ -89,6 +92,94 @@ def _called_names(trees: list[ast.AST]) -> set[str]:
                 elif isinstance(func, ast.Attribute):
                     names.add(func.attr)
     return names
+
+
+def _all_identifiers(trees: list[ast.AST]) -> set[str]:
+    """Every identifier the code *references* — defined names, called names,
+    attribute accesses, arguments, keyword args, and imports. Lowercased.
+
+    This lets a concept-level `code_contains` check recognise a token whether it
+    is defined (``def from_pretrained``), called (``obj.from_pretrained()``), or
+    imported — instead of naive substring matching that also trips on comments.
+    """
+    ids: set[str] = set()
+    for tree in trees:
+        for node in ast.walk(tree):
+            if isinstance(node, (ast.FunctionDef, ast.AsyncFunctionDef, ast.ClassDef)):
+                ids.add(node.name)
+            elif isinstance(node, ast.Name):
+                ids.add(node.id)
+            elif isinstance(node, ast.Attribute):
+                ids.add(node.attr)
+            elif isinstance(node, ast.arg):
+                ids.add(node.arg)
+            elif isinstance(node, ast.keyword) and node.arg:
+                ids.add(node.arg)
+            elif isinstance(node, ast.Import):
+                for alias in node.names:
+                    ids.add(alias.asname or alias.name.split(".")[0])
+                    ids.add(alias.name.split(".")[-1])
+            elif isinstance(node, ast.ImportFrom):
+                if node.module:
+                    ids.add(node.module.split(".")[0])
+                    ids.add(node.module.split(".")[-1])
+                for alias in node.names:
+                    ids.add(alias.asname or alias.name)
+    return {i.lower() for i in ids}
+
+
+def _code_without_comments_strings(source: str) -> str:
+    """Return source with comments removed and string *contents* blanked, so a
+    token that only appears inside a comment or string literal is NOT counted."""
+    try:
+        pieces: list[str] = []
+        for tok in tokenize.generate_tokens(io.StringIO(source).readline):
+            if tok.type in (tokenize.COMMENT, tokenize.STRING):
+                continue
+            if tok.type in (tokenize.FSTRING_MIDDLE,) if hasattr(tokenize, "FSTRING_MIDDLE") else ():
+                continue
+            pieces.append(tok.string)
+        return " ".join(pieces)
+    except Exception:  # noqa: BLE001 — partial/edited code may not tokenize.
+        return re.sub(r"#.*", "", source)
+
+
+def _code_contains_match(
+    token: str, identifiers: set[str], stripped_lower: str, raw_lower: str, syntax_ok: bool
+) -> bool:
+    """Semantic match for one accepted token.
+
+    - dotted (``nn.Module``): attribute chain in real code, or last attr referenced
+    - phrase (``def forward``): the salient identifier is actually defined/referenced
+    - simple identifier: referenced in the AST, or present in comment/string-free code
+    Falls back to lenient substring on unparseable code to avoid false negatives.
+    """
+    low = token.lower().strip()
+    if not low:
+        return False
+    idents_in_token = re.findall(r"[a-zA-Z_][a-zA-Z0-9_]*", low)
+
+    if "." in token:
+        if low in stripped_lower:
+            return True
+        if idents_in_token and syntax_ok and idents_in_token[-1] in identifiers:
+            return True
+        return low in raw_lower if not syntax_ok else False
+
+    if " " in token:  # e.g. "def forward", "from x import y"
+        if idents_in_token and syntax_ok and idents_in_token[-1] in identifiers:
+            return True
+        return low in stripped_lower
+
+    # Simple identifier.
+    if syntax_ok:
+        if low in identifiers:
+            return True
+        # A bare identifier can still be valid even if AST didn't classify it
+        # (e.g. inside an f-string expression); accept a comment/string-free hit.
+        return bool(re.search(rf"\b{re.escape(low)}\b", stripped_lower))
+    # Unparseable (mid-edit) code: be lenient — substring on comment-free source.
+    return bool(re.search(rf"\b{re.escape(low)}\b", stripped_lower))
 
 
 def build_bootstrap(files: list[WorkspaceFile], entry_file: str) -> str:
@@ -174,6 +265,16 @@ async def evaluate_milestone(
     imported = _imported_modules(trees)
     defined = _defined_symbols(trees)
     called = _called_names(trees)
+    identifiers = _all_identifiers(trees)
+    source = "\n".join(c for _p, c in _python_sources(files))
+    stripped_lower = _code_without_comments_strings(source).lower()
+    raw_lower = source.lower()
+    code_index = {
+        "identifiers": identifiers,
+        "stripped_lower": stripped_lower,
+        "raw_lower": raw_lower,
+        "syntax_ok": syntax_error is None,
+    }
 
     results: list[ProjectCheckResult] = []
     run_cache: dict | None = None
@@ -190,7 +291,7 @@ async def evaluate_milestone(
 
     for check in milestone.checks:
         passed, detail = await _evaluate_check(
-            executor, project, check, files, imported, defined, called, syntax_error, _get_run
+            executor, project, check, files, imported, defined, called, syntax_error, code_index, _get_run
         )
         results.append(ProjectCheckResult(description=check.description or check.kind, passed=passed, detail=detail))
 
@@ -207,6 +308,7 @@ async def _evaluate_check(
     defined: set[str],
     called: set[str],
     syntax_error: str | None,
+    code_index: dict,
     get_run,
 ) -> tuple[bool, str]:
     kind = check.kind
@@ -232,15 +334,24 @@ async def _evaluate_check(
         return ok, ("" if ok else f"`{check.target}` isn't called anywhere yet.")
 
     if kind == "code_contains":
-        # Concept-level, grounded check: the workspace references any of the
-        # accepted tokens (case-insensitive). Accepts alternative spellings via
-        # a "|"-separated target list.
-        blob = "\n".join(c for _p, c in _python_sources(files)).lower()
-        tokens = [t.strip().lower() for t in check.target.split("|") if t.strip()]
-        ok = any(t in blob for t in tokens) if tokens else False
+        # Concept-level, grounded check. Semantic (AST-aware): a token counts
+        # whether it is defined, called, imported, or accessed as an attribute —
+        # and NOT when it only appears in a comment or string. Any of the
+        # "|"-separated tokens satisfies the milestone (alternative impls).
+        tokens = [t.strip() for t in check.target.split("|") if t.strip()]
+        ok = any(
+            _code_contains_match(
+                t,
+                code_index["identifiers"],
+                code_index["stripped_lower"],
+                code_index["raw_lower"],
+                code_index["syntax_ok"],
+            )
+            for t in tokens
+        )
         if ok:
             return True, ""
-        pretty = " or ".join(f"`{t.strip()}`" for t in check.target.split("|") if t.strip())
+        pretty = " or ".join(f"`{t}`" for t in tokens)
         return False, f"Your code doesn't reference {pretty} yet."
 
     if kind in ("run_ok", "stdout_contains"):

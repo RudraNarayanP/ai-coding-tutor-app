@@ -64,6 +64,43 @@ def test_symbol_check_fails_when_missing():
     assert "count_words" in results[0].detail
 
 
+def test_code_contains_recognizes_defined_from_pretrained_regression():
+    # Regression for the reported false negative: a classmethod named
+    # from_pretrained that also calls .from_pretrained must satisfy the
+    # "exploring the checkpoint" milestone check.
+    code = (
+        "import torch.nn as nn\n"
+        "from transformers import GPT2LMHeadModel\n\n"
+        "class GPT(nn.Module):\n"
+        "    @classmethod\n"
+        "    def from_pretrained(cls, m):\n"
+        "        return GPT2LMHeadModel.from_pretrained(m)\n"
+    )
+    project = _project([WorkspaceFile(path="main.py", content=code)])
+    ms = Milestone(id="m", order=1, title="Checkpoint",
+                   checks=[VerificationCheck(kind="code_contains", target="from_pretrained|state_dict")])
+    passed, results, _, _ = _eval(project, ms)
+    assert passed is True, results[0].detail
+
+
+def test_code_contains_accepts_async_def_and_alternatives():
+    project = _project([WorkspaceFile(path="main.py", content="class M:\n    async def forward(self, x):\n        return x\n")])
+    ms = Milestone(id="m", order=1, title="Forward",
+                   checks=[VerificationCheck(kind="code_contains", target="def forward")])
+    passed, _, _, _ = _eval(project, ms)
+    assert passed is True
+
+
+def test_code_contains_ignores_comment_only_mentions():
+    # A token that appears ONLY in a comment/string must NOT satisfy the check
+    # (naive substring matching would wrongly pass this).
+    project = _project([WorkspaceFile(path="main.py", content="# TODO: add from_pretrained later\nx = 1\n")])
+    ms = Milestone(id="m", order=1, title="Checkpoint",
+                   checks=[VerificationCheck(kind="code_contains", target="from_pretrained|state_dict")])
+    passed, _, _, _ = _eval(project, ms)
+    assert passed is False
+
+
 def test_code_contains_check_accepts_any_token():
     project = _project([WorkspaceFile(path="main.py", content="x = torch.nn.functional.cross_entropy(a, b)\n")])
     ms = Milestone(id="m", order=1, title="Loss",

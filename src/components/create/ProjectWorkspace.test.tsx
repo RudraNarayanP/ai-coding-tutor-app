@@ -113,6 +113,31 @@ describe('ProjectWorkspace', () => {
     expect(screen.getByText(/Your code imports/)).toBeInTheDocument()
   })
 
+  it('clears stale verification feedback when the learner edits code (no false negative)', async () => {
+    const nextResult: NextResult = {
+      status: 'incomplete',
+      advanced: [],
+      current_milestone: baseProject.milestones[1],
+      checks: [{ description: 'Your code imports `collections`.', passed: false, detail: 'No import of `collections` found yet.' }],
+      feedback: 'No import of `collections` found yet.',
+      stdout: '', stderr: '', xp: 10, completion_percent: 33, completed: false,
+      project: baseProject,
+    }
+    ;(projectApi.next as any).mockResolvedValue(nextResult)
+    render(<ProjectWorkspace courseId="project-abc" onExit={() => {}} />)
+    await waitFor(() => screen.getByText('Word Frequency Counter'))
+
+    // Fail verification -> stale ✗ feedback is shown.
+    fireEvent.click(screen.getByRole('button', { name: /NEXT/ }))
+    await waitFor(() => expect(screen.getAllByText(/No import of/).length).toBeGreaterThanOrEqual(1))
+
+    // Now the learner edits the code (adds the import). The stale ✗ must disappear
+    // immediately instead of falsely claiming the requirement is still missing.
+    const editor = screen.getByLabelText('Editor for main.py') as HTMLTextAreaElement
+    fireEvent.change(editor, { target: { value: 'import collections\n' } })
+    await waitFor(() => expect(screen.queryByText(/No import of/)).toBeNull())
+  })
+
   it('offers a read-only AI suggestion that the learner explicitly applies', async () => {
     ;(projectApi.guidance as any).mockResolvedValue({
       milestone_id: 'm2', observation: '', action: '', hint: '', why: '', source_quote: '',

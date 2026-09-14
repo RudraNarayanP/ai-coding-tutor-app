@@ -76,7 +76,16 @@ export const ProjectWorkspace: React.FC<ProjectWorkspaceProps> = ({ courseId, on
     [courseId]
   )
 
+  // Any edit invalidates the last verification result — clear the stale ✗/✓
+  // feedback so a requirement the learner just satisfied is never shown as
+  // "missing" until they re-run NEXT against the latest contents.
+  const invalidateVerification = () => {
+    setNextResult(null)
+    setChecks([])
+  }
+
   const updateActiveFile = (content: string) => {
+    invalidateVerification()
     setFiles((prev) => {
       const next = prev.map((f) => (f.path === activePath ? { ...f, content } : f))
       scheduleSave(next)
@@ -89,6 +98,7 @@ export const ProjectWorkspace: React.FC<ProjectWorkspaceProps> = ({ courseId, on
     if (!name) return
     const clean = name.trim()
     if (!clean || files.some((f) => f.path === clean)) return
+    invalidateVerification()
     setFiles((prev) => {
       const next = [...prev, { path: clean, content: '' }]
       scheduleSave(next)
@@ -142,6 +152,7 @@ export const ProjectWorkspace: React.FC<ProjectWorkspaceProps> = ({ courseId, on
 
   const applySuggestion = () => {
     if (!guidance?.suggestion) return
+    invalidateVerification()
     setFiles((prev) => {
       const next = prev.map((f) =>
         f.path === activePath ? { ...f, content: `${f.content.replace(/\s*$/, '')}\n\n${guidance.suggestion}\n` } : f
