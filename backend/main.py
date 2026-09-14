@@ -1,5 +1,5 @@
-from .materials import Material, MaterialCompletionRequest, MaterialCompletionResponse
-from .materials_data import MATERIALS
+from . import env as _env  # noqa: F401 — load .env before other backend imports
+
 import asyncio
 import logging
 import os
@@ -7,6 +7,9 @@ import time
 import uuid
 from contextlib import asynccontextmanager
 from pathlib import Path
+
+from .materials import Material, MaterialCompletionRequest, MaterialCompletionResponse
+from .materials_data import MATERIALS
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel, Field

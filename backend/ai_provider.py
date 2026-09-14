@@ -1,3 +1,5 @@
+from . import env as _env  # noqa: F401 — load .env before reading provider config
+
 import os
 import json
 import logging
@@ -610,7 +612,7 @@ def create_openrouter_provider() -> OpenAICompatibleProvider:
         name="OpenRouter",
         api_key_env="OPENROUTER_API_KEY",
         model_env="OPENROUTER_MODEL",
-        default_model="meta-llama/llama-3.1-8b-instruct:free",
+        default_model="meta-llama/llama-3.1-8b-instruct",
         base_url_env="OPENROUTER_BASE_URL",
         default_base_url="https://openrouter.ai/api/v1",
         headers_extra={"HTTP-Referer": "https://github.com/patchwork", "X-Title": "Patchwork AI Tutor"},
