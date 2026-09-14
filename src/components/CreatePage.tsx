@@ -1,10 +1,14 @@
 import React, { useState, useEffect } from 'react'
+import { ProjectWorkspace } from './create/ProjectWorkspace'
+import { projectApi, type ProjectSummary } from '../utils/projectApi'
 
 export interface CreatePageProps {
   onCourseReady: (courseId: string) => void
 }
 
-export type CreateStep = 'input' | 'generating' | 'preview' | 'editing'
+export type CreateStep = 'input' | 'generating' | 'preview' | 'editing' | 'workspace'
+
+export type BuildMode = 'course' | 'project'
 
 export interface CoursePreviewData {
   course_id: string
@@ -26,10 +30,16 @@ export interface CoursePreviewData {
 
 export const CreatePage: React.FC<CreatePageProps> = ({ onCourseReady }) => {
   const [step, setStep] = useState<CreateStep>('input')
+  const [buildMode, setBuildMode] = useState<BuildMode>('project')
   const [materialType, setMaterialType] = useState<'youtube_url' | 'youtube_playlist' | 'transcript' | 'file_upload'>('youtube_url')
   const [inputContent, setInputContent] = useState('')
   const [courseTitle, setCourseTitle] = useState('')
   const [jobId, setJobId] = useState<string | null>(null)
+
+  // Guided Project (Create Course-only) state
+  const [projectCourseId, setProjectCourseId] = useState<string | null>(null)
+  const [creatingProject, setCreatingProject] = useState(false)
+  const [projects, setProjects] = useState<ProjectSummary[]>([])
 
   const [stages, setStages] = useState<Array<{ name: string; label: string; state: string }>>([])
   const [preview, setPreview] = useState<CoursePreviewData | null>(null)
@@ -40,6 +50,48 @@ export const CreatePage: React.FC<CreatePageProps> = ({ onCourseReady }) => {
   const [editTitle, setEditTitle] = useState('')
   const [editDifficulty, setEditDifficulty] = useState('beginner')
   const [editPedagogicalStyle, setEditPedagogicalStyle] = useState('conceptual')
+
+  // Load resumable guided projects for the Create Course section.
+  useEffect(() => {
+    let mounted = true
+    projectApi
+      .list()
+      .then((list) => mounted && setProjects(list))
+      .catch(() => {})
+    return () => {
+      mounted = false
+    }
+  }, [step])
+
+  // Build a guided project (persistent workspace) from the source.
+  const handleStartProject = async () => {
+    setErrorMessage(null)
+    setCreatingProject(true)
+
+    let reqType = materialType
+    if (materialType === 'youtube_url' && inputContent.includes('list=')) {
+      reqType = 'youtube_playlist'
+    }
+
+    try {
+      const project = await projectApi.create({
+        material_type: reqType,
+        content: inputContent,
+        title: courseTitle,
+      })
+      setProjectCourseId(project.course_id)
+      setStep('workspace')
+    } catch (err) {
+      setErrorMessage((err as Error).message || 'Could not build a guided project from this source.')
+    } finally {
+      setCreatingProject(false)
+    }
+  }
+
+  const openProject = (courseId: string) => {
+    setProjectCourseId(courseId)
+    setStep('workspace')
+  }
 
   // Submit Course Generation Request
   const handleStartGeneration = async (forceDuplicate = false) => {
@@ -151,12 +203,25 @@ export const CreatePage: React.FC<CreatePageProps> = ({ onCourseReady }) => {
     }
   }
 
+  // Guided Project workspace takes over the Create Course view.
+  if (step === 'workspace' && projectCourseId) {
+    return (
+      <ProjectWorkspace
+        courseId={projectCourseId}
+        onExit={() => {
+          setStep('input')
+          setProjectCourseId(null)
+        }}
+      />
+    )
+  }
+
   return (
     <div className="create-page-container" style={{ padding: '32px', maxWidth: '800px', margin: '0 auto' }}>
       <div style={{ marginBottom: '24px', textAlign: 'center' }}>
         <h1 style={{ fontSize: '28px', fontWeight: 900, color: 'var(--ink)' }}>✨ AI Course Builder</h1>
         <p style={{ fontSize: '15px', fontWeight: 700, color: 'var(--ink-soft)' }}>
-          Transform YouTube videos, playlists, transcripts, or study notes into structured, interactive Patchwork courses.
+          Bring a tutorial. Patchwork turns it into a guided project you actually build — or a structured interactive course.
         </p>
       </div>
 
@@ -192,9 +257,57 @@ export const CreatePage: React.FC<CreatePageProps> = ({ onCourseReady }) => {
         </div>
       )}
 
+      {/* Resume in-progress guided projects */}
+      {step === 'input' && projects.length > 0 && (
+        <div className="duo-card" style={{ padding: '16px', marginBottom: '20px' }}>
+          <h3 style={{ fontSize: '14px', fontWeight: 900, marginBottom: '10px', color: 'var(--ink)' }}>
+            Resume a project
+          </h3>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+            {projects.slice(0, 5).map((p) => (
+              <button
+                key={p.course_id}
+                className="duo-button duo-button-secondary"
+                onClick={() => openProject(p.course_id)}
+                style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', textAlign: 'left' }}
+              >
+                <span>{p.title}</span>
+                <span style={{ fontSize: '12px', fontWeight: 800, color: 'var(--ink-soft)' }}>
+                  {p.completed ? 'Completed' : `${p.completion_percent}%`}
+                </span>
+              </button>
+            ))}
+          </div>
+        </div>
+      )}
+
       {/* STEP 1: INPUT */}
       {step === 'input' && (
         <div className="duo-card" style={{ padding: '24px' }}>
+          {/* Build mode selector: Guided Project (new) vs Interactive Course (existing) */}
+          <div style={{ display: 'flex', gap: '10px', marginBottom: '20px' }}>
+            <button
+              className={`duo-button ${buildMode === 'project' ? 'duo-button-primary' : 'duo-button-secondary'}`}
+              onClick={() => setBuildMode('project')}
+              style={{ flex: 1, padding: '12px', flexDirection: 'column', alignItems: 'flex-start', textAlign: 'left' }}
+            >
+              <span style={{ fontWeight: 900 }}>🛠️ Guided Project</span>
+              <span style={{ fontSize: '11px', fontWeight: 700, opacity: 0.85 }}>
+                Build one persistent project, step by step
+              </span>
+            </button>
+            <button
+              className={`duo-button ${buildMode === 'course' ? 'duo-button-primary' : 'duo-button-secondary'}`}
+              onClick={() => setBuildMode('course')}
+              style={{ flex: 1, padding: '12px', flexDirection: 'column', alignItems: 'flex-start', textAlign: 'left' }}
+            >
+              <span style={{ fontWeight: 900 }}>📚 Interactive Course</span>
+              <span style={{ fontSize: '11px', fontWeight: 700, opacity: 0.85 }}>
+                Lessons, exercises &amp; checkpoints
+              </span>
+            </button>
+          </div>
+
           <div style={{ display: 'flex', gap: '8px', marginBottom: '20px' }}>
             {[
               { type: 'youtube_url', label: 'YouTube URL / Playlist' },
@@ -252,12 +365,21 @@ export const CreatePage: React.FC<CreatePageProps> = ({ onCourseReady }) => {
 
           <button
             className="duo-button duo-button-primary"
-            onClick={() => handleStartGeneration(false)}
-            disabled={!inputContent.trim() && !courseTitle.trim()}
+            onClick={() => (buildMode === 'project' ? handleStartProject() : handleStartGeneration(false))}
+            disabled={(!inputContent.trim() && !courseTitle.trim()) || creatingProject}
             style={{ width: '100%', padding: '14px', fontSize: '16px' }}
           >
-            Generate Interactive Course ✨
+            {buildMode === 'project'
+              ? creatingProject
+                ? 'Building your project…'
+                : 'Build Guided Project 🛠️'
+              : 'Generate Interactive Course ✨'}
           </button>
+          {buildMode === 'project' && (
+            <p style={{ fontSize: '12px', fontWeight: 700, color: 'var(--ink-soft)', marginTop: '10px', textAlign: 'center' }}>
+              You'll get one persistent workspace and build the source's project milestone by milestone.
+            </p>
+          )}
         </div>
       )}
 
