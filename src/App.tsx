@@ -6,7 +6,7 @@ import { CreatePage } from './components/CreatePage'
 import Settings from './components/Settings'
 import ExercisePanel from './components/ExercisePanel'
 import { CodeEditor } from './components/CodeEditor'
-import { api, type ExerciseResult, type LeaderboardEntry, type LessonProgress, type TestOutResult, type UserProfile } from './api'
+import { api, type ExerciseResult, type LeaderboardEntry, type LessonProgress, type Material, type MaterialCompletionResult, type TestOutResult, type UserProfile } from './api'
 import { LearnPath } from './components/duo/LearnPath'
 import { PracticeHub } from './components/duo/PracticeHub'
 import { QuestsPage } from './components/duo/QuestsPage'
@@ -194,6 +194,10 @@ function App() {
   // Focused Lesson Mode State
   const [isLessonActive, setIsLessonActive] = useState(false)
 
+  // Materials state
+  const [materials, setMaterials] = useState<Material[]>([])
+  const [completedMaterialIds, setCompletedMaterialIds] = useState<string[]>([])
+
   // Gamification state
   const [gamification, setGamification] = useState(getGamificationState())
   const [consecutiveCorrect, setConsecutiveCorrect] = useState(0)
@@ -289,6 +293,25 @@ function App() {
   // Reset the ephemeral interaction state whenever the current exercise changes
   // (next exercise after CONTINUE, retry after TRY AGAIN, or a brand-new lesson).
   // This guarantees stale answers/feedback can never leak between exercises.
+  useEffect(() => {
+    api.materials(selectedLanguage).then((data) => {
+      if (data) setMaterials(data)
+    })
+  }, [selectedLanguage])
+
+  const handleCompleteMaterial = async (id: string, user_answer?: string): Promise<MaterialCompletionResult | null> => {
+    const res = await api.completeMaterial(id, user_answer)
+    if (res && res.passed) {
+      if (res.xp_awarded > 0) {
+        setXp((prev) => prev + res.xp_awarded)
+        saveGameState({ xp: xp + res.xp_awarded })
+        playPatchworkSound('success')
+      }
+      setCompletedMaterialIds((prev) => Array.from(new Set([...prev, id])))
+    }
+    return res
+  }
+
   useEffect(() => {
     setExercisePhase('answering')
     setExerciseFeedback(null)
@@ -1283,6 +1306,9 @@ setExercisePhase('incorrect')
                 void loadLesson(item, true)
               }}
               onOpenGuidebook={() => setIsGuidebookOpen(true)}
+              materials={materials}
+              completedMaterialIds={completedMaterialIds}
+              onCompleteMaterial={handleCompleteMaterial}
             />
           </div>
         )}

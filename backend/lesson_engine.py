@@ -34,6 +34,7 @@ class ProgressionStore:
         self._skipped: set[str] = set()
         self._completed_sublessons: set[str] = set()
         self._completed_exercises: set[str] = set()
+        self._completed_materials: set[str] = set()
         self._attempts: dict[str, int] = {}
         self._last_results: dict[str, str] = {}
         self._xp: int = 0
@@ -54,6 +55,7 @@ class ProgressionStore:
                         self._skipped.update(data.get("skipped_lesson_ids", []))
                         self._completed_sublessons.update(data.get("completed_sublesson_ids", []))
                         self._completed_exercises.update(data.get("completed_exercise_ids", []))
+                        self._completed_materials.update(data.get("completed_material_ids", []))
                         self._attempts.update(
                             {k: int(v) for k, v in (data.get("attempt_counts") or {}).items()}
                         )
@@ -73,6 +75,7 @@ class ProgressionStore:
                         "skipped_lesson_ids": sorted(self._skipped),
                         "completed_sublesson_ids": sorted(self._completed_sublessons),
                         "completed_exercise_ids": sorted(self._completed_exercises),
+                        "completed_material_ids": sorted(self._completed_materials),
                         "attempt_counts": dict(self._attempts),
                         "last_results": dict(self._last_results),
                         "xp": self._xp,
@@ -100,6 +103,7 @@ class ProgressionStore:
                 skipped_lesson_ids=sorted(self._skipped),
                 completed_sublesson_ids=sorted(self._completed_sublessons),
                 completed_exercise_ids=sorted(self._completed_exercises),
+                completed_material_ids=sorted(self._completed_materials),
                 current_lesson_id=current,
                 xp=self._xp,
                 level=max(1, self._xp // 100 + 1),
@@ -111,6 +115,10 @@ class ProgressionStore:
             self._level = max(1, self._xp // 100 + 1)
             self._save()
         return amount
+
+    def mark_material_completed(self, material_id: str) -> None:
+        self._completed_materials.add(material_id)
+        self._save()
 
     def mark_exercise_completed(self, exercise_id: str) -> None:
         self._completed_exercises.add(exercise_id)

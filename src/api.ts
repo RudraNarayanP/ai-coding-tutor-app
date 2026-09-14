@@ -1,3 +1,41 @@
+export type Material = {
+  id: string
+  title: string
+  description: string
+  language: string
+  category: string
+  difficulty: string
+  resource_type: string
+  url: string
+  official_or_community: string
+  estimated_minutes: number
+  concept_tags: string[]
+  recommended_stage: string
+  xp_reward: number
+  completion_type: string
+  source_domain: string
+  is_external: boolean
+  is_interactive: boolean
+  is_project: boolean
+  is_reference: boolean
+  is_visualizer: boolean
+  is_challenge: boolean
+  companion_question?: {
+    question: string
+    options: string[]
+    correct_answer: string
+    explanation?: string
+  }
+}
+
+export type MaterialCompletionResult = {
+  material_id: string
+  passed: boolean
+  feedback: string
+  xp_awarded: number
+  total_xp: number
+}
+
 // ─── Patchwork API layer ──────────────────────────────────────────────────────
 // All backend calls are typed through this module. URLs and payload shapes match
 // the existing FastAPI backend exactly — the redesign never changes backend contracts.
@@ -212,6 +250,9 @@ function post(url: string, body: unknown): Promise<Response> {
 
 // ─── Endpoints ─────────────────────────────────────────────────────────────────
 
+
+
+
 export const api = {
   courses: () => request<CourseSummary[]>('/api/courses'),
 
@@ -300,4 +341,19 @@ export const api = {
       reports: number
       total: number
     }>(`/api/feedback/summary?user_id=${encodeURIComponent(userId)}`),
+
+  materials: (language?: string, stage?: string) => {
+    const params = new URLSearchParams()
+    if (language) params.append('language', language)
+    if (stage) params.append('stage', stage)
+    const query = params.toString()
+    return request<Material[]>(`/api/materials${query ? `?${query}` : ''}`)
+  },
+
+  completeMaterial: (id: string, user_answer?: string) =>
+    request<MaterialCompletionResult>(`/api/materials/${encodeURIComponent(id)}/complete`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ user_answer }),
+    }),
 }
