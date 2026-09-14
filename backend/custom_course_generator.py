@@ -1152,6 +1152,10 @@ class CurriculumGenerator:
                         title=raw_ex.get("title") or f"{slot.type.title()} Exercise {e_idx}",
                         type=ex_type,
                         question=q_text or f"According to the lesson on {c_title}, which statement best describes its core function?",
+                        micro_explanation=raw_ex.get("micro_explanation") or f"{c_title} introduces essential domain concepts.",
+                        worked_example=raw_ex.get("worked_example") or "",
+                        worked_example_takeaway=raw_ex.get("worked_example_takeaway") or "",
+                        deep_dive=raw_ex.get("deep_dive") or "",
                         options=clean_opts,
                         correct_answer=ans or clean_opts[0],
                         explanation=raw_ex.get("explanation") or f"This directly relates to {c_title} as covered in {topic_name}.",
@@ -1177,6 +1181,10 @@ class CurriculumGenerator:
                             title=raw_ex.get("title") or f"{slot.type.title()} Exercise {ex_idx}",
                             type=ex_type,
                             question=q_text,
+                            micro_explanation=raw_ex.get("micro_explanation") or f"Mastering {c_title}.",
+                            worked_example=raw_ex.get("worked_example") or "",
+                            worked_example_takeaway=raw_ex.get("worked_example_takeaway") or "",
+                            deep_dive=raw_ex.get("deep_dive") or "",
                             options=opts,
                             correct_answer=corr,
                             explanation=expl,
@@ -1186,7 +1194,7 @@ class CurriculumGenerator:
                         )
                     )
 
-                if not exercises:
+        if not exercises:
             raise GenerationError(f"No valid exercises generated for lesson {lesson_id}.")
 
         sublessons = [
