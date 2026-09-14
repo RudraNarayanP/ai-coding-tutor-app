@@ -19,6 +19,8 @@ import os
 import threading
 from pathlib import Path
 
+from .sandbox import SandboxError
+
 class ProgressionStore:
     def __init__(self, curriculum: Curriculum, storage_path: Path | None = None) -> None:
         self._lock = threading.Lock()
@@ -272,6 +274,36 @@ class LessonEngine:
             return True
         return lesson.order <= current_lesson.order
 
+    def _static_execution(self, lesson, language: str, code: str) -> dict:
+        """Simulate a sandbox result for non-Python code via solution comparison."""
+        solution = getattr(lesson, "solution_code", None)
+        if solution and solution.strip():
+            ok = self._normalize_code(code) == self._normalize_code(solution)
+            return {
+                "tests": [
+                    {
+                        "name": test.name,
+                        "passed": ok,
+                        "error": None if ok else "Static check: your code does not match the expected solution yet.",
+                        "stdout": "",
+                        "stderr": "",
+                        "execution_time_ms": 0,
+                    }
+                    for test in lesson.tests
+                ],
+                "stdout": "",
+                "stderr": "",
+                "execution_time_ms": 0,
+                "error": None,
+            }
+        return {
+            "tests": [],
+            "stdout": "",
+            "stderr": "",
+            "execution_time_ms": 0,
+            "error": f"{language} code execution needs the Docker runner, which is unavailable.",
+        }
+
     async def run_lesson(self, lesson_id: str, code: str) -> ProgressionResult:
         lesson = self.get_lesson(lesson_id)
         lang = self.get_lesson_language(lesson_id)
@@ -285,13 +317,18 @@ class LessonEngine:
                 tests=[],
                 error="lesson_locked",
             )
-        execution = await self.executor.run(
-            {
-                "language": lang,
-                "code": code,
-                "tests": [test.model_dump() for test in lesson.tests],
-            }
-        )
+        if lang.lower().strip() != "python":
+            # No multi-language runner exists: grade statically against the
+            # canonical solution so RUN CODE stays useful without Docker.
+            execution = self._static_execution(lesson, lang, code)
+        else:
+            execution = await self.executor.run(
+                {
+                    "language": lang,
+                    "code": code,
+                    "tests": [test.model_dump() for test in lesson.tests],
+                }
+            )
         result_by_name = {
             result.get("name"): result for result in execution.get("tests", [])
         }
@@ -335,6 +372,42 @@ class LessonEngine:
             execution_time_ms=execution.get("execution_time_ms", 0),
             error=execution.get("error"),
         )
+
+    @staticmethod
+    def _normalize_code(code: str) -> str:
+        """Whitespace-insensitive, case-sensitive normalization for code comparison."""
+        return "".join(str(code or "").split())
+
+    def _grade_code_static(self, exercise, code: str) -> tuple[bool, str]:
+        """Grade a code submission without executing it.
+
+        Used for non-Python languages (no multi-language runner exists) and as a
+        fallback when the Docker sandbox is unavailable. Compares against the
+        canonical solution or expected answer instead of running tests.
+        """
+        submitted = self._normalize_code(code)
+        if not submitted:
+            return False, "Your answer is empty — write some code first, then check again."
+
+        expected = exercise.correct_answer
+        if isinstance(expected, str) and expected.strip():
+            passed = self._normalize_code(expected) in submitted
+            feedback = "Correct!" if passed else (exercise.explanation or "Your code doesn't contain the expected answer yet.")
+            return passed, feedback
+        if isinstance(expected, list) and expected:
+            missing = [e for e in expected if self._normalize_code(e) not in submitted]
+            passed = not missing
+            feedback = "Correct!" if passed else (exercise.explanation or "Your code is missing an expected part — try again.")
+            return passed, feedback
+
+        solution = getattr(exercise, "solution_code", None)
+        if solution and solution.strip():
+            passed = submitted == self._normalize_code(solution)
+            if passed:
+                return True, "Correct! Your code matches the expected solution."
+            return False, exercise.explanation or "Not quite — compare your code with what the question asks for and try again."
+
+        return True, "Submitted successfully!"
 
     async def grade_exercise(self, exercise, user_input: dict, language: str) -> tuple[bool, str]:
         ex_type = exercise.type.lower().strip()
@@ -459,11 +532,19 @@ class LessonEngine:
 
         elif ex_type in ("code", "tiny_coding", "identify_mistake"):
             code = str(user_input.get("code") or user_input.get("answer") or "")
-            if exercise.tests:
-                res = await self.executor.run({"language": language, "code": code, "tests": [t.model_dump() for t in exercise.tests]})
+            if exercise.tests and language.lower().strip() == "python":
+                try:
+                    res = await self.executor.run({"language": language, "code": code, "tests": [t.model_dump() for t in exercise.tests]})
+                except SandboxError:
+                    # Docker runner unavailable: grade statically instead of failing the submission.
+                    return self._grade_code_static(exercise, code)
                 passed = bool(res.get("passed", False))
                 feedback = "All tests passed!" if passed else "Some tests failed."
                 return passed, feedback
+            elif exercise.tests or exercise.solution_code or exercise.correct_answer:
+                # Non-Python languages (and Docker outages) grade statically against
+                # the canonical solution / expected answer — never a 500.
+                return self._grade_code_static(exercise, code)
             else:
                 passed = bool(code.strip())
                 feedback = "Submitted successfully!" if passed else "Please provide an answer."

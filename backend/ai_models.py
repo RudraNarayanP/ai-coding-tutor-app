@@ -19,6 +19,8 @@ class TutorRequest(BaseModel):
     solution_requested: bool = False
     source_summary: str = Field(default="", max_length=5000)
     generated_course_id: str | None = Field(default=None, max_length=120)
+    user_id: str = Field(default="default_user", max_length=80)
+    adaptation_hint: str = Field(default="", max_length=2000)
 
 
 class TutorResponse(BaseModel):

@@ -274,7 +274,7 @@ export const CreatePage: React.FC<CreatePageProps> = ({ onCourseReady }) => {
                 <span style={{ fontSize: '18px' }}>
                   {st.state === 'done' ? '✓' : st.state === 'active' ? '🔄' : st.state === 'error' ? '❌' : '○'}
                 </span>
-                <span style={{ color: st.state === 'done' ? 'var(--green-dark)' : st.state === 'active' ? 'var(--blue-dark)' : 'var(--ink-soft)' }}>
+                <span style={{ color: st.state === 'done' ? 'var(--green)' : st.state === 'active' ? '#84d8ff' : 'var(--ink-soft)' }}>
                   {st.label}
                 </span>
               </div>
@@ -297,28 +297,28 @@ export const CreatePage: React.FC<CreatePageProps> = ({ onCourseReady }) => {
           </div>
 
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '12px', marginBottom: '24px', textAlign: 'center' }}>
-            <div style={{ padding: '12px', background: '#f1f5f9', borderRadius: '10px' }}>
+            <div style={{ padding: '12px', background: 'var(--surface-sunken)', borderRadius: '10px', border: '2px solid var(--line)', color: 'var(--ink)' }}>
               <div style={{ fontSize: '20px', fontWeight: 900 }}>{preview.unit_count}</div>
-              <div style={{ fontSize: '12px', fontWeight: 700, color: '#64748b' }}>UNITS</div>
+              <div style={{ fontSize: '12px', fontWeight: 700, color: 'var(--ink-soft)' }}>UNITS</div>
             </div>
-            <div style={{ padding: '12px', background: '#f1f5f9', borderRadius: '10px' }}>
+            <div style={{ padding: '12px', background: 'var(--surface-sunken)', borderRadius: '10px', border: '2px solid var(--line)', color: 'var(--ink)' }}>
               <div style={{ fontSize: '20px', fontWeight: 900 }}>{preview.lesson_count}</div>
-              <div style={{ fontSize: '12px', fontWeight: 700, color: '#64748b' }}>LESSONS</div>
+              <div style={{ fontSize: '12px', fontWeight: 700, color: 'var(--ink-soft)' }}>LESSONS</div>
             </div>
-            <div style={{ padding: '12px', background: '#f1f5f9', borderRadius: '10px' }}>
+            <div style={{ padding: '12px', background: 'var(--surface-sunken)', borderRadius: '10px', border: '2px solid var(--line)', color: 'var(--ink)' }}>
               <div style={{ fontSize: '20px', fontWeight: 900 }}>{preview.exercise_count}</div>
-              <div style={{ fontSize: '12px', fontWeight: 700, color: '#64748b' }}>EXERCISES</div>
+              <div style={{ fontSize: '12px', fontWeight: 700, color: 'var(--ink-soft)' }}>EXERCISES</div>
             </div>
-            <div style={{ padding: '12px', background: '#f1f5f9', borderRadius: '10px' }}>
+            <div style={{ padding: '12px', background: 'var(--surface-sunken)', borderRadius: '10px', border: '2px solid var(--line)', color: 'var(--ink)' }}>
               <div style={{ fontSize: '20px', fontWeight: 900 }}>{preview.checkpoint_count}</div>
-              <div style={{ fontSize: '12px', fontWeight: 700, color: '#64748b' }}>CHECKPOINTS</div>
+              <div style={{ fontSize: '12px', fontWeight: 700, color: 'var(--ink-soft)' }}>CHECKPOINTS</div>
             </div>
           </div>
 
           {preview.sequencing_rationale && (
-            <div style={{ background: '#f8fafc', padding: '16px', borderRadius: '12px', marginBottom: '24px', border: '1px solid #e2e8f0' }}>
-              <h4 style={{ fontSize: '14px', fontWeight: 800, marginBottom: '6px' }}>How this course is structured:</h4>
-              <p style={{ fontSize: '13px', fontWeight: 600, color: '#475569' }}>{preview.sequencing_rationale}</p>
+            <div style={{ background: 'var(--surface-sunken)', padding: '16px', borderRadius: '12px', marginBottom: '24px', border: '2px solid var(--line)' }}>
+              <h4 style={{ fontSize: '14px', fontWeight: 800, marginBottom: '6px', color: 'var(--ink)' }}>How this course is structured:</h4>
+              <p style={{ fontSize: '13px', fontWeight: 600, color: 'var(--ink-soft)' }}>{preview.sequencing_rationale}</p>
             </div>
           )}
 

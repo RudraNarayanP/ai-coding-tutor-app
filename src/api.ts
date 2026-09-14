@@ -279,4 +279,25 @@ export const api = {
 
   updateUserProfile: (payload: { user_id?: string; username?: string; streak?: number; xp?: number }) =>
     post('/api/user/profile', payload),
+
+  submitFeedback: (payload: {
+    exercise_id: string
+    lesson_id?: string | null
+    rating: 'too_easy' | 'too_difficult' | 'report'
+    comment?: string
+    user_id?: string
+  }) => {
+    const { user_id, ...body } = payload
+    return post(`/api/feedback?user_id=${encodeURIComponent(user_id || 'default_user')}`, body)
+  },
+
+  feedbackSummary: (userId: string = 'default_user') =>
+    request<{
+      user_id: string
+      bias: 'easier' | 'harder' | 'balanced'
+      too_easy: number
+      too_difficult: number
+      reports: number
+      total: number
+    }>(`/api/feedback/summary?user_id=${encodeURIComponent(userId)}`),
 }

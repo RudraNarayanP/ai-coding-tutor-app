@@ -71,6 +71,8 @@ def build_user_prompt(request: TutorRequest) -> str:
     unit_part = f"Unit: {unit_title}\n" if unit_title else ""
     concept_part = f"Concept: {concept_title}\n" if concept_title else ""
     prereq_part = f"Prerequisite concepts: {', '.join(prerequisites)}\n" if prerequisites else ""
+    adaptation_hint = getattr(request, 'adaptation_hint', '') or ''
+    adaptation_part = f"Live learner-feedback adaptation: {adaptation_hint}\n" if adaptation_hint.strip() else ""
 
     return (
         f"{lang_context}"
@@ -81,7 +83,8 @@ def build_user_prompt(request: TutorRequest) -> str:
         f"Deterministic test results (authoritative): {request.test_results}\n"
         f"Previous hints in this session: {request.previous_hints}\n"
         f"Requested hint level: {request.hint_level}\n"
-        f"solution_requested: {request.solution_requested}"
+        f"solution_requested: {request.solution_requested}\n"
+        f"{adaptation_part}"
     )
 
 

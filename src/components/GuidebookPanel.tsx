@@ -39,8 +39,9 @@ export const GuidebookPanel: React.FC<GuidebookPanelProps> = ({
         style={{
           width: '360px',
           height: '100%',
-          backgroundColor: '#ffffff',
-          boxShadow: '-4px 0 16px rgba(0, 0, 0, 0.15)',
+          backgroundColor: 'var(--card)',
+          boxShadow: '-4px 0 16px rgba(0, 0, 0, 0.5)',
+          borderLeft: '2px solid var(--line)',
           display: 'flex',
           flexDirection: 'column',
           padding: '24px',
@@ -81,16 +82,16 @@ export const GuidebookPanel: React.FC<GuidebookPanelProps> = ({
                 border: '2px solid var(--line)',
                 borderRadius: '12px',
                 padding: '16px',
-                backgroundColor: '#f8fafc',
+                backgroundColor: 'var(--surface-sunken)',
               }}
             >
-              <h3 style={{ fontSize: '15px', fontWeight: 800, marginBottom: '6px', color: 'var(--blue-dark)' }}>
+              <h3 style={{ fontSize: '15px', fontWeight: 800, marginBottom: '6px', color: '#84d8ff' }}>
                 {item.concept}
               </h3>
-              <p style={{ fontSize: '13px', fontWeight: 600, marginBottom: '10px', color: '#475569' }}>
+              <p style={{ fontSize: '13px', fontWeight: 600, marginBottom: '10px', color: 'var(--ink)' }}>
                 {item.description}
               </p>
-              <div style={{ fontSize: '12px', fontWeight: 700, marginBottom: '6px', color: '#64748b' }}>SYNTAX:</div>
+              <div style={{ fontSize: '12px', fontWeight: 700, marginBottom: '6px', color: 'var(--ink-soft)' }}>SYNTAX:</div>
               <pre
                 style={{
                   backgroundColor: '#1e293b',
@@ -105,7 +106,7 @@ export const GuidebookPanel: React.FC<GuidebookPanelProps> = ({
               >
                 <code>{item.syntax}</code>
               </pre>
-              <div style={{ fontSize: '12px', fontWeight: 700, marginBottom: '6px', color: '#64748b' }}>EXAMPLE:</div>
+              <div style={{ fontSize: '12px', fontWeight: 700, marginBottom: '6px', color: 'var(--ink-soft)' }}>EXAMPLE:</div>
               <pre
                 style={{
                   backgroundColor: '#0f172a',

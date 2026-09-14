@@ -25,6 +25,7 @@ function getAudioContext(): AudioContext | null {
 export function playPatchworkSound(
   type:
     | 'success'
+    | 'correct_chime'
     | 'error'
     | 'xp_gain'
     | 'boost_active'
@@ -52,6 +53,28 @@ export function playPatchworkSound(
         gain.connect(ctx.destination)
         osc.start(now + idx * 0.08)
         osc.stop(now + idx * 0.08 + 0.35)
+      })
+    } else if (type === 'correct_chime') {
+      // Duolingo-style bell: bright two-tone ding with a shimmering tail.
+      const strikes: Array<{ freq: number; at: number }> = [
+        { freq: 880, at: 0 }, // A5
+        { freq: 1318.5, at: 0.12 }, // E6
+      ]
+      strikes.forEach(({ freq, at }) => {
+        ;[1, 2.01, 2.74].forEach((partial, pIdx) => {
+          const osc = ctx.createOscillator()
+          const gain = ctx.createGain()
+          osc.type = 'sine'
+          osc.frequency.setValueAtTime(freq * partial, now + at)
+          const peak = pIdx === 0 ? 0.22 : 0.07 / pIdx
+          gain.gain.setValueAtTime(0.0001, now + at)
+          gain.gain.exponentialRampToValueAtTime(peak, now + at + 0.015)
+          gain.gain.exponentialRampToValueAtTime(0.0001, now + at + 0.9)
+          osc.connect(gain)
+          gain.connect(ctx.destination)
+          osc.start(now + at)
+          osc.stop(now + at + 1)
+        })
       })
     } else if (type === 'error') {
       const osc = ctx.createOscillator()

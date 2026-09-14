@@ -59,6 +59,7 @@ from .custom_course_generator import (
     build_custom_curriculum_from_text,
 )
 from .sandbox import SandboxError, sandbox
+from .feedback_store import FeedbackStore
 from .tutor_service import TutorService
 
 logger = logging.getLogger("patchwork-tutor")
@@ -106,6 +107,13 @@ class ProfileUpdateRequest(BaseModel):
     xp: int | None = None
 
 
+class ExerciseFeedbackRequest(BaseModel):
+    exercise_id: str = Field(min_length=1, max_length=120)
+    lesson_id: str | None = Field(default=None, max_length=120)
+    rating: str = Field(min_length=1, max_length=20)
+    comment: str | None = Field(default=None, max_length=2000)
+
+
 base_path = Path(__file__).resolve().parent
 curriculum_root = base_path.parent / "curriculum"
 course_serializer = CourseSerializer(curriculum_root)
@@ -125,6 +133,7 @@ for lang, curr in loaded_curriculums.items():
         loaded_stores[lang] = ProgressionStore(curr, storage_path=base_path / f"progression_state_{lang}.json")
 
 user_store = UserStore(storage_path=base_path / "users_state.json")
+feedback_store = FeedbackStore(storage_path=base_path / "feedback_state.json")
 
 lesson_engine = LessonEngine(
     executor=sandbox,
@@ -351,15 +360,68 @@ async def submit_exercise(lesson_id: str, request: ExerciseSubmissionRequest, us
         lesson_engine.get_lesson(lesson_id)
     except KeyError as exc:
         raise HTTPException(status_code=404, detail={"error": "lesson_not_found"}) from exc
-    res = await lesson_engine.submit_exercise(
-        lesson_id=lesson_id,
-        sublesson_id=request.sublesson_id,
-        exercise_id=request.exercise_id,
-        payload=request.payload,
-    )
+    try:
+        res = await lesson_engine.submit_exercise(
+            lesson_id=lesson_id,
+            sublesson_id=request.sublesson_id,
+            exercise_id=request.exercise_id,
+            payload=request.payload,
+        )
+    except SandboxError as exc:
+        # Backstop: grading itself falls back to static checks, but if the
+        # sandbox ever still blows up, return a retryable grading response
+        # instead of a 500 so the learner is never hard-blocked.
+        progress = lesson_engine.lesson_progress(lesson_id)
+        return {
+            "exercise_id": request.exercise_id,
+            "passed": False,
+            "state": "incorrect",
+            "attempt_count": 0,
+            "feedback": f"Code runner unavailable ({exc}). Your answer was not graded — try again.",
+            "xp_awarded": 0,
+            "total_xp": 0,
+            "level": 1,
+            "explanation": None,
+            "next_action": progress["next_action"],
+            "lesson_completed": progress["lesson_completed"],
+            "next_lesson_id": progress["next_lesson_id"],
+            "progress": progress["progress"],
+        }
     if res.get("xp_awarded", 0) > 0:
         user_store.update_user_xp(user_id, res["xp_awarded"])
     return res
+
+
+@app.post("/api/feedback")
+async def submit_exercise_feedback(request: ExerciseFeedbackRequest, user_id: str = "default_user"):
+    """Record a too_easy / too_difficult / report rating for an exercise.
+
+    The aggregated signal immediately steers subsequent AI tutor responses
+    for this learner (see adaptation_hint in the tutor prompt).
+    """
+    try:
+        record = feedback_store.record(
+            user_id=user_id,
+            exercise_id=request.exercise_id,
+            rating=request.rating,
+            lesson_id=request.lesson_id,
+            comment=request.comment,
+        )
+    except ValueError as exc:
+        raise HTTPException(status_code=400, detail={"error": "invalid_rating", "message": str(exc)}) from exc
+    return {
+        "status": "ok",
+        "rating": record["rating"],
+        "exercise_id": record["exercise_id"],
+        "adaptation": feedback_store.adaptation_ack(user_id, record["rating"]),
+        "summary": feedback_store.summary(user_id),
+    }
+
+
+@app.get("/api/feedback/summary")
+async def get_feedback_summary(user_id: str = "default_user"):
+    """Aggregated feedback counts + difficulty bias for a learner."""
+    return feedback_store.summary(user_id)
 
 
 @app.post("/api/lessons/{lesson_id}/test-out")
@@ -808,6 +870,10 @@ async def regenerate_course_unit(course_id: str, req: RegenerateUnitRequest):
 
 @app.post("/api/tutor", response_model=TutorResponse)
 async def tutor(request: TutorRequest):
+    # Inject live learner-feedback adaptation so the AI adjusts on the go.
+    hint = feedback_store.adaptation_hint(request.user_id or "default_user")
+    if hint:
+        request = request.model_copy(update={"adaptation_hint": hint})
     return await tutor_service.tutor(request, active_provider=get_current_provider())
 
 

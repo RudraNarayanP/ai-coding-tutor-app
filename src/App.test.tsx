@@ -198,15 +198,16 @@ describe('Course track switching', () => {
 
     await waitFor(() => expect(screen.getByText('Python Path')).toBeInTheDocument())
 
-    // Switch to Java
-    const javaTab = screen.getByRole('tab', { name: 'Java' })
+    await user.click(screen.getByRole('button', { name: /COURSES/ }))
+
+    const javaTab = await screen.findByRole('tab', { name: /Java/ })
     await user.click(javaTab)
 
     await waitFor(() => expect(screen.getByText('Java Path')).toBeInTheDocument())
     expect(localStorage.getItem('patchwork_active_language')).toBe('java')
 
-    // Switch to C++
-    const cppTab = screen.getByRole('tab', { name: 'C++' })
+    await user.click(screen.getByRole('button', { name: /COURSES/ }))
+    const cppTab = screen.getByRole('tab', { name: /C\+\+/ })
     await user.click(cppTab)
 
     await waitFor(() => expect(screen.getByText('C++ Path')).toBeInTheDocument())
@@ -242,13 +243,18 @@ describe('Lesson navigation', () => {
     expect(within(screen.getByRole('navigation', { name: 'Lessons' })).getAllByRole('button')).toHaveLength(12)
   })
 
-  it('marks the active lesson with aria-current="page"', async () => {
+  it('marks the active lesson with aria-current="page" when returning to the map', async () => {
     const user = userEvent.setup()
     setupFetch()
     render(<App />)
     await openCurrentLesson(user)
 
-    const navButton = screen.getByRole('button', { name: /Variables — Current lesson/ })
+    // Focused lesson view shows no course navigation (it lives on the Learn home map only)
+    expect(screen.queryByRole('navigation', { name: 'Lessons' })).not.toBeInTheDocument()
+
+    // Back on the Learn map, the opened lesson is marked as the current page
+    await user.click(screen.getByRole('button', { name: /Back to Map/ }))
+    const navButton = await screen.findByRole('button', { name: /Variables — Current lesson/ })
     expect(navButton).toHaveAttribute('aria-current', 'page')
   })
 

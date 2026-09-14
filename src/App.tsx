@@ -6,11 +6,15 @@ import { CreatePage } from './components/CreatePage'
 import Settings from './components/Settings'
 import ExercisePanel from './components/ExercisePanel'
 import { CodeEditor } from './components/CodeEditor'
-import { api, type ExerciseResult, type LeaderboardEntry, type LessonProgress, type TestOutResult } from './api'
+import { api, type ExerciseResult, type LeaderboardEntry, type LessonProgress, type TestOutResult, type UserProfile } from './api'
+import { LearnPath } from './components/duo/LearnPath'
+import { PracticeHub } from './components/duo/PracticeHub'
+import { QuestsPage } from './components/duo/QuestsPage'
+import { CoursesPage } from './components/duo/CoursesPage'
+import { coursePathTitle as buildCoursePathTitle } from './components/duo/courseDisplay'
 import {
   getGamificationState,
   recordActivity,
-  activateXpBoost,
   getHearts,
 loseHeart,
   restoreHearts,
@@ -18,7 +22,6 @@ loseHeart,
   saveGameState,
   restoreGameState,
   getDailyProgress,
-  xpForLevel,
   levelFromXp,
 } from './utils/gamification'
 import { playPatchworkSound } from './utils/audio'
@@ -139,7 +142,7 @@ function LineNumbers({ code }: { code: string }) {
 
 // ─── App Component ────────────────────────────────────────────────────────────
 function App() {
-  const [activeTab, setActiveTab] = useState<'learn' | 'create' | 'leaderboards' | 'quests' | 'profile'>('learn')
+  const [activeTab, setActiveTab] = useState<'learn' | 'practice' | 'quests' | 'courses' | 'create' | 'leaderboards' | 'profile'>('learn')
   const [isGuidebookOpen, setIsGuidebookOpen] = useState(false)
   const [courses, setCourses] = useState<CourseSummary[]>([])
   const [selectedLanguage, setSelectedLanguage] = useState<string>(() => {
@@ -170,6 +173,7 @@ function App() {
   const [xp, setXp] = useState(0)
   const [level, setLevel] = useState(1)
   const [leaderboardEntries, setLeaderboardEntries] = useState<LeaderboardEntry[]>([])
+  const [userProfile, setUserProfile] = useState<UserProfile | null>(null)
   const [xpGainPopup, setXpGainPopup] = useState<number | null>(null)
   const [exerciseInput, setExerciseInput] = useState<any>({})
   const [showTestOutModal, setShowTestOutModal] = useState(false)
@@ -294,7 +298,7 @@ function App() {
   const fetchLeaderboard = useCallback(async () => {
     try {
       const data = await api.leaderboard()
-      if (data) {
+      if (Array.isArray(data)) {
         setLeaderboardEntries(data)
       }
     } catch (err) {
@@ -353,6 +357,15 @@ function App() {
   }, [])
 
   // ─── Fetch Progression State for Active Language ──────────────────────────────
+  const fetchUserProfile = useCallback(async () => {
+    try {
+      const data = await api.userProfile()
+      if (data) setUserProfile(data)
+    } catch (err) {
+      console.error('API request failed:', err)
+    }
+  }, [])
+
   const fetchProgression = useCallback(async () => {
     try {
       const res = await fetch(`/api/progression?language=${encodeURIComponent(selectedLanguage)}`)
@@ -390,7 +403,10 @@ function App() {
   const handleCourseChange = async (lang: string) => {
     setSelectedLanguage(lang)
     safeSetItem('patchwork_active_language', lang)
+    setLesson(null)
     setIsLessonActive(false)
+    setCelebration(null)
+    setActiveTab('learn')
     try {
       await fetch('/api/courses/select', {
         method: 'POST',
@@ -400,11 +416,8 @@ function App() {
     } catch (err) {
       console.error('Operation failed:', err)
     }
-    // Always land back on the home / course map after switching tracks.
-    setLesson(null)
-    setIsLessonActive(false)
-    setCelebration(null)
     fetchLessons()
+    fetchProgression()
   }
 
   // ─── Generate Custom AI Course ──────────────────────────────────────────────
@@ -488,8 +501,6 @@ setIsLessonActive(true)
     // Restore persisted game state (XP, level, hearts) from previous sessions
     const saved = restoreGameState()
     if (saved) {
-      if (typeof saved.xp === 'number') setXp(saved.xp)
-      if (typeof saved.level === 'number') setLevel(saved.level)
       if (typeof saved.hearts === 'number') setHearts(saved.hearts)
       if (typeof saved.unlimitedHearts === 'boolean') setUnlimitedHearts(saved.unlimitedHearts)
     }
@@ -497,7 +508,8 @@ setIsLessonActive(true)
     fetchProviders()
     fetchLessons()
     fetchProgression()
-  }, [fetchCourses, fetchProviders, fetchLessons, fetchProgression])
+    fetchUserProfile()
+  }, [fetchCourses, fetchProviders, fetchLessons, fetchProgression, fetchUserProfile])
 
   // Persist hearts/unlimited setting whenever they change
   useEffect(() => {
@@ -591,6 +603,7 @@ setIsLessonActive(true)
           hint_level: hintLevel,
           previous_hints: previousHints,
           provider: selectedProvider,
+          user_id: 'default_user',
         }),
       })
 
@@ -653,8 +666,8 @@ setIsLessonActive(true)
       payload = { order: inputState.order || inputState.answers || [] }
     } else if (exType === 'matching') {
       payload = { pairs: inputState.pairs || [] }
-    } else if (exType === 'code') {
-      payload = { code: inputState.code || code }
+    } else if (['code', 'tiny_coding', 'identify_mistake'].includes(exType)) {
+      payload = { code: inputState.code ?? code }
     } else {
       payload = { answer: inputState.answer || '' }
     }
@@ -686,7 +699,7 @@ setIsLessonActive(true)
       }
 
       if (data.passed) {
-        playPatchworkSound('success', soundEnabled)
+        playPatchworkSound('correct_chime', soundEnabled)
         setCharState('happy')
         setCharSpeech(data.feedback || 'Correct answer!')
         setExercisePhase('correct')
@@ -856,22 +869,9 @@ setExercisePhase('incorrect')
   const allPassed = results && results.length > 0 ? failedRequired.length === 0 : false
 
   // Language Track Display Name
-  const coursePathTitle = selectedLanguage === 'cpp' ? 'C++ Path' : selectedLanguage === 'java' ? 'Java Path' : 'Python Path'
-
-  // Strict daily progression (Day N of the course)
+  const coursePathTitle = buildCoursePathTitle(selectedLanguage, courses)
+  const profileStreak = userProfile?.streak
   const dailyProgress = getDailyProgress()
-
-  // Group lessons by Unit
-  const unitsMap = new Map<string, { id: string; title: string; lessons: LessonSummary[] }>()
-  safeLessons.forEach((item, idx) => {
-    const unitId = item.unit_id || `unit-${Math.floor(idx / 4) + 1}`
-    const unitTitle = item.unit_title || `Unit ${Math.floor(idx / 4) + 1} — ${selectedLanguage.toUpperCase()} Essentials`
-    if (!unitsMap.has(unitId)) {
-      unitsMap.set(unitId, { id: unitId, title: unitTitle, lessons: [] })
-    }
-    unitsMap.get(unitId)!.lessons.push(item)
-  })
-  const unitGroups = Array.from(unitsMap.values())
 
   return (
     <div className="duo-layout">
@@ -894,6 +894,39 @@ setExercisePhase('incorrect')
           </button>
 
           <button
+            className={`duo-nav-item ${activeTab === 'practice' ? 'active' : ''}`}
+            onClick={() => {
+              setActiveTab('practice')
+              setIsLessonActive(false)
+            }}
+          >
+            <span className="duo-nav-icon">💪</span>
+            <span>PRACTICE</span>
+          </button>
+
+          <button
+            className={`duo-nav-item ${activeTab === 'quests' ? 'active' : ''}`}
+            onClick={() => {
+              setActiveTab('quests')
+              setIsLessonActive(false)
+            }}
+          >
+            <span className="duo-nav-icon">🎯</span>
+            <span>QUESTS</span>
+          </button>
+
+          <button
+            className={`duo-nav-item ${activeTab === 'courses' ? 'active' : ''}`}
+            onClick={() => {
+              setActiveTab('courses')
+              setIsLessonActive(false)
+            }}
+          >
+            <span className="duo-nav-icon">📚</span>
+            <span>COURSES</span>
+          </button>
+
+          <button
             className={`duo-nav-item ${activeTab === 'create' ? 'active' : ''}`}
             onClick={() => {
               setActiveTab('create')
@@ -913,17 +946,6 @@ setExercisePhase('incorrect')
           >
             <span className="duo-nav-icon">🛡️</span>
             <span>LEADERBOARDS</span>
-          </button>
-
-          <button
-            className={`duo-nav-item ${activeTab === 'quests' ? 'active' : ''}`}
-            onClick={() => {
-              setActiveTab('quests')
-              setIsLessonActive(false)
-            }}
-          >
-            <span className="duo-nav-icon">🎯</span>
-            <span>QUESTS</span>
           </button>
 
           <button
@@ -968,10 +990,11 @@ setExercisePhase('incorrect')
                 width: '100%',
                 padding: '4px 8px',
                 borderRadius: '8px',
-                border: '1px solid #cbd5e1',
+                border: '2px solid var(--line)',
                 fontSize: '12px',
                 fontWeight: 700,
-                background: '#fff',
+                background: 'var(--input-bg)',
+                color: 'var(--ink)',
               }}
             >
               {providersOverview?.providers?.map((p) => (
@@ -992,7 +1015,7 @@ setExercisePhase('incorrect')
             </button>
           </div>
 
-          <div style={{ fontSize: '11px', color: '#64748b', textAlign: 'center' }}>
+          <div style={{ fontSize: '11px', color: 'var(--muted)', textAlign: 'center' }}>
             {isAiAvailable ? 'Ollama ready' : 'Ollama unavailable'}
           </div>
         </div>
@@ -1003,45 +1026,20 @@ setExercisePhase('incorrect')
         {/* Top Sticky Header Bar */}
         <header className="duo-top-header" role="banner">
           <div className="duo-header-left">
-            <div className="duo-course-selector" role="tablist" aria-label="Course language selector" style={{ display: 'flex', gap: '6px', alignItems: 'center' }}>
-              {(courses ?? []).map((c) => (
-                <button
-                  key={c.id}
-                  role="tab"
-                  aria-selected={selectedLanguage === c.language || selectedLanguage === c.id}
-                  className={`duo-course-btn ${selectedLanguage === c.language || selectedLanguage === c.id ? 'active' : ''}`}
-                  onClick={() => handleCourseChange(c.language || c.id)}
-                  style={{
-                    padding: '6px 12px',
-                    borderRadius: '8px',
-                    fontSize: '13px',
-                    fontWeight: 800,
-                    border: '2px solid',
-                    borderColor: (selectedLanguage === c.language || selectedLanguage === c.id) ? 'var(--blue-dark)' : 'var(--line)',
-                    background: (selectedLanguage === c.language || selectedLanguage === c.id) ? '#ddf4ff' : '#fff',
-                    color: (selectedLanguage === c.language || selectedLanguage === c.id) ? 'var(--blue-dark)' : '#777',
-                  }}
-                >
-                  {c.title.replace(' Foundations', '').replace(' Path', '')}
-                </button>
-              ))}
-
-              <button
-                className="duo-button duo-button-primary"
-                onClick={() => setActiveTab("create")}
-                style={{ padding: '6px 12px', fontSize: '12px', marginLeft: '4px' }}
-                aria-label="Create Custom Course"
-              >
-                + Create Course
-              </button>
-            </div>
-
-            <div style={{ fontWeight: 900, fontSize: '15px', color: 'var(--ink)' }}>
+            <button
+              type="button"
+              className="duo-button duo-button-secondary"
+              style={{ padding: '6px 12px', fontSize: '12px' }}
+              onClick={() => {
+                setActiveTab('courses')
+                setIsLessonActive(false)
+              }}
+              aria-label="Open courses"
+            >
               {coursePathTitle}
-            </div>
+            </button>
           </div>
 
-          {/* Progress bar */}
           <div style={{ flex: 1, maxWidth: '200px', margin: '0 16px' }}>
             <div
               className="duo-progress-bar-bg"
@@ -1050,7 +1048,7 @@ setExercisePhase('incorrect')
               aria-valuemin={0}
               aria-valuemax={safeLessons.length}
               aria-label="Course progress"
-              style={{ height: '12px', background: '#e5e5e5', borderRadius: '999px', overflow: 'hidden' }}
+              style={{ height: '12px', background: '#37464f', borderRadius: '999px', overflow: 'hidden' }}
             >
               <div
                 className="duo-progress-bar-fill"
@@ -1060,10 +1058,15 @@ setExercisePhase('incorrect')
           </div>
 
           <div className="duo-header-stats">
-<div className="duo-stat-pill streak" title="Daily streak"><span>🔥 {gamification.streakCount || 0}</span></div>
-            <div className="duo-stat-pill gems" title="Gems"><span>💎 {gamification.dailyXp || 0}</span></div>
-            <div className="duo-stat-pill xp" title="Total XP" aria-label={`XP: ${xp}, Level: ${level}`}><span>⭐ {xp} XP</span></div>
-            <div className="duo-stat-pill hearts" title="Hearts"><span>❤️ {unlimitedHearts ? '∞' : hearts}</span></div>
+            <div className="duo-stat-pill streak" title="Streak from your server profile">
+              <span>🔥 {profileStreak == null ? '—' : profileStreak}</span>
+            </div>
+            <div className="duo-stat-pill xp" title="Total XP" aria-label={`XP: ${xp}, Level: ${level}`}>
+              <span>⭐ {xp} XP</span>
+            </div>
+            <div className="duo-stat-pill hearts" title="Hearts">
+              <span>❤️ {unlimitedHearts ? '∞' : hearts}</span>
+            </div>
           </div>
         </header>
 
@@ -1143,6 +1146,7 @@ setExercisePhase('incorrect')
                       onRetry={retryCurrentExercise}
                       onRunCode={runTests}
                       isRunningCode={isRunning}
+                      lessonId={lesson.id}
                     />
                   ) : (
                     <CodeEditor value={code} onChange={setCode} filename="exercise.py" onKeyDown={handleEditorKeyDown} />
@@ -1188,7 +1192,7 @@ setExercisePhase('incorrect')
                     </div>
                   </div>
                   {!isAiAvailable && (
-                    <p className="ai-unavailable-note" style={{ marginTop: '8px', fontSize: '13px', color: '#64748b' }}>
+                    <p className="ai-unavailable-note" style={{ marginTop: '8px', fontSize: '13px', color: 'var(--ink-soft)' }}>
                       Selected provider is unconfigured. Tests always work offline.
                     </p>
                   )}
@@ -1243,7 +1247,7 @@ setExercisePhase('incorrect')
                         }
                       }}
                       aria-label="Session note"
-                      style={{ flex: 1, padding: '10px 14px', borderRadius: '12px', border: '2px solid var(--line)', fontWeight: 700 }}
+                      style={{ flex: 1, padding: '10px 14px', borderRadius: '12px', border: '2px solid var(--line)', fontWeight: 700, background: 'var(--input-bg)', color: 'var(--ink)' }}
                     />
                     <button onClick={addNote} aria-label="Add note" className="duo-button duo-button-primary" style={{ padding: '10px 20px' }}>+</button>
                   </div>
@@ -1256,225 +1260,43 @@ setExercisePhase('incorrect')
                   )}
                 </div>
 
-                {/* Course Navigation Bar in Focused Lesson View */}
-                <div className="duo-sidebar-lessons-nav" style={{ marginTop: '24px' }}>
-                  <h3 style={{ fontSize: '13px', fontWeight: 800, color: 'var(--ink-soft)', textTransform: 'uppercase', marginBottom: '8px' }}>Course Navigation</h3>
-                  <nav aria-label="Lessons" style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
-                    {safeLessons.map((item) => {
-                      const isActive = lesson?.id === item.id
-                      let statusLabel = 'Available'
-                      if (item.status === 'completed') statusLabel = 'Completed'
-                      else if (item.status === 'locked') statusLabel = 'Locked'
-                      else if (item.status === 'current' || isActive) statusLabel = 'Current lesson'
-
-                      return (
-                        <button
-                          key={item.id}
-                          id={`lesson-nav-${item.id}`}
-                          className={`duo-nav-item ${isActive ? 'active' : ''}`}
-                          onClick={() => loadLesson(item, true)}
-                          disabled={item.status === 'locked' || isLoadingLesson}
-                          aria-current={isActive ? 'page' : undefined}
-                          aria-label={`${item.title} — ${statusLabel}`}
-                          style={{
-                            display: 'flex',
-                            alignItems: 'center',
-                            justifyContent: 'space-between',
-                            padding: '8px 12px',
-                            fontSize: '13px',
-                            fontWeight: 800,
-                            borderRadius: '8px',
-                            border: '2px solid',
-                            borderColor: isActive ? 'var(--blue-dark)' : 'var(--line)',
-                            background: isActive ? '#ddf4ff' : '#fff',
-                            cursor: item.status === 'locked' ? 'not-allowed' : 'pointer'
-                          }}
-                        >
-                          <span>{item.title}</span>
-                          <span style={{ fontSize: '11px', opacity: 0.7 }}>{statusLabel}</span>
-                        </button>
-                      )
-                    })}
-                  </nav>
-                </div>
               </div>
             ) : (
-              /* ─── COURSE MAP VIEW (COMPACT UNITS) ────────────────────────── */
-              <>
-                <div className="duo-center-column">
-                  {/* Strict daily progression hero card */}
-                  <div className="duo-widget-card" style={{ width: '100%', marginBottom: '24px' }}>
-                    <div className="duo-widget-title">
-                      <span>📅 Day {dailyProgress.currentDay} — Daily Progress</span>
-                      <span className="duo-widget-link">{selectedLanguage.toUpperCase()} TRACK</span>
-                    </div>
-                    <div className="duo-quest-progress-bg">
-                      <div className="duo-quest-progress-fill" style={{ width: `${progressPct}%` }} />
-                    </div>
-                    <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: '8px', fontSize: '12px', fontWeight: 700 }}>
-                      <span>{completedCount} of {safeLessons.length} lessons done</span>
-                      <span>{Math.round(progressPct)}%</span>
-                    </div>
-                    <div style={{ display: 'flex', gap: '12px', marginTop: '12px', fontSize: '13px', fontWeight: 800 }}>
-                      <span>🔥 Streak: {gamification.streakCount || 0} days</span>
-                      <span>❤️ {unlimitedHearts ? '∞' : hearts} hearts</span>
-                      <span>⭐ {xp} XP • Level {level}</span>
-                    </div>
-                  </div>
-
-                  {unitGroups.map((unit, uIdx) => (
-                    <div key={unit.id} className="duo-widget-card" style={{ width: '100%', marginBottom: '32px' }}>
-                      <div className="duo-unit-banner" style={{ background: uIdx % 2 === 0 ? 'var(--green)' : 'var(--blue)', boxShadow: uIdx % 2 === 0 ? '0 6px 0 var(--green-dark)' : '0 6px 0 var(--blue-dark)' }}>
-                        <div className="duo-unit-info">
-                          <span className="duo-unit-subtitle">UNIT {uIdx + 1}</span>
-                          <span className="duo-unit-title">{unit.title}</span>
-                        </div>
-                        <button className="duo-guidebook-btn" onClick={() => setIsGuidebookOpen(true)}>📖 GUIDEBOOK</button>
-                      </div>
-
-                      {/* Serpentine Node Path inside Unit */}
-                      <div className="duo-path-tree">
-                        {(unit?.lessons ?? []).map((item, idx) => {
-                          const isActive = lesson?.id === item.id
-                          const positions = ['node-pos-center', 'node-pos-left-1', 'node-pos-right-1', 'node-pos-center']
-                          const posClass = positions[idx % positions.length]
-
-                          const iconSymbol =
-                            item.status === 'completed'
-                              ? '✓'
-                              : item.type === 'challenge'
-                              ? '⚡'
-                              : item.type === 'checkpoint'
-                              ? '🏆'
-                              : '⭐'
-
-                          return (
-                            <div key={item.id} className={`duo-path-row ${posClass}`} style={{ margin: '8px 0' }}>
-                              <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
-                                <button
-                                  id={`lesson-node-${item.id}`}
-                                  className={`duo-path-circle-btn ${item.status}`}
-                                  onClick={() => loadLesson(item, true)}
-                                  disabled={item.status === 'locked' || isLoadingLesson}
-                                  title={item.title}
-                                  aria-label={item.title}
-                                >
-                                  {isActive && item.status !== 'locked' && (
-                                    <div className="duo-start-dialog">START</div>
-                                  )}
-                                  <span>{iconSymbol}</span>
-                                </button>
-                                <div style={{ display: 'flex', flexDirection: 'column' }}>
-                                  <span style={{ fontWeight: 900, fontSize: '15px', color: 'var(--ink)' }}>{item.title}</span>
-                                  <span style={{ fontWeight: 700, fontSize: '12px', color: 'var(--ink-soft)', textTransform: 'uppercase' }}>
-                                    {item.status} • {item.duration_minutes} MINS
-                                  </span>
-                                </div>
-                              </div>
-                            </div>
-                          )
-                        })}
-                      </div>
-                    </div>
-                  ))}
-                </div>
-
-                {/* Right Sidebar Widgets */}
-                <aside className="duo-right-sidebar" aria-label="Course stats and quests">
-                  <div className="duo-widget-card">
-                    <div className="duo-widget-title">
-                      <span>Active Track</span>
-                      <span className="duo-widget-link">{selectedLanguage.toUpperCase()} TRACK</span>
-                    </div>
-                    <div className="duo-course-tabs" aria-label="Course track selector">
-                      {[
-                        { lang: 'python', label: 'Python' },
-                        { lang: 'java', label: 'Java' },
-                        { lang: 'cpp', label: 'C++' },
-                      ].map(({ lang, label }) => (
-                        <button
-                          key={lang}
-                          className={`duo-course-tab ${selectedLanguage === lang ? 'active' : ''}`}
-                          onClick={() => handleCourseChange(lang)}
-                        >
-                          {label}
-                        </button>
-                      ))}
-                    </div>
-                  </div>
-
-                  <div className="duo-widget-card">
-                    <div className="duo-widget-title">
-                      <span>Daily Quests</span>
-                      <button className="duo-widget-link" onClick={() => setActiveTab('quests')}>VIEW ALL</button>
-                    </div>
-                    <div className="duo-quest-item">
-                      <span className="duo-quest-icon">⚡</span>
-                      <div className="duo-quest-body">
-                        <div className="duo-quest-name">Earn {gamification.dailyGoal || 30} XP</div>
-                        <div className="duo-quest-progress-bg">
-                          <div className="duo-quest-progress-fill" style={{ width: '50%' }} />
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-
-                  <div className="duo-widget-card">
-                    <div className="duo-widget-title">
-                      <span>Bronze League</span>
-                      <button className="duo-widget-link" onClick={() => setActiveTab('leaderboards')}>VIEW</button>
-                    </div>
-                    <p style={{ fontSize: '14px', color: 'var(--ink-soft)', fontWeight: 600 }}>
-                      Top 5 learners advance to Silver League on Sunday!
-                    </p>
-                  </div>
-
-                  {/* Navigation Element inside Right Sidebar */}
-                  <div className="duo-sidebar-lessons-nav" style={{ marginTop: '12px' }}>
-                    <h3 style={{ fontSize: '13px', fontWeight: 800, color: 'var(--ink-soft)', textTransform: 'uppercase', marginBottom: '8px' }}>Course Navigation</h3>
-                    <nav aria-label="Lessons" style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
-                      {safeLessons.map((item) => {
-                        const isActive = lesson?.id === item.id
-                        let statusLabel = 'Available'
-                        if (item.status === 'completed') statusLabel = 'Completed'
-                        else if (item.status === 'locked') statusLabel = 'Locked'
-                        else if (item.status === 'current' || isActive) statusLabel = 'Current lesson'
-
-                        return (
-                          <button
-                            key={item.id}
-                            id={`lesson-nav-${item.id}`}
-                            className={`duo-nav-item ${isActive ? 'active' : ''}`}
-                            onClick={() => loadLesson(item, true)}
-                            disabled={item.status === 'locked' || isLoadingLesson}
-                            aria-current={isActive ? 'page' : undefined}
-                            aria-label={`${item.title} — ${statusLabel}`}
-                            style={{
-                              display: 'flex',
-                              alignItems: 'center',
-                              justifyContent: 'space-between',
-                              padding: '8px 12px',
-                              fontSize: '13px',
-                              fontWeight: 800,
-                              borderRadius: '8px',
-                              border: '2px solid',
-                              borderColor: isActive ? 'var(--blue-dark)' : 'var(--line)',
-                              background: isActive ? '#ddf4ff' : '#fff',
-                              cursor: item.status === 'locked' ? 'not-allowed' : 'pointer'
-                            }}
-                          >
-                            <span>{item.title}</span>
-                            <span style={{ fontSize: '11px', opacity: 0.7 }}>{statusLabel}</span>
-                          </button>
-                        )
-                      })}
-                    </nav>
-                  </div>
-                </aside>
-              </>
+              <LearnPath
+                lessons={safeLessons}
+                activeLessonId={lesson?.id ?? null}
+                isLoadingLesson={isLoadingLesson}
+                onSelectLesson={(item) => loadLesson(item, true)}
+                onOpenGuidebook={() => setIsGuidebookOpen(true)}
+              />
             )}
           </div>
         )}
+
+        {activeTab === 'practice' && (
+          <div className="duo-page-container">
+            <PracticeHub
+              lessons={safeLessons}
+              isLoadingLesson={isLoadingLesson}
+              onOpenLesson={(item) => {
+                setActiveTab('learn')
+                void loadLesson(item, true)
+              }}
+              onOpenGuidebook={() => setIsGuidebookOpen(true)}
+            />
+          </div>
+        )}
+
+        {activeTab === 'courses' && (
+          <div className="duo-page-container">
+            <CoursesPage
+              courses={courses}
+              selectedLanguage={selectedLanguage}
+              onSelectCourse={handleCourseChange}
+            />
+          </div>
+        )}
+
 
         {/* ─── TAB 2: CREATE AI COURSE VIEW ──────────────────────────── */}
         {activeTab === 'create' && (
@@ -1565,40 +1387,35 @@ setExercisePhase('incorrect')
           </div>
         )}
 
-        {/* ─── TAB 3: LEADERBOARDS VIEW ──────────────────────────────────── */}
         {activeTab === 'leaderboards' && (
           <div className="duo-page-container">
-            {isLoadingLesson && (
-              <div role="status" aria-label="Loading lesson" style={{ position: "fixed", top: "12px", right: "24px", background: "var(--yellow)", color: "#000", padding: "8px 16px", borderRadius: "20px", fontWeight: 900, zIndex: 9999 }}>
-                Loading lesson…
-              </div>
-            )}
             <div className="duo-leaderboard-view">
               <div className="duo-league-banner">
-                <div className="duo-league-shield">🛡️</div>
+                <div className="duo-league-shield">LB</div>
                 <div className="duo-league-details">
-<h2>{xp >= 500 ? 'Silver League' : xp >= 200 ? 'Bronze League' : 'Copper League'}</h2>
-                  <p>Rank up by earning XP. Level {level} • {xp} XP — {xpForLevel(level + 1) - xp} XP to Level {level + 1}</p>
+                  <h2>Leaderboard</h2>
+                  <p>
+                    {leaderboardEntries.find((e) => e.is_current_user)
+                      ? `Your rank: #${leaderboardEntries.find((e) => e.is_current_user)!.rank} · ${xp} XP · Level ${level}`
+                      : `Level ${level} · ${xp} XP from course progression`}
+                  </p>
                 </div>
               </div>
-
-              {/* Server-Side Multi-User Leaderboard */}
               <div className="duo-rank-list">
-                {leaderboardEntries.length > 0 ? (
-                  (leaderboardEntries ?? []).map((entry) => (
+                {Array.isArray(leaderboardEntries) && leaderboardEntries.length > 0 ? (
+                  leaderboardEntries.map((entry) => (
                     <div
                       key={entry.user_id}
                       className={`duo-rank-item ${entry.is_current_user ? 'user-self' : ''}`}
-                      style={entry.is_current_user ? { border: '2px solid #22c55e', background: '#f0fdf4' } : {}}
                     >
                       <div className={`duo-rank-num ${entry.rank <= 3 ? `top-${entry.rank}` : ''}`}>
-                        {entry.rank === 1 ? '🥇' : entry.rank === 2 ? '🥈' : entry.rank === 3 ? '🥉' : entry.rank}
+                        {entry.rank}
                       </div>
                       <div className="duo-user-avatar-circle">
                         {entry.username ? entry.username.replace('[Demo] ', '').charAt(0).toUpperCase() : 'U'}
                       </div>
                       <div className="duo-rank-name" style={{ flex: 1, fontWeight: entry.is_current_user ? 800 : 600 }}>
-                        {entry.username} {entry.is_current_user ? '(You)' : ''}
+                        {entry.username}{entry.is_current_user ? ' (You)' : ''}{entry.is_demo ? ' · demo' : ''}
                       </div>
                       <div className="duo-rank-xp" style={{ fontWeight: 800 }}>
                         {entry.xp} XP
@@ -1606,93 +1423,63 @@ setExercisePhase('incorrect')
                     </div>
                   ))
                 ) : (
-                  <div className="duo-rank-item user-self">
-                    <div className="duo-rank-num top-1">1</div>
-                    <div className="duo-user-avatar-circle">P</div>
-                    <div className="duo-rank-name">You (Patchwork Learner)</div>
-                    <div className="duo-rank-xp">{xp} XP</div>
-                  </div>
+                  <p className="duo-empty-note">No leaderboard entries were returned by the server.</p>
                 )}
               </div>
-
               <div className="duo-widget-card" style={{ marginTop: '16px' }}>
                 <div className="duo-widget-title">
-                  <span>📊 Your Stats</span>
+                  <span>Your stats</span>
                   <span className="duo-widget-link">TRACK: {selectedLanguage.toUpperCase()}</span>
                 </div>
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', marginTop: '12px', fontSize: '14px', fontWeight: 800 }}>
                   <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-                    <span>🔥 Day Streak</span>
-                    <span>{gamification.streakCount || 0} days</span>
+                    <span>Streak (profile)</span>
+                    <span>{profileStreak == null ? 'Unavailable' : `${profileStreak} days`}</span>
                   </div>
                   <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-                    <span>📅 Current Day</span>
-                    <span>Day {dailyProgress.currentDay}</span>
-                  </div>
-                  <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-                    <span>⚡ XP Today</span>
-                    <span>{gamification.dailyXp} / {gamification.dailyGoal}</span>
-                  </div>
-                  <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-                    <span>⭐ Total XP</span>
+                    <span>Total XP (progression)</span>
                     <span>{xp}</span>
                   </div>
                   <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-                    <span>🏅 Level</span>
+                    <span>Level</span>
                     <span>{level}</span>
                   </div>
                   <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-                    <span>❤️ Hearts</span>
-                    <span>{unlimitedHearts ? '∞ (Unlimited)' : `${hearts} / ${gamification.maxHearts || 5}`}</span>
+                    <span>Hearts</span>
+                    <span>{unlimitedHearts ? 'Unlimited' : `${hearts} / ${gamification.maxHearts || 5}`}</span>
                   </div>
-                </div>
-                <div style={{ marginTop: '12px', fontSize: '12px', color: 'var(--ink-soft)', fontWeight: 600 }}>
-                  Keep a daily streak going — complete lessons each day to keep your 🔥 alive.
                 </div>
               </div>
             </div>
           </div>
         )}
 
-        {/* ─── TAB 4: QUESTS VIEW ────────────────────────────────────────── */}
         {activeTab === 'quests' && (
           <div className="duo-page-container">
-            {isLoadingLesson && (
-              <div role="status" aria-label="Loading lesson" style={{ position: "fixed", top: "12px", right: "24px", background: "var(--yellow)", color: "#000", padding: "8px 16px", borderRadius: "20px", fontWeight: 900, zIndex: 9999 }}>
-                Loading lesson…
-              </div>
-            )}
-            <div className="duo-quests-view">
-              <div className="duo-quest-card">
-                <h2 style={{ fontSize: '22px', fontWeight: 900 }}>Daily Quests</h2>
-                <div className="duo-quest-item">
-                  <div className="duo-quest-icon">⚡</div>
-                  <div className="duo-quest-body">
-                    <div className="duo-quest-name">Earn {gamification.dailyGoal || 30} XP</div>
-                    <div className="duo-quest-progress-bg">
-                      <div className="duo-quest-progress-fill" style={{ width: `${Math.min(100, (xp / (gamification.dailyGoal || 30)) * 100)}%` }} />
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
+            <QuestsPage
+              courses={courses}
+              selectedLanguage={selectedLanguage}
+              completedCount={completedCount}
+              totalCount={safeLessons.length}
+              xp={xp}
+              level={level}
+            />
           </div>
         )}
 
         {/* ─── TAB 5: PROFILE VIEW ───────────────────────────────────────── */}
         {activeTab === 'profile' && (
           <div className="duo-page-container">
-            {isLoadingLesson && (
-              <div role="status" aria-label="Loading lesson" style={{ position: "fixed", top: "12px", right: "24px", background: "var(--yellow)", color: "#000", padding: "8px 16px", borderRadius: "20px", fontWeight: 900, zIndex: 9999 }}>
-                Loading lesson…
-              </div>
-            )}
             <div className="duo-profile-view">
               <div className="duo-profile-header">
-                <div className="duo-profile-avatar-large">P</div>
+                <div className="duo-profile-avatar-large">
+                  {(userProfile?.username || 'P').charAt(0).toUpperCase()}
+                </div>
                 <div className="duo-profile-meta">
-                  <h1>Patchwork Learner</h1>
-                  <p className="duo-profile-handle">@patchwork_coder • Joined Sept 2026</p>
+                  <h1>{userProfile?.username || 'Profile unavailable'}</h1>
+                  <p className="duo-profile-handle">
+                    {userProfile ? userProfile.user_id : 'Server profile has not loaded'}
+                  </p>
                 </div>
               </div>
 
@@ -1700,8 +1487,8 @@ setExercisePhase('incorrect')
                 <div className="duo-stat-card">
                   <div className="duo-stat-card-icon">🔥</div>
                   <div>
-                    <div className="duo-stat-card-val">{gamification.streakCount || 0}</div>
-                    <div className="duo-stat-card-lbl">Day Streak</div>
+                    <div className="duo-stat-card-val">{profileStreak == null ? '—' : profileStreak}</div>
+                    <div className="duo-stat-card-lbl">Streak</div>
                   </div>
                 </div>
                 <div className="duo-stat-card">
@@ -1719,10 +1506,10 @@ setExercisePhase('incorrect')
                   </div>
                 </div>
                 <div className="duo-stat-card">
-                  <div className="duo-stat-card-icon">📅</div>
+                  <div className="duo-stat-card-icon">🏅</div>
                   <div>
-                    <div className="duo-stat-card-val">{dailyProgress.currentDay}</div>
-                    <div className="duo-stat-card-lbl">Current Day</div>
+                    <div className="duo-stat-card-val">{level}</div>
+                    <div className="duo-stat-card-lbl">Level</div>
                   </div>
                 </div>
               </div>
@@ -1840,7 +1627,7 @@ setExercisePhase('incorrect')
         gamification={{
           xp,
           level,
-          streak: gamification.streakCount || 0,
+          streak: profileStreak ?? 0,
           currentDay: dailyProgress.currentDay,
           dailyXp: gamification.dailyXp || 0,
           dailyGoal: gamification.dailyGoal || 30,
