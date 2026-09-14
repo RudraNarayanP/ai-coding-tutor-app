@@ -274,35 +274,3 @@ def test_quality_validator_passes_specific_content_bound_exercise():
     )
     assert res.passed is True
     assert res.score.overall_score >= 70.0
-
-
-def test_source_content_extracted_fallback():
-    from backend.custom_course_generator import CurriculumGenerator, LessonSlot
-
-    generator = CurriculumGenerator(provider=object())
-    slot = LessonSlot("practice", ["list-comprehensions"], ["Filtering"], "intermediate", 5, False, ["mcq"])
-
-    ex = generator._generate_content_extracted_exercise(
-        lesson_id="test-lesson-1",
-        c_title="List Comprehensions",
-        slot=slot,
-        domain="programming",
-        source_context="Python list comprehensions allow concise syntax to filter and transform iterables using brackets.",
-    )
-
-    assert ex.question is not None
-    assert "List Comprehensions" in ex.question or "list comprehensions" in ex.question or "source material" in ex.question
-    assert ex.type == "tiny_coding"
-    assert ex.starter_code.startswith("# Write")
-
-
-def test_system_prompt_builder_domain_specialization_and_few_shot():
-    from backend.custom_course_generator import CurriculumGenerator
-
-    generator = CurriculumGenerator(provider=object())
-    prompt = generator._build_system_prompt("programming")
-
-    assert "DOMAIN SPECIALIZATION (PROGRAMMING)" in prompt
-    assert "FEW-SHOT EXAMPLES OF QUESTION QUALITY" in prompt
-    assert "EXCELLENT QUESTION EXAMPLE" in prompt
-    assert "TERRIBLE QUESTION EXAMPLE" in prompt

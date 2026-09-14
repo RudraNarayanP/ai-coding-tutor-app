@@ -146,15 +146,11 @@ lesson_engine = LessonEngine(
 # Global active provider setting and lock for thread/async safety
 provider_lock = asyncio.Lock()
 current_provider_id = os.getenv("AI_PROVIDER", "ollama").lower().strip()
-fallback_provider_id = os.getenv("AI_FALLBACK_PROVIDER", "").lower().strip() or None
 
 def get_current_provider() -> AIProvider:
     return get_ai_provider(current_provider_id)
 
-def get_fallback_provider() -> AIProvider | None:
-    return get_ai_provider(fallback_provider_id) if fallback_provider_id else None
-
-tutor_service = TutorService(provider=get_current_provider(), fallback_provider=get_fallback_provider())
+tutor_service = TutorService(provider=get_current_provider())
 
 COURSE_METADATA = {
     "python": {
@@ -223,7 +219,6 @@ async def ollama_health():
 async def get_ai_providers():
     async with provider_lock:
         curr_id = current_provider_id
-        fb_id = fallback_provider_id
     statuses: list[ProviderStatus] = []
     for pid in ALL_PROVIDERS:
         prov = get_ai_provider(pid)
@@ -233,7 +228,6 @@ async def get_ai_providers():
 
     return ProvidersOverview(
         current_provider=curr_id,
-        fallback_provider=fb_id,
         providers=statuses,
     )
 
@@ -934,7 +928,6 @@ class SettingsSaveRequest(BaseModel):
 class SettingsResponse(BaseModel):
     providers: list[ProviderInfo]
     current_provider: str
-    fallback_provider: str | None = None
 
 
 @app.get("/api/settings", response_model=SettingsResponse)
@@ -945,11 +938,9 @@ async def get_settings():
             providers = await get_all_providers_info()
             async with provider_lock:
                 curr_id = current_provider_id
-                fb_id = fallback_provider_id
             return SettingsResponse(
                 providers=providers,
                 current_provider=curr_id,
-                fallback_provider=fb_id,
             )
     except asyncio.TimeoutError as exc:
         raise HTTPException(status_code=504, detail={"error": "settings_timeout"}) from exc

@@ -112,32 +112,3 @@ async def test_gemini_provider_tutor_success(sample_request):
         with patch.object(httpx.AsyncClient, "post", return_value=mock_response):
             res = await p.tutor(sample_request)
             assert "Set the country variable" in res
-
-
-@pytest.mark.asyncio
-async def test_tutor_service_fallback(sample_request):
-    primary = OpenAICompatibleProvider(
-        provider_id="openai",
-        name="OpenAI",
-        api_key_env="OPENAI_API_KEY",
-        model_env="OPENAI_MODEL",
-        default_model="gpt-4o-mini",
-    )
-    fallback = AnthropicProvider()
-
-    # Primary fails due to missing API key, fallback succeeds
-    with patch.dict(os.environ, {"OPENAI_API_KEY": "", "ANTHROPIC_API_KEY": "sk-ant-test"}):
-        mock_response = AsyncMock(spec=httpx.Response)
-        mock_response.status_code = 200
-        mock_response.json.return_value = {
-            "content": [{"text": "Fallback hint text"}]
-        }
-        mock_response.raise_for_status = lambda: None
-
-        service = TutorService(provider=primary, fallback_provider=fallback)
-        with patch.object(httpx.AsyncClient, "post", return_value=mock_response):
-            resp = await service.tutor(sample_request)
-            assert resp.available is True
-            assert resp.used_fallback is True
-            assert resp.provider == "anthropic"
-            assert resp.message == "Fallback hint text"

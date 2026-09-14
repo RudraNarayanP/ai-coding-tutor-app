@@ -80,18 +80,6 @@ async def test_code_exercise_empty_submission_fails_with_guidance():
 
 
 @pytest.mark.asyncio
-async def test_python_code_falls_back_to_static_when_sandbox_down():
-    class _DownExecutor:
-        async def run(self, payload):
-            raise SandboxError("Docker is unavailable on this machine.")
-
-    engine = _engine(_DownExecutor())
-    ex = _java_exercise(id="py-ex-2a")
-    passed, _ = await engine.grade_exercise(ex, {"code": JAVA_SOLUTION}, "python")
-    assert passed is True
-
-
-@pytest.mark.asyncio
 async def test_correct_answer_contains_check_for_code():
     engine = _engine()
     ex = _java_exercise(solution_code=None, tests=[], correct_answer='return "Java";')

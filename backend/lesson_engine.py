@@ -389,8 +389,7 @@ class LessonEngine:
     def _grade_code_static(self, exercise, code: str) -> tuple[bool, str]:
         """Grade a code submission without executing it.
 
-        Used for non-Python languages (no multi-language runner exists) and as a
-        fallback when the Docker sandbox is unavailable. Compares against the
+        Used for non-Python languages (no multi-language runner exists). Compares against the
         canonical solution or expected answer instead of running tests.
         """
         submitted = self._normalize_code(code)
@@ -541,17 +540,11 @@ class LessonEngine:
         elif ex_type in ("code", "tiny_coding", "identify_mistake"):
             code = str(user_input.get("code") or user_input.get("answer") or "")
             if exercise.tests and language.lower().strip() == "python":
-                try:
-                    res = await self.executor.run({"language": language, "code": code, "tests": [t.model_dump() for t in exercise.tests]})
-                except SandboxError:
-                    # Docker runner unavailable: grade statically instead of failing the submission.
-                    return self._grade_code_static(exercise, code)
+                res = await self.executor.run({"language": language, "code": code, "tests": [t.model_dump() for t in exercise.tests]})
                 passed = bool(res.get("passed", False))
                 feedback = "All tests passed!" if passed else "Some tests failed."
                 return passed, feedback
             elif exercise.tests or exercise.solution_code or exercise.correct_answer:
-                # Non-Python languages (and Docker outages) grade statically against
-                # the canonical solution / expected answer — never a 500.
                 return self._grade_code_static(exercise, code)
             else:
                 passed = bool(code.strip())
@@ -587,9 +580,7 @@ class LessonEngine:
                     break
 
         if not target_ex:
-            # Fallback mock exercise if not found
-            from .lesson_models import ExerciseDefinition
-            target_ex = ExerciseDefinition(id=exercise_id, type="code", tests=lesson.tests)
+            raise KeyError(f"Exercise '{exercise_id}' not found in lesson '{lesson_id}'.")
 
         passed, feedback = await self.grade_exercise(target_ex, payload, lang)
         xp_awarded = 0
@@ -688,10 +679,7 @@ class LessonEngine:
         # Gather exam exercises (mastery_exam or all sublesson exercises)
         exam_exercises = lesson.mastery_exam or [ex for sub in lesson.sublessons for ex in sub.exercises]
         if not exam_exercises:
-            # Fallback if no sublesson exercises exist
-            store.mark_mastered(lesson_id)
-            xp_bonus = store.add_xp(100)
-            return {"passed": True, "score_pct": 100, "xp_awarded": xp_bonus, "total_xp": store.state().xp}
+            raise ValueError(f"No exam exercises available for test-out in lesson '{lesson_id}'.")
 
         passed_count = 0
         weak_areas = []

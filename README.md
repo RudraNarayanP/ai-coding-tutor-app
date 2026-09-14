@@ -21,7 +21,6 @@ Copy `.env.example` to `.env` or export environment variables before launching t
 ```bash
 # Select Provider
 export AI_PROVIDER=ollama  # Options: ollama, openai, anthropic, openrouter, gemini
-export AI_FALLBACK_PROVIDER=  # Optional fallback provider
 
 # Ollama
 export OLLAMA_BASE_URL=http://localhost:11434

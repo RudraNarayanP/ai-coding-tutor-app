@@ -260,23 +260,6 @@ class LearningDomainClassifier:
         d = (graph.detected_domain or "").lower().strip()
         if d in DOMAIN_EXERCISE_POOLS:
             return d
-
-        # Keyword matching fallback
-        all_text = " ".join([n.label + " " + n.description + " " + " ".join(n.domain_tags) for n in graph.nodes]).lower()
-        if any(w in all_text for w in ["python", "code", "function", "variable", "class", "javascript", "c++", "algorithm"]):
-            return LearningDomain.PROGRAMMING
-        elif any(w in all_text for w in ["calculus", "derivative", "equation", "proof", "math", "matrix", "algebra"]):
-            return LearningDomain.MATHEMATICS
-        elif any(w in all_text for w in ["grammar", "vocabulary", "verb", "language", "spanish", "french", "sentence"]):
-            return LearningDomain.LANGUAGE_LEARNING
-        elif any(w in all_text for w in ["kernel", "memory", "network", "tcp", "operating system", "cpu", "process"]):
-            return LearningDomain.SYSTEMS
-        elif any(w in all_text for w in ["pandas", "dataframe", "regression", "model", "neural network", "dataset"]):
-            return LearningDomain.DATA_SCIENCE
-        elif any(w in all_text for w in ["physics", "chemistry", "biology", "molecule", "atom", "gene"]):
-            return LearningDomain.SCIENCE
-        elif any(w in all_text for w in ["automata", "turing", "logic", "boolean", "graph theory", "complexity"]):
-            return LearningDomain.THEORY
         return LearningDomain.GENERAL
 
     def select_exercise_types(
@@ -395,41 +378,7 @@ class ConceptGraphBuilder:
             source_summary=data.get("source_summary", "Extracted source material concepts."),
         )
 
-    def _fallback_graph(self, doc: SourceDocument) -> ConceptGraph:
-        c1 = ConceptNode(
-            id="core-foundations",
-            label=f"Foundations of {doc.title[:40]}",
-            description="Core principles and fundamental terminology.",
-            source_segments=[1],
-            difficulty="foundational",
-            domain_tags=["foundations"],
-            learning_objectives=["Understand core concepts"],
-        )
-        c2 = ConceptNode(
-            id="practical-application",
-            label="Practical Application & Implementation",
-            description="Applying foundational principles to practical scenarios.",
-            source_segments=[1],
-            difficulty="core",
-            domain_tags=["application"],
-            learning_objectives=["Apply learned concepts to practice"],
-        )
-        c3 = ConceptNode(
-            id="mastery-and-synthesis",
-            label="Advanced Mastery & Synthesis",
-            description="End-to-end evaluation and complex problem solving.",
-            source_segments=[1],
-            difficulty="advanced",
-            domain_tags=["mastery"],
-            learning_objectives=["Master advanced techniques"],
-        )
-        return ConceptGraph(
-            nodes=[c1, c2, c3],
-            edges=[("core-foundations", "practical-application"), ("practical-application", "mastery-and-synthesis")],
-            detected_domain="general",
-            detected_difficulty="beginner",
-            source_summary=f"Course concepts for {doc.title}.",
-        )
+
 
 
 # ─── CURRICULUM SEQUENCER ─────────────────────────────────────────────────────
@@ -462,8 +411,10 @@ class CurriculumSequencer:
         try:
             raw = await self.provider.generate_structured(system=system, user=prompt, max_tokens=3500)
             return self._parse_response(raw, graph)
-        except Exception:
-            return self._fallback_blueprint(graph)
+        except Exception as exc:
+            if isinstance(exc, GenerationError):
+                raise exc
+            raise GenerationError(f"Failed to sequence curriculum: {exc}")
 
     def _build_prompt(self, graph: ConceptGraph, retry_hint: str) -> str:
         nodes_info = "\n".join([f"- {n.id}: {n.label} ({n.difficulty})" for n in graph.nodes])
@@ -526,27 +477,7 @@ class CurriculumSequencer:
             sequencing_rationale=data.get("sequencing_rationale", "Structured in progressive difficulty order."),
         )
 
-    def _fallback_blueprint(self, graph: ConceptGraph) -> CurriculumBlueprint:
-        domain = self.classifier.classify(graph)
-        all_ids = [n.id for n in graph.nodes]
-        slots = [
-            LessonSlot("learn", all_ids[:1], ["Learn core principles"], "beginner", 5, False, self.classifier.select_exercise_types(domain, "learn", [])),
-            LessonSlot("practice", all_ids[1:2] or all_ids[:1], ["Practice application"], "beginner", 8, False, self.classifier.select_exercise_types(domain, "practice", [])),
-            LessonSlot("review", all_ids[1:2] or all_ids[:1], ["Review key concepts"], "intermediate", 6, False, self.classifier.select_exercise_types(domain, "review", [])),
-            LessonSlot("checkpoint", all_ids, ["Evaluate mastery"], "intermediate", 10, True, self.classifier.select_exercise_types(domain, "checkpoint", [])),
-        ]
-        u1 = UnitBlueprint(
-            title=f"Unit 1: Mastery of {graph.source_summary[:30]}",
-            concept_ids=all_ids,
-            lesson_slots=slots,
-            pedagogical_rationale="Fallback structured unit.",
-        )
-        return CurriculumBlueprint(
-            units=[u1],
-            total_lessons=len(slots),
-            domain=domain,
-            sequencing_rationale="Progressive sequence from basics to checkpoint evaluation.",
-        )
+
 
 
 # ─── STRUCTURE VALIDATOR ───────────────────────────────────────────────────────
@@ -1046,11 +977,9 @@ class CurriculumGenerator:
                 logger.warning(f"Generation attempt {attempt} encountered exception: {exc}")
 
         if not llm_data:
-            logger.warning(
-                f"Unit generation fell back to best available candidate (score: {best_score:.1f}/100) after 3 attempts. "
-                f"Error type: {GenerationErrorType.QUALITY_CHECK_FAILED}"
+            raise GenerationError(
+                f"Unit generation failed quality check (best score: {best_score:.1f}/100) after 3 attempts: {'; '.join(attempt_feedback)}"
             )
-            llm_data = best_llm_data
         if isinstance(llm_data, list):
             for item in llm_data:
                 if isinstance(item, dict) and "id" in item:
@@ -1211,11 +1140,7 @@ class CurriculumGenerator:
                     clean_opts.insert(0, ans)
 
                 if len(clean_opts) < 2:
-                    clean_opts = [
-                        ans or f"Primary mechanism of {c_title}",
-                        f"Secondary fallback configuration in {c_title}",
-                        f"Legacy implementation pattern for {c_title}",
-                    ]
+                    raise GenerationError(f"Exercise for {c_title} must have at least 2 non-placeholder options.")
 
                 ex_type = raw_ex.get("type", "mcq")
                 if ex_type not in ("mcq", "fill_blank", "code_completion", "tiny_coding", "true_false", "matching", "ordering"):
@@ -1261,17 +1186,8 @@ class CurriculumGenerator:
                         )
                     )
 
-                # Fallback content-bound exercise extraction from source material
-        if not exercises:
-            exercises.append(
-                self._generate_content_extracted_exercise(
-                    lesson_id=lesson_id,
-                    c_title=c_title,
-                    slot=slot,
-                    domain=domain,
-                    source_context=source_context,
-                )
-            )
+                if not exercises:
+            raise GenerationError(f"No valid exercises generated for lesson {lesson_id}.")
 
         sublessons = [
             SubLessonDefinition(

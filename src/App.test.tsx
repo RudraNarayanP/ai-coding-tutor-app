@@ -137,7 +137,6 @@ function setupFetch({
         json: () =>
           Promise.resolve({
             current_provider: 'ollama',
-            fallback_provider: null,
             providers: [
               {
                 provider: 'ollama',
@@ -705,8 +704,7 @@ describe('AI unavailable state', () => {
           json: () =>
             Promise.resolve({
               current_provider: 'ollama',
-              fallback_provider: null,
-              providers: [
+                providers: [
                 {
                   provider: 'ollama',
                   name: 'Ollama',

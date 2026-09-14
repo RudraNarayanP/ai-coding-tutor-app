@@ -30,7 +30,6 @@ class TutorResponse(BaseModel):
     available: bool = True
     provider: str | None = None
     model: str | None = None
-    used_fallback: bool = False
     error: str | None = None
 
 
@@ -50,7 +49,6 @@ ProviderHealth = ProviderStatus
 
 class ProvidersOverview(BaseModel):
     current_provider: str
-    fallback_provider: str | None = None
     providers: list[ProviderStatus]
 
 
