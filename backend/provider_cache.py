@@ -22,7 +22,9 @@ class CacheEntry:
     ttl: float  # Time to live in seconds
 
     def is_expired(self) -> bool:
-        return time.time() - self.timestamp > self.ttl
+        if self.ttl <= 0:
+            return True
+        return time.time() - self.timestamp >= self.ttl
 
 
 class ProviderCache:
