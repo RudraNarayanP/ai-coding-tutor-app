@@ -52,6 +52,22 @@ KNOWN_TECH = {
     "sqlite3": "sqlite3",
     "sqlalchemy": "sqlalchemy",
     "pydantic": "pydantic",
+    # ML / data-science stacks (common in coding tutorials)
+    "torch": "torch",
+    "pytorch": "torch",
+    "tensorflow": "tensorflow",
+    "keras": "keras",
+    "transformers": "transformers",
+    "tiktoken": "tiktoken",
+    "tokenizers": "tokenizers",
+    "datasets": "datasets",
+    "accelerate": "accelerate",
+    "einops": "einops",
+    "sklearn": "scikit-learn",
+    "scikit-learn": "scikit-learn",
+    "scipy": "scipy",
+    "tqdm": "tqdm",
+    "wandb": "wandb",
     "json": "json",
     "os": "os",
     "sys": "sys",
@@ -64,6 +80,14 @@ KNOWN_TECH = {
     "pathlib": "pathlib",
     "asyncio": "asyncio",
     "dataclasses": "dataclasses",
+}
+
+# Common English/filler words that must never be treated as code identifiers.
+_STOPWORDS = {
+    "so", "that", "which", "the", "a", "an", "to", "it", "this", "then", "and",
+    "for", "of", "in", "on", "is", "are", "with", "your", "our", "we", "you",
+    "some", "any", "each", "them", "its", "here", "there", "now", "next", "also",
+    "will", "can", "should", "into", "from", "our", "my", "his", "her",
 }
 
 _ACTION_VERBS = (
@@ -137,68 +161,89 @@ def _split_steps(text: str) -> list[str]:
     return raw_lines
 
 
+def _reject(name: str | None) -> bool:
+    """True if a captured identifier is not a usable code symbol."""
+    if not name or len(name) < 2:
+        return True
+    low = name.lower()
+    return low in _ACTION_VERBS or low in _STOPWORDS
+
+
 def _extract_target(sentence: str) -> tuple[str, str] | None:
     """Derive a verification (kind, target) from a step sentence.
 
+    Identifier case is preserved (captured from the original sentence with
+    case-insensitive keyword matching) so a check for `GPT` matches the learner's
+    real class name — not a lowercased `gpt` that could never match.
+
     Returns None when the sentence has no concrete, verifiable coding action.
     """
+    IC = re.IGNORECASE
     s = sentence.lower()
 
-    # import / install a package
-    m = re.search(rf"\b(?:import|installing|install)\s+(?:the\s+)?(?:package\s+)?({_IDENT})", s)
+    # import / install a package (identifier captured with original case).
+    m = re.search(rf"\b(?:import|installing|install)\s+(?:the\s+)?(?:package\s+)?({_IDENT})", sentence, IC)
     if m:
         module = m.group(1)
-        # `from X import Y` — prefer the package root X.
-        mf = re.search(rf"\bfrom\s+({_IDENT})\s+import\b", s)
+        mf = re.search(rf"\bfrom\s+({_IDENT})\s+import\b", sentence, IC)
         if mf:
             module = mf.group(1)
-        return ("import", module)
+        # Normalise dotted/aliased imports to the package root.
+        return ("import", module.split(".")[0])
 
-    m = re.search(rf"\bfrom\s+({_IDENT})\s+import\b", s)
+    m = re.search(rf"\bfrom\s+({_IDENT})\s+import\b", sentence, IC)
     if m:
-        return ("import", m.group(1))
+        return ("import", m.group(1).split(".")[0])
 
-    # define / write / create a function (or method)
+    # "the forward method", "the train function" — name precedes the keyword.
+    m = re.search(rf"\b(?:the\s+)({_IDENT})\s+(?:method|function)\b", sentence, IC)
+    if m and not _reject(m.group(1)):
+        return ("symbol", m.group(1))
+
+    # "def name", or "define/write a function called name" — name follows keyword.
     m = re.search(
-        rf"\b(?:def|function|method)\b[^A-Za-z0-9_]*({_IDENT})"
+        rf"\bdef\s+({_IDENT})"
         rf"|\b(?:define|write|create|implement|add)\s+(?:a\s+|an\s+|the\s+)?(?:function|method)\s+(?:called\s+|named\s+)?({_IDENT})",
-        s,
+        sentence,
+        IC,
     )
     if m:
         name = m.group(1) or m.group(2)
-        if name and name not in _ACTION_VERBS:
+        if not _reject(name):
             return ("symbol", name)
 
-    # High-precision: an explicitly named symbol — "a variable called total",
-    # "an object named client".
-    m = re.search(rf"\b(?:called|named)\s+({_IDENT})", s)
-    if m and m.group(1) not in _ACTION_VERBS:
+    # High-precision: an explicitly named symbol — "a class called GPT",
+    # "a variable named total", "a dataclass called GPTConfig".
+    m = re.search(rf"\b(?:called|named)\s+({_IDENT})", sentence, IC)
+    if m and not _reject(m.group(1)):
         return ("symbol", m.group(1))
 
     # "create/build/configure a <type-noun>" → the object itself is the symbol,
-    # e.g. "create the chain" → chain, "build a client" → client. The type noun
-    # must immediately follow the article so descriptive prose ("build a word
-    # frequency counter") does not produce spurious symbols.
+    # e.g. "create the chain" → chain. The type noun must immediately follow the
+    # article so descriptive prose ("build a word frequency counter") does not
+    # produce spurious symbols.
     _type_noun = (
         r"variable|object|client|prompt|chain|model|counter|list|dict|dictionary|"
-        r"array|instance|app|server|router|agent|pipeline|parser|handler|config|session"
+        r"array|instance|app|server|router|agent|pipeline|parser|handler|config|session|"
+        r"optimizer|dataset|dataloader|tokenizer|tensor"
     )
     m = re.search(
         rf"\b(?:create|initialize|initialise|declare|make|build|configure|set\s+up|setup|add)\s+"
         rf"(?:a\s+|an\s+|the\s+)({_type_noun})\b",
-        s,
+        sentence,
+        IC,
     )
     if m:
-        return ("symbol", m.group(1))
+        return ("symbol", m.group(1).lower())
 
     # "store ... in a variable X"
-    m = re.search(rf"\bstore\b.*?\bin\s+(?:a\s+|the\s+)?variable\s+(?:called\s+|named\s+)?({_IDENT})", s)
-    if m and m.group(1) not in _ACTION_VERBS:
+    m = re.search(rf"\bstore\b.*?\bin\s+(?:a\s+|the\s+)?variable\s+(?:called\s+|named\s+)?({_IDENT})", sentence, IC)
+    if m and not _reject(m.group(1)):
         return ("symbol", m.group(1))
 
     # call / run a specific function
-    m = re.search(rf"\bcall\s+(?:the\s+)?({_IDENT})", s)
-    if m and m.group(1) not in _ACTION_VERBS:
+    m = re.search(rf"\bcall\s+(?:the\s+)?({_IDENT})", sentence, IC)
+    if m and not _reject(m.group(1)):
         return ("function_call", m.group(1))
 
     # print / output → verify the program prints something

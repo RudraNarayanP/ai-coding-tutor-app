@@ -39,6 +39,17 @@ async def build_project(
         title=title,
         filename=filename,
     )
+    # If a YouTube source came back without a transcript (a common case when
+    # automated transcript access is blocked for the server's IP/region), tell the
+    # learner exactly how to proceed instead of fabricating a project from a bare
+    # title.
+    if doc.source_type in ("youtube_url", "youtube_playlist") and doc.access_level == "titles_only":
+        raise ProjectGroundingError(
+            "YouTube didn't return a transcript for this video, so there's no source "
+            "content to ground a project in. Open the video on YouTube, click the "
+            "\"…\" menu → \"Show transcript\", copy the text, then use the "
+            "\"Paste Transcript / Notes\" option here to build the guided project."
+        )
     project = plan_project(doc, title=title, course_id=course_id)
     return store.create(project)
 
