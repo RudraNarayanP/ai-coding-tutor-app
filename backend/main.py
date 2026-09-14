@@ -66,6 +66,10 @@ from .custom_course_generator import (
 from .sandbox import SandboxError, sandbox
 from .feedback_store import FeedbackStore
 from .tutor_service import TutorService
+from .project_models import ProjectView, WorkspaceFile
+from .project_planner import ProjectGroundingError
+from .project_store import ProjectStore
+from . import project_service
 
 logger = logging.getLogger("patchwork-tutor")
 
@@ -139,6 +143,10 @@ for lang, curr in loaded_curriculums.items():
 
 user_store = UserStore(storage_path=base_path / "users_state.json")
 feedback_store = FeedbackStore(storage_path=base_path / "feedback_state.json")
+
+# Create Course guided-project state (isolated from lessons/curriculum). Stored
+# under curriculum/generated/projects/ which is already gitignored.
+project_store = ProjectStore(storage_dir=curriculum_root / "generated" / "projects")
 
 lesson_engine = LessonEngine(
     executor=sandbox,
@@ -910,6 +918,139 @@ async def regenerate_course_unit(course_id: str, req: RegenerateUnitRequest):
 
 
 
+
+
+# ─── Create Course: Guided Project Workspace ─────────────────────────────────
+# These endpoints power the Create Course project experience ONLY. They are
+# isolated from lessons/curriculum/progression and do not affect any other
+# section of Patchwork.
+
+
+class ProjectCreateRequest(BaseModel):
+    material_type: str = Field(default="transcript", max_length=40)
+    content: str = Field(default="", max_length=200_000)
+    title: str = Field(default="", max_length=200)
+    filename: str | None = Field(default=None, max_length=200)
+
+
+class WorkspaceFilePayload(BaseModel):
+    path: str = Field(min_length=1, max_length=200)
+    content: str = Field(default="", max_length=200_000)
+
+
+class WorkspaceUpdateRequest(BaseModel):
+    files: list[WorkspaceFilePayload] = Field(default_factory=list, max_length=100)
+
+
+class ProjectRunRequest(BaseModel):
+    files: list[WorkspaceFilePayload] | None = None
+    stdin: str = Field(default="", max_length=64 * 1024)
+
+
+class ProjectNextRequest(BaseModel):
+    files: list[WorkspaceFilePayload] | None = None
+
+
+class ProjectGuidanceRequest(BaseModel):
+    question: str = Field(default="", max_length=1000)
+    files: list[WorkspaceFilePayload] | None = None
+
+
+def _to_workspace_files(payload: list[WorkspaceFilePayload] | None) -> list[WorkspaceFile] | None:
+    if payload is None:
+        return None
+    return [WorkspaceFile(path=f.path, content=f.content) for f in payload]
+
+
+@app.post("/api/create-course/projects")
+async def create_project(req: ProjectCreateRequest):
+    course_id = f"project-{uuid.uuid4().hex[:8]}"
+    try:
+        project = await project_service.build_project(
+            ingestion_service,
+            project_store,
+            material_type=req.material_type,
+            content=req.content,
+            title=req.title,
+            filename=req.filename,
+            course_id=course_id,
+            provider=get_current_provider(),
+        )
+    except IngestionError as exc:
+        raise HTTPException(status_code=400, detail={"error": "ingestion_failed", "message": str(exc)})
+    except ProjectGroundingError as exc:
+        raise HTTPException(status_code=422, detail={"error": "ungroundable_source", "message": str(exc)})
+    return ProjectView.from_project(project)
+
+
+@app.get("/api/create-course/projects")
+async def list_projects():
+    return project_store.list_summaries()
+
+
+@app.get("/api/create-course/projects/{course_id}")
+async def get_project(course_id: str):
+    project = project_store.get(course_id)
+    if not project:
+        raise HTTPException(status_code=404, detail={"error": "project_not_found"})
+    return ProjectView.from_project(project)
+
+
+@app.delete("/api/create-course/projects/{course_id}")
+async def delete_project(course_id: str):
+    if not project_store.delete(course_id):
+        raise HTTPException(status_code=404, detail={"error": "project_not_found"})
+    return {"status": "deleted", "course_id": course_id}
+
+
+@app.put("/api/create-course/projects/{course_id}/workspace")
+async def save_project_workspace(course_id: str, req: WorkspaceUpdateRequest):
+    files = _to_workspace_files(req.files) or []
+    project = project_store.save_workspace(course_id, files)
+    if not project:
+        raise HTTPException(status_code=404, detail={"error": "project_not_found"})
+    return ProjectView.from_project(project)
+
+
+@app.post("/api/create-course/projects/{course_id}/run")
+async def run_project_workspace(course_id: str, req: ProjectRunRequest):
+    project = project_store.get(course_id)
+    if not project:
+        raise HTTPException(status_code=404, detail={"error": "project_not_found"})
+    files = _to_workspace_files(req.files)
+    if files is not None:
+        project = project_store.save_workspace(course_id, files) or project
+    try:
+        return await project_service.run_project(project_store, sandbox, project, stdin=req.stdin)
+    except SandboxError as exc:
+        raise HTTPException(status_code=exc.status_code, detail={"error": "sandbox_error", "message": str(exc)})
+
+
+@app.post("/api/create-course/projects/{course_id}/next")
+async def project_next(course_id: str, req: ProjectNextRequest):
+    project = project_store.get(course_id)
+    if not project:
+        raise HTTPException(status_code=404, detail={"error": "project_not_found"})
+    files = _to_workspace_files(req.files)
+    if files is not None:
+        project = project_store.save_workspace(course_id, files) or project
+    try:
+        result = await project_service.evaluate_next(project_store, sandbox, project)
+    except SandboxError as exc:
+        raise HTTPException(status_code=exc.status_code, detail={"error": "sandbox_error", "message": str(exc)})
+    result["project"] = ProjectView.from_project(project).model_dump()
+    return result
+
+
+@app.post("/api/create-course/projects/{course_id}/guidance")
+async def project_guidance(course_id: str, req: ProjectGuidanceRequest):
+    project = project_store.get(course_id)
+    if not project:
+        raise HTTPException(status_code=404, detail={"error": "project_not_found"})
+    files = _to_workspace_files(req.files)
+    if files is not None:
+        project = project_store.save_workspace(course_id, files) or project
+    return await project_service.guidance(sandbox, get_current_provider(), project, question=req.question)
 
 
 @app.post("/api/tutor", response_model=TutorResponse)

@@ -11,6 +11,17 @@ describe('CreatePage Component', () => {
     expect(screen.getByText('YouTube URL / Playlist')).toBeInTheDocument()
     expect(screen.getByText('Paste Transcript / Notes')).toBeInTheDocument()
     expect(screen.getByText('Upload File')).toBeInTheDocument()
+    // Create Course is now dual-mode: Guided Project (default) and Interactive Course.
+    expect(screen.getByText('🛠️ Guided Project')).toBeInTheDocument()
+    expect(screen.getByText('📚 Interactive Course')).toBeInTheDocument()
+    expect(screen.getByText('Build Guided Project 🛠️')).toBeInTheDocument()
+  })
+
+  it('can switch to interactive course mode', () => {
+    const handleCourseReady = vi.fn()
+    render(<CreatePage onCourseReady={handleCourseReady} />)
+
+    fireEvent.click(screen.getByText('📚 Interactive Course'))
     expect(screen.getByText('Generate Interactive Course ✨')).toBeInTheDocument()
   })
 
