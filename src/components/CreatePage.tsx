@@ -3,53 +3,23 @@ import { ProjectWorkspace } from './create/ProjectWorkspace'
 import { projectApi, type ProjectSummary } from '../utils/projectApi'
 
 export interface CreatePageProps {
-  onCourseReady: (courseId: string) => void
+  // Retained for backwards compatibility with the app shell; the guided-project
+  // flow manages its own workspace and does not use this callback.
+  onCourseReady?: (courseId: string) => void
 }
 
-export type CreateStep = 'input' | 'generating' | 'preview' | 'editing' | 'workspace'
+export type CreateStep = 'input' | 'workspace'
 
-export type BuildMode = 'course' | 'project'
-
-export interface CoursePreviewData {
-  course_id: string
-  title: string
-  source_name: string
-  source_url: string
-  unit_count: number
-  lesson_count: number
-  exercise_count: number
-  checkpoint_count: number
-  topics: string[]
-  difficulty: string
-  domain: string
-  language: string
-  estimated_minutes: number
-  sequencing_rationale: string
-  access_notes: string[]
-}
-
-export const CreatePage: React.FC<CreatePageProps> = ({ onCourseReady }) => {
+export const CreatePage: React.FC<CreatePageProps> = () => {
   const [step, setStep] = useState<CreateStep>('input')
-  const [buildMode, setBuildMode] = useState<BuildMode>('project')
   const [materialType, setMaterialType] = useState<'youtube_url' | 'youtube_playlist' | 'transcript' | 'file_upload'>('youtube_url')
   const [inputContent, setInputContent] = useState('')
   const [courseTitle, setCourseTitle] = useState('')
-  const [jobId, setJobId] = useState<string | null>(null)
 
-  // Guided Project (Create Course-only) state
   const [projectCourseId, setProjectCourseId] = useState<string | null>(null)
   const [creatingProject, setCreatingProject] = useState(false)
   const [projects, setProjects] = useState<ProjectSummary[]>([])
-
-  const [stages, setStages] = useState<Array<{ name: string; label: string; state: string }>>([])
-  const [preview, setPreview] = useState<CoursePreviewData | null>(null)
   const [errorMessage, setErrorMessage] = useState<string | null>(null)
-  const [duplicateCourse, setDuplicateCourse] = useState<{ existing_course_id: string; existing_title: string } | null>(null)
-
-  // Edit controls state
-  const [editTitle, setEditTitle] = useState('')
-  const [editDifficulty, setEditDifficulty] = useState('beginner')
-  const [editPedagogicalStyle, setEditPedagogicalStyle] = useState('conceptual')
 
   // Load resumable guided projects for the Create Course section.
   useEffect(() => {
@@ -93,116 +63,6 @@ export const CreatePage: React.FC<CreatePageProps> = ({ onCourseReady }) => {
     setStep('workspace')
   }
 
-  // Submit Course Generation Request
-  const handleStartGeneration = async (forceDuplicate = false) => {
-    setErrorMessage(null)
-    setDuplicateCourse(null)
-
-    let reqType = materialType
-    if (materialType === 'youtube_url' && inputContent.includes('list=')) {
-      reqType = 'youtube_playlist'
-    }
-
-    try {
-      const res = await fetch('/api/generate-course', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          material_type: reqType,
-          content: inputContent,
-          title: courseTitle,
-          force_duplicate: forceDuplicate,
-        }),
-      })
-
-      if (res.status === 409) {
-        const dupData = await res.json()
-        setDuplicateCourse({
-          existing_course_id: dupData.detail.existing_course_id,
-          existing_title: dupData.detail.existing_title,
-        })
-        return
-      }
-
-      if (!res.ok) {
-        const errData = await res.json()
-        setErrorMessage(errData.detail?.message || 'Failed to start course generation.')
-        return
-      }
-
-      const data = await res.json()
-      setJobId(data.job_id)
-      setStep('generating')
-    } catch (err) {
-      console.error('Error starting generation:', err)
-      setErrorMessage('Network error initiating course generation.')
-    }
-  }
-
-  // Poll Job Status during 'generating' step safely without memory leaks
-  useEffect(() => {
-    if (step !== 'generating' || !jobId) return
-
-    let isMounted = true
-
-    const pollStatus = async () => {
-      try {
-        const res = await fetch(`/api/generate-course/${jobId}/status`)
-        if (!isMounted) return
-
-        if (res.ok) {
-          const data = await res.json()
-          if (!isMounted) return
-
-          setStages(data.stages || [])
-
-          if (data.status === 'draft' && data.preview) {
-            setPreview(data.preview)
-            setEditTitle(data.preview.title)
-            setEditDifficulty(data.preview.difficulty || 'beginner')
-            setStep('preview')
-          } else if (data.status === 'error') {
-            setErrorMessage(data.error || 'Course generation failed.')
-            setStep('input')
-          }
-        } else {
-          console.error(`Polling status failed with status: ${res.status}`)
-        }
-      } catch (err) {
-        if (isMounted) {
-          console.error('Error polling generation status:', err)
-        }
-      }
-    }
-
-    pollStatus()
-    const interval = setInterval(pollStatus, 1500)
-
-    return () => {
-      isMounted = false
-      clearInterval(interval)
-    }
-  }, [step, jobId])
-
-  // Confirm Draft Course
-  const handleConfirmCourse = async () => {
-    if (!jobId) return
-    try {
-      const res = await fetch(`/api/generate-course/${jobId}/confirm`, {
-        method: 'POST',
-      })
-      if (res.ok) {
-        const courseSummary = await res.json()
-        onCourseReady(courseSummary.id)
-      } else {
-        setErrorMessage('Failed to confirm and active course.')
-      }
-    } catch (err) {
-      console.error('Error confirming course:', err)
-      setErrorMessage('Network error confirming course.')
-    }
-  }
-
   // Guided Project workspace takes over the Create Course view.
   if (step === 'workspace' && projectCourseId) {
     return (
@@ -221,7 +81,7 @@ export const CreatePage: React.FC<CreatePageProps> = ({ onCourseReady }) => {
       <div style={{ marginBottom: '24px', textAlign: 'center' }}>
         <h1 style={{ fontSize: '28px', fontWeight: 900, color: 'var(--ink)' }}>✨ AI Course Builder</h1>
         <p style={{ fontSize: '15px', fontWeight: 700, color: 'var(--ink-soft)' }}>
-          Bring a tutorial. Patchwork turns it into a guided project you actually build — or a structured interactive course.
+          Bring a tutorial — a YouTube video, playlist, transcript, or notes. Patchwork turns it into a guided project you actually build, step by step.
         </p>
       </div>
 
@@ -231,34 +91,8 @@ export const CreatePage: React.FC<CreatePageProps> = ({ onCourseReady }) => {
         </div>
       )}
 
-      {/* Duplicate Course Resolution Modal */}
-      {duplicateCourse && (
-        <div style={{ border: '2px solid var(--yellow-dark)', borderRadius: '16px', background: '#fefce8', padding: '20px', marginBottom: '24px' }}>
-          <h3 style={{ fontSize: '18px', fontWeight: 900, color: '#854d0e', marginBottom: '8px' }}>
-            Existing Course Found!
-          </h3>
-          <p style={{ fontSize: '14px', fontWeight: 700, color: '#a16207', marginBottom: '16px' }}>
-            You have previously imported this source as <strong>"{duplicateCourse.existing_title}"</strong>.
-          </p>
-          <div style={{ display: 'flex', gap: '12px' }}>
-            <button
-              className="duo-button duo-button-primary"
-              onClick={() => onCourseReady(duplicateCourse.existing_course_id)}
-            >
-              OPEN EXISTING
-            </button>
-            <button
-              className="duo-button duo-button-secondary"
-              onClick={() => handleStartGeneration(true)}
-            >
-              CREATE NEW VERSION
-            </button>
-          </div>
-        </div>
-      )}
-
       {/* Resume in-progress guided projects */}
-      {step === 'input' && projects.length > 0 && (
+      {projects.length > 0 && (
         <div className="duo-card" style={{ padding: '16px', marginBottom: '20px' }}>
           <h3 style={{ fontSize: '14px', fontWeight: 900, marginBottom: '10px', color: 'var(--ink)' }}>
             Resume a project
@@ -281,248 +115,74 @@ export const CreatePage: React.FC<CreatePageProps> = ({ onCourseReady }) => {
         </div>
       )}
 
-      {/* STEP 1: INPUT */}
-      {step === 'input' && (
-        <div className="duo-card" style={{ padding: '24px' }}>
-          {/* Build mode selector: Guided Project (new) vs Interactive Course (existing) */}
-          <div style={{ display: 'flex', gap: '10px', marginBottom: '20px' }}>
+      <div className="duo-card" style={{ padding: '24px' }}>
+        <div style={{ display: 'flex', gap: '8px', marginBottom: '20px' }}>
+          {[
+            { type: 'youtube_url', label: 'YouTube URL / Playlist' },
+            { type: 'transcript', label: 'Paste Transcript / Notes' },
+            { type: 'file_upload', label: 'Upload File' },
+          ].map(({ type, label }) => (
             <button
-              className={`duo-button ${buildMode === 'project' ? 'duo-button-primary' : 'duo-button-secondary'}`}
-              onClick={() => setBuildMode('project')}
-              style={{ flex: 1, padding: '12px', flexDirection: 'column', alignItems: 'flex-start', textAlign: 'left' }}
+              key={type}
+              className={`duo-button ${materialType === type ? 'duo-button-primary' : 'duo-button-secondary'}`}
+              onClick={() => setMaterialType(type as any)}
+              style={{ flex: 1, padding: '10px' }}
             >
-              <span style={{ fontWeight: 900 }}>🛠️ Guided Project</span>
-              <span style={{ fontSize: '11px', fontWeight: 700, opacity: 0.85 }}>
-                Build one persistent project, step by step
-              </span>
+              {label}
             </button>
-            <button
-              className={`duo-button ${buildMode === 'course' ? 'duo-button-primary' : 'duo-button-secondary'}`}
-              onClick={() => setBuildMode('course')}
-              style={{ flex: 1, padding: '12px', flexDirection: 'column', alignItems: 'flex-start', textAlign: 'left' }}
-            >
-              <span style={{ fontWeight: 900 }}>📚 Interactive Course</span>
-              <span style={{ fontSize: '11px', fontWeight: 700, opacity: 0.85 }}>
-                Lessons, exercises &amp; checkpoints
-              </span>
-            </button>
+          ))}
+        </div>
+
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '16px', marginBottom: '24px' }}>
+          <div>
+            <label style={{ display: 'block', fontWeight: 800, fontSize: '13px', marginBottom: '6px' }}>
+              Project Title (Optional):
+            </label>
+            <input
+              type="text"
+              placeholder="e.g., Reproduce GPT-2 (124M)"
+              value={courseTitle}
+              onChange={(e) => setCourseTitle(e.target.value)}
+              style={{ width: '100%', padding: '12px', borderRadius: '10px', border: '2px solid var(--line)', fontWeight: 700 }}
+            />
           </div>
 
-          <div style={{ display: 'flex', gap: '8px', marginBottom: '20px' }}>
-            {[
-              { type: 'youtube_url', label: 'YouTube URL / Playlist' },
-              { type: 'transcript', label: 'Paste Transcript / Notes' },
-              { type: 'file_upload', label: 'Upload File' },
-            ].map(({ type, label }) => (
-              <button
-                key={type}
-                className={`duo-button ${materialType === type ? 'duo-button-primary' : 'duo-button-secondary'}`}
-                onClick={() => setMaterialType(type as any)}
-                style={{ flex: 1, padding: '10px' }}
-              >
-                {label}
-              </button>
-            ))}
-          </div>
-
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '16px', marginBottom: '24px' }}>
-            <div>
-              <label style={{ display: 'block', fontWeight: 800, fontSize: '13px', marginBottom: '6px' }}>
-                Course Title (Optional):
-              </label>
+          <div>
+            <label style={{ display: 'block', fontWeight: 800, fontSize: '13px', marginBottom: '6px' }}>
+              {materialType === 'youtube_url' ? 'YouTube Video or Playlist URL:' : 'Source Content / Transcript:'}
+            </label>
+            {materialType === 'youtube_url' ? (
               <input
                 type="text"
-                placeholder="e.g., Master Quantum Mechanics & Computing"
-                value={courseTitle}
-                onChange={(e) => setCourseTitle(e.target.value)}
+                placeholder="https://www.youtube.com/watch?v=... or playlist URL"
+                value={inputContent}
+                onChange={(e) => setInputContent(e.target.value)}
                 style={{ width: '100%', padding: '12px', borderRadius: '10px', border: '2px solid var(--line)', fontWeight: 700 }}
               />
-            </div>
-
-            <div>
-              <label style={{ display: 'block', fontWeight: 800, fontSize: '13px', marginBottom: '6px' }}>
-                {materialType === 'youtube_url' ? 'YouTube Video or Playlist URL:' : 'Source Content / Transcript:'}
-              </label>
-              {materialType === 'youtube_url' ? (
-                <input
-                  type="text"
-                  placeholder="https://www.youtube.com/watch?v=... or playlist URL"
-                  value={inputContent}
-                  onChange={(e) => setInputContent(e.target.value)}
-                  style={{ width: '100%', padding: '12px', borderRadius: '10px', border: '2px solid var(--line)', fontWeight: 700 }}
-                />
-              ) : (
-                <textarea
-                  rows={8}
-                  placeholder="Paste raw transcript, study guide, or Markdown notes here..."
-                  value={inputContent}
-                  onChange={(e) => setInputContent(e.target.value)}
-                  style={{ width: '100%', padding: '12px', borderRadius: '10px', border: '2px solid var(--line)', fontWeight: 700, fontFamily: 'inherit' }}
-                />
-              )}
-            </div>
-          </div>
-
-          <button
-            className="duo-button duo-button-primary"
-            onClick={() => (buildMode === 'project' ? handleStartProject() : handleStartGeneration(false))}
-            disabled={(!inputContent.trim() && !courseTitle.trim()) || creatingProject}
-            style={{ width: '100%', padding: '14px', fontSize: '16px' }}
-          >
-            {buildMode === 'project'
-              ? creatingProject
-                ? 'Building your project…'
-                : 'Build Guided Project 🛠️'
-              : 'Generate Interactive Course ✨'}
-          </button>
-          {buildMode === 'project' && (
-            <p style={{ fontSize: '12px', fontWeight: 700, color: 'var(--ink-soft)', marginTop: '10px', textAlign: 'center' }}>
-              You'll get one persistent workspace and build the source's project milestone by milestone.
-            </p>
-          )}
-        </div>
-      )}
-
-      {/* STEP 2: GENERATING PROGRESS TRACKER */}
-      {step === 'generating' && (
-        <div className="duo-card" style={{ padding: '32px' }}>
-          <h2 style={{ fontSize: '20px', fontWeight: 900, marginBottom: '20px', textAlign: 'center' }}>
-            Building Your AI Custom Course…
-          </h2>
-
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '12px', marginBottom: '24px' }}>
-            {stages.map((st) => (
-              <div key={st.name} style={{ display: 'flex', alignItems: 'center', gap: '12px', fontSize: '15px', fontWeight: 800 }}>
-                <span style={{ fontSize: '18px' }}>
-                  {st.state === 'done' ? '✓' : st.state === 'active' ? '🔄' : st.state === 'error' ? '❌' : '○'}
-                </span>
-                <span style={{ color: st.state === 'done' ? 'var(--green)' : st.state === 'active' ? '#84d8ff' : 'var(--ink-soft)' }}>
-                  {st.label}
-                </span>
-              </div>
-            ))}
-          </div>
-        </div>
-      )}
-
-      {/* STEP 3: PREVIEW */}
-      {step === 'preview' && preview && (
-        <div className="duo-card" style={{ padding: '32px' }}>
-          <div style={{ borderBottom: '2px solid var(--line)', paddingBottom: '16px', marginBottom: '20px' }}>
-            <span style={{ fontSize: '12px', fontWeight: 900, color: 'var(--blue-dark)', textTransform: 'uppercase' }}>
-              COURSE PREVIEW
-            </span>
-            <h2 style={{ fontSize: '24px', fontWeight: 900, marginTop: '4px' }}>{preview.title}</h2>
-            <p style={{ fontSize: '14px', fontWeight: 700, color: 'var(--ink-soft)' }}>
-              Source: {preview.source_name}
-            </p>
-          </div>
-
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '12px', marginBottom: '24px', textAlign: 'center' }}>
-            <div style={{ padding: '12px', background: 'var(--surface-sunken)', borderRadius: '10px', border: '2px solid var(--line)', color: 'var(--ink)' }}>
-              <div style={{ fontSize: '20px', fontWeight: 900 }}>{preview.unit_count}</div>
-              <div style={{ fontSize: '12px', fontWeight: 700, color: 'var(--ink-soft)' }}>UNITS</div>
-            </div>
-            <div style={{ padding: '12px', background: 'var(--surface-sunken)', borderRadius: '10px', border: '2px solid var(--line)', color: 'var(--ink)' }}>
-              <div style={{ fontSize: '20px', fontWeight: 900 }}>{preview.lesson_count}</div>
-              <div style={{ fontSize: '12px', fontWeight: 700, color: 'var(--ink-soft)' }}>LESSONS</div>
-            </div>
-            <div style={{ padding: '12px', background: 'var(--surface-sunken)', borderRadius: '10px', border: '2px solid var(--line)', color: 'var(--ink)' }}>
-              <div style={{ fontSize: '20px', fontWeight: 900 }}>{preview.exercise_count}</div>
-              <div style={{ fontSize: '12px', fontWeight: 700, color: 'var(--ink-soft)' }}>EXERCISES</div>
-            </div>
-            <div style={{ padding: '12px', background: 'var(--surface-sunken)', borderRadius: '10px', border: '2px solid var(--line)', color: 'var(--ink)' }}>
-              <div style={{ fontSize: '20px', fontWeight: 900 }}>{preview.checkpoint_count}</div>
-              <div style={{ fontSize: '12px', fontWeight: 700, color: 'var(--ink-soft)' }}>CHECKPOINTS</div>
-            </div>
-          </div>
-
-          {preview.sequencing_rationale && (
-            <div style={{ background: 'var(--surface-sunken)', padding: '16px', borderRadius: '12px', marginBottom: '24px', border: '2px solid var(--line)' }}>
-              <h4 style={{ fontSize: '14px', fontWeight: 800, marginBottom: '6px', color: 'var(--ink)' }}>How this course is structured:</h4>
-              <p style={{ fontSize: '13px', fontWeight: 600, color: 'var(--ink-soft)' }}>{preview.sequencing_rationale}</p>
-            </div>
-          )}
-
-          <div style={{ display: 'flex', gap: '12px', justifyContent: 'flex-end' }}>
-            <button
-              className="duo-button duo-button-secondary"
-              onClick={() => setStep('editing')}
-            >
-              EDIT COURSE
-            </button>
-            <button
-              className="duo-button duo-button-primary"
-              onClick={handleConfirmCourse}
-              style={{ padding: '12px 24px' }}
-            >
-              START LEARNING 🚀
-            </button>
-          </div>
-        </div>
-      )}
-
-      {/* STEP 4: EDITING */}
-      {step === 'editing' && preview && (
-        <div className="duo-card" style={{ padding: '32px' }}>
-          <h2 style={{ fontSize: '22px', fontWeight: 900, marginBottom: '20px' }}>Customize Course Settings</h2>
-
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '16px', marginBottom: '24px' }}>
-            <div>
-              <label style={{ display: 'block', fontWeight: 800, fontSize: '13px', marginBottom: '6px' }}>Title:</label>
-              <input
-                type="text"
-                value={editTitle}
-                onChange={(e) => setEditTitle(e.target.value)}
-                style={{ width: '100%', padding: '10px', borderRadius: '8px', border: '2px solid var(--line)', fontWeight: 700 }}
+            ) : (
+              <textarea
+                rows={8}
+                placeholder="Paste raw transcript, study guide, or Markdown notes here..."
+                value={inputContent}
+                onChange={(e) => setInputContent(e.target.value)}
+                style={{ width: '100%', padding: '12px', borderRadius: '10px', border: '2px solid var(--line)', fontWeight: 700, fontFamily: 'inherit' }}
               />
-            </div>
-
-            <div>
-              <label style={{ display: 'block', fontWeight: 800, fontSize: '13px', marginBottom: '6px' }}>Difficulty:</label>
-              <select
-                value={editDifficulty}
-                onChange={(e) => setEditDifficulty(e.target.value)}
-                style={{ width: '100%', padding: '10px', borderRadius: '8px', border: '2px solid var(--line)', fontWeight: 700 }}
-              >
-                <option value="beginner">Beginner</option>
-                <option value="intermediate">Intermediate</option>
-                <option value="advanced">Advanced</option>
-              </select>
-            </div>
-
-            <div>
-              <label style={{ display: 'block', fontWeight: 800, fontSize: '13px', marginBottom: '6px' }}>Teaching / Pedagogical Style:</label>
-              <select
-                value={editPedagogicalStyle}
-                onChange={(e) => setEditPedagogicalStyle(e.target.value)}
-                style={{ width: '100%', padding: '10px', borderRadius: '8px', border: '2px solid var(--line)', fontWeight: 700 }}
-              >
-                <option value="conceptual">Conceptual (Intuition-first)</option>
-                <option value="mathematical">Mathematical (Rigorous & formal)</option>
-                <option value="practical">Practical (Examples-first)</option>
-                <option value="visual">Visual (Diagrams & models)</option>
-                <option value="socratic">Socratic (Guided discovery)</option>
-              </select>
-            </div>
-          </div>
-
-          <div style={{ display: 'flex', gap: '12px', justifyContent: 'flex-end' }}>
-            <button
-              className="duo-button duo-button-secondary"
-              onClick={() => setStep('preview')}
-            >
-              Cancel
-            </button>
-            <button
-              className="duo-button duo-button-primary"
-              onClick={handleConfirmCourse}
-            >
-              SAVE & START 🚀
-            </button>
+            )}
           </div>
         </div>
-      )}
+
+        <button
+          className="duo-button duo-button-primary"
+          onClick={handleStartProject}
+          disabled={(!inputContent.trim() && !courseTitle.trim()) || creatingProject}
+          style={{ width: '100%', padding: '14px', fontSize: '16px' }}
+        >
+          {creatingProject ? 'Building your project…' : 'Build Guided Project 🛠️'}
+        </button>
+        <p style={{ fontSize: '12px', fontWeight: 700, color: 'var(--ink-soft)', marginTop: '10px', textAlign: 'center' }}>
+          You'll get one persistent workspace and build the source's project milestone by milestone.
+        </p>
+      </div>
     </div>
   )
 }
