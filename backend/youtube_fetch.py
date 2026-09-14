@@ -119,19 +119,47 @@ def build_source_text(title: str, description: str, chapters: list[tuple[str, st
     return "\n".join(parts)
 
 
+_CHALLENGE_MARKERS = ("just a moment", "security verification", "performing security", "verifying you are")
+_FETCH_ATTEMPTS = int(os.getenv("YOUTUBE_FETCH_ATTEMPTS", "3"))
+
+
+def _looks_incomplete(md: str, chapters: list) -> bool:
+    low = md.lower()
+    if any(marker in low for marker in _CHALLENGE_MARKERS):
+        return True
+    # A real watch page is large; a challenge/loading page is tiny.
+    return len(md) < 1500 and not chapters
+
+
 async def fetch_video(video_id: str, client: httpx.AsyncClient | None = None) -> dict:
-    """Fetch title/description/chapters for a single video via the reader proxy."""
-    md = await _reader_get(f"https://www.youtube.com/watch?v={video_id}", client)
-    title = _extract_title(md)
-    description = _extract_description(md)
-    chapters = extract_chapters(md)
-    return {
-        "video_id": video_id,
-        "title": title,
-        "description": description,
-        "chapters": chapters,
-        "text": build_source_text(title, description, chapters),
-    }
+    """Fetch title/description/chapters for a single video via the reader proxy.
+
+    The reader proxy intermittently returns a challenge/loading page; retry a few
+    times and keep the best (most chapters) result."""
+    best: dict | None = None
+    for attempt in range(_FETCH_ATTEMPTS):
+        try:
+            md = await _reader_get(f"https://www.youtube.com/watch?v={video_id}", client)
+        except Exception:  # noqa: BLE001
+            continue
+        title = _extract_title(md)
+        description = _extract_description(md)
+        chapters = extract_chapters(md)
+        result = {
+            "video_id": video_id,
+            "title": title,
+            "description": description,
+            "chapters": chapters,
+            "text": build_source_text(title, description, chapters),
+        }
+        if best is None or len(chapters) > len(best["chapters"]):
+            best = result
+        # Good enough — stop early.
+        if chapters and not _looks_incomplete(md, chapters):
+            return result
+    if best is not None:
+        return best
+    raise YouTubeFetchError("Reader proxy did not return usable content.")
 
 
 async def fetch_playlist_video_ids(playlist_id: str, client: httpx.AsyncClient | None = None) -> list[str]:

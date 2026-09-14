@@ -18,9 +18,10 @@ from .project_models import ProjectCourse
 
 logger = logging.getLogger("patchwork.project_enrich")
 
-_CHUNK = 6            # milestones per LLM call
-_CALL_TIMEOUT = 25.0  # seconds per call
-_TOTAL_BUDGET = 45.0  # seconds total across all calls
+_CHUNK = 4             # milestones per LLM call (small = less truncation risk)
+_CALL_TIMEOUT = 25.0   # seconds per call
+_TOTAL_BUDGET = 90.0   # seconds total across all calls
+_RETRIES = 1           # extra attempts per chunk on failure/empty
 
 
 _SYSTEM = (
@@ -46,32 +47,72 @@ def _build_user_prompt(project: ProjectCourse, items: list[tuple[int, str]]) -> 
     )
 
 
-def _parse_json_object(text: str) -> dict:
+def _parse_items(text: str) -> dict[int, dict]:
+    """Parse the model's JSON mapping step-number -> content, tolerating markdown
+    fences, surrounding prose, and truncation. Salvages individual step objects
+    when the whole payload can't be parsed, so a partially-truncated response
+    still enriches the steps it did return."""
     text = text.strip()
     m = re.search(r"```(?:json)?\s*(.*?)```", text, re.DOTALL)
     if m:
         text = m.group(1).strip()
-    # Fall back to the outermost {...} if there is surrounding prose.
-    if not text.startswith("{"):
-        b = text.find("{")
-        e = text.rfind("}")
-        if b != -1 and e != -1 and e > b:
-            text = text[b : e + 1]
-    return json.loads(text)
 
-
-async def _enrich_chunk(provider, project: ProjectCourse, items: list[tuple[int, str]]) -> None:
-    user = _build_user_prompt(project, items)
-    raw = await asyncio.wait_for(
-        provider.generate_structured(_SYSTEM, user, max_tokens=900), timeout=_CALL_TIMEOUT
-    )
-    data = _parse_json_object(raw)
-    by_order = {m.order: m for m in project.milestones}
-    for key, val in data.items():
+    # 1) Try the whole object.
+    candidate = text
+    if not candidate.startswith("{"):
+        b = candidate.find("{")
+        if b != -1:
+            candidate = candidate[b:]
+    for attempt in (candidate, candidate + "}", candidate + '"}}'):
         try:
-            order = int(str(key).strip())
-        except ValueError:
-            continue
+            data = json.loads(attempt)
+            if isinstance(data, dict):
+                return {int(k): v for k, v in data.items() if str(k).strip().lstrip("-").isdigit() and isinstance(v, dict)}
+        except Exception:  # noqa: BLE001
+            pass
+
+    # 2) Salvage: brace-match each `"<num>": { ... }` object individually.
+    out: dict[int, dict] = {}
+    for km in re.finditer(r'"(\d+)"\s*:\s*\{', text):
+        order = int(km.group(1))
+        start = km.end() - 1  # index of "{"
+        depth = 0
+        in_str = False
+        esc = False
+        end = -1
+        for i in range(start, len(text)):
+            ch = text[i]
+            if in_str:
+                if esc:
+                    esc = False
+                elif ch == "\\":
+                    esc = True
+                elif ch == '"':
+                    in_str = False
+            else:
+                if ch == '"':
+                    in_str = True
+                elif ch == "{":
+                    depth += 1
+                elif ch == "}":
+                    depth -= 1
+                    if depth == 0:
+                        end = i
+                        break
+        if end != -1:
+            try:
+                obj = json.loads(text[start : end + 1])
+                if isinstance(obj, dict):
+                    out[order] = obj
+            except Exception:  # noqa: BLE001
+                continue
+    return out
+
+
+def _apply_items(project: ProjectCourse, data: dict[int, dict]) -> int:
+    by_order = {m.order: m for m in project.milestones}
+    applied = 0
+    for order, val in data.items():
         m = by_order.get(order)
         if not m or not isinstance(val, dict):
             continue
@@ -79,15 +120,35 @@ async def _enrich_chunk(provider, project: ProjectCourse, items: list[tuple[int,
         teach = str(val.get("teach", "")).strip()
         example = str(val.get("example", "")).strip()
         celebrate = str(val.get("celebrate", "")).strip()
-        # Only accept substantive, grounded content.
         if teach and len(teach) > 20:
             m.hook = hook[:200]
             m.teach = teach[:1200]
             m.example = example[:1200]
-            m.celebrate = celebrate[:200]
-            # Promote the hook to the learner-facing observation for punch.
+            if celebrate:
+                m.celebrate = celebrate[:200]
             if hook:
                 m.microstep.observation = hook[:400]
+            applied += 1
+    return applied
+
+
+async def _enrich_chunk(provider, project: ProjectCourse, items: list[tuple[int, str]]) -> int:
+    """Enrich one chunk; retries once, and only re-requests the steps still
+    missing. Returns how many milestones were newly enriched."""
+    pending = list(items)
+    total_applied = 0
+    for attempt in range(_RETRIES + 1):
+        if not pending:
+            break
+        user = _build_user_prompt(project, pending)
+        raw = await asyncio.wait_for(
+            provider.generate_structured(_SYSTEM, user, max_tokens=1000), timeout=_CALL_TIMEOUT
+        )
+        data = _parse_items(raw)
+        total_applied += _apply_items(project, data)
+        by_order = {m.order: m for m in project.milestones}
+        pending = [(o, t) for (o, t) in pending if not (by_order.get(o) and by_order[o].teach)]
+    return total_applied
 
 
 async def enrich_project(provider, project: ProjectCourse) -> ProjectCourse:
