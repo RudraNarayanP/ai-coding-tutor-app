@@ -37,6 +37,10 @@ class ExerciseDefinition(BaseModel):
     title: str = Field(default="", max_length=120)
     type: str = Field(default="code")
     question: str = Field(default="", max_length=2000)
+    micro_explanation: str = Field(default="", max_length=2000)
+    worked_example: str = Field(default="", max_length=4000)
+    worked_example_takeaway: str = Field(default="", max_length=1000)
+    deep_dive: str = Field(default="", max_length=4000)
     options: list[str] = Field(default_factory=list)
     correct_answer: str | list[str] | dict[str, str] | None = None
     blanks: list[str] = Field(default_factory=list)
@@ -48,7 +52,7 @@ class ExerciseDefinition(BaseModel):
     xp_reward: int = Field(default=10, ge=0)
     explanation: str = Field(default="", max_length=2000)
 
-    @field_validator("title", "type", "question", "starter_code", "explanation", mode="before")
+    @field_validator("title", "type", "question", "micro_explanation", "worked_example", "worked_example_takeaway", "deep_dive", "starter_code", "explanation", mode="before")
     @classmethod
     def coerce_none_to_str(cls, v: str | None) -> str:
         if v is None:
@@ -205,6 +209,10 @@ class PublicLessonView(BaseModel):
                         title=e.title,
                         type=e.type,
                         question=e.question,
+                        micro_explanation=getattr(e, "micro_explanation", "") or "",
+                        worked_example=getattr(e, "worked_example", "") or "",
+                        worked_example_takeaway=getattr(e, "worked_example_takeaway", "") or "",
+                        deep_dive=getattr(e, "deep_dive", "") or "",
                         options=e.options,
                         blanks=e.blanks,
                         pairs=e.pairs,

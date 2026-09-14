@@ -1200,25 +1200,20 @@ setExercisePhase('incorrect')
                   </div>
                 )}
 
-                {/* Tutor Coach Box */}
-                <aside aria-label="Tutor feedback">
-                  <div className="duo-tutor-box" role="status" aria-label="Tutor feedback">
-                    <div className="duo-tutor-avatar">P</div>
-                    <div>
-                      <div className="duo-tutor-name">Tutor Guide ({currentProviderStatus?.name || selectedProvider})</div>
-                      <div className="duo-tutor-text">
-                        {isTutorLoading
-                          ? 'Thinking…'
-                          : feedback ?? (isAiAvailable ? 'Run your code or ask for a hint!' : currentProviderStatus?.reason || 'Selected provider is unconfigured.')}
+                {/* Tutor Coach Box (Shown only when active hint requested or tutor loading) */}
+                {(isTutorLoading || (feedback && feedback !== 'Run your code to get immediate feedback from the local sandbox.')) && (
+                  <aside aria-label="Tutor feedback" style={{ marginTop: '16px' }}>
+                    <div className="duo-tutor-box" role="status" aria-label="Tutor feedback">
+                      <div className="duo-tutor-avatar">P</div>
+                      <div>
+                        <div className="duo-tutor-name">AI Hint ({currentProviderStatus?.name || selectedProvider})</div>
+                        <div className="duo-tutor-text">
+                          {isTutorLoading ? 'Thinking…' : feedback}
+                        </div>
                       </div>
                     </div>
-                  </div>
-                  {!isAiAvailable && (
-                    <p className="ai-unavailable-note" style={{ marginTop: '8px', fontSize: '13px', color: 'var(--ink-soft)' }}>
-                      Selected provider is unconfigured. Tests always work offline.
-                    </p>
-                  )}
-                </aside>
+                  </aside>
+                )}
 
                 {/* Lesson-Complete Celebration */}
                 {celebration && (

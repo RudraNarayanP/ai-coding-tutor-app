@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react'
+import React, { useMemo, useState } from 'react'
 import { ExerciseFeedback } from './ExerciseFeedback'
 
 interface Props {
@@ -33,6 +33,7 @@ function shuffled<T>(items: T[]): T[] {
 
 const ExercisePanel: React.FC<Props> = (props) => {
   const {exercise, exerciseInput, exercisePhase, exerciseFeedback, exercisePosition, exerciseTotal, completedExerciseCount, onInputChange, onSubmit, onContinue, onRetry, lessonId} = props
+  const [showDeepDive, setShowDeepDive] = useState(false)
   const exType = (exercise.type || 'code').toLowerCase().trim()
   const opts = exercise.options || []
   const exState = exerciseInput[exercise.id] || {}
@@ -68,11 +69,95 @@ const ExercisePanel: React.FC<Props> = (props) => {
     </div>
   )
 
+  const renderMicroInstruction = () => {
+    const microExp = exercise.micro_explanation || exercise.description || ''
+    const workedExample = exercise.worked_example || ''
+    const takeaway = exercise.worked_example_takeaway || ''
+
+    if (!microExp && !workedExample) return null
+
+    return (
+      <div className="micro-instruction-box" style={{
+        backgroundColor: 'var(--surface-sunken, #0f172a)',
+        border: '2px solid var(--line, #334155)',
+        borderRadius: '12px',
+        padding: '16px',
+        marginBottom: '16px',
+        display: 'flex',
+        flexDirection: 'column',
+        gap: '10px'
+      }}>
+        {microExp && (
+          <p style={{ fontSize: '15px', fontWeight: 600, color: 'var(--ink, #f8fafc)', margin: 0, lineHeight: '1.4' }}>
+            💡 {microExp}
+          </p>
+        )}
+        {workedExample && (
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
+            <div style={{ fontSize: '12px', fontWeight: 800, color: '#38bdf8', textTransform: 'uppercase', letterSpacing: '0.5px' }}>
+              EXAMPLE:
+            </div>
+            <pre style={{
+              background: '#1e293b',
+              color: '#38bdf8',
+              padding: '10px 14px',
+              borderRadius: '8px',
+              fontSize: '13px',
+              fontFamily: 'monospace',
+              margin: 0,
+              overflowX: 'auto'
+            }}>
+              <code>{workedExample}</code>
+            </pre>
+            {takeaway && (
+              <p style={{ fontSize: '13px', fontWeight: 600, color: 'var(--ink-soft, #94a3b8)', margin: 0 }}>
+                {takeaway}
+              </p>
+            )}
+          </div>
+        )}
+      </div>
+    )
+  }
+
+  const renderOptionalDeepDive = () => {
+    const deepText = exercise.deep_dive || exercise.explanation || ''
+    if (!deepText) return null
+
+    return (
+      <div style={{ marginTop: '12px' }}>
+        <button
+          type="button"
+          className="duo-button duo-button-secondary"
+          style={{ fontSize: '12px', padding: '4px 10px', borderRadius: '6px' }}
+          onClick={() => setShowDeepDive(!showDeepDive)}
+        >
+          {showDeepDive ? 'Hide Deep Dive ▲' : '💡 Why does this work? / Learn More ▼'}
+        </button>
+        {showDeepDive && (
+          <div style={{
+            marginTop: '8px',
+            padding: '12px',
+            borderRadius: '8px',
+            background: 'var(--surface-sunken, #0f172a)',
+            border: '1px solid var(--line, #334155)',
+            fontSize: '13px',
+            fontWeight: 500,
+            color: 'var(--ink-soft, #cbd5e1)',
+            lineHeight: '1.4'
+          }}>
+            {deepText}
+          </div>
+        )}
+      </div>
+    )
+  }
+
   const renderCta = () => {
     if (exercisePhase === 'correct' && exerciseFeedback) {
       return (
         <div className="duo-feedback-panel success duo-great-job" style={{ marginTop: '16px' }}>
-          <div className="duo-feedback-title"><span>🎉 Great job!</span></div>
+          <div className="duo-feedback-title"><span>🎉 Correct!</span></div>
           <p style={{ fontWeight: 700 }}>{exerciseFeedback.feedback}</p>
           {exerciseFeedback.xpAwarded > 0 && (
             <div className="duo-type-badge duo-type-practice" style={{ alignSelf: 'flex-start' }}>
@@ -214,7 +299,6 @@ const ExercisePanel: React.FC<Props> = (props) => {
 
   const renderOrdering = () => {
     const orderVal: string[] = exState.order || []
-    // Consume pool items in order so duplicates behave sanely.
     const remaining = [...opts]
     orderVal.forEach((picked) => {
       const idx = remaining.indexOf(picked)
@@ -354,12 +438,12 @@ const ExercisePanel: React.FC<Props> = (props) => {
     return renderGeneric()
   }
 
-  // Code exercises edit their starter in the textarea above — no read-only dump.
   const showStarterBlock = (exercise.starter_code || exercise.code) && !CODE_TYPES.includes(exType)
 
   return (
     <div className="exercise-interactive-box">
       {renderInfo()}
+      {renderMicroInstruction()}
       <h3 style={{ fontSize: '18px', fontWeight: 800, marginBottom: '12px', color: 'var(--ink)' }}>
         {exercise.question || exercise.title || 'Complete the exercise:'}
       </h3>
@@ -379,6 +463,7 @@ const ExercisePanel: React.FC<Props> = (props) => {
         </pre>
       )}
       {renderAnswerInput()}
+      {renderOptionalDeepDive()}
       {renderCta()}
     </div>
   )

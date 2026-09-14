@@ -13,7 +13,7 @@
     {
       "id": "variables-step-1",
       "title": "1. First Variable & String Value",
-      "description": "Welcome to Python! In Python, you store text in variables using the equals sign (`=`). Assign the string \"Python\" to a variable named `language`.",
+      "description": "Store text in variables using the equals sign (=).",
       "order": 1,
       "difficulty": "beginner",
       "duration_minutes": 5,
@@ -26,7 +26,7 @@
       "learning_objectives": [
         "Create a variable and assign a string literal using ="
       ],
-      "starter_code": "# TODO: Create a variable named `language` and set it to \"Python\".\nlanguage = None\n",
+      "starter_code": "language = \"Python\"\n",
       "solution_code": "language = \"Python\"\n",
       "tests": [
         {
@@ -48,20 +48,27 @@
               "id": "py-ex-1a",
               "type": "mcq",
               "question": "Which symbol is used to assign values to variables in Python?",
+              "micro_explanation": "A variable stores a value that your program can use later.",
+              "worked_example": "language = \"Python\"",
+              "worked_example_takeaway": "The equals sign '=' copies the string \"Python\" into the variable language.",
+              "deep_dive": "In Python, assignment binds a variable name to a value in memory.",
               "options": ["=", "==", "->", ":="],
               "correct_answer": "=",
               "xp_reward": 10,
-              "explanation": "The equals sign '=' is the assignment operator in Python."
+              "explanation": "Correct! The equals sign '=' is the assignment operator in Python."
             },
             {
               "id": "py-ex-1b",
               "type": "fill_blank",
               "question": "Assign 'Python' to variable language:",
+              "micro_explanation": "Strings in Python are surrounded by quotes.",
+              "worked_example": "greeting = \"Hello\"",
+              "worked_example_takeaway": "Quotes tell Python that the value is a text string.",
               "starter_code": "language = ___",
               "blanks": ["\"Python\""],
               "correct_answer": "\"Python\"",
               "xp_reward": 10,
-              "explanation": "Strings in Python are enclosed in quotes, e.g. \"Python\"."
+              "explanation": "Correct! Strings in Python are enclosed in quotes, e.g. \"Python\"."
             }
           ]
         },
@@ -75,6 +82,9 @@
               "type": "code",
               "title": "Assign language variable",
               "question": "Assign the string 'Python' to a variable named language.",
+              "micro_explanation": "Write the variable name, followed by '=', followed by the string value.",
+              "worked_example": "language = \"Python\"",
+              "worked_example_takeaway": "This creates the variable language.",
               "starter_code": "language = None\n",
               "solution_code": "language = \"Python\"\n",
               "tests": [
@@ -109,7 +119,7 @@
     {
       "id": "variables-step-2",
       "title": "2. Numbers & Reassignment",
-      "description": "Variables can also hold numbers. You can update a variable's value or add numbers together. Set `apples` to 5, then set `total_fruit` to `apples` + 3.",
+      "description": "Variables can hold numbers and participate in arithmetic.",
       "order": 2,
       "difficulty": "beginner",
       "duration_minutes": 5,
@@ -122,7 +132,7 @@
       "learning_objectives": [
         "Assign integer values to variables and calculate totals with +"
       ],
-      "starter_code": "# TODO: Create `apples` set to 5.\napples = None\n\n# TODO: Create `total_fruit` set to apples + 3.\ntotal_fruit = None\n",
+      "starter_code": "apples = 5\ntotal_fruit = apples + 3\n",
       "solution_code": "apples = 5\ntotal_fruit = apples + 3\n",
       "tests": [
         {
@@ -139,12 +149,34 @@
       "completion_requirements": {
         "required_test_names": ["test_apples_variable", "test_total_fruit_variable"]
       },
+      "sublessons": [
+        {
+          "id": "py-num-sub-1",
+          "title": "Numbers in Variables",
+          "order": 1,
+          "exercises": [
+            {
+              "id": "py-num-ex-1a",
+              "type": "fill_blank",
+              "question": "Set apples to 5 and total_fruit to apples + 3:",
+              "micro_explanation": "Variables store numbers without quotes, and you can add values using +.",
+              "worked_example": "apples = 5\ntotal = apples + 3",
+              "worked_example_takeaway": "Adding a variable to a number evaluates to their sum.",
+              "starter_code": "apples = ___\ntotal_fruit = apples + 3",
+              "blanks": ["5"],
+              "correct_answer": "5",
+              "xp_reward": 10,
+              "explanation": "Correct! Setting apples = 5 makes apples + 3 equal 8."
+            }
+          ]
+        }
+      ],
       "static_hints": ["apples = 5", "total_fruit = apples + 3"]
     },
     {
       "id": "variables-01",
-      "title": "3. Lasagna Cooking Calculator",
-      "description": "Combine variables and arithmetic to model Guido's Lasagna preparation time.",
+      "title": "3. Recipe Preparation Calculator",
+      "description": "Combine variables and arithmetic to model total preparation time.",
       "order": 3,
       "difficulty": "beginner",
       "duration_minutes": 10,
@@ -155,11 +187,9 @@
       "concepts": ["variables"],
       "prerequisites": [],
       "learning_objectives": [
-        "Assign string and integer values to variables using =",
-        "Create new variables using existing variables and simple arithmetic",
-        "Understand Python variable naming conventions"
+        "Calculate total time by adding preparation and baking time variables"
       ],
-      "starter_code": "# TODO: Create a variable named `country` and set it to \"Italy\".\ncountry = None\n\n# TODO: Create a variable named `prep_time` and set it to 10.\nprep_time = None\n\n# TODO: Create a variable named `bake_time` and set it to 40.\nbake_time = None\n\n# TODO: Create a variable named `total_time` that equals prep_time + bake_time.\ntotal_time = None\n",
+      "starter_code": "country = \"Italy\"\nprep_time = 10\nbake_time = 40\ntotal_time = prep_time + bake_time\n",
       "solution_code": "country = \"Italy\"\nprep_time = 10\nbake_time = 40\ntotal_time = prep_time + bake_time\n",
       "tests": [
         {
@@ -175,12 +205,34 @@
       ],
       "completion_requirements": {
         "required_test_names": ["test_country_variable", "test_total_time_variable"]
-      }
+      },
+      "sublessons": [
+        {
+          "id": "py-recipe-sub-1",
+          "title": "Adding Preparation Times",
+          "order": 1,
+          "exercises": [
+            {
+              "id": "py-recipe-ex-1",
+              "type": "fill_blank",
+              "question": "Calculate total_time by adding prep_time and bake_time:",
+              "micro_explanation": "Combine existing variables using the addition operator (+).",
+              "worked_example": "prep_time = 10\nbake_time = 40\ntotal_time = prep_time + bake_time",
+              "worked_example_takeaway": "Adding prep_time (10) and bake_time (40) gives 50.",
+              "starter_code": "prep_time = 10\nbake_time = 40\ntotal_time = prep_time + ___",
+              "blanks": ["bake_time"],
+              "correct_answer": "bake_time",
+              "xp_reward": 10,
+              "explanation": "Correct! Adding prep_time and bake_time calculates the total time."
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "variables-practice-1",
       "title": "4. Cinema Ticket Billing (Practice)",
-      "description": "Apply variables to calculate the total cost for movie tickets and snacks.",
+      "description": "Calculate total cost for movie tickets and snacks using micro-steps.",
       "order": 4,
       "difficulty": "beginner",
       "duration_minutes": 5,
@@ -191,9 +243,9 @@
       "concepts": ["variables"],
       "prerequisites": [],
       "learning_objectives": [
-        "Calculate multi-item bill totals using variables"
+        "Calculate ticket total using multiplication, then add popcorn cost"
       ],
-      "starter_code": "ticket_price = 12\npopcorn_price = 8\nnum_tickets = 3\n\n# TODO: Calculate ticket_total = ticket_price * num_tickets\nticket_total = None\n\n# TODO: Calculate grand_total = ticket_total + popcorn_price\ngrand_total = None\n",
+      "starter_code": "ticket_price = 12\npopcorn_price = 8\nnum_tickets = 3\nticket_total = ticket_price * num_tickets\ngrand_total = ticket_total + popcorn_price\n",
       "solution_code": "ticket_price = 12\npopcorn_price = 8\nnum_tickets = 3\nticket_total = ticket_price * num_tickets\ngrand_total = ticket_total + popcorn_price\n",
       "tests": [
         {
@@ -204,12 +256,55 @@
       ],
       "completion_requirements": {
         "required_test_names": ["test_grand_total"]
-      }
+      },
+      "sublessons": [
+        {
+          "id": "cinema-sub-1",
+          "title": "Step A: Calculate Ticket Total",
+          "order": 1,
+          "exercises": [
+            {
+              "id": "cinema-ex-1a",
+              "type": "fill_blank",
+              "question": "3 tickets cost $12 each. Calculate ticket_total using multiplication:",
+              "micro_explanation": "Multiplication (*) calculates the total cost of multiple identical items.",
+              "worked_example": "ticket_price = 12\nnum_tickets = 3\nticket_total = ticket_price * num_tickets",
+              "worked_example_takeaway": "Multiplication gives us $36 for 3 tickets.",
+              "deep_dive": "The asterisk (*) operator multiplies two numeric variables in Python.",
+              "starter_code": "ticket_price = 12\nnum_tickets = 3\nticket_total = ticket_price * ___",
+              "blanks": ["num_tickets"],
+              "correct_answer": "num_tickets",
+              "xp_reward": 10,
+              "explanation": "Correct! Multiplying ticket_price by num_tickets calculates $36 total for tickets."
+            }
+          ]
+        },
+        {
+          "id": "cinema-sub-2",
+          "title": "Step B: Calculate Grand Total",
+          "order": 2,
+          "exercises": [
+            {
+              "id": "cinema-ex-2a",
+              "type": "fill_blank",
+              "question": "Now add the $8 popcorn price to ticket_total:",
+              "micro_explanation": "Add additional costs to an existing subtotal using the + operator.",
+              "worked_example": "ticket_total = 36\npopcorn_price = 8\ngrand_total = ticket_total + popcorn_price",
+              "worked_example_takeaway": "Adding popcorn gives $44 grand total.",
+              "starter_code": "ticket_total = 36\npopcorn_price = 8\ngrand_total = ticket_total + ___",
+              "blanks": ["popcorn_price"],
+              "correct_answer": "popcorn_price",
+              "xp_reward": 10,
+              "explanation": "Correct! Adding popcorn_price to ticket_total gives the $44 grand total."
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "variables-checkpoint",
       "title": "5. Section 1 Checkpoint: Foundations Mastery",
-      "description": "Demonstrate mastery of Section 1: Foundations before unlocking advanced topics or testing out.",
+      "description": "Demonstrate mastery of Section 1: Foundations.",
       "order": 5,
       "difficulty": "beginner",
       "duration_minutes": 5,
@@ -222,7 +317,7 @@
       "learning_objectives": [
         "Pass Section 1 Foundations Checkpoint"
       ],
-      "starter_code": "base = 10\nheight = 5\n\n# TODO: Calculate area = (base * height) / 2 as a float or int\narea = None\n",
+      "starter_code": "base = 10\nheight = 5\narea = (base * height) / 2\n",
       "solution_code": "base = 10\nheight = 5\narea = (base * height) / 2\n",
       "tests": [
         {
