@@ -64,6 +64,23 @@ def test_symbol_check_fails_when_missing():
     assert "count_words" in results[0].detail
 
 
+def test_code_contains_check_accepts_any_token():
+    project = _project([WorkspaceFile(path="main.py", content="x = torch.nn.functional.cross_entropy(a, b)\n")])
+    ms = Milestone(id="m", order=1, title="Loss",
+                   checks=[VerificationCheck(kind="code_contains", target="cross_entropy|CrossEntropyLoss")])
+    passed, _, _, _ = _eval(project, ms)
+    assert passed is True
+
+
+def test_code_contains_check_fails_when_absent():
+    project = _project([WorkspaceFile(path="main.py", content="print('hi')\n")])
+    ms = Milestone(id="m", order=1, title="Attn",
+                   checks=[VerificationCheck(kind="code_contains", target="scaled_dot_product_attention|flash")])
+    passed, results, _, _ = _eval(project, ms)
+    assert passed is False
+    assert "scaled_dot_product_attention" in results[0].detail
+
+
 def test_function_call_check():
     project = _project([WorkspaceFile(path="main.py", content="def f():\n    return 1\nf()\n")])
     ms = Milestone(id="m", order=1, title="Call", checks=[VerificationCheck(kind="function_call", target="f")])

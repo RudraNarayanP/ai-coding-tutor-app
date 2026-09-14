@@ -120,6 +120,51 @@ def test_from_import_uses_package_root():
     assert "GPT2LMHeadModel" not in imports  # must be the module, not the symbol
 
 
+def _chaptered_doc(chapters, title="Reproduce GPT-2 (124M)"):
+    from backend.source_ingestion import VideoSegment
+    seg = VideoSegment(
+        video_id="vid1", title=title, url="", position=1,
+        transcript=f"{title}. Chapters. " + " ".join(chapters), chapters=list(chapters),
+    )
+    return SourceDocument(
+        source_type="youtube_url", source_url="https://youtu.be/vid1", source_hash="h",
+        title=title, segments=[seg], access_level="full",
+    )
+
+
+GPT2_CHAPTERS = [
+    "intro: reproduce GPT-2",
+    "SECTION 1: implementing the GPT-2 nn.Module",
+    "implementing the forward pass to get logits",
+    "sampling loop",
+    "cross entropy loss",
+    "data loader lite",
+    "flash attention",
+    "SECTION 3: hyperparameters, AdamW, gradient clipping",
+]
+
+
+def test_chapter_based_plan_builds_grounded_milestones():
+    project = plan_project(_chaptered_doc(GPT2_CHAPTERS), title="Reproduce GPT-2 (124M)", course_id="project-yt")
+    titles = [m.title for m in project.milestones]
+    # Real chapters become milestones (meta "intro" is skipped).
+    assert any("nn.Module" in t for t in titles)
+    assert any("cross entropy loss" in t for t in titles)
+    assert any("flash attention" in t for t in titles)
+    assert not any(t.lower().startswith("intro") for t in titles)
+    # Concept-level checks are used so alternative implementations are accepted.
+    kinds = {m.checks[0].kind for m in project.milestones if m.checks}
+    assert "code_contains" in kinds
+    assert project.milestones[0].checks[0].kind == "file_exists"
+    assert project.milestones[-1].checks[0].kind == "run_ok"
+
+
+def test_vague_video_with_few_buildable_chapters_is_rejected():
+    vague = ["intro", "my story", "please subscribe", "thanks for watching", "outro", "sponsor message"]
+    with pytest.raises(ProjectGroundingError):
+        plan_project(_chaptered_doc(vague, title="Vlog"), title="Vlog", course_id="project-vague")
+
+
 def test_milestones_have_strictly_increasing_order():
     project = plan_project(_doc(WORD_COUNT_TRANSCRIPT), title="Word Frequency Counter", course_id="project-test")
     orders = [m.order for m in project.milestones]

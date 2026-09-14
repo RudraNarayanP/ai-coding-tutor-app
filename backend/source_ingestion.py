@@ -226,6 +226,28 @@ class SourceIngestionService:
 
         transcript, t_source = self._try_transcript_api(video_id)
 
+        # Fallback: datacenter IPs are bot-blocked by YouTube, so the transcript
+        # API/yt-dlp often fail server-side. Fetch the public watch page via a
+        # keyless reader proxy (from ITS ip) and use the creator's chapter
+        # markers + description as grounded, ordered source content.
+        if not transcript:
+            try:
+                from . import youtube_fetch
+
+                fetched = await youtube_fetch.fetch_video(video_id)
+                if fetched.get("title"):
+                    title = fetched["title"]
+                if fetched.get("chapters"):
+                    chapters = [ct for _ts, ct in fetched["chapters"]]
+                if fetched.get("description"):
+                    description_snippet = fetched["description"][:500]
+                grounded_text = fetched.get("text", "")
+                if grounded_text and len(grounded_text.strip()) >= 60:
+                    transcript = grounded_text
+                    t_source = "reader_chapters"
+            except Exception as exc:  # noqa: BLE001
+                logger.warning(f"Reader-proxy fallback failed for {video_id}: {exc}")
+
         return VideoSegment(
             video_id=video_id,
             title=title,
@@ -267,7 +289,10 @@ class SourceIngestionService:
                 if full_text:
                     return full_text, "api"
         except Exception as exc:
-            logger.warning(f"YouTubeTranscriptApi failed for video {video_id}: {exc}")
+            # Datacenter IPs are commonly bot-blocked; keep the log concise since
+            # the reader-proxy chapter fallback handles this case.
+            first_line = str(exc).strip().splitlines()[0] if str(exc).strip() else exc.__class__.__name__
+            logger.info(f"Transcript API unavailable for {video_id} ({first_line}); using chapter fallback.")
         return "", "none"
 
 

@@ -26,6 +26,7 @@ VERIFICATION_KINDS = (
     "import",           # source imports a module (AST)
     "symbol",           # a top-level function/class/variable is defined (AST)
     "function_call",    # a given function/method is called anywhere (AST)
+    "code_contains",    # the workspace code references a token/pattern (grounded, concept-level)
     "run_ok",           # the entry file runs without raising (sandbox)
     "stdout_contains",  # running the entry file prints a substring (sandbox)
     "file_exists",      # a file path exists in the workspace
@@ -33,7 +34,8 @@ VERIFICATION_KINDS = (
 
 
 class VerificationCheck(BaseModel):
-    kind: str = Field(pattern=r"^(import|symbol|function_call|run_ok|stdout_contains|file_exists)$")
+    kind: str = Field(pattern=r"^(import|symbol|function_call|code_contains|run_ok|stdout_contains|file_exists)$")
+    # For code_contains, target may be a "|"-separated list of acceptable tokens.
     target: str = Field(default="", max_length=400)
     description: str = Field(default="", max_length=280)
 

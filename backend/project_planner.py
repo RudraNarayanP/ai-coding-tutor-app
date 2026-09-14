@@ -310,8 +310,138 @@ def _detect_language(text: str) -> str:
     return "python"
 
 
+# Concept → acceptable code token(s) for chapter-based (concept-level) checks.
+# Keys are substrings matched against a lowercased chapter title; values are a
+# "|"-separated list of tokens any of which satisfy the milestone.
+CONCEPT_TOKENS: list[tuple[str, str]] = [
+    ("flash attention", "scaled_dot_product_attention|flash"),
+    ("self-attention", "attention"),
+    ("attention", "attention"),
+    ("nn.module", "nn.Module"),
+    ("forward pass", "def forward"),
+    ("forward", "forward"),
+    ("logits", "logits"),
+    ("cross entropy", "cross_entropy|CrossEntropyLoss"),
+    ("loss", "loss"),
+    ("tokeniz", "tiktoken|encode"),
+    ("tiktoken", "tiktoken"),
+    ("sampling", "topk|multinomial|generate|sample"),
+    ("from_pretrained", "from_pretrained"),
+    ("huggingface", "from_pretrained|GPT2LMHeadModel"),
+    ("checkpoint", "from_pretrained|state_dict"),
+    ("parameters", "parameters|state_dict"),
+    ("adamw", "AdamW"),
+    ("optim", "optim|AdamW"),
+    ("data loader", "DataLoader|dataloader"),
+    ("dataloader", "DataLoader|dataloader"),
+    ("data batches", "DataLoader|batch"),
+    ("parameter sharing", "lm_head|wte"),
+    ("weight", "weight"),
+    ("initializ", "init_weights|normal_|std"),
+    ("residual", "residual"),
+    ("mixed precision", "autocast|bfloat16"),
+    ("bfloat16", "bfloat16"),
+    ("float16", "float16|autocast"),
+    ("tf32", "tf32|set_float32_matmul_precision"),
+    ("tensor core", "matmul"),
+    ("torch.compile", "torch.compile|compile"),
+    ("compile", "compile"),
+    ("gradient clipping", "clip_grad_norm|clip_grad"),
+    ("gradient accumulation", "accum"),
+    ("learning rate", "lr|learning_rate"),
+    ("scheduler", "cosine|warmup|lr"),
+    ("warmup", "warmup"),
+    ("weight decay", "weight_decay"),
+    ("distributed data parallel", "DistributedDataParallel|DDP"),
+    ("ddp", "DistributedDataParallel|DDP|dist"),
+    ("dataset", "dataset|load"),
+    ("fineweb", "fineweb|dataset"),
+    ("validation", "val|eval"),
+    ("evaluation", "eval"),
+    ("hellaswag", "hellaswag|eval"),
+    ("device", "device|cuda"),
+    ("config", "config|Config"),
+    ("hyperparameter", "config|Config"),
+]
+
+# Chapters that are meta/non-implementation and shouldn't become build milestones.
+_META_CHAPTER = re.compile(
+    r"^(intro|introduction|welcome|outro|summary|conclusion|recap|results?|"
+    r"shoutout|thanks|corrections?|errata|q&a|questions|final thoughts)\b",
+    re.IGNORECASE,
+)
+_CAMEL = re.compile(r"\b([A-Z][a-zA-Z0-9]*[a-z][a-zA-Z0-9]*(?:\.[A-Za-z0-9_]+)?)\b")
+_DOTTED = re.compile(r"\b([a-zA-Z_][a-zA-Z0-9_]*\.[a-zA-Z_][a-zA-Z0-9_.]*)\b")
+
+
+def _clean_chapter(title: str) -> str:
+    t = re.sub(r"^\s*section\s*\d+\s*:\s*", "", title, flags=re.IGNORECASE)
+    t = re.sub(r"^\s*(?:let['’]?s|lets)\s+", "", t, flags=re.IGNORECASE)
+    t = re.sub(r"\s*,?\s*\d+\s*ms\b", "", t)              # drop timing annotations "333ms"
+    t = re.sub(r"\s*\([^)]*\)\s*$", "", t)                 # drop trailing "(...)"
+    t = t.strip(" -–—:•\t")
+    return t
+
+
+def _collect_chapters(doc: SourceDocument) -> list[str]:
+    chapters: list[str] = []
+    seen: set[str] = set()
+    for seg in doc.segments:
+        for ch in getattr(seg, "chapters", []) or []:
+            cleaned = _clean_chapter(ch)
+            key = cleaned.lower()
+            if cleaned and key not in seen:
+                seen.add(key)
+                chapters.append(cleaned)
+    return chapters
+
+
+def _chapter_check(title: str) -> VerificationCheck | None:
+    low = title.lower()
+    # 1) A concrete import/symbol/call if the chapter names one.
+    direct = _extract_target(title)
+    if direct and direct[0] in ("import", "symbol", "function_call"):
+        return _check_for(direct[0], direct[1])
+    # 2) Curated concept → token map (grounded concept-level check).
+    for needle, token in CONCEPT_TOKENS:
+        if needle in low:
+            pretty = token.split("|")[0]
+            return VerificationCheck(kind="code_contains", target=token,
+                                     description=f"Your code implements **{title}** (references `{pretty}`).")
+    # 3) A distinctive CamelCase / dotted identifier in the title is a strong code
+    #    signal (e.g. "nn.Module", "DataLoaderLite", "TF32").
+    for rx in (_DOTTED, _CAMEL):
+        m = rx.search(title)
+        if m:
+            tok = m.group(1)
+            if tok.lower() not in _STOPWORDS:
+                return VerificationCheck(kind="code_contains", target=tok,
+                                         description=f"Your code implements **{title}** (references `{tok}`).")
+    # No concrete code signal — deliberately return None so purely conversational
+    # chapters ("my story", "please subscribe") never become hollow milestones.
+    return None
+
+
+_MICRO_OBSERVATIONS = [
+    "Next up from the video:",
+    "Here's the next piece to build:",
+    "Keep the momentum — next section:",
+    "Now for the next milestone:",
+    "Time to build:",
+]
+
+
 def plan_project(doc: SourceDocument, title: str, course_id: str) -> ProjectCourse:
-    """Build a source-grounded ProjectCourse from an ingested source document."""
+    """Build a source-grounded ProjectCourse from an ingested source document.
+
+    Prefers creator-authored chapters (authoritative, ordered outline) when the
+    source is a chaptered video; otherwise falls back to sentence-level step
+    extraction for pasted transcripts/notes.
+    """
+    chapters = _collect_chapters(doc)
+    if len(chapters) >= 4:
+        return _plan_from_chapters(doc, chapters, title, course_id)
+
     text = _gather_source_text(doc)
     if not text or len(text.strip()) < 40:
         raise ProjectGroundingError(
@@ -453,6 +583,134 @@ def plan_project(doc: SourceDocument, title: str, course_id: str) -> ProjectCour
         updated_at=now,
     )
     return project
+
+
+def _plan_from_chapters(doc: SourceDocument, chapters: list[str], title: str, course_id: str) -> ProjectCourse:
+    """Build a milestone per creator-authored chapter — an authoritative, ordered
+    outline of exactly what the video builds."""
+    text = _gather_source_text(doc)
+    language = _detect_language(text)
+    tech_stack = _detect_tech(text)
+    project_title = title.strip() or doc.title or "Guided Project"
+
+    milestones: list[Milestone] = []
+    order = 1
+    milestones.append(
+        Milestone(
+            id=f"m{order}",
+            order=order,
+            title="Set up the project",
+            source_grounded_description=f"Create the entry file and start building the project from the video: {project_title}.",
+            source_quote=project_title,
+            microstep=Microstep(
+                observation="Your project workspace is ready.",
+                action="Create `main.py` and add a comment with the project goal.",
+                hint="Everything you write here persists across the whole course.",
+            ),
+            why="One persistent workspace — you grow this project across every chapter of the video.",
+            checks=[VerificationCheck(kind="file_exists", target="main.py", description="`main.py` exists in your workspace.")],
+            xp_reward=10,
+        )
+    )
+    order += 1
+
+    kept = 0
+    for idx, ch in enumerate(chapters):
+        if len(milestones) >= 16:
+            break
+        if _META_CHAPTER.match(ch):
+            continue
+        check = _chapter_check(ch)
+        if check is None:
+            continue
+        obs = _MICRO_OBSERVATIONS[idx % len(_MICRO_OBSERVATIONS)]
+        milestones.append(
+            Milestone(
+                id=f"m{order}",
+                order=order,
+                title=ch if len(ch) <= 60 else ch[:57] + "…",
+                source_grounded_description=f"The video covers this section: “{ch}”. Implement it in your project.",
+                source_quote=ch,
+                microstep=Microstep(
+                    observation=obs,
+                    action=f"Build this part: {ch}.",
+                    hint=_chapter_hint(check),
+                ),
+                why=f"This is a real chapter of the video — building it moves your project toward the source's final result.",
+                checks=[check],
+                xp_reward=25,
+            )
+        )
+        order += 1
+        kept += 1
+
+    # Vagueness gate: a video with no implementable chapters is rejected clearly
+    # rather than turned into a hollow course.
+    if kept < 3:
+        raise ProjectGroundingError(
+            "This video doesn't break down into enough concrete, buildable steps to make a guided "
+            "project (its chapters are too high-level or missing). Try a hands-on coding tutorial with "
+            "clear sections, or paste its transcript so Patchwork can ground the project in real steps."
+        )
+
+    milestones.append(
+        Milestone(
+            id=f"m{order}",
+            order=order,
+            title="Run and verify the project",
+            source_grounded_description="Run your complete project and confirm it works end-to-end.",
+            source_quote="",
+            microstep=Microstep(
+                observation="You've built the video's sections.",
+                action="Run your project and make sure it executes without errors.",
+                hint="Use Run, then click NEXT to verify.",
+            ),
+            why="The final milestone verifies the whole project runs — the source's intended outcome.",
+            checks=[VerificationCheck(kind="run_ok", target="", description="Your project runs without errors.")],
+            xp_reward=40,
+        )
+    )
+
+    now = time.time()
+    goal = f"Reproduce the project built in “{project_title}”, one chapter at a time."
+    return ProjectCourse(
+        course_id=course_id,
+        title=project_title,
+        language=language,
+        source_type=doc.source_type,
+        source_url=doc.source_url,
+        source_hash=doc.source_hash,
+        source_summary=text[:4000],
+        source_excerpt=text[:20_000],
+        project_goal=goal[:2000],
+        tech_stack=tech_stack,
+        entry_file="main.py",
+        milestones=milestones,
+        workspace_files=[
+            WorkspaceFile(
+                path="main.py",
+                content=(
+                    f"# {project_title}\n"
+                    f"# Built from the video, chapter by chapter. Click NEXT after each milestone.\n\n"
+                ),
+            )
+        ],
+        created_at=now,
+        updated_at=now,
+    )
+
+
+def _chapter_hint(check: VerificationCheck) -> str:
+    if check.kind == "import":
+        return f"Add an `import {check.target}` statement."
+    if check.kind == "symbol":
+        return f"Define `{check.target}` in your code."
+    if check.kind == "function_call":
+        return f"Call `{check.target}(...)` in your code."
+    if check.kind == "code_contains":
+        first = check.target.split("|")[0]
+        return f"Your implementation should use `{first}`."
+    return "Implement this section, then click NEXT."
 
 
 def _hint_for(kind: str, target: str) -> str:

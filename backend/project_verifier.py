@@ -231,6 +231,18 @@ async def _evaluate_check(
         ok = check.target in called
         return ok, ("" if ok else f"`{check.target}` isn't called anywhere yet.")
 
+    if kind == "code_contains":
+        # Concept-level, grounded check: the workspace references any of the
+        # accepted tokens (case-insensitive). Accepts alternative spellings via
+        # a "|"-separated target list.
+        blob = "\n".join(c for _p, c in _python_sources(files)).lower()
+        tokens = [t.strip().lower() for t in check.target.split("|") if t.strip()]
+        ok = any(t in blob for t in tokens) if tokens else False
+        if ok:
+            return True, ""
+        pretty = " or ".join(f"`{t.strip()}`" for t in check.target.split("|") if t.strip())
+        return False, f"Your code doesn't reference {pretty} yet."
+
     if kind in ("run_ok", "stdout_contains"):
         if syntax_error:
             return False, syntax_error
