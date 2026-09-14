@@ -1106,25 +1106,26 @@ class CurriculumGenerator:
         words = [w for w in re.findall(r"\b[A-Za-z]{4,}\b", target_sentence) if w.lower() not in c_title.lower()]
         unique_words = list(dict.fromkeys(words))
 
-        ex_type = "mcq"
-        if domain == "programming" and slot.type in ("practice", "checkpoint"):
+        s_types = getattr(slot, "suggested_exercise_types", []) or []
+        if "tiny_coding" in s_types or "code" in s_types or (domain in ("programming", "data_science", "systems") and slot.type in ("practice", "checkpoint")):
             ex_type = "tiny_coding"
-
-        question_text = f"Based on the source material covering {c_title}, which statement accurately reflects the presented content?"
-        correct_answer = f'"...{target_sentence}..." is explicitly stated as key to {c_title}.'
-
-        distractor_1 = f'The source material explicitly refutes that "{target_sentence}".'
-        distractor_2 = f'The concept of {c_title} is described as operating independently of {unique_words[0] if len(unique_words) > 0 else "surrounding components"}.'
-        distractor_3 = f'The material substitutes {c_title} with {unique_words[1] if len(unique_words) > 1 else "legacy patterns"} in standard execution.'
-
-        options = [correct_answer, distractor_1, distractor_2, distractor_3]
-        explanation = f'The source material specifically states: "{target_sentence}".'
-
-        starter_code = ""
-        solution_code = None
-        if ex_type == "tiny_coding":
-            starter_code = f"# Write a solution applying {c_title}\n"
-            solution_code = f"print('{c_title} ok')\n"
+            question_text = f"Replicate and extend the code pattern for {c_title} presented in the material. Complete the code below."
+            correct_answer = f"{c_title} solution"
+            options = []
+            explanation = f"Follow the core pattern for {c_title} from the source content: {target_sentence}"
+            starter_code = f"# Write a solution to replicate and extend {c_title} from the video\ndef solution():\n    # TODO: Implement {c_title}\n    pass\n"
+            solution_code = f"def solution():\n    print('{c_title} ok')\n"
+        else:
+            ex_type = "mcq"
+            question_text = f"Based on the source material covering {c_title}, which statement accurately reflects the presented content?"
+            correct_answer = f'"{target_sentence}" is explicitly stated as key to {c_title}.'
+            distractor_1 = f'The source material explicitly refutes "{target_sentence}".'
+            distractor_2 = f'The concept of {c_title} is described as operating independently.'
+            distractor_3 = f'The material substitutes {c_title} with legacy patterns.'
+            options = [correct_answer, distractor_1, distractor_2, distractor_3]
+            explanation = f'The source material specifically states: "{target_sentence}".'
+            starter_code = ""
+            solution_code = None
 
         return ExerciseDefinition(
             id=f"{lesson_id}-ex-1",

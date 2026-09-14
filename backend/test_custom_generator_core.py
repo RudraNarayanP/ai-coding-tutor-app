@@ -292,8 +292,8 @@ def test_source_content_extracted_fallback():
 
     assert ex.question is not None
     assert "List Comprehensions" in ex.question or "list comprehensions" in ex.question or "source material" in ex.question
-    assert len(ex.options) == 4
-    assert ex.correct_answer in ex.options
+    assert ex.type == "tiny_coding"
+    assert ex.starter_code.startswith("# Write")
 
 
 def test_system_prompt_builder_domain_specialization_and_few_shot():
