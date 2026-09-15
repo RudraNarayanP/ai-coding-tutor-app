@@ -8,6 +8,7 @@ vi.mock('../../utils/projectApi', () => ({
     get: vi.fn(),
     saveWorkspace: vi.fn(),
     run: vi.fn(),
+    exec: vi.fn(),
     next: vi.fn(),
     guidance: vi.fn(),
   },
@@ -81,16 +82,49 @@ describe('ProjectWorkspace', () => {
     expect(screen.getByText('33% complete')).toBeInTheDocument()
     expect(screen.getByLabelText('Editor for main.py')).toBeInTheDocument()
     expect(screen.getByRole('button', { name: /NEXT/ })).toBeInTheDocument()
+    expect(screen.getByText('Terminal')).toBeInTheDocument()
+    expect(screen.getByLabelText('Terminal command')).toBeInTheDocument()
   })
 
   it('runs the workspace and shows terminal output', async () => {
-    ;(projectApi.run as any).mockResolvedValue({ ran_ok: true, stdout: 'Counter({"a": 3})\n', stderr: '', error: null })
+    ;(projectApi.exec as any).mockResolvedValue({
+      command: 'python main.py',
+      ran_ok: true,
+      stdout: 'Counter({"a": 3})\n',
+      stderr: '',
+      error: null,
+      exit_code: 0,
+      cwd: '/workspace',
+    })
     render(<ProjectWorkspace courseId="project-abc" onExit={() => {}} />)
     await waitFor(() => screen.getByText('Word Frequency Counter'))
 
-    fireEvent.click(screen.getByRole('button', { name: /Run/ }))
+    expect(screen.getByLabelText('Terminal')).toBeInTheDocument()
+    expect(screen.getByLabelText('Terminal command')).toBeInTheDocument()
+
+    fireEvent.click(screen.getByRole('button', { name: /Run project/ }))
     await waitFor(() => expect(screen.getAllByText(/Counter/).length).toBeGreaterThanOrEqual(1))
-    expect(projectApi.run).toHaveBeenCalled()
+    expect(projectApi.exec).toHaveBeenCalled()
+  })
+
+  it('sends typed pip install commands to the isolated sandbox', async () => {
+    ;(projectApi.exec as any).mockResolvedValue({
+      command: 'pip install requests',
+      ran_ok: true,
+      stdout: 'Successfully installed requests\n',
+      stderr: '',
+      error: null,
+      exit_code: 0,
+      cwd: '/workspace',
+    })
+    render(<ProjectWorkspace courseId="project-abc" onExit={() => {}} />)
+    await waitFor(() => screen.getByText('Word Frequency Counter'))
+
+    const input = screen.getByLabelText('Terminal command') as HTMLInputElement
+    fireEvent.change(input, { target: { value: 'pip install requests' } })
+    fireEvent.keyDown(input, { key: 'Enter' })
+    await waitFor(() => expect(screen.getByText(/Successfully installed requests/)).toBeInTheDocument())
+    expect(projectApi.exec).toHaveBeenCalledWith('project-abc', expect.any(Array), 'pip install requests')
   })
 
   it('verifies via NEXT and shows failing checks with guidance', async () => {
@@ -250,7 +284,7 @@ describe('ProjectWorkspace', () => {
     expect(screen.getByText(/Import the collections module/)).toBeInTheDocument()
     fireEvent.click(screen.getByRole('button', { name: 'Why?' }))
     expect(screen.getByText('You need it to count.')).toBeInTheDocument()
-    expect(screen.getByRole('button', { name: /Run/ })).toBeInTheDocument()
+    expect(screen.getAllByRole('button', { name: /Run/ })[0]).toBeInTheDocument()
     expect(screen.getByRole('button', { name: /NEXT/ })).toBeInTheDocument()
   })
 })

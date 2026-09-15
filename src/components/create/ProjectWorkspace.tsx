@@ -8,6 +8,7 @@ import {
   type WorkspaceFile,
 } from '../../utils/projectApi'
 import { compactText, milestoneDescription, sourceExcerpt, whyExplanation } from './learnerCopy'
+import { ProjectTerminal, makeTerminalLine, shellPrompt, type TerminalLine } from './ProjectTerminal'
 
 // ─── ProjectWorkspace ─────────────────────────────────────────────────────────
 // The persistent, VS Code-like workspace for a Create Course guided project.
@@ -21,6 +22,9 @@ export interface ProjectWorkspaceProps {
 }
 
 const AUTOSAVE_MS = 1200
+const DEFAULT_TERMINAL_HEIGHT = 280
+const MIN_TERMINAL_HEIGHT = 140
+const MAX_TERMINAL_HEIGHT = 520
 
 export const ProjectWorkspace: React.FC<ProjectWorkspaceProps> = ({ courseId, onExit }) => {
   const [project, setProject] = useState<ProjectView | null>(null)
@@ -28,7 +32,10 @@ export const ProjectWorkspace: React.FC<ProjectWorkspaceProps> = ({ courseId, on
   const [activePath, setActivePath] = useState<string>('')
   const [loadError, setLoadError] = useState<string | null>(null)
 
-  const [terminal, setTerminal] = useState<{ stdout: string; stderr: string; error: string | null } | null>(null)
+  const [terminalLines, setTerminalLines] = useState<TerminalLine[]>([])
+  const [command, setCommand] = useState('')
+  const [cwd, setCwd] = useState('/workspace')
+  const [terminalHeight, setTerminalHeight] = useState(DEFAULT_TERMINAL_HEIGHT)
   const [running, setRunning] = useState(false)
   const [verifying, setVerifying] = useState(false)
   const [nextResult, setNextResult] = useState<NextResult | null>(null)
@@ -42,6 +49,14 @@ export const ProjectWorkspace: React.FC<ProjectWorkspaceProps> = ({ courseId, on
   const [celebrate, setCelebrate] = useState(false)
 
   const saveTimer = useRef<ReturnType<typeof setTimeout> | null>(null)
+  const resizeRef = useRef<{ startY: number; startHeight: number } | null>(null)
+  const verificationLogStart = useRef<number | null>(null)
+  const historyRef = useRef<string[]>([])
+  const historyIndexRef = useRef(-1)
+
+  const appendTerminal = useCallback((...lines: TerminalLine[]) => {
+    setTerminalLines((prev) => [...prev, ...lines])
+  }, [])
 
   // ── Load project ─────────────────────────────────────────────────────────
   useEffect(() => {
@@ -83,6 +98,10 @@ export const ProjectWorkspace: React.FC<ProjectWorkspaceProps> = ({ courseId, on
   const invalidateVerification = () => {
     setNextResult(null)
     setChecks([])
+    if (verificationLogStart.current !== null) {
+      setTerminalLines((prev) => prev.slice(0, verificationLogStart.current as number))
+      verificationLogStart.current = null
+    }
   }
 
   const updateActiveFile = (content: string) => {
@@ -108,32 +127,110 @@ export const ProjectWorkspace: React.FC<ProjectWorkspaceProps> = ({ courseId, on
     setActivePath(clean)
   }
 
-  // ── Actions ────────────────────────────────────────────────────────────────
-  const handleRun = async () => {
+  const handleTerminalResizeStart = (event: React.MouseEvent) => {
+    event.preventDefault()
+    resizeRef.current = { startY: event.clientY, startHeight: terminalHeight }
+
+    const onMove = (moveEvent: MouseEvent) => {
+      if (!resizeRef.current) return
+      const delta = resizeRef.current.startY - moveEvent.clientY
+      const next = Math.min(
+        MAX_TERMINAL_HEIGHT,
+        Math.max(MIN_TERMINAL_HEIGHT, resizeRef.current.startHeight + delta)
+      )
+      setTerminalHeight(next)
+    }
+
+    const onUp = () => {
+      resizeRef.current = null
+      window.removeEventListener('mousemove', onMove)
+      window.removeEventListener('mouseup', onUp)
+    }
+
+    window.addEventListener('mousemove', onMove)
+    window.addEventListener('mouseup', onUp)
+  }
+
+  const clearTerminal = () => {
+    setTerminalLines([])
+    setCommand('')
+  }
+
+  const handleHistory = (direction: -1 | 1) => {
+    const hist = historyRef.current
+    if (!hist.length) return
+    const next = historyIndexRef.current + direction
+    if (next < 0) {
+      historyIndexRef.current = -1
+      setCommand('')
+      return
+    }
+    historyIndexRef.current = Math.min(next, hist.length - 1)
+    setCommand(hist[hist.length - 1 - historyIndexRef.current])
+  }
+
+  const applyTerminalResult = (
+    res: { stdout: string; stderr: string; exit_code: number; cwd: string; ran_ok: boolean; error: string | null }
+  ) => {
+    if (res.stdout) appendTerminal(makeTerminalLine('stdout', res.stdout.replace(/\n$/, '')))
+    if (res.stderr) appendTerminal(makeTerminalLine('stderr', res.stderr.replace(/\n$/, '')))
+    if (res.cwd) setCwd(res.cwd)
+  }
+
+  const runSandboxCommand = async (cmd: string) => {
+    const trimmed = cmd.trim()
+    if (!trimmed || running) return
+    if (trimmed === 'clear' || trimmed === 'cls') {
+      clearTerminal()
+      return
+    }
+    const typed = `${shellPrompt(cwd)} ${trimmed}`
     setRunning(true)
-    setTerminal(null)
+    historyRef.current = [...historyRef.current, trimmed]
+    historyIndexRef.current = -1
+    setCommand('')
+    appendTerminal(makeTerminalLine('command', typed))
     try {
-      const res = await projectApi.run(courseId, files)
-      setTerminal({ stdout: res.stdout, stderr: res.stderr, error: res.error })
+      const res = await projectApi.exec(courseId, files, trimmed)
+      applyTerminalResult(res)
     } catch (err) {
-      setTerminal({ stdout: '', stderr: (err as Error).message, error: 'request_failed' })
+      appendTerminal(makeTerminalLine('error', (err as Error).message || 'Command failed'))
     } finally {
       setRunning(false)
     }
   }
 
+  // ── Actions ────────────────────────────────────────────────────────────────
+  const handleRun = async () => {
+    if (!project || running) return
+    await runSandboxCommand(`python ${project.entry_file || 'main.py'}`)
+  }
+
+  const handleSubmitCommand = async () => {
+    await runSandboxCommand(command)
+  }
+
   const handleNext = async () => {
     setVerifying(true)
+    setTerminalLines((prev) => {
+      verificationLogStart.current = prev.length
+      return [...prev, makeTerminalLine('info', '— Verifying milestone —')]
+    })
     try {
       const res = await projectApi.next(courseId, files)
       setNextResult(res)
       setChecks(res.checks || [])
       setProject(res.project)
+      if (res.stdout) appendTerminal(makeTerminalLine('stdout', res.stdout))
+      if (res.stderr) appendTerminal(makeTerminalLine('stderr', res.stderr))
+      appendTerminal(makeTerminalLine(res.status === 'project_complete' ? 'success' : 'info', res.feedback))
       if (res.status === 'project_complete') {
         setCelebrate(true)
       }
     } catch (err) {
-      setChecks([{ description: 'Verification failed', passed: false, detail: (err as Error).message }])
+      const message = (err as Error).message
+      appendTerminal(makeTerminalLine('error', message))
+      setChecks([{ description: 'Verification failed', passed: false, detail: message }])
     } finally {
       setVerifying(false)
     }
@@ -258,55 +355,62 @@ export const ProjectWorkspace: React.FC<ProjectWorkspaceProps> = ({ courseId, on
 
         {/* Center: editor + terminal */}
         <main className="pw-editor-col">
-          <div className="pw-file-tabs" role="tablist" aria-label="Workspace files">
-            {files.map((f) => (
-              <button
-                key={f.path}
-                role="tab"
-                aria-selected={f.path === activePath}
-                className={`pw-file-tab ${f.path === activePath ? 'active' : ''}`}
-                onClick={() => setActivePath(f.path)}
-              >
-                {f.path}
-              </button>
-            ))}
-            <button className="pw-file-add" onClick={addFile} aria-label="Add file">
-              +
-            </button>
+          <div className="pw-editor-stack">
+            <div className="pw-editor-pane">
+              <div className="pw-file-tabs" role="tablist" aria-label="Workspace files">
+                {files.map((f) => (
+                  <button
+                    key={f.path}
+                    role="tab"
+                    aria-selected={f.path === activePath}
+                    className={`pw-file-tab ${f.path === activePath ? 'active' : ''}`}
+                    onClick={() => setActivePath(f.path)}
+                  >
+                    {f.path}
+                  </button>
+                ))}
+                <button className="pw-file-add" onClick={addFile} aria-label="Add file">
+                  +
+                </button>
+              </div>
+
+              <textarea
+                className="pw-editor"
+                value={activeFile?.content ?? ''}
+                onChange={(e) => updateActiveFile(e.target.value)}
+                onKeyDown={(e) => {
+                  if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') {
+                    e.preventDefault()
+                    handleRun()
+                  }
+                }}
+                spellCheck={false}
+                aria-label={`Editor for ${activePath}`}
+                placeholder="Write your code here. Your work persists across the whole project."
+              />
+
+              <div className="pw-editor-toolbar">
+                <button className="duo-button duo-button-secondary" onClick={handleRun} disabled={running}>
+                  {running ? 'Running…' : '▶ Run'}
+                </button>
+                <span className="pw-toolbar-hint">Ctrl+Enter to run · type in the terminal like VS Code</span>
+              </div>
+            </div>
+
+            <ProjectTerminal
+              cwd={cwd}
+              lines={terminalLines}
+              command={command}
+              running={running}
+              height={terminalHeight}
+              onCommandChange={setCommand}
+              onSubmit={handleSubmitCommand}
+              onRunProject={handleRun}
+              onClear={clearTerminal}
+              onHistory={handleHistory}
+              onResizeStart={handleTerminalResizeStart}
+            />
           </div>
-
-          <textarea
-            className="pw-editor"
-            value={activeFile?.content ?? ''}
-            onChange={(e) => updateActiveFile(e.target.value)}
-            spellCheck={false}
-            aria-label={`Editor for ${activePath}`}
-            placeholder="Write your code here. Your work persists across the whole project."
-          />
-
-          <div className="pw-editor-toolbar">
-            <button className="duo-button duo-button-secondary" onClick={handleRun} disabled={running}>
-              {running ? 'Running…' : '▶ Run'}
-            </button>
-            <span className="pw-toolbar-hint">You own this code — the AI never edits it without you.</span>
-          </div>
-
-          <section className="pw-terminal" aria-label="Terminal output">
-            <div className="pw-terminal-header">Output</div>
-            <pre className="pw-terminal-body">
-              {terminal ? (
-                <>
-                  {terminal.stdout && <span className="pw-stdout">{terminal.stdout}</span>}
-                  {terminal.stderr && <span className="pw-stderr">{terminal.stderr}</span>}
-                  {!terminal.stdout && !terminal.stderr && (
-                    <span className="pw-muted">(no output)</span>
-                  )}
-                </>
-              ) : (
-                <span className="pw-muted">Press Run to execute your project.</span>
-              )}
-            </pre>
-          </section>
         </main>
 
         {/* Right: AI guidance + NEXT */}

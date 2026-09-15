@@ -48,6 +48,24 @@ def test_milestones_keep_source_quotes():
     assert import_ms.microstep.action  # concise action present
 
 
+def test_long_transcript_chunks_do_not_break_milestone_validation():
+    """Dense transcripts must be chunked/clipped so Pydantic field limits still hold."""
+    from backend.project_planner import _chunk_long_step, _clip
+
+    long_blob = "import torch " + ("and numpy " * 400) + "to build the model."
+    chunks = _chunk_long_step(long_blob, max_len=800)
+    assert chunks, "expected at least one chunk"
+    assert all(len(chunk) <= 800 for chunk in chunks)
+    assert len(_clip(long_blob, 2000)) <= 2000
+    assert len(_clip(long_blob, 400)) <= 400
+
+    # Accepted plans also stay within learner-facing field caps.
+    project = plan_project(_doc(WORD_COUNT_TRANSCRIPT), title="Word Frequency Counter", course_id="project-long")
+    for milestone in project.milestones:
+        assert len(milestone.source_quote) <= 2000
+        assert len(milestone.source_grounded_description) <= 2000
+        assert len(milestone.microstep.action) <= 400
+
 def test_tech_stack_detected_from_source():
     project = plan_project(_doc(WORD_COUNT_TRANSCRIPT), title="Word Frequency Counter", course_id="project-test")
     assert "collections" in project.tech_stack
