@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { ProjectWorkspace } from './create/ProjectWorkspace'
-import { projectApi, type ProjectSummary } from '../utils/projectApi'
+import { CreateCourseError, projectApi, type ProjectSummary } from '../utils/projectApi'
 
 export interface CreatePageProps {
   // Retained for backwards compatibility with the app shell; the guided-project
@@ -9,6 +9,40 @@ export interface CreatePageProps {
 }
 
 export type CreateStep = 'input' | 'workspace'
+
+type GateFeedback = {
+  kind: 'reject' | 'insufficient' | 'error'
+  title: string
+  message: string
+  nextStep: string
+  missing: string[]
+}
+
+function gateFromError(err: unknown): GateFeedback {
+  if (err instanceof CreateCourseError) {
+    const kind = err.decision === 'reject' ? 'reject' : err.decision === 'insufficient' ? 'insufficient' : 'error'
+    const title =
+      kind === 'reject'
+        ? "This source isn't suitable for a coding project"
+        : kind === 'insufficient'
+          ? "Not enough information to build a course"
+          : 'Could not build a guided project'
+    return {
+      kind,
+      title,
+      message: err.message,
+      nextStep: err.nextStep,
+      missing: err.missingInformation,
+    }
+  }
+  return {
+    kind: 'error',
+    title: 'Could not build a guided project',
+    message: (err as Error).message || 'Could not build a guided project from this source.',
+    nextStep: '',
+    missing: [],
+  }
+}
 
 export const CreatePage: React.FC<CreatePageProps> = () => {
   const [step, setStep] = useState<CreateStep>('input')
@@ -19,7 +53,7 @@ export const CreatePage: React.FC<CreatePageProps> = () => {
   const [projectCourseId, setProjectCourseId] = useState<string | null>(null)
   const [creatingProject, setCreatingProject] = useState(false)
   const [projects, setProjects] = useState<ProjectSummary[]>([])
-  const [errorMessage, setErrorMessage] = useState<string | null>(null)
+  const [gateFeedback, setGateFeedback] = useState<GateFeedback | null>(null)
 
   // Load resumable guided projects for the Create Course section.
   useEffect(() => {
@@ -35,7 +69,7 @@ export const CreatePage: React.FC<CreatePageProps> = () => {
 
   // Build a guided project (persistent workspace) from the source.
   const handleStartProject = async () => {
-    setErrorMessage(null)
+    setGateFeedback(null)
     setCreatingProject(true)
 
     let reqType = materialType
@@ -52,7 +86,12 @@ export const CreatePage: React.FC<CreatePageProps> = () => {
       setProjectCourseId(project.course_id)
       setStep('workspace')
     } catch (err) {
-      setErrorMessage((err as Error).message || 'Could not build a guided project from this source.')
+      setGateFeedback(gateFromError(err))
+      try {
+        setProjects(await projectApi.list())
+      } catch {
+        /* listing is best-effort; the source was still not accepted */
+      }
     } finally {
       setCreatingProject(false)
     }
@@ -85,9 +124,22 @@ export const CreatePage: React.FC<CreatePageProps> = () => {
         </p>
       </div>
 
-      {errorMessage && (
-        <div style={{ padding: '12px 16px', borderRadius: '12px', background: '#fee2e2', color: '#991b1b', fontWeight: 700, marginBottom: '20px' }}>
-          ⚠️ {errorMessage}
+      {gateFeedback && (
+        <div
+          className={`create-gate create-gate-${gateFeedback.kind}`}
+          role="alert"
+          data-testid="create-source-gate"
+        >
+          <strong>{gateFeedback.title}</strong>
+          <p>{gateFeedback.message}</p>
+          {gateFeedback.missing.length > 0 && (
+            <ul className="create-gate-missing">
+              {gateFeedback.missing.map((item) => (
+                <li key={item}>{item}</li>
+              ))}
+            </ul>
+          )}
+          {gateFeedback.nextStep && <p className="create-gate-next">{gateFeedback.nextStep}</p>}
         </div>
       )}
 

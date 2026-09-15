@@ -13,10 +13,17 @@ from .project_models import (
     WorkspaceFile,
 )
 from .project_enrich import enrich_project
-from .project_planner import ProjectGroundingError, plan_project
+from .project_planner import plan_project
 from .project_store import ProjectStore
 from .project_verifier import evaluate_milestone, run_workspace
 from .source_ingestion import IngestionError, SourceIngestionService
+from .source_quality import (
+    LlmSourceAnalyzer,
+    evaluate_ingestion,
+    evaluate_project,
+    evaluate_source_with_analyzer,
+    require_accept,
+)
 
 
 async def build_project(
@@ -32,8 +39,14 @@ async def build_project(
 ) -> ProjectCourse:
     """Ingest a source and build a persistent, source-grounded guided project.
 
-    Raises IngestionError (bad/unavailable source) or ProjectGroundingError
-    (source can't be turned into a real project) — both surfaced as clear errors.
+    Quality gate stages (all run before ``store.create``):
+      1. ingestion — extraction produced usable material
+      2. analysis — source can support a coherent coding project
+      3. planning — ``plan_project`` (goal + milestone sequence)
+      4. pre-workspace — final check; rejected sources are never persisted
+
+    Raises IngestionError (bad/unavailable source) or ProjectGroundingError /
+    SourceQualityError (source can't be turned into a real project).
     """
     doc = await ingestion_service.ingest(
         material_type=material_type,
@@ -41,23 +54,28 @@ async def build_project(
         title=title,
         filename=filename,
     )
-    # If a YouTube source came back without a transcript (a common case when
-    # automated transcript access is blocked for the server's IP/region), tell the
-    # learner exactly how to proceed instead of fabricating a project from a bare
-    # title.
-    if doc.source_type in ("youtube_url", "youtube_playlist") and doc.access_level == "titles_only":
-        raise ProjectGroundingError(
-            "YouTube didn't return a transcript for this video, so there's no source "
-            "content to ground a project in. Open the video on YouTube, click the "
-            "\"…\" menu → \"Show transcript\", copy the text, then use the "
-            "\"Paste Transcript / Notes\" option here to build the guided project."
-        )
+    # Stage 1 — ingestion quality (empty / failed extraction → insufficient).
+    require_accept(evaluate_ingestion(doc))
+
+    # Stage 2 — source analysis (optional AI refine on borderline cases only).
+    analyzer = LlmSourceAnalyzer(provider) if provider is not None else None
+    analysis = await evaluate_source_with_analyzer(doc, title=title, analyzer=analyzer)
+    require_accept(analysis)
+
+    # Stage 3 — curriculum planning (also re-checks source + milestone quality).
     project = plan_project(doc, title=title, course_id=course_id)
+
+    # Stage 4 — final quality check; never persist a rejected/insufficient course.
+    require_accept(evaluate_project(project, stage="pre_workspace"))
+    require_accept(evaluate_project(project, stage="pre_display"))
+
     # Best-effort: make the course rich/engaging via the LLM. Never blocks creation.
     try:
         await enrich_project(provider, project)
     except Exception:  # noqa: BLE001
         pass
+    # Re-check after enrichment so LLM copy cannot smuggle a rejected course through.
+    require_accept(evaluate_project(project, stage="pre_display"))
     return store.create(project)
 
 

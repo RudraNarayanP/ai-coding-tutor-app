@@ -100,16 +100,70 @@ export type ProjectSummary = {
 
 const BASE = '/api/create-course/projects'
 
+export class CreateCourseError extends Error {
+  errorCode: string
+  decision: 'reject' | 'insufficient' | null
+  missingInformation: string[]
+  nextStep: string
+  rejectionReasons: string[]
+
+  constructor(
+    message: string,
+    opts: {
+      errorCode?: string
+      decision?: 'reject' | 'insufficient' | null
+      missingInformation?: string[]
+      nextStep?: string
+      rejectionReasons?: string[]
+    } = {}
+  ) {
+    super(message)
+    this.name = 'CreateCourseError'
+    this.errorCode = opts.errorCode || 'error'
+    this.decision = opts.decision ?? null
+    this.missingInformation = opts.missingInformation || []
+    this.nextStep = opts.nextStep || ''
+    this.rejectionReasons = opts.rejectionReasons || []
+  }
+}
+
 async function jsonOrThrow<T>(res: Response): Promise<T> {
   if (!res.ok) {
     let message = `Request failed (${res.status})`
+    let errorCode = `http_${res.status}`
+    let decision: 'reject' | 'insufficient' | null = null
+    let missingInformation: string[] = []
+    let nextStep = ''
+    let rejectionReasons: string[] = []
     try {
       const body = await res.json()
-      message = body?.detail?.message || body?.detail?.error || message
+      const detail = body?.detail
+      if (typeof detail === 'string') {
+        message = detail
+      } else if (detail && typeof detail === 'object') {
+        message = detail.message || detail.user_message || detail.error || message
+        errorCode = detail.error || errorCode
+        if (detail.decision === 'reject' || detail.decision === 'insufficient') {
+          decision = detail.decision
+        } else if (errorCode === 'source_rejected') {
+          decision = 'reject'
+        } else if (errorCode === 'source_insufficient' || errorCode === 'ungroundable_source') {
+          decision = 'insufficient'
+        }
+        missingInformation = Array.isArray(detail.missing_information) ? detail.missing_information : []
+        nextStep = detail.next_step || ''
+        rejectionReasons = Array.isArray(detail.rejection_reasons) ? detail.rejection_reasons : []
+      }
     } catch {
       /* ignore */
     }
-    throw new Error(message)
+    throw new CreateCourseError(message, {
+      errorCode,
+      decision,
+      missingInformation,
+      nextStep,
+      rejectionReasons,
+    })
   }
   return (await res.json()) as T
 }

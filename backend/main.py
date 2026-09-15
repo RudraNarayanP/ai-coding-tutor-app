@@ -45,6 +45,7 @@ from .feedback_store import FeedbackStore
 from .tutor_service import TutorService
 from .project_models import ProjectView, WorkspaceFile
 from .project_planner import ProjectGroundingError
+from .source_quality import SourceQualityError
 from .project_store import ProjectStore
 from . import project_service
 
@@ -566,8 +567,24 @@ async def create_project(req: ProjectCreateRequest):
         )
     except IngestionError as exc:
         raise HTTPException(status_code=400, detail={"error": "ingestion_failed", "message": str(exc)})
+    except SourceQualityError as exc:
+        error_code = "source_rejected" if exc.decision == "reject" else "source_insufficient"
+        payload = {
+            "error": error_code,
+            "decision": exc.decision,
+            "message": str(exc),
+            **exc.quality.to_public_dict(),
+        }
+        raise HTTPException(status_code=422, detail=payload)
     except ProjectGroundingError as exc:
-        raise HTTPException(status_code=422, detail={"error": "ungroundable_source", "message": str(exc)})
+        raise HTTPException(
+            status_code=422,
+            detail={
+                "error": "ungroundable_source",
+                "decision": "insufficient",
+                "message": str(exc),
+            },
+        )
     return ProjectView.from_project(project)
 
 
