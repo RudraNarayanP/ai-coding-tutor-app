@@ -176,13 +176,25 @@ async def guidance(executor, provider, project: ProjectCourse, question: str = "
     """
     idx = min(project.current_milestone_index, len(project.milestones) - 1)
     milestone = project.milestones[idx] if project.milestones else None
+    from .project_copy import learner_facing_fields
+
+    fields = (
+        learner_facing_fields(
+            milestone,
+            entry_file=project.entry_file or "main.py",
+            project_title=project.title,
+            project_goal=project.project_goal,
+        )
+        if milestone
+        else {}
+    )
     base = {
         "milestone_id": milestone.id if milestone else None,
-        "observation": milestone.microstep.observation if milestone else "",
-        "action": milestone.microstep.action if milestone else "",
-        "hint": milestone.microstep.hint if milestone else "",
-        "why": milestone.why if milestone else "",
-        "source_quote": milestone.source_quote if milestone else "",
+        "observation": fields.get("observation", ""),
+        "action": fields.get("action", ""),
+        "hint": fields.get("hint", ""),
+        "why": fields.get("why", ""),
+        "source_quote": fields.get("source_quote", ""),
         "suggestion": None,
         "suggestion_note": "",
         "provider_used": None,
@@ -203,7 +215,7 @@ async def guidance(executor, provider, project: ProjectCourse, question: str = "
         user = (
             f"Project goal: {project.project_goal}\n"
             f"Current milestone: {milestone.title}\n"
-            f"Source step: {milestone.source_quote or milestone.source_grounded_description}\n"
+            f"Source step: {fields.get('source_quote') or fields.get('source_grounded_description') or milestone.title}\n"
             f"What must be true: {'; '.join(c.description for c in milestone.checks)}\n"
             f"Learner question: {question or '(none)'}\n"
             f"Learner's current code:\n{current_code}\n"

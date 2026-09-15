@@ -44,6 +44,14 @@ def test_import_check_accepts_from_import_alias():
     assert passed is True
 
 
+def test_import_check_is_case_insensitive_for_spoken_package_names():
+    # Persisted courses may still have Title-Case targets from old caption parsing.
+    project = _project([WorkspaceFile(path="main.py", content="from transformers import GPT2LMHeadModel\n")])
+    ms = Milestone(id="m", order=1, title="Import", checks=[VerificationCheck(kind="import", target="Transformers")])
+    passed, _, _, _ = _eval(project, ms)
+    assert passed is True
+
+
 def test_symbol_check_accepts_alternative_implementations():
     # Two very different valid implementations both define count_words.
     for body in (

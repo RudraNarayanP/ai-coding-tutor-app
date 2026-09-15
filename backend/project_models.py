@@ -176,24 +176,38 @@ class ProjectView(BaseModel):
 
     @classmethod
     def from_project(cls, project: ProjectCourse) -> "ProjectView":
+        # Sanitize learner-facing strings at the API boundary so already-persisted
+        # courses with caption dumps still render as concise tutorial copy.
+        from .project_copy import learner_facing_fields
+
         views: list[ProjectMilestoneView] = []
         for m in project.milestones:
             prog = project.milestone_progress.get(m.id)
             status = prog.status if prog else "pending"
+            fields = learner_facing_fields(
+                m,
+                entry_file=project.entry_file or "main.py",
+                project_title=project.title,
+                project_goal=project.project_goal,
+            )
             views.append(
                 ProjectMilestoneView(
                     id=m.id,
                     order=m.order,
                     title=m.title,
                     status=status,
-                    source_grounded_description=m.source_grounded_description,
-                    source_quote=m.source_quote,
-                    microstep=m.microstep,
-                    why=m.why,
-                    hook=m.hook,
-                    teach=m.teach,
-                    example=m.example,
-                    celebrate=m.celebrate,
+                    source_grounded_description=fields["source_grounded_description"],
+                    source_quote=fields["source_quote"],
+                    microstep=Microstep(
+                        observation=fields["observation"],
+                        action=fields["action"],
+                        hint=fields["hint"],
+                    ),
+                    why=fields["why"],
+                    hook=fields["hook"],
+                    teach=fields["teach"],
+                    example=fields["example"],
+                    celebrate=fields["celebrate"],
                     xp_reward=m.xp_reward,
                 )
             )

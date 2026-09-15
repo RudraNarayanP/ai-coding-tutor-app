@@ -20,6 +20,12 @@ from __future__ import annotations
 import re
 import time
 
+from .project_copy import (
+    code_ident_for_import,
+    display_ident,
+    polish_project_copy,
+    short_source_excerpt,
+)
 from .project_models import (
     Microstep,
     Milestone,
@@ -159,6 +165,37 @@ def _split_steps(text: str) -> list[str]:
     return raw_lines
 
 
+# Action-like leads used to carve a long unpunctuated caption into windows.
+# `from pkg import` is treated as one lead so we don't split on the inner `import`.
+_ACTION_LEAD = re.compile(
+    r"\b(?:from\s+[A-Za-z_][A-Za-z0-9_]*\s+import|"
+    r"import|install(?:ing)?|"
+    r"define|create|write|implement|"
+    r"call|"
+    r"print(?:\s*\(|\s+(?:the\s+)?(?:result|output|value|it)))\b",
+    re.IGNORECASE,
+)
+
+
+def _windows_for_extraction(sentence: str) -> list[str]:
+    """Split a long caption into per-action windows; leave short sentences intact."""
+    text = (sentence or "").strip()
+    if not text:
+        return []
+    if len(text) <= 220:
+        return [text]
+    starts = [m.start() for m in _ACTION_LEAD.finditer(text)]
+    if len(starts) < 2:
+        return [text]
+    windows: list[str] = []
+    for i, start in enumerate(starts):
+        end = starts[i + 1] if i + 1 < len(starts) else len(text)
+        chunk = text[start:end].strip()
+        if chunk:
+            windows.append(chunk)
+    return windows or [text]
+
+
 def _reject(name: str | None) -> bool:
     """True if a captured identifier is not a usable code symbol."""
     if not name or len(name) < 2:
@@ -167,31 +204,59 @@ def _reject(name: str | None) -> bool:
     return low in _ACTION_VERBS or low in _STOPWORDS
 
 
+def _canonical_import_name(name: str) -> str:
+    """Map a captured import token onto the real package name.
+
+    Spoken transcripts often Title-Case packages (`Transformers`). Known tech
+    uses the curated canonical name; other Title-Case tokens become pep-8
+    lowercase. CamelCase / ALLCAPS identifiers are left alone.
+    """
+    root = (name or "").split(".")[0]
+    if not root:
+        return root
+    low = root.lower()
+    canon = KNOWN_TECH.get(low)
+    # Tech-stack labels may be hyphenated (scikit-learn); import names cannot.
+    if canon and re.match(r"^[A-Za-z_][A-Za-z0-9_]*$", canon):
+        return canon
+    return code_ident_for_import(root)
+
+
 def _extract_target(sentence: str) -> tuple[str, str] | None:
     """Derive a verification (kind, target) from a step sentence.
 
-    Identifier case is preserved (captured from the original sentence with
-    case-insensitive keyword matching) so a check for `GPT` matches the learner's
-    real class name — not a lowercased `gpt` that could never match.
+    Identifier case is preserved for symbols (captured from the original
+    sentence with case-insensitive keyword matching) so a check for `GPT`
+    matches the learner's real class name — not a lowercased `gpt`.
+
+    Import names are canonicalized (Transformers → transformers) so instructions
+    and AST checks match the real package.
 
     Returns None when the sentence has no concrete, verifiable coding action.
     """
     IC = re.IGNORECASE
     s = sentence.lower()
 
-    # import / install a package (identifier captured with original case).
+    # `from pkg import Name` must win over the inner `import Name` so we don't
+    # treat GPT2LMHeadModel as a module — but the from-import must be LOCAL to
+    # this match. Searching the whole caption would overwrite `import torch`
+    # with a later `from transformers import ...`.
     m = re.search(rf"\b(?:import|installing|install)\s+(?:the\s+)?(?:package\s+)?({_IDENT})", sentence, IC)
     if m:
         module = m.group(1)
-        mf = re.search(rf"\bfrom\s+({_IDENT})\s+import\b", sentence, IC)
+        local = sentence[max(0, m.start() - 80) : m.end()]
+        mf = re.search(
+            rf"\bfrom\s+({_IDENT})\s+import\s+{re.escape(m.group(1))}\b",
+            local,
+            IC,
+        )
         if mf:
             module = mf.group(1)
-        # Normalise dotted/aliased imports to the package root.
-        return ("import", module.split(".")[0])
+        return ("import", _canonical_import_name(module))
 
     m = re.search(rf"\bfrom\s+({_IDENT})\s+import\b", sentence, IC)
     if m:
-        return ("import", m.group(1).split(".")[0])
+        return ("import", _canonical_import_name(m.group(1)))
 
     # "the forward method", "the train function" — name precedes the keyword.
     m = re.search(rf"\b(?:the\s+)({_IDENT})\s+(?:method|function)\b", sentence, IC)
@@ -271,7 +336,7 @@ def _is_step(sentence: str) -> bool:
 def _short_title(sentence: str, target: tuple[str, str]) -> str:
     kind, tgt = target
     if kind == "import":
-        return f"Import {tgt}"
+        return f"Import {display_ident(tgt)}"
     if kind == "symbol":
         return f"Define {tgt}"
     if kind == "function_call":
@@ -707,18 +772,19 @@ def _count_sentence_targets(text: str) -> int:
     n = 0
     seen: set[tuple[str, str]] = set()
     for sentence in _split_steps(text):
-        if not _is_step(sentence):
-            continue
-        target = _extract_target(sentence)
-        if target is None:
-            continue
-        kind, tgt = target
-        key = (kind, tgt)
-        if kind in ("import", "symbol", "function_call"):
-            if key in seen:
+        for window in _windows_for_extraction(sentence):
+            if not _is_step(window):
                 continue
-            seen.add(key)
-        n += 1
+            target = _extract_target(window)
+            if target is None:
+                continue
+            kind, tgt = target
+            key = (kind, tgt)
+            if kind in ("import", "symbol", "function_call"):
+                if key in seen:
+                    continue
+                seen.add(key)
+            n += 1
     return n
 
 
@@ -790,42 +856,43 @@ def plan_project(doc: SourceDocument, title: str, course_id: str) -> ProjectCour
     for sentence in sentences:
         if len(milestones) >= 14:
             break
-        if not _is_step(sentence):
-            continue
-        target = _extract_target(sentence)
-        if target is None:
-            continue
-        kind, tgt = target
-        # De-duplicate identical concrete checks (e.g. transcript repeats "import X").
-        key = (kind, tgt)
-        if kind in ("import", "symbol", "function_call"):
-            if key in seen_targets:
+        for window in _windows_for_extraction(sentence):
+            if len(milestones) >= 14:
+                break
+            if not _is_step(window):
                 continue
-            seen_targets.add(key)
+            target = _extract_target(window)
+            if target is None:
+                continue
+            kind, tgt = target
+            # De-duplicate identical concrete checks (e.g. transcript repeats "import X").
+            key = (kind, tgt)
+            if kind in ("import", "symbol", "function_call"):
+                if key in seen_targets:
+                    continue
+                seen_targets.add(key)
 
-        check = _check_for(kind, tgt)
-        clean_sentence = re.sub(r"^\s*(?:step\s*)?\d+[.):]\s*", "", sentence).strip()
-        action_text = clean_sentence
-        if len(action_text) > 200:
-            action_text = action_text[:197] + "…"
+            check = _check_for(kind, tgt)
+            clean_window = re.sub(r"^\s*(?:step\s*)?\d+[.):]\s*", "", window).strip()
+            quote = short_source_excerpt(clean_window, needle=tgt)
 
-        milestones.append(
-            Milestone(
-                id=f"m{order}",
-                order=order,
-                title=_short_title(sentence, (kind, tgt)),
-                source_grounded_description=clean_sentence,
-                source_quote=clean_sentence,
-                microstep=Microstep(
-                    observation="Next step from the source:",
-                    action=action_text,
-                    hint=_hint_for(kind, tgt),
-                ),
-                checks=[check],
-                xp_reward=20,
+            milestones.append(
+                Milestone(
+                    id=f"m{order}",
+                    order=order,
+                    title=_short_title(window, (kind, tgt)),
+                    source_grounded_description="",  # filled by learner-facing polish
+                    source_quote=quote,
+                    microstep=Microstep(
+                        observation="Next step from the source:",
+                        action="",
+                        hint=_hint_for(kind, tgt),
+                    ),
+                    checks=[check],
+                    xp_reward=20,
+                )
             )
-        )
-        order += 1
+            order += 1
 
     # Require at least two substantive (non-setup) milestones or we are not
     # confident the source describes a real, implementable project.
@@ -890,6 +957,7 @@ def plan_project(doc: SourceDocument, title: str, course_id: str) -> ProjectCour
         created_at=now,
         updated_at=now,
     )
+    polish_project_copy(project)
     return project
 
 
@@ -982,7 +1050,7 @@ def _plan_from_chapters(doc: SourceDocument, chapters: list[str], title: str, co
 
     now = time.time()
     goal = f"Reproduce the project built in “{project_title}”, one chapter at a time."
-    return ProjectCourse(
+    project = ProjectCourse(
         course_id=course_id,
         title=project_title,
         language=language,
@@ -1007,11 +1075,13 @@ def _plan_from_chapters(doc: SourceDocument, chapters: list[str], title: str, co
         created_at=now,
         updated_at=now,
     )
+    polish_project_copy(project)
+    return project
 
 
 def _chapter_hint(check: VerificationCheck) -> str:
     if check.kind == "import":
-        return f"Add an `import {check.target}` statement."
+        return f"Add `import {check.target}` at the top of your entry file (or `from {check.target} import ...`)."
     if check.kind == "symbol":
         return f"Define `{check.target}` in your code."
     if check.kind == "function_call":
@@ -1024,7 +1094,8 @@ def _chapter_hint(check: VerificationCheck) -> str:
 
 def _hint_for(kind: str, target: str) -> str:
     if kind == "import":
-        return f"Add an `import {target}` (or `from {target} import ...`) statement."
+        pkg = code_ident_for_import(target)
+        return f"Add `import {pkg}` at the top of your entry file (or `from {pkg} import ...`)."
     if kind == "symbol":
         return f"Make sure something named `{target}` is defined at the top level."
     if kind == "function_call":

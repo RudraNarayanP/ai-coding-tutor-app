@@ -43,7 +43,7 @@ def test_create_project_is_source_grounded():
     data = _create_project()
     assert data["course_id"].startswith("project-")
     titles = [m["title"] for m in data["milestones"]]
-    assert any("collections" in t for t in titles)
+    assert any("collections" in t.lower() for t in titles)
     assert any("count_words" in t for t in titles)
     assert data["completion_percent"] == 0
     assert data["tech_stack"] == ["collections"] or "collections" in data["tech_stack"]

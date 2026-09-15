@@ -322,7 +322,7 @@ async def _evaluate_check(
         return False, syntax_error
 
     if kind == "import":
-        ok = check.target in imported
+        ok = check.target.lower() in {name.lower() for name in imported}
         return ok, ("" if ok else f"No import of `{check.target}` found yet.")
 
     if kind == "symbol":
