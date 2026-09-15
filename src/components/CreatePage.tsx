@@ -139,7 +139,9 @@ export const CreatePage: React.FC<CreatePageProps> = () => {
               ))}
             </ul>
           )}
-          {gateFeedback.nextStep && <p className="create-gate-next">{gateFeedback.nextStep}</p>}
+          {gateFeedback.nextStep && !gateFeedback.message.includes(gateFeedback.nextStep) && (
+            <p className="create-gate-next">{gateFeedback.nextStep}</p>
+          )}
         </div>
       )}
 
