@@ -1413,6 +1413,22 @@ select option { background: var(--card); color: var(--ink); }
 .pw-celebrate-xp { font-size: 18px; font-weight: 900; color: var(--yellow); margin: 12px 0; }
 .pw-celebrate-actions { display: flex; gap: 10px; justify-content: center; margin-top: 12px; }
 
+/* Create Course source quality gate (reject / insufficient) */
+.create-gate {
+  padding: 14px 16px;
+  border-radius: 12px;
+  font-weight: 700;
+  margin-bottom: 20px;
+  border: 2px solid transparent;
+}
+.create-gate strong { display: block; font-size: 15px; margin-bottom: 6px; }
+.create-gate p { font-size: 13px; font-weight: 700; margin: 0; }
+.create-gate-missing { margin: 8px 0 0 18px; font-size: 13px; }
+.create-gate-next { margin-top: 8px !important; }
+.create-gate-reject { background: #fee2e2; color: #991b1b; border-color: #fecaca; }
+.create-gate-insufficient { background: #fef3c7; color: #92400e; border-color: #fde68a; }
+.create-gate-error { background: #fee2e2; color: #991b1b; border-color: #fecaca; }
+
 @media (max-width: 1024px) {
   .pw-body { grid-template-columns: 1fr; }
   .pw-root { height: auto; }

@@ -34,10 +34,16 @@ from .project_models import (
     WorkspaceFile,
 )
 from .source_ingestion import SourceDocument
-
-
-class ProjectGroundingError(ValueError):
-    """Raised when a source cannot be reliably turned into a guided project."""
+from .source_quality import (
+    ProjectGroundingError,
+    evaluate_milestones,
+    evaluate_source,
+    filter_invalid_milestones,
+    is_conceptual_heading,
+    is_dangling_or_document_task,
+    is_implementable_step,
+    require_accept,
+)
 
 
 # Curated technologies we can recognise in a source. Kept intentionally small and
@@ -463,7 +469,8 @@ _CONCEPT_WORDS: list[tuple[str, str]] = [
 # Chapters that are meta/non-implementation and shouldn't become build milestones.
 _META_CHAPTER = re.compile(
     r"^(intro|introduction|welcome|outro|summary|conclusion|recap|results?|"
-    r"shoutout|thanks|corrections?|errata|q&a|questions|final thoughts)\b",
+    r"shoutout|thanks|corrections?|errata|q&a|questions|final thoughts|"
+    r"series preview|some final words|notation)\b",
     re.IGNORECASE,
 )
 # Real code identifiers: inner capitals (DataLoader) or ALLCAPS+digits (TF32).
@@ -523,6 +530,8 @@ def _looks_meta_heading(title: str) -> bool:
     cleaned = _clean_chapter(title)
     if _META_CHAPTER.match(cleaned):
         return True
+    if is_conceptual_heading(cleaned):
+        return True
     # Playlist-style "Tutorial #1 - Introduction" with no implementable payload.
     if re.search(r"\b(introduction|welcome|outro|conclusion|recap|subscribe)\b", cleaned, re.I):
         if not _STRONG_CONCEPT.search(cleaned):
@@ -533,7 +542,11 @@ def _looks_meta_heading(title: str) -> bool:
 def _is_instructional_heading(title: str) -> bool:
     if _looks_meta_heading(title):
         return False
-    return bool(_INSTRUCTIONAL_HEADING.search(title))
+    if not _INSTRUCTIONAL_HEADING.search(title):
+        return False
+    # Action verbs like "write" / "build" are not enough — the heading must name
+    # something a learner can actually implement.
+    return is_implementable_step(title) or bool(_match_concept_tokens(title))
 
 
 def _collect_chapters(doc: SourceDocument) -> list[str]:
@@ -631,14 +644,36 @@ def _stems_overlap(a: set[str], b: set[str]) -> bool:
 
 
 def _concepts_from_prose(text: str, title: str) -> list[str]:
-    """Extract ordered implementable topics from title + description (no URL allowlist)."""
+    """Extract ordered implementable topics from title + description (no URL allowlist).
+
+    Mere mentions of techniques (neural net, backpropagation, gradient descent)
+    are not enough — the source must show build/implement intent. Otherwise a
+    conceptual lecture is turned into a fake coding project.
+    """
     blob = f"{title}\n{text}"
+    if not re.search(
+        r"\blet'?s (?:build|implement|write|code|create|reproduce)\b|"
+        r"\bwe (?:will |are going to |gonna )?(?:build|implement|reproduce)\b|"
+        r"\bhow to (?:build|implement)\b|"
+        r"\bimplementing\b|"
+        r"\bfrom scratch\b|"
+        r"\bfollow(?:ing)? along\b|"
+        r"github\.com|"
+        r"\bdefine (?:a |the )?(?:class|function|method)\b|"
+        r"\breproduce\b",
+        blob,
+        re.I,
+    ):
+        return []
+
     found: list[str] = []
     stems: list[set[str]] = []
 
     def _add(label: str) -> None:
         cleaned = label.strip()
-        if not cleaned or _looks_meta_heading(cleaned):
+        if not cleaned or _looks_meta_heading(cleaned) or is_conceptual_heading(cleaned):
+            return
+        if not is_implementable_step(cleaned):
             return
         stem = _concept_stem(cleaned)
         if not stem:
@@ -680,28 +715,9 @@ def _concepts_from_prose(text: str, title: str) -> list[str]:
 
 
 def _assert_source_acceptable(doc: SourceDocument, text: str, outline: list[str], title: str) -> None:
-    """Instructional-usefulness gate: reject conversations; allow informal lessons."""
-    heading = f"{title}\n{doc.title}"
-    blob = f"{heading}\n{text}"
-    if _CONVERSATION_SOURCE.search(heading):
-        raise ProjectGroundingError(
-            "This source reads like a podcast, interview, or conversation rather than a "
-            "teach-and-build lesson. Create Course needs a coding or ML tutorial, walkthrough, "
-            "or playlist with examples you can implement."
-        )
-    teach = bool(_TEACH_SIGNAL.search(blob)) or any(_is_instructional_heading(h) for h in outline)
-    if _CONVERSATION_SOURCE.search(blob) and not teach:
-        raise ProjectGroundingError(
-            "This source reads like a podcast, interview, or conversation rather than a "
-            "teach-and-build lesson. Create Course needs a coding or ML tutorial, walkthrough, "
-            "or playlist with examples you can implement."
-        )
-    if (not text or len(text.strip()) < 40) and len(outline) < 2:
-        raise ProjectGroundingError(
-            "Not enough material to ground a course in this source. YouTube didn't provide a "
-            "usable transcript or chapter outline. Paste the transcript, or pick a tutorial "
-            "with chapters / a description of what is built."
-        )
+    """Stage 2 quality gate: reject/insufficient before curriculum planning."""
+    del text, outline  # gathered again inside evaluate_source from the document
+    require_accept(evaluate_source(doc, title))
 
 
 def _check_description(title: str, token: str) -> str:
@@ -713,6 +729,8 @@ def _check_description(title: str, token: str) -> str:
 def _chapter_check(title: str) -> VerificationCheck | None:
     if len(title) > 160:
         title = title[:157] + "…"
+    if not is_implementable_step(title) and not _match_concept_tokens(title):
+        return None
     # 1) A concrete import/symbol/call if the chapter names one.
     direct = _extract_target(title)
     if direct and direct[0] in ("import", "symbol", "function_call"):
@@ -861,6 +879,8 @@ def plan_project(doc: SourceDocument, title: str, course_id: str) -> ProjectCour
                 break
             if not _is_step(window):
                 continue
+            if is_dangling_or_document_task(window):
+                continue
             target = _extract_target(window)
             if target is None:
                 continue
@@ -957,8 +977,7 @@ def plan_project(doc: SourceDocument, title: str, course_id: str) -> ProjectCour
         created_at=now,
         updated_at=now,
     )
-    polish_project_copy(project)
-    return project
+    return _finalize_planned_project(project)
 
 
 def _plan_from_chapters(doc: SourceDocument, chapters: list[str], title: str, course_id: str) -> ProjectCourse:
@@ -1075,6 +1094,13 @@ def _plan_from_chapters(doc: SourceDocument, chapters: list[str], title: str, co
         created_at=now,
         updated_at=now,
     )
+    return _finalize_planned_project(project)
+
+
+def _finalize_planned_project(project: ProjectCourse) -> ProjectCourse:
+    """Stage 3 — drop malformed milestones; reject the plan if too little remains."""
+    project.milestones = filter_invalid_milestones(project.milestones)
+    require_accept(evaluate_milestones(project.milestones, project.project_goal, stage="planning"))
     polish_project_copy(project)
     return project
 
