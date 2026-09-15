@@ -7,6 +7,7 @@ import {
   type ProjectView,
   type WorkspaceFile,
 } from '../../utils/projectApi'
+import { compactText, milestoneDescription, sourceExcerpt, whyExplanation } from './learnerCopy'
 
 // ─── ProjectWorkspace ─────────────────────────────────────────────────────────
 // The persistent, VS Code-like workspace for a Create Course guided project.
@@ -235,8 +236,8 @@ export const ProjectWorkspace: React.FC<ProjectWorkspaceProps> = ({ courseId, on
                 </span>
                 <div className="pw-milestone-body">
                   <span className="pw-milestone-title">{m.title}</span>
-                  {m.status === 'current' && m.source_quote && (
-                    <span className="pw-milestone-source">“{m.source_quote}”</span>
+                  {m.status === 'current' && milestoneDescription(m) && (
+                    <span className="pw-milestone-source">{milestoneDescription(m)}</span>
                   )}
                 </div>
                 {m.status !== 'pending' && <span className="pw-milestone-xp">+{m.xp_reward}</span>}
@@ -318,14 +319,16 @@ export const ProjectWorkspace: React.FC<ProjectWorkspaceProps> = ({ courseId, on
               <h3 className="pw-microstep-title">
                 {currentMilestone.hook || currentMilestone.title}
               </h3>
-              {currentMilestone.teach && <p className="pw-teach">{currentMilestone.teach}</p>}
-              {currentMilestone.microstep.action && (
+              {currentMilestone.teach && compactText(currentMilestone.teach, 420) && (
+                <p className="pw-teach">{compactText(currentMilestone.teach, 420)}</p>
+              )}
+              {compactText(currentMilestone.microstep.action, 220) && (
                 <p className="pw-action">
-                  <strong>Do this:</strong> {currentMilestone.microstep.action}
+                  <strong>Do this:</strong> {compactText(currentMilestone.microstep.action, 220)}
                 </p>
               )}
-              {currentMilestone.microstep.hint && (
-                <p className="pw-hint">💡 {currentMilestone.microstep.hint}</p>
+              {compactText(currentMilestone.microstep.hint, 220) && (
+                <p className="pw-hint">💡 {compactText(currentMilestone.microstep.hint, 220)}</p>
               )}
               <div className="pw-microstep-controls">
                 {currentMilestone.example && (
@@ -345,10 +348,10 @@ export const ProjectWorkspace: React.FC<ProjectWorkspaceProps> = ({ courseId, on
               )}
               {expandedWhy === currentMilestone.id && (
                 <div className="pw-why-body">
-                  {currentMilestone.why && <p>{currentMilestone.why}</p>}
-                  {currentMilestone.source_quote && (
+                  <p>{whyExplanation(currentMilestone)}</p>
+                  {sourceExcerpt(currentMilestone.source_quote) && (
                     <p className="pw-source-note">
-                      <strong>From the source:</strong> “{currentMilestone.source_quote}”
+                      <strong>From the source:</strong> “{sourceExcerpt(currentMilestone.source_quote)}”
                     </p>
                   )}
                 </div>

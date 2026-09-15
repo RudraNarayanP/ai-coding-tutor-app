@@ -118,6 +118,24 @@ def test_from_import_uses_package_root():
     imports = [m.checks[0].target for m in project.milestones if m.checks and m.checks[0].kind == "import"]
     assert "transformers" in imports
     assert "GPT2LMHeadModel" not in imports  # must be the module, not the symbol
+    assert "Transformers" not in imports  # spoken Title-Case must be canonicalized
+
+
+def test_unpunctuated_caption_does_not_collapse_to_one_transcript_milestone():
+    caption = (
+        "hello everybody welcome back going from tensor flow to pytorch Friendly and so it's "
+        "much easier to load and work with huggingface transformers so import Transformers "
+        "and then we import torch and then define a class called GPT and then implement the "
+        "forward method so that it returns the logits and then print the result"
+    )
+    project = plan_project(_doc(caption, title="Reproduce GPT-2"), title="Reproduce GPT-2", course_id="project-raw")
+    imports = [m.checks[0].target.lower() for m in project.milestones if m.checks and m.checks[0].kind == "import"]
+    assert "transformers" in imports
+    assert "torch" in imports
+    for m in project.milestones:
+        assert "tensor flow to pytorch" not in (m.source_grounded_description or "").lower()
+        assert "tensor flow to pytorch" not in (m.why or "").lower()
+        assert len(m.source_grounded_description or "") <= 280
 
 
 def _chaptered_doc(chapters, title="Reproduce GPT-2 (124M)"):

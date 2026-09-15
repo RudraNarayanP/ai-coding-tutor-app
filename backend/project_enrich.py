@@ -14,6 +14,7 @@ import json
 import logging
 import re
 
+from .project_copy import looks_like_raw_transcript, polish_project_copy
 from .project_models import ProjectCourse
 
 logger = logging.getLogger("patchwork.project_enrich")
@@ -34,16 +35,19 @@ _SYSTEM = (
 
 def _build_user_prompt(project: ProjectCourse, items: list[tuple[int, str]]) -> str:
     listing = "\n".join(f'{idx}. {title}' for idx, title in items)
+    outline = "; ".join(m.title for m in project.milestones[:16])
     return (
         f"Project: {project.title}\n"
         f"What it builds: {project.project_goal}\n"
         f"Tech: {', '.join(project.tech_stack) or 'general'}\n"
-        f"Source summary: {project.source_summary[:1200]}\n\n"
+        f"Project steps: {outline}\n\n"
         f"For EACH numbered step below, write engaging micro-content grounded in what this project "
         f"actually builds at that step. Return a JSON object mapping the step number (as a string) to "
         f'an object: {{"hook": punchy line <=12 words, "teach": 2 sentences (what it is + why it '
         f'matters), "example": ONE tiny code line or pattern, "celebrate": a short hype line with one '
-        f"emoji}}.\n\nSteps:\n{listing}"
+        f"emoji}}.\n"
+        f"Never paste or paraphrase a raw video transcript. Keep teach to two short sentences.\n\n"
+        f"Steps:\n{listing}"
     )
 
 
@@ -120,6 +124,9 @@ def _apply_items(project: ProjectCourse, data: dict[int, dict]) -> int:
         teach = str(val.get("teach", "")).strip()
         example = str(val.get("example", "")).strip()
         celebrate = str(val.get("celebrate", "")).strip()
+        # Refuse caption dumps the model echoed from source text.
+        if looks_like_raw_transcript(teach) or looks_like_raw_transcript(hook):
+            continue
         if teach and len(teach) > 20:
             m.hook = hook[:200]
             m.teach = teach[:1200]
@@ -175,4 +182,5 @@ async def enrich_project(provider, project: ProjectCourse) -> ProjectCourse:
             await _enrich_chunk(provider, project, chunk)
         except Exception as exc:  # noqa: BLE001 — enrichment is best-effort.
             logger.info(f"Milestone enrichment chunk failed ({exc.__class__.__name__}); using deterministic copy.")
+    polish_project_copy(project)
     return project

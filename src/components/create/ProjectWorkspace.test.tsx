@@ -155,4 +155,101 @@ describe('ProjectWorkspace', () => {
     fireEvent.click(screen.getByText('Apply suggestion'))
     expect((screen.getByLabelText('Editor for main.py') as HTMLTextAreaElement).value).toContain('import collections')
   })
+
+  it('shows a concise Why explanation, not a raw transcript dump (bugs A/B/C)', async () => {
+    const dump =
+      "hello everybody welcome back going from tensor flow to pytorch Friendly and so it's much easier " +
+      'to load and work with huggingface transformers so import Transformers and then we can load the model'
+    const project: ProjectView = {
+      ...baseProject,
+      title: 'Reproduce GPT-2',
+      project_goal: 'Reproduce GPT-2 from the tutorial',
+      tech_stack: ['torch', 'transformers'],
+      milestones: [
+        baseProject.milestones[0],
+        {
+          id: 'm2',
+          order: 2,
+          title: 'Import Transformers',
+          status: 'current',
+          source_grounded_description:
+            'Load the Transformers library so you can use it in this project. Add the required import to `main.py`.',
+          source_quote: dump,
+          why: 'Later steps need the transformers package available. Importing it first matches the tutorial.',
+          xp_reward: 20,
+          hook: 'Bring in the model library.',
+          teach: 'The transformers package loads pretrained GPT-2 weights. Import it before you call from_pretrained.',
+          example: 'from transformers import GPT2LMHeadModel',
+          celebrate: '',
+          microstep: {
+            observation: 'Next step from the tutorial:',
+            action: 'Add `import transformers` at the top of `main.py` (or `from transformers import ...`).',
+            hint: 'Use `import transformers` or `from transformers import ...` — package names are lowercase.',
+          },
+        },
+        baseProject.milestones[2],
+      ],
+    }
+    ;(projectApi.get as any).mockResolvedValue(project)
+    render(<ProjectWorkspace courseId="project-gpt2" onExit={() => {}} />)
+    await waitFor(() => screen.getByText('Reproduce GPT-2'))
+
+    // A: description is concise, not the caption.
+    expect(screen.getByText(/Load the Transformers library/)).toBeInTheDocument()
+    expect(screen.queryByText(/tensor flow to pytorch/i)).toBeNull()
+    // C: instructions use the real package name, not "Add an 'import Transformers'".
+    expect(screen.getByText(/Add `import transformers`/)).toBeInTheDocument()
+    expect(screen.queryByText(/Add an/)).toBeNull()
+
+    fireEvent.click(screen.getByRole('button', { name: 'Why?' }))
+    // B: Why is a useful explanation, not "From the source:" + the caption.
+    expect(screen.getByText(/Later steps need the transformers package/)).toBeInTheDocument()
+    expect(screen.queryByText(/tensor flow to pytorch/i)).toBeNull()
+    expect(screen.queryByText(/From the source:/)).toBeNull()
+  })
+
+  it('does not render a persisted caption dump in the description or Why (defense)', async () => {
+    const dump =
+      "hello everybody welcome back going from tensor flow to pytorch Friendly and so it's much easier " +
+      'to load and work with huggingface transformers so import Transformers and then we can load the model ' +
+      'with from_pretrained and so we start by writing the neural net so define a class called GPT'
+    const project: ProjectView = {
+      ...baseProject,
+      title: 'Reproduce GPT-2',
+      milestones: [
+        baseProject.milestones[0],
+        {
+          ...baseProject.milestones[1],
+          title: 'Import Transformers',
+          source_grounded_description: dump,
+          source_quote: dump,
+          why: dump,
+          teach: dump,
+          microstep: {
+            observation: dump.slice(0, 200),
+            action: dump,
+            hint: "Add an 'import Transformers' (or 'from Transformers import ...') statement.",
+          },
+        },
+        baseProject.milestones[2],
+      ],
+    }
+    ;(projectApi.get as any).mockResolvedValue(project)
+    render(<ProjectWorkspace courseId="project-gpt2" onExit={() => {}} />)
+    await waitFor(() => screen.getAllByText('Import Transformers').length)
+    expect(screen.queryByText(/tensor flow to pytorch/i)).toBeNull()
+    fireEvent.click(screen.getByRole('button', { name: 'Why?' }))
+    expect(screen.queryByText(/tensor flow to pytorch/i)).toBeNull()
+    expect(screen.getByText(/part of building the project from the tutorial/)).toBeInTheDocument()
+  })
+
+  it('keeps other Create Course tutorials readable (bug D) and Run/NEXT working (bug E)', async () => {
+    render(<ProjectWorkspace courseId="project-abc" onExit={() => {}} />)
+    await waitFor(() => screen.getByText('Word Frequency Counter'))
+    expect(screen.getByText(/Import the collections module/)).toBeInTheDocument()
+    fireEvent.click(screen.getByRole('button', { name: 'Why?' }))
+    expect(screen.getByText('You need it to count.')).toBeInTheDocument()
+    expect(screen.getByRole('button', { name: /Run/ })).toBeInTheDocument()
+    expect(screen.getByRole('button', { name: /NEXT/ })).toBeInTheDocument()
+  })
 })
