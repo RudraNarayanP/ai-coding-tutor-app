@@ -180,6 +180,7 @@ MICROGRAD_CHAPTERS = [
     "starting the core Value object of micrograd and its visualization",
     "manual backpropagation example #1: simple expression",
     "implementing the backward function for each operation",
+    "collecting all of the parameters of the neural net",
     "doing gradient descent optimization manually, training the network",
 ]
 
@@ -195,6 +196,9 @@ def test_livecoding_theory_chapters_are_kept_and_not_mapped_to_adamw():
     assert "derivative" in titles
     assert "value object" in titles or "micrograd" in titles
     assert "backpropagation" in titles or "backward" in titles
+    params = next(m for m in project.milestones if "parameters of the neural" in m.title.lower())
+    assert "parameters" in (params.checks[0].target or "")
+    assert "AdamW" not in (params.checks[0].target or "")
     for m in project.milestones:
         if m.checks:
             assert "AdamW" not in (m.checks[0].target or "")
@@ -238,6 +242,10 @@ def test_follow_along_description_grounds_milestones_without_url_allowlist():
     blob = " ".join((m.title + " " + m.source_quote).lower() for m in project.milestones)
     assert "micrograd" in blob or "backprop" in blob or "neural" in blob
     assert len([m for m in project.milestones if m.checks and m.checks[0].kind != "file_exists"]) >= 2
+    titles = [m.title.lower() for m in project.milestones]
+    # Description phrases must not emit duplicate micrograd/neural-net milestones.
+    assert sum("micrograd" in t for t in titles) == 1
+    assert sum("neural" in t for t in titles) <= 1
 
 
 def test_playlist_tutorial_titles_become_grounded_milestones():

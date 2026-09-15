@@ -69,9 +69,6 @@ KNOWN_TECH = {
     "tqdm": "tqdm",
     "wandb": "wandb",
     "json": "json",
-    "os": "os",
-    "sys": "sys",
-    "re": "re",
     "math": "math",
     "random": "random",
     "datetime": "datetime",
@@ -304,6 +301,8 @@ def _detect_tech(text: str) -> list[str]:
     found: list[str] = []
     low = text.lower()
     for key, name in KNOWN_TECH.items():
+        if len(key) < 3:
+            continue
         if re.search(rf"\b{re.escape(key)}\b", low) and name not in found:
             found.append(name)
     return found
@@ -336,6 +335,7 @@ CONCEPT_TOKENS: list[tuple[str, str]] = [
     ("dataloader", "DataLoader|dataloader"),
     ("data batches", "DataLoader|batch"),
     ("parameter sharing", "lm_head|wte"),
+    ("parameters of the neural", "parameters|state_dict"),
     ("mixed precision", "autocast|bfloat16"),
     ("bfloat16", "bfloat16"),
     ("float16", "float16|autocast"),
@@ -508,11 +508,12 @@ def _collect_outline(doc: SourceDocument) -> list[str]:
 
 
 def _match_concept_tokens(title: str) -> str | None:
+    """Longest phrase wins so 'parameters of the neural net' is not just 'neural net'."""
     low = title.lower()
-    for needle, token in CONCEPT_TOKENS:
+    for needle, token in sorted(CONCEPT_TOKENS, key=lambda item: len(item[0]), reverse=True):
         if needle in low:
             return token
-    for needle, token in _CONCEPT_WORDS:
+    for needle, token in sorted(_CONCEPT_WORDS, key=lambda item: len(item[0]), reverse=True):
         if re.search(rf"\b{re.escape(needle)}\b", low):
             return token
     return None
@@ -541,18 +542,46 @@ def _tokens_from_heading(title: str) -> str | None:
     return "|".join(ordered)
 
 
+def _concept_stem(label: str) -> set[str]:
+    s = re.sub(r"[^a-z0-9]+", " ", label.lower())
+    alias = {"net": "network", "nets": "network", "networks": "network", "nn": "network"}
+    drop = {
+        "build", "implement", "implementing", "create", "write", "train", "training",
+        "the", "a", "an", "how", "to", "engine", "library", "object", "in", "this",
+        "video", "follow", "lecture", "with",
+    }
+    out: set[str] = set()
+    for tok in s.split():
+        tok = alias.get(tok, tok)
+        if tok in drop or len(tok) < 3:
+            continue
+        out.add(tok)
+    return out
+
+
+def _stems_overlap(a: set[str], b: set[str]) -> bool:
+    if not a or not b:
+        return False
+    return a <= b or b <= a or (len(a & b) / min(len(a), len(b)) >= 0.6)
+
+
 def _concepts_from_prose(text: str, title: str) -> list[str]:
     """Extract ordered implementable topics from title + description (no URL allowlist)."""
     blob = f"{title}\n{text}"
     found: list[str] = []
-    seen: set[str] = set()
+    stems: list[set[str]] = []
 
     def _add(label: str) -> None:
-        key = label.lower().strip()
-        if not key or key in seen or _looks_meta_heading(label):
+        cleaned = label.strip()
+        if not cleaned or _looks_meta_heading(cleaned):
             return
-        seen.add(key)
-        found.append(label.strip())
+        stem = _concept_stem(cleaned)
+        if not stem:
+            return
+        if any(_stems_overlap(stem, prev) for prev in stems):
+            return
+        stems.append(stem)
+        found.append(cleaned)
 
     phrase_labels = [
         (r"micrograd", "Build the micrograd engine"),
