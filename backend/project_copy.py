@@ -87,15 +87,20 @@ def short_source_excerpt(text: str | None, *, needle: str = "", max_len: int = M
     raw = re.sub(r"\s+", " ", (text or "")).strip()
     if not raw:
         return ""
-    if len(raw) <= max_len and not looks_like_raw_transcript(raw):
+    if len(raw) <= 90 and not looks_like_raw_transcript(raw, max_len=max_len):
         return raw
     snippet = raw
     if needle:
         idx = raw.lower().find(needle.lower())
         if idx != -1:
-            start = max(0, idx - 24)
-            end = min(len(raw), start + max_len)
-            snippet = raw[start:end].strip()
+            start = max(0, idx - 16)
+            rest = raw[idx:]
+            brk = re.search(r"\s+(?:and then|and so|, and|so we|then we)\b", rest, re.I)
+            if brk and brk.start() >= len(needle):
+                end = idx + brk.start()
+            else:
+                end = min(len(raw), start + max_len)
+            snippet = raw[start:end].strip(" ,;:-")
             if start > 0:
                 snippet = "…" + snippet
             if end < len(raw):
@@ -103,7 +108,7 @@ def short_source_excerpt(text: str | None, *, needle: str = "", max_len: int = M
     elif len(raw) > max_len:
         snippet = raw[: max_len - 1].rstrip() + "…"
     snippet = snippet.strip()
-    if looks_like_raw_transcript(snippet) or len(snippet) > max_len:
+    if not snippet or looks_like_raw_transcript(snippet, max_len=max_len) or len(snippet) > max_len:
         return ""
     return snippet
 

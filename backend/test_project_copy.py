@@ -105,6 +105,11 @@ def test_b_why_is_concise_explanation_not_full_transcript():
     assert "from the source:" not in import_ms.why.lower()
     # Why explains the step; it is not a caption paste.
     assert looks_like_raw_transcript(import_ms.why) is False
+    # Source excerpt, if any, is a tight phrase — not the rest of the caption.
+    if import_ms.source_quote:
+        assert len(import_ms.source_quote) <= 160
+        assert "from_pretrained" not in import_ms.source_quote.lower()
+        assert DUMP_PHRASE not in import_ms.source_quote.lower()
 
 
 def test_c_explanation_stays_relevant_to_milestone_and_source():
