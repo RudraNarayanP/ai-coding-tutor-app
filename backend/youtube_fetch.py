@@ -52,26 +52,69 @@ def _extract_title(md: str) -> str:
     return m.group(1).strip() if m else ""
 
 
+_MD_LINK = re.compile(r"\[([^\]]*)\]\(([^)]+)\)")
+
+
+def _unmarkdown_links(text: str) -> str:
+    """Keep link labels and high-signal URLs (GitHub/Colab), drop the rest of the markup."""
+
+    def _repl(match: re.Match[str]) -> str:
+        label, url = match.group(1).strip(), match.group(2).strip()
+        if re.search(r"github\.com|colab\.research\.google|huggingface\.co", url, re.I):
+            return f"{label} {url}".strip()
+        return label
+
+    cleaned = _MD_LINK.sub(_repl, text)
+    cleaned = re.sub(r"https://www\.youtube\.com/[^\s)]+", " ", cleaned)
+    return re.sub(r"\s+", " ", cleaned).strip()
+
+
+def _creator_description_block(md: str) -> str:
+    """Prefer the ## Description section even if comments appear earlier on the page."""
+    match = re.search(
+        r"^##\s+Description\s*\n(.+?)(?=^##\s+(?!Description)\b|\Z)",
+        md,
+        re.IGNORECASE | re.MULTILINE | re.DOTALL,
+    )
+    if match:
+        return match.group(1)
+    return re.split(
+        r"^##\s+(?:Comments|In this video)\b",
+        md,
+        maxsplit=1,
+        flags=re.IGNORECASE | re.MULTILINE,
+    )[0]
+
+
 def _extract_description(md: str) -> str:
-    # Karpathy-style long descriptions appear as a paragraph; grab the longest
-    # descriptive line that isn't navigation chrome.
+    """Pull the creator's own description, not viewer comments or sidebar chrome.
+
+    Reader-proxy pages interleave comments (often the longest prose on the page)
+    with the real description. Using the longest line globally turned follow-along
+    tutorials into comment snippets and caused false rejects.
+    """
+    block = _creator_description_block(md)
     best = ""
-    for line in md.splitlines():
-        line = line.strip()
-        if len(line) < 80:
+    for raw in block.splitlines():
+        line = raw.strip()
+        if len(line) < 40:
             continue
-        if line.startswith(("[", "!", "#", "|", "Title:", "URL Source:")):
+        if line.startswith(("[", "!", "#", "|", "Title:", "URL Source:", "Warning:")):
             continue
         if "views •" in line or "Live Playlist" in line:
             continue
-        # Skip chapter/link runs and any line dominated by markdown links.
         if line.count("](https://www.youtube.com/watch") >= 2 or line.lower().startswith("chapters:"):
             continue
-        if line.count("](http") >= 1 or line.startswith("*"):
+        if line.startswith("*"):
             continue
-        # Prefer lines that read like prose.
-        if line.count(" ") >= 10 and len(line) > len(best):
-            best = line
+        prose = _unmarkdown_links(line)
+        if len(prose) < 40 or prose.count(" ") < 6:
+            continue
+        # Viewer-comment shape: short praise without a teaching verb or artifact.
+        if re.match(r"^(hey|wow|nice|thanks|thank you|great video)\b", prose, re.I) and len(prose) < 180:
+            continue
+        if len(prose) > len(best):
+            best = prose
     return best[:4000]
 
 
@@ -152,10 +195,13 @@ async def fetch_video(video_id: str, client: httpx.AsyncClient | None = None) ->
             "chapters": chapters,
             "text": build_source_text(title, description, chapters),
         }
-        if best is None or len(chapters) > len(best["chapters"]):
+        if best is None or len(chapters) > len(best["chapters"]) or (
+            len(chapters) == len(best.get("chapters") or [])
+            and len(description) > len(best.get("description") or "")
+        ):
             best = result
-        # Good enough — stop early.
-        if chapters and not _looks_incomplete(md, chapters):
+        # Good enough — stop early. Description-only videos (no chapters) still count.
+        if (chapters or len(description) >= 120) and not _looks_incomplete(md, chapters):
             return result
     if best is not None:
         return best

@@ -171,3 +171,100 @@ def test_milestones_have_strictly_increasing_order():
     assert orders == sorted(orders)
     assert orders[0] == 1
     assert len(set(orders)) == len(orders)
+
+
+MICROGRAD_CHAPTERS = [
+    "intro",
+    "micrograd overview",
+    "derivative of a simple function with one input",
+    "starting the core Value object of micrograd and its visualization",
+    "manual backpropagation example #1: simple expression",
+    "implementing the backward function for each operation",
+    "doing gradient descent optimization manually, training the network",
+]
+
+
+def test_livecoding_theory_chapters_are_kept_and_not_mapped_to_adamw():
+    """Expert whiteboard / from-scratch lessons must not be declined or GPT-2-tokenized."""
+    project = plan_project(
+        _chaptered_doc(MICROGRAD_CHAPTERS, title="building micrograd"),
+        title="building micrograd",
+        course_id="project-micrograd",
+    )
+    titles = " ".join(m.title.lower() for m in project.milestones)
+    assert "derivative" in titles
+    assert "value object" in titles or "micrograd" in titles
+    assert "backpropagation" in titles or "backward" in titles
+    for m in project.milestones:
+        if m.checks:
+            assert "AdamW" not in (m.checks[0].target or "")
+
+
+def test_podcast_style_source_is_rejected():
+    podcast = _chaptered_doc(
+        ["Introduction", "Neural networks", "Biology", "Aliens", "Universe", "Transformers"],
+        title="Tesla AI, Aliens, and AGI | Some Technical Podcast #333",
+    )
+    with pytest.raises(ProjectGroundingError, match="podcast|interview|conversation"):
+        plan_project(podcast, title="Tesla AI, Aliens, and AGI | Some Technical Podcast #333", course_id="pod")
+
+
+def test_follow_along_description_grounds_milestones_without_url_allowlist():
+    from backend.source_ingestion import VideoSegment
+
+    desc = (
+        "Original lecture on neural networks. GitHub https://github.com/example/micrograd "
+        "In this video I follow the lecture on how to build Micrograd, how to train Neural "
+        "Networks and implementing Backpropagation."
+    )
+    seg = VideoSegment(
+        video_id="abc123abc12",
+        title="I completed the AI challenge (advanced)",
+        url="https://youtu.be/abc123abc12",
+        position=1,
+        transcript=desc,
+        chapters=[],
+        description_snippet=desc[:500],
+    )
+    doc = SourceDocument(
+        source_type="youtube_url",
+        source_url="https://youtu.be/abc123abc12",
+        source_hash="h",
+        title=seg.title,
+        segments=[seg],
+        access_level="full",
+    )
+    project = plan_project(doc, title=seg.title, course_id="follow")
+    blob = " ".join((m.title + " " + m.source_quote).lower() for m in project.milestones)
+    assert "micrograd" in blob or "backprop" in blob or "neural" in blob
+    assert len([m for m in project.milestones if m.checks and m.checks[0].kind != "file_exists"]) >= 2
+
+
+def test_playlist_tutorial_titles_become_grounded_milestones():
+    from backend.source_ingestion import VideoSegment
+
+    titles = [
+        "Python ML Tutorial #1 - Introduction",
+        "Python ML Tutorial #2 - Linear Regression p.1",
+        "Python ML Tutorial #3 - KNN Implementation",
+        "Python ML Tutorial #4 - SVM Implementation",
+        "Python ML Tutorial #5 - K Means Clustering",
+    ]
+    segs = [
+        VideoSegment(video_id=f"vid{i}", title=t, url="", position=i, transcript=t, chapters=[])
+        for i, t in enumerate(titles, 1)
+    ]
+    doc = SourceDocument(
+        source_type="youtube_playlist",
+        source_url="https://www.youtube.com/playlist?list=PLexample",
+        source_hash="h",
+        title="ML Fundamentals",
+        segments=segs,
+        access_level="full",
+    )
+    project = plan_project(doc, title="ML Fundamentals", course_id="playlist-ml")
+    joined = " ".join(m.title.lower() for m in project.milestones)
+    assert "linear regression" in joined
+    assert "knn" in joined or "nearest" in joined
+    assert "print the result" not in joined
+    assert "aliens" not in joined

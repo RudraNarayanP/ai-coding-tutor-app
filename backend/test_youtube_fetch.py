@@ -33,6 +33,33 @@ def test_extract_description_prefers_prose_not_links_or_chapters():
     assert not desc.lower().startswith("chapters")
 
 
+FOLLOW_ALONG_MD = """Title: I completed the AI challenge (advanced) - YouTube
+
+# I completed the AI challenge (advanced)
+
+## Comments 37
+
+huh this is a unique video concept that i've just now seen. a video where we are learning together and you clarifying your thought process throughout the lecture and making it clear for us who is also trying to understand. that's really cool. please do more of this with other advanced ML/NN topics extra extra extra extra extra extra extra padding so this comment is the longest line on the page by far and used to be mistaken for the description.
+
+## Description
+
+I completed the AI challenge (advanced)
+
+If you're serious about AI, join my community. Original video: [The spelled-out intro to neural networks](https://www.youtube.com/watch?v=VMj-3S1tku0) GitHub: [https://github.com/karpathy/micrograd](https://github.com/karpathy/micrograd) In this video I follow the lecture on how to build Micrograd, how to train Neural Networks and implementing Backpropagation.
+
+## Transcript
+NaN
+"""
+
+
+def test_extract_description_uses_creator_block_not_comments():
+    desc = _extract_description(FOLLOW_ALONG_MD)
+    assert "build Micrograd" in desc
+    assert "Backpropagation" in desc
+    assert "github.com/karpathy/micrograd" in desc
+    assert "unique video concept" not in desc
+
+
 def test_extract_chapters_ordered_and_filtered():
     chapters = extract_chapters(SAMPLE_MD)
     titles = [t for _ts, t in chapters]

@@ -88,6 +88,7 @@ _STOPWORDS = {
     "for", "of", "in", "on", "is", "are", "with", "your", "our", "we", "you",
     "some", "any", "each", "them", "its", "here", "there", "now", "next", "also",
     "will", "can", "should", "into", "from", "our", "my", "his", "her",
+    "all", "those", "these", "they", "what", "how", "why", "when", "who",
 }
 
 _ACTION_VERBS = (
@@ -246,12 +247,18 @@ def _extract_target(sentence: str) -> tuple[str, str] | None:
     if m and not _reject(m.group(1)):
         return ("function_call", m.group(1))
 
-    # print / output → verify the program prints something
-    if re.search(r"\b(print|output|display|show)\b", s):
+    # print / output → only when it's clearly a coding action, not "show transcript"
+    # or "test data".
+    if re.search(r"\bprint\s*\(|\bprint\s+(?:the\s+)?(?:result|output|value|it)\b", s):
         return ("stdout_contains", "")
 
-    # run / execute / test / verify → the program must run cleanly
-    if re.search(r"\b(run|execute|test|verify|check that it works)\b", s):
+    # run / execute / verify → the program must run cleanly. Bare "test" is too
+    # common in English ("test data", "test set") to treat as a coding step.
+    if re.search(
+        r"\b(?:run (?:the |your )?(?:code|program|script|project|it)|"
+        r"execute(?: it)?|verify (?:it|that)|check that it works)\b",
+        s,
+    ):
         return ("run_ok", "")
 
     return None
@@ -310,58 +317,82 @@ def _detect_language(text: str) -> str:
     return "python"
 
 
-# Concept → acceptable code token(s) for chapter-based (concept-level) checks.
-# Keys are substrings matched against a lowercased chapter title; values are a
-# "|"-separated list of tokens any of which satisfy the milestone.
+# Phrase → acceptable code token(s) for concept-level checks.
+# Prefer long, specific phrases. Short needles like "optim"/"test"/"loss" are
+# dangerous because they false-match English ("optimization", "test data").
 CONCEPT_TOKENS: list[tuple[str, str]] = [
     ("flash attention", "scaled_dot_product_attention|flash"),
     ("self-attention", "attention"),
-    ("attention", "attention"),
     ("nn.module", "nn.Module"),
     ("forward pass", "def forward"),
-    ("forward", "forward"),
-    ("logits", "logits"),
     ("cross entropy", "cross_entropy|CrossEntropyLoss"),
-    ("loss", "loss"),
-    ("tokeniz", "tiktoken|encode"),
-    ("tiktoken", "tiktoken"),
-    ("sampling", "topk|multinomial|generate|sample"),
     ("from_pretrained", "from_pretrained"),
     ("huggingface", "from_pretrained|GPT2LMHeadModel"),
-    ("checkpoint", "from_pretrained|state_dict"),
-    ("parameters", "parameters|state_dict"),
+    ("tiktoken", "tiktoken"),
+    ("tokenization", "tiktoken|encode"),
+    ("sampling loop", "topk|multinomial|generate|sample"),
     ("adamw", "AdamW"),
-    ("optim", "optim|AdamW"),
     ("data loader", "DataLoader|dataloader"),
     ("dataloader", "DataLoader|dataloader"),
     ("data batches", "DataLoader|batch"),
     ("parameter sharing", "lm_head|wte"),
-    ("weight", "weight"),
-    ("initializ", "init_weights|normal_|std"),
-    ("residual", "residual"),
     ("mixed precision", "autocast|bfloat16"),
     ("bfloat16", "bfloat16"),
     ("float16", "float16|autocast"),
     ("tf32", "tf32|set_float32_matmul_precision"),
     ("tensor core", "matmul"),
     ("torch.compile", "torch.compile|compile"),
-    ("compile", "compile"),
     ("gradient clipping", "clip_grad_norm|clip_grad"),
     ("gradient accumulation", "accum"),
     ("learning rate", "lr|learning_rate"),
-    ("scheduler", "cosine|warmup|lr"),
-    ("warmup", "warmup"),
     ("weight decay", "weight_decay"),
     ("distributed data parallel", "DistributedDataParallel|DDP"),
+    ("gradient descent", "backward|grad|parameters"),
+    ("backpropagation", "backward|grad"),
+    ("backprop", "backward|grad"),
+    ("micrograd", "Value|micrograd"),
+    ("value object", "Value"),
+    ("multi-layer perceptron", "MLP|Neuron|Layer"),
+    ("neural net", "MLP|Neuron|nn"),
+    ("neural network", "MLP|Neuron|nn"),
+    ("linear regression", "LinearRegression|sklearn"),
+    ("k nearest", "KNeighbors|knn"),
+    ("k-nearest", "KNeighbors|knn"),
+    ("k-means", "KMeans|kmeans"),
+    ("k means", "KMeans|kmeans"),
+    ("support vector", "SVC|SVM|sklearn"),
+    ("saving models", "pickle|joblib|dump"),
+    ("plotting data", "matplotlib|plt|plot"),
+    ("fineweb", "fineweb|dataset"),
+    ("hellaswag", "hellaswag|eval"),
+    ("logits", "logits"),
+    ("tanh", "tanh"),
+    ("residual", "residual"),
+    ("warmup", "warmup"),
+]
+
+# Word-boundary-only needles (never matched as a substring of a longer English word).
+_CONCEPT_WORDS: list[tuple[str, str]] = [
+    ("attention", "attention"),
+    ("logits", "logits"),
+    ("tiktoken", "tiktoken"),
+    ("checkpoint", "from_pretrained|state_dict"),
+    ("adamw", "AdamW"),
+    ("dataloader", "DataLoader|dataloader"),
+    ("residual", "residual"),
+    ("bfloat16", "bfloat16"),
+    ("scheduler", "cosine|warmup|lr"),
     ("ddp", "DistributedDataParallel|DDP|dist"),
     ("dataset", "dataset|load"),
-    ("fineweb", "fineweb|dataset"),
-    ("validation", "val|eval"),
-    ("evaluation", "eval"),
-    ("hellaswag", "hellaswag|eval"),
-    ("device", "device|cuda"),
-    ("config", "config|Config"),
     ("hyperparameter", "config|Config"),
+    ("micrograd", "Value|micrograd"),
+    ("backprop", "backward|grad"),
+    ("derivative", "grad|derivative"),
+    ("neuron", "Neuron|Linear|tanh"),
+    ("knn", "KNeighbors|knn"),
+    ("svm", "SVC|SVM|sklearn"),
+    ("pytorch", "torch"),
+    ("sklearn", "sklearn"),
 ]
 
 # Chapters that are meta/non-implementation and shouldn't become build milestones.
@@ -370,8 +401,37 @@ _META_CHAPTER = re.compile(
     r"shoutout|thanks|corrections?|errata|q&a|questions|final thoughts)\b",
     re.IGNORECASE,
 )
-_CAMEL = re.compile(r"\b([A-Z][a-zA-Z0-9]*[a-z][a-zA-Z0-9]*(?:\.[A-Za-z0-9_]+)?)\b")
+# Real code identifiers: inner capitals (DataLoader) or ALLCAPS+digits (TF32).
+# Title-Case English ("Biology", "Aliens") must NOT count — that false-accepted podcasts.
+_CAMEL = re.compile(r"\b([A-Z][a-z]+[A-Z][A-Za-z0-9]*)\b")
+_DIGITAL_ACRONYM = re.compile(r"\b([A-Z]{2,}[0-9]+)\b")
 _DOTTED = re.compile(r"\b([a-zA-Z_][a-zA-Z0-9_]*\.[a-zA-Z_][a-zA-Z0-9_.]*)\b")
+
+_CONVERSATION_SOURCE = re.compile(
+    r"\b(podcast|interview|today'?s guest|welcome to the (?:show|podcast)|"
+    r"sit(?:ting)? down with|fireside chat|q\s*&\s*a episode)\b",
+    re.IGNORECASE,
+)
+
+_TEACH_SIGNAL = re.compile(
+    r"\b(implement|from scratch|step[- ]by[- ]step|follow along|tutorial|"
+    r"walkthrough|let'?s (?:build|write|code|implement|create)|"
+    r"hands[- ]on|live coding|build along|coding along|"
+    r"github\.com|jupyter|colab|starter code|exercise|"
+    r"backpropagat|micrograd|define (?:a |the )?(?:class|function))\b",
+    re.IGNORECASE,
+)
+
+_INSTRUCTIONAL_HEADING = re.compile(
+    r"\b(implement|build|code|function|class|train|grad|backprop|deriv|"
+    r"example|exercise|dataset|model|layer|network|forward|backward|"
+    r"install|import|debug|fix|write|create|neural|tensor|attention|"
+    r"token|parser|api|regression|knn|svm|means|perceptron|tanh|"
+    r"micrograd|pytorch|numpy|sklearn|tutorial|algorithm|optim|"
+    r"value object|neuron|mlp|dataloader|saving|plotting|linear|"
+    r"transformer|logits|loss function|expression graph|expression)\b",
+    re.IGNORECASE,
+)
 
 
 def _clean_chapter(title: str) -> str:
@@ -383,10 +443,27 @@ def _clean_chapter(title: str) -> str:
     return t
 
 
+def _looks_meta_heading(title: str) -> bool:
+    cleaned = _clean_chapter(title)
+    if _META_CHAPTER.match(cleaned):
+        return True
+    # Playlist-style "Tutorial #1 - Introduction" with no implementable payload.
+    if re.search(r"\b(introduction|welcome|outro|conclusion|recap|subscribe)\b", cleaned, re.I):
+        if not _INSTRUCTIONAL_HEADING.search(cleaned):
+            return True
+    return False
+
+
+def _is_instructional_heading(title: str) -> bool:
+    if _looks_meta_heading(title):
+        return False
+    return bool(_INSTRUCTIONAL_HEADING.search(title))
+
+
 def _collect_chapters(doc: SourceDocument) -> list[str]:
     chapters: list[str] = []
     seen: set[str] = set()
-    for seg in doc.segments:
+    for seg in getattr(doc, "segments", []) or []:
         for ch in getattr(seg, "chapters", []) or []:
             cleaned = _clean_chapter(ch)
             key = cleaned.lower()
@@ -396,29 +473,169 @@ def _collect_chapters(doc: SourceDocument) -> list[str]:
     return chapters
 
 
-def _chapter_check(title: str) -> VerificationCheck | None:
+def _collect_outline(doc: SourceDocument) -> list[str]:
+    """Ordered skill headings: video chapters, else playlist video titles."""
+    chapters = _collect_chapters(doc)
+    instructional = [c for c in chapters if _is_instructional_heading(c)]
+    if len(instructional) >= 2:
+        return chapters
+    if getattr(doc, "source_type", "") == "youtube_playlist" and len(getattr(doc, "segments", []) or []) >= 3:
+        titles: list[str] = []
+        seen: set[str] = set()
+        for seg in doc.segments:
+            raw = (seg.title or "").strip()
+            if not raw or raw.lower() in {"- youtube", "youtube"}:
+                continue
+            cleaned = _clean_chapter(raw)
+            key = cleaned.lower()
+            if cleaned and key not in seen:
+                seen.add(key)
+                titles.append(cleaned)
+        if len(titles) >= 3:
+            return titles
+    return chapters
+
+
+def _match_concept_tokens(title: str) -> str | None:
     low = title.lower()
+    for needle, token in CONCEPT_TOKENS:
+        if needle in low:
+            return token
+    for needle, token in _CONCEPT_WORDS:
+        if re.search(rf"\b{re.escape(needle)}\b", low):
+            return token
+    return None
+
+
+def _tokens_from_heading(title: str) -> str | None:
+    """Fallback concept tokens from distinctive words in an instructional heading."""
+    known = _match_concept_tokens(title)
+    if known:
+        return known
+    words: list[str] = []
+    seen: set[str] = set()
+    for word in re.findall(r"[A-Za-z][A-Za-z0-9_-]{3,}", title):
+        low = word.lower()
+        if low in _STOPWORDS or low in _ACTION_VERBS:
+            continue
+        if low in seen:
+            continue
+        seen.add(low)
+        words.append(word)
+    if not words:
+        return None
+    # Prefer the most specific (longest) content words, keep source order among them.
+    ranked = sorted(words, key=len, reverse=True)[:3]
+    ordered = [w for w in words if w in ranked]
+    return "|".join(ordered)
+
+
+def _concepts_from_prose(text: str, title: str) -> list[str]:
+    """Extract ordered implementable topics from title + description (no URL allowlist)."""
+    blob = f"{title}\n{text}"
+    found: list[str] = []
+    seen: set[str] = set()
+
+    def _add(label: str) -> None:
+        key = label.lower().strip()
+        if not key or key in seen or _looks_meta_heading(label):
+            return
+        seen.add(key)
+        found.append(label.strip())
+
+    phrase_labels = [
+        (r"micrograd", "Build the micrograd engine"),
+        (r"backpropagat", "Implement backpropagation"),
+        (r"neural nets?", "Build a neural net"),
+        (r"linear regression", "Implement linear regression"),
+        (r"k-?nearest|knn\b", "Implement k-nearest neighbors"),
+        (r"support vector|\bsvm\b", "Implement a support vector machine"),
+        (r"k-?means", "Implement k-means clustering"),
+        (r"value object", "Build the Value object"),
+        (r"gradient descent", "Train with gradient descent"),
+        (r"from scratch", None),
+    ]
+    for pattern, label in phrase_labels:
+        if label and re.search(pattern, blob, re.I):
+            _add(label)
+
+    for match in re.finditer(
+        r"\b(?:build|implement(?:ing)?|create|write|train(?:ing)?)\s+"
+        r"(?:a |an |the |how to )?"
+        r"([A-Za-z][A-Za-z0-9 _-]{2,48})",
+        blob,
+        re.I,
+    ):
+        snippet = match.group(0)
+        snippet = re.split(r"[,.]| and ", snippet)[0].strip()
+        if len(snippet) >= 8:
+            _add(snippet)
+
+    return found[:12]
+
+
+def _assert_source_acceptable(doc: SourceDocument, text: str, outline: list[str], title: str) -> None:
+    """Instructional-usefulness gate: reject conversations; allow informal lessons."""
+    heading = f"{title}\n{doc.title}"
+    blob = f"{heading}\n{text}"
+    if _CONVERSATION_SOURCE.search(heading):
+        raise ProjectGroundingError(
+            "This source reads like a podcast, interview, or conversation rather than a "
+            "teach-and-build lesson. Create Course needs a coding or ML tutorial, walkthrough, "
+            "or playlist with examples you can implement."
+        )
+    teach = bool(_TEACH_SIGNAL.search(blob)) or any(_is_instructional_heading(h) for h in outline)
+    if _CONVERSATION_SOURCE.search(blob) and not teach:
+        raise ProjectGroundingError(
+            "This source reads like a podcast, interview, or conversation rather than a "
+            "teach-and-build lesson. Create Course needs a coding or ML tutorial, walkthrough, "
+            "or playlist with examples you can implement."
+        )
+    if (not text or len(text.strip()) < 40) and len(outline) < 2:
+        raise ProjectGroundingError(
+            "Not enough material to ground a course in this source. YouTube didn't provide a "
+            "usable transcript or chapter outline. Paste the transcript, or pick a tutorial "
+            "with chapters / a description of what is built."
+        )
+
+
+def _chapter_check(title: str) -> VerificationCheck | None:
     # 1) A concrete import/symbol/call if the chapter names one.
     direct = _extract_target(title)
     if direct and direct[0] in ("import", "symbol", "function_call"):
         return _check_for(direct[0], direct[1])
     # 2) Curated concept → token map (grounded concept-level check).
-    for needle, token in CONCEPT_TOKENS:
-        if needle in low:
-            pretty = token.split("|")[0]
-            return VerificationCheck(kind="code_contains", target=token,
-                                     description=f"Your code implements **{title}** (references `{pretty}`).")
-    # 3) A distinctive CamelCase / dotted identifier in the title is a strong code
-    #    signal (e.g. "nn.Module", "DataLoaderLite", "TF32").
-    for rx in (_DOTTED, _CAMEL):
+    token = _match_concept_tokens(title)
+    if token:
+        pretty = token.split("|")[0]
+        return VerificationCheck(
+            kind="code_contains",
+            target=token,
+            description=f"Your code implements **{title}** (references `{pretty}`).",
+        )
+    # 3) Distinctive code identifiers — inner CamelCase or dotted (nn.Module),
+    #    not Title-Case English.
+    for rx in (_DOTTED, _CAMEL, _DIGITAL_ACRONYM):
         m = rx.search(title)
         if m:
             tok = m.group(1)
             if tok.lower() not in _STOPWORDS:
-                return VerificationCheck(kind="code_contains", target=tok,
-                                         description=f"Your code implements **{title}** (references `{tok}`).")
-    # No concrete code signal — deliberately return None so purely conversational
-    # chapters ("my story", "please subscribe") never become hollow milestones.
+                return VerificationCheck(
+                    kind="code_contains",
+                    target=tok,
+                    description=f"Your code implements **{title}** (references `{tok}`).",
+                )
+    # 4) Instructional heading with extractable content words (Karpathy-style
+    #    "derivative of a simple function") — still source-grounded, not GPT-2-only.
+    if _is_instructional_heading(title):
+        generic = _tokens_from_heading(title)
+        if generic:
+            pretty = generic.split("|")[0]
+            return VerificationCheck(
+                kind="code_contains",
+                target=generic,
+                description=f"Your code implements **{title}** (references `{pretty}`).",
+            )
     return None
 
 
@@ -440,21 +657,56 @@ _CELEBRATIONS = [
 ]
 
 
+def _count_sentence_targets(text: str) -> int:
+    n = 0
+    seen: set[tuple[str, str]] = set()
+    for sentence in _split_steps(text):
+        if not _is_step(sentence):
+            continue
+        target = _extract_target(sentence)
+        if target is None:
+            continue
+        kind, tgt = target
+        key = (kind, tgt)
+        if kind in ("import", "symbol", "function_call"):
+            if key in seen:
+                continue
+            seen.add(key)
+        n += 1
+    return n
+
+
 def plan_project(doc: SourceDocument, title: str, course_id: str) -> ProjectCourse:
     """Build a source-grounded ProjectCourse from an ingested source document.
 
-    Prefers creator-authored chapters (authoritative, ordered outline) when the
-    source is a chaptered video; otherwise falls back to sentence-level step
-    extraction for pasted transcripts/notes.
+    Acceptance is based on instructional usefulness (teach → example → apply),
+    not on a polished "course product" brand or a GPT-2-specific chapter map.
+    Conversations/podcasts and empty sources fail with a clear reason instead of
+    emitting a generic curriculum.
     """
-    chapters = _collect_chapters(doc)
-    if len(chapters) >= 4:
-        return _plan_from_chapters(doc, chapters, title, course_id)
-
     text = _gather_source_text(doc)
+    outline = _collect_outline(doc)
+    _assert_source_acceptable(doc, text, outline, title)
+
+    instructional_outline = [h for h in outline if _is_instructional_heading(h) or _chapter_check(h)]
+    if len(instructional_outline) >= 2:
+        try:
+            return _plan_from_chapters(doc, outline, title, course_id)
+        except ProjectGroundingError:
+            pass
+
+    # Prefer explicit coding steps in a transcript over coarse description phrases
+    # ("build a word frequency counter") so we don't skip import/def milestones.
+    prose_concepts = _concepts_from_prose(text, title or doc.title)
+    if len(prose_concepts) >= 2 and _count_sentence_targets(text) < 2:
+        try:
+            return _plan_from_chapters(doc, prose_concepts, title, course_id)
+        except ProjectGroundingError:
+            pass
+
     if not text or len(text.strip()) < 40:
         raise ProjectGroundingError(
-            "The source did not contain enough readable text to build a project. "
+            "Not enough material to ground a course in this source. "
             "Paste a fuller transcript or tutorial, or provide a video whose transcript is available."
         )
 
@@ -534,9 +786,10 @@ def plan_project(doc: SourceDocument, title: str, course_id: str) -> ProjectCour
     substantive = [m for m in milestones if m.checks and m.checks[0].kind != "file_exists"]
     if len(substantive) < 2:
         raise ProjectGroundingError(
-            "This source doesn't describe enough concrete implementation steps to build a guided project. "
-            "Provide a hands-on coding tutorial (with steps like importing packages, defining functions, "
-            "and running code) so Patchwork can turn it into a project you build."
+            "Not enough material to ground a course: this source doesn't describe enough "
+            "concrete implementation steps. Provide a hands-on coding tutorial (with steps "
+            "like importing packages, defining functions, and running code) so Patchwork can "
+            "turn it into a project you build."
         )
 
     # Final milestone — always: run the whole project and verify it works.
@@ -627,7 +880,7 @@ def _plan_from_chapters(doc: SourceDocument, chapters: list[str], title: str, co
     for idx, ch in enumerate(chapters):
         if len(milestones) >= 16:
             break
-        if _META_CHAPTER.match(ch):
+        if _looks_meta_heading(ch):
             continue
         check = _chapter_check(ch)
         if check is None:
@@ -656,11 +909,11 @@ def _plan_from_chapters(doc: SourceDocument, chapters: list[str], title: str, co
 
     # Vagueness gate: a video with no implementable chapters is rejected clearly
     # rather than turned into a hollow course.
-    if kept < 3:
+    if kept < 2:
         raise ProjectGroundingError(
-            "This video doesn't break down into enough concrete, buildable steps to make a guided "
-            "project (its chapters are too high-level or missing). Try a hands-on coding tutorial with "
-            "clear sections, or paste its transcript so Patchwork can ground the project in real steps."
+            "Not enough material to ground a course: this source doesn't break down into enough "
+            "concrete, buildable steps (sections are too high-level, conversational, or missing). "
+            "Try a hands-on coding tutorial with clear sections, or paste its transcript."
         )
 
     milestones.append(
