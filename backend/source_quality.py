@@ -624,14 +624,14 @@ def _classify_source_type(blob: str, title: str, evidence: list[str]) -> str:
 
     if _CONVERSATION.search(heading) or (_CONVERSATION.search(blob) and not _has_strong_teach(blob)):
         return "conversation"
-    if _NEWS.search(blob) and not buildable:
-        return "news_commentary"
-    if _MOTIVATIONAL.search(blob) and not buildable:
-        return "motivational"
     if _ASSISTANT_USAGE.search(blob) and not real_code:
         return "assistant_usage"
     if dangling + doc_tasks >= 2 and not real_code:
         return "unrelated"
+    if _NEWS.search(blob) and not buildable:
+        return "news_commentary"
+    if _MOTIVATIONAL.search(blob) and not buildable:
+        return "motivational"
     if buildable and (_has_strong_teach(blob) or real_code or _specific_phrase_hits(blob)):
         return "coding_tutorial"
     if any(w in _GENERIC_TECH_WORDS for w in _words(blob)) and not buildable:
