@@ -137,6 +137,39 @@ _ACTION_VERBS = (
 _IDENT = r"[A-Za-z_][A-Za-z0-9_]*"
 
 
+def _clip(text: str, max_len: int, suffix: str = "…") -> str:
+    """Truncate text to fit Pydantic field limits without breaking validation."""
+    text = (text or "").strip()
+    if len(text) <= max_len:
+        return text
+    if max_len <= len(suffix):
+        return text[:max_len]
+    return text[: max_len - len(suffix)] + suffix
+
+
+def _chunk_long_step(sentence: str, max_len: int = 800) -> list[str]:
+    """Break dense transcript blobs into smaller step-sized chunks."""
+    sentence = sentence.strip()
+    if len(sentence) <= max_len:
+        return [sentence]
+    chunks: list[str] = []
+    words = sentence.split()
+    current: list[str] = []
+    current_len = 0
+    for word in words:
+        add_len = len(word) + (1 if current else 0)
+        if current and current_len + add_len > max_len:
+            chunks.append(" ".join(current))
+            current = [word]
+            current_len = len(word)
+        else:
+            current.append(word)
+            current_len += add_len
+    if current:
+        chunks.append(" ".join(current))
+    return chunks
+
+
 def _gather_source_text(doc: SourceDocument) -> str:
     """Collect the most transcript-like text available from the source."""
     if doc.plain_text and doc.plain_text.strip():
@@ -166,8 +199,10 @@ def _split_steps(text: str) -> list[str]:
         # Split a line into sentences so a dense transcript still yields steps.
         for sentence in re.split(r"(?<=[.!?:])\s+", line):
             sentence = sentence.strip(" -•\t")
-            if sentence:
-                raw_lines.append(sentence)
+            if not sentence:
+                continue
+            for chunk in _chunk_long_step(sentence):
+                raw_lines.append(chunk)
     return raw_lines
 
 
@@ -854,11 +889,12 @@ def plan_project(doc: SourceDocument, title: str, course_id: str) -> ProjectCour
             id=f"m{order}",
             order=order,
             title="Set up the project",
-            source_grounded_description=(
+            source_grounded_description=_clip(
                 f"Create the entry file for this project so you can start building "
-                f"the thing the source builds: {title}."
+                f"the thing the source builds: {title}.",
+                2000,
             ),
-            source_quote=title,
+            source_quote=_clip(title, 2000),
             microstep=Microstep(
                 observation="Your project workspace is ready.",
                 action="Create `main.py` and add a comment describing the project goal.",
@@ -995,8 +1031,11 @@ def _plan_from_chapters(doc: SourceDocument, chapters: list[str], title: str, co
             id=f"m{order}",
             order=order,
             title="Set up the project",
-            source_grounded_description=f"Create the entry file and start building the project from the video: {project_title}.",
-            source_quote=project_title,
+            source_grounded_description=_clip(
+                f"Create the entry file and start building the project from the video: {project_title}.",
+                2000,
+            ),
+            source_quote=_clip(project_title, 2000),
             microstep=Microstep(
                 observation="Your project workspace is ready.",
                 action="Create `main.py` and add a comment with the project goal.",
@@ -1023,15 +1062,21 @@ def _plan_from_chapters(doc: SourceDocument, chapters: list[str], title: str, co
             Milestone(
                 id=f"m{order}",
                 order=order,
-                title=ch if len(ch) <= 60 else ch[:57] + "…",
-                source_grounded_description=f"The video covers this section: “{ch}”. Implement it in your project.",
-                source_quote=ch,
-                microstep=Microstep(
-                    observation=obs,
-                    action=f"Build this part: {ch}.",
-                    hint=_chapter_hint(check),
+                title=_clip(ch, 60),
+                source_grounded_description=_clip(
+                    f"The video covers this section: “{ch}”. Implement it in your project.",
+                    2000,
                 ),
-                why=f"This is a real chapter of the video — building it moves your project toward the source's final result.",
+                source_quote=_clip(ch, 2000),
+                microstep=Microstep(
+                    observation=_clip(obs, 400),
+                    action=_clip(f"Build this part: {ch}.", 400),
+                    hint=_clip(_chapter_hint(check), 400),
+                ),
+                why=_clip(
+                    "This is a real chapter of the video — building it moves your project toward the source's final result.",
+                    2000,
+                ),
                 celebrate=_CELEBRATIONS[idx % len(_CELEBRATIONS)],
                 checks=[check],
                 xp_reward=25,
