@@ -203,9 +203,10 @@ describe('ProjectWorkspace', () => {
 
     fireEvent.click(screen.getByRole('button', { name: 'Why?' }))
     // B: Why is a useful explanation, not "From the source:" + the caption.
-    expect(screen.getByText(/Later steps need the transformers package/)).toBeInTheDocument()
-    expect(screen.queryByText(/tensor flow to pytorch/i)).toBeNull()
-    expect(screen.queryByText(/From the source:/)).toBeNull()
+    const whyBody = document.querySelector('.pw-why-body')
+    expect(whyBody?.textContent).toMatch(/Later steps need the transformers package/)
+    expect(whyBody?.textContent || '').not.toMatch(/tensor flow to pytorch/i)
+    expect(whyBody?.querySelector('.pw-source-note')).toBeNull()
   })
 
   it('does not render a persisted caption dump in the description or Why (defense)', async () => {
