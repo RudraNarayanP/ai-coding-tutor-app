@@ -638,7 +638,35 @@ def test_karpathy_style_chapter_tutorial_is_still_accepted():
     assert "implement backpropagation" not in titles
 
 
-def test_incidental_assistant_mention_does_not_reject_a_real_tutorial():
+def test_assistant_tips_marketing_follow_along_does_not_count_as_a_build():
+    """Live ChatGPT-tips pages say 'follow along' and mention OpenAI/GPT-4 without code."""
+    desc = (
+        "This video offers a comprehensive guide on mastering ChatGPT, the cutting-edge "
+        "product of OpenAI's GPT-4 technology. We unravel 36 invaluable tips. "
+        "Follow along and be amazed by the sheer power of ChatGPT! "
+        "From prompt engineering to custom instructions, I cover it all. "
+        "Assign roles to ChatGPT and speak with ChatGPT. Write a birthday letter."
+    )
+    doc = _chaptered(ASSISTANT_TIPS_CHAPTERS, "36 ChatGPT Tips for Beginners in 2024!", desc)
+    decision = evaluate_source(doc, title="36 ChatGPT Tips for Beginners in 2024!")
+    assert decision.decision == "reject"
+    assert decision.source_type == "assistant_usage"
+
+
+def test_conceptual_explainer_without_extracted_chapters_is_still_blocked():
+    """Reader-proxy pages sometimes drop chapters; title+description must still fail."""
+    desc = (
+        "But what is a neural network? What are the neurons, why are there layers, "
+        "and what is the math underlying it? Help fund future projects. "
+        "We discuss backpropagation and gradient descent at a high level. "
+        "Written/interactive form of this series: https://www.3blue1brown.com/topics/neural-networks"
+    )
+    doc = _chaptered([], CONCEPTUAL_TITLE, desc)
+    decision = evaluate_source(doc, title=CONCEPTUAL_TITLE)
+    assert decision.decision in {"reject", "insufficient"}
+    assert decision.source_type == "conceptual_explainer"
+    with pytest.raises(ProjectGroundingError):
+        plan_project(doc, title=CONCEPTUAL_TITLE, course_id="nn-nochapters")
     decision = evaluate_source(_doc(PASSING_ASSISTANT_MENTION, "Word Frequency Counter"))
     assert decision.decision == "accept"
     project = plan_project(_doc(PASSING_ASSISTANT_MENTION), title="Word Frequency Counter", course_id="ask-aside")

@@ -246,7 +246,11 @@ _CODE_IMPORT = re.compile(
     r"\bimport\s+[A-Za-z_][A-Za-z0-9_.]*\b|\bfrom\s+[A-Za-z_][A-Za-z0-9_.]*\s+import\b"
 )
 _CODE_DEF = re.compile(
-    r"\b(?:def|class|function|async function|const|let|var)\s+[A-Za-z_]"
+    r"\bdef\s+[A-Za-z_]"
+    r"|\bclass\s+(?:called\s+)?[A-Z][A-Za-z0-9_]*"
+    r"|\bfunction\s+called\s+[A-Za-z_]"
+    r"|\b(?:async )?function\s+[A-Za-z_][A-Za-z0-9_]*\s*\("
+    r"|\b(?:const|let|var)\s+[A-Za-z_][A-Za-z0-9_]*\s*="
 )
 _CODE_FILE = re.compile(r"\b[\w.-]+\.(?:py|js|ts|tsx|jsx|java|cpp|cc|h|hpp|sql|ipynb|rs|go)\b")
 _DOTTED_API = re.compile(r"\b[a-zA-Z_][a-zA-Z0-9_]*\.[a-zA-Z_][a-zA-Z0-9_.]*")
@@ -775,7 +779,8 @@ def _action_chapters(chapters: list[str]) -> list[str]:
 def has_implementation_cluster(blob: str, chapters: list[str] | None = None) -> bool:
     """True when the source actually demonstrates building something.
 
-    Vocabulary like "neural network" or "backpropagation" is not enough.
+    Vocabulary like "neural network", "OpenAI", or marketing "follow along"
+    is not enough. Spoken English ("let me", "function of") is not code.
     """
     chapters = chapters or []
     defs = bool(_CODE_IMPORT.search(blob) or _CODE_DEF.search(blob))
@@ -785,12 +790,6 @@ def has_implementation_cluster(blob: str, chapters: list[str] | None = None) -> 
     strong_teach = _has_strong_teach(blob)
     build_intent = bool(_BUILD_INTENT.search(blob))
     libs = _library_hits(blob)
-    real_code = bool(
-        defs
-        or files
-        or _real_dotted_tokens(blob)
-        or _ACRONYM_PASCAL.search(blob)
-    )
 
     if len(action) >= 2:
         return True
@@ -810,8 +809,6 @@ def has_implementation_cluster(blob: str, chapters: list[str] | None = None) -> 
     if defs or files:
         return True
     if github and (build_intent or strong_teach or libs or action):
-        return True
-    if (strong_teach or build_intent) and real_code and (action or libs or github):
         return True
     if (strong_teach or build_intent) and libs and action:
         return True
@@ -841,6 +838,8 @@ def _classify_source_type(
 
     if _CONVERSATION.search(heading) or (_CONVERSATION.search(blob) and not _has_strong_teach(blob)):
         return "conversation"
+    # Assistant-usage wins over marketing "follow along" / product names like OpenAI
+    # unless the source actually shows code, files, a repo, or build-along chapters.
     if _assistant_signal_count(blob, heading) >= 2 and not implementation:
         return "assistant_usage"
     if dangling + doc_tasks >= 2 and not real_code and not implementation:
@@ -855,7 +854,12 @@ def _classify_source_type(
     if _MOTIVATIONAL.search(blob) and not implementation and not buildable:
         return "motivational"
     conceptual_hits = _conceptual_signal_count(blob, heading, chapters)
-    if conceptual_hits >= 2 and not implementation:
+    strong_conceptual_title = bool(
+        _CONCEPTUAL_TITLE.search(heading)
+        or re.search(r"\bbut what is\b", blob, re.I)
+        or re.search(r"\bthe math underlying\b", blob, re.I)
+    )
+    if not implementation and (conceptual_hits >= 2 or strong_conceptual_title):
         return "conceptual_explainer"
     if implementation and (buildable or _has_strong_teach(blob) or real_code or _specific_phrase_hits(blob)):
         return "coding_tutorial"
@@ -969,7 +973,7 @@ def evaluate_source(doc: SourceDocument, title: str = "") -> SourceQualityDecisi
     text = gather_source_text(doc)
     chapters = _collect_chapters(doc)
     heading = (title or doc.title or "").strip()
-    blob = f"{heading}\n{text}\n" + "\n".join(chapters)
+    blob = f"{heading}\n{doc.title}\n{text}\n" + "\n".join(chapters)
 
     ingest = evaluate_ingestion(doc)
     if ingest.decision != "accept":
@@ -982,7 +986,8 @@ def evaluate_source(doc: SourceDocument, title: str = "") -> SourceQualityDecisi
     dangling = len(_DANGLING_OBJECT.findall(blob))
     doc_tasks = len(_WRITE_DOCUMENT.findall(blob))
     t_status, t_notes = assess_transcript_quality(text, chapter_count=len(chapters))
-    source_kind = _classify_source_type(blob, heading, evidence, chapters)
+    title_for_class = "\n".join(part for part in (heading, doc.title) if part)
+    source_kind = _classify_source_type(blob, title_for_class, evidence, chapters)
     score, conf = _score(
         evidence=evidence,
         teach=teach,
