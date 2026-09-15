@@ -8,6 +8,7 @@ must also fail.
 from __future__ import annotations
 
 import asyncio
+import json
 import tempfile
 from pathlib import Path
 
@@ -145,11 +146,11 @@ def _store() -> ProjectStore:
 
 def test_nonsense_source_is_rejected_or_insufficient():
     decision = evaluate_source(_doc(NONSENSE_TRANSCRIPT, "ChatGPT Tips"), title="ChatGPT Tips")
-    assert decision.decision in {"reject", "insufficient"}
-    assert decision.decision != "accept"
+    assert decision.decision == "reject"
+    assert decision.source_type == "assistant_usage"
     with pytest.raises(SourceQualityError) as exc:
         plan_project(_doc(NONSENSE_TRANSCRIPT, "ChatGPT Tips"), title="ChatGPT Tips", course_id="bad")
-    assert exc.value.decision in {"reject", "insufficient"}
+    assert exc.value.decision == "reject"
 
 
 def test_nonsense_is_generalized_not_hardcoded_phrases():
@@ -186,6 +187,8 @@ def test_nonsense_chapters_are_not_accepted_as_a_course():
 def test_unrelated_news_source_is_rejected():
     decision = evaluate_source(_doc(UNRELATED_NEWS, "Nightly News"), title="Nightly News")
     assert decision.decision == "reject"
+    assert decision.source_type == "news_commentary"
+    assert "may be related to programming" not in decision.user_message.lower()
     with pytest.raises(SourceQualityError) as exc:
         plan_project(_doc(UNRELATED_NEWS, "Nightly News"), title="Nightly News", course_id="news")
     assert exc.value.decision == "reject"
@@ -444,3 +447,199 @@ def test_quality_decision_schema_fields_present():
         assert key in payload
     assert payload["decision"] == "accept"
     assert payload["quality_score"] >= 0.5
+
+
+# ─── Live-failure classes (generalized; not hardcoded video IDs) ──────────────
+
+ASSISTANT_TIPS_TITLE = "36 Assistant Tips for Beginners (Become a PRO!)"
+ASSISTANT_TIPS_CHAPTERS = [
+    "Prompt follow-up questions",
+    "Assign roles to ChatGPT",
+    "Use natural language",
+    "Set your context",
+    "Rename your chat logs",
+    "Utilize prompt sequences",
+    "Archive your chats",
+    "Use custom instructions",
+    "Speak with ChatGPT",
+    "Utilize output formatting",
+]
+ASSISTANT_TIPS_DESC = """
+36 ChatGPT Tips for Beginners. Master prompting and custom instructions.
+Write a birthday letter, then ask ChatGPT to act as a pirate.
+Generate product descriptions for an e-commerce store.
+Rename your chat logs and archive chats you want to keep.
+"""
+
+CLAUDE_PRODUCTIVITY = """
+Welcome to Claude prompts to 10x your writing.
+Ask Claude to draft an email for your boss.
+Use custom instructions so the assistant always writes in your voice.
+Speak with the chatbot and save the chat logs for later.
+"""
+
+NEWS_COMMENTARY_TITLE = "Governor reacts to critics saying the CEO is in charge"
+NEWS_COMMENTARY_DESC = """
+President-elect Jane Doe praised a donor at the rally and responded to criticism
+that a private CEO is actually running the administration.
+Republican strategist Alex Chen and Democratic strategist Morgan Lee join to discuss.
+"""
+
+CONCEPTUAL_TITLE = "But what is a neural network? | Deep learning chapter 1"
+CONCEPTUAL_CHAPTERS = [
+    "Introduction example",
+    "Series preview",
+    "What are neurons?",
+    "Introducing layers",
+    "Why layers?",
+    "Edge detection example",
+    "Counting weights and biases",
+    "How learning relates",
+    "Notation and linear algebra",
+    "Recap",
+    "Some final words",
+]
+CONCEPTUAL_DESC = """
+But what is a neural network? What are the neurons, why are there layers,
+and what is the math underlying it? We discuss backpropagation and gradient
+descent at a high level so the intuition clicks. Help fund future lessons.
+"""
+
+GPT2_STYLE_CHAPTERS = [
+    "intro: reproduce GPT-2",
+    "exploring the GPT-2 (124M) OpenAI checkpoint",
+    "SECTION 1: implementing the GPT-2 nn.Module",
+    "implementing the forward pass to get logits",
+    "sampling loop",
+    "cross entropy loss",
+    "data loader lite",
+    "parameter sharing wte and lm_head",
+    "float16, gradient scalers, bfloat16",
+]
+
+PASSING_ASSISTANT_MENTION = """
+In this tutorial we build a word frequency counter in Python.
+First, import the collections module.
+Next, define a function called count_words that takes a text string.
+Then create a variable called sample containing some text.
+Call count_words on the sample.
+Finally, print the result so you can see the counts.
+If you get stuck you can ask ChatGPT to explain a traceback, but you still write the code.
+"""
+
+
+def test_assistant_tips_source_is_analysis_reject():
+    doc = _chaptered(
+        ASSISTANT_TIPS_CHAPTERS,
+        ASSISTANT_TIPS_TITLE,
+        ASSISTANT_TIPS_DESC,
+    )
+    decision = evaluate_source(doc, title=ASSISTANT_TIPS_TITLE)
+    assert decision.decision == "reject"
+    assert decision.source_type == "assistant_usage"
+    assert decision.stage == "analysis"
+    assert "assistant" in decision.user_message.lower() or "prompt" in decision.user_message.lower()
+    assert "may be related to programming" not in decision.user_message.lower()
+    with pytest.raises(SourceQualityError) as exc:
+        plan_project(doc, title=ASSISTANT_TIPS_TITLE, course_id="tips-bad")
+    assert exc.value.decision == "reject"
+    assert exc.value.quality.stage == "analysis"
+
+
+def test_assistant_tips_class_is_generalized_not_one_product():
+    decision = evaluate_source(_doc(CLAUDE_PRODUCTIVITY, "Claude prompts to 10x your writing"))
+    assert decision.decision == "reject"
+    assert decision.source_type == "assistant_usage"
+
+
+def test_news_commentary_is_rejected_not_ambiguous_technical():
+    decision = evaluate_source(_doc(NEWS_COMMENTARY_DESC, NEWS_COMMENTARY_TITLE), title=NEWS_COMMENTARY_TITLE)
+    assert decision.decision == "reject"
+    assert decision.source_type == "news_commentary"
+    assert "may be related to programming" not in decision.user_message.lower()
+    assert "news" in decision.user_message.lower() or "comment" in decision.user_message.lower()
+
+
+def test_conceptual_explainer_is_not_turned_into_a_build_along():
+    doc = _chaptered(CONCEPTUAL_CHAPTERS, CONCEPTUAL_TITLE, CONCEPTUAL_DESC)
+    decision = evaluate_source(doc, title=CONCEPTUAL_TITLE)
+    assert decision.decision in {"reject", "insufficient"}
+    assert decision.decision != "accept"
+    assert decision.source_type == "conceptual_explainer"
+    assert "implement a project" in decision.user_message.lower() or "intuition" in decision.user_message.lower()
+    with pytest.raises(ProjectGroundingError):
+        plan_project(doc, title=CONCEPTUAL_TITLE, course_id="nn-explainer")
+
+
+def test_conceptual_explainer_api_does_not_create_invented_milestones():
+    before = {p["course_id"] for p in client.get("/api/create-course/projects").json()}
+    res = client.post(
+        "/api/create-course/projects",
+        json={
+            "material_type": "transcript",
+            "content": CONCEPTUAL_TITLE + "\n" + CONCEPTUAL_DESC + "\n" + "\n".join(CONCEPTUAL_CHAPTERS),
+            "title": CONCEPTUAL_TITLE,
+        },
+    )
+    assert res.status_code == 422
+    detail = res.json()["detail"]
+    assert detail["decision"] in {"reject", "insufficient"}
+    blob = json.dumps(detail).lower()
+    assert "implement backpropagation" not in blob
+    assert "build a neural net" not in blob
+    assert "train with gradient descent" not in blob
+    after = {p["course_id"] for p in client.get("/api/create-course/projects").json()}
+    assert after == before
+
+
+def test_assistant_tips_api_is_source_rejected_not_ungroundable():
+    before = {p["course_id"] for p in client.get("/api/create-course/projects").json()}
+    res = client.post(
+        "/api/create-course/projects",
+        json={
+            "material_type": "transcript",
+            "content": ASSISTANT_TIPS_DESC + "\n" + "\n".join(ASSISTANT_TIPS_CHAPTERS),
+            "title": ASSISTANT_TIPS_TITLE,
+        },
+    )
+    assert res.status_code == 422
+    detail = res.json()["detail"]
+    assert detail["decision"] == "reject"
+    assert detail["error"] == "source_rejected"
+    assert detail.get("source_type") == "assistant_usage"
+    assert {p["course_id"] for p in client.get("/api/create-course/projects").json()} == before
+
+
+def test_news_commentary_api_is_source_rejected():
+    res = client.post(
+        "/api/create-course/projects",
+        json={"material_type": "transcript", "content": NEWS_COMMENTARY_DESC, "title": NEWS_COMMENTARY_TITLE},
+    )
+    assert res.status_code == 422
+    detail = res.json()["detail"]
+    assert detail["decision"] == "reject"
+    assert detail["error"] == "source_rejected"
+    assert detail.get("source_type") == "news_commentary"
+    assert "may be related to programming" not in detail.get("message", "").lower()
+
+
+def test_karpathy_style_chapter_tutorial_is_still_accepted():
+    doc = _chaptered(
+        GPT2_STYLE_CHAPTERS,
+        "Let's reproduce GPT-2 (124M)",
+        "Let's reproduce GPT-2 (124M) from scratch in PyTorch. GitHub https://github.com/karpathy/build-nanogpt",
+    )
+    decision = evaluate_source(doc, title="Let's reproduce GPT-2 (124M)")
+    assert decision.decision == "accept"
+    project = plan_project(doc, title="Let's reproduce GPT-2 (124M)", course_id="gpt2-live-style")
+    titles = " ".join(m.title.lower() for m in project.milestones)
+    assert "nn.module" in titles
+    assert "forward pass" in titles
+    assert "implement backpropagation" not in titles
+
+
+def test_incidental_assistant_mention_does_not_reject_a_real_tutorial():
+    decision = evaluate_source(_doc(PASSING_ASSISTANT_MENTION, "Word Frequency Counter"))
+    assert decision.decision == "accept"
+    project = plan_project(_doc(PASSING_ASSISTANT_MENTION), title="Word Frequency Counter", course_id="ask-aside")
+    assert any(m.checks and m.checks[0].target == "count_words" for m in project.milestones)

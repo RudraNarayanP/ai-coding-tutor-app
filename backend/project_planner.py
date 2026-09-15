@@ -39,6 +39,7 @@ from .source_quality import (
     evaluate_milestones,
     evaluate_source,
     filter_invalid_milestones,
+    is_conceptual_heading,
     is_dangling_or_document_task,
     is_implementable_step,
     require_accept,
@@ -468,7 +469,8 @@ _CONCEPT_WORDS: list[tuple[str, str]] = [
 # Chapters that are meta/non-implementation and shouldn't become build milestones.
 _META_CHAPTER = re.compile(
     r"^(intro|introduction|welcome|outro|summary|conclusion|recap|results?|"
-    r"shoutout|thanks|corrections?|errata|q&a|questions|final thoughts)\b",
+    r"shoutout|thanks|corrections?|errata|q&a|questions|final thoughts|"
+    r"series preview|some final words|notation)\b",
     re.IGNORECASE,
 )
 # Real code identifiers: inner capitals (DataLoader) or ALLCAPS+digits (TF32).
@@ -527,6 +529,8 @@ def _clean_chapter(title: str) -> str:
 def _looks_meta_heading(title: str) -> bool:
     cleaned = _clean_chapter(title)
     if _META_CHAPTER.match(cleaned):
+        return True
+    if is_conceptual_heading(cleaned):
         return True
     # Playlist-style "Tutorial #1 - Introduction" with no implementable payload.
     if re.search(r"\b(introduction|welcome|outro|conclusion|recap|subscribe)\b", cleaned, re.I):
@@ -640,14 +644,34 @@ def _stems_overlap(a: set[str], b: set[str]) -> bool:
 
 
 def _concepts_from_prose(text: str, title: str) -> list[str]:
-    """Extract ordered implementable topics from title + description (no URL allowlist)."""
+    """Extract ordered implementable topics from title + description (no URL allowlist).
+
+    Mere mentions of techniques (neural net, backpropagation, gradient descent)
+    are not enough — the source must show build/implement intent. Otherwise a
+    conceptual lecture is turned into a fake coding project.
+    """
     blob = f"{title}\n{text}"
+    if not re.search(
+        r"\blet'?s (?:build|implement|write|code|create|reproduce)\b|"
+        r"\bwe (?:will |are going to |gonna )?(?:build|implement|reproduce)\b|"
+        r"\bhow to (?:build|implement)\b|"
+        r"\bimplementing\b|"
+        r"\bfrom scratch\b|"
+        r"\bfollow(?:ing)? along\b|"
+        r"github\.com|"
+        r"\bdefine (?:a |the )?(?:class|function|method)\b|"
+        r"\breproduce\b",
+        blob,
+        re.I,
+    ):
+        return []
+
     found: list[str] = []
     stems: list[set[str]] = []
 
     def _add(label: str) -> None:
         cleaned = label.strip()
-        if not cleaned or _looks_meta_heading(cleaned):
+        if not cleaned or _looks_meta_heading(cleaned) or is_conceptual_heading(cleaned):
             return
         if not is_implementable_step(cleaned):
             return

@@ -76,6 +76,21 @@ _REJECT_MSG = (
     "meaningful coding project. Try a tutorial that builds a specific application, "
     "algorithm, or technical system."
 )
+_NEWS_MSG = (
+    "This source is news or political commentary, not a coding tutorial. "
+    "Create Course needs a hands-on tutorial that builds a specific application, "
+    "algorithm, or technical system."
+)
+_ASSISTANT_MSG = (
+    "This source is about using an AI assistant (prompting, tips, or productivity "
+    "chats), not about implementing software. Create Course needs a coding or ML "
+    "tutorial that builds a specific application, algorithm, or technical system."
+)
+_CONCEPTUAL_MSG = (
+    "This source explains a concept but doesn't show how to implement a project. "
+    "Create Course needs a tutorial that builds a specific application, algorithm, "
+    "or technical system — not a math or intuition lecture alone."
+)
 _INSUFFICIENT_MSG = (
     "This source may be related to programming, but there isn't enough reliable "
     "material to create a meaningful coding project. Patchwork won't guess at "
@@ -116,12 +131,29 @@ _WRITE_DOCUMENT = re.compile(
 )
 
 # Using an assistant as a writing/productivity tool, not implementing software.
+# Product names only — not GPT-2 / model-architecture tutorials.
+_ASSISTANT_PRODUCT = (
+    r"(?:chat\s*gpt|chatgpt|google\s*bard|gemini(?:\s+(?:advanced|pro|app))?|"
+    r"claude(?:\s+\d)?|copilot|the chatbot|the assistant)"
+)
 _ASSISTANT_USAGE = re.compile(
-    r"\b(?:ask|tell|prompt)\s+(?:chat\s*)?gpt\b|"
-    r"\b(?:chat\s*gpt|chatgpt|the chatbot|the assistant)\s+(?:to|will|can|for)\b|"
-    r"\buse\s+(?:chat\s*gpt|chatgpt)\s+(?:to|for|and)\b|"
-    r"\b(?:tips?|hacks?|prompts?)\s+(?:for|to use)\s+(?:chat\s*)?gpt\b|"
-    r"\bhow to use\s+(?:chat\s*)?gpt\b",
+    r"\b(?:ask|tell|prompt|write)\s+" + _ASSISTANT_PRODUCT + r"\b|"
+    r"\b" + _ASSISTANT_PRODUCT + r"\s+(?:to|will|can|for)\b|"
+    r"\buse\s+" + _ASSISTANT_PRODUCT + r"\s+(?:to|for|and)\b|"
+    r"\b(?:tips?|hacks?|prompts?|tricks?|features?)\s+(?:for|to use)\s+" + _ASSISTANT_PRODUCT + r"\b|"
+    r"\bhow to use\s+" + _ASSISTANT_PRODUCT + r"\b|"
+    r"\b" + _ASSISTANT_PRODUCT + r"\s+(?:tips?|hacks?|prompts?|tricks?|features?)\b",
+    re.IGNORECASE,
+)
+_ASSISTANT_TIPS_TITLE = re.compile(
+    r"\b(?:\d+\s+)?" + _ASSISTANT_PRODUCT + r"\s+(?:tips?|hacks?|prompts?|tricks?|features?)\b|"
+    r"\b(?:tips?|hacks?|prompts?|tricks?)\s+(?:for|to use)\s+" + _ASSISTANT_PRODUCT + r"\b|"
+    r"\bhow to use\s+" + _ASSISTANT_PRODUCT + r"\b",
+    re.IGNORECASE,
+)
+_ASSISTANT_HABIT = re.compile(
+    r"\b(?:assign roles to|speak with|talk to|chat logs|custom instructions|"
+    r"prompt sequences?|prompt follow-up|act as a|archive (?:your )?chats)\b",
     re.IGNORECASE,
 )
 
@@ -133,9 +165,20 @@ _CONVERSATION = re.compile(
 
 _NEWS = re.compile(
     r"\b(?:breaking news|geopolitic|foreign policy|headlines|pundit|"
-    r"ceasefire|election night|press conference|"
+    r"ceasefire|election night|press conference|nightly news|newsroom|"
+    r"news central|president-elect|"
     r"(?:war|conflict) in [A-Z][a-z]+)\b",
     re.IGNORECASE,
+)
+_NEWS_PATTERNS = (
+    re.compile(r"\b(?:breaking news|nightly news|news central|newsroom|headlines)\b", re.I),
+    re.compile(r"\b(?:pundit|press conference|ceasefire|election night|foreign policy|geopolitic)\b", re.I),
+    re.compile(r"\b(?:president-elect|white house|prime minister|campaign trail)\b", re.I),
+    re.compile(r"\breacts? to (?:critics?|reports?|allegations|claims)\b", re.I),
+    re.compile(r"\b(?:republican|democratic|labour|conservative) strategist\b", re.I),
+    re.compile(r"\bresponded to criticism\b", re.I),
+    re.compile(r"\bjoined (?:us |by ).{0,80}\b(?:discuss|debate|react)\b", re.I),
+    re.compile(r"\b(?:war|conflict) in [A-Z][a-z]+\b"),
 )
 
 _MOTIVATIONAL = re.compile(
@@ -163,6 +206,42 @@ _NEGATED_TEACH = re.compile(
     re.IGNORECASE,
 )
 
+# Conceptual / intuition lectures — not build-alongs.
+_CONCEPTUAL_TITLE = re.compile(
+    r"\bbut what is\b|"
+    r"\bwhat is(?: a| an)?\b.{0,60}\?|"
+    r"\b(?:explained(?: visually)?|the intuition|visuali[sz]ed|"
+    r"the math (?:behind|of|underlying)|essence of|intuition behind)\b",
+    re.IGNORECASE,
+)
+_CONCEPTUAL_HEADING = re.compile(
+    r"^\s*(?:but\s+)?(?:what (?:is|are)\b|why (?:are|is|do|does)\b|"
+    r"how \w+ relates\b|introducing\b|notation\b|series preview\b|"
+    r"some final words\b|intuition\b)",
+    re.IGNORECASE,
+)
+_BUILD_ACTION_HEADING = re.compile(
+    r"\b(?:implement(?:ing)?|build(?:ing)?|code|coding|define|defined|"
+    r"write|writing|create|creating|train(?:ing)? the|reproduc(?:e|ing)|"
+    r"from scratch|follow along|load(?:ing)? the|sampling loop|"
+    r"forward pass|backward (?:pass|function))\b",
+    re.IGNORECASE,
+)
+_BUILD_INTENT = re.compile(
+    r"\blet'?s (?:build|implement|write|code|create|reproduce)\b|"
+    r"\bwe (?:will |are going to |gonna )?(?:build|implement|reproduce)\b|"
+    r"\bhow to (?:build|implement)\b|"
+    r"\bimplementing\b|"
+    r"\bfrom scratch\b|"
+    r"\bfollow(?:ing)? along\b|"
+    r"\bhands[- ]on\b|"
+    r"github\.com|"
+    r"\bstarter code\b|"
+    r"\bdefine (?:a |the )?(?:class|function|method)\b|"
+    r"\breproduce\b",
+    re.IGNORECASE,
+)
+
 _CODE_IMPORT = re.compile(
     r"\bimport\s+[A-Za-z_][A-Za-z0-9_.]*\b|\bfrom\s+[A-Za-z_][A-Za-z0-9_.]*\s+import\b"
 )
@@ -186,6 +265,11 @@ _PRODUCT_CAMEL = {
 }
 _SNAKE_ID = re.compile(r"\b[a-z][a-z0-9]+_[a-z0-9_]+\b")
 _GITHUB = re.compile(r"github\.com/[\w.-]+/[\w.-]+", re.IGNORECASE)
+_DOTTED_URL_HEAD = {"www", "http", "https", "image", "mailto"}
+_DOTTED_URL_TAIL = {
+    "com", "org", "net", "io", "edu", "gov", "html", "htm", "php",
+    "co", "uk", "us", "au", "jpg", "jpeg", "png", "gif", "webp", "svg",
+}
 
 # Bare category nouns with no specific technique/name.
 _GENERIC_OBJECTS = {
@@ -437,6 +521,23 @@ def _words(text: str) -> list[str]:
     return re.findall(r"[A-Za-z']+", text.lower())
 
 
+def _real_dotted_tokens(text: str) -> list[str]:
+    """Dotted identifiers that look like APIs (nn.Module), not www.example.com."""
+    if not text:
+        return []
+    hits: list[str] = []
+    for match in _DOTTED_API.finditer(text):
+        token = match.group(0)
+        head, _, rest = token.partition(".")
+        if head.lower() in _DOTTED_URL_HEAD:
+            continue
+        first_tail = rest.split(".", 1)[0].lower()
+        if first_tail in _DOTTED_URL_TAIL:
+            continue
+        hits.append(token)
+    return hits
+
+
 def has_code_artifact(text: str) -> bool:
     """True for real code/API artifacts — not product names like ChatGPT."""
     if not text:
@@ -445,7 +546,7 @@ def has_code_artifact(text: str) -> bool:
         _CODE_IMPORT.search(text)
         or _CODE_DEF.search(text)
         or _CODE_FILE.search(text)
-        or _DOTTED_API.search(text)
+        or _real_dotted_tokens(text)
         or _GITHUB.search(text)
         or _ACRONYM_PASCAL.search(text)
     )
@@ -506,6 +607,17 @@ def is_generic_bare_task(text: str) -> bool:
     return bool(_GENERIC_BARE.search(text.strip()))
 
 
+def is_conceptual_heading(text: str) -> bool:
+    cleaned = (text or "").strip()
+    if not cleaned:
+        return False
+    if _CONCEPTUAL_HEADING.search(cleaned):
+        return True
+    if cleaned.endswith("?") and not _BUILD_ACTION_HEADING.search(cleaned):
+        return True
+    return False
+
+
 def is_implementable_step(text: str) -> bool:
     """A candidate milestone/heading must be a concrete, technical action."""
     cleaned = (text or "").strip()
@@ -514,6 +626,8 @@ def is_implementable_step(text: str) -> bool:
     if is_dangling_or_document_task(cleaned):
         return False
     if is_generic_bare_task(cleaned):
+        return False
+    if is_conceptual_heading(cleaned):
         return False
     # Incomplete fragments: action verb plus a trailing filler ("build like").
     if re.search(r"\b(?:build|implement|create|write|make)\s+like\b", cleaned, re.I):
@@ -536,7 +650,7 @@ def extract_technical_evidence(text: str, title: str = "") -> list[str]:
         evidence.append("source defines functions or classes")
     if _CODE_FILE.search(blob):
         evidence.append("source names source files")
-    if _DOTTED_API.search(blob) or _ACRONYM_PASCAL.search(blob):
+    if _real_dotted_tokens(blob) or _ACRONYM_PASCAL.search(blob):
         evidence.append("source names APIs or code identifiers")
     if _GITHUB.search(blob):
         evidence.append("source links a code repository")
@@ -608,15 +722,118 @@ def assess_transcript_quality(text: str, chapter_count: int = 0) -> tuple[str, l
     return "ok", []
 
 
-def _classify_source_type(blob: str, title: str, evidence: list[str]) -> str:
+def _assistant_signal_count(blob: str, title: str) -> int:
+    """Clustered assistant-usage evidence — not a single product-name hit."""
+    heading = title or ""
+    haystack = f"{heading}\n{blob}"
+    hits = 0
+    tips = bool(_ASSISTANT_TIPS_TITLE.search(heading) or _ASSISTANT_TIPS_TITLE.search(haystack))
+    usage = bool(_ASSISTANT_USAGE.search(haystack))
+    if tips or usage:
+        hits += 1
+    if _ASSISTANT_HABIT.search(haystack) and re.search(_ASSISTANT_PRODUCT, haystack, re.I):
+        hits += 1
+    if len(_WRITE_DOCUMENT.findall(haystack)) >= 1 and re.search(_ASSISTANT_PRODUCT, haystack, re.I):
+        hits += 1
+    return hits
+
+
+def _news_signal_count(blob: str, title: str) -> int:
+    haystack = f"{title}\n{blob}"
+    return sum(1 for pat in _NEWS_PATTERNS if pat.search(haystack))
+
+
+def _conceptual_signal_count(blob: str, title: str, chapters: list[str]) -> int:
+    hits = 0
+    if _CONCEPTUAL_TITLE.search(title or "") or _CONCEPTUAL_TITLE.search(blob or ""):
+        hits += 1
+    headings = list(chapters)
+    for line in (blob or "").splitlines():
+        stripped = line.strip(" -•\t")
+        if is_conceptual_heading(stripped):
+            headings.append(stripped)
+    conceptual_chapters = [c for c in headings if is_conceptual_heading(c)]
+    if len(conceptual_chapters) >= 2:
+        hits += 1
+    if len(conceptual_chapters) >= 4:
+        hits += 1
+    return hits
+
+
+def _action_chapters(chapters: list[str]) -> list[str]:
+    out: list[str] = []
+    for chapter in chapters:
+        if is_conceptual_heading(chapter):
+            continue
+        if _BUILD_ACTION_HEADING.search(chapter) and (
+            is_implementable_step(chapter) or has_code_artifact(chapter)
+        ):
+            out.append(chapter)
+    return out
+
+
+def has_implementation_cluster(blob: str, chapters: list[str] | None = None) -> bool:
+    """True when the source actually demonstrates building something.
+
+    Vocabulary like "neural network" or "backpropagation" is not enough.
+    """
+    chapters = chapters or []
+    defs = bool(_CODE_IMPORT.search(blob) or _CODE_DEF.search(blob))
+    files = bool(_CODE_FILE.search(blob))
+    github = bool(_GITHUB.search(blob))
+    action = _action_chapters(chapters)
+    strong_teach = _has_strong_teach(blob)
+    build_intent = bool(_BUILD_INTENT.search(blob))
+    libs = _library_hits(blob)
+    real_code = bool(
+        defs
+        or files
+        or _real_dotted_tokens(blob)
+        or _ACRONYM_PASCAL.search(blob)
+    )
+
+    if len(action) >= 2:
+        return True
+    impl_lines = []
+    for line in blob.splitlines():
+        stripped = line.strip(" -•\t")
+        if len(stripped) < 8:
+            continue
+        if is_conceptual_heading(stripped):
+            continue
+        if not is_implementable_step(stripped):
+            continue
+        if _BUILD_ACTION_HEADING.search(stripped) or re.search(r"\bimplementation\b", stripped, re.I):
+            impl_lines.append(stripped)
+    if len(impl_lines) >= 2:
+        return True
+    if defs or files:
+        return True
+    if github and (build_intent or strong_teach or libs or action):
+        return True
+    if (strong_teach or build_intent) and real_code and (action or libs or github):
+        return True
+    if (strong_teach or build_intent) and libs and action:
+        return True
+    return False
+
+
+def _classify_source_type(
+    blob: str,
+    title: str,
+    evidence: list[str],
+    chapters: list[str] | None = None,
+) -> str:
     heading = f"{title}"
+    chapters = chapters or []
     dangling = len(_DANGLING_OBJECT.findall(blob))
     doc_tasks = len(_WRITE_DOCUMENT.findall(blob))
+    implementation = has_implementation_cluster(blob, chapters)
     real_code = bool(
         _CODE_IMPORT.search(blob)
         or _CODE_DEF.search(blob)
         or _CODE_FILE.search(blob)
-        or _DOTTED_API.search(blob)
+        or _real_dotted_tokens(blob)
         or _GITHUB.search(blob)
     )
     strong_tech = bool(_library_hits(blob) or _specific_phrase_hits(blob) or _ACRONYM_PASCAL.search(blob))
@@ -624,17 +841,27 @@ def _classify_source_type(blob: str, title: str, evidence: list[str]) -> str:
 
     if _CONVERSATION.search(heading) or (_CONVERSATION.search(blob) and not _has_strong_teach(blob)):
         return "conversation"
-    if _ASSISTANT_USAGE.search(blob) and not real_code:
+    if _assistant_signal_count(blob, heading) >= 2 and not implementation:
         return "assistant_usage"
-    if dangling + doc_tasks >= 2 and not real_code:
+    if dangling + doc_tasks >= 2 and not real_code and not implementation:
         return "unrelated"
-    if _NEWS.search(blob) and not buildable:
+    news_hits = _news_signal_count(blob, heading)
+    if news_hits >= 2 and not implementation:
         return "news_commentary"
-    if _MOTIVATIONAL.search(blob) and not buildable:
+    if news_hits >= 1 and not implementation and not buildable:
+        return "news_commentary"
+    if _NEWS.search(blob) and not implementation and not buildable:
+        return "news_commentary"
+    if _MOTIVATIONAL.search(blob) and not implementation and not buildable:
         return "motivational"
-    if buildable and (_has_strong_teach(blob) or real_code or _specific_phrase_hits(blob)):
+    conceptual_hits = _conceptual_signal_count(blob, heading, chapters)
+    if conceptual_hits >= 2 and not implementation:
+        return "conceptual_explainer"
+    if implementation and (buildable or _has_strong_teach(blob) or real_code or _specific_phrase_hits(blob)):
         return "coding_tutorial"
-    if any(w in _GENERIC_TECH_WORDS for w in _words(blob)) and not buildable:
+    if buildable and (_has_strong_teach(blob) or real_code or _specific_phrase_hits(blob)) and implementation:
+        return "coding_tutorial"
+    if any(w in _GENERIC_TECH_WORDS for w in _words(blob)) and not implementation:
         return "ambiguous_technical"
     if not evidence:
         return "unrelated"
@@ -662,12 +889,23 @@ def _score(
         score += 0.12
     if transcript_status == "ok":
         score += 0.08
-    if source_kind in {"conversation", "news_commentary", "motivational", "assistant_usage", "unrelated"}:
+    if source_kind in {
+        "conversation",
+        "news_commentary",
+        "motivational",
+        "assistant_usage",
+        "unrelated",
+        "conceptual_explainer",
+    }:
         score -= 0.45
     if dangling + doc_tasks >= 2 and len(evidence) < 2:
         score -= 0.25
     score = max(0.0, min(1.0, score))
-    if score >= 0.72 or (source_kind in {"conversation", "news_commentary", "assistant_usage"} and score < 0.4):
+    if score >= 0.72 or (
+        source_kind
+        in {"conversation", "news_commentary", "assistant_usage", "conceptual_explainer"}
+        and score < 0.55
+    ):
         conf: Confidence = "high"
     elif score >= 0.45:
         conf = "medium"
@@ -744,7 +982,7 @@ def evaluate_source(doc: SourceDocument, title: str = "") -> SourceQualityDecisi
     dangling = len(_DANGLING_OBJECT.findall(blob))
     doc_tasks = len(_WRITE_DOCUMENT.findall(blob))
     t_status, t_notes = assess_transcript_quality(text, chapter_count=len(chapters))
-    source_kind = _classify_source_type(blob, heading, evidence)
+    source_kind = _classify_source_type(blob, heading, evidence, chapters)
     score, conf = _score(
         evidence=evidence,
         teach=teach,
@@ -756,10 +994,12 @@ def evaluate_source(doc: SourceDocument, title: str = "") -> SourceQualityDecisi
     )
 
     implementable_chapters = [c for c in chapters if is_implementable_step(c)]
-    has_enough_structure = (
+    implementation = has_implementation_cluster(blob, chapters)
+    has_enough_structure = implementation and (
         len(evidence) >= 2
-        or (len(implementable_chapters) >= 2 and has_technical_substance(blob))
+        or (len(_action_chapters(chapters)) >= 2 and has_technical_substance(blob))
         or (bool(goal) and has_code_artifact(blob) and teach)
+        or bool(_CODE_IMPORT.search(blob) or _CODE_DEF.search(blob))
     )
 
     if source_kind in {"conversation", "news_commentary", "motivational", "assistant_usage", "unrelated"}:
@@ -776,9 +1016,9 @@ def evaluate_source(doc: SourceDocument, title: str = "") -> SourceQualityDecisi
                 "teach-and-build lesson. Create Course needs a coding or ML tutorial, walkthrough, "
                 "or playlist with examples you can implement."
             ),
-            "news_commentary": _REJECT_MSG,
+            "news_commentary": _NEWS_MSG,
             "motivational": _REJECT_MSG,
-            "assistant_usage": _REJECT_MSG,
+            "assistant_usage": _ASSISTANT_MSG,
             "unrelated": _REJECT_MSG,
         }
         return SourceQualityDecision(
@@ -791,6 +1031,23 @@ def evaluate_source(doc: SourceDocument, title: str = "") -> SourceQualityDecisi
             confidence="high",
             user_message=messages[source_kind],
             next_step=_REJECT_NEXT,
+            stage="analysis",
+        )
+
+    if source_kind == "conceptual_explainer" or (not implementation and _conceptual_signal_count(blob, heading, chapters) >= 2):
+        return SourceQualityDecision(
+            decision="insufficient",
+            quality_score=min(score, 0.35),
+            project_goal=goal,
+            source_type="conceptual_explainer",
+            technical_evidence=evidence,
+            rejection_reasons=[
+                "The source explains a concept but does not demonstrate implementing a project."
+            ],
+            missing_information=["a hands-on implementation sequence (code, files, or build-along steps)"],
+            confidence="high",
+            user_message=_CONCEPTUAL_MSG,
+            next_step=_INSUFFICIENT_NEXT,
             stage="analysis",
         )
 
@@ -959,10 +1216,11 @@ _ANALYZER_SYSTEM = (
     "Return STRICT JSON with keys: decision (accept|reject|insufficient), project_goal, "
     "source_type, technical_evidence (array of strings), rejection_reasons (array), "
     "missing_information (array), confidence (high|medium|low). "
-    "Do not invent a project. Do not accept productivity chats, news, interviews, or "
-    "motivational talks. Accept only when the source teaches building a specific "
-    "software, ML, or technical system. Mentions of Python, AI, ChatGPT, code, or "
-    "algorithm alone are not enough."
+    "Do not invent a project. Do not accept productivity chats, news, interviews, "
+    "motivational talks, or conceptual explainers that never implement anything. "
+    "Accept only when the source teaches building a specific "
+    "software, ML, or technical system. Mentions of Python, AI, ChatGPT, code, "
+    "neural networks, or backpropagation alone are not enough."
 )
 
 

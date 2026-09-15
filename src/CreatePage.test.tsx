@@ -74,6 +74,31 @@ describe('CreatePage Component', () => {
     expect(screen.queryByText(/0%/)).toBeNull()
   })
 
+  it('shows a rejection state for assistant-usage sources', async () => {
+    vi.mocked(projectApi.create).mockRejectedValue(
+      new CreateCourseError(
+        'This source is about using an AI assistant (prompting, tips, or productivity chats), not about implementing software. Create Course needs a coding or ML tutorial that builds a specific application, algorithm, or technical system.',
+        {
+          errorCode: 'source_rejected',
+          decision: 'reject',
+          nextStep: 'Try a tutorial that builds a specific application, algorithm, or technical system.',
+        }
+      )
+    )
+    render(<CreatePage />)
+    fireEvent.click(screen.getByText('Paste Transcript / Notes'))
+    fireEvent.change(screen.getByPlaceholderText(/Paste raw transcript/), {
+      target: { value: '36 ChatGPT tips. Assign roles to ChatGPT. Write a birthday letter.' },
+    })
+    fireEvent.click(screen.getByText('Build Guided Project 🛠️'))
+
+    const gate = await screen.findByTestId('create-source-gate')
+    expect(gate).toHaveClass('create-gate-reject')
+    expect(gate).toHaveTextContent(/isn't suitable for a coding project/i)
+    expect(gate).toHaveTextContent(/AI assistant/i)
+    expect(screen.queryByLabelText('Guided project workspace')).toBeNull()
+  })
+
   it('shows an insufficient state with a next step and does not invent a course', async () => {
     vi.mocked(projectApi.create).mockRejectedValue(
       new CreateCourseError(
