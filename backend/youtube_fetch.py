@@ -92,30 +92,32 @@ def _extract_description(md: str) -> str:
     Reader-proxy pages interleave comments (often the longest prose on the page)
     with the real description. Using the longest line globally turned follow-along
     tutorials into comment snippets and caused false rejects.
+
+    Creator descriptions often embed YouTube/GitHub markdown links; unmarkdown
+    those and keep the prose rather than dropping the line.
     """
     block = _creator_description_block(md)
-    best = ""
+    pieces: list[str] = []
     for raw in block.splitlines():
         line = raw.strip()
-        if len(line) < 40:
+        if len(line) < 20:
             continue
-        if line.startswith(("[", "!", "#", "|", "Title:", "URL Source:", "Warning:")):
+        if line.startswith(("#", "|", "Title:", "URL Source:", "Warning:")):
             continue
         if "views •" in line or "Live Playlist" in line:
             continue
-        if line.count("](https://www.youtube.com/watch") >= 2 or line.lower().startswith("chapters:"):
+        if line.lower().startswith("chapters:"):
             continue
         if line.startswith("*"):
             continue
         prose = _unmarkdown_links(line)
-        if len(prose) < 40 or prose.count(" ") < 6:
+        if len(prose) < 20:
             continue
-        # Viewer-comment shape: short praise without a teaching verb or artifact.
         if re.match(r"^(hey|wow|nice|thanks|thank you|great video)\b", prose, re.I) and len(prose) < 180:
             continue
-        if len(prose) > len(best):
-            best = prose
-    return best[:4000]
+        pieces.append(prose)
+    joined = " ".join(pieces)
+    return joined[:4000]
 
 
 def extract_chapters(md: str) -> list[tuple[str, str]]:

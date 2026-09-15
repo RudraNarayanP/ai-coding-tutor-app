@@ -422,6 +422,17 @@ _TEACH_SIGNAL = re.compile(
     re.IGNORECASE,
 )
 
+_JUNK_HEAD_WORDS = {
+    "github", "youtube", "http", "https", "www", "com", "watch", "subscribe",
+    "tutorial", "course", "lesson", "python", "introduction", "overview",
+}
+
+_STRONG_CONCEPT = re.compile(
+    r"\b(regression|knn|svm|means|implement|neural|backprop|micrograd|"
+    r"attention|tokenizer|dataloader|gradient|derivative|perceptron|"
+    r"saving|plotting|sklearn|pytorch|forward|backward|value object)\b",
+    re.IGNORECASE,
+)
 _INSTRUCTIONAL_HEADING = re.compile(
     r"\b(implement|build|code|function|class|train|grad|backprop|deriv|"
     r"example|exercise|dataset|model|layer|network|forward|backward|"
@@ -449,7 +460,7 @@ def _looks_meta_heading(title: str) -> bool:
         return True
     # Playlist-style "Tutorial #1 - Introduction" with no implementable payload.
     if re.search(r"\b(introduction|welcome|outro|conclusion|recap|subscribe)\b", cleaned, re.I):
-        if not _INSTRUCTIONAL_HEADING.search(cleaned):
+        if not _STRONG_CONCEPT.search(cleaned):
             return True
     return False
 
@@ -516,7 +527,7 @@ def _tokens_from_heading(title: str) -> str | None:
     seen: set[str] = set()
     for word in re.findall(r"[A-Za-z][A-Za-z0-9_-]{3,}", title):
         low = word.lower()
-        if low in _STOPWORDS or low in _ACTION_VERBS:
+        if low in _STOPWORDS or low in _ACTION_VERBS or low in _JUNK_HEAD_WORDS:
             continue
         if low in seen:
             continue
@@ -599,7 +610,15 @@ def _assert_source_acceptable(doc: SourceDocument, text: str, outline: list[str]
         )
 
 
+def _check_description(title: str, token: str) -> str:
+    pretty = token.split("|")[0]
+    desc = f"Your code implements **{title}** (references `{pretty}`)."
+    return desc if len(desc) <= 280 else desc[:277] + "…"
+
+
 def _chapter_check(title: str) -> VerificationCheck | None:
+    if len(title) > 160:
+        title = title[:157] + "…"
     # 1) A concrete import/symbol/call if the chapter names one.
     direct = _extract_target(title)
     if direct and direct[0] in ("import", "symbol", "function_call"):
@@ -607,11 +626,10 @@ def _chapter_check(title: str) -> VerificationCheck | None:
     # 2) Curated concept → token map (grounded concept-level check).
     token = _match_concept_tokens(title)
     if token:
-        pretty = token.split("|")[0]
         return VerificationCheck(
             kind="code_contains",
             target=token,
-            description=f"Your code implements **{title}** (references `{pretty}`).",
+            description=_check_description(title, token),
         )
     # 3) Distinctive code identifiers — inner CamelCase or dotted (nn.Module),
     #    not Title-Case English.
@@ -619,22 +637,21 @@ def _chapter_check(title: str) -> VerificationCheck | None:
         m = rx.search(title)
         if m:
             tok = m.group(1)
-            if tok.lower() not in _STOPWORDS:
+            if tok.lower() not in _STOPWORDS and tok.lower() not in _JUNK_HEAD_WORDS:
                 return VerificationCheck(
                     kind="code_contains",
                     target=tok,
-                    description=f"Your code implements **{title}** (references `{tok}`).",
+                    description=_check_description(title, tok),
                 )
     # 4) Instructional heading with extractable content words (Karpathy-style
     #    "derivative of a simple function") — still source-grounded, not GPT-2-only.
     if _is_instructional_heading(title):
         generic = _tokens_from_heading(title)
         if generic:
-            pretty = generic.split("|")[0]
             return VerificationCheck(
                 kind="code_contains",
                 target=generic,
-                description=f"Your code implements **{title}** (references `{pretty}`).",
+                description=_check_description(title, generic),
             )
     return None
 
