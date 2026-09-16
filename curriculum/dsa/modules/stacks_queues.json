@@ -1,0 +1,186 @@
+{
+  "id": "stacks-queues",
+  "title": "Unit 2: Stacks & Queues",
+  "order": 2,
+  "concepts": [
+    {
+      "id": "stacks-queues",
+      "title": "Stacks & Queues",
+      "prerequisites": [
+        "big-o"
+      ]
+    }
+  ],
+  "lessons": [
+    {
+      "id": "stacks-queues-step-1",
+      "title": "1. Stack with a List",
+      "description": "Implement `Stack` with push, pop, and peek using a Python list (end is top).",
+      "order": 6,
+      "difficulty": "intermediate",
+      "duration_minutes": 5,
+      "type": "learn",
+      "section_id": "sec-dsa-1",
+      "section_title": "Section 1: Data Structures & Algorithms",
+      "concepts": [
+        "stacks-queues"
+      ],
+      "prerequisites": [
+        "big-o"
+      ],
+      "learning_objectives": [
+        "Model LIFO with list append/pop"
+      ],
+      "starter_code": "class Stack:\n    def __init__(self):\n        self._data = []\n\n    def push(self, value):\n        # TODO\n        pass\n\n    def pop(self):\n        # TODO: raise IndexError if empty\n        pass\n\n    def peek(self):\n        # TODO\n        pass\n\n    def __len__(self):\n        return len(self._data)\n",
+      "solution_code": "class Stack:\n    def __init__(self):\n        self._data = []\n\n    def push(self, value):\n        self._data.append(value)\n\n    def pop(self):\n        if not self._data:\n            raise IndexError('empty')\n        return self._data.pop()\n\n    def peek(self):\n        if not self._data:\n            raise IndexError('empty')\n        return self._data[-1]\n\n    def __len__(self):\n        return len(self._data)\n",
+      "tests": [
+        {
+          "name": "test_stack",
+          "unittest_code": "def test_stack(self):\n    s = Stack()\n    s.push(1); s.push(2)\n    self.assertEqual(s.peek(), 2)\n    self.assertEqual(s.pop(), 2)\n    self.assertEqual(len(s), 1)",
+          "required": true
+        }
+      ],
+      "completion_requirements": {
+        "required_test_names": [
+          "test_stack"
+        ]
+      }
+    },
+    {
+      "id": "stacks-queues-step-2",
+      "title": "2. Queue with collections.deque",
+      "description": "Implement `Queue` with enqueue/dequeue using `collections.deque`.",
+      "order": 7,
+      "difficulty": "intermediate",
+      "duration_minutes": 5,
+      "type": "learn",
+      "section_id": "sec-dsa-1",
+      "section_title": "Section 1: Data Structures & Algorithms",
+      "concepts": [
+        "stacks-queues"
+      ],
+      "prerequisites": [
+        "big-o"
+      ],
+      "learning_objectives": [
+        "Model FIFO with deque"
+      ],
+      "starter_code": "from collections import deque\n\nclass Queue:\n    def __init__(self):\n        self._data = deque()\n\n    def enqueue(self, value):\n        # TODO\n        pass\n\n    def dequeue(self):\n        # TODO: raise IndexError if empty\n        pass\n\n    def __len__(self):\n        return len(self._data)\n",
+      "solution_code": "from collections import deque\n\nclass Queue:\n    def __init__(self):\n        self._data = deque()\n\n    def enqueue(self, value):\n        self._data.append(value)\n\n    def dequeue(self):\n        if not self._data:\n            raise IndexError('empty')\n        return self._data.popleft()\n\n    def __len__(self):\n        return len(self._data)\n",
+      "tests": [
+        {
+          "name": "test_queue",
+          "unittest_code": "def test_queue(self):\n    q = Queue()\n    q.enqueue('a'); q.enqueue('b')\n    self.assertEqual(q.dequeue(), 'a')\n    self.assertEqual(len(q), 1)",
+          "required": true
+        }
+      ],
+      "completion_requirements": {
+        "required_test_names": [
+          "test_queue"
+        ]
+      }
+    },
+    {
+      "id": "stacks-queues-01",
+      "title": "3. Balanced Parentheses (Concept Challenge)",
+      "description": "Use a stack to check whether brackets in a string are balanced.",
+      "order": 8,
+      "difficulty": "intermediate",
+      "duration_minutes": 10,
+      "type": "challenge",
+      "section_id": "sec-dsa-1",
+      "section_title": "Section 1: Data Structures & Algorithms",
+      "concepts": [
+        "stacks-queues"
+      ],
+      "prerequisites": [
+        "big-o"
+      ],
+      "learning_objectives": [
+        "Match opening/closing brackets with a stack"
+      ],
+      "starter_code": "def is_balanced(s):\n    # TODO: return True if (), [], {} are balanced\n    pass\n",
+      "solution_code": "def is_balanced(s):\n    pairs = {')': '(', ']': '[', '}': '{'}\n    stack = []\n    for ch in s:\n        if ch in '([{':\n            stack.append(ch)\n        elif ch in pairs:\n            if not stack or stack[-1] != pairs[ch]:\n                return False\n            stack.pop()\n    return not stack\n",
+      "tests": [
+        {
+          "name": "test_balanced",
+          "unittest_code": "def test_balanced(self):\n    self.assertTrue(is_balanced('([]{})'))\n    self.assertFalse(is_balanced('([)]'))\n    self.assertFalse(is_balanced('('))",
+          "required": true
+        }
+      ],
+      "completion_requirements": {
+        "required_test_names": [
+          "test_balanced"
+        ]
+      }
+    },
+    {
+      "id": "stacks-queues-practice-1",
+      "title": "4. Reverse with a Stack (Practice)",
+      "description": "Reverse a list by pushing all items then popping them.",
+      "order": 9,
+      "difficulty": "intermediate",
+      "duration_minutes": 5,
+      "type": "practice",
+      "section_id": "sec-dsa-1",
+      "section_title": "Section 1: Data Structures & Algorithms",
+      "concepts": [
+        "stacks-queues"
+      ],
+      "prerequisites": [
+        "big-o"
+      ],
+      "learning_objectives": [
+        "Reverse via LIFO"
+      ],
+      "starter_code": "def reverse_list(items):\n    # TODO: reverse using an explicit stack list\n    pass\n",
+      "solution_code": "def reverse_list(items):\n    stack = list(items)\n    out = []\n    while stack:\n        out.append(stack.pop())\n    return out\n",
+      "tests": [
+        {
+          "name": "test_reverse",
+          "unittest_code": "def test_reverse(self):\n    self.assertEqual(reverse_list([1, 2, 3]), [3, 2, 1])",
+          "required": true
+        }
+      ],
+      "completion_requirements": {
+        "required_test_names": [
+          "test_reverse"
+        ]
+      }
+    },
+    {
+      "id": "stacks-queues-checkpoint",
+      "title": "5. Unit 2 Checkpoint: Stacks & Queues",
+      "description": "Implement `moving_average(values, k)` using a queue window of size k; return list of averages.",
+      "order": 10,
+      "difficulty": "intermediate",
+      "duration_minutes": 5,
+      "type": "checkpoint",
+      "section_id": "sec-dsa-1",
+      "section_title": "Section 1: Data Structures & Algorithms",
+      "concepts": [
+        "stacks-queues"
+      ],
+      "prerequisites": [
+        "big-o"
+      ],
+      "learning_objectives": [
+        "Sliding window with a queue"
+      ],
+      "starter_code": "from collections import deque\n\ndef moving_average(values, k):\n    # TODO: return averages of each window of size k\n    pass\n",
+      "solution_code": "from collections import deque\n\ndef moving_average(values, k):\n    window = deque()\n    total = 0\n    result = []\n    for v in values:\n        window.append(v)\n        total += v\n        if len(window) > k:\n            total -= window.popleft()\n        if len(window) == k:\n            result.append(total / k)\n    return result\n",
+      "tests": [
+        {
+          "name": "test_moving_avg",
+          "unittest_code": "def test_moving_avg(self):\n    self.assertEqual(moving_average([1, 2, 3, 4], 2), [1.5, 2.5, 3.5])",
+          "required": true
+        }
+      ],
+      "completion_requirements": {
+        "required_test_names": [
+          "test_moving_avg"
+        ]
+      }
+    }
+  ]
+}

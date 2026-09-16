@@ -1,0 +1,187 @@
+{
+  "id": "generators",
+  "title": "Unit 17: Generators",
+  "order": 17,
+  "concepts": [
+    {
+      "id": "generators",
+      "title": "Generators & yield",
+      "prerequisites": [
+        "functions",
+        "comprehensions"
+      ]
+    }
+  ],
+  "lessons": [
+    {
+      "id": "generators-step-1",
+      "title": "1. yield Basics",
+      "description": "A generator function uses `yield` to produce values lazily. Implement `count_up(n)` yielding 1..n.",
+      "order": 81,
+      "difficulty": "intermediate",
+      "duration_minutes": 5,
+      "type": "learn",
+      "section_id": "sec-py-intermed",
+      "section_title": "Section 2: Intermediate Python",
+      "concepts": [
+        "generators"
+      ],
+      "prerequisites": [
+        "functions"
+      ],
+      "learning_objectives": [
+        "Write a generator that yields a sequence"
+      ],
+      "starter_code": "def count_up(n):\n    # TODO: yield 1, 2, ..., n\n    pass\n",
+      "solution_code": "def count_up(n):\n    for i in range(1, n + 1):\n        yield i\n",
+      "tests": [
+        {
+          "name": "test_count_up",
+          "unittest_code": "def test_count_up(self):\n    self.assertEqual(list(count_up(3)), [1, 2, 3])",
+          "required": true
+        }
+      ],
+      "completion_requirements": {
+        "required_test_names": [
+          "test_count_up"
+        ]
+      }
+    },
+    {
+      "id": "generators-step-2",
+      "title": "2. Infinite Generators with take",
+      "description": "Implement `take(n, iterable)` that yields the first n items from any iterable.",
+      "order": 82,
+      "difficulty": "intermediate",
+      "duration_minutes": 5,
+      "type": "learn",
+      "section_id": "sec-py-intermed",
+      "section_title": "Section 2: Intermediate Python",
+      "concepts": [
+        "generators"
+      ],
+      "prerequisites": [
+        "functions"
+      ],
+      "learning_objectives": [
+        "Limit an iterable with a generator"
+      ],
+      "starter_code": "def take(n, iterable):\n    # TODO: yield first n items from iterable\n    pass\n",
+      "solution_code": "def take(n, iterable):\n    for i, item in enumerate(iterable):\n        if i >= n:\n            break\n        yield item\n",
+      "tests": [
+        {
+          "name": "test_take",
+          "unittest_code": "def test_take(self):\n    self.assertEqual(list(take(3, range(10))), [0, 1, 2])",
+          "required": true
+        }
+      ],
+      "completion_requirements": {
+        "required_test_names": [
+          "test_take"
+        ]
+      }
+    },
+    {
+      "id": "generators-01",
+      "title": "3. Running Average Stream (Concept Challenge)",
+      "description": "Yield the running average after each number in a sequence.",
+      "order": 83,
+      "difficulty": "intermediate",
+      "duration_minutes": 10,
+      "type": "challenge",
+      "section_id": "sec-py-intermed",
+      "section_title": "Section 2: Intermediate Python",
+      "concepts": [
+        "generators"
+      ],
+      "prerequisites": [
+        "functions"
+      ],
+      "learning_objectives": [
+        "Maintain state across yields"
+      ],
+      "starter_code": "def running_average(nums):\n    # TODO: yield average after each number\n    pass\n",
+      "solution_code": "def running_average(nums):\n    total = 0\n    count = 0\n    for x in nums:\n        total += x\n        count += 1\n        yield total / count\n",
+      "tests": [
+        {
+          "name": "test_running_average",
+          "unittest_code": "def test_running_average(self):\n    self.assertEqual(list(running_average([2, 4, 6])), [2.0, 3.0, 4.0])",
+          "required": true
+        }
+      ],
+      "completion_requirements": {
+        "required_test_names": [
+          "test_running_average"
+        ]
+      }
+    },
+    {
+      "id": "generators-practice-1",
+      "title": "4. Chunked Reader (Practice)",
+      "description": "Yield fixed-size chunks from a list (last chunk may be smaller).",
+      "order": 84,
+      "difficulty": "intermediate",
+      "duration_minutes": 5,
+      "type": "practice",
+      "section_id": "sec-py-intermed",
+      "section_title": "Section 2: Intermediate Python",
+      "concepts": [
+        "generators"
+      ],
+      "prerequisites": [
+        "lists"
+      ],
+      "learning_objectives": [
+        "Slice an iterable into chunks via yield"
+      ],
+      "starter_code": "def chunks(items, size):\n    # TODO: yield successive slices of length size\n    pass\n",
+      "solution_code": "def chunks(items, size):\n    for i in range(0, len(items), size):\n        yield items[i:i + size]\n",
+      "tests": [
+        {
+          "name": "test_chunks",
+          "unittest_code": "def test_chunks(self):\n    self.assertEqual(list(chunks([1, 2, 3, 4, 5], 2)), [[1, 2], [3, 4], [5]])",
+          "required": true
+        }
+      ],
+      "completion_requirements": {
+        "required_test_names": [
+          "test_chunks"
+        ]
+      }
+    },
+    {
+      "id": "generators-checkpoint",
+      "title": "5. Unit 17 Checkpoint: Generators",
+      "description": "Implement `filter_gen(pred, iterable)` that yields items where pred(item) is true.",
+      "order": 85,
+      "difficulty": "intermediate",
+      "duration_minutes": 5,
+      "type": "checkpoint",
+      "section_id": "sec-py-intermed",
+      "section_title": "Section 2: Intermediate Python",
+      "concepts": [
+        "generators"
+      ],
+      "prerequisites": [
+        "functions"
+      ],
+      "learning_objectives": [
+        "Build a filtering generator"
+      ],
+      "starter_code": "def filter_gen(pred, iterable):\n    # TODO: yield items where pred(item) is True\n    pass\n",
+      "solution_code": "def filter_gen(pred, iterable):\n    for item in iterable:\n        if pred(item):\n            yield item\n",
+      "tests": [
+        {
+          "name": "test_filter_gen",
+          "unittest_code": "def test_filter_gen(self):\n    self.assertEqual(list(filter_gen(lambda x: x % 2 == 0, [1, 2, 3, 4])), [2, 4])",
+          "required": true
+        }
+      ],
+      "completion_requirements": {
+        "required_test_names": [
+          "test_filter_gen"
+        ]
+      }
+    }
+  ]
+}

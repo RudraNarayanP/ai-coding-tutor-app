@@ -172,6 +172,11 @@ COURSE_METADATA = {
         "tagline": "AI application development & LLM patterns",
         "description": "HTTP/APIs, JSON, env vars, calling model APIs, structured outputs, prompt design, tool calling, embeddings, RAG, and storing AI data in SQL.",
     },
+    "dsa": {
+        "is_primary": True,
+        "tagline": "Algorithms, complexity & core data structures",
+        "description": "Big O, stacks, queues, linked lists, recursion, binary search, hash maps, trees, BSTs, and graph traversals in pure Python.",
+    },
 }
 
 

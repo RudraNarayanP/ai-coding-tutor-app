@@ -1,0 +1,186 @@
+{
+  "id": "linked-lists",
+  "title": "Unit 3: Linked Lists",
+  "order": 3,
+  "concepts": [
+    {
+      "id": "linked-lists",
+      "title": "Linked Lists",
+      "prerequisites": [
+        "stacks-queues"
+      ]
+    }
+  ],
+  "lessons": [
+    {
+      "id": "linked-lists-step-1",
+      "title": "1. Node and Singly Linked List",
+      "description": "Implement `ListNode` and `LinkedList.append` / `to_list`.",
+      "order": 11,
+      "difficulty": "intermediate",
+      "duration_minutes": 5,
+      "type": "learn",
+      "section_id": "sec-dsa-1",
+      "section_title": "Section 1: Data Structures & Algorithms",
+      "concepts": [
+        "linked-lists"
+      ],
+      "prerequisites": [
+        "stacks-queues"
+      ],
+      "learning_objectives": [
+        "Build a singly linked list append"
+      ],
+      "starter_code": "class ListNode:\n    def __init__(self, value, next=None):\n        self.value = value\n        self.next = next\n\nclass LinkedList:\n    def __init__(self):\n        self.head = None\n\n    def append(self, value):\n        # TODO: append new node at end\n        pass\n\n    def to_list(self):\n        out = []\n        cur = self.head\n        while cur:\n            out.append(cur.value)\n            cur = cur.next\n        return out\n",
+      "solution_code": "class ListNode:\n    def __init__(self, value, next=None):\n        self.value = value\n        self.next = next\n\nclass LinkedList:\n    def __init__(self):\n        self.head = None\n\n    def append(self, value):\n        node = ListNode(value)\n        if not self.head:\n            self.head = node\n            return\n        cur = self.head\n        while cur.next:\n            cur = cur.next\n        cur.next = node\n\n    def to_list(self):\n        out = []\n        cur = self.head\n        while cur:\n            out.append(cur.value)\n            cur = cur.next\n        return out\n",
+      "tests": [
+        {
+          "name": "test_append",
+          "unittest_code": "def test_append(self):\n    ll = LinkedList()\n    ll.append(1); ll.append(2)\n    self.assertEqual(ll.to_list(), [1, 2])",
+          "required": true
+        }
+      ],
+      "completion_requirements": {
+        "required_test_names": [
+          "test_append"
+        ]
+      }
+    },
+    {
+      "id": "linked-lists-step-2",
+      "title": "2. Prepend and Length",
+      "description": "Add `prepend` and `__len__` to LinkedList.",
+      "order": 12,
+      "difficulty": "intermediate",
+      "duration_minutes": 5,
+      "type": "learn",
+      "section_id": "sec-dsa-1",
+      "section_title": "Section 1: Data Structures & Algorithms",
+      "concepts": [
+        "linked-lists"
+      ],
+      "prerequisites": [
+        "stacks-queues"
+      ],
+      "learning_objectives": [
+        "Insert at head in O(1)"
+      ],
+      "starter_code": "class ListNode:\n    def __init__(self, value, next=None):\n        self.value = value\n        self.next = next\n\nclass LinkedList:\n    def __init__(self):\n        self.head = None\n\n    def prepend(self, value):\n        # TODO\n        pass\n\n    def __len__(self):\n        # TODO\n        pass\n",
+      "solution_code": "class ListNode:\n    def __init__(self, value, next=None):\n        self.value = value\n        self.next = next\n\nclass LinkedList:\n    def __init__(self):\n        self.head = None\n\n    def prepend(self, value):\n        self.head = ListNode(value, self.head)\n\n    def __len__(self):\n        n = 0\n        cur = self.head\n        while cur:\n            n += 1\n            cur = cur.next\n        return n\n",
+      "tests": [
+        {
+          "name": "test_prepend",
+          "unittest_code": "def test_prepend(self):\n    ll = LinkedList()\n    ll.prepend(2); ll.prepend(1)\n    self.assertEqual(len(ll), 2)\n    self.assertEqual(ll.head.value, 1)",
+          "required": true
+        }
+      ],
+      "completion_requirements": {
+        "required_test_names": [
+          "test_prepend"
+        ]
+      }
+    },
+    {
+      "id": "linked-lists-01",
+      "title": "3. Reverse a Linked List (Concept Challenge)",
+      "description": "Reverse a singly linked list in place; return the new head.",
+      "order": 13,
+      "difficulty": "intermediate",
+      "duration_minutes": 10,
+      "type": "challenge",
+      "section_id": "sec-dsa-1",
+      "section_title": "Section 1: Data Structures & Algorithms",
+      "concepts": [
+        "linked-lists"
+      ],
+      "prerequisites": [
+        "stacks-queues"
+      ],
+      "learning_objectives": [
+        "Reverse pointers iteratively"
+      ],
+      "starter_code": "class ListNode:\n    def __init__(self, value, next=None):\n        self.value = value\n        self.next = next\n\ndef reverse_list(head):\n    # TODO: reverse and return new head\n    pass\n\ndef to_list(head):\n    out = []\n    while head:\n        out.append(head.value)\n        head = head.next\n    return out\n",
+      "solution_code": "class ListNode:\n    def __init__(self, value, next=None):\n        self.value = value\n        self.next = next\n\ndef reverse_list(head):\n    prev = None\n    cur = head\n    while cur:\n        nxt = cur.next\n        cur.next = prev\n        prev = cur\n        cur = nxt\n    return prev\n\ndef to_list(head):\n    out = []\n    while head:\n        out.append(head.value)\n        head = head.next\n    return out\n",
+      "tests": [
+        {
+          "name": "test_reverse_ll",
+          "unittest_code": "def test_reverse_ll(self):\n    head = ListNode(1, ListNode(2, ListNode(3)))\n    self.assertEqual(to_list(reverse_list(head)), [3, 2, 1])",
+          "required": true
+        }
+      ],
+      "completion_requirements": {
+        "required_test_names": [
+          "test_reverse_ll"
+        ]
+      }
+    },
+    {
+      "id": "linked-lists-practice-1",
+      "title": "4. Find Middle Node (Practice)",
+      "description": "Return the middle node's value using slow/fast pointers (for even length, return the second middle).",
+      "order": 14,
+      "difficulty": "intermediate",
+      "duration_minutes": 5,
+      "type": "practice",
+      "section_id": "sec-dsa-1",
+      "section_title": "Section 1: Data Structures & Algorithms",
+      "concepts": [
+        "linked-lists"
+      ],
+      "prerequisites": [
+        "stacks-queues"
+      ],
+      "learning_objectives": [
+        "Use two-pointer middle finding"
+      ],
+      "starter_code": "class ListNode:\n    def __init__(self, value, next=None):\n        self.value = value\n        self.next = next\n\ndef middle_value(head):\n    # TODO: slow/fast pointers\n    pass\n",
+      "solution_code": "class ListNode:\n    def __init__(self, value, next=None):\n        self.value = value\n        self.next = next\n\ndef middle_value(head):\n    slow = fast = head\n    while fast and fast.next:\n        slow = slow.next\n        fast = fast.next.next\n    return slow.value\n",
+      "tests": [
+        {
+          "name": "test_middle",
+          "unittest_code": "def test_middle(self):\n    head = ListNode(1, ListNode(2, ListNode(3, ListNode(4, ListNode(5)))))\n    self.assertEqual(middle_value(head), 3)",
+          "required": true
+        }
+      ],
+      "completion_requirements": {
+        "required_test_names": [
+          "test_middle"
+        ]
+      }
+    },
+    {
+      "id": "linked-lists-checkpoint",
+      "title": "5. Unit 3 Checkpoint: Linked Lists",
+      "description": "Detect whether a linked list has a cycle (Floyd).",
+      "order": 15,
+      "difficulty": "intermediate",
+      "duration_minutes": 5,
+      "type": "checkpoint",
+      "section_id": "sec-dsa-1",
+      "section_title": "Section 1: Data Structures & Algorithms",
+      "concepts": [
+        "linked-lists"
+      ],
+      "prerequisites": [
+        "stacks-queues"
+      ],
+      "learning_objectives": [
+        "Detect cycles with slow/fast pointers"
+      ],
+      "starter_code": "class ListNode:\n    def __init__(self, value, next=None):\n        self.value = value\n        self.next = next\n\ndef has_cycle(head):\n    # TODO: return True if cycle exists\n    pass\n",
+      "solution_code": "class ListNode:\n    def __init__(self, value, next=None):\n        self.value = value\n        self.next = next\n\ndef has_cycle(head):\n    slow = fast = head\n    while fast and fast.next:\n        slow = slow.next\n        fast = fast.next.next\n        if slow is fast:\n            return True\n    return False\n",
+      "tests": [
+        {
+          "name": "test_cycle",
+          "unittest_code": "def test_cycle(self):\n    a = ListNode(1); b = ListNode(2); c = ListNode(3)\n    a.next = b; b.next = c; c.next = b\n    self.assertTrue(has_cycle(a))\n    self.assertFalse(has_cycle(ListNode(1, ListNode(2))))",
+          "required": true
+        }
+      ],
+      "completion_requirements": {
+        "required_test_names": [
+          "test_cycle"
+        ]
+      }
+    }
+  ]
+}

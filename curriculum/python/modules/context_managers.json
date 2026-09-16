@@ -1,0 +1,187 @@
+{
+  "id": "context-managers",
+  "title": "Unit 19: Context Managers",
+  "order": 19,
+  "concepts": [
+    {
+      "id": "context-managers",
+      "title": "Context Managers",
+      "prerequisites": [
+        "exceptions",
+        "classes"
+      ]
+    }
+  ],
+  "lessons": [
+    {
+      "id": "context-managers-step-1",
+      "title": "1. with and contextlib",
+      "description": "Implement a context manager class `TempValue` that temporarily sets an attribute and restores it.",
+      "order": 91,
+      "difficulty": "intermediate",
+      "duration_minutes": 5,
+      "type": "learn",
+      "section_id": "sec-py-intermed",
+      "section_title": "Section 2: Intermediate Python",
+      "concepts": [
+        "context-managers"
+      ],
+      "prerequisites": [
+        "classes"
+      ],
+      "learning_objectives": [
+        "Implement __enter__/__exit__"
+      ],
+      "starter_code": "class TempValue:\n    def __init__(self, obj, attr, value):\n        self.obj = obj\n        self.attr = attr\n        self.value = value\n        self._old = None\n\n    def __enter__(self):\n        # TODO: save old value, set new, return self\n        pass\n\n    def __exit__(self, *args):\n        # TODO: restore old value\n        pass\n",
+      "solution_code": "class TempValue:\n    def __init__(self, obj, attr, value):\n        self.obj = obj\n        self.attr = attr\n        self.value = value\n        self._old = None\n\n    def __enter__(self):\n        self._old = getattr(self.obj, self.attr)\n        setattr(self.obj, self.attr, self.value)\n        return self\n\n    def __exit__(self, *args):\n        setattr(self.obj, self.attr, self._old)\n",
+      "tests": [
+        {
+          "name": "test_temp_value",
+          "unittest_code": "def test_temp_value(self):\n    class Box:\n        def __init__(self):\n            self.x = 1\n    b = Box()\n    with TempValue(b, 'x', 99):\n        self.assertEqual(b.x, 99)\n    self.assertEqual(b.x, 1)",
+          "required": true
+        }
+      ],
+      "completion_requirements": {
+        "required_test_names": [
+          "test_temp_value"
+        ]
+      }
+    },
+    {
+      "id": "context-managers-step-2",
+      "title": "2. contextlib.contextmanager",
+      "description": "Use `@contextmanager` to build `opened_list` that yields a list and clears it on exit.",
+      "order": 92,
+      "difficulty": "intermediate",
+      "duration_minutes": 5,
+      "type": "learn",
+      "section_id": "sec-py-intermed",
+      "section_title": "Section 2: Intermediate Python",
+      "concepts": [
+        "context-managers"
+      ],
+      "prerequisites": [
+        "decorators"
+      ],
+      "learning_objectives": [
+        "Use contextlib.contextmanager"
+      ],
+      "starter_code": "from contextlib import contextmanager\n\n@contextmanager\ndef opened_list():\n    data = []\n    # TODO: yield data, then clear it in finally\n    yield data\n",
+      "solution_code": "from contextlib import contextmanager\n\n@contextmanager\ndef opened_list():\n    data = []\n    try:\n        yield data\n    finally:\n        data.clear()\n",
+      "tests": [
+        {
+          "name": "test_opened_list",
+          "unittest_code": "def test_opened_list(self):\n    with opened_list() as items:\n        items.append(1)\n        self.assertEqual(items, [1])\n    self.assertEqual(items, [])",
+          "required": true
+        }
+      ],
+      "completion_requirements": {
+        "required_test_names": [
+          "test_opened_list"
+        ]
+      }
+    },
+    {
+      "id": "context-managers-01",
+      "title": "3. Timing Context (Concept Challenge)",
+      "description": "Record elapsed seconds on a `Timer` object while inside the `with` block.",
+      "order": 93,
+      "difficulty": "intermediate",
+      "duration_minutes": 10,
+      "type": "challenge",
+      "section_id": "sec-py-intermed",
+      "section_title": "Section 2: Intermediate Python",
+      "concepts": [
+        "context-managers"
+      ],
+      "prerequisites": [
+        "classes"
+      ],
+      "learning_objectives": [
+        "Measure wall time across enter/exit"
+      ],
+      "starter_code": "import time\n\nclass Timer:\n    def __init__(self):\n        self.elapsed = 0.0\n        self._start = None\n\n    def __enter__(self):\n        # TODO: record start time\n        pass\n\n    def __exit__(self, *args):\n        # TODO: set self.elapsed\n        pass\n",
+      "solution_code": "import time\n\nclass Timer:\n    def __init__(self):\n        self.elapsed = 0.0\n        self._start = None\n\n    def __enter__(self):\n        self._start = time.perf_counter()\n        return self\n\n    def __exit__(self, *args):\n        self.elapsed = time.perf_counter() - self._start\n",
+      "tests": [
+        {
+          "name": "test_timer",
+          "unittest_code": "def test_timer(self):\n    with Timer() as t:\n        _ = sum(range(1000))\n    self.assertGreaterEqual(t.elapsed, 0.0)",
+          "required": true
+        }
+      ],
+      "completion_requirements": {
+        "required_test_names": [
+          "test_timer"
+        ]
+      }
+    },
+    {
+      "id": "context-managers-practice-1",
+      "title": "4. Suppress Specific Errors (Practice)",
+      "description": "Implement `suppress(exc_type)` that swallows the given exception type.",
+      "order": 94,
+      "difficulty": "intermediate",
+      "duration_minutes": 5,
+      "type": "practice",
+      "section_id": "sec-py-intermed",
+      "section_title": "Section 2: Intermediate Python",
+      "concepts": [
+        "context-managers"
+      ],
+      "prerequisites": [
+        "exceptions"
+      ],
+      "learning_objectives": [
+        "Return True from __exit__ to suppress"
+      ],
+      "starter_code": "class suppress:\n    def __init__(self, exc_type):\n        self.exc_type = exc_type\n\n    def __enter__(self):\n        return self\n\n    def __exit__(self, exc_type, exc, tb):\n        # TODO: return True if exc_type is self.exc_type (or subclass)\n        pass\n",
+      "solution_code": "class suppress:\n    def __init__(self, exc_type):\n        self.exc_type = exc_type\n\n    def __enter__(self):\n        return self\n\n    def __exit__(self, exc_type, exc, tb):\n        return exc_type is not None and issubclass(exc_type, self.exc_type)\n",
+      "tests": [
+        {
+          "name": "test_suppress",
+          "unittest_code": "def test_suppress(self):\n    with suppress(ValueError):\n        int('x')\n    with self.assertRaises(TypeError):\n        with suppress(ValueError):\n            raise TypeError('nope')",
+          "required": true
+        }
+      ],
+      "completion_requirements": {
+        "required_test_names": [
+          "test_suppress"
+        ]
+      }
+    },
+    {
+      "id": "context-managers-checkpoint",
+      "title": "5. Unit 19 Checkpoint: Context Managers",
+      "description": "Implement `locked(flag_dict)` that sets flag_dict['locked']=True on enter and False on exit.",
+      "order": 95,
+      "difficulty": "intermediate",
+      "duration_minutes": 5,
+      "type": "checkpoint",
+      "section_id": "sec-py-intermed",
+      "section_title": "Section 2: Intermediate Python",
+      "concepts": [
+        "context-managers"
+      ],
+      "prerequisites": [
+        "dictionaries"
+      ],
+      "learning_objectives": [
+        "Manage a boolean lock flag"
+      ],
+      "starter_code": "class locked:\n    def __init__(self, flag_dict):\n        self.flag_dict = flag_dict\n\n    def __enter__(self):\n        # TODO: set locked True\n        pass\n\n    def __exit__(self, *args):\n        # TODO: set locked False\n        pass\n",
+      "solution_code": "class locked:\n    def __init__(self, flag_dict):\n        self.flag_dict = flag_dict\n\n    def __enter__(self):\n        self.flag_dict['locked'] = True\n        return self\n\n    def __exit__(self, *args):\n        self.flag_dict['locked'] = False\n",
+      "tests": [
+        {
+          "name": "test_locked",
+          "unittest_code": "def test_locked(self):\n    flags = {'locked': False}\n    with locked(flags):\n        self.assertTrue(flags['locked'])\n    self.assertFalse(flags['locked'])",
+          "required": true
+        }
+      ],
+      "completion_requirements": {
+        "required_test_names": [
+          "test_locked"
+        ]
+      }
+    }
+  ]
+}

@@ -1,0 +1,186 @@
+{
+  "id": "recursion-binary-search",
+  "title": "Unit 4: Recursion & Binary Search",
+  "order": 4,
+  "concepts": [
+    {
+      "id": "recursion-binary-search",
+      "title": "Recursion & Binary Search",
+      "prerequisites": [
+        "big-o"
+      ]
+    }
+  ],
+  "lessons": [
+    {
+      "id": "recursion-binary-search-step-1",
+      "title": "1. Recursive Factorial",
+      "description": "Implement `factorial(n)` recursively with base case n <= 1.",
+      "order": 16,
+      "difficulty": "intermediate",
+      "duration_minutes": 5,
+      "type": "learn",
+      "section_id": "sec-dsa-1",
+      "section_title": "Section 1: Data Structures & Algorithms",
+      "concepts": [
+        "recursion-binary-search"
+      ],
+      "prerequisites": [
+        "big-o"
+      ],
+      "learning_objectives": [
+        "Write a classic recursive base/recursive case"
+      ],
+      "starter_code": "def factorial(n):\n    # TODO\n    pass\n",
+      "solution_code": "def factorial(n):\n    if n <= 1:\n        return 1\n    return n * factorial(n - 1)\n",
+      "tests": [
+        {
+          "name": "test_factorial",
+          "unittest_code": "def test_factorial(self):\n    self.assertEqual(factorial(5), 120)",
+          "required": true
+        }
+      ],
+      "completion_requirements": {
+        "required_test_names": [
+          "test_factorial"
+        ]
+      }
+    },
+    {
+      "id": "recursion-binary-search-step-2",
+      "title": "2. Binary Search",
+      "description": "Implement iterative `binary_search(sorted_items, target)` returning index or -1.",
+      "order": 17,
+      "difficulty": "intermediate",
+      "duration_minutes": 5,
+      "type": "learn",
+      "section_id": "sec-dsa-1",
+      "section_title": "Section 1: Data Structures & Algorithms",
+      "concepts": [
+        "recursion-binary-search"
+      ],
+      "prerequisites": [
+        "big-o"
+      ],
+      "learning_objectives": [
+        "Halve the search space each step"
+      ],
+      "starter_code": "def binary_search(sorted_items, target):\n    # TODO: return index or -1\n    pass\n",
+      "solution_code": "def binary_search(sorted_items, target):\n    lo, hi = 0, len(sorted_items) - 1\n    while lo <= hi:\n        mid = (lo + hi) // 2\n        if sorted_items[mid] == target:\n            return mid\n        if sorted_items[mid] < target:\n            lo = mid + 1\n        else:\n            hi = mid - 1\n    return -1\n",
+      "tests": [
+        {
+          "name": "test_binary_search",
+          "unittest_code": "def test_binary_search(self):\n    data = [1, 3, 5, 7, 9]\n    self.assertEqual(binary_search(data, 7), 3)\n    self.assertEqual(binary_search(data, 2), -1)",
+          "required": true
+        }
+      ],
+      "completion_requirements": {
+        "required_test_names": [
+          "test_binary_search"
+        ]
+      }
+    },
+    {
+      "id": "recursion-binary-search-01",
+      "title": "3. Recursive Binary Search (Concept Challenge)",
+      "description": "Implement recursive binary search returning True/False.",
+      "order": 18,
+      "difficulty": "intermediate",
+      "duration_minutes": 10,
+      "type": "challenge",
+      "section_id": "sec-dsa-1",
+      "section_title": "Section 1: Data Structures & Algorithms",
+      "concepts": [
+        "recursion-binary-search"
+      ],
+      "prerequisites": [
+        "big-o"
+      ],
+      "learning_objectives": [
+        "Express binary search recursively"
+      ],
+      "starter_code": "def contains(sorted_items, target):\n    # TODO: recursive binary search -> bool\n    pass\n",
+      "solution_code": "def contains(sorted_items, target):\n    def helper(lo, hi):\n        if lo > hi:\n            return False\n        mid = (lo + hi) // 2\n        if sorted_items[mid] == target:\n            return True\n        if sorted_items[mid] < target:\n            return helper(mid + 1, hi)\n        return helper(lo, mid - 1)\n    return helper(0, len(sorted_items) - 1)\n",
+      "tests": [
+        {
+          "name": "test_contains",
+          "unittest_code": "def test_contains(self):\n    self.assertTrue(contains([2, 4, 6, 8], 6))\n    self.assertFalse(contains([2, 4, 6, 8], 5))",
+          "required": true
+        }
+      ],
+      "completion_requirements": {
+        "required_test_names": [
+          "test_contains"
+        ]
+      }
+    },
+    {
+      "id": "recursion-binary-search-practice-1",
+      "title": "4. Sum Nested Lists (Practice)",
+      "description": "Recursively sum integers in a nested list structure.",
+      "order": 19,
+      "difficulty": "intermediate",
+      "duration_minutes": 5,
+      "type": "practice",
+      "section_id": "sec-dsa-1",
+      "section_title": "Section 1: Data Structures & Algorithms",
+      "concepts": [
+        "recursion-binary-search"
+      ],
+      "prerequisites": [
+        "big-o"
+      ],
+      "learning_objectives": [
+        "Recurse into nested lists"
+      ],
+      "starter_code": "def deep_sum(obj):\n    # TODO: if int return it; if list sum deep_sum of children\n    pass\n",
+      "solution_code": "def deep_sum(obj):\n    if isinstance(obj, int):\n        return obj\n    return sum(deep_sum(x) for x in obj)\n",
+      "tests": [
+        {
+          "name": "test_deep_sum",
+          "unittest_code": "def test_deep_sum(self):\n    self.assertEqual(deep_sum([1, [2, [3]], 4]), 10)",
+          "required": true
+        }
+      ],
+      "completion_requirements": {
+        "required_test_names": [
+          "test_deep_sum"
+        ]
+      }
+    },
+    {
+      "id": "recursion-binary-search-checkpoint",
+      "title": "5. Unit 4 Checkpoint: Recursion & Search",
+      "description": "Implement `fib(n)` recursively (naive is fine for small n).",
+      "order": 20,
+      "difficulty": "intermediate",
+      "duration_minutes": 5,
+      "type": "checkpoint",
+      "section_id": "sec-dsa-1",
+      "section_title": "Section 1: Data Structures & Algorithms",
+      "concepts": [
+        "recursion-binary-search"
+      ],
+      "prerequisites": [
+        "big-o"
+      ],
+      "learning_objectives": [
+        "Recursive Fibonacci base cases"
+      ],
+      "starter_code": "def fib(n):\n    # TODO: fib(0)=0, fib(1)=1\n    pass\n",
+      "solution_code": "def fib(n):\n    if n < 2:\n        return n\n    return fib(n - 1) + fib(n - 2)\n",
+      "tests": [
+        {
+          "name": "test_fib",
+          "unittest_code": "def test_fib(self):\n    self.assertEqual(fib(0), 0)\n    self.assertEqual(fib(1), 1)\n    self.assertEqual(fib(7), 13)",
+          "required": true
+        }
+      ],
+      "completion_requirements": {
+        "required_test_names": [
+          "test_fib"
+        ]
+      }
+    }
+  ]
+}

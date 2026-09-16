@@ -1,0 +1,187 @@
+{
+  "id": "trees-bst",
+  "title": "Unit 6: Trees & BST",
+  "order": 6,
+  "concepts": [
+    {
+      "id": "trees-bst",
+      "title": "Trees & BST",
+      "prerequisites": [
+        "recursion-binary-search",
+        "linked-lists"
+      ]
+    }
+  ],
+  "lessons": [
+    {
+      "id": "trees-bst-step-1",
+      "title": "1. Binary Tree Node & Traversal",
+      "description": "Implement inorder traversal returning a list of values.",
+      "order": 26,
+      "difficulty": "intermediate",
+      "duration_minutes": 5,
+      "type": "learn",
+      "section_id": "sec-dsa-1",
+      "section_title": "Section 1: Data Structures & Algorithms",
+      "concepts": [
+        "trees-bst"
+      ],
+      "prerequisites": [
+        "recursion-binary-search"
+      ],
+      "learning_objectives": [
+        "Recursively traverse left-root-right"
+      ],
+      "starter_code": "class TreeNode:\n    def __init__(self, value, left=None, right=None):\n        self.value = value\n        self.left = left\n        self.right = right\n\ndef inorder(root):\n    # TODO\n    pass\n",
+      "solution_code": "class TreeNode:\n    def __init__(self, value, left=None, right=None):\n        self.value = value\n        self.left = left\n        self.right = right\n\ndef inorder(root):\n    if root is None:\n        return []\n    return inorder(root.left) + [root.value] + inorder(root.right)\n",
+      "tests": [
+        {
+          "name": "test_inorder",
+          "unittest_code": "def test_inorder(self):\n    root = TreeNode(2, TreeNode(1), TreeNode(3))\n    self.assertEqual(inorder(root), [1, 2, 3])",
+          "required": true
+        }
+      ],
+      "completion_requirements": {
+        "required_test_names": [
+          "test_inorder"
+        ]
+      }
+    },
+    {
+      "id": "trees-bst-step-2",
+      "title": "2. BST Insert",
+      "description": "Insert values into a binary search tree.",
+      "order": 27,
+      "difficulty": "intermediate",
+      "duration_minutes": 5,
+      "type": "learn",
+      "section_id": "sec-dsa-1",
+      "section_title": "Section 1: Data Structures & Algorithms",
+      "concepts": [
+        "trees-bst"
+      ],
+      "prerequisites": [
+        "recursion-binary-search"
+      ],
+      "learning_objectives": [
+        "Maintain BST ordering on insert"
+      ],
+      "starter_code": "class TreeNode:\n    def __init__(self, value, left=None, right=None):\n        self.value = value\n        self.left = left\n        self.right = right\n\ndef bst_insert(root, value):\n    # TODO: insert and return root\n    pass\n",
+      "solution_code": "class TreeNode:\n    def __init__(self, value, left=None, right=None):\n        self.value = value\n        self.left = left\n        self.right = right\n\ndef bst_insert(root, value):\n    if root is None:\n        return TreeNode(value)\n    if value < root.value:\n        root.left = bst_insert(root.left, value)\n    else:\n        root.right = bst_insert(root.right, value)\n    return root\n",
+      "tests": [
+        {
+          "name": "test_bst_insert",
+          "unittest_code": "def test_bst_insert(self):\n    root = None\n    for v in [5, 3, 7]:\n        root = bst_insert(root, v)\n    self.assertEqual(root.value, 5)\n    self.assertEqual(root.left.value, 3)\n    self.assertEqual(root.right.value, 7)",
+          "required": true
+        }
+      ],
+      "completion_requirements": {
+        "required_test_names": [
+          "test_bst_insert"
+        ]
+      }
+    },
+    {
+      "id": "trees-bst-01",
+      "title": "3. BST Contains (Concept Challenge)",
+      "description": "Search a BST for a value.",
+      "order": 28,
+      "difficulty": "intermediate",
+      "duration_minutes": 10,
+      "type": "challenge",
+      "section_id": "sec-dsa-1",
+      "section_title": "Section 1: Data Structures & Algorithms",
+      "concepts": [
+        "trees-bst"
+      ],
+      "prerequisites": [
+        "recursion-binary-search"
+      ],
+      "learning_objectives": [
+        "Search left/right based on comparison"
+      ],
+      "starter_code": "class TreeNode:\n    def __init__(self, value, left=None, right=None):\n        self.value = value\n        self.left = left\n        self.right = right\n\ndef bst_contains(root, value):\n    # TODO\n    pass\n",
+      "solution_code": "class TreeNode:\n    def __init__(self, value, left=None, right=None):\n        self.value = value\n        self.left = left\n        self.right = right\n\ndef bst_contains(root, value):\n    cur = root\n    while cur:\n        if value == cur.value:\n            return True\n        cur = cur.left if value < cur.value else cur.right\n    return False\n",
+      "tests": [
+        {
+          "name": "test_bst_contains",
+          "unittest_code": "def test_bst_contains(self):\n    root = TreeNode(5, TreeNode(3), TreeNode(7))\n    self.assertTrue(bst_contains(root, 7))\n    self.assertFalse(bst_contains(root, 4))",
+          "required": true
+        }
+      ],
+      "completion_requirements": {
+        "required_test_names": [
+          "test_bst_contains"
+        ]
+      }
+    },
+    {
+      "id": "trees-bst-practice-1",
+      "title": "4. Tree Height (Practice)",
+      "description": "Return the height of a binary tree (empty tree height 0).",
+      "order": 29,
+      "difficulty": "intermediate",
+      "duration_minutes": 5,
+      "type": "practice",
+      "section_id": "sec-dsa-1",
+      "section_title": "Section 1: Data Structures & Algorithms",
+      "concepts": [
+        "trees-bst"
+      ],
+      "prerequisites": [
+        "recursion-binary-search"
+      ],
+      "learning_objectives": [
+        "Height is 1 + max of children"
+      ],
+      "starter_code": "class TreeNode:\n    def __init__(self, value, left=None, right=None):\n        self.value = value\n        self.left = left\n        self.right = right\n\ndef height(root):\n    # TODO\n    pass\n",
+      "solution_code": "class TreeNode:\n    def __init__(self, value, left=None, right=None):\n        self.value = value\n        self.left = left\n        self.right = right\n\ndef height(root):\n    if root is None:\n        return 0\n    return 1 + max(height(root.left), height(root.right))\n",
+      "tests": [
+        {
+          "name": "test_height",
+          "unittest_code": "def test_height(self):\n    root = TreeNode(1, TreeNode(2, TreeNode(3)), TreeNode(4))\n    self.assertEqual(height(root), 3)\n    self.assertEqual(height(None), 0)",
+          "required": true
+        }
+      ],
+      "completion_requirements": {
+        "required_test_names": [
+          "test_height"
+        ]
+      }
+    },
+    {
+      "id": "trees-bst-checkpoint",
+      "title": "5. Unit 6 Checkpoint: Trees & BST",
+      "description": "Validate whether a tree is a BST (strict: left < node < right for all nodes).",
+      "order": 30,
+      "difficulty": "intermediate",
+      "duration_minutes": 5,
+      "type": "checkpoint",
+      "section_id": "sec-dsa-1",
+      "section_title": "Section 1: Data Structures & Algorithms",
+      "concepts": [
+        "trees-bst"
+      ],
+      "prerequisites": [
+        "recursion-binary-search"
+      ],
+      "learning_objectives": [
+        "Track allowed value ranges while recursing"
+      ],
+      "starter_code": "class TreeNode:\n    def __init__(self, value, left=None, right=None):\n        self.value = value\n        self.left = left\n        self.right = right\n\ndef is_bst(root):\n    # TODO\n    pass\n",
+      "solution_code": "class TreeNode:\n    def __init__(self, value, left=None, right=None):\n        self.value = value\n        self.left = left\n        self.right = right\n\ndef is_bst(root):\n    def helper(node, lo, hi):\n        if node is None:\n            return True\n        if not (lo < node.value < hi):\n            return False\n        return helper(node.left, lo, node.value) and helper(node.right, node.value, hi)\n    return helper(root, float('-inf'), float('inf'))\n",
+      "tests": [
+        {
+          "name": "test_is_bst",
+          "unittest_code": "def test_is_bst(self):\n    good = TreeNode(2, TreeNode(1), TreeNode(3))\n    bad = TreeNode(2, TreeNode(3), TreeNode(1))\n    self.assertTrue(is_bst(good))\n    self.assertFalse(is_bst(bad))",
+          "required": true
+        }
+      ],
+      "completion_requirements": {
+        "required_test_names": [
+          "test_is_bst"
+        ]
+      }
+    }
+  ]
+}

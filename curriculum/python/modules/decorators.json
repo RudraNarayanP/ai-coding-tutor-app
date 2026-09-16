@@ -1,0 +1,187 @@
+{
+  "id": "decorators",
+  "title": "Unit 18: Decorators",
+  "order": 18,
+  "concepts": [
+    {
+      "id": "decorators",
+      "title": "Decorators",
+      "prerequisites": [
+        "functions",
+        "generators"
+      ]
+    }
+  ],
+  "lessons": [
+    {
+      "id": "decorators-step-1",
+      "title": "1. Simple Decorator",
+      "description": "A decorator wraps a function. Implement `shout` that uppercases the string returned by the wrapped function.",
+      "order": 86,
+      "difficulty": "intermediate",
+      "duration_minutes": 5,
+      "type": "learn",
+      "section_id": "sec-py-intermed",
+      "section_title": "Section 2: Intermediate Python",
+      "concepts": [
+        "decorators"
+      ],
+      "prerequisites": [
+        "functions"
+      ],
+      "learning_objectives": [
+        "Write a decorator that wraps a return value"
+      ],
+      "starter_code": "def shout(fn):\n    def wrapper(*args, **kwargs):\n        # TODO: call fn and return result.upper()\n        pass\n    return wrapper\n\n@shout\ndef greet(name):\n    return f'hello {name}'\n",
+      "solution_code": "def shout(fn):\n    def wrapper(*args, **kwargs):\n        return fn(*args, **kwargs).upper()\n    return wrapper\n\n@shout\ndef greet(name):\n    return f'hello {name}'\n",
+      "tests": [
+        {
+          "name": "test_shout",
+          "unittest_code": "def test_shout(self):\n    self.assertEqual(greet('ada'), 'HELLO ADA')",
+          "required": true
+        }
+      ],
+      "completion_requirements": {
+        "required_test_names": [
+          "test_shout"
+        ]
+      }
+    },
+    {
+      "id": "decorators-step-2",
+      "title": "2. Decorator with Arguments",
+      "description": "Implement `repeat(n)` that calls the wrapped function n times and returns a list of results.",
+      "order": 87,
+      "difficulty": "intermediate",
+      "duration_minutes": 5,
+      "type": "learn",
+      "section_id": "sec-py-intermed",
+      "section_title": "Section 2: Intermediate Python",
+      "concepts": [
+        "decorators"
+      ],
+      "prerequisites": [
+        "functions"
+      ],
+      "learning_objectives": [
+        "Build a parameterized decorator"
+      ],
+      "starter_code": "def repeat(n):\n    def decorator(fn):\n        def wrapper(*args, **kwargs):\n            # TODO: return list of n calls to fn\n            pass\n        return wrapper\n    return decorator\n\n@repeat(3)\ndef ping():\n    return 'pong'\n",
+      "solution_code": "def repeat(n):\n    def decorator(fn):\n        def wrapper(*args, **kwargs):\n            return [fn(*args, **kwargs) for _ in range(n)]\n        return wrapper\n    return decorator\n\n@repeat(3)\ndef ping():\n    return 'pong'\n",
+      "tests": [
+        {
+          "name": "test_repeat",
+          "unittest_code": "def test_repeat(self):\n    self.assertEqual(ping(), ['pong', 'pong', 'pong'])",
+          "required": true
+        }
+      ],
+      "completion_requirements": {
+        "required_test_names": [
+          "test_repeat"
+        ]
+      }
+    },
+    {
+      "id": "decorators-01",
+      "title": "3. Memoize Decorator (Concept Challenge)",
+      "description": "Cache function results by args so repeated calls are cheap.",
+      "order": 88,
+      "difficulty": "intermediate",
+      "duration_minutes": 10,
+      "type": "challenge",
+      "section_id": "sec-py-intermed",
+      "section_title": "Section 2: Intermediate Python",
+      "concepts": [
+        "decorators"
+      ],
+      "prerequisites": [
+        "functions"
+      ],
+      "learning_objectives": [
+        "Cache return values keyed by arguments"
+      ],
+      "starter_code": "def memoize(fn):\n    cache = {}\n    def wrapper(*args):\n        # TODO: return cached value or compute and store\n        pass\n    return wrapper\n\n@memoize\ndef add(a, b):\n    return a + b\n",
+      "solution_code": "def memoize(fn):\n    cache = {}\n    def wrapper(*args):\n        if args not in cache:\n            cache[args] = fn(*args)\n        return cache[args]\n    wrapper.cache = cache\n    return wrapper\n\n@memoize\ndef add(a, b):\n    return a + b\n",
+      "tests": [
+        {
+          "name": "test_memoize",
+          "unittest_code": "def test_memoize(self):\n    self.assertEqual(add(2, 3), 5)\n    self.assertEqual(add(2, 3), 5)\n    self.assertIn((2, 3), add.cache)",
+          "required": true
+        }
+      ],
+      "completion_requirements": {
+        "required_test_names": [
+          "test_memoize"
+        ]
+      }
+    },
+    {
+      "id": "decorators-practice-1",
+      "title": "4. Call Counter (Practice)",
+      "description": "Implement `count_calls` that tracks how many times a function was invoked via `.calls`.",
+      "order": 89,
+      "difficulty": "intermediate",
+      "duration_minutes": 5,
+      "type": "practice",
+      "section_id": "sec-py-intermed",
+      "section_title": "Section 2: Intermediate Python",
+      "concepts": [
+        "decorators"
+      ],
+      "prerequisites": [
+        "functions"
+      ],
+      "learning_objectives": [
+        "Attach state to a wrapper function"
+      ],
+      "starter_code": "def count_calls(fn):\n    def wrapper(*args, **kwargs):\n        # TODO: increment wrapper.calls and call fn\n        pass\n    wrapper.calls = 0\n    return wrapper\n\n@count_calls\ndef inc(x):\n    return x + 1\n",
+      "solution_code": "def count_calls(fn):\n    def wrapper(*args, **kwargs):\n        wrapper.calls += 1\n        return fn(*args, **kwargs)\n    wrapper.calls = 0\n    return wrapper\n\n@count_calls\ndef inc(x):\n    return x + 1\n",
+      "tests": [
+        {
+          "name": "test_count_calls",
+          "unittest_code": "def test_count_calls(self):\n    self.assertEqual(inc(1), 2)\n    self.assertEqual(inc(2), 3)\n    self.assertEqual(inc.calls, 2)",
+          "required": true
+        }
+      ],
+      "completion_requirements": {
+        "required_test_names": [
+          "test_count_calls"
+        ]
+      }
+    },
+    {
+      "id": "decorators-checkpoint",
+      "title": "5. Unit 18 Checkpoint: Decorators",
+      "description": "Implement `ensure_non_negative` that raises ValueError if the first argument is negative.",
+      "order": 90,
+      "difficulty": "intermediate",
+      "duration_minutes": 5,
+      "type": "checkpoint",
+      "section_id": "sec-py-intermed",
+      "section_title": "Section 2: Intermediate Python",
+      "concepts": [
+        "decorators"
+      ],
+      "prerequisites": [
+        "exceptions"
+      ],
+      "learning_objectives": [
+        "Validate arguments inside a decorator"
+      ],
+      "starter_code": "def ensure_non_negative(fn):\n    def wrapper(x, *args, **kwargs):\n        # TODO: raise ValueError if x < 0 else call fn\n        pass\n    return wrapper\n\n@ensure_non_negative\ndef double(x):\n    return x * 2\n",
+      "solution_code": "def ensure_non_negative(fn):\n    def wrapper(x, *args, **kwargs):\n        if x < 0:\n            raise ValueError('negative')\n        return fn(x, *args, **kwargs)\n    return wrapper\n\n@ensure_non_negative\ndef double(x):\n    return x * 2\n",
+      "tests": [
+        {
+          "name": "test_ensure",
+          "unittest_code": "def test_ensure(self):\n    self.assertEqual(double(3), 6)\n    with self.assertRaises(ValueError):\n        double(-1)",
+          "required": true
+        }
+      ],
+      "completion_requirements": {
+        "required_test_names": [
+          "test_ensure"
+        ]
+      }
+    }
+  ]
+}

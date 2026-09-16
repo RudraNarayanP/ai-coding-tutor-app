@@ -1,0 +1,187 @@
+{
+  "id": "graph-traversals",
+  "title": "Unit 7: Graph Traversals (BFS/DFS)",
+  "order": 7,
+  "concepts": [
+    {
+      "id": "graph-traversals",
+      "title": "Graph Traversals (BFS/DFS)",
+      "prerequisites": [
+        "trees-bst",
+        "stacks-queues"
+      ]
+    }
+  ],
+  "lessons": [
+    {
+      "id": "graph-traversals-step-1",
+      "title": "1. Adjacency List Graph",
+      "description": "Represent an undirected graph and add edges.",
+      "order": 31,
+      "difficulty": "intermediate",
+      "duration_minutes": 5,
+      "type": "learn",
+      "section_id": "sec-dsa-1",
+      "section_title": "Section 1: Data Structures & Algorithms",
+      "concepts": [
+        "graph-traversals"
+      ],
+      "prerequisites": [
+        "stacks-queues"
+      ],
+      "learning_objectives": [
+        "Store neighbors in a dict of lists"
+      ],
+      "starter_code": "class Graph:\n    def __init__(self):\n        self.adj = {}\n\n    def add_edge(self, u, v):\n        # TODO: undirected edge u-v\n        pass\n\n    def neighbors(self, u):\n        return list(self.adj.get(u, []))\n",
+      "solution_code": "class Graph:\n    def __init__(self):\n        self.adj = {}\n\n    def add_edge(self, u, v):\n        self.adj.setdefault(u, []).append(v)\n        self.adj.setdefault(v, []).append(u)\n\n    def neighbors(self, u):\n        return list(self.adj.get(u, []))\n",
+      "tests": [
+        {
+          "name": "test_graph",
+          "unittest_code": "def test_graph(self):\n    g = Graph()\n    g.add_edge('a', 'b')\n    self.assertEqual(sorted(g.neighbors('a')), ['b'])\n    self.assertEqual(sorted(g.neighbors('b')), ['a'])",
+          "required": true
+        }
+      ],
+      "completion_requirements": {
+        "required_test_names": [
+          "test_graph"
+        ]
+      }
+    },
+    {
+      "id": "graph-traversals-step-2",
+      "title": "2. DFS Traversal",
+      "description": "Return DFS visit order starting from a node (iterative or recursive).",
+      "order": 32,
+      "difficulty": "intermediate",
+      "duration_minutes": 5,
+      "type": "learn",
+      "section_id": "sec-dsa-1",
+      "section_title": "Section 1: Data Structures & Algorithms",
+      "concepts": [
+        "graph-traversals"
+      ],
+      "prerequisites": [
+        "stacks-queues"
+      ],
+      "learning_objectives": [
+        "Depth-first visit with a stack or recursion"
+      ],
+      "starter_code": "def dfs(graph, start):\n    # graph is dict[str, list[str]]; return visit order\n    # TODO\n    pass\n",
+      "solution_code": "def dfs(graph, start):\n    visited = []\n    seen = set()\n    stack = [start]\n    while stack:\n        node = stack.pop()\n        if node in seen:\n            continue\n        seen.add(node)\n        visited.append(node)\n        for nbr in reversed(graph.get(node, [])):\n            if nbr not in seen:\n                stack.append(nbr)\n    return visited\n",
+      "tests": [
+        {
+          "name": "test_dfs",
+          "unittest_code": "def test_dfs(self):\n    g = {'a': ['b', 'c'], 'b': ['a', 'd'], 'c': ['a'], 'd': ['b']}\n    order = dfs(g, 'a')\n    self.assertEqual(order[0], 'a')\n    self.assertEqual(set(order), {'a', 'b', 'c', 'd'})",
+          "required": true
+        }
+      ],
+      "completion_requirements": {
+        "required_test_names": [
+          "test_dfs"
+        ]
+      }
+    },
+    {
+      "id": "graph-traversals-01",
+      "title": "3. BFS Traversal (Concept Challenge)",
+      "description": "Return BFS visit order from a start node.",
+      "order": 33,
+      "difficulty": "intermediate",
+      "duration_minutes": 10,
+      "type": "challenge",
+      "section_id": "sec-dsa-1",
+      "section_title": "Section 1: Data Structures & Algorithms",
+      "concepts": [
+        "graph-traversals"
+      ],
+      "prerequisites": [
+        "stacks-queues"
+      ],
+      "learning_objectives": [
+        "Breadth-first visit with a queue"
+      ],
+      "starter_code": "from collections import deque\n\ndef bfs(graph, start):\n    # TODO\n    pass\n",
+      "solution_code": "from collections import deque\n\ndef bfs(graph, start):\n    visited = []\n    seen = {start}\n    q = deque([start])\n    while q:\n        node = q.popleft()\n        visited.append(node)\n        for nbr in graph.get(node, []):\n            if nbr not in seen:\n                seen.add(nbr)\n                q.append(nbr)\n    return visited\n",
+      "tests": [
+        {
+          "name": "test_bfs",
+          "unittest_code": "def test_bfs(self):\n    g = {'a': ['b', 'c'], 'b': ['a', 'd'], 'c': ['a'], 'd': ['b']}\n    self.assertEqual(bfs(g, 'a'), ['a', 'b', 'c', 'd'])",
+          "required": true
+        }
+      ],
+      "completion_requirements": {
+        "required_test_names": [
+          "test_bfs"
+        ]
+      }
+    },
+    {
+      "id": "graph-traversals-practice-1",
+      "title": "4. Shortest Path Length (Practice)",
+      "description": "Unweighted shortest path length via BFS (edges count), or -1 if unreachable.",
+      "order": 34,
+      "difficulty": "intermediate",
+      "duration_minutes": 5,
+      "type": "practice",
+      "section_id": "sec-dsa-1",
+      "section_title": "Section 1: Data Structures & Algorithms",
+      "concepts": [
+        "graph-traversals"
+      ],
+      "prerequisites": [
+        "stacks-queues"
+      ],
+      "learning_objectives": [
+        "BFS layers give unweighted distance"
+      ],
+      "starter_code": "from collections import deque\n\ndef shortest_path_length(graph, start, goal):\n    # TODO\n    pass\n",
+      "solution_code": "from collections import deque\n\ndef shortest_path_length(graph, start, goal):\n    if start == goal:\n        return 0\n    seen = {start}\n    q = deque([(start, 0)])\n    while q:\n        node, dist = q.popleft()\n        for nbr in graph.get(node, []):\n            if nbr in seen:\n                continue\n            if nbr == goal:\n                return dist + 1\n            seen.add(nbr)\n            q.append((nbr, dist + 1))\n    return -1\n",
+      "tests": [
+        {
+          "name": "test_shortest",
+          "unittest_code": "def test_shortest(self):\n    g = {'a': ['b'], 'b': ['a', 'c'], 'c': ['b']}\n    self.assertEqual(shortest_path_length(g, 'a', 'c'), 2)\n    self.assertEqual(shortest_path_length(g, 'a', 'z'), -1)",
+          "required": true
+        }
+      ],
+      "completion_requirements": {
+        "required_test_names": [
+          "test_shortest"
+        ]
+      }
+    },
+    {
+      "id": "graph-traversals-checkpoint",
+      "title": "5. Unit 7 Checkpoint: Graph Traversals",
+      "description": "Return True if an undirected graph is connected (all nodes reachable from any).",
+      "order": 35,
+      "difficulty": "intermediate",
+      "duration_minutes": 5,
+      "type": "checkpoint",
+      "section_id": "sec-dsa-1",
+      "section_title": "Section 1: Data Structures & Algorithms",
+      "concepts": [
+        "graph-traversals"
+      ],
+      "prerequisites": [
+        "stacks-queues"
+      ],
+      "learning_objectives": [
+        "Compare visited size to node count"
+      ],
+      "starter_code": "from collections import deque\n\ndef is_connected(graph):\n    # graph: dict[node, list[neighbors]]; empty graph is connected\n    # TODO\n    pass\n",
+      "solution_code": "from collections import deque\n\ndef is_connected(graph):\n    if not graph:\n        return True\n    start = next(iter(graph))\n    seen = {start}\n    q = deque([start])\n    while q:\n        node = q.popleft()\n        for nbr in graph.get(node, []):\n            if nbr not in seen:\n                seen.add(nbr)\n                q.append(nbr)\n    return len(seen) == len(graph)\n",
+      "tests": [
+        {
+          "name": "test_connected",
+          "unittest_code": "def test_connected(self):\n    self.assertTrue(is_connected({'a': ['b'], 'b': ['a']}))\n    self.assertFalse(is_connected({'a': [], 'b': []}))",
+          "required": true
+        }
+      ],
+      "completion_requirements": {
+        "required_test_names": [
+          "test_connected"
+        ]
+      }
+    }
+  ]
+}

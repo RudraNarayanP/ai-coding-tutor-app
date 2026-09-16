@@ -1,0 +1,186 @@
+{
+  "id": "hash-maps",
+  "title": "Unit 5: Hash Maps",
+  "order": 5,
+  "concepts": [
+    {
+      "id": "hash-maps",
+      "title": "Hash Maps",
+      "prerequisites": [
+        "big-o"
+      ]
+    }
+  ],
+  "lessons": [
+    {
+      "id": "hash-maps-step-1",
+      "title": "1. Frequency Counter",
+      "description": "Count character frequencies with a dict.",
+      "order": 21,
+      "difficulty": "intermediate",
+      "duration_minutes": 5,
+      "type": "learn",
+      "section_id": "sec-dsa-1",
+      "section_title": "Section 1: Data Structures & Algorithms",
+      "concepts": [
+        "hash-maps"
+      ],
+      "prerequisites": [
+        "big-o"
+      ],
+      "learning_objectives": [
+        "Build a frequency map"
+      ],
+      "starter_code": "def char_counts(text):\n    # TODO: return dict of char -> count\n    pass\n",
+      "solution_code": "def char_counts(text):\n    counts = {}\n    for ch in text:\n        counts[ch] = counts.get(ch, 0) + 1\n    return counts\n",
+      "tests": [
+        {
+          "name": "test_char_counts",
+          "unittest_code": "def test_char_counts(self):\n    self.assertEqual(char_counts('aba'), {'a': 2, 'b': 1})",
+          "required": true
+        }
+      ],
+      "completion_requirements": {
+        "required_test_names": [
+          "test_char_counts"
+        ]
+      }
+    },
+    {
+      "id": "hash-maps-step-2",
+      "title": "2. Two Sum Indices",
+      "description": "Return indices of two numbers that add to target using a hash map.",
+      "order": 22,
+      "difficulty": "intermediate",
+      "duration_minutes": 5,
+      "type": "learn",
+      "section_id": "sec-dsa-1",
+      "section_title": "Section 1: Data Structures & Algorithms",
+      "concepts": [
+        "hash-maps"
+      ],
+      "prerequisites": [
+        "big-o"
+      ],
+      "learning_objectives": [
+        "Complement lookup in a hash map"
+      ],
+      "starter_code": "def two_sum(nums, target):\n    # TODO: return (i, j) with i < j or None\n    pass\n",
+      "solution_code": "def two_sum(nums, target):\n    seen = {}\n    for i, n in enumerate(nums):\n        need = target - n\n        if need in seen:\n            return (seen[need], i)\n        seen[n] = i\n    return None\n",
+      "tests": [
+        {
+          "name": "test_two_sum",
+          "unittest_code": "def test_two_sum(self):\n    self.assertEqual(two_sum([2, 7, 11, 15], 9), (0, 1))\n    self.assertIsNone(two_sum([1, 2, 3], 100))",
+          "required": true
+        }
+      ],
+      "completion_requirements": {
+        "required_test_names": [
+          "test_two_sum"
+        ]
+      }
+    },
+    {
+      "id": "hash-maps-01",
+      "title": "3. Group Anagrams (Concept Challenge)",
+      "description": "Group words that are anagrams of each other.",
+      "order": 23,
+      "difficulty": "intermediate",
+      "duration_minutes": 10,
+      "type": "challenge",
+      "section_id": "sec-dsa-1",
+      "section_title": "Section 1: Data Structures & Algorithms",
+      "concepts": [
+        "hash-maps"
+      ],
+      "prerequisites": [
+        "big-o"
+      ],
+      "learning_objectives": [
+        "Key anagrams by sorted letters"
+      ],
+      "starter_code": "def group_anagrams(words):\n    # TODO: return list of groups (order of groups/words unconstrained)\n    pass\n",
+      "solution_code": "def group_anagrams(words):\n    groups = {}\n    for w in words:\n        key = ''.join(sorted(w))\n        groups.setdefault(key, []).append(w)\n    return list(groups.values())\n",
+      "tests": [
+        {
+          "name": "test_group_anagrams",
+          "unittest_code": "def test_group_anagrams(self):\n    groups = group_anagrams(['eat', 'tea', 'tan', 'ate', 'nat', 'bat'])\n    normalized = {frozenset(g) for g in groups}\n    self.assertEqual(normalized, {frozenset(['eat', 'tea', 'ate']), frozenset(['tan', 'nat']), frozenset(['bat'])})",
+          "required": true
+        }
+      ],
+      "completion_requirements": {
+        "required_test_names": [
+          "test_group_anagrams"
+        ]
+      }
+    },
+    {
+      "id": "hash-maps-practice-1",
+      "title": "4. First Unique Char (Practice)",
+      "description": "Return the first character that appears once, or None.",
+      "order": 24,
+      "difficulty": "intermediate",
+      "duration_minutes": 5,
+      "type": "practice",
+      "section_id": "sec-dsa-1",
+      "section_title": "Section 1: Data Structures & Algorithms",
+      "concepts": [
+        "hash-maps"
+      ],
+      "prerequisites": [
+        "big-o"
+      ],
+      "learning_objectives": [
+        "Two-pass frequency then scan"
+      ],
+      "starter_code": "def first_unique(text):\n    # TODO\n    pass\n",
+      "solution_code": "def first_unique(text):\n    counts = {}\n    for ch in text:\n        counts[ch] = counts.get(ch, 0) + 1\n    for ch in text:\n        if counts[ch] == 1:\n            return ch\n    return None\n",
+      "tests": [
+        {
+          "name": "test_first_unique",
+          "unittest_code": "def test_first_unique(self):\n    self.assertEqual(first_unique('swiss'), 'w')\n    self.assertIsNone(first_unique('aabb'))",
+          "required": true
+        }
+      ],
+      "completion_requirements": {
+        "required_test_names": [
+          "test_first_unique"
+        ]
+      }
+    },
+    {
+      "id": "hash-maps-checkpoint",
+      "title": "5. Unit 5 Checkpoint: Hash Maps",
+      "description": "Implement `intersection(a, b)` returning sorted unique common elements.",
+      "order": 25,
+      "difficulty": "intermediate",
+      "duration_minutes": 5,
+      "type": "checkpoint",
+      "section_id": "sec-dsa-1",
+      "section_title": "Section 1: Data Structures & Algorithms",
+      "concepts": [
+        "hash-maps"
+      ],
+      "prerequisites": [
+        "big-o"
+      ],
+      "learning_objectives": [
+        "Set intersection via hash sets"
+      ],
+      "starter_code": "def intersection(a, b):\n    # TODO: sorted unique commons\n    pass\n",
+      "solution_code": "def intersection(a, b):\n    return sorted(set(a) & set(b))\n",
+      "tests": [
+        {
+          "name": "test_intersection",
+          "unittest_code": "def test_intersection(self):\n    self.assertEqual(intersection([1, 2, 2, 3], [2, 3, 4]), [2, 3])",
+          "required": true
+        }
+      ],
+      "completion_requirements": {
+        "required_test_names": [
+          "test_intersection"
+        ]
+      }
+    }
+  ]
+}

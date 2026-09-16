@@ -1,0 +1,187 @@
+{
+  "id": "type-hints-dataclasses",
+  "title": "Unit 20: Type Hints & Dataclasses",
+  "order": 20,
+  "concepts": [
+    {
+      "id": "type-hints-dataclasses",
+      "title": "Type Hints & Dataclasses",
+      "prerequisites": [
+        "classes",
+        "functions"
+      ]
+    }
+  ],
+  "lessons": [
+    {
+      "id": "type-hints-dataclasses-step-1",
+      "title": "1. Function Type Hints",
+      "description": "Annotate parameters and return types. Implement `add(a: int, b: int) -> int`.",
+      "order": 96,
+      "difficulty": "intermediate",
+      "duration_minutes": 5,
+      "type": "learn",
+      "section_id": "sec-py-intermed",
+      "section_title": "Section 2: Intermediate Python",
+      "concepts": [
+        "type-hints-dataclasses"
+      ],
+      "prerequisites": [
+        "functions"
+      ],
+      "learning_objectives": [
+        "Add basic type annotations"
+      ],
+      "starter_code": "def add(a: int, b: int) -> int:\n    # TODO: return a + b\n    pass\n",
+      "solution_code": "def add(a: int, b: int) -> int:\n    return a + b\n",
+      "tests": [
+        {
+          "name": "test_add",
+          "unittest_code": "def test_add(self):\n    self.assertEqual(add(2, 3), 5)\n    self.assertEqual(add.__annotations__['return'], int)",
+          "required": true
+        }
+      ],
+      "completion_requirements": {
+        "required_test_names": [
+          "test_add"
+        ]
+      }
+    },
+    {
+      "id": "type-hints-dataclasses-step-2",
+      "title": "2. Dataclass Basics",
+      "description": "Use `@dataclass` to define `Point` with x and y floats and a `magnitude` method.",
+      "order": 97,
+      "difficulty": "intermediate",
+      "duration_minutes": 5,
+      "type": "learn",
+      "section_id": "sec-py-intermed",
+      "section_title": "Section 2: Intermediate Python",
+      "concepts": [
+        "type-hints-dataclasses"
+      ],
+      "prerequisites": [
+        "classes"
+      ],
+      "learning_objectives": [
+        "Define a dataclass with a method"
+      ],
+      "starter_code": "from dataclasses import dataclass\nimport math\n\n@dataclass\nclass Point:\n    x: float\n    y: float\n\n    def magnitude(self) -> float:\n        # TODO: return sqrt(x^2 + y^2)\n        pass\n",
+      "solution_code": "from dataclasses import dataclass\nimport math\n\n@dataclass\nclass Point:\n    x: float\n    y: float\n\n    def magnitude(self) -> float:\n        return math.sqrt(self.x * self.x + self.y * self.y)\n",
+      "tests": [
+        {
+          "name": "test_point",
+          "unittest_code": "def test_point(self):\n    p = Point(3, 4)\n    self.assertEqual(p.magnitude(), 5.0)",
+          "required": true
+        }
+      ],
+      "completion_requirements": {
+        "required_test_names": [
+          "test_point"
+        ]
+      }
+    },
+    {
+      "id": "type-hints-dataclasses-01",
+      "title": "3. Frozen Dataclass Config (Concept Challenge)",
+      "description": "Create an immutable `Config` dataclass and a helper that updates via `dataclasses.replace`.",
+      "order": 98,
+      "difficulty": "intermediate",
+      "duration_minutes": 10,
+      "type": "challenge",
+      "section_id": "sec-py-intermed",
+      "section_title": "Section 2: Intermediate Python",
+      "concepts": [
+        "type-hints-dataclasses"
+      ],
+      "prerequisites": [
+        "classes"
+      ],
+      "learning_objectives": [
+        "Use frozen=True and replace()"
+      ],
+      "starter_code": "from dataclasses import dataclass, replace\n\n@dataclass(frozen=True)\nclass Config:\n    host: str\n    port: int = 80\n\ndef with_port(cfg: Config, port: int) -> Config:\n    # TODO: return replace(cfg, port=port)\n    pass\n",
+      "solution_code": "from dataclasses import dataclass, replace\n\n@dataclass(frozen=True)\nclass Config:\n    host: str\n    port: int = 80\n\ndef with_port(cfg: Config, port: int) -> Config:\n    return replace(cfg, port=port)\n",
+      "tests": [
+        {
+          "name": "test_config",
+          "unittest_code": "def test_config(self):\n    c = Config('localhost')\n    c2 = with_port(c, 8080)\n    self.assertEqual(c2.port, 8080)\n    self.assertEqual(c.port, 80)",
+          "required": true
+        }
+      ],
+      "completion_requirements": {
+        "required_test_names": [
+          "test_config"
+        ]
+      }
+    },
+    {
+      "id": "type-hints-dataclasses-practice-1",
+      "title": "4. Typed Optional Defaults (Practice)",
+      "description": "Implement `greet(name: str, title: str | None = None) -> str`.",
+      "order": 99,
+      "difficulty": "intermediate",
+      "duration_minutes": 5,
+      "type": "practice",
+      "section_id": "sec-py-intermed",
+      "section_title": "Section 2: Intermediate Python",
+      "concepts": [
+        "type-hints-dataclasses"
+      ],
+      "prerequisites": [
+        "functions"
+      ],
+      "learning_objectives": [
+        "Use Optional / union types in annotations"
+      ],
+      "starter_code": "def greet(name: str, title: str | None = None) -> str:\n    # TODO: if title: return f'{title} {name}' else return name\n    pass\n",
+      "solution_code": "def greet(name: str, title: str | None = None) -> str:\n    if title:\n        return f'{title} {name}'\n    return name\n",
+      "tests": [
+        {
+          "name": "test_greet",
+          "unittest_code": "def test_greet(self):\n    self.assertEqual(greet('Ada'), 'Ada')\n    self.assertEqual(greet('Ada', 'Dr'), 'Dr Ada')",
+          "required": true
+        }
+      ],
+      "completion_requirements": {
+        "required_test_names": [
+          "test_greet"
+        ]
+      }
+    },
+    {
+      "id": "type-hints-dataclasses-checkpoint",
+      "title": "5. Unit 20 Checkpoint: Types & Dataclasses",
+      "description": "Define `@dataclass` `Pair` with a generic-feeling `swap` method returning a new Pair.",
+      "order": 100,
+      "difficulty": "intermediate",
+      "duration_minutes": 5,
+      "type": "checkpoint",
+      "section_id": "sec-py-intermed",
+      "section_title": "Section 2: Intermediate Python",
+      "concepts": [
+        "type-hints-dataclasses"
+      ],
+      "prerequisites": [
+        "classes"
+      ],
+      "learning_objectives": [
+        "Return a new dataclass instance from a method"
+      ],
+      "starter_code": "from dataclasses import dataclass\n\n@dataclass\nclass Pair:\n    left: str\n    right: str\n\n    def swap(self) -> 'Pair':\n        # TODO: return Pair(self.right, self.left)\n        pass\n",
+      "solution_code": "from dataclasses import dataclass\n\n@dataclass\nclass Pair:\n    left: str\n    right: str\n\n    def swap(self) -> 'Pair':\n        return Pair(self.right, self.left)\n",
+      "tests": [
+        {
+          "name": "test_pair_swap",
+          "unittest_code": "def test_pair_swap(self):\n    p = Pair('a', 'b').swap()\n    self.assertEqual((p.left, p.right), ('b', 'a'))",
+          "required": true
+        }
+      ],
+      "completion_requirements": {
+        "required_test_names": [
+          "test_pair_swap"
+        ]
+      }
+    }
+  ]
+}

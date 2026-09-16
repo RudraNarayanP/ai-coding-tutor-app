@@ -1,0 +1,196 @@
+{
+  "id": "exceptions",
+  "title": "Unit 15: Exceptions & Error Handling",
+  "order": 15,
+  "concepts": [
+    {
+      "id": "exceptions",
+      "title": "Exceptions & Error Handling",
+      "prerequisites": [
+        "classes"
+      ]
+    }
+  ],
+  "lessons": [
+    {
+      "id": "exceptions-step-1",
+      "title": "1. Raising and Catching Exceptions",
+      "description": "Use `try`/`except` to catch errors and `raise` to signal invalid input. Implement `safe_divide(a, b)` that returns None when dividing by zero.",
+      "order": 71,
+      "difficulty": "intermediate",
+      "duration_minutes": 5,
+      "type": "learn",
+      "section_id": "sec-py-intermed",
+      "section_title": "Section 2: Intermediate Python",
+      "concepts": [
+        "exceptions"
+      ],
+      "prerequisites": [
+        "classes"
+      ],
+      "learning_objectives": [
+        "Catch ZeroDivisionError and return None"
+      ],
+      "starter_code": "def safe_divide(a, b):\n    # TODO: return a/b, or None if b is 0\n    pass\n",
+      "solution_code": "def safe_divide(a, b):\n    try:\n        return a / b\n    except ZeroDivisionError:\n        return None\n",
+      "tests": [
+        {
+          "name": "test_safe_divide",
+          "unittest_code": "def test_safe_divide(self):\n    self.assertEqual(safe_divide(10, 2), 5.0)\n    self.assertIsNone(safe_divide(1, 0))",
+          "required": true
+        }
+      ],
+      "completion_requirements": {
+        "required_test_names": [
+          "test_safe_divide"
+        ]
+      },
+      "static_hints": [
+        "try:",
+        "except ZeroDivisionError:"
+      ]
+    },
+    {
+      "id": "exceptions-step-2",
+      "title": "2. Custom Exception Classes",
+      "description": "Subclass `Exception` to create domain-specific errors. Raise `InvalidAgeError` when age is negative.",
+      "order": 72,
+      "difficulty": "intermediate",
+      "duration_minutes": 5,
+      "type": "learn",
+      "section_id": "sec-py-intermed",
+      "section_title": "Section 2: Intermediate Python",
+      "concepts": [
+        "exceptions"
+      ],
+      "prerequisites": [
+        "classes"
+      ],
+      "learning_objectives": [
+        "Define and raise a custom exception"
+      ],
+      "starter_code": "class InvalidAgeError(Exception):\n    pass\n\ndef set_age(age):\n    # TODO: raise InvalidAgeError if age < 0, else return age\n    pass\n",
+      "solution_code": "class InvalidAgeError(Exception):\n    pass\n\ndef set_age(age):\n    if age < 0:\n        raise InvalidAgeError(f'age must be >= 0, got {age}')\n    return age\n",
+      "tests": [
+        {
+          "name": "test_invalid_age",
+          "unittest_code": "def test_invalid_age(self):\n    self.assertEqual(set_age(21), 21)\n    with self.assertRaises(InvalidAgeError):\n        set_age(-1)",
+          "required": true
+        }
+      ],
+      "completion_requirements": {
+        "required_test_names": [
+          "test_invalid_age"
+        ]
+      }
+    },
+    {
+      "id": "exceptions-01",
+      "title": "3. Retry with Backoff (Concept Challenge)",
+      "description": "Implement `retry_call(fn, retries)` that calls `fn` up to `retries` times, returning the first success or re-raising the last exception.",
+      "order": 73,
+      "difficulty": "intermediate",
+      "duration_minutes": 10,
+      "type": "challenge",
+      "section_id": "sec-py-intermed",
+      "section_title": "Section 2: Intermediate Python",
+      "concepts": [
+        "exceptions"
+      ],
+      "prerequisites": [
+        "classes"
+      ],
+      "learning_objectives": [
+        "Retry a failing callable and propagate the final error"
+      ],
+      "starter_code": "def retry_call(fn, retries=3):\n    # TODO: call fn() up to retries times; return result; re-raise last exception\n    pass\n",
+      "solution_code": "def retry_call(fn, retries=3):\n    last = None\n    for _ in range(retries):\n        try:\n            return fn()\n        except Exception as exc:\n            last = exc\n    raise last\n",
+      "tests": [
+        {
+          "name": "test_retry_success",
+          "unittest_code": "def test_retry_success(self):\n    calls = {'n': 0}\n    def flaky():\n        calls['n'] += 1\n        if calls['n'] < 3:\n            raise ValueError('fail')\n        return 'ok'\n    self.assertEqual(retry_call(flaky, retries=3), 'ok')\n    self.assertEqual(calls['n'], 3)",
+          "required": true
+        },
+        {
+          "name": "test_retry_exhaust",
+          "unittest_code": "def test_retry_exhaust(self):\n    def always():\n        raise RuntimeError('boom')\n    with self.assertRaises(RuntimeError):\n        retry_call(always, retries=2)",
+          "required": true
+        }
+      ],
+      "completion_requirements": {
+        "required_test_names": [
+          "test_retry_success",
+          "test_retry_exhaust"
+        ]
+      }
+    },
+    {
+      "id": "exceptions-practice-1",
+      "title": "4. Parse Int Safely (Practice)",
+      "description": "Write `parse_ints(values)` that converts strings to ints, skipping values that raise `ValueError`.",
+      "order": 74,
+      "difficulty": "intermediate",
+      "duration_minutes": 5,
+      "type": "practice",
+      "section_id": "sec-py-intermed",
+      "section_title": "Section 2: Intermediate Python",
+      "concepts": [
+        "exceptions"
+      ],
+      "prerequisites": [
+        "classes"
+      ],
+      "learning_objectives": [
+        "Skip invalid conversions with try/except"
+      ],
+      "starter_code": "def parse_ints(values):\n    # TODO: return list of ints; ignore ValueError on int(v)\n    pass\n",
+      "solution_code": "def parse_ints(values):\n    result = []\n    for v in values:\n        try:\n            result.append(int(v))\n        except ValueError:\n            continue\n    return result\n",
+      "tests": [
+        {
+          "name": "test_parse_ints",
+          "unittest_code": "def test_parse_ints(self):\n    self.assertEqual(parse_ints(['1', 'x', '3']), [1, 3])",
+          "required": true
+        }
+      ],
+      "completion_requirements": {
+        "required_test_names": [
+          "test_parse_ints"
+        ]
+      }
+    },
+    {
+      "id": "exceptions-checkpoint",
+      "title": "5. Unit 15 Checkpoint: Exceptions Mastery",
+      "description": "Implement `read_config(data)` that raises `KeyError` wrapped as `ValueError('missing key')` when 'host' is absent.",
+      "order": 75,
+      "difficulty": "intermediate",
+      "duration_minutes": 5,
+      "type": "checkpoint",
+      "section_id": "sec-py-intermed",
+      "section_title": "Section 2: Intermediate Python",
+      "concepts": [
+        "exceptions"
+      ],
+      "prerequisites": [
+        "classes"
+      ],
+      "learning_objectives": [
+        "Translate KeyError into a clearer ValueError"
+      ],
+      "starter_code": "def read_config(data):\n    # TODO: return data['host']; on KeyError raise ValueError('missing key')\n    pass\n",
+      "solution_code": "def read_config(data):\n    try:\n        return data['host']\n    except KeyError:\n        raise ValueError('missing key')\n",
+      "tests": [
+        {
+          "name": "test_read_config",
+          "unittest_code": "def test_read_config(self):\n    self.assertEqual(read_config({'host': 'localhost'}), 'localhost')\n    with self.assertRaises(ValueError):\n        read_config({})",
+          "required": true
+        }
+      ],
+      "completion_requirements": {
+        "required_test_names": [
+          "test_read_config"
+        ]
+      }
+    }
+  ]
+}

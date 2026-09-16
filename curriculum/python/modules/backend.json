@@ -1,20 +1,30 @@
 {
   "id": "python-backend",
-  "title": "Unit 16: Web Services & Backend APIs",
-  "order": 16,
-  "concepts": [{ "id": "py-backend", "title": "HTTP Endpoint Handlers & APIs", "prerequisites": ["py-auto"] }],
+  "title": "Unit 23: Web Services & Backend APIs",
+  "order": 23,
+  "concepts": [
+    {
+      "id": "py-backend",
+      "title": "HTTP Endpoint Handlers & APIs",
+      "prerequisites": [
+        "py-auto"
+      ]
+    }
+  ],
   "lessons": [
     {
       "id": "py-backend-01",
       "title": "1. Building REST API Endpoint Response Objects",
       "description": "Format backend REST API response dictionaries with status codes and payloads.",
-      "order": 72,
+      "order": 107,
       "difficulty": "intermediate",
       "duration_minutes": 5,
       "type": "learn",
       "section_id": "sec-py-3",
       "section_title": "Section 3: Practical Python",
-      "concepts": ["py-backend"],
+      "concepts": [
+        "py-backend"
+      ],
       "starter_code": "def make_api_response(data: dict, status: int = 200) -> dict:\n    return {\"status_code\": status, \"body\": data}\n",
       "solution_code": "def make_api_response(data: dict, status: int = 200) -> dict:\n    return {\"status_code\": status, \"body\": data}\n",
       "tests": [
@@ -24,7 +34,11 @@
           "required": true
         }
       ],
-      "completion_requirements": { "required_test_names": ["test_api_response"] }
+      "completion_requirements": {
+        "required_test_names": [
+          "test_api_response"
+        ]
+      }
     }
   ]
 }

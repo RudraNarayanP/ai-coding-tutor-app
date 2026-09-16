@@ -1,0 +1,187 @@
+{
+  "id": "pytest-testing",
+  "title": "Unit 21: Testing with pytest Patterns",
+  "order": 21,
+  "concepts": [
+    {
+      "id": "pytest-testing",
+      "title": "Testing with pytest Patterns",
+      "prerequisites": [
+        "functions",
+        "exceptions"
+      ]
+    }
+  ],
+  "lessons": [
+    {
+      "id": "pytest-testing-step-1",
+      "title": "1. Assert Helpers",
+      "description": "Write `assert_equal(actual, expected)` that raises AssertionError with a clear message on mismatch.",
+      "order": 101,
+      "difficulty": "intermediate",
+      "duration_minutes": 5,
+      "type": "learn",
+      "section_id": "sec-py-intermed",
+      "section_title": "Section 2: Intermediate Python",
+      "concepts": [
+        "pytest-testing"
+      ],
+      "prerequisites": [
+        "exceptions"
+      ],
+      "learning_objectives": [
+        "Raise AssertionError with a helpful message"
+      ],
+      "starter_code": "def assert_equal(actual, expected):\n    # TODO: if actual != expected raise AssertionError(f'{actual!r} != {expected!r}')\n    pass\n",
+      "solution_code": "def assert_equal(actual, expected):\n    if actual != expected:\n        raise AssertionError(f'{actual!r} != {expected!r}')\n",
+      "tests": [
+        {
+          "name": "test_assert_equal",
+          "unittest_code": "def test_assert_equal(self):\n    assert_equal(1, 1)\n    with self.assertRaises(AssertionError):\n        assert_equal(1, 2)",
+          "required": true
+        }
+      ],
+      "completion_requirements": {
+        "required_test_names": [
+          "test_assert_equal"
+        ]
+      }
+    },
+    {
+      "id": "pytest-testing-step-2",
+      "title": "2. Parametrized Cases",
+      "description": "Implement `run_cases(fn, cases)` where each case is (args_tuple, expected).",
+      "order": 102,
+      "difficulty": "intermediate",
+      "duration_minutes": 5,
+      "type": "learn",
+      "section_id": "sec-py-intermed",
+      "section_title": "Section 2: Intermediate Python",
+      "concepts": [
+        "pytest-testing"
+      ],
+      "prerequisites": [
+        "functions"
+      ],
+      "learning_objectives": [
+        "Drive multiple cases through one helper"
+      ],
+      "starter_code": "def run_cases(fn, cases):\n    # TODO: for args, expected in cases: assert fn(*args) == expected; return len(cases)\n    pass\n",
+      "solution_code": "def run_cases(fn, cases):\n    for args, expected in cases:\n        assert fn(*args) == expected\n    return len(cases)\n",
+      "tests": [
+        {
+          "name": "test_run_cases",
+          "unittest_code": "def test_run_cases(self):\n    n = run_cases(lambda a, b: a + b, [((1, 2), 3), ((0, 0), 0)])\n    self.assertEqual(n, 2)",
+          "required": true
+        }
+      ],
+      "completion_requirements": {
+        "required_test_names": [
+          "test_run_cases"
+        ]
+      }
+    },
+    {
+      "id": "pytest-testing-01",
+      "title": "3. Fixture-like Setup (Concept Challenge)",
+      "description": "Build `with_temp_dict(factory)` that creates a dict via factory, yields it to a callback, then clears it.",
+      "order": 103,
+      "difficulty": "intermediate",
+      "duration_minutes": 10,
+      "type": "challenge",
+      "section_id": "sec-py-intermed",
+      "section_title": "Section 2: Intermediate Python",
+      "concepts": [
+        "pytest-testing"
+      ],
+      "prerequisites": [
+        "functions"
+      ],
+      "learning_objectives": [
+        "Simulate fixture setup/teardown"
+      ],
+      "starter_code": "def with_temp_dict(factory, callback):\n    # TODO: data = factory(); callback(data); data.clear(); return data\n    pass\n",
+      "solution_code": "def with_temp_dict(factory, callback):\n    data = factory()\n    callback(data)\n    data.clear()\n    return data\n",
+      "tests": [
+        {
+          "name": "test_with_temp_dict",
+          "unittest_code": "def test_with_temp_dict(self):\n    seen = {}\n    def cb(d):\n        d['x'] = 1\n        seen.update(d)\n    result = with_temp_dict(dict, cb)\n    self.assertEqual(seen, {'x': 1})\n    self.assertEqual(result, {})",
+          "required": true
+        }
+      ],
+      "completion_requirements": {
+        "required_test_names": [
+          "test_with_temp_dict"
+        ]
+      }
+    },
+    {
+      "id": "pytest-testing-practice-1",
+      "title": "4. Approximate Float Compare (Practice)",
+      "description": "Implement `approx_equal(a, b, tol=1e-6)` for float comparisons in tests.",
+      "order": 104,
+      "difficulty": "intermediate",
+      "duration_minutes": 5,
+      "type": "practice",
+      "section_id": "sec-py-intermed",
+      "section_title": "Section 2: Intermediate Python",
+      "concepts": [
+        "pytest-testing"
+      ],
+      "prerequisites": [
+        "numbers"
+      ],
+      "learning_objectives": [
+        "Compare floats with tolerance"
+      ],
+      "starter_code": "def approx_equal(a, b, tol=1e-6):\n    # TODO: return abs(a - b) <= tol\n    pass\n",
+      "solution_code": "def approx_equal(a, b, tol=1e-6):\n    return abs(a - b) <= tol\n",
+      "tests": [
+        {
+          "name": "test_approx",
+          "unittest_code": "def test_approx(self):\n    self.assertTrue(approx_equal(0.1 + 0.2, 0.3, tol=1e-9))\n    self.assertFalse(approx_equal(1.0, 1.1, tol=1e-3))",
+          "required": true
+        }
+      ],
+      "completion_requirements": {
+        "required_test_names": [
+          "test_approx"
+        ]
+      }
+    },
+    {
+      "id": "pytest-testing-checkpoint",
+      "title": "5. Unit 21 Checkpoint: Testing Patterns",
+      "description": "Implement `raises(exc_type, fn)` that returns True if fn() raises exc_type, else False.",
+      "order": 105,
+      "difficulty": "intermediate",
+      "duration_minutes": 5,
+      "type": "checkpoint",
+      "section_id": "sec-py-intermed",
+      "section_title": "Section 2: Intermediate Python",
+      "concepts": [
+        "pytest-testing"
+      ],
+      "prerequisites": [
+        "exceptions"
+      ],
+      "learning_objectives": [
+        "Detect expected exceptions in a helper"
+      ],
+      "starter_code": "def raises(exc_type, fn):\n    # TODO: call fn(); return True if exc_type raised else False\n    pass\n",
+      "solution_code": "def raises(exc_type, fn):\n    try:\n        fn()\n    except exc_type:\n        return True\n    return False\n",
+      "tests": [
+        {
+          "name": "test_raises",
+          "unittest_code": "def test_raises(self):\n    self.assertTrue(raises(ValueError, lambda: int('x')))\n    self.assertFalse(raises(ValueError, lambda: int('3')))",
+          "required": true
+        }
+      ],
+      "completion_requirements": {
+        "required_test_names": [
+          "test_raises"
+        ]
+      }
+    }
+  ]
+}
