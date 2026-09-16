@@ -41,6 +41,23 @@ SYSTEM_PROMPT = (
     "Level 4: explain the correct approach in detail."
 )
 
+# Enough room for a complete hint paragraph without mid-sentence truncation.
+TUTOR_MAX_TOKENS = 512
+
+
+def _extract_openai_compatible_message(data: dict[str, Any]) -> str | None:
+    try:
+        message_obj = data["choices"][0]["message"]
+    except (KeyError, IndexError, TypeError):
+        return None
+    if not isinstance(message_obj, dict):
+        return None
+    for key in ("content", "reasoning"):
+        candidate = message_obj.get(key)
+        if isinstance(candidate, str) and candidate.strip():
+            return candidate.strip()
+    return None
+
 
 def build_user_prompt(request: TutorRequest) -> str:
     unit_title = getattr(request, 'unit_title', '')
@@ -125,7 +142,7 @@ class OllamaProvider:
                 json={
                     "model": self.model,
                     "stream": False,
-                    "options": {"num_predict": 180},
+                    "options": {"num_predict": TUTOR_MAX_TOKENS},
                     "messages": [
                         {"role": "system", "content": SYSTEM_PROMPT},
                         {"role": "user", "content": prompt},
@@ -253,7 +270,7 @@ class OpenAICompatibleProvider:
 
         payload = {
             "model": self.model,
-            "max_tokens": 180,
+            "max_tokens": TUTOR_MAX_TOKENS,
             "messages": [
                 {"role": "system", "content": SYSTEM_PROMPT},
                 {"role": "user", "content": build_user_prompt(request)},
@@ -274,12 +291,9 @@ class OpenAICompatibleProvider:
         except Exception as exc:
             raise AIProviderError(f"{self.name} request failed or timed out.", provider=self.provider_id, code="network_error") from exc
 
-        try:
-            message = data["choices"][0]["message"]["content"]
-            if isinstance(message, str) and message.strip():
-                return message.strip()
-        except (KeyError, IndexError, TypeError):
-            pass
+        message = _extract_openai_compatible_message(data)
+        if message:
+            return message
         raise AIProviderError(f"{self.name} returned an unexpected response format.", provider=self.provider_id, code="malformed_response")
 
     async def generate_structured(self, system: str, user: str, max_tokens: int = 4000) -> str:
@@ -316,12 +330,9 @@ class OpenAICompatibleProvider:
         except Exception as exc:
             raise AIProviderError(f"{self.name} request failed or timed out.", provider=self.provider_id, code="network_error") from exc
 
-        try:
-            message = data["choices"][0]["message"]["content"]
-            if isinstance(message, str) and message.strip():
-                return message.strip()
-        except (KeyError, IndexError, TypeError):
-            pass
+        message = _extract_openai_compatible_message(data)
+        if message:
+            return message
         raise AIProviderError(f"{self.name} returned an unexpected response format.", provider=self.provider_id, code="malformed_response")
 
     async def health(self) -> ProviderStatus:
@@ -335,6 +346,47 @@ class OpenAICompatibleProvider:
                 reason=f"{self.api_key_env} environment variable not set",
                 error="missing_api_key",
             )
+
+        headers = {
+            "Authorization": f"Bearer {self.api_key}",
+            "Content-Type": "application/json",
+            **self.headers_extra,
+        }
+        try:
+            client = get_shared_client()
+            res = await client.get(f"{self.base_url}/models", headers=headers, timeout=10.0)
+            if res.status_code == 401:
+                return ProviderStatus(
+                    provider=self.provider_id,
+                    name=self.name,
+                    available=False,
+                    model=self.model,
+                    configured=True,
+                    reason=f"{self.name} API key is invalid or unauthorized.",
+                    error="invalid_api_key",
+                )
+            if res.status_code != 200:
+                return ProviderStatus(
+                    provider=self.provider_id,
+                    name=self.name,
+                    available=False,
+                    model=self.model,
+                    configured=True,
+                    reason=f"{self.name} health check failed with status {res.status_code}.",
+                    error="health_check_failed",
+                )
+        except Exception as exc:
+            logger.warning("%s health check failed: %s", self.name, exc)
+            return ProviderStatus(
+                provider=self.provider_id,
+                name=self.name,
+                available=False,
+                model=self.model,
+                configured=True,
+                reason=f"{self.name} request failed or timed out.",
+                error="network_error",
+            )
+
         return ProviderStatus(
             provider=self.provider_id,
             name=self.name,
@@ -378,7 +430,7 @@ class AnthropicProvider:
 
         payload = {
             "model": self.model,
-            "max_tokens": 180,
+            "max_tokens": TUTOR_MAX_TOKENS,
             "system": SYSTEM_PROMPT,
             "messages": [
                 {"role": "user", "content": build_user_prompt(request)},
@@ -505,7 +557,7 @@ class GeminiProvider:
                 "parts": [{"text": build_user_prompt(request)}]
             }],
             "generationConfig": {
-                "maxOutputTokens": 180,
+                "maxOutputTokens": TUTOR_MAX_TOKENS,
             }
         }
 

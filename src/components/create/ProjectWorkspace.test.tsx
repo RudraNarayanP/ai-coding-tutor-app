@@ -11,6 +11,7 @@ vi.mock('../../utils/projectApi', () => ({
     exec: vi.fn(),
     next: vi.fn(),
     guidance: vi.fn(),
+    remove: vi.fn(),
   },
 }))
 
@@ -22,6 +23,7 @@ const baseProject: ProjectView = {
   source_url: '',
   source_summary: '',
   project_goal: 'Build a word frequency counter',
+  course_intro: 'Build a word frequency counter step by step, using collections as in the source tutorial.',
   tech_stack: ['collections'],
   entry_file: 'main.py',
   milestones: [
@@ -39,7 +41,7 @@ const baseProject: ProjectView = {
       teach: 'The collections module gives you Counter, a ready-made word tallier. It saves you from hand-rolling a dict.',
       example: 'from collections import Counter',
       celebrate: 'Toolkit imported! 🧰',
-      microstep: { observation: 'Next step from the source:', action: 'Import the collections module.', hint: 'Add import collections.' },
+      microstep: { observation: 'This step brings in collections from the tutorial.', action: 'Add `import collections` to your code.', hint: 'Add import collections.' },
     },
     {
       id: 'm3', order: 3, title: 'Define count_words', status: 'pending',
@@ -73,11 +75,14 @@ describe('ProjectWorkspace', () => {
     expect(screen.getAllByText('Import collections').length).toBeGreaterThanOrEqual(1)
     expect(screen.getByText('Define count_words')).toBeInTheDocument()
     // Microstep guidance for the current milestone
-    expect(screen.getByText(/Import the collections module\./)).toBeInTheDocument()
-    // Rich, engaging content: hook headline + teach explanation + Show example
+    expect(screen.getByText(/Add `import collections`/)).toBeInTheDocument()
+    // Concise default view: observation + action; teach is behind Learn more
     expect(screen.getByText('Bring in the counting toolkit.')).toBeInTheDocument()
+    expect(screen.getByText(/brings in collections/)).toBeInTheDocument()
+    expect(screen.getByText('Learn more')).toBeInTheDocument()
+    expect(screen.queryByText(/ready-made word tallier/)).toBeNull()
+    fireEvent.click(screen.getByText('Learn more'))
     expect(screen.getByText(/ready-made word tallier/)).toBeInTheDocument()
-    expect(screen.getByText('Show example')).toBeInTheDocument()
     // Progress + editor + NEXT
     expect(screen.getByText('33% complete')).toBeInTheDocument()
     expect(screen.getByLabelText('Editor for main.py')).toBeInTheDocument()
@@ -170,6 +175,32 @@ describe('ProjectWorkspace', () => {
     const editor = screen.getByLabelText('Editor for main.py') as HTMLTextAreaElement
     fireEvent.change(editor, { target: { value: 'import collections\n' } })
     await waitFor(() => expect(screen.queryByText(/No import of/)).toBeNull())
+  })
+
+  it('does not dump raw transcript speech as the default lesson action', async () => {
+    const leaky = {
+      ...baseProject,
+      milestones: baseProject.milestones.map((m) =>
+        m.id === 'm2'
+          ? {
+              ...m,
+              hook: 'Your LLM is a confident liar.',
+              microstep: {
+                observation: 'Your LLM is a confident liar.',
+                action:
+                  "about this fish it's not going to exactly parrot the documents that it saw in the training set but again it's some kind of a lossy compression",
+                hint: 'Call hallucination.',
+              },
+            }
+          : m
+      ),
+    }
+    ;(projectApi.get as any).mockResolvedValue(leaky)
+    render(<ProjectWorkspace courseId="project-abc" onExit={() => {}} />)
+    await waitFor(() => screen.getByText('Word Frequency Counter'))
+    expect(screen.queryByText(/about this fish/i)).toBeNull()
+    expect(screen.queryByText(/lossy compression/i)).toBeNull()
+    expect(screen.getByText(/Complete this step: Import collections/)).toBeInTheDocument()
   })
 
   it('offers a read-only AI suggestion that the learner explicitly applies', async () => {
@@ -281,10 +312,21 @@ describe('ProjectWorkspace', () => {
   it('keeps other Create Course tutorials readable (bug D) and Run/NEXT working (bug E)', async () => {
     render(<ProjectWorkspace courseId="project-abc" onExit={() => {}} />)
     await waitFor(() => screen.getByText('Word Frequency Counter'))
-    expect(screen.getByText(/Import the collections module/)).toBeInTheDocument()
+    expect(screen.getByText(/import the collections module/i)).toBeInTheDocument()
     fireEvent.click(screen.getByRole('button', { name: 'Why?' }))
     expect(screen.getByText('You need it to count.')).toBeInTheDocument()
     expect(screen.getAllByRole('button', { name: /Run/ })[0]).toBeInTheDocument()
     expect(screen.getByRole('button', { name: /NEXT/ })).toBeInTheDocument()
+  })
+
+  it('deletes the open project from the workspace header', async () => {
+    ;(projectApi.remove as any).mockResolvedValue({ status: 'deleted' })
+    vi.spyOn(window, 'confirm').mockReturnValue(true)
+    const onExit = vi.fn()
+    render(<ProjectWorkspace courseId="project-abc" onExit={onExit} />)
+    await waitFor(() => screen.getByText('Word Frequency Counter'))
+    fireEvent.click(screen.getByRole('button', { name: 'Delete this project' }))
+    await waitFor(() => expect(projectApi.remove).toHaveBeenCalledWith('project-abc'))
+    expect(onExit).toHaveBeenCalled()
   })
 })

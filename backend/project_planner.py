@@ -135,6 +135,158 @@ _ACTION_VERBS = (
 )
 
 _IDENT = r"[A-Za-z_][A-Za-z0-9_]*"
+_FIELD_MAX = 2000
+_STEP_CHUNK_MAX = 800
+
+# Speech-to-text / filler patterns that must never appear in learner-facing copy.
+_TRANSCRIPT_FILLER = re.compile(
+    r"\b(uh+|u+m+|er+|ah+|huh|yeah|y'know|you know|sort of|kind of|kinda|sorta|"
+    r"i mean|basically|literally|right\?|gonna|wanna|gotta|okay so|alright so)\b",
+    re.IGNORECASE,
+)
+_SPOKEN_FILLER_CHUNKS = re.compile(
+    r"\b(it's not going to|what we want|we want is we|some kind of a|"
+    r"we call (it|this|that)|as we call it)\b",
+    re.IGNORECASE,
+)
+_NARRATIVE_PRINT = re.compile(
+    r"\b(?:when|if|as|while|because|so that|where)\b.+\b(?:print|output|display)\b",
+    re.IGNORECASE,
+)
+
+
+def _cap_field(text: str, max_len: int = _FIELD_MAX) -> str:
+    """Clamp milestone text fields to the Pydantic model limit."""
+    cleaned = (text or "").strip()
+    if len(cleaned) <= max_len:
+        return cleaned
+    return cleaned[: max_len - 1] + "…"
+
+
+def looks_like_raw_transcript(text: str) -> bool:
+    """True when text looks like unprocessed speech-to-text, not learner copy."""
+    cleaned = (text or "").strip()
+    if not cleaned:
+        return False
+    if _TRANSCRIPT_FILLER.search(cleaned) or _SPOKEN_FILLER_CHUNKS.search(cleaned):
+        return True
+    words = cleaned.split()
+    # Learner-facing lines must stay short. Spoken monologue is long and breathless.
+    if len(words) > 28:
+        return True
+    if len(cleaned) > 160 and cleaned.count(",") >= 3:
+        return True
+    if len(cleaned) > 90 and cleaned.count(".") == 0 and cleaned.count("`") == 0:
+        return True
+    # Repeated short phrases ("we want we want") are common STT artifacts.
+    if re.search(r"\b(\w+(?:\s+\w+){0,3})\s+\1\b", cleaned, re.IGNORECASE):
+        return True
+    return False
+
+
+def _kind_target_from_milestone(milestone: Milestone) -> tuple[str, str]:
+    if not milestone.checks:
+        return ("run_ok", "")
+    c = milestone.checks[0]
+    return (c.kind, c.target)
+
+
+def scrub_learner_fields(milestone: Milestone) -> Milestone:
+    """Replace transcript-like learner copy with a short synthesized instruction.
+
+    Used both at generation time and when projecting a saved project, so already
+    stored courses cannot keep dumping YouTube speech into the lesson pane.
+    """
+    kind, tgt = _kind_target_from_milestone(milestone)
+    safe_action = _action_for(kind, tgt, milestone.title)
+    safe_obs = _observation_for(kind, tgt, milestone.title)
+    if looks_like_raw_transcript(milestone.microstep.action) or len(milestone.microstep.action.split()) > 28:
+        milestone.microstep.action = safe_action
+    if looks_like_raw_transcript(milestone.microstep.observation) or len(milestone.microstep.observation.split()) > 28:
+        milestone.microstep.observation = safe_obs
+    if looks_like_raw_transcript(milestone.hook) or len(milestone.hook.split()) > 12:
+        milestone.hook = ""
+    if looks_like_raw_transcript(milestone.teach) or len(milestone.teach.split()) > 60:
+        milestone.teach = ""
+    if looks_like_raw_transcript(milestone.example):
+        milestone.example = ""
+    return milestone
+
+
+def scrub_project_learner_copy(project: ProjectCourse) -> ProjectCourse:
+    for m in project.milestones:
+        scrub_learner_fields(m)
+    if looks_like_raw_transcript(project.course_intro) or len(project.course_intro.split()) > 80:
+        project.course_intro = ""
+    if looks_like_raw_transcript(project.project_goal):
+        project.project_goal = _synthesize_project_goal(project.title, project.tech_stack)
+    return project
+
+
+def _synthesize_project_goal(title: str, tech_stack: list[str]) -> str:
+    """Learner-facing project goal — never the first raw transcript sentence."""
+    name = title.strip() or "this project"
+    stack = ", ".join(tech_stack[:4])
+    if stack:
+        return f"Build “{name}” step by step, using {stack} as in the source tutorial."
+    return f"Build “{name}” step by step, following the source tutorial."
+
+
+def _action_for(kind: str, target: str, title: str = "") -> str:
+    """Concise, imperative learner task — never raw source dialogue."""
+    if kind == "import":
+        return f"Add `import {target}` (or `from {target} import ...`) to your code."
+    if kind == "symbol":
+        return f"Define `{target}` in your workspace."
+    if kind == "function_call":
+        return f"Call `{target}(...)` in your code."
+    if kind == "stdout_contains":
+        return "Add a `print(...)` statement that shows your result."
+    if kind == "run_ok":
+        return "Run your code and confirm it executes without errors."
+    if kind == "code_contains":
+        token = target.split("|")[0]
+        return f"Implement this step so your code references `{token}`."
+    return title or "Complete this step in your code."
+
+
+def _observation_for(kind: str, target: str, title: str) -> str:
+    """One short sentence — what this milestone is about."""
+    if kind == "import":
+        return f"This step brings in `{target}` from the tutorial."
+    if kind == "symbol":
+        return f"Here you define `{target}` — a core piece of the project."
+    if kind == "function_call":
+        return f"Wire up `{target}` so the project actually runs this logic."
+    if kind == "stdout_contains":
+        return "Time to see output — printing confirms your code works."
+    if kind == "run_ok":
+        return "Run the project to verify everything works together."
+    if kind == "code_contains":
+        return f"Build the “{title}” section from the source."
+    return f"Next milestone: {title}."
+
+
+def _chunk_long_step(text: str, max_len: int = _STEP_CHUNK_MAX) -> list[str]:
+    """Break dense transcript blobs into smaller step-sized chunks."""
+    if len(text) <= max_len:
+        return [text]
+    chunks: list[str] = []
+    words = text.split()
+    current: list[str] = []
+    length = 0
+    for word in words:
+        extra = len(word) + (1 if current else 0)
+        if current and length + extra > max_len:
+            chunks.append(" ".join(current))
+            current = [word]
+            length = len(word)
+        else:
+            current.append(word)
+            length += extra
+    if current:
+        chunks.append(" ".join(current))
+    return chunks
 
 
 def _clip(text: str, max_len: int, suffix: str = "…") -> str:
@@ -316,9 +468,23 @@ def _extract_target(sentence: str) -> tuple[str, str] | None:
         if not _reject(name):
             return ("symbol", name)
 
-    # High-precision: an explicitly named symbol — "a class called GPT",
-    # "a variable named total", "a dataclass called GPTConfig".
-    m = re.search(rf"\b(?:called|named)\s+({_IDENT})", sentence, IC)
+    # High-precision: an explicitly named *code* symbol — "a class called GPT",
+    # "a variable named total", "a dataclass called GPTConfig". Bare "called X"
+    # in lecture speech ("we called this attention") is not a coding step.
+    m = re.search(
+        rf"\b(?:class|function|method|variable|dataclass|object|module)\s+"
+        rf"(?:called|named)\s+({_IDENT})",
+        sentence,
+        IC,
+    )
+    if m and not _reject(m.group(1)):
+        return ("symbol", m.group(1))
+    m = re.search(
+        rf"\b(?:define|write|create|implement|add)\s+(?:a\s+|an\s+|the\s+)?"
+        rf"(?:class|function|method|variable|dataclass)\s+(?:called\s+|named\s+)?({_IDENT})",
+        sentence,
+        IC,
+    )
     if m and not _reject(m.group(1)):
         return ("symbol", m.group(1))
 
@@ -345,17 +511,20 @@ def _extract_target(sentence: str) -> tuple[str, str] | None:
     if m and not _reject(m.group(1)):
         return ("symbol", m.group(1))
 
-    # call / run a specific function
-    m = re.search(rf"\bcall\s+(?:the\s+)?({_IDENT})", sentence, IC)
-    if m and not _reject(m.group(1)):
+    # call a specific function — not spoken "we call it X" / "we call this Y".
+    m = re.search(rf"\bcall\s+(?:the\s+)?(?:function\s+)?({_IDENT})", sentence, IC)
+    if m and _is_callable_target(m.group(1), sentence):
         return ("function_call", m.group(1))
 
-    # print / output → only when it's clearly a coding action, not "show transcript"
-    # or "test data".
-    if re.search(r"\bprint\s*\(|\bprint\s+(?:the\s+)?(?:result|output|value|it)\b", s):
+    # print / output → explicit coding instructions only, not narrative lecture.
+    if re.search(r"\bprint\s*\(", sentence) and not _NARRATIVE_PRINT.search(sentence):
+        return ("stdout_contains", "")
+    if re.search(r"^\s*(?:first|next|then|now|finally|let'?s)?[,:]?\s*(?:print|print the result)\b", s):
+        return ("stdout_contains", "")
+    if re.match(r"^\s*print\b", s) and not _NARRATIVE_PRINT.search(sentence):
         return ("stdout_contains", "")
 
-    # run / execute / verify → the program must run cleanly. Bare "test" is too
+    # run / execute / verify → explicit coding actions only. Bare "test" is too
     # common in English ("test data", "test set") to treat as a coding step.
     if re.search(
         r"\b(?:run (?:the |your )?(?:code|program|script|project|it)|"
@@ -367,11 +536,57 @@ def _extract_target(sentence: str) -> tuple[str, str] | None:
     return None
 
 
+def _is_callable_target(name: str, sentence: str) -> bool:
+    """True when `call X` refers to a real function, not ordinary speech."""
+    if _reject(name):
+        return False
+    if re.search(r"\bcall\s+(?:it|this|that|them)\b", sentence, re.IGNORECASE):
+        return False
+    # Real code names: snake_case, CamelCase, or an explicit function/method.
+    if "_" in name or (name[0].isupper() and any(ch.islower() for ch in name[1:])):
+        return True
+    if re.search(rf"\b(?:function|method)\s+{re.escape(name)}\b", sentence, re.IGNORECASE):
+        return True
+    if re.search(rf"\b{re.escape(name)}\s*\(", sentence):
+        return True
+    # A single lowercase English word is almost always speech, not a function.
+    if name.isalpha() and name.islower():
+        return False
+    return not _reject(name)
+
+
 def _is_step(sentence: str) -> bool:
-    s = sentence.lower()
+    """True only for explicit coding instructions — not narrative transcript."""
+    s = sentence.lower().strip()
+    if looks_like_raw_transcript(sentence):
+        return False
     if re.match(r"^\s*(?:step\s*)?\d+[.):]", s):
         return True
-    return any(re.search(rf"\b{re.escape(v)}\b", s) for v in _ACTION_VERBS)
+    # Strong structural signals (import/def/class).
+    if re.search(r"\b(import|from\s+\w+\s+import|def\s+\w+|class\s+\w+)\b", s):
+        return True
+    # Imperative tutorial phrasing at the start of a sentence.
+    if re.search(
+        r"^(?:first|next|then|now|finally|let'?s)\b.*\b"
+        r"(import|define|create|implement|add|write|build|install|set up|setup|"
+        r"print|call)\b",
+        s,
+    ):
+        # "let's call it X" is lecture speech, not a coding call.
+        if re.search(r"\bcall\s+(?:it|this|that)\b", s):
+            return False
+        return True
+    # Direct imperatives at sentence start — but not narrative "when we print...".
+    if _NARRATIVE_PRINT.search(sentence):
+        return False
+    if re.match(
+        r"^(?:import|define|create|implement|add|write|build|call|print|install)\b",
+        s,
+    ):
+        if re.match(r"^call\s+(?:it|this|that)\b", s):
+            return False
+        return True
+    return False
 
 
 def _short_title(sentence: str, target: tuple[str, str]) -> str:
@@ -383,7 +598,10 @@ def _short_title(sentence: str, target: tuple[str, str]) -> str:
     if kind == "function_call":
         return f"Call {tgt}"
     if kind == "stdout_contains":
-        return "Print the result"
+        m = re.search(r"\bprint(?:ing)?\s+(?:the\s+)?(\w+)", sentence, re.IGNORECASE)
+        if m and m.group(1).lower() not in _STOPWORDS:
+            return f"Print {m.group(1)}"
+        return "Print output"
     if kind == "run_ok":
         return "Run and verify"
     # Fallback: first few words of the sentence.
@@ -501,7 +719,28 @@ _CONCEPT_WORDS: list[tuple[str, str]] = [
     ("sklearn", "sklearn"),
 ]
 
-# Chapters that are meta/non-implementation and shouldn't become build milestones.
+_IMPLEMENTATION_HINT = re.compile(
+    r"implement|nn\.module|forward pass|data loader|dataloader|flash attention|"
+    r"adamw|gradient clip|from_pretrained|torch\.compile|cross entropy|"
+    r"sampling loop|hyperparameter|tiktoken|define a (?:class|function|dataclass)",
+    re.IGNORECASE,
+)
+
+_CODE_SIGNAL = re.compile(
+    r"\b(?:import\s+[A-Za-z_]\w*|from\s+[A-Za-z_]\w*\s+import|"
+    r"def\s+[A-Za-z_]\w*|class\s+[A-Za-z_]\w*|"
+    r"define\s+(?:a\s+|an\s+|the\s+)?(?:function|class|method|variable|dataclass)|"
+    r"create\s+(?:a\s+|an\s+|the\s+)?(?:function|class|method|variable)|"
+    r"pip install)\b",
+    re.IGNORECASE,
+)
+
+_NOT_ENOUGH_MATERIAL = (
+    "This source does not contain enough hands-on coding material to build a guided project. "
+    "It reads like a lecture or overview, not a build-along tutorial. "
+    "Use a video or transcript that actually implements code — with steps such as importing "
+    "libraries, defining functions or classes, and running the program."
+)
 _META_CHAPTER = re.compile(
     r"^(intro|introduction|welcome|outro|summary|conclusion|recap|results?|"
     r"shoutout|thanks|corrections?|errata|q&a|questions|final thoughts|"
@@ -764,15 +1003,18 @@ def _check_description(title: str, token: str) -> str:
 def _chapter_check(title: str) -> VerificationCheck | None:
     if len(title) > 160:
         title = title[:157] + "…"
+    low = title.lower()
+    if re.search(r"\b(what is|intro to|introduction|history|why |overview)\b", low):
+        return None
     if not is_implementable_step(title) and not _match_concept_tokens(title):
         return None
     # 1) A concrete import/symbol/call if the chapter names one.
     direct = _extract_target(title)
     if direct and direct[0] in ("import", "symbol", "function_call"):
         return _check_for(direct[0], direct[1])
-    # 2) Curated concept → token map (grounded concept-level check).
+    # 2) Curated concept → token map for implementation or instructional chapters.
     token = _match_concept_tokens(title)
-    if token:
+    if token and (_IMPLEMENTATION_HINT.search(title) or _is_instructional_heading(title)):
         return VerificationCheck(
             kind="code_contains",
             target=token,
@@ -841,16 +1083,37 @@ def _count_sentence_targets(text: str) -> int:
     return n
 
 
+def _has_coding_tutorial_signal(text: str) -> bool:
+    """True when the source shows real implementation, not just spoken explanation."""
+    if not text or len(text.strip()) < 40:
+        return False
+    return len(_CODE_SIGNAL.findall(text)) >= 2
+
+
+def _implementation_chapter_count(chapters: list[str]) -> int:
+    return sum(1 for ch in chapters if _IMPLEMENTATION_HINT.search(ch))
+
+
+def _reject_if_not_buildable(text: str, chapters: list[str]) -> None:
+    if _implementation_chapter_count(chapters) >= 3:
+        return
+    if _has_coding_tutorial_signal(text):
+        return
+    raise ProjectGroundingError(_NOT_ENOUGH_MATERIAL)
+
+
 def plan_project(doc: SourceDocument, title: str, course_id: str) -> ProjectCourse:
     """Build a source-grounded ProjectCourse from an ingested source document.
 
     Acceptance is based on instructional usefulness (teach → example → apply),
     not on a polished "course product" brand or a GPT-2-specific chapter map.
     Conversations/podcasts and empty sources fail with a clear reason instead of
-    emitting a generic curriculum.
+    emitting a generic curriculum. Conceptual lecture chapters never become a
+    fake coding course.
     """
     text = _gather_source_text(doc)
     outline = _collect_outline(doc)
+    chapters = _collect_chapters(doc)
     _assert_source_acceptable(doc, text, outline, title)
 
     instructional_outline = [h for h in outline if _is_instructional_heading(h) or _chapter_check(h)]
@@ -859,6 +1122,9 @@ def plan_project(doc: SourceDocument, title: str, course_id: str) -> ProjectCour
             return _plan_from_chapters(doc, outline, title, course_id)
         except ProjectGroundingError:
             pass
+
+    if _implementation_chapter_count(chapters) >= 3:
+        return _plan_from_chapters(doc, chapters, title, course_id)
 
     # Prefer explicit coding steps in a transcript over coarse description phrases
     # ("build a word frequency counter") so we don't skip import/def milestones.
@@ -870,10 +1136,7 @@ def plan_project(doc: SourceDocument, title: str, course_id: str) -> ProjectCour
             pass
 
     if not text or len(text.strip()) < 40:
-        raise ProjectGroundingError(
-            "Not enough material to ground a course in this source. "
-            "Paste a fuller transcript or tutorial, or provide a video whose transcript is available."
-        )
+        raise ProjectGroundingError(_NOT_ENOUGH_MATERIAL)
 
     language = _detect_language(text)
     tech_stack = _detect_tech(text)
@@ -982,7 +1245,7 @@ def plan_project(doc: SourceDocument, title: str, course_id: str) -> ProjectCour
         )
         order += 1
 
-    goal = title.strip() or (sentences[0] if sentences else "Build the project from the source")
+    goal = _synthesize_project_goal(title, tech_stack)
     summary = text.strip()
     excerpt = summary[:20_000]
 
@@ -1049,6 +1312,7 @@ def _plan_from_chapters(doc: SourceDocument, chapters: list[str], title: str, co
     order += 1
 
     kept = 0
+    seen_checks: set[tuple[str, str]] = set()
     for idx, ch in enumerate(chapters):
         if len(milestones) >= 16:
             break
@@ -1057,6 +1321,11 @@ def _plan_from_chapters(doc: SourceDocument, chapters: list[str], title: str, co
         check = _chapter_check(ch)
         if check is None:
             continue
+        check_key = (check.kind, check.target.lower())
+        if check_key in seen_checks:
+            continue
+        seen_checks.add(check_key)
+        ch_title = ch if len(ch) <= 60 else ch[:57] + "…"
         obs = _MICRO_OBSERVATIONS[idx % len(_MICRO_OBSERVATIONS)]
         milestones.append(
             Milestone(
@@ -1070,7 +1339,7 @@ def _plan_from_chapters(doc: SourceDocument, chapters: list[str], title: str, co
                 source_quote=_clip(ch, 2000),
                 microstep=Microstep(
                     observation=_clip(obs, 400),
-                    action=_clip(f"Build this part: {ch}.", 400),
+                    action=_clip(_action_for(check.kind, check.target, ch_title), 400),
                     hint=_clip(_chapter_hint(check), 400),
                 ),
                 why=_clip(
@@ -1161,6 +1430,65 @@ def _chapter_hint(check: VerificationCheck) -> str:
         first = check.target.split("|")[0]
         return f"Your implementation should use `{first}`."
     return "Implement this section, then click NEXT."
+
+
+def validate_project(project: ProjectCourse) -> None:
+    """Reject courses with transcript leaks, duplicate titles, or hollow milestones."""
+    coding = [
+        m for m in project.milestones
+        if m.checks and m.checks[0].kind in ("import", "symbol", "function_call", "code_contains")
+    ]
+    if len(coding) < 2:
+        raise ProjectGroundingError(
+            "This source reads like a lecture or explanation, not a hands-on coding tutorial. "
+            "Patchwork can only build a guided project from a source that shows real implementation "
+            "steps (imports, functions, classes). Try a build-along coding video or paste a tutorial "
+            "with concrete steps."
+        )
+
+    titles = [m.title.strip().lower() for m in coding]
+    dup_titles = {t for t in titles if titles.count(t) > 1}
+    if dup_titles:
+        raise ProjectGroundingError(
+            f"Generated milestones contain duplicate titles ({', '.join(sorted(dup_titles)[:3])}). "
+            "Provide a clearer source with distinct implementation steps."
+        )
+
+    for m in project.milestones:
+        for field in (m.microstep.action, m.microstep.observation, m.hook, m.teach):
+            if looks_like_raw_transcript(field):
+                raise ProjectGroundingError(
+                    "Generated lesson content still contains raw transcript speech. "
+                    "Try a cleaner transcript or a video with chapter markers."
+                )
+        if m.microstep.action and len(m.microstep.action) > 220:
+            raise ProjectGroundingError(
+                "Generated lesson instructions are too long. The source may be too conversational."
+            )
+
+    run_ok_titles = [m.title.strip().lower() for m in project.milestones if "run and verify" in m.title.strip().lower()]
+    if len(run_ok_titles) > 1:
+        raise ProjectGroundingError(_NOT_ENOUGH_MATERIAL)
+
+    if looks_like_raw_transcript(project.project_goal):
+        raise ProjectGroundingError(
+            "Could not produce a clean project overview from this source."
+        )
+
+
+def is_hollow_guided_project(project: ProjectCourse) -> bool:
+    """True when a saved course has too little real implementation structure."""
+    titles = [m.title.strip().lower() for m in project.milestones]
+    if any(titles.count(t) >= 2 for t in titles if t in {"run and verify", "print output", "print the result"}):
+        return True
+    run_ok = sum(1 for m in project.milestones if m.checks and m.checks[0].kind == "run_ok")
+    if run_ok >= 3:
+        return True
+    coding = [
+        m for m in project.milestones
+        if m.checks and m.checks[0].kind in ("import", "symbol", "function_call", "code_contains")
+    ]
+    return len(coding) < 2
 
 
 def _hint_for(kind: str, target: str) -> str:

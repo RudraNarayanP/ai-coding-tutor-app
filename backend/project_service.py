@@ -13,13 +13,19 @@ from .project_models import (
     WorkspaceFile,
 )
 from .project_enrich import enrich_project
-from .project_planner import ProjectGroundingError, plan_project
+from .project_planner import (
+    is_hollow_guided_project,
+    plan_project,
+    scrub_project_learner_copy,
+    validate_project,
+)
 from .project_sandbox import project_terminal_sandbox
 from .project_store import ProjectStore
 from .project_verifier import evaluate_milestone, run_workspace
 from .source_ingestion import IngestionError, SourceIngestionService
 from .source_quality import (
     LlmSourceAnalyzer,
+    ProjectGroundingError,
     evaluate_ingestion,
     evaluate_project,
     evaluate_source_with_analyzer,
@@ -73,8 +79,9 @@ async def build_project(
     # Best-effort: make the course rich/engaging via the LLM. Never blocks creation.
     try:
         await enrich_project(provider, project)
-    except Exception:  # noqa: BLE001
+    except Exception:  # noqa: BLE001 — copy enrichment must not block a valid course
         pass
+    validate_project(project)
     # Re-check after enrichment so LLM copy cannot smuggle a rejected course through.
     require_accept(evaluate_project(project, stage="pre_display"))
     return store.create(project)
@@ -205,8 +212,25 @@ def _first_failure_feedback(results: list[ProjectCheckResult]) -> str:
     return "Keep going."
 
 
+def require_usable_project(project: ProjectCourse) -> None:
+    """Block saved courses that lack enough implementation structure to be a real project."""
+    if is_hollow_guided_project(project):
+        raise ProjectGroundingError(
+            "This saved course does not have enough real coding material to be a guided project. "
+            "Delete it from Create and try a build-along tutorial that actually implements a program."
+        )
+
+
+def to_learner_view(project: ProjectCourse) -> ProjectView:
+    """Public Create Course view: never send raw transcript as lesson copy."""
+    cleaned = project.model_copy(deep=True)
+    scrub_project_learner_copy(cleaned)
+    cleaned.source_summary = ""
+    return ProjectView.from_project(cleaned)
+
+
 def _milestone_payload(project: ProjectCourse, idx: int) -> dict:
-    view = ProjectView.from_project(project)
+    view = to_learner_view(project)
     for mv in view.milestones:
         if mv.order == idx + 1:
             return mv.model_dump()

@@ -26,6 +26,33 @@ const DEFAULT_TERMINAL_HEIGHT = 280
 const MIN_TERMINAL_HEIGHT = 140
 const MAX_TERMINAL_HEIGHT = 520
 
+const TRANSCRIPT_FILLER =
+  /\b(uh+|u+m+|er+|ah+|you know|kind of|sort of|i mean|gonna|we call it)\b/i
+
+function looksLikeTranscript(text: string): boolean {
+  const t = (text || '').trim()
+  if (!t) return false
+  if (TRANSCRIPT_FILLER.test(t)) return true
+  if (t.split(/\s+/).length > 28) return true
+  if (t.length > 90 && !t.includes('`') && (t.match(/\./g) || []).length === 0) return true
+  return /\b(\w+(?:\s+\w+){0,3})\s+\1\b/i.test(t)
+}
+
+function lessonCopy(milestone: {
+  title: string
+  hook: string
+  teach: string
+  microstep: { observation: string; action: string; hint: string }
+}) {
+  const action = looksLikeTranscript(milestone.microstep.action)
+    ? `Complete this step: ${milestone.title}.`
+    : milestone.microstep.action
+  const observation = looksLikeTranscript(milestone.microstep.observation) ? '' : milestone.microstep.observation
+  const hook = looksLikeTranscript(milestone.hook) || milestone.hook.split(/\s+/).length > 12 ? '' : milestone.hook
+  const teach = looksLikeTranscript(milestone.teach) ? '' : milestone.teach
+  return { action, observation, hook, teach }
+}
+
 export const ProjectWorkspace: React.FC<ProjectWorkspaceProps> = ({ courseId, onExit }) => {
   const [project, setProject] = useState<ProjectView | null>(null)
   const [files, setFiles] = useState<WorkspaceFile[]>([])
@@ -45,8 +72,10 @@ export const ProjectWorkspace: React.FC<ProjectWorkspaceProps> = ({ courseId, on
   const [askingAi, setAskingAi] = useState(false)
   const [question, setQuestion] = useState('')
   const [expandedWhy, setExpandedWhy] = useState<string | null>(null)
+  const [expandedLearn, setExpandedLearn] = useState<string | null>(null)
   const [showExample, setShowExample] = useState(false)
   const [celebrate, setCelebrate] = useState(false)
+  const [deleting, setDeleting] = useState(false)
 
   const saveTimer = useRef<ReturnType<typeof setTimeout> | null>(null)
   const resizeRef = useRef<{ startY: number; startHeight: number } | null>(null)
@@ -79,6 +108,7 @@ export const ProjectWorkspace: React.FC<ProjectWorkspaceProps> = ({ courseId, on
   const currentStepKey = project?.milestones.find((m) => m.status === 'current')?.id ?? null
   useEffect(() => {
     setShowExample(false)
+    setExpandedLearn(null)
   }, [currentStepKey])
 
   // ── Autosave (debounced) ───────────────────────────────────────────────────
@@ -236,6 +266,21 @@ export const ProjectWorkspace: React.FC<ProjectWorkspaceProps> = ({ courseId, on
     }
   }
 
+  const handleDeleteProject = async () => {
+    const label = project?.title || 'this project'
+    const ok = window.confirm(`Delete “${label}”? This cannot be undone.`)
+    if (!ok) return
+    setDeleting(true)
+    try {
+      await projectApi.remove(courseId)
+      onExit()
+    } catch (err) {
+      setLoadError((err as Error).message || 'Could not delete this project.')
+    } finally {
+      setDeleting(false)
+    }
+  }
+
   const handleAskAi = async () => {
     setAskingAi(true)
     try {
@@ -267,9 +312,21 @@ export const ProjectWorkspace: React.FC<ProjectWorkspaceProps> = ({ courseId, on
         <div className="pw-error-state">
           <h2>Couldn't open this project</h2>
           <p>{loadError}</p>
-          <button className="duo-button duo-button-secondary" onClick={onExit}>
-            Back to Create
-          </button>
+          <div style={{ display: 'flex', gap: '8px', justifyContent: 'center', flexWrap: 'wrap' }}>
+            <button className="duo-button duo-button-secondary" onClick={onExit}>
+              Back to Create
+            </button>
+            <button
+              type="button"
+              className="duo-button duo-button-secondary"
+              onClick={handleDeleteProject}
+              disabled={deleting}
+              aria-label="Delete this project"
+              style={{ color: '#991b1b' }}
+            >
+              {deleting ? 'Deleting…' : 'Delete'}
+            </button>
+          </div>
         </div>
       </div>
     )
@@ -290,6 +347,7 @@ export const ProjectWorkspace: React.FC<ProjectWorkspaceProps> = ({ courseId, on
     null
   const currentMilestoneId = currentMilestone?.id ?? null
   const passedTests = checks.filter((c) => c.passed).length
+  const lesson = currentMilestone ? lessonCopy(currentMilestone) : null
 
   return (
     <div className="pw-root" aria-label="Guided project workspace">
@@ -301,7 +359,7 @@ export const ProjectWorkspace: React.FC<ProjectWorkspaceProps> = ({ courseId, on
           </button>
           <div>
             <h1 className="pw-title">{project.title}</h1>
-            <p className="pw-goal">{project.project_goal}</p>
+            <p className="pw-goal">{project.course_intro || project.project_goal}</p>
           </div>
         </div>
         <div className="pw-header-stats">
@@ -314,6 +372,16 @@ export const ProjectWorkspace: React.FC<ProjectWorkspaceProps> = ({ courseId, on
           <div className="pw-stat">⚡ {project.xp} XP</div>
           <div className="pw-stat">📄 {project.files_changed} files</div>
           <div className="pw-stat">✓ {passedTests} tests passed</div>
+          <button
+            type="button"
+            className="duo-button duo-button-secondary"
+            onClick={handleDeleteProject}
+            disabled={deleting}
+            aria-label="Delete this project"
+            style={{ padding: '8px 12px', fontSize: '12px', color: '#991b1b' }}
+          >
+            {deleting ? 'Deleting…' : 'Delete'}
+          </button>
         </div>
       </header>
 
@@ -421,20 +489,30 @@ export const ProjectWorkspace: React.FC<ProjectWorkspaceProps> = ({ courseId, on
                 Step {currentMilestone.order} · +{currentMilestone.xp_reward} XP
               </span>
               <h3 className="pw-microstep-title">
-                {currentMilestone.hook || currentMilestone.title}
+                {lesson.hook || currentMilestone.title}
               </h3>
-              {currentMilestone.teach && compactText(currentMilestone.teach, 420) && (
-                <p className="pw-teach">{compactText(currentMilestone.teach, 420)}</p>
+              {lesson?.observation && (
+                <p className="pw-observation">{lesson.observation}</p>
               )}
-              {compactText(currentMilestone.microstep.action, 220) && (
+              {lesson?.action && (
                 <p className="pw-action">
-                  <strong>Do this:</strong> {compactText(currentMilestone.microstep.action, 220)}
+                  <strong>Do this:</strong> {lesson.action}
                 </p>
               )}
               {compactText(currentMilestone.microstep.hint, 220) && (
                 <p className="pw-hint">💡 {compactText(currentMilestone.microstep.hint, 220)}</p>
               )}
               <div className="pw-microstep-controls">
+                {lesson.teach && (
+                  <button
+                    className="pw-why"
+                    onClick={() =>
+                      setExpandedLearn(expandedLearn === currentMilestone.id ? null : currentMilestone.id)
+                    }
+                  >
+                    {expandedLearn === currentMilestone.id ? 'Hide' : 'Learn more'}
+                  </button>
+                )}
                 {currentMilestone.example && (
                   <button className="pw-why" onClick={() => setShowExample((v) => !v)}>
                     {showExample ? 'Hide example' : 'Show example'}
@@ -447,10 +525,15 @@ export const ProjectWorkspace: React.FC<ProjectWorkspaceProps> = ({ courseId, on
                   {expandedWhy === currentMilestone.id ? 'Hide' : 'Why?'}
                 </button>
               </div>
+              {expandedLearn === currentMilestone.id && lesson.teach && (
+                <div className="pw-why-body">
+                  <p>{lesson.teach}</p>
+                </div>
+              )}
               {showExample && currentMilestone.example && (
                 <pre className="pw-example">{currentMilestone.example}</pre>
               )}
-              {expandedWhy === currentMilestone.id && (
+              {expandedWhy === currentMilestone.id && currentMilestone.why && (
                 <div className="pw-why-body">
                   <p>{whyExplanation(currentMilestone)}</p>
                   {sourceExcerpt(currentMilestone.source_quote) && (

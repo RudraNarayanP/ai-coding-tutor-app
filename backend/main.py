@@ -611,7 +611,7 @@ async def create_project(req: ProjectCreateRequest):
                 "message": str(exc),
             },
         )
-    return ProjectView.from_project(project)
+    return project_service.to_learner_view(project)
 
 
 @app.get("/api/create-course/projects")
@@ -624,7 +624,11 @@ async def get_project(course_id: str):
     project = project_store.get(course_id)
     if not project:
         raise HTTPException(status_code=404, detail={"error": "project_not_found"})
-    return ProjectView.from_project(project)
+    try:
+        project_service.require_usable_project(project)
+    except ProjectGroundingError as exc:
+        raise HTTPException(status_code=422, detail={"error": "ungroundable_source", "message": str(exc)})
+    return project_service.to_learner_view(project)
 
 
 @app.delete("/api/create-course/projects/{course_id}")
@@ -641,7 +645,7 @@ async def save_project_workspace(course_id: str, req: WorkspaceUpdateRequest):
     project = project_store.save_workspace(course_id, files)
     if not project:
         raise HTTPException(status_code=404, detail={"error": "project_not_found"})
-    return ProjectView.from_project(project)
+    return project_service.to_learner_view(project)
 
 
 @app.post("/api/create-course/projects/{course_id}/run")
@@ -684,7 +688,7 @@ async def project_next(course_id: str, req: ProjectNextRequest):
         result = await project_service.evaluate_next(project_store, sandbox, project)
     except SandboxError as exc:
         raise HTTPException(status_code=exc.status_code, detail={"error": "sandbox_error", "message": str(exc)})
-    result["project"] = ProjectView.from_project(project).model_dump()
+    result["project"] = project_service.to_learner_view(project).model_dump()
     return result
 
 

@@ -55,6 +55,31 @@ def test_valid_request_returns_structured_feedback():
     assert response.is_solution is False
 
 
+def test_tutor_endpoint_accepts_frontend_payload_shape():
+    from fastapi.testclient import TestClient
+    import backend.main as main
+
+    client = TestClient(main.app)
+    response = client.post(
+        "/api/tutor",
+        json={
+            "lesson_id": "py-hello",
+            "lesson_title": "Hello Python",
+            "instructions": "Print hello world",
+            "code": "print(1)",
+            "test_results": [],
+            "previous_hints": [],
+            "hint_level": 1,
+            "session_id": "default",
+            "user_id": "default_user",
+        },
+    )
+    assert response.status_code == 200
+    data = response.json()
+    assert "message" in data
+    assert "available" in data
+
+
 def test_tutor_endpoint_returns_typed_response_with_fake_provider():
     import backend.main as main
 

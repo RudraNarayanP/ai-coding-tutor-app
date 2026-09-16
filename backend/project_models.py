@@ -95,6 +95,8 @@ class ProjectCourse(BaseModel):
     source_excerpt: str = Field(default="", max_length=20_000)
 
     project_goal: str = Field(default="", max_length=2000)
+    # Polished learner-facing overview (not raw transcript).
+    course_intro: str = Field(default="", max_length=2000)
     tech_stack: list[str] = Field(default_factory=list)
     entry_file: str = Field(default="main.py", max_length=200)
 
@@ -163,6 +165,7 @@ class ProjectView(BaseModel):
     source_url: str = ""
     source_summary: str = ""
     project_goal: str
+    course_intro: str = ""
     tech_stack: list[str]
     entry_file: str
     milestones: list[ProjectMilestoneView]
@@ -219,6 +222,7 @@ class ProjectView(BaseModel):
             source_url=project.source_url,
             source_summary=project.source_summary,
             project_goal=project.project_goal,
+            course_intro=project.course_intro,
             tech_stack=project.tech_stack,
             entry_file=project.entry_file,
             milestones=views,

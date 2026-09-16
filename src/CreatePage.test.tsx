@@ -12,12 +12,14 @@ vi.mock('../src/utils/projectApi', async () => {
       list: vi.fn().mockResolvedValue([]),
       create: vi.fn(),
       get: vi.fn(),
+      remove: vi.fn(),
     },
   }
 })
 
 describe('CreatePage Component', () => {
   beforeEach(() => {
+    vi.clearAllMocks()
     vi.mocked(projectApi.list).mockResolvedValue([])
     vi.mocked(projectApi.create).mockReset()
   })
@@ -192,5 +194,56 @@ describe('CreatePage Component', () => {
       expect(projectApi.create).toHaveBeenCalled()
     })
     expect(await screen.findByLabelText('Guided project workspace')).toBeInTheDocument()
+  })
+
+  it('shows a cancel button while building and aborts the request', async () => {
+    let rejectCreate: (reason?: unknown) => void = () => {}
+    vi.mocked(projectApi.create).mockImplementation(
+      (_payload: unknown, options?: { signal?: AbortSignal }) =>
+        new Promise((_resolve, reject) => {
+          rejectCreate = reject
+          options?.signal?.addEventListener('abort', () => {
+            reject(new DOMException('Aborted', 'AbortError'))
+          })
+        })
+    )
+
+    render(<CreatePage />)
+
+    fireEvent.change(screen.getByPlaceholderText('e.g., Reproduce GPT-2 (124M)'), {
+      target: { value: 'My Project' },
+    })
+    fireEvent.click(screen.getByText('Build Guided Project 🛠️'))
+
+    await waitFor(() => expect(screen.getByRole('status')).toBeInTheDocument())
+    expect(screen.getByRole('button', { name: 'Cancel build' })).toBeInTheDocument()
+
+    fireEvent.click(screen.getByRole('button', { name: 'Cancel build' }))
+    rejectCreate(new DOMException('Aborted', 'AbortError'))
+
+    await waitFor(() => expect(screen.getByText('Build cancelled.')).toBeInTheDocument())
+    expect(screen.queryByRole('status')).toBeNull()
+  })
+
+  it('deletes a saved project from the resume list', async () => {
+    vi.mocked(projectApi.list).mockResolvedValue([
+      {
+        course_id: 'project-bad',
+        title: 'Intro to Large Language Models',
+        language: 'python',
+        completion_percent: 50,
+        completed: false,
+        milestone_count: 8,
+        updated_at: 1,
+      },
+    ])
+    vi.mocked(projectApi.remove).mockResolvedValue({ status: 'deleted' })
+    vi.spyOn(window, 'confirm').mockReturnValue(true)
+
+    render(<CreatePage />)
+    await waitFor(() => screen.getByText('Intro to Large Language Models'))
+    fireEvent.click(screen.getByRole('button', { name: 'Delete Intro to Large Language Models' }))
+    await waitFor(() => expect(projectApi.remove).toHaveBeenCalledWith('project-bad'))
+    await waitFor(() => expect(screen.queryByText('Intro to Large Language Models')).toBeNull())
   })
 })

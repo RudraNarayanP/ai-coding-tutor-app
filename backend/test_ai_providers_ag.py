@@ -10,6 +10,7 @@ from backend.ai_provider import (
     OpenAICompatibleProvider,
     AnthropicProvider,
     GeminiProvider,
+    TUTOR_MAX_TOKENS,
     get_ai_provider,
 )
 from backend.tutor_service import TutorService, TutorSessionStore

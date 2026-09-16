@@ -37,6 +37,7 @@ export type ProjectView = {
   source_url: string
   source_summary: string
   project_goal: string
+  course_intro: string
   tech_stack: string[]
   entry_file: string
   milestones: ProjectMilestone[]
@@ -178,17 +179,20 @@ async function jsonOrThrow<T>(res: Response): Promise<T> {
   return (await res.json()) as T
 }
 
-function post(path: string, body: unknown): Promise<Response> {
+function post(path: string, body: unknown, signal?: AbortSignal): Promise<Response> {
   return fetch(path, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(body),
+    signal,
   })
 }
 
 export const projectApi = {
-  create: (payload: { material_type: string; content: string; title: string; filename?: string }) =>
-    post(BASE, payload).then((r) => jsonOrThrow<ProjectView>(r)),
+  create: (
+    payload: { material_type: string; content: string; title: string; filename?: string },
+    options?: { signal?: AbortSignal }
+  ) => post(BASE, payload, options?.signal).then((r) => jsonOrThrow<ProjectView>(r)),
 
   list: () => fetch(BASE).then((r) => jsonOrThrow<ProjectSummary[]>(r)),
 

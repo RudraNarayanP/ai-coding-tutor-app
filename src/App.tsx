@@ -364,17 +364,26 @@ function App() {
 
   // ─── Fetch Provider Status ─────────────────────────────────────────────────
   const fetchProviders = useCallback(async () => {
-    try {
-      const res = await fetch('/api/ai/providers')
-      if (res.ok) {
-        const data: ProvidersOverview = await res.json()
-        setProvidersOverview(data)
-        if (data.current_provider) {
-          setSelectedProvider(data.current_provider)
+    const maxAttempts = 5
+    for (let attempt = 1; attempt <= maxAttempts; attempt++) {
+      try {
+        const res = await fetch('/api/ai/providers')
+        if (res.ok) {
+          const data: ProvidersOverview = await res.json()
+          setProvidersOverview(data)
+          if (data.current_provider) {
+            setSelectedProvider(data.current_provider)
+          }
+          return
+        }
+      } catch (err) {
+        if (attempt === maxAttempts) {
+          console.error('API request failed:', err)
         }
       }
-    } catch (err) {
-      console.error('API request failed:', err)
+      if (attempt < maxAttempts) {
+        await new Promise((resolve) => setTimeout(resolve, 1500))
+      }
     }
   }, [])
 
@@ -621,16 +630,26 @@ setIsLessonActive(true)
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           lesson_id: lesson.id,
+          lesson_title: lesson.title,
+          unit_title: lesson.unit_title || lesson.section_title || '',
+          concept_title: lesson.concept_title || '',
+          prerequisites: lesson.prerequisites || [],
+          instructions:
+            lesson.description ||
+            lesson.learning_objectives?.[0] ||
+            'Complete the coding exercise using the concepts from this lesson.',
           code,
-          hint_level: hintLevel,
+          test_results: results || [],
           previous_hints: previousHints,
-          provider: selectedProvider,
+          hint_level: hintLevel,
+          session_id: 'default',
           user_id: 'default_user',
         }),
       })
 
-      if (res.ok) {
-        const data = await res.json()
+      const data = await res.json().catch(() => null)
+
+      if (res.ok && data?.available !== false) {
         setFeedback(data.message)
         setHintLevel((prev) => prev + 1)
         if (data.message) {
@@ -639,11 +658,22 @@ setIsLessonActive(true)
         }
         setCharState('encouraging')
       } else {
-        setFeedback('AI tutor service is currently offline.')
+        const detail = data?.detail
+        const validationMsg = Array.isArray(detail)
+          ? 'Tutor request was incomplete. Try reloading the lesson.'
+          : null
+        setFeedback(
+          data?.message ||
+            validationMsg ||
+            (typeof detail === 'string' ? detail : null) ||
+            'AI tutor is temporarily unavailable. Check your provider in Settings.'
+        )
+        setCharState('confused')
       }
     } catch (err) {
       console.error('Error reaching AI tutor:', err)
       setFeedback('Failed to reach AI tutor service.')
+      setCharState('confused')
     } finally {
       setIsTutorLoading(false)
     }
@@ -1038,7 +1068,9 @@ setExercisePhase('incorrect')
           </div>
 
           <div style={{ fontSize: '11px', color: 'var(--muted)', textAlign: 'center' }}>
-            {isAiAvailable ? 'Ollama ready' : 'Ollama unavailable'}
+            {isAiAvailable
+              ? `${currentProviderStatus?.name || 'AI provider'} ready`
+              : `${currentProviderStatus?.name || 'AI provider'} unavailable`}
           </div>
         </div>
       </aside>

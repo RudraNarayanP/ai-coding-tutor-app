@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import { ProjectWorkspace } from './create/ProjectWorkspace'
 import { CreateCourseError, projectApi, type ProjectSummary } from '../utils/projectApi'
 
@@ -54,6 +54,9 @@ export const CreatePage: React.FC<CreatePageProps> = () => {
   const [creatingProject, setCreatingProject] = useState(false)
   const [projects, setProjects] = useState<ProjectSummary[]>([])
   const [gateFeedback, setGateFeedback] = useState<GateFeedback | null>(null)
+  const [errorMessage, setErrorMessage] = useState<string | null>(null)
+  const [cancelMessage, setCancelMessage] = useState<string | null>(null)
+  const createAbortRef = useRef<AbortController | null>(null)
 
   // Load resumable guided projects for the Create Course section.
   useEffect(() => {
@@ -70,7 +73,12 @@ export const CreatePage: React.FC<CreatePageProps> = () => {
   // Build a guided project (persistent workspace) from the source.
   const handleStartProject = async () => {
     setGateFeedback(null)
+    setErrorMessage(null)
+    setCancelMessage(null)
     setCreatingProject(true)
+
+    const controller = new AbortController()
+    createAbortRef.current = controller
 
     let reqType = materialType
     if (materialType === 'youtube_url' && inputContent.includes('list=')) {
@@ -78,14 +86,21 @@ export const CreatePage: React.FC<CreatePageProps> = () => {
     }
 
     try {
-      const project = await projectApi.create({
-        material_type: reqType,
-        content: inputContent,
-        title: courseTitle,
-      })
+      const project = await projectApi.create(
+        {
+          material_type: reqType,
+          content: inputContent,
+          title: courseTitle,
+        },
+        { signal: controller.signal }
+      )
       setProjectCourseId(project.course_id)
       setStep('workspace')
     } catch (err) {
+      if ((err as Error).name === 'AbortError') {
+        setCancelMessage('Build cancelled.')
+        return
+      }
       setGateFeedback(gateFromError(err))
       try {
         setProjects(await projectApi.list())
@@ -93,7 +108,31 @@ export const CreatePage: React.FC<CreatePageProps> = () => {
         /* listing is best-effort; the source was still not accepted */
       }
     } finally {
+      createAbortRef.current = null
       setCreatingProject(false)
+    }
+  }
+
+  const handleCancelBuild = () => {
+    createAbortRef.current?.abort()
+  }
+
+  const [deletingId, setDeletingId] = useState<string | null>(null)
+
+  const handleDeleteProject = async (courseId: string, title: string, e?: React.MouseEvent) => {
+    e?.preventDefault()
+    e?.stopPropagation()
+    const ok = window.confirm(`Delete “${title}”? This cannot be undone.`)
+    if (!ok) return
+    setDeletingId(courseId)
+    setErrorMessage(null)
+    try {
+      await projectApi.remove(courseId)
+      setProjects((prev) => prev.filter((p) => p.course_id !== courseId))
+    } catch (err) {
+      setErrorMessage((err as Error).message || 'Could not delete this project.')
+    } finally {
+      setDeletingId(null)
     }
   }
 
@@ -145,6 +184,45 @@ export const CreatePage: React.FC<CreatePageProps> = () => {
         </div>
       )}
 
+      {errorMessage && (
+        <div
+          style={{ padding: '12px 16px', borderRadius: '12px', background: '#fef2f2', color: '#991b1b', fontWeight: 700, marginBottom: '20px' }}
+          role="alert"
+        >
+          {errorMessage}
+        </div>
+      )}
+
+      {cancelMessage && (
+        <div style={{ padding: '12px 16px', borderRadius: '12px', background: '#f3f4f6', color: 'var(--ink-soft)', fontWeight: 700, marginBottom: '20px' }}>
+          {cancelMessage}
+        </div>
+      )}
+
+      {creatingProject && (
+        <div
+          className="duo-card"
+          style={{ padding: '20px', marginBottom: '20px', textAlign: 'center' }}
+          role="status"
+          aria-live="polite"
+        >
+          <p style={{ fontSize: '15px', fontWeight: 800, color: 'var(--ink)', marginBottom: '6px' }}>
+            Building your guided project…
+          </p>
+          <p style={{ fontSize: '13px', fontWeight: 700, color: 'var(--ink-soft)', marginBottom: '16px' }}>
+            Fetching the source, planning milestones, and preparing your workspace.
+          </p>
+          <button
+            type="button"
+            className="duo-button duo-button-secondary"
+            onClick={handleCancelBuild}
+            aria-label="Cancel build"
+          >
+            Cancel
+          </button>
+        </div>
+      )}
+
       {/* Resume in-progress guided projects */}
       {projects.length > 0 && (
         <div className="duo-card" style={{ padding: '16px', marginBottom: '20px' }}>
@@ -152,24 +230,38 @@ export const CreatePage: React.FC<CreatePageProps> = () => {
             Resume a project
           </h3>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-            {projects.slice(0, 5).map((p) => (
-              <button
+            {projects.map((p) => (
+              <div
                 key={p.course_id}
-                className="duo-button duo-button-secondary"
-                onClick={() => openProject(p.course_id)}
-                style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', textAlign: 'left' }}
+                style={{ display: 'flex', gap: '8px', alignItems: 'stretch' }}
               >
-                <span>{p.title}</span>
-                <span style={{ fontSize: '12px', fontWeight: 800, color: 'var(--ink-soft)' }}>
-                  {p.completed ? 'Completed' : `${p.completion_percent}%`}
-                </span>
-              </button>
+                <button
+                  className="duo-button duo-button-secondary"
+                  onClick={() => openProject(p.course_id)}
+                  style={{ flex: 1, display: 'flex', justifyContent: 'space-between', alignItems: 'center', textAlign: 'left' }}
+                >
+                  <span>{p.title}</span>
+                  <span style={{ fontSize: '12px', fontWeight: 800, color: 'var(--ink-soft)' }}>
+                    {p.completed ? 'Completed' : `${p.completion_percent}%`}
+                  </span>
+                </button>
+                <button
+                  type="button"
+                  className="duo-button duo-button-secondary"
+                  onClick={(e) => handleDeleteProject(p.course_id, p.title, e)}
+                  disabled={deletingId === p.course_id}
+                  aria-label={`Delete ${p.title}`}
+                  style={{ padding: '10px 14px', color: '#991b1b', flexShrink: 0 }}
+                >
+                  {deletingId === p.course_id ? '…' : 'Delete'}
+                </button>
+              </div>
             ))}
           </div>
         </div>
       )}
 
-      <div className="duo-card" style={{ padding: '24px' }}>
+      <div className="duo-card" style={{ padding: '24px', opacity: creatingProject ? 0.55 : 1, pointerEvents: creatingProject ? 'none' : 'auto' }}>
         <div style={{ display: 'flex', gap: '8px', marginBottom: '20px' }}>
           {[
             { type: 'youtube_url', label: 'YouTube URL / Playlist' },
@@ -231,7 +323,7 @@ export const CreatePage: React.FC<CreatePageProps> = () => {
           disabled={(!inputContent.trim() && !courseTitle.trim()) || creatingProject}
           style={{ width: '100%', padding: '14px', fontSize: '16px' }}
         >
-          {creatingProject ? 'Building your project…' : 'Build Guided Project 🛠️'}
+          Build Guided Project 🛠️
         </button>
         <p style={{ fontSize: '12px', fontWeight: 700, color: 'var(--ink-soft)', marginTop: '10px', textAlign: 'center' }}>
           You'll get one persistent workspace and build the source's project milestone by milestone.

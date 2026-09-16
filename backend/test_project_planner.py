@@ -1,7 +1,12 @@
 """Tests for source-grounded guided-project planning (Create Course only)."""
 import pytest
 
-from backend.project_planner import ProjectGroundingError, plan_project
+from backend.project_planner import (
+    ProjectGroundingError,
+    looks_like_raw_transcript,
+    plan_project,
+    validate_project,
+)
 from backend.source_ingestion import SourceDocument
 
 
@@ -45,7 +50,10 @@ def test_milestones_keep_source_quotes():
     import_ms = next(m for m in project.milestones if m.checks and m.checks[0].kind == "import")
     # The milestone preserves the actual source sentence for transparency.
     assert "import" in import_ms.source_quote.lower()
-    assert import_ms.microstep.action  # concise action present
+    # Learner-facing action is synthesized — not the raw source sentence.
+    assert import_ms.microstep.action
+    assert "import" in import_ms.microstep.action.lower()
+    assert not looks_like_raw_transcript(import_ms.microstep.action)
 
 
 def test_long_transcript_chunks_do_not_break_milestone_validation():
@@ -312,3 +320,166 @@ def test_playlist_tutorial_titles_become_grounded_milestones():
     assert "knn" in joined or "nearest" in joined
     assert "print the result" not in joined
     assert "aliens" not in joined
+
+
+DENSE_STT_TRANSCRIPT = """
+In this tutorial we build a tokenizer for a small language model.
+what we want is we want to trade off uh this um symbol size of this vocabulary
+as we call it and the resulting sequence length so we don't want just two symbols
+when we print the key and the value we can see what is happening in the dictionary
+print the tokens to verify the encoding works
+define a variable called bite to hold the text chunks
+when we run the model we should see output on the screen
+import tiktoken to load the reference tokenizer
+"""
+
+
+def test_raw_transcript_not_used_as_learner_action():
+    project = plan_project(_doc(DENSE_STT_TRANSCRIPT), title="Deep Dive into LLMs", course_id="project-llm")
+    for m in project.milestones:
+        assert not looks_like_raw_transcript(m.microstep.action)
+        assert not looks_like_raw_transcript(m.microstep.observation)
+        assert "uh" not in m.microstep.action.lower()
+        assert "um" not in m.microstep.action.lower()
+
+
+def test_narrative_print_sentences_do_not_spawn_duplicate_milestones():
+    project = plan_project(_doc(DENSE_STT_TRANSCRIPT), title="Deep Dive into LLMs", course_id="project-llm")
+    print_titles = [m.title for m in project.milestones if "print" in m.title.lower()]
+    assert len(print_titles) <= 1
+
+
+def test_duplicate_meaningless_titles_are_rejected_by_validation():
+    from backend.project_models import Microstep, Milestone, ProjectCourse, VerificationCheck
+
+    project = ProjectCourse(
+        course_id="p", title="Bad", source_hash="h", project_goal="Build bad",
+        entry_file="main.py",
+        milestones=[
+            Milestone(id="m1", order=1, title="Set up",
+                      checks=[VerificationCheck(kind="file_exists", target="main.py")]),
+            Milestone(id="m2", order=2, title="Define tokenizer",
+                      microstep=Microstep(action="Define tokenizer.", observation="obs"),
+                      checks=[VerificationCheck(kind="symbol", target="tokenizer")]),
+            Milestone(id="m3", order=3, title="Define tokenizer",
+                      microstep=Microstep(action="Define tokenizer again.", observation="obs"),
+                      checks=[VerificationCheck(kind="symbol", target="encode")]),
+            Milestone(id="m4", order=4, title="Run",
+                      checks=[VerificationCheck(kind="run_ok", target="")]),
+        ],
+    )
+    with pytest.raises(ProjectGroundingError, match="duplicate"):
+        validate_project(project)
+
+
+def test_validate_accepts_well_formed_project():
+    project = plan_project(_doc(WORD_COUNT_TRANSCRIPT), title="Word Frequency Counter", course_id="project-test")
+    validate_project(project)
+
+
+LECTURE_TRANSCRIPT = """
+every great LLM starts with a bite a bite is a small chunk of text that a model
+can process at once what we want is we want to trade off uh this um symbol size
+your LLM is a confident liar about this fish it's not going to exactly parrot
+the documents that it saw in the training set but again it's some kind of a
+lossy compression of the internet we call it hallucination when we run the
+model we call Transformer attention and then we print the key and the value
+"""
+
+
+def test_lecture_talk_is_rejected_instead_of_fake_coding_course():
+    with pytest.raises(
+        ProjectGroundingError,
+        match="enough hands-on coding material|lecture|implementation|enough reliable material|isn't enough",
+    ):
+        plan_project(_doc(LECTURE_TRANSCRIPT, title="Intro to Large Language Models"),
+                     title="Intro to Large Language Models", course_id="project-talk")
+
+
+def test_chaptered_lecture_is_rejected_not_turned_into_fake_milestones():
+    lecture_chapters = [
+        "Intro to Large Language Models",
+        "Tokens and bites",
+        "Hallucinations",
+        "Transformers",
+        "Attention",
+        "Why this matters",
+    ]
+    with pytest.raises(
+        ProjectGroundingError,
+        match="enough hands-on coding material|enough reliable material|isn't enough",
+    ):
+        plan_project(
+            _chaptered_doc(lecture_chapters, title="[1hr Talk] Intro to Large Language Models"),
+            title="[1hr Talk] Intro to Large Language Models",
+            course_id="project-talk-ch",
+        )
+
+
+def test_hollow_saved_course_is_detected():
+    from backend.project_models import Milestone, ProjectCourse, VerificationCheck
+    from backend.project_planner import is_hollow_guided_project
+
+    project = ProjectCourse(
+        course_id="p", title="Talk", source_hash="h", project_goal="goal",
+        entry_file="main.py",
+        milestones=[
+            Milestone(id="m1", order=1, title="Set up the project",
+                      checks=[VerificationCheck(kind="file_exists", target="main.py")]),
+            Milestone(id="m2", order=2, title="Run and verify",
+                      checks=[VerificationCheck(kind="run_ok", target="")]),
+            Milestone(id="m3", order=3, title="Run and verify",
+                      checks=[VerificationCheck(kind="run_ok", target="")]),
+            Milestone(id="m4", order=4, title="Print output",
+                      checks=[VerificationCheck(kind="stdout_contains", target="")]),
+        ],
+    )
+    assert is_hollow_guided_project(project) is True
+
+
+def test_spoken_call_it_is_not_a_function():
+    from backend.project_planner import _extract_target
+    assert _extract_target("we call it attention") is None
+    assert _extract_target("we call this Tokenizer") is None
+    assert _extract_target("Call count_words on the sample.") == ("function_call", "count_words")
+
+
+def test_scrub_replaces_transcript_action_on_existing_milestones():
+    from backend.project_models import Microstep, Milestone, VerificationCheck
+    from backend.project_planner import scrub_learner_fields
+
+    m = Milestone(
+        id="m2", order=2, title="Define tokenizer",
+        microstep=Microstep(
+            observation="Next up from the video:",
+            action="what we want is we want to trade off uh this um symbol size of this vocabulary as we call it and the resulting sequence length so we don't want just two symbols",
+        ),
+        checks=[VerificationCheck(kind="symbol", target="tokenizer")],
+    )
+    scrub_learner_fields(m)
+    assert "what we want" not in m.microstep.action.lower()
+    assert "uh" not in m.microstep.action.lower()
+    assert "tokenizer" in m.microstep.action
+    assert not looks_like_raw_transcript(m.microstep.action)
+
+
+def test_project_goal_is_polished_not_raw_transcript():
+    project = plan_project(_doc(WORD_COUNT_TRANSCRIPT), title="Word Frequency Counter", course_id="project-test")
+    assert "step by step" in project.project_goal.lower()
+    assert not looks_like_raw_transcript(project.project_goal)
+
+
+def test_long_unpunctuated_transcript_does_not_exceed_field_limits():
+    """Regression: dense YouTube transcripts without punctuation used to produce
+    one giant 'sentence' that crashed Milestone validation (>2000 chars)."""
+    from backend.project_planner import _cap_field, _split_steps
+
+    giant = ("import torch and define GPTConfig and implement forward " * 200).strip()
+    assert all(len(chunk) <= 800 for chunk in _split_steps(giant))
+    assert len(_cap_field(giant)) == 2000
+
+    blob = GPT2_TRANSCRIPT
+    project = plan_project(_doc(blob, title="Reproduce GPT-2"), title="Reproduce GPT-2", course_id="project-long")
+    for milestone in project.milestones:
+        assert len(milestone.source_grounded_description) <= 2000
+        assert len(milestone.source_quote) <= 2000

@@ -301,11 +301,17 @@ export const api = {
 
   tutor: (payload: {
     lesson_id: string
-    question?: string
+    lesson_title: string
+    unit_title?: string
+    concept_title?: string
+    prerequisites?: string[]
+    instructions: string
     code?: string
-    results?: TestResult[] | null
+    test_results: TestResult[]
+    previous_hints?: string[]
     hint_level: number
-    tone?: string
+    session_id?: string
+    user_id?: string
   }) => post('/api/tutor', payload),
 
   progression: (language: string) =>
