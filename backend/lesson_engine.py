@@ -428,6 +428,28 @@ class LessonEngine:
         )
         return tests, passed
 
+    @staticmethod
+    def _extract_blanks_from_code(starter_code: str, user_code: str) -> list[str]:
+        answers: list[str] = []
+        starter_lines = starter_code.splitlines()
+        user_lines = user_code.splitlines()
+        for idx, starter_line in enumerate(starter_lines):
+            if "___" not in starter_line:
+                continue
+            user_line = user_lines[idx] if idx < len(user_lines) else ""
+            prefix, _, suffix = starter_line.partition("___")
+            if not user_line.startswith(prefix):
+                answers.append("")
+                continue
+            remainder = user_line[len(prefix) :]
+            if suffix:
+                if not remainder.endswith(suffix):
+                    answers.append("")
+                    continue
+                remainder = remainder[: len(remainder) - len(suffix)]
+            answers.append(remainder.strip())
+        return answers
+
     async def run_exercise_code(
         self, lesson_id: str, exercise_id: str, code: str
     ) -> ProgressionResult:
@@ -439,6 +461,10 @@ class LessonEngine:
             raise KeyError(f"Exercise '{exercise_id}' not found in lesson '{lesson_id}'.")
         if not exercise.tests:
             raise KeyError(f"Exercise '{exercise_id}' has no runnable tests.")
+        if "___" in code:
+            raise ValueError(
+                "Replace every ___ placeholder in the editor with your answer before running code."
+            )
 
         execution = await self._execute_tests(lang, code, exercise.tests)
         tests, passed = self._tests_from_execution(exercise.tests, execution)
@@ -511,7 +537,33 @@ class LessonEngine:
             return passed, feedback
 
         elif ex_type in ("fill_blank", "code_completion"):
-            raw_ans = user_input.get("answers", user_input.get("answer", []))
+            submitted_code = str(user_input.get("code") or "").strip()
+            if submitted_code:
+                if "___" in submitted_code:
+                    return (
+                        False,
+                        "Replace every ___ placeholder in the editor with your answer before submitting.",
+                    )
+                if exercise.tests and language.lower().strip() == "python":
+                    res = await self.executor.run(
+                        {
+                            "language": language,
+                            "code": submitted_code,
+                            "tests": [test.model_dump() for test in exercise.tests],
+                        }
+                    )
+                    passed = bool(res.get("passed", False))
+                    feedback = "All tests passed!" if passed else "Some tests failed."
+                    return passed, feedback
+                if exercise.starter_code and "___" in exercise.starter_code:
+                    raw_ans = self._extract_blanks_from_code(
+                        exercise.starter_code, submitted_code
+                    )
+                else:
+                    raw_ans = [submitted_code]
+            else:
+                raw_ans = user_input.get("answers", user_input.get("answer", []))
+
             if isinstance(raw_ans, str):
                 answers = [raw_ans]
             elif isinstance(raw_ans, list):

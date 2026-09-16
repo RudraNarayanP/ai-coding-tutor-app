@@ -410,6 +410,11 @@ async def run_exercise_code(lesson_id: str, exercise_id: str, request: CodeSubmi
             status_code=exc.status_code,
             detail={"error": "sandbox_unavailable", "message": str(exc)},
         ) from exc
+    except ValueError as exc:
+        raise HTTPException(
+            status_code=400,
+            detail={"error": "invalid_code", "message": str(exc)},
+        ) from exc
 
 
 @app.post("/api/lessons/{lesson_id}/submit-exercise")

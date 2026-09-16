@@ -15,12 +15,18 @@ interface Props {
   onRetry: () => void
   onRunCode?: () => void
   isRunningCode?: boolean
+  codeTestsPassed?: boolean
   lessonId?: string | null
 }
 
 const MCQ_TYPES = ['mcq', 'true_false', 'output_prediction', 'debugging', 'identify_error']
 const FILL_TYPES = ['fill_blank', 'code_completion']
 const CODE_TYPES = ['code', 'tiny_coding', 'identify_mistake']
+
+function usesInlineCodeEditor(exercise: { type?: string; starter_code?: string; code?: string }) {
+  const exType = (exercise.type || 'code').toLowerCase().trim()
+  return FILL_TYPES.includes(exType) && !!(exercise.starter_code || exercise.code)
+}
 
 function shuffled<T>(items: T[]): T[] {
   const arr = [...items]
@@ -32,7 +38,7 @@ function shuffled<T>(items: T[]): T[] {
 }
 
 const ExercisePanel: React.FC<Props> = (props) => {
-  const {exercise, exerciseInput, exercisePhase, exerciseFeedback, exercisePosition, exerciseTotal, completedExerciseCount, onInputChange, onSubmit, onContinue, onRetry, lessonId} = props
+  const {exercise, exerciseInput, exercisePhase, exerciseFeedback, exercisePosition, exerciseTotal, completedExerciseCount, onInputChange, onSubmit, onContinue, onRetry, codeTestsPassed, lessonId} = props
   const [showDeepDive, setShowDeepDive] = useState(false)
   const exType = (exercise.type || 'code').toLowerCase().trim()
   const opts = exercise.options || []
@@ -169,7 +175,7 @@ const ExercisePanel: React.FC<Props> = (props) => {
             exerciseId={exercise.id}
             lessonId={lessonId ?? null}
           />
-          <button className="duo-button duo-button-primary" style={{ marginTop: '12px', padding: '12px 24px' }} onClick={onContinue}>Continue &rarr;</button>
+          <button className="duo-button duo-button-primary" style={{ marginTop: '12px', padding: '12px 24px' }} onClick={onContinue}>Continue →</button>
         </div>
       )
     }
@@ -191,10 +197,14 @@ const ExercisePanel: React.FC<Props> = (props) => {
         </div>
       )
     }
+    const isCodeExercise = CODE_TYPES.includes(exType) || usesInlineCodeEditor(exercise)
+    const continueLabel = isCodeExercise && codeTestsPassed ? 'Continue →' : 'Check Answer'
+
     return (
       <button className="duo-button duo-button-primary" style={{ marginTop: '16px', padding: '12px 24px' }}
-        onClick={onSubmit} disabled={exercisePhase === 'checking'}>
-        {exercisePhase === 'checking' ? 'Checking...' : 'Check Answer'}
+        onClick={isCodeExercise && codeTestsPassed ? onContinue : onSubmit}
+        disabled={exercisePhase === 'checking'}>
+        {exercisePhase === 'checking' ? 'Saving…' : continueLabel}
       </button>
     )
   }
@@ -270,6 +280,13 @@ const ExercisePanel: React.FC<Props> = (props) => {
           placeholder="Write your code here…"
           onChange={(e) => setState({ code: e.target.value })}
           onKeyDown={(e) => {
+            if ((e.ctrlKey || e.shiftKey) && e.key === 'Enter') {
+              e.preventDefault()
+              if (props.onRunCode && !disabled && !props.isRunningCode) {
+                props.onRunCode()
+              }
+              return
+            }
             if (e.key === 'Tab') {
               e.preventDefault()
               const target = e.target as HTMLTextAreaElement
@@ -440,6 +457,7 @@ const ExercisePanel: React.FC<Props> = (props) => {
 
   const renderAnswerInput = () => {
     if (MCQ_TYPES.includes(exType)) return renderMcq()
+    if (FILL_TYPES.includes(exType) && usesInlineCodeEditor(exercise)) return renderCode()
     if (FILL_TYPES.includes(exType)) return renderFillBlank()
     if (exType === 'select_multiple') return renderSelectMultiple()
     if (exType === 'ordering') return renderOrdering()
@@ -448,7 +466,10 @@ const ExercisePanel: React.FC<Props> = (props) => {
     return renderGeneric()
   }
 
-  const showStarterBlock = (exercise.starter_code || exercise.code) && !CODE_TYPES.includes(exType)
+  const showStarterBlock =
+    (exercise.starter_code || exercise.code) &&
+    !CODE_TYPES.includes(exType) &&
+    !usesInlineCodeEditor(exercise)
 
   return (
     <div className="exercise-interactive-box">

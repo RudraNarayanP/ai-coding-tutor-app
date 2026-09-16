@@ -41,6 +41,45 @@ async def test_true_false_contract(engine):
     assert failed is False
 
 @pytest.mark.asyncio
+async def test_fill_blank_code_editor_contract(engine):
+    ex = ExerciseDefinition(
+        id="ex-fb-code",
+        type="fill_blank",
+        starter_code="apples = ___\ntotal_fruit = apples + 3\n",
+        blanks=["5"],
+        correct_answer="5",
+        tests=[
+            {
+                "name": "test_apples_variable",
+                "unittest_code": "def test_apples_variable(self):\n    self.assertEqual(apples, 5)",
+                "required": True,
+            }
+        ],
+    )
+
+    passed, _ = await engine.grade_exercise(
+        ex,
+        {"code": "apples = 5\ntotal_fruit = apples + 3\n"},
+        "python",
+    )
+    assert passed is True
+
+    failed_placeholder, msg = await engine.grade_exercise(
+        ex,
+        {"code": "apples = ___\ntotal_fruit = apples + 3\n"},
+        "python",
+    )
+    assert failed_placeholder is False
+    assert "___" in msg
+
+    extracted = LessonEngine._extract_blanks_from_code(
+        "apples = ___\ntotal_fruit = apples + 3",
+        "apples = 5\ntotal_fruit = apples + 3",
+    )
+    assert extracted == ["5"]
+
+
+@pytest.mark.asyncio
 async def test_fill_blank_contract(engine):
     ex = ExerciseDefinition(id="ex-fb", type="fill_blank", correct_answer=["\"Python\""])
 

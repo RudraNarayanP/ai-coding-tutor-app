@@ -64,9 +64,16 @@
               "micro_explanation": "Strings in Python are surrounded by quotes.",
               "worked_example": "greeting = \"Hello\"",
               "worked_example_takeaway": "Quotes tell Python that the value is a text string.",
-              "starter_code": "language = ___",
+              "starter_code": "language = ___\n",
               "blanks": ["\"Python\""],
               "correct_answer": "\"Python\"",
+              "tests": [
+                {
+                  "name": "test_language_variable",
+                  "unittest_code": "def test_language_variable(self):\n    self.assertEqual(language, \"Python\", msg=\"Expected variable 'language' to equal 'Python'.\")",
+                  "required": true
+                }
+              ],
               "xp_reward": 10,
               "explanation": "Correct! Strings in Python are enclosed in quotes, e.g. \"Python\"."
             }
@@ -162,9 +169,21 @@
               "micro_explanation": "Variables store numbers without quotes, and you can add values using +.",
               "worked_example": "apples = 5\ntotal = apples + 3",
               "worked_example_takeaway": "Adding a variable to a number evaluates to their sum.",
-              "starter_code": "apples = ___\ntotal_fruit = apples + 3",
+              "starter_code": "apples = ___\ntotal_fruit = apples + 3\n",
               "blanks": ["5"],
               "correct_answer": "5",
+              "tests": [
+                {
+                  "name": "test_apples_variable",
+                  "unittest_code": "def test_apples_variable(self):\n    self.assertEqual(apples, 5, msg=\"Expected apples to equal 5.\")",
+                  "required": true
+                },
+                {
+                  "name": "test_total_fruit_variable",
+                  "unittest_code": "def test_total_fruit_variable(self):\n    self.assertEqual(total_fruit, 8, msg=\"Expected total_fruit to equal 8.\")",
+                  "required": true
+                }
+              ],
               "xp_reward": 10,
               "explanation": "Correct! Setting apples = 5 makes apples + 3 equal 8."
             }

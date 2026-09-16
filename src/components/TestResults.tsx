@@ -45,6 +45,7 @@ export const TestResults: React.FC<TestResultsProps> = ({ tests, passed, complet
             <span className="test-row-name">{test.name}</span>
             {!test.required && <span className="test-row-opt">opt</span>}
             {test.description && <span className="test-row-desc">{test.description}</span>}
+            {!test.passed && test.error && <span className="test-row-error">{test.error}</span>}
           </li>
         ))}
       </ul>
