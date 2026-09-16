@@ -1208,7 +1208,7 @@ setExercisePhase('incorrect')
           <div style={{ fontSize: '11px', color: 'var(--muted)', textAlign: 'center' }}>
             {isAiAvailable
               ? `${currentProviderStatus?.name || 'AI provider'} ready`
-              : `${currentProviderStatus?.name || 'AI provider'} unavailable`}
+              : `${currentProviderStatus?.name || 'AI provider'} unavailable (Selected provider is unconfigured or offline)`}
           </div>
         </div>
       </aside>
