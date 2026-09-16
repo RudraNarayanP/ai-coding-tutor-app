@@ -1,0 +1,174 @@
+{
+  "id": "http-client",
+  "title": "Unit 1: HTTP Client",
+  "order": 1,
+  "concepts": [
+    {
+      "id": "http-client",
+      "title": "HTTP Client",
+      "prerequisites": []
+    }
+  ],
+  "lessons": [
+    {
+      "id": "fs-url-join",
+      "title": "1. Join URL Paths",
+      "description": "Implement `join_url(base, path)` avoiding double/missing slashes.",
+      "order": 1,
+      "difficulty": "intermediate",
+      "duration_minutes": 8,
+      "type": "learn",
+      "section_id": "sec-fs-1",
+      "section_title": "Section 1: Full-Stack Client Patterns",
+      "concepts": [
+        "http-client"
+      ],
+      "prerequisites": [],
+      "learning_objectives": [
+        "Build API URLs safely"
+      ],
+      "starter_code": "def join_url(base, path):\n    # TODO\n    pass\n",
+      "solution_code": "def join_url(base, path):\n    return base.rstrip('/') + '/' + path.lstrip('/')\n",
+      "tests": [
+        {
+          "name": "test_join_url",
+          "unittest_code": "def test_join_url(self):\n    self.assertEqual(join_url('https://api.com/', '/v1/users'), 'https://api.com/v1/users')\n    self.assertEqual(join_url('https://api.com', 'v1'), 'https://api.com/v1')\n",
+          "required": true
+        }
+      ],
+      "completion_requirements": {
+        "required_test_names": [
+          "test_join_url"
+        ]
+      }
+    },
+    {
+      "id": "fs-query-string",
+      "title": "2. Encode Query String",
+      "description": "Implement `query_string(params)` as sorted k=v pairs with urllib.parse.quote.",
+      "order": 2,
+      "difficulty": "intermediate",
+      "duration_minutes": 8,
+      "type": "learn",
+      "section_id": "sec-fs-1",
+      "section_title": "Section 1: Full-Stack Client Patterns",
+      "concepts": [
+        "http-client"
+      ],
+      "prerequisites": [],
+      "learning_objectives": [
+        "Encode query parameters"
+      ],
+      "starter_code": "from urllib.parse import quote\n\ndef query_string(params):\n    # TODO\n    pass\n",
+      "solution_code": "from urllib.parse import quote\n\ndef query_string(params):\n    parts = []\n    for k in sorted(params):\n        parts.append(quote(str(k), safe='') + '=' + quote(str(params[k]), safe=''))\n    return '&'.join(parts)\n",
+      "tests": [
+        {
+          "name": "test_query_string",
+          "unittest_code": "def test_query_string(self):\n    self.assertEqual(query_string({'b': 2, 'a': 1}), 'a=1&b=2')\n",
+          "required": true
+        }
+      ],
+      "completion_requirements": {
+        "required_test_names": [
+          "test_query_string"
+        ]
+      }
+    },
+    {
+      "id": "fs-parse-json",
+      "title": "3. Parse JSON Response",
+      "description": "Implement `parse_json_response(body, status)` returning dict; raise ValueError if status>=400.",
+      "order": 3,
+      "difficulty": "intermediate",
+      "duration_minutes": 8,
+      "type": "challenge",
+      "section_id": "sec-fs-1",
+      "section_title": "Section 1: Full-Stack Client Patterns",
+      "concepts": [
+        "http-client"
+      ],
+      "prerequisites": [],
+      "learning_objectives": [
+        "Parse JSON HTTP responses"
+      ],
+      "starter_code": "import json\n\ndef parse_json_response(body, status):\n    # TODO\n    pass\n",
+      "solution_code": "import json\n\ndef parse_json_response(body, status):\n    if status >= 400:\n        raise ValueError('http ' + str(status))\n    return json.loads(body)\n",
+      "tests": [
+        {
+          "name": "test_parse_json_response",
+          "unittest_code": "def test_parse_json_response(self):\n    self.assertEqual(parse_json_response('{\"ok\": true}', 200), {'ok': True})\n    with self.assertRaises(ValueError):\n        parse_json_response('{}', 500)\n",
+          "required": true
+        }
+      ],
+      "completion_requirements": {
+        "required_test_names": [
+          "test_parse_json_response"
+        ]
+      }
+    },
+    {
+      "id": "fs-headers",
+      "title": "4. Merge Headers (Practice)",
+      "description": "Implement `merge_headers(base, extra)` \u2014 extra wins on conflicts.",
+      "order": 4,
+      "difficulty": "intermediate",
+      "duration_minutes": 8,
+      "type": "practice",
+      "section_id": "sec-fs-1",
+      "section_title": "Section 1: Full-Stack Client Patterns",
+      "concepts": [
+        "http-client"
+      ],
+      "prerequisites": [],
+      "learning_objectives": [
+        "Merge HTTP headers"
+      ],
+      "starter_code": "def merge_headers(base, extra):\n    # TODO\n    pass\n",
+      "solution_code": "def merge_headers(base, extra):\n    out = dict(base)\n    out.update(extra)\n    return out\n",
+      "tests": [
+        {
+          "name": "test_merge_headers",
+          "unittest_code": "def test_merge_headers(self):\n    self.assertEqual(merge_headers({'A': '1'}, {'A': '2', 'B': '3'}), {'A': '2', 'B': '3'})\n",
+          "required": true
+        }
+      ],
+      "completion_requirements": {
+        "required_test_names": [
+          "test_merge_headers"
+        ]
+      }
+    },
+    {
+      "id": "fs-http-checkpoint",
+      "title": "5. Checkpoint: Build Request",
+      "description": "Implement `build_request(method, url, headers=None, json_body=None)` returning method/url/headers/body.",
+      "order": 5,
+      "difficulty": "intermediate",
+      "duration_minutes": 8,
+      "type": "checkpoint",
+      "section_id": "sec-fs-1",
+      "section_title": "Section 1: Full-Stack Client Patterns",
+      "concepts": [
+        "http-client"
+      ],
+      "prerequisites": [],
+      "learning_objectives": [
+        "Assemble HTTP request objects"
+      ],
+      "starter_code": "import json\n\ndef build_request(method, url, headers=None, json_body=None):\n    # TODO\n    pass\n",
+      "solution_code": "import json\n\ndef build_request(method, url, headers=None, json_body=None):\n    hdrs = dict(headers or {})\n    body = None\n    if json_body is not None:\n        body = json.dumps(json_body)\n        hdrs.setdefault('Content-Type', 'application/json')\n    return {'method': method.upper(), 'url': url, 'headers': hdrs, 'body': body}\n",
+      "tests": [
+        {
+          "name": "test_build_request",
+          "unittest_code": "def test_build_request(self):\n    r = build_request('post', '/x', json_body={'a': 1})\n    self.assertEqual(r['method'], 'POST')\n    self.assertIn('application/json', r['headers']['Content-Type'])\n    self.assertIn('\"a\"', r['body'])\n",
+          "required": true
+        }
+      ],
+      "completion_requirements": {
+        "required_test_names": [
+          "test_build_request"
+        ]
+      }
+    }
+  ]
+}

@@ -1,0 +1,176 @@
+{
+  "id": "train-test-scaling",
+  "title": "Unit 5: Train/Test & Scaling",
+  "order": 5,
+  "concepts": [
+    {
+      "id": "train-test-scaling",
+      "title": "Train/Test & Scaling",
+      "prerequisites": [
+        "data-wrangling"
+      ]
+    }
+  ],
+  "lessons": [
+    {
+      "id": "split-train-test",
+      "title": "1. Train/Test Split",
+      "description": "Implement `train_test_split(xs, ratio)` returning (train, test); train gets floor(n*ratio).",
+      "order": 21,
+      "difficulty": "intermediate",
+      "duration_minutes": 8,
+      "type": "learn",
+      "section_id": "sec-mlmath-1",
+      "section_title": "Section 1: Math & Data for ML",
+      "concepts": [
+        "train-test-scaling"
+      ],
+      "prerequisites": [],
+      "learning_objectives": [
+        "Split data into train and test"
+      ],
+      "starter_code": "def train_test_split(xs, ratio):\n    # TODO\n    pass\n",
+      "solution_code": "def train_test_split(xs, ratio):\n    n = int(len(xs) * ratio)\n    return xs[:n], xs[n:]\n",
+      "tests": [
+        {
+          "name": "test_split",
+          "unittest_code": "def test_split(self):\n    tr, te = train_test_split([1, 2, 3, 4, 5], 0.6)\n    self.assertEqual(tr, [1, 2, 3])\n    self.assertEqual(te, [4, 5])\n",
+          "required": true
+        }
+      ],
+      "completion_requirements": {
+        "required_test_names": [
+          "test_split"
+        ]
+      }
+    },
+    {
+      "id": "split-shuffle",
+      "title": "2. Deterministic Shuffle Split",
+      "description": "Implement `shuffle_split(xs, ratio, seed)` using random.Random(seed).shuffle on a copy.",
+      "order": 22,
+      "difficulty": "intermediate",
+      "duration_minutes": 8,
+      "type": "learn",
+      "section_id": "sec-mlmath-1",
+      "section_title": "Section 1: Math & Data for ML",
+      "concepts": [
+        "train-test-scaling"
+      ],
+      "prerequisites": [],
+      "learning_objectives": [
+        "Shuffle before splitting"
+      ],
+      "starter_code": "import random\n\ndef shuffle_split(xs, ratio, seed):\n    # TODO\n    pass\n",
+      "solution_code": "import random\n\ndef shuffle_split(xs, ratio, seed):\n    items = list(xs)\n    random.Random(seed).shuffle(items)\n    n = int(len(items) * ratio)\n    return items[:n], items[n:]\n",
+      "tests": [
+        {
+          "name": "test_shuffle_split",
+          "unittest_code": "def test_shuffle_split(self):\n    tr, te = shuffle_split([1, 2, 3, 4], 0.5, 0)\n    self.assertEqual(len(tr), 2)\n    self.assertEqual(len(te), 2)\n    self.assertEqual(sorted(tr + te), [1, 2, 3, 4])\n",
+          "required": true
+        }
+      ],
+      "completion_requirements": {
+        "required_test_names": [
+          "test_shuffle_split"
+        ]
+      }
+    },
+    {
+      "id": "scale-minmax",
+      "title": "3. Min-Max Scaling",
+      "description": "Implement `minmax(xs)` scaling to [0,1]. If max==min, return zeros.",
+      "order": 23,
+      "difficulty": "intermediate",
+      "duration_minutes": 8,
+      "type": "challenge",
+      "section_id": "sec-mlmath-1",
+      "section_title": "Section 1: Math & Data for ML",
+      "concepts": [
+        "train-test-scaling"
+      ],
+      "prerequisites": [],
+      "learning_objectives": [
+        "Apply min-max feature scaling"
+      ],
+      "starter_code": "def minmax(xs):\n    # TODO\n    pass\n",
+      "solution_code": "def minmax(xs):\n    lo, hi = min(xs), max(xs)\n    if hi == lo:\n        return [0.0 for _ in xs]\n    return [(x - lo) / (hi - lo) for x in xs]\n",
+      "tests": [
+        {
+          "name": "test_minmax",
+          "unittest_code": "def test_minmax(self):\n    self.assertEqual(minmax([0, 5, 10]), [0.0, 0.5, 1.0])\n    self.assertEqual(minmax([3, 3, 3]), [0.0, 0.0, 0.0])\n",
+          "required": true
+        }
+      ],
+      "completion_requirements": {
+        "required_test_names": [
+          "test_minmax"
+        ]
+      }
+    },
+    {
+      "id": "scale-standardize",
+      "title": "4. Standardize (Practice)",
+      "description": "Implement `standardize(xs)` to zero mean / unit variance (population). All zeros if var==0.",
+      "order": 24,
+      "difficulty": "intermediate",
+      "duration_minutes": 8,
+      "type": "practice",
+      "section_id": "sec-mlmath-1",
+      "section_title": "Section 1: Math & Data for ML",
+      "concepts": [
+        "train-test-scaling"
+      ],
+      "prerequisites": [],
+      "learning_objectives": [
+        "Standardize features"
+      ],
+      "starter_code": "import math\n\ndef standardize(xs):\n    # TODO\n    pass\n",
+      "solution_code": "import math\n\ndef standardize(xs):\n    m = sum(xs) / len(xs)\n    var = sum((x - m) ** 2 for x in xs) / len(xs)\n    if var == 0:\n        return [0.0 for _ in xs]\n    sd = math.sqrt(var)\n    return [(x - m) / sd for x in xs]\n",
+      "tests": [
+        {
+          "name": "test_standardize",
+          "unittest_code": "def test_standardize(self):\n    out = standardize([1, 2, 3])\n    self.assertAlmostEqual(sum(out), 0.0)\n    self.assertAlmostEqual(sum(x * x for x in out) / len(out), 1.0)\n",
+          "required": true
+        }
+      ],
+      "completion_requirements": {
+        "required_test_names": [
+          "test_standardize"
+        ]
+      }
+    },
+    {
+      "id": "scale-checkpoint",
+      "title": "5. Checkpoint: Fit-Transform Scaler",
+      "description": "Implement `fit_minmax(train)` returning (lo, hi) and `transform_minmax(xs, lo, hi)`.",
+      "order": 25,
+      "difficulty": "intermediate",
+      "duration_minutes": 8,
+      "type": "checkpoint",
+      "section_id": "sec-mlmath-1",
+      "section_title": "Section 1: Math & Data for ML",
+      "concepts": [
+        "train-test-scaling"
+      ],
+      "prerequisites": [],
+      "learning_objectives": [
+        "Fit scaler on train only"
+      ],
+      "starter_code": "def fit_minmax(train):\n    # TODO\n    pass\n\ndef transform_minmax(xs, lo, hi):\n    # TODO\n    pass\n",
+      "solution_code": "def fit_minmax(train):\n    return min(train), max(train)\n\ndef transform_minmax(xs, lo, hi):\n    if hi == lo:\n        return [0.0 for _ in xs]\n    return [(x - lo) / (hi - lo) for x in xs]\n",
+      "tests": [
+        {
+          "name": "test_fit_transform",
+          "unittest_code": "def test_fit_transform(self):\n    lo, hi = fit_minmax([0, 10])\n    self.assertEqual((lo, hi), (0, 10))\n    self.assertEqual(transform_minmax([5], lo, hi), [0.5])\n",
+          "required": true
+        }
+      ],
+      "completion_requirements": {
+        "required_test_names": [
+          "test_fit_transform"
+        ]
+      }
+    }
+  ]
+}

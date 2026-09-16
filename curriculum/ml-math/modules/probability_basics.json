@@ -1,0 +1,176 @@
+{
+  "id": "probability-basics",
+  "title": "Unit 2: Probability Basics",
+  "order": 2,
+  "concepts": [
+    {
+      "id": "probability-basics",
+      "title": "Probability Basics",
+      "prerequisites": [
+        "vectors-matrices"
+      ]
+    }
+  ],
+  "lessons": [
+    {
+      "id": "prob-uniform",
+      "title": "1. Uniform Probability",
+      "description": "Implement `uniform_prob(n_favorable, n_total)` returning favorable/total as float.",
+      "order": 6,
+      "difficulty": "intermediate",
+      "duration_minutes": 8,
+      "type": "learn",
+      "section_id": "sec-mlmath-1",
+      "section_title": "Section 1: Math & Data for ML",
+      "concepts": [
+        "probability-basics"
+      ],
+      "prerequisites": [],
+      "learning_objectives": [
+        "Compute classical probability"
+      ],
+      "starter_code": "def uniform_prob(n_favorable, n_total):\n    # TODO\n    pass\n",
+      "solution_code": "def uniform_prob(n_favorable, n_total):\n    if n_total == 0:\n        raise ValueError('n_total must be > 0')\n    return n_favorable / n_total\n",
+      "tests": [
+        {
+          "name": "test_uniform_prob",
+          "unittest_code": "def test_uniform_prob(self):\n    self.assertAlmostEqual(uniform_prob(1, 6), 1/6)\n    self.assertAlmostEqual(uniform_prob(0, 10), 0.0)\n",
+          "required": true
+        }
+      ],
+      "completion_requirements": {
+        "required_test_names": [
+          "test_uniform_prob"
+        ]
+      }
+    },
+    {
+      "id": "prob-complement",
+      "title": "2. Complement Rule",
+      "description": "Implement `prob_at_least_one(p_single, n)` = 1 - (1-p)^n for independent trials.",
+      "order": 7,
+      "difficulty": "intermediate",
+      "duration_minutes": 8,
+      "type": "learn",
+      "section_id": "sec-mlmath-1",
+      "section_title": "Section 1: Math & Data for ML",
+      "concepts": [
+        "probability-basics"
+      ],
+      "prerequisites": [],
+      "learning_objectives": [
+        "Apply complement rule"
+      ],
+      "starter_code": "def prob_at_least_one(p_single, n):\n    # TODO\n    pass\n",
+      "solution_code": "def prob_at_least_one(p_single, n):\n    return 1.0 - (1.0 - p_single) ** n\n",
+      "tests": [
+        {
+          "name": "test_at_least_one",
+          "unittest_code": "def test_at_least_one(self):\n    self.assertAlmostEqual(prob_at_least_one(0.5, 1), 0.5)\n    self.assertAlmostEqual(prob_at_least_one(0.5, 2), 0.75)\n",
+          "required": true
+        }
+      ],
+      "completion_requirements": {
+        "required_test_names": [
+          "test_at_least_one"
+        ]
+      }
+    },
+    {
+      "id": "prob-conditional",
+      "title": "3. Conditional Probability",
+      "description": "Implement `conditional(p_a_and_b, p_b)` = P(A\u2229B)/P(B).",
+      "order": 8,
+      "difficulty": "intermediate",
+      "duration_minutes": 8,
+      "type": "challenge",
+      "section_id": "sec-mlmath-1",
+      "section_title": "Section 1: Math & Data for ML",
+      "concepts": [
+        "probability-basics"
+      ],
+      "prerequisites": [],
+      "learning_objectives": [
+        "Compute conditional probability"
+      ],
+      "starter_code": "def conditional(p_a_and_b, p_b):\n    # TODO\n    pass\n",
+      "solution_code": "def conditional(p_a_and_b, p_b):\n    if p_b == 0:\n        raise ValueError('P(B) must be > 0')\n    return p_a_and_b / p_b\n",
+      "tests": [
+        {
+          "name": "test_conditional",
+          "unittest_code": "def test_conditional(self):\n    self.assertAlmostEqual(conditional(0.1, 0.5), 0.2)\n",
+          "required": true
+        }
+      ],
+      "completion_requirements": {
+        "required_test_names": [
+          "test_conditional"
+        ]
+      }
+    },
+    {
+      "id": "prob-bayes",
+      "title": "4. Bayes Update (Practice)",
+      "description": "Implement `bayes(prior, likelihood, evidence)` = prior*likelihood/evidence.",
+      "order": 9,
+      "difficulty": "intermediate",
+      "duration_minutes": 8,
+      "type": "practice",
+      "section_id": "sec-mlmath-1",
+      "section_title": "Section 1: Math & Data for ML",
+      "concepts": [
+        "probability-basics"
+      ],
+      "prerequisites": [],
+      "learning_objectives": [
+        "Apply Bayes rule"
+      ],
+      "starter_code": "def bayes(prior, likelihood, evidence):\n    # TODO\n    pass\n",
+      "solution_code": "def bayes(prior, likelihood, evidence):\n    return (prior * likelihood) / evidence\n",
+      "tests": [
+        {
+          "name": "test_bayes",
+          "unittest_code": "def test_bayes(self):\n    self.assertAlmostEqual(bayes(0.01, 0.9, 0.1), 0.09)\n",
+          "required": true
+        }
+      ],
+      "completion_requirements": {
+        "required_test_names": [
+          "test_bayes"
+        ]
+      }
+    },
+    {
+      "id": "prob-checkpoint",
+      "title": "5. Checkpoint: Expected Value",
+      "description": "Implement `expected_value(values, probs)` for discrete outcomes.",
+      "order": 10,
+      "difficulty": "intermediate",
+      "duration_minutes": 8,
+      "type": "checkpoint",
+      "section_id": "sec-mlmath-1",
+      "section_title": "Section 1: Math & Data for ML",
+      "concepts": [
+        "probability-basics"
+      ],
+      "prerequisites": [],
+      "learning_objectives": [
+        "Compute discrete expectation"
+      ],
+      "starter_code": "def expected_value(values, probs):\n    # TODO\n    pass\n",
+      "solution_code": "def expected_value(values, probs):\n    return sum(v * p for v, p in zip(values, probs))\n",
+      "tests": [
+        {
+          "name": "test_expected_value",
+          "unittest_code": "def test_expected_value(self):\n    self.assertAlmostEqual(expected_value([1, 2, 3], [0.2, 0.5, 0.3]), 2.1)\n",
+          "required": true
+        }
+      ],
+      "completion_requirements": {
+        "required_test_names": [
+          "test_expected_value"
+        ]
+      }
+    }
+  ]
+}

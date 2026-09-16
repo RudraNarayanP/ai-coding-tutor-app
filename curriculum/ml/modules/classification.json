@@ -1,0 +1,176 @@
+{
+  "id": "classification",
+  "title": "Unit 2: Classification",
+  "order": 2,
+  "concepts": [
+    {
+      "id": "classification",
+      "title": "Classification",
+      "prerequisites": [
+        "linear-regression"
+      ]
+    }
+  ],
+  "lessons": [
+    {
+      "id": "clf-sigmoid",
+      "title": "1. Sigmoid",
+      "description": "Implement `sigmoid(z)` = 1/(1+e^{-z}).",
+      "order": 6,
+      "difficulty": "intermediate",
+      "duration_minutes": 8,
+      "type": "learn",
+      "section_id": "sec-ml-1",
+      "section_title": "Section 1: ML Foundations",
+      "concepts": [
+        "classification"
+      ],
+      "prerequisites": [],
+      "learning_objectives": [
+        "Compute sigmoid probabilities"
+      ],
+      "starter_code": "import math\n\ndef sigmoid(z):\n    # TODO\n    pass\n",
+      "solution_code": "import math\n\ndef sigmoid(z):\n    return 1 / (1 + math.exp(-z))\n",
+      "tests": [
+        {
+          "name": "test_sigmoid",
+          "unittest_code": "def test_sigmoid(self):\n    self.assertAlmostEqual(sigmoid(0), 0.5)\n    self.assertTrue(sigmoid(10) > 0.99)\n",
+          "required": true
+        }
+      ],
+      "completion_requirements": {
+        "required_test_names": [
+          "test_sigmoid"
+        ]
+      }
+    },
+    {
+      "id": "clf-logistic-predict",
+      "title": "2. Logistic Predict",
+      "description": "Implement `logistic_predict(x, w, b, threshold=0.5)` returning 0/1.",
+      "order": 7,
+      "difficulty": "intermediate",
+      "duration_minutes": 8,
+      "type": "learn",
+      "section_id": "sec-ml-1",
+      "section_title": "Section 1: ML Foundations",
+      "concepts": [
+        "classification"
+      ],
+      "prerequisites": [],
+      "learning_objectives": [
+        "Threshold logistic probabilities"
+      ],
+      "starter_code": "import math\n\ndef logistic_predict(x, w, b, threshold=0.5):\n    # TODO\n    pass\n",
+      "solution_code": "import math\n\ndef logistic_predict(x, w, b, threshold=0.5):\n    p = 1 / (1 + math.exp(-(w * x + b)))\n    return 1 if p >= threshold else 0\n",
+      "tests": [
+        {
+          "name": "test_logistic_predict",
+          "unittest_code": "def test_logistic_predict(self):\n    self.assertEqual(logistic_predict(10, 1, 0), 1)\n    self.assertEqual(logistic_predict(-10, 1, 0), 0)\n",
+          "required": true
+        }
+      ],
+      "completion_requirements": {
+        "required_test_names": [
+          "test_logistic_predict"
+        ]
+      }
+    },
+    {
+      "id": "clf-knn",
+      "title": "3. k-NN Classify",
+      "description": "Implement `knn_classify(x, points, labels, k)` majority vote of k nearest (1D). Tie \u2192 smaller label.",
+      "order": 8,
+      "difficulty": "intermediate",
+      "duration_minutes": 8,
+      "type": "challenge",
+      "section_id": "sec-ml-1",
+      "section_title": "Section 1: ML Foundations",
+      "concepts": [
+        "classification"
+      ],
+      "prerequisites": [],
+      "learning_objectives": [
+        "Classify with k-nearest neighbors"
+      ],
+      "starter_code": "from collections import Counter\n\ndef knn_classify(x, points, labels, k):\n    # TODO\n    pass\n",
+      "solution_code": "from collections import Counter\n\ndef knn_classify(x, points, labels, k):\n    dist = sorted(((abs(x - p), lab) for p, lab in zip(points, labels)), key=lambda t: (t[0], t[1]))\n    votes = [lab for _, lab in dist[:k]]\n    counts = Counter(votes)\n    best = max(counts.values())\n    winners = sorted(lab for lab, c in counts.items() if c == best)\n    return winners[0]\n",
+      "tests": [
+        {
+          "name": "test_knn",
+          "unittest_code": "def test_knn(self):\n    self.assertEqual(knn_classify(0, [-1, 1, 2], [0, 1, 1], 3), 1)\n    self.assertEqual(knn_classify(0, [-2, -1, 5], [0, 0, 1], 2), 0)\n",
+          "required": true
+        }
+      ],
+      "completion_requirements": {
+        "required_test_names": [
+          "test_knn"
+        ]
+      }
+    },
+    {
+      "id": "clf-accuracy",
+      "title": "4. Accuracy (Practice)",
+      "description": "Implement `accuracy(y_true, y_pred)`.",
+      "order": 9,
+      "difficulty": "intermediate",
+      "duration_minutes": 8,
+      "type": "practice",
+      "section_id": "sec-ml-1",
+      "section_title": "Section 1: ML Foundations",
+      "concepts": [
+        "classification"
+      ],
+      "prerequisites": [],
+      "learning_objectives": [
+        "Compute classification accuracy"
+      ],
+      "starter_code": "def accuracy(y_true, y_pred):\n    # TODO\n    pass\n",
+      "solution_code": "def accuracy(y_true, y_pred):\n    return sum(a == b for a, b in zip(y_true, y_pred)) / len(y_true)\n",
+      "tests": [
+        {
+          "name": "test_accuracy",
+          "unittest_code": "def test_accuracy(self):\n    self.assertAlmostEqual(accuracy([1, 0, 1], [1, 1, 1]), 2 / 3)\n",
+          "required": true
+        }
+      ],
+      "completion_requirements": {
+        "required_test_names": [
+          "test_accuracy"
+        ]
+      }
+    },
+    {
+      "id": "clf-checkpoint",
+      "title": "5. Checkpoint: Precision & Recall",
+      "description": "Implement `precision_recall(y_true, y_pred)` returning (precision, recall) for positive class 1. Use 0 if denom 0.",
+      "order": 10,
+      "difficulty": "intermediate",
+      "duration_minutes": 8,
+      "type": "checkpoint",
+      "section_id": "sec-ml-1",
+      "section_title": "Section 1: ML Foundations",
+      "concepts": [
+        "classification"
+      ],
+      "prerequisites": [],
+      "learning_objectives": [
+        "Compute precision and recall"
+      ],
+      "starter_code": "def precision_recall(y_true, y_pred):\n    # TODO\n    pass\n",
+      "solution_code": "def precision_recall(y_true, y_pred):\n    tp = sum(yt == 1 and yp == 1 for yt, yp in zip(y_true, y_pred))\n    fp = sum(yt == 0 and yp == 1 for yt, yp in zip(y_true, y_pred))\n    fn = sum(yt == 1 and yp == 0 for yt, yp in zip(y_true, y_pred))\n    prec = tp / (tp + fp) if (tp + fp) else 0.0\n    rec = tp / (tp + fn) if (tp + fn) else 0.0\n    return prec, rec\n",
+      "tests": [
+        {
+          "name": "test_precision_recall",
+          "unittest_code": "def test_precision_recall(self):\n    p, r = precision_recall([1, 1, 0, 0], [1, 0, 1, 0])\n    self.assertAlmostEqual(p, 0.5)\n    self.assertAlmostEqual(r, 0.5)\n",
+          "required": true
+        }
+      ],
+      "completion_requirements": {
+        "required_test_names": [
+          "test_precision_recall"
+        ]
+      }
+    }
+  ]
+}

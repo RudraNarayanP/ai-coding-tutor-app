@@ -1,0 +1,176 @@
+{
+  "id": "data-wrangling",
+  "title": "Unit 4: Data Wrangling",
+  "order": 4,
+  "concepts": [
+    {
+      "id": "data-wrangling",
+      "title": "Data Wrangling",
+      "prerequisites": [
+        "stats-summaries"
+      ]
+    }
+  ],
+  "lessons": [
+    {
+      "id": "wrangle-filter",
+      "title": "1. Filter Rows",
+      "description": "Implement `filter_rows(rows, key, value)` keeping dict rows where row[key]==value.",
+      "order": 16,
+      "difficulty": "intermediate",
+      "duration_minutes": 8,
+      "type": "learn",
+      "section_id": "sec-mlmath-1",
+      "section_title": "Section 1: Math & Data for ML",
+      "concepts": [
+        "data-wrangling"
+      ],
+      "prerequisites": [],
+      "learning_objectives": [
+        "Filter tabular dict rows"
+      ],
+      "starter_code": "def filter_rows(rows, key, value):\n    # TODO\n    pass\n",
+      "solution_code": "def filter_rows(rows, key, value):\n    return [r for r in rows if r.get(key) == value]\n",
+      "tests": [
+        {
+          "name": "test_filter_rows",
+          "unittest_code": "def test_filter_rows(self):\n    rows = [{'a': 1}, {'a': 2}, {'a': 1}]\n    self.assertEqual(filter_rows(rows, 'a', 1), [{'a': 1}, {'a': 1}])\n",
+          "required": true
+        }
+      ],
+      "completion_requirements": {
+        "required_test_names": [
+          "test_filter_rows"
+        ]
+      }
+    },
+    {
+      "id": "wrangle-select",
+      "title": "2. Select Columns",
+      "description": "Implement `select(rows, cols)` returning new dicts with only cols.",
+      "order": 17,
+      "difficulty": "intermediate",
+      "duration_minutes": 8,
+      "type": "learn",
+      "section_id": "sec-mlmath-1",
+      "section_title": "Section 1: Math & Data for ML",
+      "concepts": [
+        "data-wrangling"
+      ],
+      "prerequisites": [],
+      "learning_objectives": [
+        "Project columns from rows"
+      ],
+      "starter_code": "def select(rows, cols):\n    # TODO\n    pass\n",
+      "solution_code": "def select(rows, cols):\n    return [{c: r[c] for c in cols if c in r} for r in rows]\n",
+      "tests": [
+        {
+          "name": "test_select",
+          "unittest_code": "def test_select(self):\n    rows = [{'x': 1, 'y': 2, 'z': 3}]\n    self.assertEqual(select(rows, ['x', 'z']), [{'x': 1, 'z': 3}])\n",
+          "required": true
+        }
+      ],
+      "completion_requirements": {
+        "required_test_names": [
+          "test_select"
+        ]
+      }
+    },
+    {
+      "id": "wrangle-groupby",
+      "title": "3. Group-By Count",
+      "description": "Implement `group_count(rows, key)` returning {value: count}.",
+      "order": 18,
+      "difficulty": "intermediate",
+      "duration_minutes": 8,
+      "type": "challenge",
+      "section_id": "sec-mlmath-1",
+      "section_title": "Section 1: Math & Data for ML",
+      "concepts": [
+        "data-wrangling"
+      ],
+      "prerequisites": [],
+      "learning_objectives": [
+        "Aggregate with group-by count"
+      ],
+      "starter_code": "def group_count(rows, key):\n    # TODO\n    pass\n",
+      "solution_code": "def group_count(rows, key):\n    out = {}\n    for r in rows:\n        v = r[key]\n        out[v] = out.get(v, 0) + 1\n    return out\n",
+      "tests": [
+        {
+          "name": "test_group_count",
+          "unittest_code": "def test_group_count(self):\n    rows = [{'c': 'a'}, {'c': 'b'}, {'c': 'a'}]\n    self.assertEqual(group_count(rows, 'c'), {'a': 2, 'b': 1})\n",
+          "required": true
+        }
+      ],
+      "completion_requirements": {
+        "required_test_names": [
+          "test_group_count"
+        ]
+      }
+    },
+    {
+      "id": "wrangle-join",
+      "title": "4. Inner Join (Practice)",
+      "description": "Implement `inner_join(left, right, key)` joining lists of dicts on key.",
+      "order": 19,
+      "difficulty": "intermediate",
+      "duration_minutes": 8,
+      "type": "practice",
+      "section_id": "sec-mlmath-1",
+      "section_title": "Section 1: Math & Data for ML",
+      "concepts": [
+        "data-wrangling"
+      ],
+      "prerequisites": [],
+      "learning_objectives": [
+        "Inner-join dict tables"
+      ],
+      "starter_code": "def inner_join(left, right, key):\n    # TODO\n    pass\n",
+      "solution_code": "def inner_join(left, right, key):\n    index = {}\n    for r in right:\n        index.setdefault(r[key], []).append(r)\n    out = []\n    for l in left:\n        for r in index.get(l[key], []):\n            merged = dict(l)\n            merged.update(r)\n            out.append(merged)\n    return out\n",
+      "tests": [
+        {
+          "name": "test_inner_join",
+          "unittest_code": "def test_inner_join(self):\n    left = [{'id': 1, 'n': 'a'}, {'id': 2, 'n': 'b'}]\n    right = [{'id': 1, 's': 10}, {'id': 3, 's': 30}]\n    res = inner_join(left, right, 'id')\n    self.assertEqual(len(res), 1)\n    self.assertEqual(res[0]['n'], 'a')\n    self.assertEqual(res[0]['s'], 10)\n",
+          "required": true
+        }
+      ],
+      "completion_requirements": {
+        "required_test_names": [
+          "test_inner_join"
+        ]
+      }
+    },
+    {
+      "id": "wrangle-checkpoint",
+      "title": "5. Checkpoint: Fill Missing",
+      "description": "Implement `fill_na(rows, key, default)` replacing missing/None key with default.",
+      "order": 20,
+      "difficulty": "intermediate",
+      "duration_minutes": 8,
+      "type": "checkpoint",
+      "section_id": "sec-mlmath-1",
+      "section_title": "Section 1: Math & Data for ML",
+      "concepts": [
+        "data-wrangling"
+      ],
+      "prerequisites": [],
+      "learning_objectives": [
+        "Impute missing values"
+      ],
+      "starter_code": "def fill_na(rows, key, default):\n    # TODO\n    pass\n",
+      "solution_code": "def fill_na(rows, key, default):\n    out = []\n    for r in rows:\n        nr = dict(r)\n        if key not in nr or nr[key] is None:\n            nr[key] = default\n        out.append(nr)\n    return out\n",
+      "tests": [
+        {
+          "name": "test_fill_na",
+          "unittest_code": "def test_fill_na(self):\n    rows = [{'a': 1}, {'a': None}, {}]\n    self.assertEqual(fill_na(rows, 'a', 0), [{'a': 1}, {'a': 0}, {'a': 0}])\n",
+          "required": true
+        }
+      ],
+      "completion_requirements": {
+        "required_test_names": [
+          "test_fill_na"
+        ]
+      }
+    }
+  ]
+}

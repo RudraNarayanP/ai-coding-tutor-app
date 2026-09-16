@@ -1,0 +1,174 @@
+{
+  "id": "linear-regression",
+  "title": "Unit 1: Linear Regression",
+  "order": 1,
+  "concepts": [
+    {
+      "id": "linear-regression",
+      "title": "Linear Regression",
+      "prerequisites": []
+    }
+  ],
+  "lessons": [
+    {
+      "id": "linreg-predict",
+      "title": "1. Linear Prediction",
+      "description": "Implement `predict(x, w, b)` = w*x + b for scalars.",
+      "order": 1,
+      "difficulty": "intermediate",
+      "duration_minutes": 8,
+      "type": "learn",
+      "section_id": "sec-ml-1",
+      "section_title": "Section 1: ML Foundations",
+      "concepts": [
+        "linear-regression"
+      ],
+      "prerequisites": [],
+      "learning_objectives": [
+        "Compute linear predictions"
+      ],
+      "starter_code": "def predict(x, w, b):\n    # TODO\n    pass\n",
+      "solution_code": "def predict(x, w, b):\n    return w * x + b\n",
+      "tests": [
+        {
+          "name": "test_predict",
+          "unittest_code": "def test_predict(self):\n    self.assertEqual(predict(2, 3, 1), 7)\n",
+          "required": true
+        }
+      ],
+      "completion_requirements": {
+        "required_test_names": [
+          "test_predict"
+        ]
+      }
+    },
+    {
+      "id": "linreg-mse",
+      "title": "2. Mean Squared Error",
+      "description": "Implement `mse(y_true, y_pred)`.",
+      "order": 2,
+      "difficulty": "intermediate",
+      "duration_minutes": 8,
+      "type": "learn",
+      "section_id": "sec-ml-1",
+      "section_title": "Section 1: ML Foundations",
+      "concepts": [
+        "linear-regression"
+      ],
+      "prerequisites": [],
+      "learning_objectives": [
+        "Compute MSE loss"
+      ],
+      "starter_code": "def mse(y_true, y_pred):\n    # TODO\n    pass\n",
+      "solution_code": "def mse(y_true, y_pred):\n    n = len(y_true)\n    return sum((a - b) ** 2 for a, b in zip(y_true, y_pred)) / n\n",
+      "tests": [
+        {
+          "name": "test_mse",
+          "unittest_code": "def test_mse(self):\n    self.assertAlmostEqual(mse([1, 2], [1, 4]), 2.0)\n",
+          "required": true
+        }
+      ],
+      "completion_requirements": {
+        "required_test_names": [
+          "test_mse"
+        ]
+      }
+    },
+    {
+      "id": "linreg-gd-step",
+      "title": "3. Gradient Descent Step",
+      "description": "Implement `gd_step(xs, ys, w, b, lr)` one step for y\u2248w*x+b. Return (w_new, b_new).",
+      "order": 3,
+      "difficulty": "intermediate",
+      "duration_minutes": 8,
+      "type": "challenge",
+      "section_id": "sec-ml-1",
+      "section_title": "Section 1: ML Foundations",
+      "concepts": [
+        "linear-regression"
+      ],
+      "prerequisites": [],
+      "learning_objectives": [
+        "Take one GD step for linear regression"
+      ],
+      "starter_code": "def gd_step(xs, ys, w, b, lr):\n    # TODO\n    pass\n",
+      "solution_code": "def gd_step(xs, ys, w, b, lr):\n    n = len(xs)\n    dw = sum((w * x + b - y) * x for x, y in zip(xs, ys)) * 2 / n\n    db = sum((w * x + b - y) for x, y in zip(xs, ys)) * 2 / n\n    return w - lr * dw, b - lr * db\n",
+      "tests": [
+        {
+          "name": "test_gd_step",
+          "unittest_code": "def test_gd_step(self):\n    w, b = gd_step([1.0], [2.0], 0.0, 0.0, 0.1)\n    self.assertAlmostEqual(w, 0.4)\n    self.assertAlmostEqual(b, 0.4)\n",
+          "required": true
+        }
+      ],
+      "completion_requirements": {
+        "required_test_names": [
+          "test_gd_step"
+        ]
+      }
+    },
+    {
+      "id": "linreg-closed-form",
+      "title": "4. Closed-Form Slope (Practice)",
+      "description": "Implement `fit_slope(xs, ys)` for y=w*x (no intercept): w = sum(x*y)/sum(x*x).",
+      "order": 4,
+      "difficulty": "intermediate",
+      "duration_minutes": 8,
+      "type": "practice",
+      "section_id": "sec-ml-1",
+      "section_title": "Section 1: ML Foundations",
+      "concepts": [
+        "linear-regression"
+      ],
+      "prerequisites": [],
+      "learning_objectives": [
+        "Fit slope via normal equation"
+      ],
+      "starter_code": "def fit_slope(xs, ys):\n    # TODO\n    pass\n",
+      "solution_code": "def fit_slope(xs, ys):\n    return sum(x * y for x, y in zip(xs, ys)) / sum(x * x for x in xs)\n",
+      "tests": [
+        {
+          "name": "test_fit_slope",
+          "unittest_code": "def test_fit_slope(self):\n    self.assertAlmostEqual(fit_slope([1, 2, 3], [2, 4, 6]), 2.0)\n",
+          "required": true
+        }
+      ],
+      "completion_requirements": {
+        "required_test_names": [
+          "test_fit_slope"
+        ]
+      }
+    },
+    {
+      "id": "linreg-checkpoint",
+      "title": "5. Checkpoint: R\u00b2 Score",
+      "description": "Implement `r2(y_true, y_pred)`. Return 0 if total sum of squares is 0.",
+      "order": 5,
+      "difficulty": "intermediate",
+      "duration_minutes": 8,
+      "type": "checkpoint",
+      "section_id": "sec-ml-1",
+      "section_title": "Section 1: ML Foundations",
+      "concepts": [
+        "linear-regression"
+      ],
+      "prerequisites": [],
+      "learning_objectives": [
+        "Evaluate with R-squared"
+      ],
+      "starter_code": "def r2(y_true, y_pred):\n    # TODO\n    pass\n",
+      "solution_code": "def r2(y_true, y_pred):\n    mean_y = sum(y_true) / len(y_true)\n    ss_tot = sum((y - mean_y) ** 2 for y in y_true)\n    ss_res = sum((a - b) ** 2 for a, b in zip(y_true, y_pred))\n    if ss_tot == 0:\n        return 0.0\n    return 1 - ss_res / ss_tot\n",
+      "tests": [
+        {
+          "name": "test_r2",
+          "unittest_code": "def test_r2(self):\n    self.assertAlmostEqual(r2([1, 2, 3], [1, 2, 3]), 1.0)\n    self.assertAlmostEqual(r2([1, 2, 3], [2, 2, 2]), 0.0)\n",
+          "required": true
+        }
+      ],
+      "completion_requirements": {
+        "required_test_names": [
+          "test_r2"
+        ]
+      }
+    }
+  ]
+}

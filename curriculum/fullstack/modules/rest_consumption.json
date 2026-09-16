@@ -1,0 +1,176 @@
+{
+  "id": "rest-consumption",
+  "title": "Unit 2: REST Consumption",
+  "order": 2,
+  "concepts": [
+    {
+      "id": "rest-consumption",
+      "title": "REST Consumption",
+      "prerequisites": [
+        "http-client"
+      ]
+    }
+  ],
+  "lessons": [
+    {
+      "id": "fs-rest-get",
+      "title": "1. REST Resource Path",
+      "description": "Implement `resource_path(collection, id=None)` e.g. '/users' or '/users/3'.",
+      "order": 6,
+      "difficulty": "intermediate",
+      "duration_minutes": 8,
+      "type": "learn",
+      "section_id": "sec-fs-1",
+      "section_title": "Section 1: Full-Stack Client Patterns",
+      "concepts": [
+        "rest-consumption"
+      ],
+      "prerequisites": [],
+      "learning_objectives": [
+        "Build REST resource paths"
+      ],
+      "starter_code": "def resource_path(collection, id=None):\n    # TODO\n    pass\n",
+      "solution_code": "def resource_path(collection, id=None):\n    base = '/' + collection.strip('/')\n    if id is None:\n        return base\n    return base + '/' + str(id)\n",
+      "tests": [
+        {
+          "name": "test_resource_path",
+          "unittest_code": "def test_resource_path(self):\n    self.assertEqual(resource_path('users'), '/users')\n    self.assertEqual(resource_path('/users/', 3), '/users/3')\n",
+          "required": true
+        }
+      ],
+      "completion_requirements": {
+        "required_test_names": [
+          "test_resource_path"
+        ]
+      }
+    },
+    {
+      "id": "fs-rest-page",
+      "title": "2. Pagination Params",
+      "description": "Implement `page_params(page, page_size)` returning limit/offset.",
+      "order": 7,
+      "difficulty": "intermediate",
+      "duration_minutes": 8,
+      "type": "learn",
+      "section_id": "sec-fs-1",
+      "section_title": "Section 1: Full-Stack Client Patterns",
+      "concepts": [
+        "rest-consumption"
+      ],
+      "prerequisites": [],
+      "learning_objectives": [
+        "Compute offset pagination"
+      ],
+      "starter_code": "def page_params(page, page_size):\n    # TODO\n    pass\n",
+      "solution_code": "def page_params(page, page_size):\n    return {'limit': page_size, 'offset': (page - 1) * page_size}\n",
+      "tests": [
+        {
+          "name": "test_page_params",
+          "unittest_code": "def test_page_params(self):\n    self.assertEqual(page_params(3, 10), {'limit': 10, 'offset': 20})\n",
+          "required": true
+        }
+      ],
+      "completion_requirements": {
+        "required_test_names": [
+          "test_page_params"
+        ]
+      }
+    },
+    {
+      "id": "fs-rest-filter",
+      "title": "3. Filter Client Collection",
+      "description": "Implement `filter_items(items, **criteria)` keeping dicts matching all criteria.",
+      "order": 8,
+      "difficulty": "intermediate",
+      "duration_minutes": 8,
+      "type": "challenge",
+      "section_id": "sec-fs-1",
+      "section_title": "Section 1: Full-Stack Client Patterns",
+      "concepts": [
+        "rest-consumption"
+      ],
+      "prerequisites": [],
+      "learning_objectives": [
+        "Filter API result collections"
+      ],
+      "starter_code": "def filter_items(items, **criteria):\n    # TODO\n    pass\n",
+      "solution_code": "def filter_items(items, **criteria):\n    return [it for it in items if all(it.get(k) == v for k, v in criteria.items())]\n",
+      "tests": [
+        {
+          "name": "test_filter_items",
+          "unittest_code": "def test_filter_items(self):\n    items = [{'id': 1, 'ok': True}, {'id': 2, 'ok': False}]\n    self.assertEqual(filter_items(items, ok=True), [{'id': 1, 'ok': True}])\n",
+          "required": true
+        }
+      ],
+      "completion_requirements": {
+        "required_test_names": [
+          "test_filter_items"
+        ]
+      }
+    },
+    {
+      "id": "fs-rest-idempotent",
+      "title": "4. Idempotent Key (Practice)",
+      "description": "Implement `idempotency_key(method, path, body)` as method|path|body_or_empty.",
+      "order": 9,
+      "difficulty": "intermediate",
+      "duration_minutes": 8,
+      "type": "practice",
+      "section_id": "sec-fs-1",
+      "section_title": "Section 1: Full-Stack Client Patterns",
+      "concepts": [
+        "rest-consumption"
+      ],
+      "prerequisites": [],
+      "learning_objectives": [
+        "Form idempotency keys"
+      ],
+      "starter_code": "def idempotency_key(method, path, body):\n    # TODO\n    pass\n",
+      "solution_code": "def idempotency_key(method, path, body):\n    return method.upper() + '|' + path + '|' + (body or '')\n",
+      "tests": [
+        {
+          "name": "test_idempotency_key",
+          "unittest_code": "def test_idempotency_key(self):\n    self.assertEqual(idempotency_key('post', '/x', None), 'POST|/x|')\n",
+          "required": true
+        }
+      ],
+      "completion_requirements": {
+        "required_test_names": [
+          "test_idempotency_key"
+        ]
+      }
+    },
+    {
+      "id": "fs-rest-checkpoint",
+      "title": "5. Checkpoint: Status Category",
+      "description": "Implement `status_category(code)` returning success/redirect/client_error/server_error/other.",
+      "order": 10,
+      "difficulty": "intermediate",
+      "duration_minutes": 8,
+      "type": "checkpoint",
+      "section_id": "sec-fs-1",
+      "section_title": "Section 1: Full-Stack Client Patterns",
+      "concepts": [
+        "rest-consumption"
+      ],
+      "prerequisites": [],
+      "learning_objectives": [
+        "Categorize HTTP status codes"
+      ],
+      "starter_code": "def status_category(code):\n    # TODO\n    pass\n",
+      "solution_code": "def status_category(code):\n    if 200 <= code < 300:\n        return 'success'\n    if 300 <= code < 400:\n        return 'redirect'\n    if 400 <= code < 500:\n        return 'client_error'\n    if 500 <= code < 600:\n        return 'server_error'\n    return 'other'\n",
+      "tests": [
+        {
+          "name": "test_status_category",
+          "unittest_code": "def test_status_category(self):\n    self.assertEqual(status_category(201), 'success')\n    self.assertEqual(status_category(404), 'client_error')\n    self.assertEqual(status_category(503), 'server_error')\n",
+          "required": true
+        }
+      ],
+      "completion_requirements": {
+        "required_test_names": [
+          "test_status_category"
+        ]
+      }
+    }
+  ]
+}

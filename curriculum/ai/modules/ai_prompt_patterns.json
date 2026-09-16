@@ -1,0 +1,176 @@
+{
+  "id": "ai-prompt-patterns",
+  "title": "Unit 6: Prompt Patterns",
+  "order": 6,
+  "concepts": [
+    {
+      "id": "ai-prompt-patterns",
+      "title": "Prompt Patterns",
+      "prerequisites": [
+        "ai-embeddings"
+      ]
+    }
+  ],
+  "lessons": [
+    {
+      "id": "ai-prompt-system",
+      "title": "14. Build Chat Messages",
+      "description": "Implement `chat_messages(system, user)` returning list of role/content dicts.",
+      "order": 14,
+      "difficulty": "intermediate",
+      "duration_minutes": 8,
+      "type": "learn",
+      "section_id": "sec-ai-2",
+      "section_title": "Section 2: Production AI Apps",
+      "concepts": [
+        "ai-prompt-patterns"
+      ],
+      "prerequisites": [],
+      "learning_objectives": [
+        "Assemble chat message lists"
+      ],
+      "starter_code": "def chat_messages(system, user):\n    # TODO\n    pass\n",
+      "solution_code": "def chat_messages(system, user):\n    return [{'role': 'system', 'content': system}, {'role': 'user', 'content': user}]\n",
+      "tests": [
+        {
+          "name": "test_chat_messages",
+          "unittest_code": "def test_chat_messages(self):\n    m = chat_messages('sys', 'hi')\n    self.assertEqual(m[0]['role'], 'system')\n    self.assertEqual(m[1]['content'], 'hi')\n",
+          "required": true
+        }
+      ],
+      "completion_requirements": {
+        "required_test_names": [
+          "test_chat_messages"
+        ]
+      }
+    },
+    {
+      "id": "ai-prompt-template",
+      "title": "15. Prompt Template",
+      "description": "Implement `render_prompt(template, **kwargs)` using str.format_map.",
+      "order": 15,
+      "difficulty": "intermediate",
+      "duration_minutes": 8,
+      "type": "learn",
+      "section_id": "sec-ai-2",
+      "section_title": "Section 2: Production AI Apps",
+      "concepts": [
+        "ai-prompt-patterns"
+      ],
+      "prerequisites": [],
+      "learning_objectives": [
+        "Render prompt templates"
+      ],
+      "starter_code": "def render_prompt(template, **kwargs):\n    # TODO\n    pass\n",
+      "solution_code": "def render_prompt(template, **kwargs):\n    return template.format_map(kwargs)\n",
+      "tests": [
+        {
+          "name": "test_render_prompt",
+          "unittest_code": "def test_render_prompt(self):\n    self.assertEqual(render_prompt('Hello {name}', name='Ada'), 'Hello Ada')\n",
+          "required": true
+        }
+      ],
+      "completion_requirements": {
+        "required_test_names": [
+          "test_render_prompt"
+        ]
+      }
+    },
+    {
+      "id": "ai-prompt-fewshot",
+      "title": "16. Few-Shot Packing",
+      "description": "Implement `few_shot(examples, query)` formatting Input/Output blocks then the query.",
+      "order": 16,
+      "difficulty": "intermediate",
+      "duration_minutes": 8,
+      "type": "challenge",
+      "section_id": "sec-ai-2",
+      "section_title": "Section 2: Production AI Apps",
+      "concepts": [
+        "ai-prompt-patterns"
+      ],
+      "prerequisites": [],
+      "learning_objectives": [
+        "Pack few-shot examples into prompts"
+      ],
+      "starter_code": "def few_shot(examples, query):\n    # TODO\n    pass\n",
+      "solution_code": "def few_shot(examples, query):\n    blocks = [f'Input: {inp}\\nOutput: {out}' for inp, out in examples]\n    blocks.append(f'Input: {query}\\nOutput:')\n    return '\\n\\n'.join(blocks)\n",
+      "tests": [
+        {
+          "name": "test_few_shot",
+          "unittest_code": "def test_few_shot(self):\n    text = few_shot([('2+2', '4')], '3+3')\n    self.assertIn('Input: 2+2', text)\n    self.assertTrue(text.endswith('Output:'))\n",
+          "required": true
+        }
+      ],
+      "completion_requirements": {
+        "required_test_names": [
+          "test_few_shot"
+        ]
+      }
+    },
+    {
+      "id": "ai-prompt-json-schema",
+      "title": "17. Ask for JSON (Practice)",
+      "description": "Implement `json_instruction(schema_keys)` telling the model to return JSON with those keys.",
+      "order": 17,
+      "difficulty": "intermediate",
+      "duration_minutes": 8,
+      "type": "practice",
+      "section_id": "sec-ai-2",
+      "section_title": "Section 2: Production AI Apps",
+      "concepts": [
+        "ai-prompt-patterns"
+      ],
+      "prerequisites": [],
+      "learning_objectives": [
+        "Request structured JSON outputs"
+      ],
+      "starter_code": "def json_instruction(schema_keys):\n    # TODO\n    pass\n",
+      "solution_code": "def json_instruction(schema_keys):\n    keys = ', '.join(schema_keys)\n    return f'Respond with JSON containing keys: {keys}.'\n",
+      "tests": [
+        {
+          "name": "test_json_instruction",
+          "unittest_code": "def test_json_instruction(self):\n    s = json_instruction(['name', 'age'])\n    self.assertIn('name', s)\n    self.assertIn('age', s)\n    self.assertIn('JSON', s)\n",
+          "required": true
+        }
+      ],
+      "completion_requirements": {
+        "required_test_names": [
+          "test_json_instruction"
+        ]
+      }
+    },
+    {
+      "id": "ai-prompt-checkpoint",
+      "title": "18. Checkpoint: Extract JSON Block",
+      "description": "Implement `extract_json(text)` returning the substring from first '{' to last '}'.",
+      "order": 18,
+      "difficulty": "intermediate",
+      "duration_minutes": 8,
+      "type": "checkpoint",
+      "section_id": "sec-ai-2",
+      "section_title": "Section 2: Production AI Apps",
+      "concepts": [
+        "ai-prompt-patterns"
+      ],
+      "prerequisites": [],
+      "learning_objectives": [
+        "Extract JSON from model output"
+      ],
+      "starter_code": "def extract_json(text):\n    # TODO\n    pass\n",
+      "solution_code": "def extract_json(text):\n    start = text.find('{')\n    end = text.rfind('}')\n    if start == -1 or end == -1 or end < start:\n        raise ValueError('no json object')\n    return text[start:end + 1]\n",
+      "tests": [
+        {
+          "name": "test_extract_json",
+          "unittest_code": "def test_extract_json(self):\n    sample = chr(123) + chr(34) + 'a' + chr(34) + ': 1' + chr(125)\n    self.assertEqual(extract_json('say ' + sample + ' please'), sample)\n",
+          "required": true
+        }
+      ],
+      "completion_requirements": {
+        "required_test_names": [
+          "test_extract_json"
+        ]
+      }
+    }
+  ]
+}

@@ -1,0 +1,176 @@
+{
+  "id": "auth-tokens",
+  "title": "Unit 4: Auth Token Handling",
+  "order": 4,
+  "concepts": [
+    {
+      "id": "auth-tokens",
+      "title": "Auth Token Handling",
+      "prerequisites": [
+        "frontend-state"
+      ]
+    }
+  ],
+  "lessons": [
+    {
+      "id": "fs-auth-header",
+      "title": "1. Bearer Header",
+      "description": "Implement `auth_header(token)` returning an Authorization bearer header dict.",
+      "order": 16,
+      "difficulty": "intermediate",
+      "duration_minutes": 8,
+      "type": "learn",
+      "section_id": "sec-fs-1",
+      "section_title": "Section 1: Full-Stack Client Patterns",
+      "concepts": [
+        "auth-tokens"
+      ],
+      "prerequisites": [],
+      "learning_objectives": [
+        "Build Authorization bearer headers"
+      ],
+      "starter_code": "def auth_header(token):\n    # TODO\n    pass\n",
+      "solution_code": "def auth_header(token):\n    return {'Authorization': 'Bearer ' + token}\n",
+      "tests": [
+        {
+          "name": "test_auth_header",
+          "unittest_code": "def test_auth_header(self):\n    self.assertEqual(auth_header('abc'), {'Authorization': 'Bearer abc'})\n",
+          "required": true
+        }
+      ],
+      "completion_requirements": {
+        "required_test_names": [
+          "test_auth_header"
+        ]
+      }
+    },
+    {
+      "id": "fs-auth-store",
+      "title": "2. Token Store",
+      "description": "Implement `TokenStore` with set/get/clear methods.",
+      "order": 17,
+      "difficulty": "intermediate",
+      "duration_minutes": 8,
+      "type": "learn",
+      "section_id": "sec-fs-1",
+      "section_title": "Section 1: Full-Stack Client Patterns",
+      "concepts": [
+        "auth-tokens"
+      ],
+      "prerequisites": [],
+      "learning_objectives": [
+        "Store auth tokens client-side"
+      ],
+      "starter_code": "class TokenStore:\n    def __init__(self):\n        # TODO\n        pass\n    def set(self, token):\n        pass\n    def get(self):\n        pass\n    def clear(self):\n        pass\n",
+      "solution_code": "class TokenStore:\n    def __init__(self):\n        self._token = None\n    def set(self, token):\n        self._token = token\n    def get(self):\n        return self._token\n    def clear(self):\n        self._token = None\n",
+      "tests": [
+        {
+          "name": "test_token_store",
+          "unittest_code": "def test_token_store(self):\n    s = TokenStore()\n    self.assertIsNone(s.get())\n    s.set('t')\n    self.assertEqual(s.get(), 't')\n    s.clear()\n    self.assertIsNone(s.get())\n",
+          "required": true
+        }
+      ],
+      "completion_requirements": {
+        "required_test_names": [
+          "test_token_store"
+        ]
+      }
+    },
+    {
+      "id": "fs-auth-jwt-payload",
+      "title": "3. Decode JWT Payload (no verify)",
+      "description": "Implement `jwt_payload(token)` decoding the middle base64url segment as JSON.",
+      "order": 18,
+      "difficulty": "intermediate",
+      "duration_minutes": 8,
+      "type": "challenge",
+      "section_id": "sec-fs-1",
+      "section_title": "Section 1: Full-Stack Client Patterns",
+      "concepts": [
+        "auth-tokens"
+      ],
+      "prerequisites": [],
+      "learning_objectives": [
+        "Decode JWT payloads without verifying"
+      ],
+      "starter_code": "import base64, json\n\ndef jwt_payload(token):\n    # TODO\n    pass\n",
+      "solution_code": "import base64, json\n\ndef jwt_payload(token):\n    parts = token.split('.')\n    payload = parts[1]\n    pad = '=' * (-len(payload) % 4)\n    raw = base64.urlsafe_b64decode(payload + pad)\n    return json.loads(raw.decode('utf-8'))\n",
+      "tests": [
+        {
+          "name": "test_jwt_payload",
+          "unittest_code": "def test_jwt_payload(self):\n    import base64, json\n    payload = base64.urlsafe_b64encode(json.dumps({'sub': '1'}).encode()).rstrip(b'=').decode()\n    token = 'x.' + payload + '.y'\n    self.assertEqual(jwt_payload(token), {'sub': '1'})\n",
+          "required": true
+        }
+      ],
+      "completion_requirements": {
+        "required_test_names": [
+          "test_jwt_payload"
+        ]
+      }
+    },
+    {
+      "id": "fs-auth-expired",
+      "title": "4. Expiry Check (Practice)",
+      "description": "Implement `is_expired(payload, now)` True if payload exp <= now.",
+      "order": 19,
+      "difficulty": "intermediate",
+      "duration_minutes": 8,
+      "type": "practice",
+      "section_id": "sec-fs-1",
+      "section_title": "Section 1: Full-Stack Client Patterns",
+      "concepts": [
+        "auth-tokens"
+      ],
+      "prerequisites": [],
+      "learning_objectives": [
+        "Detect expired tokens"
+      ],
+      "starter_code": "def is_expired(payload, now):\n    # TODO\n    pass\n",
+      "solution_code": "def is_expired(payload, now):\n    return payload.get('exp', 0) <= now\n",
+      "tests": [
+        {
+          "name": "test_is_expired",
+          "unittest_code": "def test_is_expired(self):\n    self.assertTrue(is_expired({'exp': 10}, 10))\n    self.assertFalse(is_expired({'exp': 11}, 10))\n",
+          "required": true
+        }
+      ],
+      "completion_requirements": {
+        "required_test_names": [
+          "test_is_expired"
+        ]
+      }
+    },
+    {
+      "id": "fs-auth-checkpoint",
+      "title": "5. Checkpoint: Refresh Decision",
+      "description": "Implement `should_refresh(payload, now, skew=30)` True if exp - now <= skew.",
+      "order": 20,
+      "difficulty": "intermediate",
+      "duration_minutes": 8,
+      "type": "checkpoint",
+      "section_id": "sec-fs-1",
+      "section_title": "Section 1: Full-Stack Client Patterns",
+      "concepts": [
+        "auth-tokens"
+      ],
+      "prerequisites": [],
+      "learning_objectives": [
+        "Decide when to refresh tokens"
+      ],
+      "starter_code": "def should_refresh(payload, now, skew=30):\n    # TODO\n    pass\n",
+      "solution_code": "def should_refresh(payload, now, skew=30):\n    return payload.get('exp', 0) - now <= skew\n",
+      "tests": [
+        {
+          "name": "test_should_refresh",
+          "unittest_code": "def test_should_refresh(self):\n    self.assertTrue(should_refresh({'exp': 100}, 80, skew=30))\n    self.assertFalse(should_refresh({'exp': 200}, 80, skew=30))\n",
+          "required": true
+        }
+      ],
+      "completion_requirements": {
+        "required_test_names": [
+          "test_should_refresh"
+        ]
+      }
+    }
+  ]
+}

@@ -1,0 +1,176 @@
+{
+  "id": "frontend-state",
+  "title": "Unit 3: Client State",
+  "order": 3,
+  "concepts": [
+    {
+      "id": "frontend-state",
+      "title": "Client State",
+      "prerequisites": [
+        "rest-consumption"
+      ]
+    }
+  ],
+  "lessons": [
+    {
+      "id": "fs-state-update",
+      "title": "1. Immutable Set Field",
+      "description": "Implement `set_field(state, key, value)` returning a new dict.",
+      "order": 11,
+      "difficulty": "intermediate",
+      "duration_minutes": 8,
+      "type": "learn",
+      "section_id": "sec-fs-1",
+      "section_title": "Section 1: Full-Stack Client Patterns",
+      "concepts": [
+        "frontend-state"
+      ],
+      "prerequisites": [],
+      "learning_objectives": [
+        "Immutably update state fields"
+      ],
+      "starter_code": "def set_field(state, key, value):\n    # TODO\n    pass\n",
+      "solution_code": "def set_field(state, key, value):\n    out = dict(state)\n    out[key] = value\n    return out\n",
+      "tests": [
+        {
+          "name": "test_set_field",
+          "unittest_code": "def test_set_field(self):\n    s = {'a': 1}\n    n = set_field(s, 'a', 2)\n    self.assertEqual(n['a'], 2)\n    self.assertEqual(s['a'], 1)\n",
+          "required": true
+        }
+      ],
+      "completion_requirements": {
+        "required_test_names": [
+          "test_set_field"
+        ]
+      }
+    },
+    {
+      "id": "fs-state-reducer",
+      "title": "2. Simple Reducer",
+      "description": "Implement `reduce(state, action)` handling inc and set actions for {'count': int}.",
+      "order": 12,
+      "difficulty": "intermediate",
+      "duration_minutes": 8,
+      "type": "learn",
+      "section_id": "sec-fs-1",
+      "section_title": "Section 1: Full-Stack Client Patterns",
+      "concepts": [
+        "frontend-state"
+      ],
+      "prerequisites": [],
+      "learning_objectives": [
+        "Implement a tiny state reducer"
+      ],
+      "starter_code": "def reduce(state, action):\n    # TODO\n    pass\n",
+      "solution_code": "def reduce(state, action):\n    t = action.get('type')\n    if t == 'inc':\n        return {'count': state['count'] + 1}\n    if t == 'set':\n        return {'count': action['value']}\n    return state\n",
+      "tests": [
+        {
+          "name": "test_reduce",
+          "unittest_code": "def test_reduce(self):\n    self.assertEqual(reduce({'count': 1}, {'type': 'inc'}), {'count': 2})\n    self.assertEqual(reduce({'count': 1}, {'type': 'set', 'value': 9}), {'count': 9})\n",
+          "required": true
+        }
+      ],
+      "completion_requirements": {
+        "required_test_names": [
+          "test_reduce"
+        ]
+      }
+    },
+    {
+      "id": "fs-state-list",
+      "title": "3. List CRUD",
+      "description": "Implement `upsert_item(items, item)` by id (replace or append).",
+      "order": 13,
+      "difficulty": "intermediate",
+      "duration_minutes": 8,
+      "type": "challenge",
+      "section_id": "sec-fs-1",
+      "section_title": "Section 1: Full-Stack Client Patterns",
+      "concepts": [
+        "frontend-state"
+      ],
+      "prerequisites": [],
+      "learning_objectives": [
+        "Upsert items in client state"
+      ],
+      "starter_code": "def upsert_item(items, item):\n    # TODO\n    pass\n",
+      "solution_code": "def upsert_item(items, item):\n    out = []\n    found = False\n    for it in items:\n        if it.get('id') == item.get('id'):\n            out.append(item)\n            found = True\n        else:\n            out.append(it)\n    if not found:\n        out.append(item)\n    return out\n",
+      "tests": [
+        {
+          "name": "test_upsert_item",
+          "unittest_code": "def test_upsert_item(self):\n    items = [{'id': 1, 'n': 'a'}]\n    self.assertEqual(upsert_item(items, {'id': 1, 'n': 'b'}), [{'id': 1, 'n': 'b'}])\n    self.assertEqual(upsert_item(items, {'id': 2, 'n': 'c'})[-1]['id'], 2)\n",
+          "required": true
+        }
+      ],
+      "completion_requirements": {
+        "required_test_names": [
+          "test_upsert_item"
+        ]
+      }
+    },
+    {
+      "id": "fs-state-select",
+      "title": "4. Derived Selector (Practice)",
+      "description": "Implement `select_active(items)` returning those with active True.",
+      "order": 14,
+      "difficulty": "intermediate",
+      "duration_minutes": 8,
+      "type": "practice",
+      "section_id": "sec-fs-1",
+      "section_title": "Section 1: Full-Stack Client Patterns",
+      "concepts": [
+        "frontend-state"
+      ],
+      "prerequisites": [],
+      "learning_objectives": [
+        "Derive views from state"
+      ],
+      "starter_code": "def select_active(items):\n    # TODO\n    pass\n",
+      "solution_code": "def select_active(items):\n    return [it for it in items if it.get('active')]\n",
+      "tests": [
+        {
+          "name": "test_select_active",
+          "unittest_code": "def test_select_active(self):\n    self.assertEqual(select_active([{'active': True}, {'active': False}]), [{'active': True}])\n",
+          "required": true
+        }
+      ],
+      "completion_requirements": {
+        "required_test_names": [
+          "test_select_active"
+        ]
+      }
+    },
+    {
+      "id": "fs-state-checkpoint",
+      "title": "5. Checkpoint: Batch Actions",
+      "description": "Implement `apply_actions(state, actions)` folding a reducer over actions.",
+      "order": 15,
+      "difficulty": "intermediate",
+      "duration_minutes": 8,
+      "type": "checkpoint",
+      "section_id": "sec-fs-1",
+      "section_title": "Section 1: Full-Stack Client Patterns",
+      "concepts": [
+        "frontend-state"
+      ],
+      "prerequisites": [],
+      "learning_objectives": [
+        "Apply batches of state actions"
+      ],
+      "starter_code": "def reduce(state, action):\n    t = action.get('type')\n    if t == 'inc':\n        return {'count': state['count'] + 1}\n    if t == 'set':\n        return {'count': action['value']}\n    return state\n\ndef apply_actions(state, actions):\n    # TODO\n    pass\n",
+      "solution_code": "def reduce(state, action):\n    t = action.get('type')\n    if t == 'inc':\n        return {'count': state['count'] + 1}\n    if t == 'set':\n        return {'count': action['value']}\n    return state\n\ndef apply_actions(state, actions):\n    for action in actions:\n        state = reduce(state, action)\n    return state\n",
+      "tests": [
+        {
+          "name": "test_apply_actions",
+          "unittest_code": "def test_apply_actions(self):\n    self.assertEqual(apply_actions({'count': 0}, [{'type': 'inc'}, {'type': 'inc'}]), {'count': 2})\n",
+          "required": true
+        }
+      ],
+      "completion_requirements": {
+        "required_test_names": [
+          "test_apply_actions"
+        ]
+      }
+    }
+  ]
+}

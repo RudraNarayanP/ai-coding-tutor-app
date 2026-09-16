@@ -1,0 +1,176 @@
+{
+  "id": "ai-rag-chunking",
+  "title": "Unit 8: RAG Chunking & Retrieval",
+  "order": 8,
+  "concepts": [
+    {
+      "id": "ai-rag-chunking",
+      "title": "RAG Chunking & Retrieval",
+      "prerequisites": [
+        "ai-tool-calling"
+      ]
+    }
+  ],
+  "lessons": [
+    {
+      "id": "ai-rag-chunk",
+      "title": "24. Chunk Text",
+      "description": "Implement `chunk_text(text, size, overlap)` splitting on characters with overlap.",
+      "order": 24,
+      "difficulty": "intermediate",
+      "duration_minutes": 8,
+      "type": "learn",
+      "section_id": "sec-ai-2",
+      "section_title": "Section 2: Production AI Apps",
+      "concepts": [
+        "ai-rag-chunking"
+      ],
+      "prerequisites": [],
+      "learning_objectives": [
+        "Chunk documents for RAG"
+      ],
+      "starter_code": "def chunk_text(text, size, overlap):\n    # TODO\n    pass\n",
+      "solution_code": "def chunk_text(text, size, overlap):\n    if size <= 0:\n        raise ValueError('size')\n    step = max(size - overlap, 1)\n    chunks = []\n    for i in range(0, len(text), step):\n        chunk = text[i:i + size]\n        if chunk:\n            chunks.append(chunk)\n        if i + size >= len(text):\n            break\n    return chunks\n",
+      "tests": [
+        {
+          "name": "test_chunk_text",
+          "unittest_code": "def test_chunk_text(self):\n    self.assertEqual(chunk_text('abcdefgh', 4, 2), ['abcd', 'cdef', 'efgh'])\n",
+          "required": true
+        }
+      ],
+      "completion_requirements": {
+        "required_test_names": [
+          "test_chunk_text"
+        ]
+      }
+    },
+    {
+      "id": "ai-rag-index",
+      "title": "25. Build Lexical Index",
+      "description": "Implement `build_index(chunks)` mapping tokens to chunk id lists.",
+      "order": 25,
+      "difficulty": "intermediate",
+      "duration_minutes": 8,
+      "type": "learn",
+      "section_id": "sec-ai-2",
+      "section_title": "Section 2: Production AI Apps",
+      "concepts": [
+        "ai-rag-chunking"
+      ],
+      "prerequisites": [],
+      "learning_objectives": [
+        "Build an inverted index"
+      ],
+      "starter_code": "def build_index(chunks):\n    # TODO\n    pass\n",
+      "solution_code": "def build_index(chunks):\n    index = {}\n    for i, chunk in enumerate(chunks):\n        for tok in chunk.lower().split():\n            index.setdefault(tok, [])\n            if i not in index[tok]:\n                index[tok].append(i)\n    return index\n",
+      "tests": [
+        {
+          "name": "test_build_index",
+          "unittest_code": "def test_build_index(self):\n    idx = build_index(['Hello world', 'Hello AI'])\n    self.assertEqual(idx['hello'], [0, 1])\n    self.assertEqual(idx['world'], [0])\n",
+          "required": true
+        }
+      ],
+      "completion_requirements": {
+        "required_test_names": [
+          "test_build_index"
+        ]
+      }
+    },
+    {
+      "id": "ai-rag-retrieve",
+      "title": "26. Retrieve by Overlap",
+      "description": "Implement `retrieve(query, chunks, k)` scoring by shared lowercase tokens; return top-k chunk strings.",
+      "order": 26,
+      "difficulty": "intermediate",
+      "duration_minutes": 8,
+      "type": "challenge",
+      "section_id": "sec-ai-2",
+      "section_title": "Section 2: Production AI Apps",
+      "concepts": [
+        "ai-rag-chunking"
+      ],
+      "prerequisites": [],
+      "learning_objectives": [
+        "Retrieve chunks by token overlap"
+      ],
+      "starter_code": "def retrieve(query, chunks, k):\n    # TODO\n    pass\n",
+      "solution_code": "def retrieve(query, chunks, k):\n    q = set(query.lower().split())\n    scored = []\n    for i, ch in enumerate(chunks):\n        score = len(q & set(ch.lower().split()))\n        scored.append((score, i, ch))\n    scored.sort(key=lambda t: (-t[0], t[1]))\n    positives = [ch for score, _, ch in scored[:k] if score > 0]\n    return positives if positives else [ch for _, _, ch in scored[:k]]\n",
+      "tests": [
+        {
+          "name": "test_retrieve",
+          "unittest_code": "def test_retrieve(self):\n    chunks = ['cats are nice', 'dogs bark', 'cats and dogs']\n    self.assertEqual(retrieve('cats', chunks, 2)[0], 'cats are nice')\n",
+          "required": true
+        }
+      ],
+      "completion_requirements": {
+        "required_test_names": [
+          "test_retrieve"
+        ]
+      }
+    },
+    {
+      "id": "ai-rag-context",
+      "title": "27. Pack Context (Practice)",
+      "description": "Implement `pack_context(chunks, budget)` joining with a separator without exceeding budget chars.",
+      "order": 27,
+      "difficulty": "intermediate",
+      "duration_minutes": 8,
+      "type": "practice",
+      "section_id": "sec-ai-2",
+      "section_title": "Section 2: Production AI Apps",
+      "concepts": [
+        "ai-rag-chunking"
+      ],
+      "prerequisites": [],
+      "learning_objectives": [
+        "Pack retrieved context under a budget"
+      ],
+      "starter_code": "def pack_context(chunks, budget):\n    # TODO\n    pass\n",
+      "solution_code": "def pack_context(chunks, budget):\n    parts = []\n    used = 0\n    sep = chr(10) + '---' + chr(10)\n    for ch in chunks:\n        add = len(ch) if not parts else len(sep) + len(ch)\n        if used + add > budget:\n            break\n        parts.append(ch)\n        used += add\n    return sep.join(parts)\n",
+      "tests": [
+        {
+          "name": "test_pack_context",
+          "unittest_code": "def test_pack_context(self):\n    sep = chr(10) + '---' + chr(10)\n    self.assertEqual(pack_context(['ab', 'cd'], 100), 'ab' + sep + 'cd')\n    self.assertEqual(pack_context(['abcdef'], 3), '')\n",
+          "required": true
+        }
+      ],
+      "completion_requirements": {
+        "required_test_names": [
+          "test_pack_context"
+        ]
+      }
+    },
+    {
+      "id": "ai-rag-checkpoint2",
+      "title": "28. Checkpoint: Citation Map",
+      "description": "Implement `cite(chunks)` returning list of id/text dicts.",
+      "order": 28,
+      "difficulty": "intermediate",
+      "duration_minutes": 8,
+      "type": "checkpoint",
+      "section_id": "sec-ai-2",
+      "section_title": "Section 2: Production AI Apps",
+      "concepts": [
+        "ai-rag-chunking"
+      ],
+      "prerequisites": [],
+      "learning_objectives": [
+        "Attach citation ids to chunks"
+      ],
+      "starter_code": "def cite(chunks):\n    # TODO\n    pass\n",
+      "solution_code": "def cite(chunks):\n    return [{'id': i, 'text': c} for i, c in enumerate(chunks)]\n",
+      "tests": [
+        {
+          "name": "test_cite",
+          "unittest_code": "def test_cite(self):\n    self.assertEqual(cite(['a', 'b']), [{'id': 0, 'text': 'a'}, {'id': 1, 'text': 'b'}])\n",
+          "required": true
+        }
+      ],
+      "completion_requirements": {
+        "required_test_names": [
+          "test_cite"
+        ]
+      }
+    }
+  ]
+}

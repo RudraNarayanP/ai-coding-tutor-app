@@ -1,0 +1,176 @@
+{
+  "id": "trees-ensemble",
+  "title": "Unit 5: Trees & Simple Ensembles",
+  "order": 5,
+  "concepts": [
+    {
+      "id": "trees-ensemble",
+      "title": "Trees & Ensembles",
+      "prerequisites": [
+        "overfitting-regularization"
+      ]
+    }
+  ],
+  "lessons": [
+    {
+      "id": "tree-stump",
+      "title": "1. Decision Stump",
+      "description": "Implement `stump_predict(x, threshold)` \u2192 1 if x>=threshold else 0.",
+      "order": 21,
+      "difficulty": "intermediate",
+      "duration_minutes": 8,
+      "type": "learn",
+      "section_id": "sec-ml-1",
+      "section_title": "Section 1: ML Foundations",
+      "concepts": [
+        "trees-ensemble"
+      ],
+      "prerequisites": [],
+      "learning_objectives": [
+        "Predict with a decision stump"
+      ],
+      "starter_code": "def stump_predict(x, threshold):\n    # TODO\n    pass\n",
+      "solution_code": "def stump_predict(x, threshold):\n    return 1 if x >= threshold else 0\n",
+      "tests": [
+        {
+          "name": "test_stump",
+          "unittest_code": "def test_stump(self):\n    self.assertEqual(stump_predict(3, 2), 1)\n    self.assertEqual(stump_predict(1, 2), 0)\n",
+          "required": true
+        }
+      ],
+      "completion_requirements": {
+        "required_test_names": [
+          "test_stump"
+        ]
+      }
+    },
+    {
+      "id": "tree-gini",
+      "title": "2. Gini Impurity",
+      "description": "Implement `gini(labels)` for a list of class labels.",
+      "order": 22,
+      "difficulty": "intermediate",
+      "duration_minutes": 8,
+      "type": "learn",
+      "section_id": "sec-ml-1",
+      "section_title": "Section 1: ML Foundations",
+      "concepts": [
+        "trees-ensemble"
+      ],
+      "prerequisites": [],
+      "learning_objectives": [
+        "Compute Gini impurity"
+      ],
+      "starter_code": "def gini(labels):\n    # TODO\n    pass\n",
+      "solution_code": "def gini(labels):\n    n = len(labels)\n    if n == 0:\n        return 0.0\n    counts = {}\n    for lab in labels:\n        counts[lab] = counts.get(lab, 0) + 1\n    return 1.0 - sum((c / n) ** 2 for c in counts.values())\n",
+      "tests": [
+        {
+          "name": "test_gini",
+          "unittest_code": "def test_gini(self):\n    self.assertAlmostEqual(gini([0, 0, 0]), 0.0)\n    self.assertAlmostEqual(gini([0, 1]), 0.5)\n",
+          "required": true
+        }
+      ],
+      "completion_requirements": {
+        "required_test_names": [
+          "test_gini"
+        ]
+      }
+    },
+    {
+      "id": "tree-best-split",
+      "title": "3. Best Threshold Split",
+      "description": "Implement `best_split(xs, labels)` minimizing weighted gini of left (x<t) / right (x>=t). Return threshold.",
+      "order": 23,
+      "difficulty": "intermediate",
+      "duration_minutes": 8,
+      "type": "challenge",
+      "section_id": "sec-ml-1",
+      "section_title": "Section 1: ML Foundations",
+      "concepts": [
+        "trees-ensemble"
+      ],
+      "prerequisites": [],
+      "learning_objectives": [
+        "Find best stump threshold"
+      ],
+      "starter_code": "def best_split(xs, labels):\n    # TODO\n    pass\n",
+      "solution_code": "def best_split(xs, labels):\n    def _gini(labs):\n        n = len(labs)\n        if n == 0:\n            return 0.0\n        counts = {}\n        for lab in labs:\n            counts[lab] = counts.get(lab, 0) + 1\n        return 1.0 - sum((c / n) ** 2 for c in counts.values())\n    best_t, best_g = xs[0], float('inf')\n    for t in sorted(set(xs)):\n        left = [lab for x, lab in zip(xs, labels) if x < t]\n        right = [lab for x, lab in zip(xs, labels) if x >= t]\n        if not left or not right:\n            continue\n        g = (len(left) * _gini(left) + len(right) * _gini(right)) / len(labels)\n        if g < best_g:\n            best_g, best_t = g, t\n    return best_t\n",
+      "tests": [
+        {
+          "name": "test_best_split",
+          "unittest_code": "def test_best_split(self):\n    t = best_split([1, 2, 3, 10], [0, 0, 0, 1])\n    self.assertEqual(t, 10)\n",
+          "required": true
+        }
+      ],
+      "completion_requirements": {
+        "required_test_names": [
+          "test_best_split"
+        ]
+      }
+    },
+    {
+      "id": "tree-bagging",
+      "title": "4. Majority Vote Ensemble (Practice)",
+      "description": "Implement `majority_vote(pred_lists)` \u2014 each pred_lists[i] is predictions from one model. Tie \u2192 min label.",
+      "order": 24,
+      "difficulty": "intermediate",
+      "duration_minutes": 8,
+      "type": "practice",
+      "section_id": "sec-ml-1",
+      "section_title": "Section 1: ML Foundations",
+      "concepts": [
+        "trees-ensemble"
+      ],
+      "prerequisites": [],
+      "learning_objectives": [
+        "Ensemble via majority vote"
+      ],
+      "starter_code": "from collections import Counter\n\ndef majority_vote(pred_lists):\n    # TODO\n    pass\n",
+      "solution_code": "from collections import Counter\n\ndef majority_vote(pred_lists):\n    n = len(pred_lists[0])\n    out = []\n    for i in range(n):\n        votes = [plist[i] for plist in pred_lists]\n        counts = Counter(votes)\n        best = max(counts.values())\n        out.append(min(v for v, c in counts.items() if c == best))\n    return out\n",
+      "tests": [
+        {
+          "name": "test_majority_vote",
+          "unittest_code": "def test_majority_vote(self):\n    self.assertEqual(majority_vote([[1, 0], [1, 1], [0, 1]]), [1, 1])\n",
+          "required": true
+        }
+      ],
+      "completion_requirements": {
+        "required_test_names": [
+          "test_majority_vote"
+        ]
+      }
+    },
+    {
+      "id": "tree-checkpoint",
+      "title": "5. Checkpoint: Tree Depth Limit",
+      "description": "Implement `should_stop(depth, max_depth, labels)` True if depth>=max_depth or all labels equal.",
+      "order": 25,
+      "difficulty": "intermediate",
+      "duration_minutes": 8,
+      "type": "checkpoint",
+      "section_id": "sec-ml-1",
+      "section_title": "Section 1: ML Foundations",
+      "concepts": [
+        "trees-ensemble"
+      ],
+      "prerequisites": [],
+      "learning_objectives": [
+        "Apply tree stopping rules"
+      ],
+      "starter_code": "def should_stop(depth, max_depth, labels):\n    # TODO\n    pass\n",
+      "solution_code": "def should_stop(depth, max_depth, labels):\n    return depth >= max_depth or len(set(labels)) <= 1\n",
+      "tests": [
+        {
+          "name": "test_should_stop",
+          "unittest_code": "def test_should_stop(self):\n    self.assertTrue(should_stop(3, 3, [0, 1]))\n    self.assertTrue(should_stop(0, 5, [1, 1, 1]))\n    self.assertFalse(should_stop(1, 5, [0, 1]))\n",
+          "required": true
+        }
+      ],
+      "completion_requirements": {
+        "required_test_names": [
+          "test_should_stop"
+        ]
+      }
+    }
+  ]
+}

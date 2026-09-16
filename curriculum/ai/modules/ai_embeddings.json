@@ -1,0 +1,176 @@
+{
+  "id": "ai-embeddings",
+  "title": "Unit 5: Embeddings & Similarity",
+  "order": 5,
+  "concepts": [
+    {
+      "id": "ai-embeddings",
+      "title": "Embeddings & Similarity",
+      "prerequisites": [
+        "ai-tokenization"
+      ]
+    }
+  ],
+  "lessons": [
+    {
+      "id": "ai-emb-dot",
+      "title": "9. Embedding Dot Product",
+      "description": "Implement `emb_dot(a, b)` for equal-length float lists.",
+      "order": 9,
+      "difficulty": "intermediate",
+      "duration_minutes": 8,
+      "type": "learn",
+      "section_id": "sec-ai-2",
+      "section_title": "Section 2: Production AI Apps",
+      "concepts": [
+        "ai-embeddings"
+      ],
+      "prerequisites": [],
+      "learning_objectives": [
+        "Score embedding similarity via dot product"
+      ],
+      "starter_code": "def emb_dot(a, b):\n    # TODO\n    pass\n",
+      "solution_code": "def emb_dot(a, b):\n    return sum(x * y for x, y in zip(a, b))\n",
+      "tests": [
+        {
+          "name": "test_emb_dot",
+          "unittest_code": "def test_emb_dot(self):\n    self.assertEqual(emb_dot([1, 2], [3, 4]), 11)\n",
+          "required": true
+        }
+      ],
+      "completion_requirements": {
+        "required_test_names": [
+          "test_emb_dot"
+        ]
+      }
+    },
+    {
+      "id": "ai-emb-cosine",
+      "title": "10. Cosine Ranking",
+      "description": "Implement `most_similar(query, corpus)` returning index of max cosine similarity.",
+      "order": 10,
+      "difficulty": "intermediate",
+      "duration_minutes": 8,
+      "type": "learn",
+      "section_id": "sec-ai-2",
+      "section_title": "Section 2: Production AI Apps",
+      "concepts": [
+        "ai-embeddings"
+      ],
+      "prerequisites": [],
+      "learning_objectives": [
+        "Rank embeddings by cosine similarity"
+      ],
+      "starter_code": "import math\n\ndef most_similar(query, corpus):\n    # TODO\n    pass\n",
+      "solution_code": "import math\n\ndef most_similar(query, corpus):\n    def cos(a, b):\n        dot = sum(x * y for x, y in zip(a, b))\n        na = math.sqrt(sum(x * x for x in a))\n        nb = math.sqrt(sum(x * x for x in b))\n        if na == 0 or nb == 0:\n            return -1.0\n        return dot / (na * nb)\n    best_i, best = 0, -2.0\n    for i, v in enumerate(corpus):\n        s = cos(query, v)\n        if s > best:\n            best, best_i = s, i\n    return best_i\n",
+      "tests": [
+        {
+          "name": "test_most_similar",
+          "unittest_code": "def test_most_similar(self):\n    self.assertEqual(most_similar([1, 0], [[0, 1], [1, 0], [0.5, 0.5]]), 1)\n",
+          "required": true
+        }
+      ],
+      "completion_requirements": {
+        "required_test_names": [
+          "test_most_similar"
+        ]
+      }
+    },
+    {
+      "id": "ai-emb-topk",
+      "title": "11. Top-K Retrieval",
+      "description": "Implement `topk(query, corpus, k)` returning indices of k highest dots, highest first.",
+      "order": 11,
+      "difficulty": "intermediate",
+      "duration_minutes": 8,
+      "type": "challenge",
+      "section_id": "sec-ai-2",
+      "section_title": "Section 2: Production AI Apps",
+      "concepts": [
+        "ai-embeddings"
+      ],
+      "prerequisites": [],
+      "learning_objectives": [
+        "Retrieve top-k similar vectors"
+      ],
+      "starter_code": "def topk(query, corpus, k):\n    # TODO\n    pass\n",
+      "solution_code": "def topk(query, corpus, k):\n    scored = [(sum(a * b for a, b in zip(query, v)), i) for i, v in enumerate(corpus)]\n    scored.sort(key=lambda t: (-t[0], t[1]))\n    return [i for _, i in scored[:k]]\n",
+      "tests": [
+        {
+          "name": "test_topk",
+          "unittest_code": "def test_topk(self):\n    self.assertEqual(topk([1, 0], [[1, 0], [0, 1], [2, 0]], 2), [2, 0])\n",
+          "required": true
+        }
+      ],
+      "completion_requirements": {
+        "required_test_names": [
+          "test_topk"
+        ]
+      }
+    },
+    {
+      "id": "ai-emb-meanpool",
+      "title": "12. Mean Pool Tokens (Practice)",
+      "description": "Implement `mean_pool(token_vecs)` averaging equal-length vectors.",
+      "order": 12,
+      "difficulty": "intermediate",
+      "duration_minutes": 8,
+      "type": "practice",
+      "section_id": "sec-ai-2",
+      "section_title": "Section 2: Production AI Apps",
+      "concepts": [
+        "ai-embeddings"
+      ],
+      "prerequisites": [],
+      "learning_objectives": [
+        "Mean-pool token embeddings"
+      ],
+      "starter_code": "def mean_pool(token_vecs):\n    # TODO\n    pass\n",
+      "solution_code": "def mean_pool(token_vecs):\n    dim = len(token_vecs[0])\n    n = len(token_vecs)\n    return [sum(v[d] for v in token_vecs) / n for d in range(dim)]\n",
+      "tests": [
+        {
+          "name": "test_mean_pool",
+          "unittest_code": "def test_mean_pool(self):\n    self.assertEqual(mean_pool([[1, 2], [3, 4]]), [2.0, 3.0])\n",
+          "required": true
+        }
+      ],
+      "completion_requirements": {
+        "required_test_names": [
+          "test_mean_pool"
+        ]
+      }
+    },
+    {
+      "id": "ai-emb-checkpoint",
+      "title": "13. Checkpoint: Softmax Scores",
+      "description": "Implement `softmax(xs)` for a list of floats.",
+      "order": 13,
+      "difficulty": "intermediate",
+      "duration_minutes": 8,
+      "type": "checkpoint",
+      "section_id": "sec-ai-2",
+      "section_title": "Section 2: Production AI Apps",
+      "concepts": [
+        "ai-embeddings"
+      ],
+      "prerequisites": [],
+      "learning_objectives": [
+        "Convert scores to softmax probabilities"
+      ],
+      "starter_code": "import math\n\ndef softmax(xs):\n    # TODO\n    pass\n",
+      "solution_code": "import math\n\ndef softmax(xs):\n    m = max(xs)\n    exps = [math.exp(x - m) for x in xs]\n    s = sum(exps)\n    return [e / s for e in exps]\n",
+      "tests": [
+        {
+          "name": "test_softmax",
+          "unittest_code": "def test_softmax(self):\n    out = softmax([0, 0])\n    self.assertAlmostEqual(out[0], 0.5)\n    self.assertAlmostEqual(sum(softmax([1, 2, 3])), 1.0)\n",
+          "required": true
+        }
+      ],
+      "completion_requirements": {
+        "required_test_names": [
+          "test_softmax"
+        ]
+      }
+    }
+  ]
+}

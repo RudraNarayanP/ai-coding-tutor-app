@@ -170,12 +170,27 @@ COURSE_METADATA = {
     "ai": {
         "is_primary": False,
         "tagline": "AI application development & LLM patterns",
-        "description": "HTTP/APIs, JSON, env vars, calling model APIs, structured outputs, prompt design, tool calling, embeddings, RAG, and storing AI data in SQL.",
+        "description": "HTTP/APIs, JSON, model APIs, tokenization, embeddings, prompt patterns, tool calling, RAG chunking/retrieval, and storing AI data in SQL.",
     },
     "dsa": {
         "is_primary": True,
         "tagline": "Algorithms, complexity & core data structures",
         "description": "Big O, stacks, queues, linked lists, recursion, binary search, hash maps, trees, BSTs, and graph traversals in pure Python.",
+    },
+    "ml-math": {
+        "is_primary": True,
+        "tagline": "Vectors, probability, stats & data prep for ML",
+        "description": "Pure-Python vectors/matrices, probability, summary stats, data wrangling, train/test splits, and feature scaling.",
+    },
+    "ml": {
+        "is_primary": True,
+        "tagline": "Machine learning foundations from scratch",
+        "description": "Linear regression, classification, loss/metrics, overfitting/regularization, and decision trees/ensembles in pure Python.",
+    },
+    "fullstack": {
+        "is_primary": True,
+        "tagline": "HTTP clients, REST, state & auth tokens",
+        "description": "Full-stack client patterns: HTTP requests, REST consumption, immutable UI state, and auth token handling — coding exercises that pair with the Python backend track.",
     },
 }
 

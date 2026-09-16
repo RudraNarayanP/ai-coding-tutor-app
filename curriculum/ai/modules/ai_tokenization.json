@@ -1,0 +1,176 @@
+{
+  "id": "ai-tokenization",
+  "title": "Unit 4: Tokenization",
+  "order": 4,
+  "concepts": [
+    {
+      "id": "ai-tokenization",
+      "title": "Tokenization",
+      "prerequisites": [
+        "ai-rag"
+      ]
+    }
+  ],
+  "lessons": [
+    {
+      "id": "ai-tok-split",
+      "title": "4. Whitespace Tokenize",
+      "description": "Implement `tokenize(text)` splitting on whitespace and dropping empties.",
+      "order": 4,
+      "difficulty": "intermediate",
+      "duration_minutes": 8,
+      "type": "learn",
+      "section_id": "sec-ai-1",
+      "section_title": "Section 1: AI Foundations",
+      "concepts": [
+        "ai-tokenization"
+      ],
+      "prerequisites": [],
+      "learning_objectives": [
+        "Tokenize text on whitespace"
+      ],
+      "starter_code": "def tokenize(text):\n    # TODO\n    pass\n",
+      "solution_code": "def tokenize(text):\n    return [t for t in text.split() if t]\n",
+      "tests": [
+        {
+          "name": "test_tokenize",
+          "unittest_code": "def test_tokenize(self):\n    self.assertEqual(tokenize('  hello   world '), ['hello', 'world'])\n",
+          "required": true
+        }
+      ],
+      "completion_requirements": {
+        "required_test_names": [
+          "test_tokenize"
+        ]
+      }
+    },
+    {
+      "id": "ai-tok-lower",
+      "title": "5. Normalize Tokens",
+      "description": "Implement `normalize_tokens(tokens)` lowercasing and stripping punctuation from ends.",
+      "order": 5,
+      "difficulty": "intermediate",
+      "duration_minutes": 8,
+      "type": "learn",
+      "section_id": "sec-ai-1",
+      "section_title": "Section 1: AI Foundations",
+      "concepts": [
+        "ai-tokenization"
+      ],
+      "prerequisites": [],
+      "learning_objectives": [
+        "Normalize tokens for NLP"
+      ],
+      "starter_code": "import string\n\ndef normalize_tokens(tokens):\n    # TODO\n    pass\n",
+      "solution_code": "import string\n\ndef normalize_tokens(tokens):\n    out = []\n    for t in tokens:\n        t = t.lower().strip(string.punctuation)\n        if t:\n            out.append(t)\n    return out\n",
+      "tests": [
+        {
+          "name": "test_normalize_tokens",
+          "unittest_code": "def test_normalize_tokens(self):\n    self.assertEqual(normalize_tokens(['Hello!', 'WORLD.']), ['hello', 'world'])\n",
+          "required": true
+        }
+      ],
+      "completion_requirements": {
+        "required_test_names": [
+          "test_normalize_tokens"
+        ]
+      }
+    },
+    {
+      "id": "ai-tok-vocab",
+      "title": "6. Build Vocabulary",
+      "description": "Implement `build_vocab(token_lists)` mapping tokens to sorted alphabetical ids from 0.",
+      "order": 6,
+      "difficulty": "intermediate",
+      "duration_minutes": 8,
+      "type": "challenge",
+      "section_id": "sec-ai-1",
+      "section_title": "Section 1: AI Foundations",
+      "concepts": [
+        "ai-tokenization"
+      ],
+      "prerequisites": [],
+      "learning_objectives": [
+        "Build a token vocabulary"
+      ],
+      "starter_code": "def build_vocab(token_lists):\n    # TODO\n    pass\n",
+      "solution_code": "def build_vocab(token_lists):\n    uniq = sorted({t for tokens in token_lists for t in tokens})\n    return {t: i for i, t in enumerate(uniq)}\n",
+      "tests": [
+        {
+          "name": "test_build_vocab",
+          "unittest_code": "def test_build_vocab(self):\n    self.assertEqual(build_vocab([['b', 'a'], ['a']]), {'a': 0, 'b': 1})\n",
+          "required": true
+        }
+      ],
+      "completion_requirements": {
+        "required_test_names": [
+          "test_build_vocab"
+        ]
+      }
+    },
+    {
+      "id": "ai-tok-encode",
+      "title": "7. Encode Sequence (Practice)",
+      "description": "Implement `encode(tokens, vocab, unk_id)` mapping unknown tokens to unk_id.",
+      "order": 7,
+      "difficulty": "intermediate",
+      "duration_minutes": 8,
+      "type": "practice",
+      "section_id": "sec-ai-1",
+      "section_title": "Section 1: AI Foundations",
+      "concepts": [
+        "ai-tokenization"
+      ],
+      "prerequisites": [],
+      "learning_objectives": [
+        "Encode tokens to ids"
+      ],
+      "starter_code": "def encode(tokens, vocab, unk_id):\n    # TODO\n    pass\n",
+      "solution_code": "def encode(tokens, vocab, unk_id):\n    return [vocab.get(t, unk_id) for t in tokens]\n",
+      "tests": [
+        {
+          "name": "test_encode",
+          "unittest_code": "def test_encode(self):\n    self.assertEqual(encode(['a', 'z'], {'a': 1}, 0), [1, 0])\n",
+          "required": true
+        }
+      ],
+      "completion_requirements": {
+        "required_test_names": [
+          "test_encode"
+        ]
+      }
+    },
+    {
+      "id": "ai-tok-checkpoint",
+      "title": "8. Checkpoint: Sliding Windows",
+      "description": "Implement `ngrams(tokens, n)` returning list of n-length tuples.",
+      "order": 8,
+      "difficulty": "intermediate",
+      "duration_minutes": 8,
+      "type": "checkpoint",
+      "section_id": "sec-ai-1",
+      "section_title": "Section 1: AI Foundations",
+      "concepts": [
+        "ai-tokenization"
+      ],
+      "prerequisites": [],
+      "learning_objectives": [
+        "Generate n-grams"
+      ],
+      "starter_code": "def ngrams(tokens, n):\n    # TODO\n    pass\n",
+      "solution_code": "def ngrams(tokens, n):\n    return [tuple(tokens[i:i + n]) for i in range(len(tokens) - n + 1)]\n",
+      "tests": [
+        {
+          "name": "test_ngrams",
+          "unittest_code": "def test_ngrams(self):\n    self.assertEqual(ngrams(['a', 'b', 'c'], 2), [('a', 'b'), ('b', 'c')])\n",
+          "required": true
+        }
+      ],
+      "completion_requirements": {
+        "required_test_names": [
+          "test_ngrams"
+        ]
+      }
+    }
+  ]
+}

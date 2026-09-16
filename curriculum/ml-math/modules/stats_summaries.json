@@ -1,0 +1,176 @@
+{
+  "id": "stats-summaries",
+  "title": "Unit 3: Stats Summaries",
+  "order": 3,
+  "concepts": [
+    {
+      "id": "stats-summaries",
+      "title": "Stats Summaries",
+      "prerequisites": [
+        "probability-basics"
+      ]
+    }
+  ],
+  "lessons": [
+    {
+      "id": "stats-mean",
+      "title": "1. Mean",
+      "description": "Implement `mean(xs)` for a non-empty list of numbers.",
+      "order": 11,
+      "difficulty": "intermediate",
+      "duration_minutes": 8,
+      "type": "learn",
+      "section_id": "sec-mlmath-1",
+      "section_title": "Section 1: Math & Data for ML",
+      "concepts": [
+        "stats-summaries"
+      ],
+      "prerequisites": [],
+      "learning_objectives": [
+        "Compute arithmetic mean"
+      ],
+      "starter_code": "def mean(xs):\n    # TODO\n    pass\n",
+      "solution_code": "def mean(xs):\n    return sum(xs) / len(xs)\n",
+      "tests": [
+        {
+          "name": "test_mean",
+          "unittest_code": "def test_mean(self):\n    self.assertAlmostEqual(mean([1, 2, 3, 4]), 2.5)\n",
+          "required": true
+        }
+      ],
+      "completion_requirements": {
+        "required_test_names": [
+          "test_mean"
+        ]
+      }
+    },
+    {
+      "id": "stats-median",
+      "title": "2. Median",
+      "description": "Implement `median(xs)` for a non-empty list (sort a copy).",
+      "order": 12,
+      "difficulty": "intermediate",
+      "duration_minutes": 8,
+      "type": "learn",
+      "section_id": "sec-mlmath-1",
+      "section_title": "Section 1: Math & Data for ML",
+      "concepts": [
+        "stats-summaries"
+      ],
+      "prerequisites": [],
+      "learning_objectives": [
+        "Compute median"
+      ],
+      "starter_code": "def median(xs):\n    # TODO\n    pass\n",
+      "solution_code": "def median(xs):\n    s = sorted(xs)\n    n = len(s)\n    mid = n // 2\n    if n % 2:\n        return float(s[mid])\n    return (s[mid - 1] + s[mid]) / 2\n",
+      "tests": [
+        {
+          "name": "test_median",
+          "unittest_code": "def test_median(self):\n    self.assertEqual(median([3, 1, 2]), 2.0)\n    self.assertEqual(median([1, 2, 3, 4]), 2.5)\n",
+          "required": true
+        }
+      ],
+      "completion_requirements": {
+        "required_test_names": [
+          "test_median"
+        ]
+      }
+    },
+    {
+      "id": "stats-variance",
+      "title": "3. Population Variance",
+      "description": "Implement `variance(xs)` as mean of squared deviations from the mean.",
+      "order": 13,
+      "difficulty": "intermediate",
+      "duration_minutes": 8,
+      "type": "challenge",
+      "section_id": "sec-mlmath-1",
+      "section_title": "Section 1: Math & Data for ML",
+      "concepts": [
+        "stats-summaries"
+      ],
+      "prerequisites": [],
+      "learning_objectives": [
+        "Compute population variance"
+      ],
+      "starter_code": "def variance(xs):\n    # TODO\n    pass\n",
+      "solution_code": "def variance(xs):\n    m = sum(xs) / len(xs)\n    return sum((x - m) ** 2 for x in xs) / len(xs)\n",
+      "tests": [
+        {
+          "name": "test_variance",
+          "unittest_code": "def test_variance(self):\n    self.assertAlmostEqual(variance([1, 2, 3]), 2 / 3)\n",
+          "required": true
+        }
+      ],
+      "completion_requirements": {
+        "required_test_names": [
+          "test_variance"
+        ]
+      }
+    },
+    {
+      "id": "stats-zscore",
+      "title": "4. Z-Score (Practice)",
+      "description": "Implement `zscore(x, mu, sigma)` = (x-mu)/sigma. Raise if sigma==0.",
+      "order": 14,
+      "difficulty": "intermediate",
+      "duration_minutes": 8,
+      "type": "practice",
+      "section_id": "sec-mlmath-1",
+      "section_title": "Section 1: Math & Data for ML",
+      "concepts": [
+        "stats-summaries"
+      ],
+      "prerequisites": [],
+      "learning_objectives": [
+        "Standardize with z-scores"
+      ],
+      "starter_code": "def zscore(x, mu, sigma):\n    # TODO\n    pass\n",
+      "solution_code": "def zscore(x, mu, sigma):\n    if sigma == 0:\n        raise ValueError('sigma must be non-zero')\n    return (x - mu) / sigma\n",
+      "tests": [
+        {
+          "name": "test_zscore",
+          "unittest_code": "def test_zscore(self):\n    self.assertAlmostEqual(zscore(10, 8, 2), 1.0)\n",
+          "required": true
+        }
+      ],
+      "completion_requirements": {
+        "required_test_names": [
+          "test_zscore"
+        ]
+      }
+    },
+    {
+      "id": "stats-checkpoint",
+      "title": "5. Checkpoint: Pearson Correlation",
+      "description": "Implement `pearson(xs, ys)` for equal-length lists. Return 0 if either std is 0.",
+      "order": 15,
+      "difficulty": "intermediate",
+      "duration_minutes": 8,
+      "type": "checkpoint",
+      "section_id": "sec-mlmath-1",
+      "section_title": "Section 1: Math & Data for ML",
+      "concepts": [
+        "stats-summaries"
+      ],
+      "prerequisites": [],
+      "learning_objectives": [
+        "Compute Pearson correlation"
+      ],
+      "starter_code": "import math\n\ndef pearson(xs, ys):\n    # TODO\n    pass\n",
+      "solution_code": "import math\n\ndef pearson(xs, ys):\n    n = len(xs)\n    mx = sum(xs) / n\n    my = sum(ys) / n\n    num = sum((x - mx) * (y - my) for x, y in zip(xs, ys))\n    dx = math.sqrt(sum((x - mx) ** 2 for x in xs))\n    dy = math.sqrt(sum((y - my) ** 2 for y in ys))\n    if dx == 0 or dy == 0:\n        return 0.0\n    return num / (dx * dy)\n",
+      "tests": [
+        {
+          "name": "test_pearson",
+          "unittest_code": "def test_pearson(self):\n    self.assertAlmostEqual(pearson([1, 2, 3], [2, 4, 6]), 1.0)\n    self.assertEqual(pearson([1, 1, 1], [1, 2, 3]), 0.0)\n",
+          "required": true
+        }
+      ],
+      "completion_requirements": {
+        "required_test_names": [
+          "test_pearson"
+        ]
+      }
+    }
+  ]
+}

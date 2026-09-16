@@ -1,0 +1,176 @@
+{
+  "id": "overfitting-regularization",
+  "title": "Unit 4: Overfitting & Regularization",
+  "order": 4,
+  "concepts": [
+    {
+      "id": "overfitting-regularization",
+      "title": "Overfitting & Regularization",
+      "prerequisites": [
+        "loss-metrics"
+      ]
+    }
+  ],
+  "lessons": [
+    {
+      "id": "overfit-train-val",
+      "title": "1. Train vs Val Error",
+      "description": "Implement `error_gap(train_err, val_err)` = val_err - train_err.",
+      "order": 16,
+      "difficulty": "intermediate",
+      "duration_minutes": 8,
+      "type": "learn",
+      "section_id": "sec-ml-1",
+      "section_title": "Section 1: ML Foundations",
+      "concepts": [
+        "overfitting-regularization"
+      ],
+      "prerequisites": [],
+      "learning_objectives": [
+        "Measure train/val generalization gap"
+      ],
+      "starter_code": "def error_gap(train_err, val_err):\n    # TODO\n    pass\n",
+      "solution_code": "def error_gap(train_err, val_err):\n    return val_err - train_err\n",
+      "tests": [
+        {
+          "name": "test_error_gap",
+          "unittest_code": "def test_error_gap(self):\n    self.assertAlmostEqual(error_gap(0.1, 0.4), 0.3)\n",
+          "required": true
+        }
+      ],
+      "completion_requirements": {
+        "required_test_names": [
+          "test_error_gap"
+        ]
+      }
+    },
+    {
+      "id": "overfit-l2",
+      "title": "2. L2 Penalty",
+      "description": "Implement `l2_loss(mse, weights, lam)` = mse + lam * sum(w^2).",
+      "order": 17,
+      "difficulty": "intermediate",
+      "duration_minutes": 8,
+      "type": "learn",
+      "section_id": "sec-ml-1",
+      "section_title": "Section 1: ML Foundations",
+      "concepts": [
+        "overfitting-regularization"
+      ],
+      "prerequisites": [],
+      "learning_objectives": [
+        "Add L2 regularization to loss"
+      ],
+      "starter_code": "def l2_loss(mse, weights, lam):\n    # TODO\n    pass\n",
+      "solution_code": "def l2_loss(mse, weights, lam):\n    return mse + lam * sum(w * w for w in weights)\n",
+      "tests": [
+        {
+          "name": "test_l2_loss",
+          "unittest_code": "def test_l2_loss(self):\n    self.assertAlmostEqual(l2_loss(1.0, [1, 2], 0.5), 1.0 + 0.5 * 5)\n",
+          "required": true
+        }
+      ],
+      "completion_requirements": {
+        "required_test_names": [
+          "test_l2_loss"
+        ]
+      }
+    },
+    {
+      "id": "overfit-early-stop",
+      "title": "3. Early Stopping",
+      "description": "Implement `early_stop_epoch(val_losses, patience)` returning first epoch index to stop (0-based) or last index if never.",
+      "order": 18,
+      "difficulty": "intermediate",
+      "duration_minutes": 8,
+      "type": "challenge",
+      "section_id": "sec-ml-1",
+      "section_title": "Section 1: ML Foundations",
+      "concepts": [
+        "overfitting-regularization"
+      ],
+      "prerequisites": [],
+      "learning_objectives": [
+        "Simulate early stopping"
+      ],
+      "starter_code": "def early_stop_epoch(val_losses, patience):\n    # TODO\n    pass\n",
+      "solution_code": "def early_stop_epoch(val_losses, patience):\n    best = float('inf')\n    wait = 0\n    for i, loss in enumerate(val_losses):\n        if loss < best:\n            best = loss\n            wait = 0\n        else:\n            wait += 1\n            if wait >= patience:\n                return i\n    return len(val_losses) - 1\n",
+      "tests": [
+        {
+          "name": "test_early_stop",
+          "unittest_code": "def test_early_stop(self):\n    self.assertEqual(early_stop_epoch([1.0, 0.5, 0.6, 0.7], 2), 3)\n    self.assertEqual(early_stop_epoch([1.0, 0.8, 0.6], 5), 2)\n",
+          "required": true
+        }
+      ],
+      "completion_requirements": {
+        "required_test_names": [
+          "test_early_stop"
+        ]
+      }
+    },
+    {
+      "id": "overfit-poly-features",
+      "title": "4. Polynomial Features (Practice)",
+      "description": "Implement `poly_features(x, degree)` returning [x^1, x^2, ..., x^degree].",
+      "order": 19,
+      "difficulty": "intermediate",
+      "duration_minutes": 8,
+      "type": "practice",
+      "section_id": "sec-ml-1",
+      "section_title": "Section 1: ML Foundations",
+      "concepts": [
+        "overfitting-regularization"
+      ],
+      "prerequisites": [],
+      "learning_objectives": [
+        "Expand polynomial features"
+      ],
+      "starter_code": "def poly_features(x, degree):\n    # TODO\n    pass\n",
+      "solution_code": "def poly_features(x, degree):\n    return [x ** d for d in range(1, degree + 1)]\n",
+      "tests": [
+        {
+          "name": "test_poly_features",
+          "unittest_code": "def test_poly_features(self):\n    self.assertEqual(poly_features(2, 3), [2, 4, 8])\n",
+          "required": true
+        }
+      ],
+      "completion_requirements": {
+        "required_test_names": [
+          "test_poly_features"
+        ]
+      }
+    },
+    {
+      "id": "overfit-checkpoint",
+      "title": "5. Checkpoint: Choose Complexity",
+      "description": "Implement `choose_degree(val_errors)` returning degree (1-based index) with lowest val error.",
+      "order": 20,
+      "difficulty": "intermediate",
+      "duration_minutes": 8,
+      "type": "checkpoint",
+      "section_id": "sec-ml-1",
+      "section_title": "Section 1: ML Foundations",
+      "concepts": [
+        "overfitting-regularization"
+      ],
+      "prerequisites": [],
+      "learning_objectives": [
+        "Select model complexity via validation"
+      ],
+      "starter_code": "def choose_degree(val_errors):\n    # TODO\n    pass\n",
+      "solution_code": "def choose_degree(val_errors):\n    best_i = min(range(len(val_errors)), key=lambda i: val_errors[i])\n    return best_i + 1\n",
+      "tests": [
+        {
+          "name": "test_choose_degree",
+          "unittest_code": "def test_choose_degree(self):\n    self.assertEqual(choose_degree([0.5, 0.2, 0.3]), 2)\n",
+          "required": true
+        }
+      ],
+      "completion_requirements": {
+        "required_test_names": [
+          "test_choose_degree"
+        ]
+      }
+    }
+  ]
+}

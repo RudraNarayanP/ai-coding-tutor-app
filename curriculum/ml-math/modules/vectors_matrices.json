@@ -1,0 +1,174 @@
+{
+  "id": "vectors-matrices",
+  "title": "Unit 1: Vectors & Matrices",
+  "order": 1,
+  "concepts": [
+    {
+      "id": "vectors-matrices",
+      "title": "Vectors & Matrices",
+      "prerequisites": []
+    }
+  ],
+  "lessons": [
+    {
+      "id": "vectors-dot",
+      "title": "1. Dot Product",
+      "description": "Implement `dot(a, b)` for equal-length lists of numbers.",
+      "order": 1,
+      "difficulty": "intermediate",
+      "duration_minutes": 8,
+      "type": "learn",
+      "section_id": "sec-mlmath-1",
+      "section_title": "Section 1: Math & Data for ML",
+      "concepts": [
+        "vectors-matrices"
+      ],
+      "prerequisites": [],
+      "learning_objectives": [
+        "Compute vector dot products"
+      ],
+      "starter_code": "def dot(a, b):\n    # TODO: return sum of a[i]*b[i]\n    pass\n",
+      "solution_code": "def dot(a, b):\n    return sum(x * y for x, y in zip(a, b))\n",
+      "tests": [
+        {
+          "name": "test_dot",
+          "unittest_code": "def test_dot(self):\n    self.assertEqual(dot([1, 2, 3], [4, 5, 6]), 32)\n    self.assertEqual(dot([0, 1], [1, 0]), 0)\n",
+          "required": true
+        }
+      ],
+      "completion_requirements": {
+        "required_test_names": [
+          "test_dot"
+        ]
+      }
+    },
+    {
+      "id": "vectors-norm",
+      "title": "2. Euclidean Norm",
+      "description": "Implement `l2_norm(v)` returning sqrt(sum of squares).",
+      "order": 2,
+      "difficulty": "intermediate",
+      "duration_minutes": 8,
+      "type": "learn",
+      "section_id": "sec-mlmath-1",
+      "section_title": "Section 1: Math & Data for ML",
+      "concepts": [
+        "vectors-matrices"
+      ],
+      "prerequisites": [],
+      "learning_objectives": [
+        "Compute L2 norms"
+      ],
+      "starter_code": "import math\n\ndef l2_norm(v):\n    # TODO\n    pass\n",
+      "solution_code": "import math\n\ndef l2_norm(v):\n    return math.sqrt(sum(x * x for x in v))\n",
+      "tests": [
+        {
+          "name": "test_l2_norm",
+          "unittest_code": "def test_l2_norm(self):\n    self.assertAlmostEqual(l2_norm([3, 4]), 5.0)\n    self.assertAlmostEqual(l2_norm([0, 0, 0]), 0.0)\n",
+          "required": true
+        }
+      ],
+      "completion_requirements": {
+        "required_test_names": [
+          "test_l2_norm"
+        ]
+      }
+    },
+    {
+      "id": "matrix-transpose",
+      "title": "3. Matrix Transpose",
+      "description": "Implement `transpose(m)` for a rectangular list-of-lists matrix.",
+      "order": 3,
+      "difficulty": "intermediate",
+      "duration_minutes": 8,
+      "type": "challenge",
+      "section_id": "sec-mlmath-1",
+      "section_title": "Section 1: Math & Data for ML",
+      "concepts": [
+        "vectors-matrices"
+      ],
+      "prerequisites": [],
+      "learning_objectives": [
+        "Transpose matrices"
+      ],
+      "starter_code": "def transpose(m):\n    # TODO: return rows as columns\n    pass\n",
+      "solution_code": "def transpose(m):\n    return [list(row) for row in zip(*m)]\n",
+      "tests": [
+        {
+          "name": "test_transpose",
+          "unittest_code": "def test_transpose(self):\n    self.assertEqual(transpose([[1, 2, 3], [4, 5, 6]]), [[1, 4], [2, 5], [3, 6]])\n",
+          "required": true
+        }
+      ],
+      "completion_requirements": {
+        "required_test_names": [
+          "test_transpose"
+        ]
+      }
+    },
+    {
+      "id": "matrix-multiply",
+      "title": "4. Matrix-Vector Multiply",
+      "description": "Implement `matvec(A, x)` multiplying matrix A by vector x.",
+      "order": 4,
+      "difficulty": "intermediate",
+      "duration_minutes": 8,
+      "type": "practice",
+      "section_id": "sec-mlmath-1",
+      "section_title": "Section 1: Math & Data for ML",
+      "concepts": [
+        "vectors-matrices"
+      ],
+      "prerequisites": [],
+      "learning_objectives": [
+        "Multiply matrix by vector"
+      ],
+      "starter_code": "def matvec(A, x):\n    # TODO: return A @ x as a list\n    pass\n",
+      "solution_code": "def matvec(A, x):\n    return [sum(a * b for a, b in zip(row, x)) for row in A]\n",
+      "tests": [
+        {
+          "name": "test_matvec",
+          "unittest_code": "def test_matvec(self):\n    self.assertEqual(matvec([[1, 2], [3, 4]], [1, 1]), [3, 7])\n",
+          "required": true
+        }
+      ],
+      "completion_requirements": {
+        "required_test_names": [
+          "test_matvec"
+        ]
+      }
+    },
+    {
+      "id": "vectors-checkpoint",
+      "title": "5. Checkpoint: Cosine Similarity",
+      "description": "Implement `cosine_sim(a, b)` = dot/(||a|| ||b||). Return 0 if either norm is 0.",
+      "order": 5,
+      "difficulty": "intermediate",
+      "duration_minutes": 8,
+      "type": "checkpoint",
+      "section_id": "sec-mlmath-1",
+      "section_title": "Section 1: Math & Data for ML",
+      "concepts": [
+        "vectors-matrices"
+      ],
+      "prerequisites": [],
+      "learning_objectives": [
+        "Compute cosine similarity"
+      ],
+      "starter_code": "import math\n\ndef cosine_sim(a, b):\n    # TODO\n    pass\n",
+      "solution_code": "import math\n\ndef cosine_sim(a, b):\n    dot = sum(x * y for x, y in zip(a, b))\n    na = math.sqrt(sum(x * x for x in a))\n    nb = math.sqrt(sum(x * x for x in b))\n    if na == 0 or nb == 0:\n        return 0.0\n    return dot / (na * nb)\n",
+      "tests": [
+        {
+          "name": "test_cosine_sim",
+          "unittest_code": "def test_cosine_sim(self):\n    self.assertAlmostEqual(cosine_sim([1, 0], [1, 0]), 1.0)\n    self.assertAlmostEqual(cosine_sim([1, 0], [0, 1]), 0.0)\n    self.assertEqual(cosine_sim([0, 0], [1, 2]), 0.0)\n",
+          "required": true
+        }
+      ],
+      "completion_requirements": {
+        "required_test_names": [
+          "test_cosine_sim"
+        ]
+      }
+    }
+  ]
+}
