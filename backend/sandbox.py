@@ -2,9 +2,11 @@ import asyncio
 import json
 import logging
 import subprocess
+import sys
 import time
 import uuid
 from dataclasses import dataclass
+from pathlib import Path
 
 logger = logging.getLogger("patchwork.sandbox")
 
@@ -25,6 +27,9 @@ class SandboxLimits:
     max_code_bytes: int = 64 * 1024
 
 
+_RUNNER_PATH = Path(__file__).resolve().parent.parent / "sandbox" / "runner.py"
+
+
 class DockerSandbox:
     image = "patchwork-sandbox:local"
 
@@ -32,6 +37,7 @@ class DockerSandbox:
         self.limits = limits or SandboxLimits()
         self._image_ready = asyncio.Lock()
         self._cleaned_orphans = False
+        self._docker_available: bool | None = None
 
     async def _docker(self, *args: str, input_data: bytes | None = None, timeout: float = 30, timeout_message: str = "Docker operation timed out.") -> tuple[int, bytes, bytes]:
         def invoke() -> subprocess.CompletedProcess[bytes]:
@@ -62,6 +68,51 @@ class DockerSandbox:
         except Exception as exc:
             logger.warning(f"Orphaned container cleanup error: {exc}")
 
+    async def _probe_docker(self) -> bool:
+        if self._docker_available is not None:
+            return self._docker_available
+        try:
+            code, _, _ = await self._docker("info", timeout=8)
+            self._docker_available = code == 0
+        except SandboxError:
+            self._docker_available = False
+        if not self._docker_available:
+            logger.warning(
+                "Docker is unavailable — falling back to local Python sandbox for code execution."
+            )
+        return self._docker_available
+
+    async def _run_local(self, payload: dict) -> dict:
+        """Execute student code in-process via sandbox/runner.py when Docker is down."""
+
+        def invoke() -> subprocess.CompletedProcess[bytes]:
+            return subprocess.run(
+                [sys.executable, "-I", str(_RUNNER_PATH)],
+                input=json.dumps(payload).encode("utf-8"),
+                capture_output=True,
+                timeout=self.limits.timeout_seconds + 10,
+            )
+
+        started = time.perf_counter()
+        try:
+            completed = await asyncio.to_thread(invoke)
+        except subprocess.TimeoutExpired as exc:
+            raise SandboxError("Student execution timed out.", 408) from exc
+
+        elapsed = round((time.perf_counter() - started) * 1000)
+        stdout = completed.stdout.decode("utf-8", errors="replace")
+        stderr = completed.stderr.decode("utf-8", errors="replace")
+        if completed.returncode != 0 and not stdout.strip():
+            raise SandboxError(
+                f"Local sandbox failed: {stderr[-500:] or 'runner exited with an error.'}"
+            )
+        try:
+            result = json.loads(stdout)
+        except json.JSONDecodeError:
+            raise SandboxError("Local sandbox returned an invalid result.")
+        result["execution_time_ms"] = elapsed
+        return result
+
     async def _ensure_image(self) -> None:
         async with self._image_ready:
             if not self._cleaned_orphans:
@@ -80,6 +131,8 @@ class DockerSandbox:
         code_bytes = payload["code"].encode("utf-8")
         if len(code_bytes) > self.limits.max_code_bytes:
             raise SandboxError("Submitted code exceeds the 64 KiB limit.", 413)
+        if not await self._probe_docker():
+            return await self._run_local(payload)
         await self._ensure_image()
         container = f"patchwork-run-{uuid.uuid4().hex}"
         create_args = [

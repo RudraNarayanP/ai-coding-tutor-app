@@ -35,6 +35,8 @@ type TestResult = {
   error: string | null
 }
 
+const CODE_EXERCISE_TYPES = ['code', 'tiny_coding', 'identify_mistake']
+
 type LessonSummary = {
   id: string
   title: string
@@ -281,6 +283,11 @@ function App() {
     () => allExercises.filter((ex) => completedExerciseIds.has(ex.id)).length,
     [allExercises, completedExerciseIds]
   )
+  const currentExerciseIsCode = useMemo(() => {
+    if (!currentExercise) return false
+    return CODE_EXERCISE_TYPES.includes((currentExercise.type || 'code').toLowerCase().trim())
+  }, [currentExercise])
+  const showLessonRunCode = !lessonHasExercises || lessonComplete || currentExerciseIsCode
 
   // Fetch the authoritative progress for the open lesson.
   const fetchLessonProgress = useCallback(async (lessonId: string) => {
@@ -554,28 +561,65 @@ setIsLessonActive(true)
     }
   }, [code, lesson])
 
+  const getRunnableCode = useCallback(() => {
+    if (currentExerciseIsCode && currentExercise) {
+      const exState = exerciseInput[currentExercise.id] || {}
+      return (
+        exState.code ??
+        currentExercise.starter_code ??
+        currentExercise.code ??
+        code
+      )
+    }
+    return code
+  }, [currentExerciseIsCode, currentExercise, exerciseInput, code])
+
   // ─── Run Code & Tests ───────────────────────────────────────────────────────
   const runTests = useCallback(async () => {
     if (!lesson) return
+    const codeToRun = getRunnableCode()
     setIsRunning(true)
     setResults(null)
     setCharState('thinking')
     setCharSpeech('Testing your code against strict test cases…')
 
     try {
-      const res = await fetch(`/api/lessons/${lesson.id}/run`, {
+      const runUrl =
+        lessonHasExercises && currentExerciseIsCode && currentExercise
+          ? `/api/lessons/${lesson.id}/exercises/${currentExercise.id}/run`
+          : `/api/lessons/${lesson.id}/run`
+
+      const res = await fetch(runUrl, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ code }),
+        body: JSON.stringify({ code: codeToRun }),
       })
 
-      if (!res.ok) throw new Error('Sandbox error')
-      const data = await res.json()
-      setResults(data.tests || [])
+      const data = await res.json().catch(() => ({}))
+      if (!res.ok) {
+        const detail = data?.detail
+        const message =
+          (typeof detail === 'object' && detail?.message) ||
+          (typeof detail === 'string' ? detail : null) ||
+          data?.message ||
+          'Code execution failed. Make sure the backend is running.'
+        throw new Error(message)
+      }
 
-      const allPassed = data.passed || (data.tests && data.tests.every((t: TestResult) => !t.required || t.passed))
+      setResults(data.tests || [])
+      const allPassed =
+        data.passed ||
+        (data.tests && data.tests.every((t: TestResult) => !t.required || t.passed))
 
       if (allPassed) {
+        if (lessonHasExercises && currentExerciseIsCode && currentExercise) {
+          playPatchworkSound('success', soundEnabled)
+          setCharState('happy')
+          setCharSpeech('All tests passed! Tap Check Answer to save progress and continue.')
+          setFeedback('All tests passed — tap Check Answer to continue.')
+          return
+        }
+
         playPatchworkSound('success', soundEnabled)
         setCharState('celebrate')
         setCharSpeech('Outstanding job! All checks passed perfectly!')
@@ -584,8 +628,9 @@ setIsLessonActive(true)
         const activity = recordActivity(15)
         setGamification(activity.state)
         triggerXpGain(15)
+        fetchLessons()
+        fetchProgression()
 
-// Lesson-level code lesson completed. Show the celebration screen.
         const nextId =
           data.next_lesson_id ||
           (() => {
@@ -599,7 +644,6 @@ setIsLessonActive(true)
         setCharSpeech('Some test checks failed. Take a look at the details below!')
         setConsecutiveCorrect(0)
 
-// Duolingo-style: every mistake costs one heart.
         const heartState = loseHeart()
         setHearts(heartState.hearts)
         if (heartState.hearts <= 0 && !heartState.unlimitedHearts) {
@@ -608,7 +652,7 @@ setIsLessonActive(true)
       }
     } catch (err) {
       console.error('Error executing code:', err)
-      setFeedback('Error connecting to code execution sandbox.')
+      setFeedback(err instanceof Error ? err.message : 'Error connecting to code execution sandbox.')
       setCharState('confused')
     } finally {
       setIsRunning(false)
@@ -616,7 +660,18 @@ setIsLessonActive(true)
         resultsRef.current?.scrollIntoView({ behavior: 'smooth' })
       }, 100)
     }
-  }, [lesson, code, soundEnabled, triggerXpGain, lessons])
+  }, [
+    lesson,
+    getRunnableCode,
+    soundEnabled,
+    triggerXpGain,
+    lessons,
+    lessonHasExercises,
+    currentExerciseIsCode,
+    currentExercise,
+    fetchLessons,
+    fetchProgression,
+  ])
 
   // ─── Ask AI Tutor ──────────────────────────────────────────────────────────
   const askTutor = async () => {
@@ -1570,7 +1625,7 @@ setExercisePhase('incorrect')
         )}
 
         {/* ─── Bottom Footer Action Bar ──────────────────────────────────── */}
-        {activeTab === 'learn' && isLessonActive && (
+        {activeTab === 'learn' && isLessonActive && showLessonRunCode && (
           <footer className="duo-footer-bar">
             <div className="duo-footer-left" style={{ display: 'flex', gap: '12px' }}>
               <button

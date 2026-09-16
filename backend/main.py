@@ -399,6 +399,19 @@ async def run_lesson(lesson_id: str, request: CodeSubmission):
     return await submit_lesson(lesson_id, request)
 
 
+@app.post("/api/lessons/{lesson_id}/exercises/{exercise_id}/run", response_model=ProgressionResult)
+async def run_exercise_code(lesson_id: str, exercise_id: str, request: CodeSubmission):
+    try:
+        return await lesson_engine.run_exercise_code(lesson_id, exercise_id, request.code)
+    except KeyError as exc:
+        raise HTTPException(status_code=404, detail={"error": "exercise_not_found", "message": str(exc)}) from exc
+    except SandboxError as exc:
+        raise HTTPException(
+            status_code=exc.status_code,
+            detail={"error": "sandbox_unavailable", "message": str(exc)},
+        ) from exc
+
+
 @app.post("/api/lessons/{lesson_id}/submit-exercise")
 async def submit_exercise(lesson_id: str, request: ExerciseSubmissionRequest, user_id: str = "default_user"):
     try:

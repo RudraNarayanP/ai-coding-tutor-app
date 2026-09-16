@@ -381,6 +381,79 @@ class LessonEngine:
             error=execution.get("error"),
         )
 
+    def _find_exercise(self, lesson: LessonDefinition, exercise_id: str):
+        for sub in lesson.sublessons:
+            for ex in sub.exercises:
+                if ex.id == exercise_id:
+                    return ex
+        for ex in lesson.mastery_exam:
+            if ex.id == exercise_id:
+                return ex
+        return None
+
+    async def _execute_tests(self, lang: str, code: str, tests: list) -> dict:
+        if lang.lower().strip() != "python":
+            fake_lesson = type("L", (), {"tests": tests, "solution_code": ""})()
+            return self._static_execution(fake_lesson, lang, code)
+        return await self.executor.run(
+            {
+                "language": lang,
+                "code": code,
+                "tests": [test.model_dump() for test in tests],
+            }
+        )
+
+    def _tests_from_execution(self, tests_spec: list, execution: dict) -> tuple[list[TestResult], bool]:
+        result_by_name = {
+            result.get("name"): result for result in execution.get("tests", [])
+        }
+        tests = [
+            TestResult(
+                name=test.name,
+                required=test.required,
+                description=test.description,
+                passed=bool(result_by_name.get(test.name, {}).get("passed", False)),
+                error=result_by_name.get(test.name, {}).get("error"),
+                stdout=result_by_name.get(test.name, {}).get("stdout", ""),
+                stderr=result_by_name.get(test.name, {}).get("stderr", ""),
+                execution_time_ms=result_by_name.get(test.name, {}).get(
+                    "execution_time_ms", 0
+                ),
+            )
+            for test in tests_spec
+        ]
+        required_names = {test.name for test in tests_spec if test.required}
+        passed = bool(tests) and all(
+            test.passed for test in tests if test.name in required_names
+        )
+        return tests, passed
+
+    async def run_exercise_code(
+        self, lesson_id: str, exercise_id: str, code: str
+    ) -> ProgressionResult:
+        """Run tests for a single exercise without persisting completion."""
+        lesson = self.get_lesson(lesson_id)
+        lang = self.get_lesson_language(lesson_id)
+        exercise = self._find_exercise(lesson, exercise_id)
+        if exercise is None:
+            raise KeyError(f"Exercise '{exercise_id}' not found in lesson '{lesson_id}'.")
+        if not exercise.tests:
+            raise KeyError(f"Exercise '{exercise_id}' has no runnable tests.")
+
+        execution = await self._execute_tests(lang, code, exercise.tests)
+        tests, passed = self._tests_from_execution(exercise.tests, execution)
+        return ProgressionResult(
+            lesson_id=lesson_id,
+            passed=passed,
+            completed=False,
+            next_lesson_id=None,
+            tests=tests,
+            stdout=execution.get("stdout", ""),
+            stderr=execution.get("stderr", ""),
+            execution_time_ms=execution.get("execution_time_ms", 0),
+            error=execution.get("error"),
+        )
+
     @staticmethod
     def _normalize_code(code: str) -> str:
         """Whitespace-insensitive, case-sensitive normalization for code comparison."""

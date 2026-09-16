@@ -284,6 +284,16 @@ const ExercisePanel: React.FC<Props> = (props) => {
           }}
         />
         <div className="exercise-code-actions">
+          {props.onRunCode && (
+            <button
+              type="button"
+              className="duo-button duo-button-primary"
+              disabled={disabled || props.isRunningCode}
+              onClick={props.onRunCode}
+            >
+              {props.isRunningCode ? 'Running…' : 'Run code'}
+            </button>
+          )}
           <button
             type="button"
             className="duo-button duo-button-secondary exercise-code-reset"
