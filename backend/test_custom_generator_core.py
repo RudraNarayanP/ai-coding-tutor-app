@@ -145,6 +145,24 @@ async def test_build_lesson_definition_mcq_null_starter_code():
     """Regression: mcq exercises previously passed starter_code=None, which failed
     ExerciseDefinition validation (starter_code is a non-optional str)."""
     generator = CurriculumGenerator(provider=object())  # provider unused by this method
+    llm_data = {
+        "id": "course-lesson-1",
+        "title": "Topic",
+        "description": "desc",
+        "starter_code": "",
+        "exercises": [
+            {
+                "id": "ex-1",
+                "title": "T",
+                "type": "mcq",
+                "question": "Q?",
+                "options": ["A", "B"],
+                "correct_answer": "A",
+                "explanation": "Exp",
+                "starter_code": None
+            }
+        ]
+    }
     lesson = generator._build_lesson_definition(
         lesson_id="course-lesson-1",
         course_id="course",
@@ -153,6 +171,7 @@ async def test_build_lesson_definition_mcq_null_starter_code():
         order=1,
         slot=_make_slot(),
         domain="general",
+        llm_data=llm_data
     )
     assert lesson.sublessons[0].exercises[0].starter_code == ""
 
@@ -160,6 +179,24 @@ async def test_build_lesson_definition_mcq_null_starter_code():
 @pytest.mark.asyncio
 async def test_build_lesson_definition_tiny_coding_keeps_starter_code():
     generator = CurriculumGenerator(provider=object())
+    llm_data = {
+        "id": "course-lesson-2",
+        "title": "Topic",
+        "description": "desc",
+        "starter_code": "# Write solution below\n",
+        "exercises": [
+            {
+                "id": "ex-2",
+                "title": "T",
+                "type": "tiny_coding",
+                "question": "Q?",
+                "options": [],
+                "correct_answer": "ans",
+                "explanation": "Exp",
+                "starter_code": "# Write solution below\n"
+            }
+        ]
+    }
     lesson = generator._build_lesson_definition(
         lesson_id="course-lesson-2",
         course_id="course",
@@ -168,6 +205,7 @@ async def test_build_lesson_definition_tiny_coding_keeps_starter_code():
         order=1,
         slot=_make_slot("checkpoint"),
         domain="programming",
+        llm_data=llm_data
     )
     assert lesson.sublessons[0].exercises[0].starter_code.startswith("# Write")
 
@@ -177,7 +215,31 @@ async def test_curriculum_generator_with_source_context_and_difficulty():
     from backend.custom_course_generator import CurriculumGenerator, SourceDocument, VideoSegment
     from backend.ai_provider import get_ai_provider
 
-    provider = get_ai_provider("ollama")
+    class DummyProvider:
+        async def generate_structured(self, system: str, user: str, max_tokens: int = 3500) -> str:
+            return '''[
+  {
+    "id": "course-123-m1-l1",
+    "title": "Backpropagation Essentials",
+    "description": "Learn how backpropagation computes gradients of loss functions using chain rule.",
+    "starter_code": "",
+    "exercises": [
+      {
+        "id": "ex_1",
+        "title": "Backpropagation Concept",
+        "type": "mcq",
+        "question": "How does backpropagation compute gradients of the loss function?",
+        "options": ["Using the chain rule to calculate derivatives", "By random sampling of weights", "By brute force grid search"],
+        "correct_answer": "Using the chain rule to calculate derivatives",
+        "explanation": "Backpropagation computes gradients of the loss function using the chain rule.",
+        "starter_code": "",
+        "solution_code": ""
+      }
+    ]
+  }
+]'''
+
+    provider = DummyProvider()
     generator = CurriculumGenerator(provider)
 
     doc = SourceDocument(

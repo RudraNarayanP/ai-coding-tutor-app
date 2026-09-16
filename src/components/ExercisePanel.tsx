@@ -252,7 +252,8 @@ const ExercisePanel: React.FC<Props> = (props) => {
   )
 
   const renderCode = () => {
-    const starter = exercise.starter_code || exercise.code || ''
+    const rawStarter = exercise.starter_code || exercise.code || ''
+    const starter = (rawStarter.includes("___") || rawStarter.includes("---")) ? '' : rawStarter
     const value = exState.code ?? starter
     return (
       <div className="exercise-code-block">
