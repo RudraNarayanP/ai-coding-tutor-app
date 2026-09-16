@@ -556,6 +556,12 @@ class ProjectRunRequest(BaseModel):
     stdin: str = Field(default="", max_length=64 * 1024)
 
 
+class ProjectTerminalRequest(BaseModel):
+    command: str = Field(..., min_length=1, max_length=4000)
+    files: list[WorkspaceFilePayload] | None = None
+    stdin: str = Field(default="", max_length=64 * 1024)
+
+
 class ProjectNextRequest(BaseModel):
     files: list[WorkspaceFilePayload] | None = None
 
@@ -623,6 +629,7 @@ async def get_project(course_id: str):
 
 @app.delete("/api/create-course/projects/{course_id}")
 async def delete_project(course_id: str):
+    await project_service.destroy_terminal(course_id)
     if not project_store.delete(course_id):
         raise HTTPException(status_code=404, detail={"error": "project_not_found"})
     return {"status": "deleted", "course_id": course_id}
@@ -647,6 +654,20 @@ async def run_project_workspace(course_id: str, req: ProjectRunRequest):
         project = project_store.save_workspace(course_id, files) or project
     try:
         return await project_service.run_project(project_store, sandbox, project, stdin=req.stdin)
+    except SandboxError as exc:
+        raise HTTPException(status_code=exc.status_code, detail={"error": "sandbox_error", "message": str(exc)})
+
+
+@app.post("/api/create-course/projects/{course_id}/terminal")
+async def project_terminal(course_id: str, req: ProjectTerminalRequest):
+    project = project_store.get(course_id)
+    if not project:
+        raise HTTPException(status_code=404, detail={"error": "project_not_found"})
+    files = _to_workspace_files(req.files)
+    if files is not None:
+        project = project_store.save_workspace(course_id, files) or project
+    try:
+        return await project_service.exec_terminal(project, command=req.command, stdin=req.stdin)
     except SandboxError as exc:
         raise HTTPException(status_code=exc.status_code, detail={"error": "sandbox_error", "message": str(exc)})
 

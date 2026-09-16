@@ -13,7 +13,8 @@ from .project_models import (
     WorkspaceFile,
 )
 from .project_enrich import enrich_project
-from .project_planner import plan_project
+from .project_planner import ProjectGroundingError, plan_project
+from .project_sandbox import project_terminal_sandbox
 from .project_store import ProjectStore
 from .project_verifier import evaluate_milestone, run_workspace
 from .source_ingestion import IngestionError, SourceIngestionService
@@ -88,6 +89,34 @@ async def run_project(store: ProjectStore, executor, project: ProjectCourse, std
         "stderr": result.get("stderr", ""),
         "error": result.get("error"),
     }
+
+
+async def exec_terminal(
+    project: ProjectCourse,
+    command: str,
+    stdin: str = "",
+) -> dict:
+    """Run one shell command inside the project's isolated Docker terminal."""
+    files = [{"path": f.path, "content": f.content} for f in project.workspace_files]
+    result = await project_terminal_sandbox.exec_command(
+        project.course_id,
+        command,
+        files=files,
+        stdin=stdin,
+    )
+    return {
+        "command": result.command,
+        "stdout": result.stdout,
+        "stderr": result.stderr,
+        "exit_code": result.exit_code,
+        "cwd": result.cwd,
+        "error": result.error,
+        "ran_ok": result.exit_code == 0,
+    }
+
+
+async def destroy_terminal(course_id: str) -> None:
+    await project_terminal_sandbox.destroy(course_id)
 
 
 async def evaluate_next(store: ProjectStore, executor, project: ProjectCourse) -> dict:

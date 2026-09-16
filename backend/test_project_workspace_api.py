@@ -128,6 +128,17 @@ def test_resume_lists_project():
     assert any(p["course_id"] == cid for p in res.json())
 
 
+def test_terminal_rejects_blocked_commands_without_docker():
+    data = _create_project()
+    cid = data["course_id"]
+    res = client.post(
+        f"/api/create-course/projects/{cid}/terminal",
+        json={"command": "sudo pip install evil"},
+    )
+    assert res.status_code == 400
+    assert "sandbox" in res.json()["detail"]["message"].lower() or "blocked" in res.json()["detail"]["message"].lower() or "not available" in res.json()["detail"]["message"].lower()
+
+
 def test_project_feature_does_not_disturb_existing_courses():
     # Existing courses endpoint still works and returns native courses.
     res = client.get("/api/courses")

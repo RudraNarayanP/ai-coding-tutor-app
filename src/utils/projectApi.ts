@@ -76,6 +76,16 @@ export type RunResult = {
   error: string | null
 }
 
+export type TerminalResult = {
+  command: string
+  stdout: string
+  stderr: string
+  exit_code: number
+  cwd: string
+  error: string | null
+  ran_ok: boolean
+}
+
 export type GuidanceResult = {
   milestone_id: string | null
   observation: string
@@ -194,6 +204,11 @@ export const projectApi = {
 
   run: (courseId: string, files: WorkspaceFile[], stdin = '') =>
     post(`${BASE}/${encodeURIComponent(courseId)}/run`, { files, stdin }).then((r) => jsonOrThrow<RunResult>(r)),
+
+  exec: (courseId: string, files: WorkspaceFile[], command: string, stdin = '') =>
+    post(`${BASE}/${encodeURIComponent(courseId)}/terminal`, { files, command, stdin }).then((r) =>
+      jsonOrThrow<TerminalResult>(r)
+    ),
 
   next: (courseId: string, files: WorkspaceFile[]) =>
     post(`${BASE}/${encodeURIComponent(courseId)}/next`, { files }).then((r) => jsonOrThrow<NextResult>(r)),
