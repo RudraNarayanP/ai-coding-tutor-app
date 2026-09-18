@@ -253,7 +253,7 @@ export const ProjectWorkspace: React.FC<ProjectWorkspaceProps> = ({ courseId, on
       setProject(res.project)
       if (res.stdout) appendTerminal(makeTerminalLine('stdout', res.stdout))
       if (res.stderr) appendTerminal(makeTerminalLine('stderr', res.stderr))
-      appendTerminal(makeTerminalLine(res.status === 'project_complete' ? 'success' : 'info', res.feedback))
+      appendTerminal(makeTerminalLine('info', res.feedback))
       if (res.status === 'project_complete') {
         setCelebrate(true)
       }
@@ -489,7 +489,7 @@ export const ProjectWorkspace: React.FC<ProjectWorkspaceProps> = ({ courseId, on
                 Step {currentMilestone.order} · +{currentMilestone.xp_reward} XP
               </span>
               <h3 className="pw-microstep-title">
-                {lesson.hook || currentMilestone.title}
+                {lesson?.hook || currentMilestone.title}
               </h3>
               {lesson?.observation && (
                 <p className="pw-observation">{lesson.observation}</p>
@@ -503,7 +503,7 @@ export const ProjectWorkspace: React.FC<ProjectWorkspaceProps> = ({ courseId, on
                 <p className="pw-hint">💡 {compactText(currentMilestone.microstep.hint, 220)}</p>
               )}
               <div className="pw-microstep-controls">
-                {lesson.teach && (
+                {lesson?.teach && (
                   <button
                     className="pw-why"
                     onClick={() =>
@@ -525,9 +525,9 @@ export const ProjectWorkspace: React.FC<ProjectWorkspaceProps> = ({ courseId, on
                   {expandedWhy === currentMilestone.id ? 'Hide' : 'Why?'}
                 </button>
               </div>
-              {expandedLearn === currentMilestone.id && lesson.teach && (
+              {expandedLearn === currentMilestone.id && lesson?.teach && (
                 <div className="pw-why-body">
-                  <p>{lesson.teach}</p>
+                  <p>{lesson?.teach}</p>
                 </div>
               )}
               {showExample && currentMilestone.example && (

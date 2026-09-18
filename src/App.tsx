@@ -567,7 +567,7 @@ setIsLessonActive(true)
       return (
         exState.code ??
         currentExercise.starter_code ??
-        currentExercise.code ??
+        (currentExercise as any).code ??
         code
       )
     }

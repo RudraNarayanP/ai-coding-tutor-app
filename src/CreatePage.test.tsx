@@ -146,7 +146,7 @@ describe('CreatePage Component', () => {
       completed: false,
       completion_percent: 0,
       files_changed: 0,
-    } as Awaited<ReturnType<typeof projectApi.create>>)
+    } as unknown as Awaited<ReturnType<typeof projectApi.create>>)
     vi.mocked(projectApi.get).mockResolvedValue({
       course_id: 'project-ok',
       title: 'Word Frequency Counter',
@@ -181,7 +181,7 @@ describe('CreatePage Component', () => {
       completed: false,
       completion_percent: 0,
       files_changed: 0,
-    } as Awaited<ReturnType<typeof projectApi.get>>)
+    } as unknown as Awaited<ReturnType<typeof projectApi.get>>)
 
     render(<CreatePage />)
     fireEvent.click(screen.getByText('Paste Transcript / Notes'))
