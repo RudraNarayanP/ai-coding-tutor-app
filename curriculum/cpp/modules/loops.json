@@ -6,7 +6,9 @@
     {
       "id": "cpp-loops",
       "title": "For & While Loops in C++",
-      "prerequisites": ["cpp-conditionals"]
+      "prerequisites": [
+        "cpp-conditionals"
+      ]
     }
   ],
   "lessons": [
@@ -18,8 +20,12 @@
       "difficulty": "beginner",
       "duration_minutes": 5,
       "type": "learn",
-      "concepts": ["cpp-loops"],
-      "prerequisites": ["cpp-conditionals"],
+      "concepts": [
+        "cpp-loops"
+      ],
+      "prerequisites": [
+        "cpp-conditionals"
+      ],
       "learning_objectives": [
         "Use for loops in C++"
       ],
@@ -33,8 +39,51 @@
         }
       ],
       "completion_requirements": {
-        "required_test_names": ["test_sum_range"]
-      }
+        "required_test_names": [
+          "test_sum_range"
+        ]
+      },
+      "source": {
+        "name": "cppreference.com — for loop statement",
+        "url": "https://en.cppreference.com/w/cpp/language/for",
+        "license": "CC BY-SA 4.0 (cppreference.com)"
+      },
+      "xp_reward": 10,
+      "sublessons": [
+        {
+          "id": "cpp-factorial-code-sub",
+          "title": "Write the loop",
+          "order": 1,
+          "exercises": [
+            {
+              "id": "cpp-factorial-code-1",
+              "type": "code",
+              "question": "Implement `factorial(int n)` returning n! as a long long, with 0! defined as 1. Accumulate in a loop the way `sum_range` does.",
+              "starter_code": "long long factorial(int n) {\n    long long result = 1;\n    // TODO: multiply result by each value from 2 up to n\n    return 0;\n}\n",
+              "solution_code": "long long factorial(int n) {\n    long long result = 1;\n    for (int i = 2; i <= n; ++i) { result *= i; }\n    return result;\n}\n",
+              "tests": [
+                {
+                  "name": "test_factorial_five",
+                  "test_code": "if (factorial(5) != 120) throw std::runtime_error(\"5!\");"
+                },
+                {
+                  "name": "test_factorial_zero",
+                  "test_code": "if (factorial(0) != 1) throw std::runtime_error(\"0!\");"
+                },
+                {
+                  "name": "test_factorial_one",
+                  "test_code": "if (factorial(1) != 1) throw std::runtime_error(\"1!\");"
+                },
+                {
+                  "name": "test_factorial_ten",
+                  "test_code": "if (factorial(10) != 3628800) throw std::runtime_error(\"10!\");"
+                }
+              ],
+              "xp_reward": 15
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "cpp-loops-step-2",
@@ -44,8 +93,12 @@
       "difficulty": "beginner",
       "duration_minutes": 5,
       "type": "learn",
-      "concepts": ["cpp-loops"],
-      "prerequisites": ["cpp-conditionals"],
+      "concepts": [
+        "cpp-loops"
+      ],
+      "prerequisites": [
+        "cpp-conditionals"
+      ],
       "learning_objectives": [
         "Use while loops in C++"
       ],
@@ -59,8 +112,16 @@
         }
       ],
       "completion_requirements": {
-        "required_test_names": ["test_count_digits"]
-      }
+        "required_test_names": [
+          "test_count_digits"
+        ]
+      },
+      "source": {
+        "name": "cppreference.com — while loop statement",
+        "url": "https://en.cppreference.com/w/cpp/language/while",
+        "license": "CC BY-SA 4.0 (cppreference.com)"
+      },
+      "xp_reward": 10
     },
     {
       "id": "cpp-loops-01",
@@ -68,10 +129,14 @@
       "description": "Calculate the Nth Fibonacci number iteratively in C++.",
       "order": 13,
       "difficulty": "beginner",
-      "duration_minutes": 10,
+      "duration_minutes": 8,
       "type": "challenge",
-      "concepts": ["cpp-loops"],
-      "prerequisites": ["cpp-conditionals"],
+      "concepts": [
+        "cpp-loops"
+      ],
+      "prerequisites": [
+        "cpp-conditionals"
+      ],
       "learning_objectives": [
         "Iteratively calculate Fibonacci terms"
       ],
@@ -85,19 +150,31 @@
         }
       ],
       "completion_requirements": {
-        "required_test_names": ["test_fibonacci"]
-      }
+        "required_test_names": [
+          "test_fibonacci"
+        ]
+      },
+      "source": {
+        "name": "cppreference.com — for loop statement",
+        "url": "https://en.cppreference.com/w/cpp/language/for",
+        "license": "CC BY-SA 4.0 (cppreference.com)"
+      },
+      "xp_reward": 25
     },
     {
       "id": "cpp-loops-practice-1",
       "title": "4. Power Calculator (Practice)",
-      "description": "Compute base^exp using a loop.",
+      "description": "Practice: implement power(int base, int exp) returning base^exp as a long long, multiplying base into an accumulator exp times. The test asserts power(2, 5) == 32.",
       "order": 14,
       "difficulty": "beginner",
-      "duration_minutes": 5,
+      "duration_minutes": 6,
       "type": "practice",
-      "concepts": ["cpp-loops"],
-      "prerequisites": ["cpp-conditionals"],
+      "concepts": [
+        "cpp-loops"
+      ],
+      "prerequisites": [
+        "cpp-conditionals"
+      ],
       "learning_objectives": [
         "Accumulate product in C++ for loop"
       ],
@@ -111,19 +188,54 @@
         }
       ],
       "completion_requirements": {
-        "required_test_names": ["test_power"]
-      }
+        "required_test_names": [
+          "test_power"
+        ]
+      },
+      "source": {
+        "name": "cppreference.com — for loop statement",
+        "url": "https://en.cppreference.com/w/cpp/language/for",
+        "license": "CC BY-SA 4.0 (cppreference.com)"
+      },
+      "xp_reward": 15,
+      "sublessons": [
+        {
+          "id": "cpp-power-loop-dbg-sub",
+          "title": "Find the defect",
+          "order": 1,
+          "exercises": [
+            {
+              "id": "cpp-power-loop-dbg-1",
+              "type": "debugging",
+              "question": "`power(base, exp)` should return base raised to exp, and the test expects `power(2, 5)` to be 32. It prints 64 instead. What is wrong?\n\n```cpp\nlong long power(int base, int exp) {\n    long long result = 1;\n    for (int i = 0; i <= exp; ++i) { result *= base; }\n    return result;\n}\n```",
+              "options": [
+                "the loop should start at `int i = 1` so the exponent is counted",
+                "`result` should be initialised to 0 so the first multiply seeds it",
+                "nothing is wrong; 2^5 is 64",
+                "`i <= exp` runs one multiplication too many; it should be `i < exp`"
+              ],
+              "correct_answer": "`i <= exp` runs one multiplication too many; it should be `i < exp`",
+              "explanation": "Starting `result` at 1 and multiplying `exp` times is the whole algorithm; looping to `<= exp` performs exp + 1 multiplications. Initialising `result` to 0 would make every answer 0.",
+              "xp_reward": 10
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "cpp-loops-checkpoint",
       "title": "5. Unit 3 Checkpoint: C++ Loops Mastery",
-      "description": "Verify C++ iteration skills.",
+      "description": "Checkpoint for loops: implement count_multiples(int start, int end, int k) counting every integer i in [start, end] where i % k == 0. The test asserts count_multiples(1, 15, 3) == 5.",
       "order": 15,
       "difficulty": "beginner",
-      "duration_minutes": 5,
+      "duration_minutes": 10,
       "type": "checkpoint",
-      "concepts": ["cpp-loops"],
-      "prerequisites": ["cpp-conditionals"],
+      "concepts": [
+        "cpp-loops"
+      ],
+      "prerequisites": [
+        "cpp-conditionals"
+      ],
       "learning_objectives": [
         "Pass C++ loops checkpoint"
       ],
@@ -137,8 +249,51 @@
         }
       ],
       "completion_requirements": {
-        "required_test_names": ["test_multiples"]
-      }
+        "required_test_names": [
+          "test_multiples"
+        ]
+      },
+      "source": {
+        "name": "cppreference.com — for loop statement",
+        "url": "https://en.cppreference.com/w/cpp/language/for",
+        "license": "CC BY-SA 4.0 (cppreference.com)"
+      },
+      "xp_reward": 40,
+      "sublessons": [
+        {
+          "id": "cpp-vowels-code-sub",
+          "title": "Write the counting loop",
+          "order": 1,
+          "exercises": [
+            {
+              "id": "cpp-vowels-code-1",
+              "type": "code",
+              "question": "Implement `count_vowels(std::string s)` returning how many characters are a, e, i, o or u (lower case only). Count inside a loop, as `count_multiples` does.",
+              "starter_code": "#include <string>\nint count_vowels(std::string s) {\n    int count = 0;\n    // TODO: scan the string and count aeiou\n    return count;\n}\n",
+              "solution_code": "#include <string>\nint count_vowels(std::string s) {\n    int count = 0;\n    for (char c : s) {\n        if (c == 'a' || c == 'e' || c == 'i' || c == 'o' || c == 'u') {\n            count++;\n        }\n    }\n    return count;\n}\n",
+              "tests": [
+                {
+                  "name": "test_count_phrase",
+                  "test_code": "if (count_vowels(\"orchestra\") != 3) throw std::runtime_error(\"phrase\");"
+                },
+                {
+                  "name": "test_count_none",
+                  "test_code": "if (count_vowels(\"rhythm\") != 0) throw std::runtime_error(\"none\");"
+                },
+                {
+                  "name": "test_count_empty",
+                  "test_code": "if (count_vowels(\"\") != 0) throw std::runtime_error(\"empty\");"
+                },
+                {
+                  "name": "test_count_upper_ignored",
+                  "test_code": "if (count_vowels(\"AEIOU\") != 0) throw std::runtime_error(\"case\");"
+                }
+              ],
+              "xp_reward": 15
+            }
+          ]
+        }
+      ]
     }
   ]
 }

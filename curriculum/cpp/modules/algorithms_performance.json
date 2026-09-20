@@ -2,12 +2,20 @@
   "id": "cpp-algorithms-performance",
   "title": "Unit 9: Algorithms & Systems Performance",
   "order": 9,
-  "concepts": [{ "id": "cpp-perf", "title": "Modern C++ STL & Performance", "prerequisites": ["cpp-raii"] }],
+  "concepts": [
+    {
+      "id": "cpp-perf",
+      "title": "Modern C++ STL & Performance",
+      "prerequisites": [
+        "cpp-raii"
+      ]
+    }
+  ],
   "lessons": [
     {
       "id": "cpp-perf-01",
       "title": "1. Modern C++ STL Algorithms",
-      "description": "Utilize modern C++20 algorithms, ranges, and lambdas for high performance execution.",
+      "description": "Modern C++ checkpoint: implement sortVector(std::vector<int>& vec) so it sorts the vector in place with std::sort over the [vec.begin(), vec.end()) iterator range. The test sorts {3, 1, 2} and checks the result.",
       "order": 33,
       "difficulty": "advanced",
       "duration_minutes": 10,
@@ -15,8 +23,10 @@
       "section_id": "sec-cpp-2",
       "section_title": "Section 2: Systems & Memory",
       "test_out_eligible": true,
-      "concepts": ["cpp-perf"],
-      "starter_code": "#include <vector>\n#include <algorithm>\n\ninline void sortVector(std::vector<int>& vec) {\n    std::sort(vec.begin(), vec.end());\n}\n",
+      "concepts": [
+        "cpp-perf"
+      ],
+      "starter_code": "#include <vector>\n#include <algorithm>\n\ninline void sortVector(std::vector<int>& vec) {\n    // TODO: sort the range [vec.begin(), vec.end()) with std::sort\n}\n",
       "solution_code": "#include <vector>\n#include <algorithm>\n\ninline void sortVector(std::vector<int>& vec) {\n    std::sort(vec.begin(), vec.end());\n}\n",
       "tests": [
         {
@@ -25,7 +35,48 @@
           "required": true
         }
       ],
-      "completion_requirements": { "required_test_names": ["test_sort_vec"] }
+      "completion_requirements": {
+        "required_test_names": [
+          "test_sort_vec"
+        ]
+      },
+      "source": {
+        "name": "cppreference.com — std::sort — 'Sorts the elements in the target range [first, last)'",
+        "url": "https://en.cppreference.com/w/cpp/algorithm/sort",
+        "license": "CC BY-SA 4.0 (cppreference.com)"
+      },
+      "learning_objectives": [
+        "Sort a std::vector in place with std::sort",
+        "Pass iterator ranges [first, last) to STL algorithms",
+        "Include <algorithm> for std::sort and <vector> for the container"
+      ],
+      "xp_reward": 45,
+      "sublessons": [
+        {
+          "id": "cpp-perf-01-multi-1-sub",
+          "title": "Headers for std::sort",
+          "order": 1,
+          "exercises": [
+            {
+              "id": "cpp-perf-01-multi-1",
+              "type": "select_multiple",
+              "question": "A file calls `std::sort` on a `std::vector<int>`. Which headers must it include? Select all that apply.",
+              "options": [
+                "<algorithm>",
+                "<vector>",
+                "<string>",
+                "<cstring>"
+              ],
+              "correct_answer": [
+                "<algorithm>",
+                "<vector>"
+              ],
+              "explanation": "`std::sort` is declared in <algorithm> and the container itself needs <vector>; the other two are unrelated.",
+              "xp_reward": 15
+            }
+          ]
+        }
+      ]
     }
   ]
 }

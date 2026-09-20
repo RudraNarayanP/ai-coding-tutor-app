@@ -44,7 +44,13 @@
         "required_test_names": [
           "test_char_counts"
         ]
-      }
+      },
+      "source": {
+        "name": "Python official documentation (docs.python.org) — Mapping Types — dict.get() and key lookup",
+        "url": "https://docs.python.org/3/library/stdtypes.html#mapping-types-dict",
+        "license": "Python documentation license (PSF)"
+      },
+      "xp_reward": 10
     },
     {
       "id": "hash-maps-step-2",
@@ -78,7 +84,41 @@
         "required_test_names": [
           "test_two_sum"
         ]
-      }
+      },
+      "source": {
+        "name": "Python official documentation (docs.python.org) — Time complexity — dict 'x in d' is O(1) average",
+        "url": "https://docs.python.org/3/library/time-complexity.html",
+        "license": "Python documentation license (PSF)"
+      },
+      "xp_reward": 10,
+      "sublessons": [
+        {
+          "id": "twosum-hashmap-sub",
+          "title": "Select every true statement",
+          "order": 1,
+          "exercises": [
+            {
+              "id": "twosum-hashmap-multi-1",
+              "type": "select_multiple",
+              "question": "The lesson's `two_sum` makes one pass with a dict called `seen`. Select every statement that is true of that approach.",
+              "options": [
+                "`seen` maps each value it has passed to that value's index",
+                "for each number it looks up `target - number` before storing it",
+                "the returned pair is ordered as the earlier index then the later one",
+                "it sorts the numbers before searching",
+                "it compares every pair of numbers with two nested loops"
+              ],
+              "correct_answer": [
+                "`seen` maps each value it has passed to that value's index",
+                "for each number it looks up `target - number` before storing it",
+                "the returned pair is ordered as the earlier index then the later one"
+              ],
+              "explanation": "One pass, keyed by complement lookup: `seen[need]` is necessarily an earlier index than the current `i`. Sorting or nested loops are the slower approaches this lesson replaces.",
+              "xp_reward": 10
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "hash-maps-01",
@@ -86,7 +126,7 @@
       "description": "Group words that are anagrams of each other.",
       "order": 23,
       "difficulty": "intermediate",
-      "duration_minutes": 10,
+      "duration_minutes": 8,
       "type": "challenge",
       "section_id": "sec-dsa-1",
       "section_title": "Section 1: Data Structures & Algorithms",
@@ -112,7 +152,13 @@
         "required_test_names": [
           "test_group_anagrams"
         ]
-      }
+      },
+      "source": {
+        "name": "Python official documentation (docs.python.org) — sorted() — Built-in Functions",
+        "url": "https://docs.python.org/3/library/functions.html#sorted",
+        "license": "Python documentation license (PSF)"
+      },
+      "xp_reward": 25
     },
     {
       "id": "hash-maps-practice-1",
@@ -120,7 +166,7 @@
       "description": "Return the first character that appears once, or None.",
       "order": 24,
       "difficulty": "intermediate",
-      "duration_minutes": 5,
+      "duration_minutes": 6,
       "type": "practice",
       "section_id": "sec-dsa-1",
       "section_title": "Section 1: Data Structures & Algorithms",
@@ -146,7 +192,13 @@
         "required_test_names": [
           "test_first_unique"
         ]
-      }
+      },
+      "source": {
+        "name": "Python official documentation (docs.python.org) — Mapping Types — dict.get() counting",
+        "url": "https://docs.python.org/3/library/stdtypes.html#mapping-types-dict",
+        "license": "Python documentation license (PSF)"
+      },
+      "xp_reward": 15
     },
     {
       "id": "hash-maps-checkpoint",
@@ -154,7 +206,7 @@
       "description": "Implement `intersection(a, b)` returning sorted unique common elements.",
       "order": 25,
       "difficulty": "intermediate",
-      "duration_minutes": 5,
+      "duration_minutes": 10,
       "type": "checkpoint",
       "section_id": "sec-dsa-1",
       "section_title": "Section 1: Data Structures & Algorithms",
@@ -180,7 +232,13 @@
         "required_test_names": [
           "test_intersection"
         ]
-      }
+      },
+      "source": {
+        "name": "Python official documentation (docs.python.org) — Set types — 'x in s' O(1) and set operations",
+        "url": "https://docs.python.org/3/library/time-complexity.html",
+        "license": "Python documentation license (PSF)"
+      },
+      "xp_reward": 40
     }
   ]
 }

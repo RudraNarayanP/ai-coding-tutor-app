@@ -35,7 +35,20 @@ def test_user_store_persistence(tmp_path: Path):
     assert top_user.is_current_user is True
 
 
-def test_leaderboard_api_endpoint():
+def test_leaderboard_api_endpoint(tmp_path: Path, monkeypatch):
+    # Isolate from the live users_state.json and progression state so real
+    # learner XP cannot pollute ranking assertions.
+    import backend.main as main_module
+    from backend.curriculum_loader import load_default_curriculum
+    from backend.lesson_engine import ProgressionStore
+
+    isolated_store = UserStore(storage_path=tmp_path / "test_users_state.json")
+    monkeypatch.setattr(main_module, "user_store", isolated_store)
+    fresh_engine_store = ProgressionStore(load_default_curriculum())
+    monkeypatch.setattr(
+        main_module.lesson_engine, "stores", {"python": fresh_engine_store}
+    )
+
     # Update profile
     res_prof = client.post(
         "/api/user/profile",

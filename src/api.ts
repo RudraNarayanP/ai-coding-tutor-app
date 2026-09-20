@@ -111,6 +111,7 @@ export type LessonSummary = {
   concept_id?: string
   concept_title?: string
   test_out_eligible?: boolean
+  xp_reward?: number
 }
 
 export type CourseSummary = {
@@ -166,10 +167,25 @@ export type ExerciseResult = {
   total_xp: number
   level: number
   explanation?: string
-  next_action?: 'continue' | 'retry' | 'lesson_complete'
+  next_action?: 'answer' | 'review' | 'continue' | 'retry' | 'lesson_complete'
   lesson_completed?: boolean
+  lesson_mastered?: boolean
+  mastery?: MasteryState
+  /** True when this attempt cleared the item from the mistake queue. */
+  graduated?: boolean
+  still_queued?: boolean
+  /** Authoritative pool after this attempt (charged on a miss, refunded on a graduation). */
+  hearts?: HeartStatus
   next_lesson_id?: string | null
   progress?: { completed: number; total: number }
+}
+
+export type MasteryState = {
+  required: number
+  cleared: number
+  first_attempt_accuracy: number
+  threshold: number
+  mastered: boolean
 }
 
 export type LessonProgress = {
@@ -179,9 +195,33 @@ export type LessonProgress = {
   attempt_counts: Record<string, number>
   last_results: Record<string, 'correct' | 'incorrect'>
   lesson_completed: boolean
-  next_action: 'answer' | 'lesson_complete'
+  lesson_mastered?: boolean
+  mastery?: MasteryState
+  cleared_exercise_ids?: string[]
+  queued_exercise_ids?: string[]
+  next_action: 'answer' | 'review' | 'lesson_complete'
   next_lesson_id: string | null
   progress: { completed: number; total: number }
+}
+
+/** One missed exercise waiting to be re-served, as returned by /api/mistakes. */
+export type MistakeItem = {
+  language: string
+  lesson_id: string
+  lesson_title: string
+  sublesson_id: string | null
+  exercise_id: string
+  wrong_count: number
+  streak: number
+  exercise: Record<string, unknown>
+}
+
+/** Server-owned heart pool. */
+export type HeartStatus = {
+  hearts: number
+  max_hearts: number
+  unlimited: boolean
+  seconds_to_next_heart: number
 }
 
 export type TestOutResult = {
@@ -247,6 +287,17 @@ function post(url: string, body: unknown): Promise<Response> {
   })
 }
 
+/** POST that returns a parsed body, or null when the request failed. */
+async function jsonPost<T>(url: string, body: unknown): Promise<T | null> {
+  try {
+    const res = await post(url, body)
+    if (!res.ok) return null
+    return (await res.json()) as T
+  } catch {
+    return null
+  }
+}
+
 // ─── Endpoints ─────────────────────────────────────────────────────────────────
 
 
@@ -268,6 +319,19 @@ export const api = {
   lesson: (id: string) => request<LessonView>(`/api/lessons/${id}`),
 
   lessonProgress: (id: string) => request<LessonProgress>(`/api/lessons/${id}/progress`),
+
+  /** Exercises the learner got wrong, ready to be re-served. */
+  mistakes: (language?: string) =>
+    request<{ due: MistakeItem[] }>(
+      `/api/mistakes?limit=20${language ? `&language=${encodeURIComponent(language)}` : ''}`
+    ),
+
+  hearts: () => request<HeartStatus>('/api/hearts'),
+
+  setHeartSettings: (body: { unlimited?: boolean; max_hearts?: number }) =>
+    jsonPost<HeartStatus>('/api/hearts/settings', body),
+
+  refillHearts: () => jsonPost<HeartStatus>('/api/hearts/refill', {}),
 
   lessonSolution: (id: string) =>
     request<{ solution_code: string }>(`/api/lessons/${id}/solution`),

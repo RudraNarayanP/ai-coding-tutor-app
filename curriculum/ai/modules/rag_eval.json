@@ -2,12 +2,20 @@
   "id": "ai-rag-eval",
   "title": "Unit 3: RAG, Embeddings & SQL Conversation Logs",
   "order": 3,
-  "concepts": [{ "id": "ai-rag", "title": "RAG, Persistence & Evaluation", "prerequisites": ["ai-tools"] }],
+  "concepts": [
+    {
+      "id": "ai-rag",
+      "title": "RAG, Persistence & Evaluation",
+      "prerequisites": [
+        "ai-tools"
+      ]
+    }
+  ],
   "lessons": [
     {
       "id": "ai-03",
       "title": "3. Storing AI Conversations & RAG Context in SQL",
-      "description": "Store user conversations and model outputs in SQL tables for evaluation and retrieval.",
+      "description": "RAG evaluation starts by logging conversations as structured rows (later stored in a table). Implement format_conversation_log(user_id, prompt, response) returning a dict with keys 'user_id', 'prompt', 'response' and a cheap 'tokens' estimate: len(prompt.split()) + len(response.split()). Tests check the user id and that tokens > 0 for a real exchange.",
       "order": 3,
       "difficulty": "advanced",
       "duration_minutes": 10,
@@ -15,8 +23,10 @@
       "section_id": "sec-ai-2",
       "section_title": "Section 2: Production AI Apps",
       "test_out_eligible": true,
-      "concepts": ["ai-rag"],
-      "starter_code": "def format_conversation_log(user_id: int, prompt: str, response: str) -> dict:\n    return {\n        \"user_id\": user_id,\n        \"prompt\": prompt,\n        \"response\": response,\n        \"tokens\": len(prompt.split()) + len(response.split())\n    }\n",
+      "concepts": [
+        "ai-rag"
+      ],
+      "starter_code": "def format_conversation_log(user_id: int, prompt: str, response: str) -> dict:\n    # TODO: return the log dict; 'tokens' = prompt word count + response word count\n    return {'user_id': user_id, 'prompt': prompt, 'response': response, 'tokens': 0}\n",
       "solution_code": "def format_conversation_log(user_id: int, prompt: str, response: str) -> dict:\n    return {\n        \"user_id\": user_id,\n        \"prompt\": prompt,\n        \"response\": response,\n        \"tokens\": len(prompt.split()) + len(response.split())\n    }\n",
       "tests": [
         {
@@ -25,7 +35,22 @@
           "required": true
         }
       ],
-      "completion_requirements": { "required_test_names": ["test_conversation_log"] }
+      "completion_requirements": {
+        "required_test_names": [
+          "test_conversation_log"
+        ]
+      },
+      "source": {
+        "name": "Python official documentation (docs.python.org) — Mapping Types — building logging rows as dicts",
+        "url": "https://docs.python.org/3/library/stdtypes.html#mapping-types-dict",
+        "license": "Python documentation license (PSF)"
+      },
+      "learning_objectives": [
+        "Shape conversation logs as dict rows ready for a database insert",
+        "Estimate token counts with a whitespace heuristic",
+        "Understand that RAG evaluation needs stored prompts and outputs"
+      ],
+      "xp_reward": 45
     }
   ]
 }

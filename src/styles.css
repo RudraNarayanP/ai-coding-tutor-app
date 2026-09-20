@@ -79,6 +79,12 @@ input:focus-visible, textarea:focus-visible, select:focus-visible {
   outline-offset: 1px;
   border-color: var(--blue);
 }
+.code-editor-textarea:focus,
+.code-editor-textarea:focus-visible {
+  outline: none !important;
+  border: 0 !important;
+  box-shadow: none !important;
+}
 select option { background: var(--card); color: var(--ink); }
 
 /* Main Grid Shell */
@@ -773,6 +779,12 @@ select option { background: var(--card); color: var(--ink); }
   flex-shrink: 0;
 }
 
+/* The coach's words always get the remaining width; the avatar never does. */
+.duo-tutor-body {
+  flex: 1;
+  min-width: 0;
+}
+
 .duo-tutor-name {
   font-size: 13px;
   font-weight: 900;
@@ -787,7 +799,7 @@ select option { background: var(--card); color: var(--ink); }
   line-height: 1.5;
   font-weight: 700;
   white-space: pre-wrap;
-  overflow-wrap: anywhere;
+  overflow-wrap: break-word;
   max-height: none;
 }
 
@@ -1126,6 +1138,9 @@ select option { background: var(--card); color: var(--ink); }
 
 /* ─── Code editor (CodeEditor.tsx) — dark, matches duo-editor theme ─────── */
 .code-editor {
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
   border: 2px solid var(--line);
   border-radius: var(--r-md);
   overflow: hidden;
@@ -1140,6 +1155,7 @@ select option { background: var(--card); color: var(--ink); }
   align-items: center;
   justify-content: space-between;
   border-bottom: 1px solid #334155;
+  flex-shrink: 0;
 }
 .code-editor-filename {
   color: #94a3b8;
@@ -1147,13 +1163,20 @@ select option { background: var(--card); color: var(--ink); }
   font-size: 13px;
   font-weight: 700;
 }
-.code-editor-body { display: flex; min-height: 200px; }
+.code-editor-body {
+  display: flex;
+  position: relative;
+  flex: 1;
+  min-height: 220px;
+  align-items: stretch;
+}
 .code-editor .line-numbers {
   padding: 16px 12px;
   background: #0f172a;
   border-right: 1px solid #334155;
   display: flex;
   flex-direction: column;
+  overflow: hidden;
 }
 .code-editor .line-number {
   color: #64748b;
@@ -1164,47 +1187,137 @@ select option { background: var(--card); color: var(--ink); }
   user-select: none;
   min-width: 2ch;
 }
+.code-editor-input {
+  position: relative;
+  flex: 1 1 auto;
+  min-width: 0;
+  min-height: 0;
+  align-self: stretch;
+}
 .code-editor-textarea {
-  flex: 1;
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
   padding: 16px;
   background: #1e293b;
   color: #f1f5f9;
+  caret-color: #f1f5f9;
   font-family: var(--font-mono);
   font-size: 14px;
   line-height: 1.6;
   border: 0;
   outline: 0;
-  resize: vertical;
+  resize: none;
   tab-size: 4;
+  overflow: auto;
+  white-space: pre;
 }
 .code-editor-textarea:disabled { opacity: 0.6; }
+
+.duo-card .code-editor--workspace,
+.lesson-workspace .code-editor--workspace,
+.exercise-interactive-box .code-editor--workspace {
+  min-height: 420px;
+  height: 52vh;
+  margin-bottom: 0;
+}
+
+/* Workspace variant — matches fullscreen exercise mockup */
+.code-editor--workspace {
+  border: 0;
+  border-radius: 0;
+  margin: 0;
+  box-shadow: none;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  height: 100%;
+  overflow: hidden;
+  background: #0e1628;
+}
+.code-editor--workspace .code-editor-header {
+  background: #121a2b;
+  padding: 8px 12px;
+  min-height: 44px;
+  border-bottom: 1px solid #162033;
+  align-items: center;
+}
+.code-editor--workspace .code-editor-filename {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: #c5d0e6;
+  font-size: 13px;
+  font-weight: 600;
+  background: #0e1628;
+  border: 0;
+  border-radius: 8px;
+  padding: 7px 12px;
+  margin: 0;
+}
+.code-editor--workspace .code-editor-file-icon {
+  font-size: 14px;
+  opacity: 0.85;
+}
+.code-editor--workspace .code-editor-body {
+  position: relative;
+  flex: 1;
+  min-height: 0;
+  height: 100%;
+  background: #0e1628;
+  align-items: stretch;
+  line-height: 1.7;
+}
+.code-editor--workspace .line-numbers {
+  padding: 16px 10px 16px 16px;
+  background: #0e1628;
+  border-right: 0;
+  min-width: 40px;
+  overflow: hidden;
+}
+.code-editor--workspace .line-number {
+  color: #4a5568;
+  font-size: 13px;
+  line-height: 1.7;
+}
+.code-editor--workspace .code-editor-input {
+  position: relative;
+  flex: 1 1 auto;
+  min-width: 0;
+  min-height: 0;
+  align-self: stretch;
+}
+.code-editor--workspace .code-editor-textarea,
+.code-editor--workspace .code-editor-textarea:focus,
+.code-editor--workspace .code-editor-textarea:focus-visible {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  padding: 16px 16px 16px 8px;
+  background: #0e1628;
+  color: #d6deeb;
+  caret-color: #e2e8f0;
+  font-size: 14px;
+  line-height: 1.7;
+  resize: none;
+  min-height: 0;
+  border: 0 !important;
+  outline: none !important;
+  box-shadow: none !important;
+  white-space: pre;
+  overflow: auto;
+  word-break: normal;
+  overflow-wrap: normal;
+}
 
 /* ─── Interactive exercise wrapper ─────────────────────────────────────── */
 .exercise-interactive-box h3 { color: var(--ink); }
 .exercise-interactive-box label { color: var(--ink); }
 
 /* ─── Code answer editor ──────────────────────────────────────────────── */
-.exercise-code-block { display: flex; flex-direction: column; gap: 10px; }
-.exercise-code-label { font-weight: 800; font-size: 14px; color: var(--ink); }
-.exercise-code-textarea {
-  width: 100%;
-  min-height: 180px;
-  padding: 14px 16px;
-  background: #0f172a;
-  color: #f1f5f9;
-  font-family: var(--font-mono);
-  font-size: 14px;
-  line-height: 1.6;
-  border: 2px solid var(--line);
-  border-radius: var(--r-md);
-  outline: 0;
-  resize: vertical;
-  tab-size: 4;
-  color-scheme: dark;
-}
-.exercise-code-textarea:focus { border-color: var(--blue); }
-.exercise-code-textarea:disabled { opacity: 0.65; }
-.exercise-code-actions { display: flex; justify-content: flex-end; }
 .exercise-code-reset { padding: 8px 16px !important; font-size: 12px !important; }
 
 /* ─── Ordering + matching chips ───────────────────────────────────────── */
@@ -1360,8 +1473,31 @@ select option { background: var(--card); color: var(--ink); }
 
 .pw-editor-col { display: flex; flex-direction: column; min-height: 0; }
 .pw-editor-stack { display: flex; flex-direction: column; min-height: 0; flex: 1; gap: 0; border: 2px solid var(--line); border-radius: 14px; overflow: hidden; background: var(--card); }
-.pw-editor-pane { display: flex; flex-direction: column; min-height: 0; flex: 1; gap: 8px; padding: 8px 8px 0; }
-.pw-file-tabs { display: flex; gap: 4px; align-items: center; flex-wrap: wrap; }
+.pw-editor-pane {
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  flex: 1;
+  gap: 0;
+  padding: 0;
+}
+.pw-file-tabs {
+  display: flex;
+  gap: 4px;
+  align-items: center;
+  flex-wrap: wrap;
+  padding: 8px 8px 0;
+  flex-shrink: 0;
+}
+.pw-editor-pane .code-editor--workspace {
+  flex: 1;
+  min-height: 0;
+  height: auto;
+  background: #0e1628;
+}
+.pw-editor-pane .code-editor-body {
+  min-height: 0;
+}
 .pw-file-tab { background: var(--surface-sunken); border: 2px solid var(--line); color: var(--ink-soft);
   font-weight: 800; font-size: 12px; padding: 6px 12px; border-radius: 8px 8px 0 0; cursor: pointer; }
 .pw-file-tab.active { color: var(--ink); border-bottom-color: var(--blue); background: var(--card); }
@@ -1531,6 +1667,571 @@ select option { background: var(--card); color: var(--ink); }
 .pw-celebrate-xp { font-size: 18px; font-weight: 900; color: var(--yellow); margin: 12px 0; }
 .pw-celebrate-actions { display: flex; gap: 10px; justify-content: center; margin-top: 12px; }
 
+/* ─── Exercise Workspace (fullscreen coding exercise UI) ─────────────────── */
+.duo-layout--exercise-focus .duo-nav-sidebar { display: none; }
+.duo-layout--exercise-focus .duo-main-viewport {
+  margin-left: 0 !important;
+  width: 100%;
+  padding: 0 !important;
+  background: #0b1220;
+}
+.duo-layout--exercise-focus .duo-page-container {
+  display: block;
+  padding: 0 !important;
+  max-width: none !important;
+  width: 100%;
+  height: 100vh;
+  margin: 0;
+}
+
+.ew-root {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100vh;
+  background: #0b1220;
+  color: #e2e8f0;
+  font-family: var(--ew-ui-font);
+  --ew-ui-font: Inter, "Segoe UI", system-ui, sans-serif;
+}
+.ew-root:not(.ph-root) {
+  position: fixed;
+  inset: 0;
+  z-index: 400;
+  width: 100vw;
+  height: 100vh;
+}
+
+.ew-topbar {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 14px 28px;
+  background: #0b1220;
+  border-bottom: 0;
+  flex-shrink: 0;
+}
+
+.ew-close {
+  background: none;
+  border: 0;
+  color: #8b9cb8;
+  font-size: 18px;
+  cursor: pointer;
+  padding: 4px 6px;
+  border-radius: 6px;
+  line-height: 1;
+}
+.ew-close:hover { background: #1a2438; color: #f8fafc; }
+
+.ew-progress {
+  flex: 1;
+  margin: 0 80px;
+  height: 6px;
+  background: #1b2740;
+  border-radius: 999px;
+  overflow: hidden;
+}
+.ew-progress-fill {
+  height: 100%;
+  background: #5b6cff;
+  border-radius: 999px;
+  transition: width 0.3s ease;
+}
+
+.ew-topbar-actions { display: flex; gap: 16px; align-items: center; }
+.ew-topbar-link {
+  background: none;
+  border: 0;
+  color: #94a3b8;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 8px;
+  border-radius: 6px;
+}
+.ew-topbar-link:hover { color: #f8fafc; background: #334155; }
+
+.ew-feedback-dropdown {
+  padding: 8px 20px;
+  background: #1e293b;
+  border-bottom: 1px solid #334155;
+}
+
+.ew-body {
+  display: grid;
+  grid-template-columns: 340px minmax(0, 1fr);
+  gap: 0;
+  flex: 1;
+  min-height: 0;
+  overflow: hidden;
+}
+
+.ew-task-col {
+  padding: 8px 28px 24px;
+  overflow-y: auto;
+  border-right: 0;
+  background: #0b1220;
+}
+
+.ew-workspace-pane {
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  min-width: 0;
+  background: #0e1628;
+}
+
+.ew-workspace-columns {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 320px;
+  flex: 1;
+  min-height: 0;
+  overflow: hidden;
+}
+.ew-workspace-columns--single {
+  grid-template-columns: minmax(0, 1fr);
+}
+.ew-answer-col {
+  display: flex;
+  min-width: 0;
+  padding: 24px;
+  overflow: auto;
+}
+.ew-answer-card {
+  flex: 1;
+  align-self: flex-start;
+  background: #151d2e;
+  border-radius: 16px;
+  padding: 22px 22px 20px;
+}
+.ew-answer-question {
+  font-size: 18px;
+  font-weight: 700;
+  color: #f1f5f9;
+  margin: 0 0 16px;
+  line-height: 1.4;
+}
+
+.ew-section-label {
+  display: block;
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  color: #6b7c93;
+  margin-bottom: 10px;
+}
+
+.ew-task-card {
+  background: #151d2e;
+  border: 0;
+  border-radius: 16px;
+  padding: 22px 22px 20px;
+}
+
+.ew-task-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: #6ea8fe;
+  margin-bottom: 14px;
+}
+.ew-task-badge-icon { font-size: 13px; }
+
+.ew-task-title {
+  font-size: 22px;
+  font-weight: 700;
+  color: #f1f5f9;
+  margin: 0 0 12px;
+  line-height: 1.35;
+}
+
+.ew-task-desc {
+  font-size: 14px;
+  font-weight: 500;
+  color: #94a3b8;
+  margin: 0 0 16px;
+  line-height: 1.5;
+}
+
+.ew-task-example {
+  background: #0f172a;
+  border: 1px solid #334155;
+  border-radius: 8px;
+  padding: 10px 12px;
+  font-family: var(--font-mono, monospace);
+  font-size: 13px;
+  color: #38bdf8;
+  margin: 0 0 16px;
+  overflow-x: auto;
+}
+
+.ew-task-steps {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.ew-task-steps li {
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+  font-size: 13px;
+  line-height: 1.45;
+  color: #c5d0e0;
+  background: #0c1422;
+  border-radius: 12px;
+  padding: 10px 12px;
+}
+
+.ew-step-num {
+  flex-shrink: 0;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: #1b2538;
+  border: 0;
+  color: #8b9cb8;
+  font-size: 11px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 1px;
+}
+
+.ew-step-text { flex: 1; }
+.ew-task-code {
+  background: #334155;
+  color: #e2e8f0;
+  padding: 1px 6px;
+  border-radius: 4px;
+  font-family: var(--font-mono, monospace);
+  font-size: 13px;
+}
+
+.ew-editor-col {
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  min-width: 0;
+  background: #0e1628;
+  border-right: 1px solid #162033;
+}
+
+.ew-editor-shell {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-height: 0;
+}
+
+.ew-editor-reset {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  z-index: 2;
+  background: transparent;
+  border: 0;
+  color: #4b5568;
+  cursor: pointer;
+  font-size: 15px;
+  padding: 4px 6px;
+  border-radius: 6px;
+}
+.ew-editor-reset:hover:not(:disabled) { color: #e2e8f0; background: #1a2438; }
+.ew-editor-reset:disabled { opacity: 0.4; cursor: not-allowed; }
+
+.ew-output-col {
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  background: #0e1628;
+}
+
+.ew-output-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 16px;
+  min-height: 44px;
+  border-bottom: 1px solid #162033;
+  flex-shrink: 0;
+}
+
+.ew-output-label {
+  font-size: 13px;
+  font-weight: 600;
+  color: #8b9cb8;
+}
+
+.ew-output-clear {
+  background: none;
+  border: 0;
+  color: #64748b;
+  cursor: pointer;
+  font-size: 16px;
+  padding: 2px 6px;
+  border-radius: 4px;
+}
+.ew-output-clear:hover { color: #f8fafc; background: #334155; }
+
+.ew-output-body {
+  flex: 1;
+  overflow-y: auto;
+  padding: 16px;
+  font-family: var(--font-mono, monospace);
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+.ew-output-running { color: #7aa2f7; margin: 0; font-size: 13px; }
+.ew-output-line { margin: 0; color: #e2e8f0; white-space: pre-wrap; word-break: break-word; }
+.ew-output-stderr { color: #fbbf24; }
+.ew-output-error { color: #f87171; }
+
+.ew-output-tests { display: flex; flex-direction: column; gap: 8px; }
+.ew-output-test {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  align-items: baseline;
+  font-size: 13px;
+}
+.ew-output-test.pass .ew-output-test-icon { color: #4ade80; }
+.ew-output-test.fail .ew-output-test-icon { color: #f87171; }
+.ew-output-test-name { color: #e2e8f0; font-weight: 600; }
+.ew-output-test-error { color: #f87171; font-size: 12px; width: 100%; }
+
+.ew-grade-banner {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 20px;
+  background: #141b2d;
+  border-top: 1px solid #1a2438;
+  font-size: 13px;
+  flex-shrink: 0;
+}
+.ew-grade-banner.correct { border-top-color: #22543d; background: rgba(34, 84, 61, 0.25); }
+.ew-grade-banner.incorrect { border-top-color: #7f1d1d; background: rgba(127, 29, 29, 0.2); }
+.ew-grade-title { font-weight: 700; color: #f1f5f9; }
+.ew-grade-text { color: #94a3b8; flex: 1; }
+.ew-grade-xp {
+  font-size: 12px;
+  font-weight: 700;
+  color: #4ade80;
+  background: rgba(74, 222, 128, 0.12);
+  padding: 4px 10px;
+  border-radius: 999px;
+}
+
+.ew-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 20px;
+  background: #0b1220;
+  border-top: 0;
+  flex-shrink: 0;
+}
+
+.ew-footer-left, .ew-footer-right { display: flex; gap: 10px; align-items: center; }
+
+.ew-btn {
+  border: 0;
+  border-radius: 12px;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  padding: 11px 18px;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  letter-spacing: 0.04em;
+  transition: background 0.15s, opacity 0.15s;
+}
+.ew-btn:disabled { opacity: 0.45; cursor: not-allowed; }
+
+.ew-btn-back {
+  background: #1b2538;
+  color: #c8d4e8;
+}
+.ew-btn-back:hover:not(:disabled) { background: #243049; }
+
+.ew-btn-reset {
+  background: #1b2538;
+  color: #c8d4e8;
+  padding: 10px 14px;
+  font-size: 16px;
+}
+.ew-btn-reset:hover:not(:disabled) { background: #243049; }
+
+.ew-btn-run {
+  background: #1b2538;
+  color: #c8d4e8;
+}
+.ew-btn-run:hover:not(:disabled) { background: #243049; }
+
+.ew-btn-submit {
+  background: #4c6fff;
+  color: #ffffff;
+  padding: 11px 22px;
+}
+.ew-btn-submit:hover:not(:disabled) { background: #5b7cff; }
+
+.ew-topbar-icon { font-size: 14px; }
+
+@media (max-width: 900px) {
+  .ew-body {
+    grid-template-columns: 1fr;
+    overflow-y: auto;
+  }
+  .ew-task-col { max-height: 240px; border-right: 0; border-bottom: 1px solid #1a2438; }
+  .ew-workspace-columns {
+    grid-template-columns: 1fr;
+    grid-template-rows: 1fr auto;
+  }
+  .ew-editor-col { min-height: 280px; border-right: 0; border-bottom: 1px solid #1a2438; }
+  .ew-output-col { min-height: 120px; }
+}
+
+/* Practice hub — same workspace chrome as coding exercises */
+.duo-layout--practice .duo-main-viewport {
+  background: #080d18;
+  overflow: hidden;
+}
+.duo-page-container--practice {
+  padding: 0;
+  max-width: none;
+  width: 100%;
+  flex: 1;
+  min-height: 0;
+  height: 100%;
+}
+.ph-root {
+  height: 100%;
+  min-height: calc(100vh - 0px);
+}
+.ph-topbar-stat {
+  cursor: default;
+}
+.ph-topbar-stat:hover { background: transparent; color: #94a3b8; }
+
+.ph-step-btn {
+  display: flex;
+  gap: 12px;
+  width: 100%;
+  text-align: left;
+  background: #0b1220;
+  border: 1px solid #1e2a3f;
+  border-radius: 12px;
+  padding: 12px 14px;
+  color: #cbd5e1;
+  cursor: pointer;
+  align-items: flex-start;
+}
+.ph-step-btn:hover { border-color: #2a3d5c; }
+.ph-step-btn.is-selected {
+  border-color: #3b6fd9;
+  background: #111c33;
+}
+.ph-step-btn.is-disabled { opacity: 0.72; }
+.ph-step-copy {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
+}
+.ph-step-title {
+  font-size: 13px;
+  font-weight: 800;
+  color: #e2e8f0;
+}
+.ph-step-detail {
+  font-size: 12px;
+  font-weight: 600;
+  color: #8b9cb8;
+  line-height: 1.4;
+}
+
+.ph-session { height: 100%; }
+.ph-session-body {
+  flex: 1;
+  overflow-y: auto;
+  padding: 28px 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+.ph-session-title {
+  margin: 0;
+  font-size: 22px;
+  font-weight: 700;
+  color: #f1f5f9;
+}
+.ph-session-copy {
+  margin: 0;
+  font-size: 14px;
+  font-weight: 500;
+  color: #94a3b8;
+  line-height: 1.55;
+  max-width: 52ch;
+}
+.ph-session-list {
+  list-style: none;
+  margin: 8px 0 0;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.ph-lesson-chip {
+  background: #1a2438;
+  border: 1px solid #2a3650;
+  color: #c8d4e8;
+  border-radius: 999px;
+  padding: 8px 14px;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+}
+.ph-lesson-chip:hover:not(:disabled) { background: #243049; }
+.ph-lesson-chip.is-selected {
+  background: #3b5bdb;
+  border-color: #4c6ef5;
+  color: #fff;
+}
+.ph-lesson-chip:disabled { opacity: 0.45; cursor: not-allowed; }
+
+.duo-materials-view--workspace h2 {
+  font-size: 18px !important;
+  color: #e2e8f0 !important;
+}
+.duo-materials-view--workspace h3,
+.duo-materials-view--workspace p {
+  color: #e2e8f0 !important;
+}
+.duo-materials-view--workspace .duo-hero-card {
+  background: #111827 !important;
+  border-color: #1e2a3f !important;
+}
+.duo-materials-view--workspace a.duo-button {
+  color: #e2e8f0;
+}
+
 /* Create Course source quality gate (reject / insufficient) */
 .create-gate {
   padding: 14px 16px;
@@ -1550,4 +2251,304 @@ select option { background: var(--card); color: var(--ink); }
 @media (max-width: 1024px) {
   .pw-body { grid-template-columns: 1fr; }
   .pw-root { height: auto; }
+}
+
+/* ─── Lesson-mode workspace slots (exercise-free lessons) ─────────────── */
+.ew-footer-actions {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  margin-left: 12px;
+}
+
+.ew-lesson-notes {
+  margin-top: 16px;
+  background: #151d2e;
+  border-radius: 16px;
+  padding: 18px 22px 20px;
+}
+
+.ew-lesson-notes-row {
+  display: flex;
+  gap: 8px;
+}
+
+.ew-lesson-notes-input {
+  flex: 1;
+  min-width: 0;
+  padding: 10px 14px;
+  border-radius: 12px;
+  border: 2px solid #334155;
+  background: #0f172a;
+  color: #f1f5f9;
+  font-weight: 700;
+  font-family: inherit;
+  font-size: 14px;
+}
+.ew-lesson-notes-input::placeholder { color: #64748b; }
+.ew-lesson-notes-input:focus { outline: none; border-color: #4c6fff; }
+
+.ew-lesson-notes-list {
+  margin: 12px 0 0;
+  padding-left: 20px;
+  font-weight: 700;
+  font-size: 14px;
+  color: #cbd5e1;
+}
+
+.ew-output-body .duo-feedback-panel {
+  border-radius: 12px;
+  padding: 14px 16px;
+  margin-top: 12px;
+}
+.ew-output-body .duo-feedback-panel.success {
+  background: rgba(34, 197, 94, 0.12);
+  border: 2px solid rgba(34, 197, 94, 0.45);
+  color: #4ade80;
+}
+.ew-output-body .duo-feedback-panel.error {
+  background: rgba(239, 68, 68, 0.12);
+  border: 2px solid rgba(239, 68, 68, 0.45);
+  color: #f87171;
+}
+.ew-output-body .duo-feedback-title { font-size: 15px; }
+
+.ew-workspace-pane .duo-tutor-box {
+  /* The output pane is a monospace console; the coach is a person. Without
+     this the hint renders as terminal output and wraps raggedly. */
+  font-family: var(--ew-ui-font);
+  background: #0f172a;
+  border: 1px solid #334155;
+  margin-top: 14px;
+  padding: 12px;
+  gap: 10px;
+}
+.ew-workspace-pane .duo-tutor-box > .duo-tutor-body {
+  flex: 1;
+  min-width: 0;
+}
+.ew-workspace-pane .duo-tutor-avatar {
+  width: 26px;
+  height: 26px;
+  font-size: 13px;
+  border-radius: 9px;
+  flex-shrink: 0;
+}
+.ew-workspace-pane .duo-tutor-name {
+  color: #8b9cb8;
+  font-size: 10.5px;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  line-height: 1.35;
+}
+.ew-workspace-pane .duo-tutor-text {
+  color: #e8eefb;
+  font-size: 14.5px;
+  font-weight: 500;
+  line-height: 1.5;
+  letter-spacing: 0;
+  overflow-wrap: break-word;
+  text-wrap: pretty;
+  margin-top: 3px;
+}
+
+.ew-lesson-celebration {
+  margin-top: 12px;
+  border-radius: 16px;
+}
+.ew-lesson-celebration.success {
+  background: #10231a;
+  border: 2px solid rgba(34, 197, 94, 0.45);
+  color: #d1fae5;
+}
+
+
+/* ─── Lesson source attribution (LessonSourceNote) ─────────────────────── */
+.lesson-source-note {
+  margin-top: 14px;
+  padding: 14px 16px;
+  background: rgba(28, 176, 246, 0.06);
+  border: 1px solid var(--line);
+  border-radius: 14px;
+}
+
+.lesson-source-objectives .lesson-source-label {
+  display: block;
+  font-size: 11px;
+  font-weight: 900;
+  letter-spacing: 0.8px;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 6px;
+}
+
+.lesson-source-objectives ul {
+  margin: 0 0 10px;
+  padding-left: 20px;
+}
+
+.lesson-source-objectives li {
+  font-size: 13.5px;
+  line-height: 1.5;
+  color: var(--ink-soft);
+  margin-bottom: 4px;
+}
+
+.lesson-source-line {
+  margin: 0;
+  font-size: 12.5px;
+  line-height: 1.5;
+  color: var(--muted);
+  word-break: break-word;
+}
+
+.lesson-source-link {
+  color: var(--blue);
+  font-weight: 800;
+  text-decoration: none;
+}
+
+.lesson-source-link:hover {
+  text-decoration: underline;
+}
+
+.lesson-source-license {
+  color: var(--muted);
+  font-size: 11.5px;
+}
+
+/* ─── Flow-state mechanics: combo, boss, pulse, XP preview ──────────────── */
+.ew-combo-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  background: linear-gradient(135deg, #ff9600, #ffc800);
+  color: #1a1200;
+  font-weight: 900;
+  font-size: 14px;
+  padding: 4px 12px;
+  border-radius: 999px;
+  animation: comboPop 0.28s ease-out;
+  box-shadow: 0 0 14px rgba(255, 150, 0, 0.45);
+}
+
+@keyframes comboPop {
+  0% { transform: scale(0.5); opacity: 0; }
+  60% { transform: scale(1.25); }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+.duo-path-circle-btn--boss {
+  background: linear-gradient(180deg, #c958f5, #9b30c9) !important;
+  box-shadow: 0 8px 0 #6d1f92, 0 0 18px rgba(201, 88, 245, 0.5);
+}
+
+.duo-path-circle-btn--pulse {
+  animation: nodePulse 1.6s ease-in-out infinite;
+}
+
+@keyframes nodePulse {
+  0%, 100% { box-shadow: 0 8px 0 rgba(0, 0, 0, 0.25), 0 0 0 0 rgba(28, 176, 246, 0.55); }
+  50% { box-shadow: 0 8px 0 rgba(0, 0, 0, 0.25), 0 0 0 14px rgba(28, 176, 246, 0); }
+}
+
+.duo-path-xp-badge {
+  position: absolute;
+  left: calc(50% + 40px);
+  top: 50%;
+  transform: translateY(-50%);
+  background: var(--surface-raised);
+  color: var(--yellow, #ffc800);
+  font-size: 11px;
+  font-weight: 900;
+  padding: 3px 8px;
+  border-radius: 999px;
+  border: 1px solid var(--line);
+  white-space: nowrap;
+  pointer-events: none;
+}
+
+.duo-path-xp-badge--boss {
+  color: #e9a6ff;
+  border-color: #9b30c9;
+}
+
+.ew-task-card--boss {
+  background: linear-gradient(160deg, #24123a 0%, #151d2e 70%);
+  border: 1px solid #9b30c9;
+  box-shadow: 0 0 22px rgba(155, 48, 201, 0.25);
+}
+
+.ew-task-card--boss .ew-task-badge {
+  background: #9b30c9;
+  color: #fff;
+}
+
+.ew-celebration--perfect {
+  border: 2px solid #ffc800 !important;
+  box-shadow: 0 0 26px rgba(255, 200, 0, 0.35);
+}
+
+.ew-celebration--boss {
+  border: 2px solid #c958f5 !important;
+  box-shadow: 0 0 26px rgba(201, 88, 245, 0.4);
+}
+
+.ew-perfect-badge {
+  display: inline-block;
+  margin-left: 10px;
+  background: linear-gradient(135deg, #ffc800, #ff9600);
+  color: #1a1200;
+  font-size: 12px;
+  font-weight: 900;
+  padding: 3px 10px;
+  border-radius: 999px;
+  animation: comboPop 0.4s ease-out;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ew-combo-chip,
+  .duo-path-circle-btn--pulse,
+  .ew-perfect-badge {
+    animation: none;
+  }
+}
+
+/* ─── Hint contract UI ────────────────────────────────────────────────────────
+   Hints are 1-2 sentence nudges, so the panel reads like a coach whisper, not
+   an error log. When the AI cannot honour the contract the box is labelled
+   honestly as an offline coach tip instead of pretending to be a model reply. */
+.duo-tutor-meta {
+  margin-left: 8px;
+  font-size: 10.5px;
+  font-weight: 800;
+  letter-spacing: 0.01em;
+  text-transform: none;
+  color: #7c8ba1;
+  white-space: nowrap;
+}
+
+.duo-tutor-box.duo-tutor-box--offline {
+  background: #101828;
+  border-color: rgba(148, 163, 184, 0.45);
+}
+.duo-tutor-box.duo-tutor-box--offline .duo-tutor-name { color: #94a3b8; }
+.duo-tutor-box.duo-tutor-box--offline .duo-tutor-avatar {
+  background: #334155;
+  box-shadow: 0 3px 0 #1e293b;
+}
+.duo-tutor-box.duo-tutor-box--offline .duo-tutor-text { color: #cbd5e1; }
+
+/* The answer button wears a warning colour only while it is waiting for
+   confirmation, so "paste the whole solution" can never be a mis-tap. */
+.ew-btn--armed,
+.duo-button-solution.ew-btn--armed {
+  border-color: #f59e0b;
+  color: #fbbf24;
+  box-shadow: 0 3px 0 rgba(245, 158, 11, 0.35);
+}
+
+#restore-code-button {
+  border-style: dashed;
 }

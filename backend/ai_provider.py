@@ -10,6 +10,7 @@ from urllib.parse import urlparse
 import httpx
 
 from .ai_models import OllamaHealth, ProviderStatus, TutorRequest
+from .hint_contract import failing_check_names, redact_spec, system_prompt_for
 
 logger = logging.getLogger("patchwork.ai_provider")
 
@@ -31,31 +32,37 @@ class AIProvider(Protocol):
     async def health(self) -> ProviderStatus: ...
 
 
-SYSTEM_PROMPT = (
-    "You are a patient coding teacher for Patchwork local learning tutor. Deterministic test results are authoritative and cannot be changed. "
-    "Return tutoring prose only. Follow the requested hint level exactly. "
-    "Do not provide complete working code unless solution_requested is true.\n"
-    "Level 1: explain the concept without naming the exact mistake.\n"
-    "Level 2: point toward the relevant part of the approach.\n"
-    "Level 3: identify the student's mistake.\n"
-    "Level 4: explain the correct approach in detail."
-)
-
-# Enough room for a complete hint paragraph without mid-sentence truncation.
+# Solutions need room for a full file plus one sentence.
 TUTOR_MAX_TOKENS = 512
+# Hints are 1-2 sentence nudges; a tight budget stops essays before they start.
+HINT_MAX_TOKENS = 110
+HINT_MAX_TOKENS_LEVEL4 = 150
+
+
+def tutor_max_tokens(request: "TutorRequest") -> int:
+    if getattr(request, "solution_requested", False):
+        return TUTOR_MAX_TOKENS
+    return HINT_MAX_TOKENS_LEVEL4 if int(getattr(request, "hint_level", 1) or 1) >= 4 else HINT_MAX_TOKENS
 
 
 def _extract_openai_compatible_message(data: dict[str, Any]) -> str | None:
+    """Return the model's SPEAKING text only.
+
+    Reasoning models stream their private chain of thought into `reasoning`
+    and it routinely contains the complete answer. Surfacing it as a hint is
+    exactly what broke the learner flow, so it is never returned here; an
+    empty `content` is treated as a provider failure and the tutor service
+    repairs or falls back instead.
+    """
     try:
         message_obj = data["choices"][0]["message"]
     except (KeyError, IndexError, TypeError):
         return None
     if not isinstance(message_obj, dict):
         return None
-    for key in ("content", "reasoning"):
-        candidate = message_obj.get(key)
-        if isinstance(candidate, str) and candidate.strip():
-            return candidate.strip()
+    candidate = message_obj.get("content")
+    if isinstance(candidate, str) and candidate.strip():
+        return candidate.strip()
     return None
 
 
@@ -93,16 +100,63 @@ def build_user_prompt(request: TutorRequest) -> str:
     adaptation_hint = getattr(request, 'adaptation_hint', '') or ''
     adaptation_part = f"Live learner-feedback adaptation: {adaptation_hint}\n" if adaptation_hint.strip() else ""
 
+    # ─── Disclosure ladder ────────────────────────────────────────────────────
+    # Each level is handed strictly more information, so an early nudge cannot
+    # be built out of the very values the learner is meant to work out. Test
+    # output is withheld until level 3 because assertion messages routinely
+    # contain the expected value verbatim.
+    level = int(getattr(request, "hint_level", 1) or 1)
+    wants_solution = bool(getattr(request, "solution_requested", False))
+    full = wants_solution or level >= 3
+    mid = wants_solution or level >= 2
+
+    if full:
+        instructions_label, instructions = "Instructions", request.instructions
+    else:
+        instructions_label = (
+            "Instructions (expected values hidden at this level — never guess them aloud)"
+        )
+        instructions = redact_spec(request.instructions) or request.instructions
+
+    if full:
+        results_label = "Deterministic test results (authoritative)"
+        results_part = f"{results_label}: {request.test_results}\n"
+    elif mid:
+        results_part = (
+            "Failing check names only (details withheld at this level): "
+            f"{failing_check_names(request.test_results)}\n"
+        )
+    else:
+        results_part = (
+            "Test details withheld at this level: the learner needs a concept nudge, "
+            "not a diagnosis.\n"
+        )
+
+    code_part = (
+        f"Student code:\n{request.code}\n"
+        if mid
+        else "Student code withheld at this level: do not describe their specific mistake.\n"
+    )
+
+    if wants_solution:
+        reminder = "Now reply with the corrected code in one fenced block plus one short sentence."
+    else:
+        reminder = (
+            "Now reply with the hint only: 1-2 plain sentences, at most 35 words, no code, "
+            "no markdown, no preamble, ending in the learner's next action."
+        )
+
     return (
         f"{lang_context}"
         f"{unit_part}{concept_part}{prereq_part}"
         f"Lesson: {request.lesson_title} ({request.lesson_id})\n"
-        f"Instructions: {request.instructions}\n"
-        f"Student code:\n{request.code}\n"
-        f"Deterministic test results (authoritative): {request.test_results}\n"
+        f"{instructions_label}: {instructions}\n"
+        f"{code_part}"
+        f"{results_part}"
         f"Previous hints in this session: {request.previous_hints}\n"
         f"Requested hint level: {request.hint_level}\n"
         f"solution_requested: {request.solution_requested}\n"
+        f"{reminder}\n"
         f"{adaptation_part}"
     )
 
@@ -135,19 +189,24 @@ class OllamaProvider:
 
     async def tutor(self, request: TutorRequest) -> str:
         prompt = build_user_prompt(request)
+        payload: dict[str, Any] = {
+            "model": self.model,
+            "stream": False,
+            "options": {"num_predict": tutor_max_tokens(request)},
+            "messages": [
+                {"role": "system", "content": system_prompt_for(request)},
+                {"role": "user", "content": prompt},
+            ],
+        }
+        if not getattr(request, "solution_requested", False):
+            # Ollama runs thinking models too; a hint must never be a
+            # chain-of-thought dump, so ask for a direct answer when supported.
+            payload["think"] = False
         try:
             client = get_shared_client()
             response = await client.post(
                 f"{self.base_url}/api/chat",
-                json={
-                    "model": self.model,
-                    "stream": False,
-                    "options": {"num_predict": TUTOR_MAX_TOKENS},
-                    "messages": [
-                        {"role": "system", "content": SYSTEM_PROMPT},
-                        {"role": "user", "content": prompt},
-                    ],
-                },
+                json=payload,
                 timeout=self.timeout_seconds,
             )
             if response.status_code == 404:
@@ -236,6 +295,9 @@ class OpenAICompatibleProvider:
     base_url_env: str | None = None
     default_base_url: str = "https://api.openai.com/v1"
     headers_extra: dict[str, str] = field(default_factory=dict)
+    # OpenRouter understands a `reasoning` control object; other OpenAI-compatible
+    # servers may reject unknown fields, so it is opt-in per provider.
+    supports_reasoning_param: bool = False
 
     @property
     def api_key(self) -> str:
@@ -270,16 +332,28 @@ class OpenAICompatibleProvider:
 
         payload = {
             "model": self.model,
-            "max_tokens": TUTOR_MAX_TOKENS,
+            "max_tokens": tutor_max_tokens(request),
             "messages": [
-                {"role": "system", "content": SYSTEM_PROMPT},
+                {"role": "system", "content": system_prompt_for(request)},
                 {"role": "user", "content": build_user_prompt(request)},
             ],
         }
+        if self.supports_reasoning_param and not request.solution_requested:
+            # Hints must arrive as speaking text. Reasoning models otherwise
+            # spend the whole budget on a private chain of thought that
+            # contains the answer, and the learner sees nothing usable.
+            payload["reasoning"] = {"effort": "none"}
 
         try:
             client = get_shared_client()
             res = await client.post(f"{self.base_url}/chat/completions", headers=headers, json=payload, timeout=30.0)
+            if res.status_code == 400 and "reasoning" in payload:
+                # Some OpenAI-compatible servers reject the reasoning control
+                # object; drop it and ask once more rather than lose the hint.
+                payload.pop("reasoning", None)
+                res = await client.post(
+                    f"{self.base_url}/chat/completions", headers=headers, json=payload, timeout=30.0
+                )
             if res.status_code == 401:
                 raise AIProviderError(f"{self.name} API key is invalid or unauthorized.", provider=self.provider_id, code="invalid_api_key")
             elif res.status_code == 429:
@@ -430,12 +504,14 @@ class AnthropicProvider:
 
         payload = {
             "model": self.model,
-            "max_tokens": TUTOR_MAX_TOKENS,
-            "system": SYSTEM_PROMPT,
+            "max_tokens": tutor_max_tokens(request),
+            "system": system_prompt_for(request),
             "messages": [
                 {"role": "user", "content": build_user_prompt(request)},
             ],
         }
+        # Anthropic's extended thinking is off unless requested, so hints
+        # already arrive as speaking text and need no extra control object.
 
         try:
             client = get_shared_client()
@@ -551,13 +627,13 @@ class GeminiProvider:
 
         payload = {
             "system_instruction": {
-                "parts": [{"text": SYSTEM_PROMPT}]
+                "parts": [{"text": system_prompt_for(request)}]
             },
             "contents": [{
                 "parts": [{"text": build_user_prompt(request)}]
             }],
             "generationConfig": {
-                "maxOutputTokens": TUTOR_MAX_TOKENS,
+                "maxOutputTokens": tutor_max_tokens(request),
             }
         }
 
@@ -668,6 +744,7 @@ def create_openrouter_provider() -> OpenAICompatibleProvider:
         base_url_env="OPENROUTER_BASE_URL",
         default_base_url="https://openrouter.ai/api/v1",
         headers_extra={"HTTP-Referer": "https://github.com/patchwork", "X-Title": "Patchwork AI Tutor"},
+        supports_reasoning_param=True,
     )
 
 

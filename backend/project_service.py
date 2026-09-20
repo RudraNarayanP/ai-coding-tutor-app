@@ -75,6 +75,9 @@ async def build_project(
     # Stage 4 — final quality check; never persist a rejected/insufficient course.
     require_accept(evaluate_project(project, stage="pre_workspace"))
     require_accept(evaluate_project(project, stage="pre_display"))
+    # Loading applies this same gate in require_usable_project(). Without it a
+    # project could be saved, listed under "Resume", and then refuse to open.
+    require_usable_project(project)
 
     # Best-effort: make the course rich/engaging via the LLM. Never blocks creation.
     try:

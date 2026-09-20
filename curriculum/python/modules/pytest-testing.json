@@ -45,7 +45,13 @@
         "required_test_names": [
           "test_assert_equal"
         ]
-      }
+      },
+      "source": {
+        "name": "pytest documentation — Write your first test (plain asserts)",
+        "url": "https://docs.pytest.org/en/stable/getting-started.html",
+        "license": "MIT license (pytest documentation)"
+      },
+      "xp_reward": 10
     },
     {
       "id": "pytest-testing-step-2",
@@ -79,7 +85,13 @@
         "required_test_names": [
           "test_run_cases"
         ]
-      }
+      },
+      "source": {
+        "name": "pytest documentation — Write your first test (parametrize-style case running)",
+        "url": "https://docs.pytest.org/en/stable/getting-started.html",
+        "license": "MIT license (pytest documentation)"
+      },
+      "xp_reward": 10
     },
     {
       "id": "pytest-testing-01",
@@ -87,7 +99,7 @@
       "description": "Build `with_temp_dict(factory)` that creates a dict via factory, yields it to a callback, then clears it.",
       "order": 103,
       "difficulty": "intermediate",
-      "duration_minutes": 10,
+      "duration_minutes": 8,
       "type": "challenge",
       "section_id": "sec-py-intermed",
       "section_title": "Section 2: Intermediate Python",
@@ -113,15 +125,49 @@
         "required_test_names": [
           "test_with_temp_dict"
         ]
-      }
+      },
+      "source": {
+        "name": "Python official documentation (docs.python.org) — The yield statement — setup/teardown around a yielded value (Language Reference)",
+        "url": "https://docs.python.org/3/reference/simple_stmts.html#yield",
+        "license": "Python documentation license (PSF)"
+      },
+      "xp_reward": 25,
+      "sublessons": [
+        {
+          "id": "pytest-testing-01-order-1-sub",
+          "title": "Order the steps",
+          "order": 1,
+          "exercises": [
+            {
+              "id": "pytest-testing-01-order-1",
+              "type": "ordering",
+              "question": "Put the steps of `3. Fixture-like Setup (Concept Challenge)` back in order. Each line depends on the one before it.",
+              "options": [
+                "return data",
+                "data = factory()",
+                "callback(data)",
+                "data.clear()"
+              ],
+              "correct_answer": [
+                "data = factory()",
+                "callback(data)",
+                "data.clear()",
+                "return data"
+              ],
+              "explanation": "The order the solution in “3. Fixture-like Setup (Concept Challenge)” actually runs in.",
+              "xp_reward": 10
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "pytest-testing-practice-1",
       "title": "4. Approximate Float Compare (Practice)",
-      "description": "Implement `approx_equal(a, b, tol=1e-6)` for float comparisons in tests.",
+      "description": "Implement `approx_equal(a, b, tol=1e-6)` for float comparisons in tests: two numbers count as equal when their distance is within `tol`.",
       "order": 104,
       "difficulty": "intermediate",
-      "duration_minutes": 5,
+      "duration_minutes": 6,
       "type": "practice",
       "section_id": "sec-py-intermed",
       "section_title": "Section 2: Intermediate Python",
@@ -134,7 +180,7 @@
       "learning_objectives": [
         "Compare floats with tolerance"
       ],
-      "starter_code": "def approx_equal(a, b, tol=1e-6):\n    # TODO: return abs(a - b) <= tol\n    pass\n",
+      "starter_code": "def approx_equal(a, b, tol=1e-6):\n    # TODO: return True when a and b are within tol of each other\n    pass\n",
       "solution_code": "def approx_equal(a, b, tol=1e-6):\n    return abs(a - b) <= tol\n",
       "tests": [
         {
@@ -147,7 +193,13 @@
         "required_test_names": [
           "test_approx"
         ]
-      }
+      },
+      "source": {
+        "name": "pytest documentation — use pytest.approx() to compare floating-point values",
+        "url": "https://docs.pytest.org/en/stable/getting-started.html",
+        "license": "MIT license (pytest documentation)"
+      },
+      "xp_reward": 15
     },
     {
       "id": "pytest-testing-checkpoint",
@@ -155,7 +207,7 @@
       "description": "Implement `raises(exc_type, fn)` that returns True if fn() raises exc_type, else False.",
       "order": 105,
       "difficulty": "intermediate",
-      "duration_minutes": 5,
+      "duration_minutes": 10,
       "type": "checkpoint",
       "section_id": "sec-py-intermed",
       "section_title": "Section 2: Intermediate Python",
@@ -181,7 +233,13 @@
         "required_test_names": [
           "test_raises"
         ]
-      }
+      },
+      "source": {
+        "name": "pytest reference — pytest.raises context behavior",
+        "url": "https://docs.pytest.org/en/stable/reference/reference.html#pytest.raises",
+        "license": "MIT license (pytest documentation)"
+      },
+      "xp_reward": 40
     }
   ]
 }

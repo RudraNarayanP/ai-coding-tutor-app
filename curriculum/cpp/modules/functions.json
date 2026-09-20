@@ -6,7 +6,9 @@
     {
       "id": "cpp-functions",
       "title": "Functions, Default Arguments & References",
-      "prerequisites": ["cpp-loops"]
+      "prerequisites": [
+        "cpp-loops"
+      ]
     }
   ],
   "lessons": [
@@ -18,8 +20,12 @@
       "difficulty": "intermediate",
       "duration_minutes": 5,
       "type": "learn",
-      "concepts": ["cpp-functions"],
-      "prerequisites": ["cpp-loops"],
+      "concepts": [
+        "cpp-functions"
+      ],
+      "prerequisites": [
+        "cpp-loops"
+      ],
       "learning_objectives": [
         "Use C++ reference parameters & to mutate values"
       ],
@@ -33,23 +39,35 @@
         }
       ],
       "completion_requirements": {
-        "required_test_names": ["test_swap"]
-      }
+        "required_test_names": [
+          "test_swap"
+        ]
+      },
+      "source": {
+        "name": "cppreference.com — References — 'Declares a named variable as a reference'",
+        "url": "https://en.cppreference.com/w/cpp/language/reference",
+        "license": "CC BY-SA 4.0 (cppreference.com)"
+      },
+      "xp_reward": 10
     },
     {
       "id": "cpp-functions-step-2",
       "title": "2. Const References (const &)",
-      "description": "Pass large objects by `const &` to avoid expensive copies while guaranteeing immutability. Implement `greeting(const std::string& name)`.",
+      "description": "Pass large objects by `const &` to avoid expensive copies while guaranteeing immutability. Implement `greeting(const std::string& name)` returning `\"Hello, \"` followed by the name and a `!`.",
       "order": 17,
       "difficulty": "intermediate",
       "duration_minutes": 5,
       "type": "learn",
-      "concepts": ["cpp-functions"],
-      "prerequisites": ["cpp-loops"],
+      "concepts": [
+        "cpp-functions"
+      ],
+      "prerequisites": [
+        "cpp-loops"
+      ],
       "learning_objectives": [
         "Pass parameters by const std::string& in C++"
       ],
-      "starter_code": "#include <string>\n\nstd::string greeting(const std::string& name) {\n    // TODO: Return \"Hello, \" + name + \"!\"\n    return \"\";\n}\n",
+      "starter_code": "#include <string>\n\nstd::string greeting(const std::string& name) {\n    // TODO: return the greeting for this name\n    return \"\";\n}\n",
       "solution_code": "#include <string>\n\nstd::string greeting(const std::string& name) {\n    return \"Hello, \" + name + \"!\";\n}\n",
       "tests": [
         {
@@ -59,8 +77,42 @@
         }
       ],
       "completion_requirements": {
-        "required_test_names": ["test_greeting"]
-      }
+        "required_test_names": [
+          "test_greeting"
+        ]
+      },
+      "source": {
+        "name": "cppreference.com — References — const reference function parameters",
+        "url": "https://en.cppreference.com/w/cpp/language/reference",
+        "license": "CC BY-SA 4.0 (cppreference.com)"
+      },
+      "xp_reward": 10,
+      "sublessons": [
+        {
+          "id": "cpp-const-ref-sub",
+          "title": "Select the const references",
+          "order": 1,
+          "exercises": [
+            {
+              "id": "cpp-const-ref-multi-1",
+              "type": "select_multiple",
+              "question": "This lesson passes large objects by `const &` to avoid a copy while guaranteeing the function cannot change them. Select every parameter declaration that does both.",
+              "options": [
+                "const std::string& name",
+                "std::string name",
+                "const std::string& text",
+                "std::string& ref"
+              ],
+              "correct_answer": [
+                "const std::string& name",
+                "const std::string& text"
+              ],
+              "explanation": "`const &` borrows without copying and forbids writes. Plain `std::string` copies, and a non-const reference can modify the caller's object.",
+              "xp_reward": 10
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "cpp-functions-01",
@@ -68,10 +120,14 @@
       "description": "Clamp a double variable in-place using reference.",
       "order": 18,
       "difficulty": "intermediate",
-      "duration_minutes": 10,
+      "duration_minutes": 8,
       "type": "challenge",
-      "concepts": ["cpp-functions"],
-      "prerequisites": ["cpp-loops"],
+      "concepts": [
+        "cpp-functions"
+      ],
+      "prerequisites": [
+        "cpp-loops"
+      ],
       "learning_objectives": [
         "Clamp values in-place using reference parameters"
       ],
@@ -85,19 +141,31 @@
         }
       ],
       "completion_requirements": {
-        "required_test_names": ["test_clamp"]
-      }
+        "required_test_names": [
+          "test_clamp"
+        ]
+      },
+      "source": {
+        "name": "cppreference.com — References — modifying the referred object",
+        "url": "https://en.cppreference.com/w/cpp/language/reference",
+        "license": "CC BY-SA 4.0 (cppreference.com)"
+      },
+      "xp_reward": 25
     },
     {
       "id": "cpp-functions-practice-1",
       "title": "4. Value Incrementer (Practice)",
-      "description": "Increment a reference value by amount.",
+      "description": "Practice with pass-by-reference: implement increment(int& value, int amount = 1) so it adds amount to value in-place; the caller's variable must change. The test runs increment(val, 5) on val == 10 and asserts val == 15.",
       "order": 19,
       "difficulty": "intermediate",
-      "duration_minutes": 5,
+      "duration_minutes": 6,
       "type": "practice",
-      "concepts": ["cpp-functions"],
-      "prerequisites": ["cpp-loops"],
+      "concepts": [
+        "cpp-functions"
+      ],
+      "prerequisites": [
+        "cpp-loops"
+      ],
       "learning_objectives": [
         "Mutate reference parameter in C++"
       ],
@@ -111,8 +179,16 @@
         }
       ],
       "completion_requirements": {
-        "required_test_names": ["test_increment"]
-      }
+        "required_test_names": [
+          "test_increment"
+        ]
+      },
+      "source": {
+        "name": "cppreference.com — References — pass-by-reference mutation",
+        "url": "https://en.cppreference.com/w/cpp/language/reference",
+        "license": "CC BY-SA 4.0 (cppreference.com)"
+      },
+      "xp_reward": 15
     },
     {
       "id": "cpp-functions-checkpoint",
@@ -120,10 +196,14 @@
       "description": "Verify function signature and reference skills.",
       "order": 20,
       "difficulty": "intermediate",
-      "duration_minutes": 5,
+      "duration_minutes": 10,
       "type": "checkpoint",
-      "concepts": ["cpp-functions"],
-      "prerequisites": ["cpp-loops"],
+      "concepts": [
+        "cpp-functions"
+      ],
+      "prerequisites": [
+        "cpp-loops"
+      ],
       "learning_objectives": [
         "Pass C++ functions checkpoint"
       ],
@@ -137,8 +217,16 @@
         }
       ],
       "completion_requirements": {
-        "required_test_names": ["test_double_value"]
-      }
+        "required_test_names": [
+          "test_double_value"
+        ]
+      },
+      "source": {
+        "name": "cppreference.com — References — function parameters",
+        "url": "https://en.cppreference.com/w/cpp/language/reference",
+        "license": "CC BY-SA 4.0 (cppreference.com)"
+      },
+      "xp_reward": 40
     }
   ]
 }

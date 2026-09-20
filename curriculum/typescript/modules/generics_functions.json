@@ -2,29 +2,122 @@
   "id": "ts-generics-functions",
   "title": "Unit 3: Generics & Classes",
   "order": 3,
-  "concepts": [{ "id": "ts-generics", "title": "Generics & Typed Classes", "prerequisites": ["ts-unions"] }],
+  "concepts": [
+    {
+      "id": "ts-generics",
+      "title": "Generics & Typed Classes",
+      "prerequisites": [
+        "ts-unions"
+      ]
+    }
+  ],
   "lessons": [
     {
       "id": "ts-03",
       "title": "3. Generic Data Structures",
-      "description": "Create reusable generic container classes that work safely with any data type.",
+      "description": "Generics are types which take parameters. Implement a generic class Box<T> that stores a private value field assigned in the constructor and a getValue(): T method returning it. Declare the field explicitly (constructor parameter-property shorthand is not plain erasable TypeScript). Tests build Box<number> and Box<string>.",
       "order": 3,
       "difficulty": "intermediate",
       "duration_minutes": 5,
       "type": "learn",
       "section_id": "sec-ts-2",
       "section_title": "Section 2: Architecture",
-      "concepts": ["ts-generics"],
-      "starter_code": "export class Box<T> {\n    constructor(public value: T) {}\n    getValue(): T {\n        return this.value;\n    }\n}\n",
-      "solution_code": "export class Box<T> {\n    constructor(public value: T) {}\n    getValue(): T {\n        return this.value;\n    }\n}\n",
+      "concepts": [
+        "ts-generics"
+      ],
+      "starter_code": "export class Box<T> {\n    private value: T;\n\n    constructor(value: T) {\n        this.value = value;\n    }\n\n    getValue(): T {\n        // TODO: return the stored value\n        throw new Error('not implemented');\n    }\n}\n",
+      "solution_code": "export class Box<T> {\n    private value: T;\n\n    constructor(value: T) {\n        this.value = value;\n    }\n\n    getValue(): T {\n        return this.value;\n    }\n}\n",
       "tests": [
         {
           "name": "test_generic_box",
-          "unittest_code": "const box = new solution.Box<number>(42);\nif (box.getValue() !== 42) throw new Error('Generic Box failed');",
-          "required": true
+          "required": true,
+          "unittest_code": "const n = new solution.Box<number>(42);\nif (n.getValue() !== 42) throw new Error('Box<number> failed');\nconst s = new solution.Box<string>('x');\nif (s.getValue() !== 'x') throw new Error('Box<string> failed');"
         }
       ],
-      "completion_requirements": { "required_test_names": ["test_generic_box"] }
+      "completion_requirements": {
+        "required_test_names": [
+          "test_generic_box"
+        ]
+      },
+      "learning_objectives": [
+        "Define generic classes that take a type parameter <T>",
+        "Initialize class fields in the constructor",
+        "Return typed values from instance methods"
+      ],
+      "source": {
+        "name": "TypeScript Handbook — Generics — 'types which take parameters'",
+        "url": "https://www.typescriptlang.org/docs/handbook/2/generics.html",
+        "license": "CC BY 4.0 (TypeScript documentation)"
+      },
+      "xp_reward": 10,
+      "sublessons": [
+        {
+          "id": "ts-generics-sub",
+          "title": "Select the valid declarations",
+          "order": 1,
+          "exercises": [
+            {
+              "id": "ts-generics-multi-1",
+              "type": "select_multiple",
+              "question": "This lesson's `Box<T>` must stay in plain erasable TypeScript: the field is declared on the class and assigned in the constructor. Select every declaration the lesson allows.",
+              "options": [
+                "private value: T; declared on the class",
+                "this.value = value inside the constructor",
+                "getValue(): T returning the stored value",
+                "constructor(private value: T) parameter-property shorthand"
+              ],
+              "correct_answer": [
+                "private value: T; declared on the class",
+                "this.value = value inside the constructor",
+                "getValue(): T returning the stored value"
+              ],
+              "explanation": "Parameter-property shorthand is TypeScript-only syntax that no erasable-syntax runtime understands, so the field has to be declared and assigned explicitly.",
+              "xp_reward": 10
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "ts-06",
+      "title": "6. The Identity Function with Generics",
+      "description": "The 'Hello World of Generics' is the identity function: a generic function identity<T>(arg: T): T that returns whatever is passed in, keeping the caller's type. Implement and export it (no type assertions needed - the parameter already has type T). The test calls it with <number> and <string>.",
+      "order": 6,
+      "difficulty": "beginner",
+      "duration_minutes": 5,
+      "type": "learn",
+      "section_id": "sec-ts-2",
+      "section_title": "Section 2: Architecture",
+      "test_out_eligible": false,
+      "concepts": [
+        "ts-generics"
+      ],
+      "prerequisites": [],
+      "learning_objectives": [
+        "Write a generic function with a type parameter <T>",
+        "Let the caller supply (or infer) the type argument",
+        "Return values typed T from generic functions"
+      ],
+      "source": {
+        "name": "TypeScript Handbook — Generics — 'Hello World of Generics' (the identity function)",
+        "url": "https://www.typescriptlang.org/docs/handbook/2/generics.html",
+        "license": "CC BY 4.0 (TypeScript documentation)"
+      },
+      "starter_code": "export function identity<T>(arg: T): T {\n    // TODO: return arg\n    throw new Error('not implemented');\n}\n",
+      "solution_code": "export function identity<T>(arg: T): T {\n    return arg;\n}\n",
+      "tests": [
+        {
+          "name": "test_identity",
+          "required": true,
+          "unittest_code": "if (solution.identity<number>(7) !== 7) throw new Error('number identity');\nif (solution.identity<string>('x') !== 'x') throw new Error('string identity');"
+        }
+      ],
+      "completion_requirements": {
+        "required_test_names": [
+          "test_identity"
+        ]
+      },
+      "xp_reward": 10
     }
   ]
 }

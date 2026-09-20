@@ -18,7 +18,7 @@
       "description": "Implement `parse_tool_call(payload)` expecting name/arguments and returning (name, arguments).",
       "order": 19,
       "difficulty": "intermediate",
-      "duration_minutes": 8,
+      "duration_minutes": 5,
       "type": "learn",
       "section_id": "sec-ai-2",
       "section_title": "Section 2: Production AI Apps",
@@ -42,7 +42,13 @@
         "required_test_names": [
           "test_parse_tool_call"
         ]
-      }
+      },
+      "source": {
+        "name": "OpenAI documentation — Function calling — 'The model returns a tool call that contains a ... argument'",
+        "url": "https://developers.openai.com/api/docs/guides/function-calling",
+        "license": "OpenAI API documentation (developers.openai.com)"
+      },
+      "xp_reward": 10
     },
     {
       "id": "ai-tool-dispatch",
@@ -50,7 +56,7 @@
       "description": "Implement `dispatch(name, args, registry)` calling registry[name](**args).",
       "order": 20,
       "difficulty": "intermediate",
-      "duration_minutes": 8,
+      "duration_minutes": 5,
       "type": "learn",
       "section_id": "sec-ai-2",
       "section_title": "Section 2: Production AI Apps",
@@ -74,7 +80,13 @@
         "required_test_names": [
           "test_dispatch"
         ]
-      }
+      },
+      "source": {
+        "name": "Python official documentation (docs.python.org) — Mapping Types — looking up callables in a dict and **kwargs unpacking",
+        "url": "https://docs.python.org/3/library/stdtypes.html#mapping-types-dict",
+        "license": "Python documentation license (PSF)"
+      },
+      "xp_reward": 10
     },
     {
       "id": "ai-tool-validate",
@@ -106,15 +118,21 @@
         "required_test_names": [
           "test_validate_args"
         ]
-      }
+      },
+      "source": {
+        "name": "Python official documentation (docs.python.org) — 5.5. Dictionaries — key membership tests for required arguments",
+        "url": "https://docs.python.org/3/tutorial/datastructures.html#dictionaries",
+        "license": "Python documentation license (PSF)"
+      },
+      "xp_reward": 25
     },
     {
       "id": "ai-tool-result-msg",
       "title": "22. Tool Result Message (Practice)",
-      "description": "Implement `tool_result_message(call_id, content)` returning a tool role message dict.",
+      "description": "After executing a tool, the model must see the result message tied to the originating call — the OpenAI guide references tool calls by a `call_id`. Implement tool_result_message(call_id, content) returning {'role': 'tool', 'call_id': call_id, 'content': content}. Tests check role, call_id and content.",
       "order": 22,
       "difficulty": "intermediate",
-      "duration_minutes": 8,
+      "duration_minutes": 6,
       "type": "practice",
       "section_id": "sec-ai-2",
       "section_title": "Section 2: Production AI Apps",
@@ -125,20 +143,26 @@
       "learning_objectives": [
         "Format tool result messages"
       ],
-      "starter_code": "def tool_result_message(call_id, content):\n    # TODO\n    pass\n",
-      "solution_code": "def tool_result_message(call_id, content):\n    return {'role': 'tool', 'tool_call_id': call_id, 'content': content}\n",
+      "starter_code": "def tool_result_message(call_id, content):\n    # TODO: return the tool result message described in the task\n    return {}\n",
+      "solution_code": "def tool_result_message(call_id, content):\n    return {'role': 'tool', 'call_id': call_id, 'content': content}\n",
       "tests": [
         {
           "name": "test_tool_result_message",
-          "unittest_code": "def test_tool_result_message(self):\n    m = tool_result_message('c1', 'ok')\n    self.assertEqual(m['role'], 'tool')\n    self.assertEqual(m['tool_call_id'], 'c1')\n",
-          "required": true
+          "required": true,
+          "unittest_code": "def test_tool_result_message(self):\n    m = tool_result_message('c1', 'ok')\n    self.assertEqual(m['role'], 'tool')\n    self.assertEqual(m['call_id'], 'c1')\n    self.assertEqual(m['content'], 'ok')\n"
         }
       ],
       "completion_requirements": {
         "required_test_names": [
           "test_tool_result_message"
         ]
-      }
+      },
+      "source": {
+        "name": "OpenAI documentation — Function calling — tool results 'referenced by call_id in the examples to come'",
+        "url": "https://developers.openai.com/api/docs/guides/function-calling",
+        "license": "OpenAI API documentation (developers.openai.com)"
+      },
+      "xp_reward": 15
     },
     {
       "id": "ai-tool-checkpoint",
@@ -146,7 +170,7 @@
       "description": "Implement `safe_dispatch(name, args, registry)` returning error dict if unknown else result dict.",
       "order": 23,
       "difficulty": "intermediate",
-      "duration_minutes": 8,
+      "duration_minutes": 10,
       "type": "checkpoint",
       "section_id": "sec-ai-2",
       "section_title": "Section 2: Production AI Apps",
@@ -170,7 +194,13 @@
         "required_test_names": [
           "test_safe_dispatch"
         ]
-      }
+      },
+      "source": {
+        "name": "Python official documentation (docs.python.org) — The while/raise machinery + mapping lookup for safe dispatch",
+        "url": "https://docs.python.org/3/library/stdtypes.html#mapping-types-dict",
+        "license": "Python documentation license (PSF)"
+      },
+      "xp_reward": 40
     }
   ]
 }

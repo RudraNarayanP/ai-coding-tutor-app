@@ -2,29 +2,85 @@
   "id": "ts-interfaces-unions",
   "title": "Unit 2: Interfaces, Unions & Narrowing",
   "order": 2,
-  "concepts": [{ "id": "ts-unions", "title": "Interfaces, Union Types & Narrowing", "prerequisites": ["ts-types"] }],
+  "concepts": [
+    {
+      "id": "ts-unions",
+      "title": "Interfaces, Union Types & Narrowing",
+      "prerequisites": [
+        "ts-types"
+      ]
+    }
+  ],
   "lessons": [
     {
       "id": "ts-02",
       "title": "2. Interfaces & Union Narrowing",
-      "description": "Define interfaces for user records and narrow union types with type guards.",
+      "description": "Interfaces describe object shapes, and TypeScript treats a comparison like typeof input === 'number' as a type guard that narrows a union. Keep the exported User interface and implement getId(input: number | User): number: return input directly for numbers, or input.id for User objects. The test checks both union cases.",
       "order": 2,
       "difficulty": "intermediate",
       "duration_minutes": 5,
       "type": "learn",
       "section_id": "sec-ts-1",
       "section_title": "Section 1: Type System",
-      "concepts": ["ts-unions"],
-      "starter_code": "export interface User {\n    id: number;\n    name: string;\n}\n\nexport function getId(input: number | User): number {\n    return typeof input === 'number' ? input : input.id;\n}\n",
+      "concepts": [
+        "ts-unions"
+      ],
+      "starter_code": "export interface User {\n    id: number;\n    name: string;\n}\n\nexport function getId(input: number | User): number {\n    // TODO: narrow the union before reading the id\n    return 0;\n}\n",
       "solution_code": "export interface User {\n    id: number;\n    name: string;\n}\n\nexport function getId(input: number | User): number {\n    return typeof input === 'number' ? input : input.id;\n}\n",
       "tests": [
         {
           "name": "test_get_id",
-          "unittest_code": "if (solution.getId(10) !== 10 || solution.getId({ id: 20, name: 'Bob' }) !== 20) throw new Error('Narrowing failed');",
-          "required": true
+          "required": true,
+          "unittest_code": "if (solution.getId(10) !== 10) throw new Error('number case failed');\nif (solution.getId({ id: 20, name: 'Bob' }) !== 20) throw new Error('User case failed');"
         }
       ],
-      "completion_requirements": { "required_test_names": ["test_get_id"] }
+      "completion_requirements": {
+        "required_test_names": [
+          "test_get_id"
+        ]
+      },
+      "learning_objectives": [
+        "Declare object shapes with interfaces",
+        "Narrow union types with typeof type guards",
+        "Write functions over number | object unions"
+      ],
+      "source": {
+        "name": "TypeScript Handbook — Narrowing — typeof type guards",
+        "url": "https://www.typescriptlang.org/docs/handbook/2/narrowing.html",
+        "license": "CC BY 4.0 (TypeScript documentation)"
+      },
+      "xp_reward": 10,
+      "sublessons": [
+        {
+          "id": "ts-narrow-code-sub",
+          "title": "Write the type guard",
+          "order": 1,
+          "exercises": [
+            {
+              "id": "ts-narrow-code-1",
+              "type": "code",
+              "question": "Implement the exported `describe(input: number | string): string` so it returns 'number' for a number and 'string' for a string, using a `typeof` check to narrow the union.",
+              "starter_code": "export function describe(input: number | string): string {\n    // TODO: narrow the union before choosing a label\n    return '';\n}\n",
+              "solution_code": "export function describe(input: number | string): string {\n    return typeof input === 'number' ? 'number' : 'string';\n}\n",
+              "tests": [
+                {
+                  "name": "test_describe_number",
+                  "test_code": "if (solution.describe(7) !== 'number') throw new Error('number case failed');"
+                },
+                {
+                  "name": "test_describe_string",
+                  "test_code": "if (solution.describe('seven') !== 'string') throw new Error('string case failed');"
+                },
+                {
+                  "name": "test_describe_zero",
+                  "test_code": "if (solution.describe(0) !== 'number') throw new Error('zero case failed');"
+                }
+              ],
+              "xp_reward": 15
+            }
+          ]
+        }
+      ]
     }
   ]
 }

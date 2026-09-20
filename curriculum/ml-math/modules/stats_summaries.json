@@ -18,7 +18,7 @@
       "description": "Implement `mean(xs)` for a non-empty list of numbers.",
       "order": 11,
       "difficulty": "intermediate",
-      "duration_minutes": 8,
+      "duration_minutes": 5,
       "type": "learn",
       "section_id": "sec-mlmath-1",
       "section_title": "Section 1: Math & Data for ML",
@@ -42,7 +42,13 @@
         "required_test_names": [
           "test_mean"
         ]
-      }
+      },
+      "source": {
+        "name": "Python official documentation (docs.python.org) — statistics.mean — 'Return the sample arithmetic mean of data'",
+        "url": "https://docs.python.org/3/library/statistics.html",
+        "license": "Python documentation license (PSF)"
+      },
+      "xp_reward": 10
     },
     {
       "id": "stats-median",
@@ -50,7 +56,7 @@
       "description": "Implement `median(xs)` for a non-empty list (sort a copy).",
       "order": 12,
       "difficulty": "intermediate",
-      "duration_minutes": 8,
+      "duration_minutes": 5,
       "type": "learn",
       "section_id": "sec-mlmath-1",
       "section_title": "Section 1: Math & Data for ML",
@@ -74,7 +80,53 @@
         "required_test_names": [
           "test_median"
         ]
-      }
+      },
+      "source": {
+        "name": "Python official documentation (docs.python.org) — statistics.median — 'the common \"mean of middle two\" method'",
+        "url": "https://docs.python.org/3/library/statistics.html",
+        "license": "Python documentation license (PSF)"
+      },
+      "xp_reward": 10,
+      "sublessons": [
+        {
+          "id": "median-cases-sub",
+          "title": "Match case to behaviour",
+          "order": 1,
+          "exercises": [
+            {
+              "id": "median-cases-match-1",
+              "type": "matching",
+              "question": "`median(xs)` sorts a copy of a non-empty list. Match each input case to what the function must do.",
+              "pairs": [
+                {
+                  "left": "odd length",
+                  "right": "the single middle value of the sorted copy"
+                },
+                {
+                  "left": "even length",
+                  "right": "the mean of the two middle values"
+                },
+                {
+                  "left": "input in random order",
+                  "right": "sort a copy, leaving the caller's list alone"
+                },
+                {
+                  "left": "repeated values",
+                  "right": "count each repeat, because length decides the middle"
+                }
+              ],
+              "correct_answer": {
+                "odd length": "the single middle value of the sorted copy",
+                "even length": "the mean of the two middle values",
+                "input in random order": "sort a copy, leaving the caller's list alone",
+                "repeated values": "count each repeat, because length decides the middle"
+              },
+              "explanation": "The middle is chosen after sorting and depends only on length, so duplicates are ordinary members of the list.",
+              "xp_reward": 10
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "stats-variance",
@@ -106,7 +158,13 @@
         "required_test_names": [
           "test_variance"
         ]
-      }
+      },
+      "source": {
+        "name": "Python official documentation (docs.python.org) — statistics.pvariance — 'Return the population variance of data'",
+        "url": "https://docs.python.org/3/library/statistics.html",
+        "license": "Python documentation license (PSF)"
+      },
+      "xp_reward": 25
     },
     {
       "id": "stats-zscore",
@@ -114,7 +172,7 @@
       "description": "Implement `zscore(x, mu, sigma)` = (x-mu)/sigma. Raise if sigma==0.",
       "order": 14,
       "difficulty": "intermediate",
-      "duration_minutes": 8,
+      "duration_minutes": 6,
       "type": "practice",
       "section_id": "sec-mlmath-1",
       "section_title": "Section 1: Math & Data for ML",
@@ -138,7 +196,36 @@
         "required_test_names": [
           "test_zscore"
         ]
-      }
+      },
+      "source": {
+        "name": "scikit-learn User Guide — Preprocessing — StandardScaler: remove the mean and scale to unit variance",
+        "url": "https://scikit-learn.org/stable/modules/preprocessing.html",
+        "license": "BSD 3-Clause (scikit-learn documentation)"
+      },
+      "xp_reward": 15,
+      "sublessons": [
+        {
+          "id": "stats-zscore-out-sub",
+          "title": "Predict the output",
+          "order": 1,
+          "exercises": [
+            {
+              "id": "stats-zscore-out-1",
+              "type": "output_prediction",
+              "question": "What does this program print?\n\n```python\ndef zscore(x, mu, sigma):\n    return (x - mu) / sigma\n\nprint(zscore(10, 8, 2))\n```",
+              "options": [
+                "-1.0",
+                "4",
+                "6.0",
+                "1.0"
+              ],
+              "correct_answer": "1.0",
+              "explanation": "(10 - 8) / 2 is 1.0. -1.0 is the subtracted the wrong way round, 4 comes from multiplying by sigma instead of dividing, and 6.0 comes from dropping the brackets so only mu is divided.",
+              "xp_reward": 10
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "stats-checkpoint",
@@ -146,7 +233,7 @@
       "description": "Implement `pearson(xs, ys)` for equal-length lists. Return 0 if either std is 0.",
       "order": 15,
       "difficulty": "intermediate",
-      "duration_minutes": 8,
+      "duration_minutes": 10,
       "type": "checkpoint",
       "section_id": "sec-mlmath-1",
       "section_title": "Section 1: Math & Data for ML",
@@ -170,7 +257,13 @@
         "required_test_names": [
           "test_pearson"
         ]
-      }
+      },
+      "source": {
+        "name": "Google Machine Learning Crash Course — Glossary: R-squared — square of the Pearson correlation coefficient between predictions and ground truth",
+        "url": "https://developers.google.com/machine-learning/glossary/metrics",
+        "license": "CC BY 4.0 (Google Machine Learning Crash Course)"
+      },
+      "xp_reward": 40
     }
   ]
 }

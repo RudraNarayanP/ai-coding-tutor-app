@@ -1,12 +1,13 @@
-import { safeGetItem, safeSetItem } from './utils/storage'
+import { safeGetItem, safeSetItem, codeDraftKey, readCodeDraft, writeCodeDraft } from './utils/storage'
+import { widgetFor } from './utils/exerciseTypes'
  import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
-import { PatchworkCharacter } from './components/PatchworkCharacters'
 import { GuidebookPanel } from './components/GuidebookPanel'
 import { CreatePage } from './components/CreatePage'
 import Settings from './components/Settings'
 import ExercisePanel from './components/ExercisePanel'
-import { CodeEditor } from './components/CodeEditor'
-import { api, type ExerciseResult, type LeaderboardEntry, type LessonProgress, type Material, type MaterialCompletionResult, type TestOutResult, type UserProfile } from './api'
+import ExerciseWorkspace from './components/ExerciseWorkspace'
+import { TutorActions } from './components/TutorActions'
+import { api, type ExerciseResult, type LeaderboardEntry, type LessonProgress, type Material, type MaterialCompletionResult, type MistakeItem, type HeartStatus, type TestOutResult, type UserProfile } from './api'
 import { LearnPath } from './components/duo/LearnPath'
 import { PracticeHub } from './components/duo/PracticeHub'
 import { QuestsPage } from './components/duo/QuestsPage'
@@ -16,7 +17,6 @@ import {
   getGamificationState,
   recordActivity,
   getHearts,
-loseHeart,
   restoreHearts,
   setUnlimitedHearts as applyUnlimitedHearts,
   saveGameState,
@@ -25,6 +25,13 @@ loseHeart,
   levelFromXp,
 } from './utils/gamification'
 import { playPatchworkSound } from './utils/audio'
+import {
+  allBlanksFilled,
+  assembleFillBlankCode,
+  buildFillBlankTemplate,
+  extractAnswersFromEdited,
+  isFillBlankCodeComplete,
+} from './utils/assembleFillBlankCode'
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 type TestResult = {
@@ -36,13 +43,7 @@ type TestResult = {
 }
 
 const CODE_EXERCISE_TYPES = ['code', 'tiny_coding', 'identify_mistake']
-const FILL_CODE_EXERCISE_TYPES = ['fill_blank', 'code_completion']
-
-function exerciseUsesInlineCodeEditor(exercise: { type?: string; starter_code?: string; code?: string } | null) {
-  if (!exercise) return false
-  const exType = (exercise.type || 'code').toLowerCase().trim()
-  return FILL_CODE_EXERCISE_TYPES.includes(exType) && !!(exercise.starter_code || exercise.code)
-}
+const FILL_EXERCISE_TYPES = ['fill_blank', 'code_completion']
 
 type LessonSummary = {
   id: string
@@ -59,6 +60,7 @@ type LessonSummary = {
   concept_id?: string
   concept_title?: string
   test_out_eligible?: boolean
+  xp_reward?: number
 }
 
 type Exercise = {
@@ -85,6 +87,17 @@ type SubLesson = {
   exercises: Exercise[]
 }
 
+// File extensions used by the sandbox for each course track (python-based
+// tracks — DSA, ML, AI, Fullstack — execute plain Python).
+const LANGUAGE_FILE_EXT: Record<string, string> = {
+  python: 'py', py: 'py', dsa: 'py', ml: 'py', 'ml-math': 'py', ai: 'py',
+  fullstack: 'py', javascript: 'js', typescript: 'ts', java: 'java',
+  cpp: 'cpp', 'c++': 'cpp', sql: 'sql',
+}
+
+/** Neutral editor prompt; anything else in `feedback` is tutor output. */
+const DEFAULT_FEEDBACK = 'Run your code to get immediate feedback from the local sandbox.'
+
 type Lesson = {
   id: string
   title: string
@@ -104,6 +117,7 @@ type Lesson = {
   concepts?: string[]
   prerequisites?: string[]
   learning_objectives?: string[]
+  source?: { name: string; url: string; license?: string } | null
   sublessons?: SubLesson[]
   mastery_exam?: Exercise[]
   xp_reward?: number
@@ -161,9 +175,7 @@ function App() {
   const [code, setCode] = useState('')
   const [results, setResults] = useState<TestResult[] | null>(null)
   const [hintLevel, setHintLevel] = useState(1)
-  const [feedback, setFeedback] = useState(
-    'Run your code to get immediate feedback from the local sandbox.'
-  )
+  const [feedback, setFeedback] = useState(DEFAULT_FEEDBACK)
   const [aiEnabled, setAiEnabled] = useState(true)
   const [soundEnabled, setSoundEnabled] = useState<boolean>(() => {
     const saved = safeGetItem('patchwork_sound_enabled')
@@ -172,6 +184,16 @@ function App() {
   const [providersOverview, setProvidersOverview] = useState<ProvidersOverview | null>(null)
   const [selectedProvider, setSelectedProvider] = useState<string>('ollama')
   const [previousHints, setPreviousHints] = useState<string[]>([])
+  const [tutorSource, setTutorSource] = useState<'ai' | 'ai_repaired' | 'offline' | null>(null)
+  const [tutorLevel, setTutorLevel] = useState(1)
+  // The full answer is a deliberate, two-tap act of giving up — never a
+  // lightbulb-shaped surprise — and it is always reversible.
+  const [answerArmed, setAnswerArmed] = useState(false)
+  const [restoreSnapshot, setRestoreSnapshot] = useState<
+    | { kind: 'lesson'; code: string }
+    | { kind: 'exercise'; exerciseId: string; value: Record<string, any> }
+    | null
+  >(null)
   const [isRunning, setIsRunning] = useState(false)
   const [isLoadingLesson, setIsLoadingLesson] = useState(false)
   const [isTutorLoading, setIsTutorLoading] = useState(false)
@@ -233,14 +255,41 @@ function App() {
     attempts: number
   } | null>(null)
   // Lesson-complete celebration (ephemeral; completion itself is persisted by the backend)
-  const [celebration, setCelebration] = useState<{ xpEarned: number; nextLessonId: string | null } | null>(null)
+  const [celebration, setCelebration] = useState<{
+    xpEarned: number
+    nextLessonId: string | null
+    mistakeFree?: boolean
+    boss?: boolean
+  } | null>(null)
+  // Flow-state tracking for the current lesson visit (combo/perfect detection).
+  const visitMistakesRef = useRef(0)
 
-  // Hearts (Duolingo-style) + Settings modal
+  // Hearts. The server owns the pool (see backend/hearts.py); these are a
+  // mirror for rendering, so editing localStorage can no longer buy infinite
+  // attempts. `applyHearts` is the only writer, and every grading response
+  // carries the authoritative status.
   const [hearts, setHearts] = useState<number>(() => getHearts())
+  const [maxHearts, setMaxHearts] = useState<number>(5)
+  const [secondsToNextHeart, setSecondsToNextHeart] = useState<number>(0)
   const [unlimitedHearts, setUnlimitedHearts] = useState<boolean>(
     () => getGamificationState().unlimitedHearts
   )
   const [showSettings, setShowSettings] = useState(false)
+
+  const applyHearts = useCallback((status?: HeartStatus | null) => {
+    if (!status) return
+    setHearts(status.hearts)
+    setMaxHearts(status.max_hearts)
+    setUnlimitedHearts(status.unlimited)
+    setSecondsToNextHeart(status.seconds_to_next_heart)
+    // Keep the localStorage mirror so a cold start still shows the right count
+    // before the first response arrives.
+    saveGameState({ hearts: status.hearts, unlimitedHearts: status.unlimited })
+  }, [])
+
+  useEffect(() => {
+    api.hearts().then(applyHearts)
+  }, [applyHearts])
 
   const triggerXpGain = useCallback((amount: number) => {
     if (amount > 0) {
@@ -261,6 +310,11 @@ function App() {
 
   // ─── Derived lesson progression (single source of truth: backend) ───────────
   // Canonical exercise order = sublessons flattened in curriculum order.
+  // The server owns the mistake queue; this mirrors only the items that are
+  // due right now, which is what makes a parked step reappear without also
+  // holding a lesson hostage to its recall timer.
+  const [mistakes, setMistakes] = useState<MistakeItem[]>([])
+
   const allExercises = useMemo(() => {
     if (!lesson?.sublessons) return []
     return lesson.sublessons.flatMap((sub) =>
@@ -273,11 +327,23 @@ function App() {
     [lessonProgress]
   )
 
-  // The current exercise is the FIRST exercise not yet completed.
-  const currentExerciseIndex = useMemo(
-    () => allExercises.findIndex((ex) => !completedExerciseIds.has(ex.id)),
-    [allExercises, completedExerciseIds]
-  )
+  // The current exercise is the first one still owed: a step that is due for
+  // re-review comes before an untouched one. Without this, "Review your
+  // misses" opened the lesson and skipped straight past the exercise it was
+  // meant to re-serve, because that exercise was already in
+  // completed_exercise_ids.
+  const dueReviewIds = useMemo(() => {
+    if (!lesson?.id) return new Set<string>()
+    return new Set(
+      mistakes.filter((item) => item.lesson_id === lesson.id).map((item) => item.exercise_id)
+    )
+  }, [mistakes, lesson?.id])
+
+  const currentExerciseIndex = useMemo(() => {
+    const reviewIndex = allExercises.findIndex((ex) => dueReviewIds.has(ex.id))
+    if (reviewIndex >= 0) return reviewIndex
+    return allExercises.findIndex((ex) => !completedExerciseIds.has(ex.id))
+  }, [allExercises, completedExerciseIds, dueReviewIds])
   const currentExercise = currentExerciseIndex >= 0 ? allExercises[currentExerciseIndex] : null
 
   // Lesson complete = lesson has exercises AND every one of them is completed.
@@ -292,26 +358,13 @@ function App() {
   )
   const currentExerciseIsCode = useMemo(() => {
     if (!currentExercise) return false
-    const exType = (currentExercise.type || 'code').toLowerCase().trim()
-    if (CODE_EXERCISE_TYPES.includes(exType)) return true
-    return (
-      exerciseUsesInlineCodeEditor(currentExercise) &&
-      Array.isArray(currentExercise.tests) &&
-      currentExercise.tests.length > 0
-    )
+    return CODE_EXERCISE_TYPES.includes((currentExercise.type || 'code').toLowerCase().trim())
+  }, [currentExercise])
+  const currentExerciseIsFill = useMemo(() => {
+    if (!currentExercise) return false
+    return FILL_EXERCISE_TYPES.includes((currentExercise.type || '').toLowerCase().trim())
   }, [currentExercise])
   const showLessonRunCode = !lessonHasExercises || lessonComplete || currentExerciseIsCode
-  const codeTestsPassed = Boolean(
-    currentExerciseIsCode &&
-      results &&
-      results.length > 0 &&
-      results.filter((r) => r.required).every((r) => r.passed)
-  )
-  const showExerciseContinue =
-    lessonHasExercises &&
-    currentExerciseIsCode &&
-    !lessonComplete &&
-    (exercisePhase === 'correct' || codeTestsPassed)
 
   // Fetch the authoritative progress for the open lesson.
   const fetchLessonProgress = useCallback(async (lessonId: string) => {
@@ -329,6 +382,20 @@ function App() {
     })
   }, [selectedLanguage])
 
+  const refreshMistakes = useCallback(() => {
+    api
+      .mistakes(selectedLanguage)
+      .then((data) => setMistakes(Array.isArray(data?.due) ? data.due : []))
+      .catch(() => setMistakes([]))
+  }, [selectedLanguage])
+
+  useEffect(() => {
+    refreshMistakes()
+    // The queue is time-based: an item parked for a recall gap becomes due
+    // while the learner is doing something else. Re-poll whenever the Practice
+    // hub is opened, or "Review your misses" silently never reappears.
+  }, [refreshMistakes, lesson?.id, activeTab])
+
   const handleCompleteMaterial = async (id: string, user_answer?: string): Promise<MaterialCompletionResult | null> => {
     const res = await api.completeMaterial(id, user_answer)
     if (res && res.passed) {
@@ -345,10 +412,6 @@ function App() {
   useEffect(() => {
     setExercisePhase('answering')
     setExerciseFeedback(null)
-    setResults(null)
-    setFeedback('')
-    setCharSpeech('Let\'s work through this step together!')
-    setCharState('idle')
   }, [currentExercise?.id])
 
   // ─── Fetch Leaderboard ──────────────────────────────────────────────────────
@@ -448,9 +511,9 @@ function App() {
   // ─── Load Lessons for Language ──────────────────────────────────────────────
   // Landing on the HOME page is intentional: lessons are only opened when the
   // learner clicks a node, never implicitly on load or course switch.
-  const fetchLessons = useCallback(async () => {
+  const fetchLessons = useCallback(async (lang?: string) => {
     try {
-      const res = await fetch('/api/lessons')
+      const res = await fetch(`/api/lessons?language=${encodeURIComponent(lang || selectedLanguage)}`)
       if (!res.ok) {
         setBackendError(true)
         return
@@ -463,7 +526,7 @@ function App() {
     } catch {
       setBackendError(true)
     }
-  }, [])
+  }, [selectedLanguage])
 
   // ─── Select Language Course Track ───────────────────────────────────────────
   const handleCourseChange = async (lang: string) => {
@@ -482,7 +545,7 @@ function App() {
     } catch (err) {
       console.error('Operation failed:', err)
     }
-    fetchLessons()
+    fetchLessons(lang)
     fetchProgression()
   }
 
@@ -520,16 +583,19 @@ function App() {
   const loadLesson = async (summary: LessonSummary, openWorkspace = false) => {
     setIsLoadingLesson(true)
     setResults(null)
-    setFeedback('Run your code to get immediate feedback from the local sandbox.')
+    setFeedback(DEFAULT_FEEDBACK)
     setHintLevel(1)
     setPreviousHints([])
+    setTutorSource(null)
+    setAnswerArmed(false)
+    setRestoreSnapshot(null)
     setExerciseInput({})
     setCharState('idle')
     setLessonProgress(null)
     setExercisePhase('answering')
     setExerciseFeedback(null)
     setCelebration(null)
-    setCharSpeech('Let\'s learn together!')
+    visitMistakesRef.current = 0
 
     try {
       const [res, prog] = await Promise.all([
@@ -541,9 +607,9 @@ function App() {
       setLesson(data)
       if (prog) setLessonProgress(prog)
 
-      const draftKey = `patchwork_code_${data.id}`
-      const savedDraft = safeGetItem(draftKey)
-      setCode(savedDraft !== null ? savedDraft : data.starter_code || '')
+      const starter = data.starter_code || ''
+      const savedDraft = readCodeDraft(codeDraftKey(data.id), starter)
+      setCode(savedDraft !== null ? savedDraft : starter)
 setIsLessonActive(true)
       saveGameState({ currentLessonId: data.id })
     } catch {
@@ -583,40 +649,95 @@ setIsLessonActive(true)
     saveGameState({ hearts, unlimitedHearts })
   }, [hearts, unlimitedHearts])
 
-  // Save code drafts
+  // Save code drafts, tagged with the starter they were based on so a revised
+  // curriculum starter supersedes the stale draft instead of resurfacing it.
   useEffect(() => {
     if (lesson?.id) {
-      safeSetItem(`patchwork_code_${lesson.id}`, code)
+      writeCodeDraft(codeDraftKey(lesson.id), lesson.starter_code || '', code)
     }
   }, [code, lesson])
 
   const getRunnableCode = useCallback(() => {
-    if (currentExercise) {
+    if (currentExercise && (currentExerciseIsCode || currentExerciseIsFill)) {
       const exState = exerciseInput[currentExercise.id] || {}
-      if (currentExerciseIsCode || exerciseUsesInlineCodeEditor(currentExercise)) {
-        return (
-          exState.code ??
-          currentExercise.starter_code ??
-          currentExercise.code ??
-          code
+      if (currentExerciseIsFill) {
+        const template = buildFillBlankTemplate(
+          currentExercise.starter_code || (currentExercise as any).code || '',
+          currentExercise.blanks,
+          currentExercise.question
         )
+        const edited = exState.code
+        if (edited && !edited.includes('___')) return edited
+        const answers: string[] = (exState.answers?.length
+          ? exState.answers
+          : edited
+            ? extractAnswersFromEdited(template, edited)
+            : exState.answer
+              ? [exState.answer]
+              : []
+        ).map((answer: string) => String(answer ?? '').split('___').join(''))
+        return assembleFillBlankCode(template, answers)
       }
+      return (
+        exState.code ??
+        currentExercise.starter_code ??
+        (currentExercise as any).code ??
+        code
+      )
     }
     return code
-  }, [currentExerciseIsCode, currentExercise, exerciseInput, code])
+  }, [currentExerciseIsCode, currentExerciseIsFill, currentExercise, exerciseInput, code])
 
   // ─── Run Code & Tests ───────────────────────────────────────────────────────
   const runTests = useCallback(async () => {
     if (!lesson) return
     const codeToRun = getRunnableCode()
+
+    if (currentExerciseIsFill && currentExercise) {
+      const template = buildFillBlankTemplate(
+        currentExercise.starter_code || (currentExercise as any).code || '',
+        currentExercise.blanks,
+        currentExercise.question
+      )
+      const exState = exerciseInput[currentExercise.id] || {}
+      const edited = exState.code
+      const answers: string[] = (exState.answers?.length
+        ? exState.answers
+        : edited
+          ? extractAnswersFromEdited(template, edited)
+          : exState.answer
+            ? [exState.answer]
+            : []
+      ).map((answer: string) => String(answer ?? '').split('___').join(''))
+      const blanksReady = edited
+        ? isFillBlankCodeComplete(template, edited)
+        : allBlanksFilled(template, answers)
+      if (!blanksReady) {
+        setCharState('confused')
+        setCharSpeech('Fill in every blank before running your code.')
+        setExerciseInput((prev: any) => ({
+          ...prev,
+          [currentExercise.id]: {
+            ...prev[currentExercise.id],
+            runOutput: { error: 'Fill in every blank before running.' },
+          },
+        }))
+        return
+      }
+    }
+
     setIsRunning(true)
     setResults(null)
     setCharState('thinking')
-    setCharSpeech('Testing your code against strict test cases…')
+    setCharSpeech(
+      currentExerciseIsFill
+        ? 'Running your code…'
+        : 'Testing your code against strict test cases…'
+    )
 
     try {
       const runUrl =
-        lessonHasExercises && currentExerciseIsCode && currentExercise
+        lessonHasExercises && (currentExerciseIsCode || currentExerciseIsFill) && currentExercise
           ? `/api/lessons/${lesson.id}/exercises/${currentExercise.id}/run`
           : `/api/lessons/${lesson.id}/run`
 
@@ -627,6 +748,14 @@ setIsLessonActive(true)
       })
 
       const data = await res.json().catch(() => ({}))
+      if (res.status === 403 && data?.detail?.error === 'out_of_hearts') {
+        applyHearts(data.detail.hearts)
+        setShowOutofHeartsModal(true)
+        setCharState('confused')
+        setCharSpeech('Out of hearts! Review your missed steps to earn one back.')
+        setExercisePhase('answering')
+        return
+      }
       if (!res.ok) {
         const detail = data?.detail
         const message =
@@ -635,6 +764,33 @@ setIsLessonActive(true)
           data?.message ||
           'Code execution failed. Make sure the backend is running.'
         throw new Error(message)
+      }
+
+      if (currentExerciseIsFill && currentExercise) {
+        const runError = data.error || null
+        const runOutput = {
+          stdout: data.stdout || '',
+          stderr: data.stderr || '',
+          error: runError,
+        }
+        setExerciseInput((prev: any) => ({
+          ...prev,
+          [currentExercise.id]: {
+            ...prev[currentExercise.id],
+            runOutput,
+          },
+        }))
+        if (runError) {
+          playPatchworkSound('error', soundEnabled)
+          setCharState('confused')
+          setCharSpeech(runError)
+        } else {
+          playPatchworkSound('success', soundEnabled)
+          setCharState('happy')
+          setCharSpeech('Code ran! Check the output, then tap Check Answer to continue.')
+          setFeedback('Code ran — tap Check Answer to save progress and continue.')
+        }
+        return
       }
 
       setResults(data.tests || [])
@@ -646,19 +802,23 @@ setIsLessonActive(true)
         if (lessonHasExercises && currentExerciseIsCode && currentExercise) {
           playPatchworkSound('success', soundEnabled)
           setCharState('happy')
-          setCharSpeech('All tests passed! Tap Continue to save progress and move on.')
-          setFeedback('All tests passed — tap Continue below to move on.')
+          setCharSpeech('All tests passed! Tap Check Answer to save progress and continue.')
+          setFeedback('All tests passed — tap Check Answer to continue.')
           return
         }
 
-        playPatchworkSound('success', soundEnabled)
+        const boss = (lesson?.type || '') === 'checkpoint'
+        playPatchworkSound(boss ? 'checkpoint_complete' : 'lesson_complete', soundEnabled)
         setCharState('celebrate')
         setCharSpeech('Outstanding job! All checks passed perfectly!')
         setConsecutiveCorrect((prev) => prev + 1)
 
-        const activity = recordActivity(15)
-        setGamification(activity.state)
-        triggerXpGain(15)
+        const runXp = Number(data.xp_awarded) || 0
+        if (runXp > 0) {
+          const activity = recordActivity(runXp)
+          setGamification(activity.state)
+          triggerXpGain(runXp)
+        }
         fetchLessons()
         fetchProgression()
 
@@ -668,17 +828,23 @@ setIsLessonActive(true)
             const idx = lessons.findIndex((l) => l.id === lesson?.id)
             return idx >= 0 && idx < lessons.length - 1 ? lessons[idx + 1].id : null
           })()
-        setCelebration({ xpEarned: 15, nextLessonId: nextId ?? null })
+        setCelebration({
+          xpEarned: runXp,
+          nextLessonId: nextId ?? null,
+          mistakeFree: visitMistakesRef.current === 0,
+          boss,
+        })
       } else {
         playPatchworkSound('error', soundEnabled)
         setCharState('confused')
         setCharSpeech('Some test checks failed. Take a look at the details below!')
         setConsecutiveCorrect(0)
+        visitMistakesRef.current += 1
 
-        const heartState = loseHeart()
-        setHearts(heartState.hearts)
-        if (heartState.hearts <= 0 && !heartState.unlimitedHearts) {
-          setCharSpeech('Out of hearts! Enable Unlimited Hearts in Settings or review the guidebook and try again.')
+        // The server already deducted for this failed assessment.
+        applyHearts(data.hearts)
+        if (data.hearts && data.hearts.hearts <= 0 && !data.hearts.unlimited) {
+          setShowOutofHeartsModal(true)
         }
       }
     } catch (err) {
@@ -699,7 +865,9 @@ setIsLessonActive(true)
     lessons,
     lessonHasExercises,
     currentExerciseIsCode,
+    currentExerciseIsFill,
     currentExercise,
+    exerciseInput,
     fetchLessons,
     fetchProgression,
   ])
@@ -709,8 +877,31 @@ setIsLessonActive(true)
     if (!lesson || !aiEnabled) return
     setIsTutorLoading(true)
     setCharState('thinking')
+    setTutorLevel(hintLevel)
 
     try {
+      // The tutor must see whatever the learner is actually staring at: the
+      // current exercise's own answer buffer when one is open, otherwise the
+      // lesson-level code buffer.
+      const activeExercise = currentExercise
+      const exerciseAnswer = activeExercise
+        ? (exerciseInput[activeExercise.id]?.code
+            ?? exerciseInput[activeExercise.id]?.answer
+            ?? activeExercise.starter_code
+            ?? '')
+        : ''
+      const tutorCode = activeExercise ? String(exerciseAnswer) : code
+      const tutorInstructions = activeExercise
+        ? String(
+            activeExercise.question ||
+              activeExercise.title ||
+              lesson.description ||
+              lesson.title
+          )
+        : lesson.description ||
+          lesson.learning_objectives?.[0] ||
+          'Complete the coding exercise using the concepts from this lesson.'
+
       const res = await fetch('/api/tutor', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -720,11 +911,9 @@ setIsLessonActive(true)
           unit_title: lesson.unit_title || lesson.section_title || '',
           concept_title: lesson.concept_title || '',
           prerequisites: lesson.prerequisites || [],
-          instructions:
-            lesson.description ||
-            lesson.learning_objectives?.[0] ||
-            'Complete the coding exercise using the concepts from this lesson.',
-          code,
+          instructions: tutorInstructions.slice(0, 2000),
+          learning_objective: lesson.learning_objectives?.[0] || '',
+          code: tutorCode,
           test_results: results || [],
           previous_hints: previousHints,
           hint_level: hintLevel,
@@ -735,93 +924,193 @@ setIsLessonActive(true)
 
       const data = await res.json().catch(() => null)
 
-      if (res.ok && data?.available !== false) {
+      if (res.ok && data?.message && data?.available !== false) {
+        const source: 'ai' | 'ai_repaired' | 'offline' =
+          data.source === 'offline' ? 'offline' : data.source === 'ai_repaired' ? 'ai_repaired' : 'ai'
+        setTutorSource(source)
         setFeedback(data.message)
-        setHintLevel((prev) => prev + 1)
-        if (data.message) {
-          setPreviousHints((prev) => [...prev, data.message])
-          setCharSpeech(data.message)
-        }
-        setCharState('encouraging')
+        // Hints saturate at level 4 instead of running off the scale.
+        setHintLevel((prev) => Math.min(4, prev + 1))
+        setPreviousHints((prev) => [...prev, data.message])
+        setCharSpeech(data.message)
+        setCharState(source === 'offline' ? 'idle' : 'encouraging')
       } else {
-        const detail = data?.detail
-        const validationMsg = Array.isArray(detail)
-          ? 'Tutor request was incomplete. Try reloading the lesson.'
-          : null
+        // Never surface a raw provider error where a hint belongs.
+        setTutorSource('offline')
+        setHintLevel((prev) => Math.min(4, prev + 1))
         setFeedback(
-          data?.message ||
-            validationMsg ||
-            (typeof detail === 'string' ? detail : null) ||
-            'AI tutor is temporarily unavailable. Check your provider in Settings.'
+          'The coach is offline right now. Read the first red check, name the value it wants, ' +
+            'then change only the line that produces it.'
         )
         setCharState('confused')
       }
     } catch (err) {
       console.error('Error reaching AI tutor:', err)
-      setFeedback('Failed to reach AI tutor service.')
+      setTutorSource('offline')
+      setFeedback(
+        'The coach could not be reached. Read the first red check, name the value it wants, ' +
+          'then change only the line that produces it.'
+      )
       setCharState('confused')
     } finally {
       setIsTutorLoading(false)
     }
   }
 
-  // ─── View Canonical Solution ───────────────────────────────────────────────
+  // ─── Show Canonical Answer ─────────────────────────────────────────────────
+  // A lightbulb means "hint", so the answer button must not wear one: it asks
+  // once, warns, and keeps the learner's own work recoverable afterwards. It
+  // targets whichever buffer is on screen — the current step or the lesson.
   const askSolution = async () => {
     if (!lesson) return
+    if (!answerArmed) {
+      setAnswerArmed(true)
+      setTutorSource(null)
+      setFeedback(
+        'This pastes the complete answer into your editor — it is not a hint. ' +
+          'Tap it again to go ahead, or request one more nudge and keep the win.'
+      )
+      setCharState('thinking')
+      setCharSpeech('A nudge keeps the solve yours. Want one more before you give up?')
+      return
+    }
+    setAnswerArmed(false)
+
+    const exercise = currentExercise
     try {
+      if (exercise) {
+        const res = await fetch(`/api/lessons/${lesson.id}/exercises/${exercise.id}/solution`)
+        if (!res.ok) {
+          setFeedback('This step has no canonical answer to paste — a nudge will still help.')
+          setCharState('thinking')
+          return
+        }
+        const data = await res.json()
+        const previous = exerciseInput[exercise.id] || {}
+        const type = String(data.type || exercise.type || 'code').toLowerCase()
+        const next: Record<string, any> = { ...previous }
+        if (type === 'fill_blank' && Array.isArray(data.answers)) {
+          const template = buildFillBlankTemplate(
+            data.starter_code || exercise.starter_code || '',
+            data.blanks || exercise.blanks || [],
+            data.question || exercise.question || ''
+          )
+          next.answers = data.answers
+          next.answer = data.answers[0] ?? ''
+          next.code = assembleFillBlankCode(template, data.answers)
+        } else if (data.solution_code) {
+          next.code = data.solution_code
+        } else if (typeof data.answer === 'string') {
+          next.answer = data.answer
+        } else {
+          setFeedback('This step has no canonical answer to paste — a nudge will still help.')
+          return
+        }
+        setRestoreSnapshot({ kind: 'exercise', exerciseId: exercise.id, value: previous })
+        setExerciseInput((prev: Record<string, any>) => ({ ...prev, [exercise.id]: next }))
+        setFeedback(
+          'Full answer inserted into this step. Read it, then restore your own attempt and rewrite it.'
+        )
+        setCharState('idle')
+        setCharSpeech('Study it, then restore your own code and write it from scratch.')
+        return
+      }
+
       const res = await fetch(`/api/lessons/${lesson.id}/solution`)
       if (res.ok) {
         const data = await res.json()
+        setRestoreSnapshot({ kind: 'lesson', code })
         setCode(data.solution_code || '')
-        setFeedback('Canonical solution inserted into editor.')
-        setCharState('happy')
-        setCharSpeech('Here is the canonical solution for this challenge!')
+        setFeedback(
+          'Full answer inserted. Tap "Restore my code" to get your own version back and keep going.'
+        )
+        setCharState('idle')
+        setCharSpeech('Study it, then restore your own code and write it from scratch.')
       }
     } catch (err) {
       console.error('API request failed:', err)
     }
   }
 
+  const restoreAnsweredBuffer = () => {
+    if (!restoreSnapshot) return
+    if (restoreSnapshot.kind === 'lesson') {
+      setCode(restoreSnapshot.code)
+    } else {
+      const { exerciseId, value } = restoreSnapshot
+      setExerciseInput((prev: Record<string, any>) => ({ ...prev, [exerciseId]: value }))
+    }
+    setRestoreSnapshot(null)
+    setFeedback('Your work is back. Run it and take it from there.')
+    setCharState('encouraging')
+    setCharSpeech('Back to your own work. You have this.')
+  }
+
   // ─── Submit Interactive Sublesson Exercise ──────────────────────────────────
-  const submitSubLessonExercise = async (
-    ex: Exercise & { sublessonId?: string },
-    options?: { autoContinue?: boolean }
-  ) => {
-    if (!lesson) return false
+  const submitSubLessonExercise = async (ex: Exercise & { sublessonId?: string }) => {
+    if (!lesson) return
     // Hard guard: submissions are only valid from the 'answering' phase.
     // This makes double-clicks and stale submissions impossible.
-    if (exercisePhase !== 'answering') return false
-    if (completedExerciseIds.has(ex.id)) return false // already graded — never re-award XP
+    if (exercisePhase !== 'answering') return
+    if (completedExerciseIds.has(ex.id)) return // already graded — never re-award XP
 
     const inputState = exerciseInput[ex.id] || {}
     const exType = (ex.type || 'code').toLowerCase().trim()
     let payload: Record<string, any> = {}
 
-    if (['mcq', 'true_false', 'output_prediction', 'debugging', 'identify_error'].includes(exType)) {
-      payload = { answer: inputState.answer || '' }
-    } else if (['fill_blank', 'code_completion'].includes(exType)) {
-      if (inputState.code) {
-        payload = { code: inputState.code }
-      } else {
-        payload = { answers: inputState.answers || (inputState.answer ? [inputState.answer] : []) }
+    // Build the submit payload from the shared type registry rather than a
+    // second copy of the type lists, so a new backend type cannot arrive here
+    // unhandled and quietly submit the wrong shape.
+    switch (widgetFor(exType)) {
+      case 'fill': {
+        const template = buildFillBlankTemplate(
+          ex.starter_code || '',
+          ex.blanks ?? [],
+          ex.question
+        )
+        const edited = inputState.code
+        const answers = (
+          edited
+            ? extractAnswersFromEdited(template, edited)
+            : (inputState.answers || (inputState.answer ? [inputState.answer] : []))
+        ).map((a: string) =>
+          String(a ?? '').split('___').join('').split('\n')[0].trim()
+        )
+        payload = { answers, code: edited }
+        break
       }
-    } else if (exType === 'select_multiple') {
-      payload = { answers: inputState.answers || inputState.selected || [] }
-    } else if (exType === 'ordering') {
-      payload = { order: inputState.order || inputState.answers || [] }
-    } else if (exType === 'matching') {
-      payload = { pairs: inputState.pairs || [] }
-    } else if (['code', 'tiny_coding', 'identify_mistake'].includes(exType)) {
-      payload = { code: inputState.code ?? code }
-    } else {
-      payload = { answer: inputState.answer || '' }
+      case 'multi_select':
+        payload = { answers: inputState.answers || inputState.selected || [] }
+        break
+      case 'ordering':
+        payload = { order: inputState.order || inputState.answers || [] }
+        break
+      case 'matching':
+        payload = { pairs: inputState.pairs || [] }
+        break
+      case 'code':
+        payload = { code: inputState.code ?? code }
+        break
+      default:
+        payload = { answer: inputState.answer || '' }
     }
 
     setExercisePhase('checking')
     try {
       const res = await api.submitExercise(lesson.id, ex.id, ex.sublessonId, payload)
+      if (res.status === 403) {
+        const detail = (await res.json().catch(() => ({})))?.detail
+        if (detail?.error === 'out_of_hearts') {
+          applyHearts(detail.hearts)
+          setShowOutofHeartsModal(true)
+          setExercisePhase('answering')
+          return
+        }
+      }
       if (!res.ok) throw new Error('Submission failed')
       const data: ExerciseResult = await res.json()
+      // The server just updated the mistake queue from this attempt.
+      refreshMistakes()
 
       // Sync authoritative progress from the grading response itself.
       if (data.progress) {
@@ -845,32 +1134,31 @@ setIsLessonActive(true)
 
       if (data.passed) {
         playPatchworkSound('correct_chime', soundEnabled)
+        setConsecutiveCorrect((prev) => {
+          const next = prev + 1
+          if (next >= 3 && next % 3 === 0) {
+            playPatchworkSound('streak_milestone', soundEnabled)
+          }
+          return next
+        })
         setCharState('happy')
+        setCharSpeech(data.feedback || 'Correct answer!')
+        setExercisePhase('correct')
+        setExerciseFeedback({
+          passed: true,
+          feedback: data.feedback || 'Correct!',
+          explanation: data.explanation || undefined,
+          xpAwarded: data.xp_awarded || 0,
+          attempts: data.attempt_count || 1,
+        })
         if (data.xp_awarded) {
           triggerXpGain(data.xp_awarded)
         }
         fetchLessons()
-        if (options?.autoContinue) {
-          setCharSpeech(data.lesson_completed ? 'Lesson complete! Great work!' : 'Nice! Moving to the next step.')
-          continueToNextExercise({
-            forceLessonComplete: data.lesson_completed,
-            earnedXp: data.xp_awarded || 0,
-            nextLessonId: data.next_lesson_id ?? null,
-          })
-        } else {
-          setCharSpeech(data.feedback || 'Correct answer!')
-          setExercisePhase('correct')
-          setExerciseFeedback({
-            passed: true,
-            feedback: data.feedback || 'Correct!',
-            explanation: data.explanation || undefined,
-            xpAwarded: data.xp_awarded || 0,
-            attempts: data.attempt_count || 1,
-          })
-        }
-        return true
       } else {
         playPatchworkSound('error', soundEnabled)
+        setConsecutiveCorrect(0)
+        visitMistakesRef.current += 1
         setCharState('confused')
         setCharSpeech(data.feedback || data.explanation || 'Not quite right. Try again!')
 setExercisePhase('incorrect')
@@ -882,34 +1170,29 @@ setExercisePhase('incorrect')
           attempts: data.attempt_count || 1,
         })
 
-        // Wrong answers cost one heart too.
-        const heartState = loseHeart()
-        setHearts(heartState.hearts)
-        if (heartState.hearts <= 0 && !heartState.unlimitedHearts) {
-          setCharSpeech('Out of hearts! Enable Unlimited Hearts in Settings or review the guidebook and try again.')
+        // A wrong answer is charged by the server; clearing a miss refunds.
+        applyHearts(data.hearts)
+        if (data.graduated && data.hearts && data.hearts.hearts > 0) {
+          setCharSpeech('Cleared from your review list — heart back! ❤️')
         }
-        return false
+        if (data.hearts && data.hearts.hearts <= 0 && !data.hearts.unlimited) {
+          setShowOutofHeartsModal(true)
+        }
       }
     } catch (err) {
       console.error('Error submitting exercise:', err)
       playPatchworkSound('error', soundEnabled)
       setFeedback('Failed to submit exercise to grading server.')
       setExercisePhase('answering')
-      return false
     }
-    return false
   }
 
   // ─── Primary CTA: CONTINUE (after a correct answer) ─────────────────────────
   // The backend has already persisted completion; the derived progression now
   // points at the next exercise automatically. We only clear ephemeral state.
-  const continueToNextExercise = (opts?: {
-    forceLessonComplete?: boolean
-    earnedXp?: number
-    nextLessonId?: string | null
-  }) => {
-    const wasLessonComplete = opts?.forceLessonComplete ?? lessonComplete
-    const earnedXp = opts?.earnedXp ?? exerciseFeedback?.xpAwarded ?? 0
+  const continueToNextExercise = () => {
+    const wasLessonComplete = lessonComplete
+    const earnedXp = exerciseFeedback?.xpAwarded ?? 0
     setExerciseInput((prev: any) => {
       if (!currentExercise) return prev
       const next = { ...prev }
@@ -918,45 +1201,24 @@ setExercisePhase('incorrect')
     })
     setExercisePhase('answering')
     setExerciseFeedback(null)
-    setResults(null)
-    setFeedback('')
 
     if (wasLessonComplete) {
       const nextId =
-        opts?.nextLessonId ??
-        lessonProgress?.next_lesson_id ??
+        lessonProgress?.next_lesson_id ||
         (() => {
           const idx = lessons.findIndex((l) => l.id === lesson?.id)
           return idx >= 0 && idx < lessons.length - 1 ? lessons[idx + 1].id : null
         })()
-      setCelebration({ xpEarned: earnedXp, nextLessonId: nextId ?? null })
+      const boss = (lesson?.type || '') === 'checkpoint'
+      if (boss) playPatchworkSound('checkpoint_complete', soundEnabled)
+      setCelebration({
+        xpEarned: earnedXp,
+        nextLessonId: nextId ?? null,
+        mistakeFree: visitMistakesRef.current === 0,
+        boss,
+      })
     }
   }
-
-  const handleExerciseContinue = useCallback(async () => {
-    if (!lesson || !currentExercise) return
-
-    if (exercisePhase === 'correct') {
-      continueToNextExercise()
-      return
-    }
-
-    if (exercisePhase !== 'answering') return
-
-    const ex = { ...currentExercise, sublessonId: currentExercise.sublessonId }
-    if (currentExerciseIsCode && codeTestsPassed) {
-      await submitSubLessonExercise(ex, { autoContinue: true })
-      return
-    }
-
-    await submitSubLessonExercise(ex)
-  }, [
-    lesson,
-    currentExercise,
-    exercisePhase,
-    currentExerciseIsCode,
-    codeTestsPassed,
-  ])
 
   // ─── Primary CTA: TRY AGAIN (after an incorrect answer) ─────────────────────
   const retryCurrentExercise = () => {
@@ -1063,8 +1325,97 @@ setExercisePhase('incorrect')
   const profileStreak = userProfile?.streak
   const dailyProgress = getDailyProgress()
 
+  const isCodingType = (ex: Exercise | null | undefined) => {
+    if (!ex) return false
+    const t = (ex.type || 'code').toLowerCase().trim()
+    return CODE_EXERCISE_TYPES.includes(t) || FILL_EXERCISE_TYPES.includes(t)
+  }
+
+  const lastCompletedCodingExercise = allExercises.filter(
+    (ex) => isCodingType(ex) && completedExerciseIds.has(ex.id)
+  ).at(-1) ?? null
+
+  const codingFeedbackActive =
+    !currentExercise &&
+    (exercisePhase === 'correct' || exercisePhase === 'incorrect') &&
+    exerciseFeedback !== null &&
+    lastCompletedCodingExercise !== null
+
+  const workspaceExercise = currentExercise ?? (codingFeedbackActive ? lastCompletedCodingExercise : null)
+
+  // Every lesson — with or without exercises — opens the fullscreen workspace.
+  const isExerciseWorkspace = isLessonActive && lesson !== null
+
+  // Lessons without an active exercise still get the workspace chrome: the lesson
+  // itself is treated as one open-ended code exercise over the shared `code` buffer.
+  const lessonWorkspaceExercise = lesson
+    ? {
+        id: `lesson-${lesson.id}`,
+        type: 'code',
+        question: lesson.description || lesson.title,
+        sublessonTitle: lesson.title,
+        starter_code: lesson.starter_code || '',
+      }
+    : null
+
+  const handleExerciseBack = () => setIsLessonActive(false)
+
+  // ─── One tutor affordance, shared by every workspace surface ───────────────
+  // Exercise steps and lesson-level code used to render different chrome, which
+  // meant the hint existed in one place only. Both now get the same row and the
+  // same hint panel.
+  const tutorActionsRow = (
+    <div className="ew-footer-actions">
+      <TutorActions
+        hintDisabled={hintDisabled}
+        isTutorLoading={isTutorLoading}
+        isAiAvailable={isAiAvailable}
+        aiEnabled={aiEnabled}
+        answerArmed={answerArmed}
+        hasCodeToRestore={restoreSnapshot !== null}
+        onHint={askTutor}
+        onAnswer={askSolution}
+        onRestore={restoreAnsweredBuffer}
+        answerDisabled={isRunning}
+        buttonClass="ew-btn ew-btn-back"
+        answerButtonClass="ew-btn ew-btn-back"
+      />
+    </div>
+  )
+
+  const showTutorPanel =
+    isTutorLoading || Boolean(feedback && feedback !== DEFAULT_FEEDBACK)
+
+  const tutorPanel = showTutorPanel ? (
+    <aside aria-label="Tutor feedback" className="ew-lesson-tutor">
+      <div
+        className={`duo-tutor-box${tutorSource === 'offline' ? ' duo-tutor-box--offline' : ''}`}
+        role="status"
+        aria-label="Tutor feedback"
+        data-testid="tutor-box"
+        data-source={tutorSource || 'idle'}
+      >
+        <div className="duo-tutor-avatar">P</div>
+        <div className="duo-tutor-body">
+          <div className="duo-tutor-name">
+            {tutorSource === 'offline' ? 'Coach tip' : 'AI hint'}
+            <span className="duo-tutor-meta">
+              {tutorSource === 'offline'
+                ? 'offline fallback'
+                : currentProviderStatus?.name || selectedProvider}
+              {' · '}nudge {Math.min(4, Math.max(1, tutorLevel))} of 4
+            </span>
+          </div>
+          <div className="duo-tutor-text">
+            {isTutorLoading ? 'Thinking…' : feedback}
+          </div>
+        </div>
+      </div>
+    </aside>
+  ) : null
+
   return (
-    <div className="duo-layout">
+    <div className={`duo-layout${isExerciseWorkspace ? ' duo-layout--exercise-focus' : ''}${activeTab === 'practice' ? ' duo-layout--practice' : ''}`}>
       {/* ─── Left Sidebar Navigation Bar ─────────────────────────────────── */}
       <aside className="duo-nav-sidebar" aria-label="Main Navigation">
         <div className="duo-logo-area">
@@ -1215,7 +1566,8 @@ setExercisePhase('incorrect')
 
       {/* ─── Main Viewport Area ─────────────────────────────────────────── */}
       <div className="duo-main-viewport">
-        {/* Top Sticky Header Bar */}
+        {/* Top Sticky Header Bar (hidden during fullscreen coding exercises) */}
+        {!isExerciseWorkspace && activeTab !== 'practice' && (
         <header className="duo-top-header" role="banner">
           <div className="duo-header-left">
             <button
@@ -1256,11 +1608,21 @@ setExercisePhase('incorrect')
             <div className="duo-stat-pill xp" title="Total XP" aria-label={`XP: ${xp}, Level: ${level}`}>
               <span>⭐ {xp} XP</span>
             </div>
-            <div className="duo-stat-pill hearts" title="Hearts">
-              <span>❤️ {unlimitedHearts ? '∞' : hearts}</span>
+            <div
+              className="duo-stat-pill hearts"
+              title={
+                unlimitedHearts
+                  ? 'Unlimited hearts'
+                  : hearts >= maxHearts
+                    ? `${hearts} of ${maxHearts} hearts — full`
+                    : `Next heart in ${Math.ceil(secondsToNextHeart / 60)} min, or clear a missed step`
+              }
+            >
+              <span>❤️ {unlimitedHearts ? '∞' : `${hearts}/${maxHearts}`}</span>
             </div>
           </div>
         </header>
+        )}
 
         {backendError && (
           <div className="backend-error-banner" role="alert" style={{ background: '#fee2e2', color: '#991b1b', padding: '10px 24px', fontWeight: 700, fontSize: '14px' }}>
@@ -1277,196 +1639,173 @@ setExercisePhase('incorrect')
               </div>
             )}
             {isLessonActive && lesson ? (
-              /* ─── FOCUSED LESSON WORKSPACE ────────────────────────────── */
-              <div className="duo-exercise-stage">
-                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '16px' }}>
-                  <button
-                    className="duo-button duo-button-secondary"
-                    onClick={() => setIsLessonActive(false)}
-                    style={{ padding: '8px 16px', fontSize: '14px' }}
-                  >
-                    ← Back to Map
-                  </button>
-                  <div style={{ fontWeight: 900, fontSize: '18px', color: 'var(--ink)' }}>
-                    {lesson.title}
-                  </div>
-                    <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
-                      <button
-                        className="duo-button duo-button-secondary"
-                        onClick={() => setIsGuidebookOpen(true)}
-                        style={{ padding: '6px 12px', fontSize: '13px' }}
-                      >
-                        📖 Guidebook
-                      </button>
-                      <div className="duo-type-badge duo-type-practice">
-                        +15 XP
-                      </div>
-                  </div>
-                </div>
-
-                <main className="duo-card" aria-label="Lesson content">
-                  <div className="duo-card-header">
-                    <span className={`duo-type-badge duo-type-${lesson.type || 'practice'}`}>
-                      {(lesson.type || 'practice').toUpperCase()}
-                    </span>
-                    <span className="duo-difficulty-badge">
-                      {lesson.difficulty.toUpperCase()} • {lesson.duration_minutes} MINS
-                    </span>
-                  </div>
-
-                  <h2 className="duo-lesson-title">{lesson.title}</h2>
-                  <p className="duo-instruction">{lesson.description}</p>
-
-                  {/* Character Mascot Coach */}
-                  <div style={{ marginBottom: '20px' }}>
-                    <PatchworkCharacter name="patch" state={charState} speech={charSpeech} />
-                  </div>
-
-                  {/* Interactive Exercise — phase-driven learning loop */}
-                  {lessonHasExercises && !lessonComplete && currentExercise ? (
-                    <ExercisePanel
-                      exercise={currentExercise}
-                      exerciseInput={exerciseInput}
-                      exercisePhase={exercisePhase}
-                      exerciseFeedback={exerciseFeedback}
-                      exercisePosition={exercisePosition}
-                      exerciseTotal={exerciseTotal}
-                      completedExerciseCount={completedExerciseCount}
-                      onInputChange={setExerciseInput}
-                      onSubmit={() => submitSubLessonExercise({ ...currentExercise, sublessonId: currentExercise.sublessonId })}
-                      onRetry={retryCurrentExercise}
-                      onRunCode={runTests}
-                      isRunningCode={isRunning}
-                      codeTestsPassed={codeTestsPassed}
-                      onContinue={handleExerciseContinue}
-                      lessonId={lesson.id}
-                    />
-                  ) : (
-                    <CodeEditor value={code} onChange={setCode} filename="exercise.py" onKeyDown={handleEditorKeyDown} />
-                  )}
-                </main>
-
-                {/* Immediate Test Results */}
-                {results && (
-                  <div
-                    ref={resultsRef}
-                    className={`duo-feedback-panel ${allPassed ? 'success' : 'error'}`}
-                    role="region"
-                    aria-label="Test results"
-                  >
-                    <div className="duo-feedback-title">
-                      <span>
-                        {allPassed
-                          ? `All ${results.length} tests passed`
-                          : `${failedRequired.length} of ${results.filter((r) => r.required).length} required failed`}
-                      </span>
-                    </div>
-                    {(results ?? []).map((r) => (
-                      <div key={r.name} style={{ display: 'flex', flexDirection: 'column', gap: '4px', fontSize: '14px', fontWeight: 700 }}>
-                        <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
-                          <span role="img" aria-label={r.passed ? 'Passed' : 'Failed'}>{r.passed ? '✓' : '×'}</span>
-                          <span>{r.name}</span>
-                          {!r.required && <span style={{ fontSize: '10px', background: 'rgba(0,0,0,0.1)', padding: '2px 6px', borderRadius: '4px' }}>opt</span>}
-                        </div>
-                        {!r.passed && r.error && (
-                          <div style={{ marginLeft: '24px', fontSize: '12px', fontWeight: 500, opacity: 0.9 }}>
-                            {r.error}
-                          </div>
-                        )}
-                      </div>
-                    ))}
-                    {allPassed && showExerciseContinue && (
-                      <button
-                        type="button"
-                        className="duo-button duo-button-primary"
-                        style={{ marginTop: '12px', alignSelf: 'flex-start', padding: '12px 24px' }}
-                        onClick={handleExerciseContinue}
-                        disabled={exercisePhase === 'checking'}
-                      >
-                        {exercisePhase === 'checking' ? 'Saving…' : 'Continue →'}
-                      </button>
-                    )}
-                  </div>
-                )}
-
-                {/* Tutor Coach Box (Shown only when active hint requested or tutor loading) */}
-                {(isTutorLoading || (feedback && feedback !== 'Run your code to get immediate feedback from the local sandbox.')) && (
-                  <aside aria-label="Tutor feedback" style={{ marginTop: '16px' }}>
-                    <div className="duo-tutor-box" role="status" aria-label="Tutor feedback">
-                      <div className="duo-tutor-avatar">P</div>
-                      <div>
-                        <div className="duo-tutor-name">AI Hint ({currentProviderStatus?.name || selectedProvider})</div>
-                        <div className="duo-tutor-text">
-                          {isTutorLoading ? 'Thinking…' : feedback}
-                        </div>
-                      </div>
-                    </div>
-                  </aside>
-                )}
-
-                {/* Lesson-Complete Celebration */}
-                {celebration && (
-                  <div className="duo-feedback-panel success" role="status">
-                    <div className="duo-feedback-title">
-                      <span>🎉 Lesson Complete!</span>
-                    </div>
-                    <p style={{ fontWeight: 700, marginBottom: '8px' }}>
-                      Awesome work! You completed every exercise in this lesson.
-                    </p>
-                    {celebration.xpEarned > 0 && (
-                      <p style={{ fontWeight: 700, color: '#16a34a', marginBottom: '16px' }}>
-                        +{celebration.xpEarned} XP earned
-                      </p>
-                    )}
-                    <div style={{ display: 'flex', gap: '12px' }}>
-                      {celebration.nextLessonId ? (
-                        <button className="duo-button duo-button-primary" onClick={goToNextLesson}>
-                          Next Lesson →
+              workspaceExercise ? (
+                <ExercisePanel
+                  exercise={workspaceExercise}
+                  exerciseInput={exerciseInput}
+                  exercisePhase={exercisePhase}
+                  exerciseFeedback={exerciseFeedback}
+                  exercisePosition={exercisePosition}
+                  exerciseTotal={exerciseTotal}
+                  completedExerciseCount={completedExerciseCount}
+                  onInputChange={setExerciseInput}
+                  onSubmit={() => submitSubLessonExercise({ ...workspaceExercise, sublessonId: workspaceExercise.sublessonId })}
+                  onContinue={continueToNextExercise}
+                  onRetry={retryCurrentExercise}
+                  onRunCode={runTests}
+                  isRunningCode={isRunning}
+                  lessonId={lesson.id}
+                  lessonSource={lesson.source}
+                  lessonObjectives={lesson.learning_objectives}
+                  combo={consecutiveCorrect}
+                  lessonType={lesson.type}
+                  onBack={handleExerciseBack}
+                  soundEnabled={soundEnabled}
+                  onToggleSound={toggleSound}
+                  runResults={results}
+                  language={selectedLanguage}
+                  footerExtra={tutorActionsRow}
+                  outputExtra={tutorPanel}
+                />
+              ) : lessonWorkspaceExercise ? (
+                /* ─── FOCUSED LESSON WORKSPACE (no active exercise) ─────── */
+                <ExerciseWorkspace
+                  lessonMode
+                  exercise={lessonWorkspaceExercise}
+                  exType="code"
+                  exerciseInput={{ [lessonWorkspaceExercise.id]: { code } }}
+                  exercisePhase="answering"
+                  exerciseFeedback={null}
+                  exercisePosition={1}
+                  exerciseTotal={1}
+                  completedExerciseCount={0}
+                  onInputChange={(updater: any) => {
+                    const snapshot = { [lessonWorkspaceExercise.id]: { code } }
+                    const next = updater(snapshot)
+                    const nextCode = next?.[lessonWorkspaceExercise.id]?.code
+                    if (typeof nextCode === 'string') setCode(nextCode)
+                  }}
+                  onContinue={() => {}}
+                  onRetry={() => {}}
+                  onRun={runTests}
+                  isRunning={isRunning}
+                  onBack={() => setIsLessonActive(false)}
+                  soundEnabled={soundEnabled}
+                  onToggleSound={toggleSound}
+                  lessonId={lesson.id}
+                  lessonSource={lesson.source}
+                  lessonObjectives={lesson.learning_objectives}
+                  combo={consecutiveCorrect}
+                  lessonType={lesson.type}
+                  language={selectedLanguage}
+                  editorFilename={`exercise.${LANGUAGE_FILE_EXT[selectedLanguage] || 'py'}`}
+                  onOpenGuidebook={() => setIsGuidebookOpen(true)}
+                  footerExtra={tutorActionsRow}
+                  taskExtra={
+                    <div className="ew-lesson-notes">
+                      <span className="ew-section-label">Session notes</span>
+                      <div className="ew-lesson-notes-row">
+                        <input
+                          type="text"
+                          placeholder="Add a note…"
+                          value={noteInput}
+                          onChange={(e) => setNoteInput(e.target.value)}
+                          onKeyDown={(e) => {
+                            if (e.key === 'Enter') {
+                              e.preventDefault()
+                              addNote()
+                            }
+                          }}
+                          aria-label="Session note"
+                          className="ew-lesson-notes-input"
+                        />
+                        <button
+                          onClick={addNote}
+                          aria-label="Add note"
+                          className="ew-btn ew-btn-submit"
+                          style={{ padding: '10px 16px' }}
+                        >
+                          +
                         </button>
-                      ) : null}
-                      <button
-                        className="duo-button duo-button-secondary"
-                        onClick={() => {
-                          setCelebration(null)
-                          setIsLessonActive(false)
-                          setLesson(null)
-                        }}
-                      >
-                        Back to Course
-                      </button>
+                      </div>
+                      {sessionNotes.length > 0 && (
+                        <ul className="ew-lesson-notes-list">
+                          {(sessionNotes ?? []).map((note, i) => (
+                            <li key={i}>{note}</li>
+                          ))}
+                        </ul>
+                      )}
                     </div>
-                  </div>
-                )}
-
-                {/* Session Notes */}
-                <div style={{ marginTop: '16px' }}>
-                  <div style={{ display: 'flex', gap: '8px' }}>
-                    <input
-                      type="text"
-                      placeholder="Add a note…"
-                      value={noteInput}
-                      onChange={(e) => setNoteInput(e.target.value)}
-                      onKeyDown={(e) => {
-                        if (e.key === 'Enter') {
-                          e.preventDefault()
-                          addNote()
-                        }
-                      }}
-                      aria-label="Session note"
-                      style={{ flex: 1, padding: '10px 14px', borderRadius: '12px', border: '2px solid var(--line)', fontWeight: 700, background: 'var(--input-bg)', color: 'var(--ink)' }}
-                    />
-                    <button onClick={addNote} aria-label="Add note" className="duo-button duo-button-primary" style={{ padding: '10px 20px' }}>+</button>
-                  </div>
-                  {sessionNotes.length > 0 && (
-                    <ul style={{ marginTop: '12px', paddingLeft: '20px', fontWeight: 700 }}>
-                      {(sessionNotes ?? []).map((note, i) => (
-                        <li key={i}>{note}</li>
-                      ))}
-                    </ul>
-                  )}
-                </div>
-
-              </div>
+                  }
+                  outputExtra={
+                    <>
+                      {results && (
+                        <div
+                          ref={resultsRef}
+                          className={`duo-feedback-panel ${allPassed ? 'success' : 'error'}`}
+                          role="region"
+                          aria-label="Test results"
+                        >
+                          <div className="duo-feedback-title">
+                            <span>
+                              {allPassed
+                                ? `All ${results.length} tests passed`
+                                : `${failedRequired.length} of ${results.filter((r) => r.required).length} required failed`}
+                            </span>
+                          </div>
+                          {(results ?? []).map((r) => (
+                            <div key={r.name} style={{ display: 'flex', gap: '8px', alignItems: 'center', fontSize: '14px', fontWeight: 700 }}>
+                              <span role="img" aria-label={r.passed ? 'Passed' : 'Failed'}>{r.passed ? '✓' : '×'}</span>
+                              <span>{r.name}</span>
+                              {!r.required && <span style={{ fontSize: '10px', background: 'rgba(0,0,0,0.1)', padding: '2px 6px', borderRadius: '4px' }}>opt</span>}
+                            </div>
+                          ))}
+                        </div>
+                      )}
+                      {tutorPanel}
+                    </>
+                  }
+                  banner={
+                    celebration && (
+                      <div className={`duo-feedback-panel success ew-lesson-celebration${celebration.mistakeFree ? ' ew-celebration--perfect' : ''}${celebration.boss ? ' ew-celebration--boss' : ''}`} role="status">
+                        <div className="duo-feedback-title">
+                          <span>{celebration.boss ? '👑 BOSS CLEARED!' : '🎉 Lesson Complete!'}</span>
+                          {celebration.mistakeFree && (
+                            <span className="ew-perfect-badge">⚡ PERFECT — no mistakes!</span>
+                          )}
+                        </div>
+                        <p style={{ fontWeight: 700, marginBottom: '8px' }}>
+                          {celebration.boss
+                            ? 'You just mastered a checkpoint — the hardest lesson in the unit!'
+                            : 'Awesome work! You completed every exercise in this lesson.'}
+                        </p>
+                        {celebration.xpEarned > 0 && (
+                          <p style={{ fontWeight: 700, color: '#16a34a', marginBottom: '16px' }}>
+                            +{celebration.xpEarned} XP earned
+                          </p>
+                        )}
+                        <div style={{ display: 'flex', gap: '12px' }}>
+                          {celebration.nextLessonId ? (
+                            <button className="duo-button duo-button-primary" onClick={goToNextLesson}>
+                              Next Lesson →
+                            </button>
+                          ) : null}
+                          <button
+                            className="duo-button duo-button-secondary"
+                            onClick={() => {
+                              setCelebration(null)
+                              setIsLessonActive(false)
+                              setLesson(null)
+                            }}
+                          >
+                            Back to Course
+                          </button>
+                        </div>
+                      </div>
+                    )
+                  }
+                />
+              ) : null
             ) : (
               <LearnPath
                 lessons={safeLessons}
@@ -1480,7 +1819,7 @@ setExercisePhase('incorrect')
         )}
 
         {activeTab === 'practice' && (
-          <div className="duo-page-container">
+          <div className="duo-page-container duo-page-container--practice">
             <PracticeHub
               lessons={safeLessons}
               isLoadingLesson={isLoadingLesson}
@@ -1489,9 +1828,12 @@ setExercisePhase('incorrect')
                 void loadLesson(item, true)
               }}
               onOpenGuidebook={() => setIsGuidebookOpen(true)}
+              onBack={() => setActiveTab('learn')}
               materials={materials}
               completedMaterialIds={completedMaterialIds}
               onCompleteMaterial={handleCompleteMaterial}
+              mistakes={mistakes}
+              language={selectedLanguage}
             />
           </div>
         )}
@@ -1726,64 +2068,33 @@ setExercisePhase('incorrect')
           </div>
         )}
 
-        {/* ─── Bottom Footer Action Bar ──────────────────────────────────── */}
-        {activeTab === 'learn' && isLessonActive && showLessonRunCode && (
+        {/* ─── Bottom Footer Action Bar (only when the workspace is not open) ── */}
+        {activeTab === 'learn' && isLessonActive && showLessonRunCode && !isExerciseWorkspace && (
           <footer className="duo-footer-bar">
             <div className="duo-footer-left" style={{ display: 'flex', gap: '12px' }}>
-              <button
-                id="hint-button"
-                className="duo-button duo-button-secondary"
-                onClick={askTutor}
-                disabled={hintDisabled}
-                aria-label={
-                  !isAiAvailable
-                    ? 'AI tutor unavailable'
-                    : !aiEnabled
-                    ? 'AI tutor is paused'
-                    : 'Request a hint'
-                }
-              >
-                {isTutorLoading
-                  ? 'Getting Hint…'
-                  : !isAiAvailable
-                  ? 'AI tutor unavailable'
-                  : !aiEnabled
-                  ? 'AI tutor is paused'
-                  : 'Request a hint'}
-              </button>
-
-              <button
-                id="solution-button"
-                className="duo-button duo-button-secondary duo-button-solution"
-                onClick={askSolution}
-                disabled={!lesson || isRunning}
-                aria-label="View Solution"
-              >
-                View Solution 💡
-              </button>
+              <TutorActions
+                hintDisabled={hintDisabled}
+                isTutorLoading={isTutorLoading}
+                isAiAvailable={isAiAvailable}
+                aiEnabled={aiEnabled}
+                answerArmed={answerArmed}
+                hasCodeToRestore={restoreSnapshot !== null}
+                onHint={askTutor}
+                onAnswer={askSolution}
+                onRestore={restoreAnsweredBuffer}
+                answerDisabled={!lesson || isRunning}
+              />
             </div>
 
-            {showExerciseContinue ? (
-              <button
-                id="continue-exercise-button"
-                className="duo-button duo-button-primary"
-                onClick={handleExerciseContinue}
-                disabled={exercisePhase === 'checking' || isLoadingLesson}
-                aria-label="Continue"
-              >
-                {exercisePhase === 'checking' ? 'Saving…' : 'Continue →'}
-              </button>
-            ) : (
-              <button
-                id="run-tests-button"
-                className="duo-button duo-button-primary"
-                onClick={runTests}
-                disabled={isRunning || isLoadingLesson}
-                aria-label="Run code"
-              >
-                {isRunning ? 'Running…' : 'Run code'}
-              </button>
-            )}
+            <button
+              id="run-tests-button"
+              className="duo-button duo-button-primary"
+              onClick={runTests}
+              disabled={isRunning || isLoadingLesson}
+              aria-label="Run code"
+            >
+              {isRunning ? 'Running…' : 'Run code'}
+            </button>
           </footer>
         )}
       </div>
@@ -1800,18 +2111,21 @@ setExercisePhase('incorrect')
               <button
                 className="duo-button duo-button-primary"
                 onClick={() => {
-                  setHearts(5)
-                  saveGameState({ hearts: 5 })
-                  setShowOutofHeartsModal(false)
+                  void api.refillHearts().then((status) => {
+                    applyHearts(status)
+                    setShowOutofHeartsModal(false)
+                  })
                 }}
               >
-                Refill 5 Hearts ❤️
+                Refill Hearts ❤️
               </button>
               <button
                 className="duo-button duo-button-secondary"
                 onClick={() => {
-                  setUnlimitedHearts(true)
-                  setShowOutofHeartsModal(false)
+                  void api.setHeartSettings({ unlimited: true }).then((status) => {
+                    applyHearts(status)
+                    setShowOutofHeartsModal(false)
+                  })
                 }}
               >
                 Enable Unlimited Hearts ∞
@@ -1837,13 +2151,12 @@ setExercisePhase('incorrect')
         unlimitedHearts={unlimitedHearts}
         hearts={hearts}
         onToggleUnlimitedHearts={(value) => {
-          const next = applyUnlimitedHearts(value)
-          setUnlimitedHearts(next.unlimitedHearts)
-          setHearts(next.hearts)
+          applyUnlimitedHearts(value)
+          void api.setHeartSettings({ unlimited: value }).then(applyHearts)
         }}
         onRestoreHearts={() => {
-          const next = restoreHearts(1)
-          setHearts(next.hearts)
+          restoreHearts(1)
+          void api.hearts().then(applyHearts)
         }}
         gamification={{
           xp,

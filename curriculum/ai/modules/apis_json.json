@@ -13,7 +13,7 @@
     {
       "id": "ai-01",
       "title": "1. Building Model API Request Payloads",
-      "description": "Construct standard Chat Completion JSON request payloads with system and user messages.",
+      "description": "Chat completion requests send a 'model' and a 'messages' array — 'a list of messages comprising the conversation so far' — where each message is a dict with 'role' and 'content'. Implement build_chat_payload(model, system_prompt, user_prompt) so it returns json.dumps of {\"model\": ..., \"messages\": [system, user]}. Tests parse the JSON and check the model name and that there are 2 messages.",
       "order": 1,
       "difficulty": "intermediate",
       "duration_minutes": 5,
@@ -21,8 +21,10 @@
       "section_id": "sec-ai-1",
       "section_title": "Section 1: AI Foundations",
       "test_out_eligible": false,
-      "concepts": ["ai-model-apis"],
-      "starter_code": "import json\n\ndef build_chat_payload(model: str, system_prompt: str, user_prompt: str) -> str:\n    payload = {\n        \"model\": model,\n        \"messages\": [\n            {\"role\": \"system\", \"content\": system_prompt},\n            {\"role\": \"user\", \"content\": user_prompt}\n        ]\n    }\n    return json.dumps(payload)\n",
+      "concepts": [
+        "ai-model-apis"
+      ],
+      "starter_code": "import json\n\ndef build_chat_payload(model: str, system_prompt: str, user_prompt: str) -> str:\n    # TODO: assemble {'model': ..., 'messages': [system msg dict, user msg dict]}\n    #       each message dict has 'role' ('system'/'user') and 'content'\n    return json.dumps({'model': model, 'messages': []})\n",
       "solution_code": "import json\n\ndef build_chat_payload(model: str, system_prompt: str, user_prompt: str) -> str:\n    payload = {\n        \"model\": model,\n        \"messages\": [\n            {\"role\": \"system\", \"content\": system_prompt},\n            {\"role\": \"user\", \"content\": user_prompt}\n        ]\n    }\n    return json.dumps(payload)\n",
       "tests": [
         {
@@ -31,7 +33,44 @@
           "required": true
         }
       ],
-      "completion_requirements": { "required_test_names": ["test_build_chat_payload"] }
+      "completion_requirements": {
+        "required_test_names": [
+          "test_build_chat_payload"
+        ]
+      },
+      "source": {
+        "name": "OpenAI documentation — Chat Completions API — 'A list of messages comprising the conversation so far'",
+        "url": "https://developers.openai.com/api/docs/api-reference/chat",
+        "license": "OpenAI API documentation (developers.openai.com)"
+      },
+      "learning_objectives": [
+        "Build chat completion request payloads with model and messages",
+        "Encode role/content message dicts for system and user turns",
+        "Serialize requests with json.dumps"
+      ],
+      "xp_reward": 10,
+      "sublessons": [
+        {
+          "id": "ai-01-tf-1-sub",
+          "title": "Reading a request payload",
+          "order": 1,
+          "exercises": [
+            {
+              "id": "ai-01-tf-1",
+              "type": "true_false",
+              "question": "In a chat-completion request, every entry in the `messages` array carries both a `role` and a `content`.",
+              "micro_explanation": "The API needs to know who said each line, not just the text.",
+              "correct_answer": "True",
+              "explanation": "Each message names its author through `role` (system, user or assistant) and carries the text for that turn in `content`.",
+              "xp_reward": 10,
+              "options": [
+                "True",
+                "False"
+              ]
+            }
+          ]
+        }
+      ]
     }
   ]
 }

@@ -9,6 +9,7 @@ import {
 } from '../../utils/projectApi'
 import { compactText, milestoneDescription, sourceExcerpt, whyExplanation } from './learnerCopy'
 import { ProjectTerminal, makeTerminalLine, shellPrompt, type TerminalLine } from './ProjectTerminal'
+import { CodeEditor } from '../CodeEditor'
 
 // ─── ProjectWorkspace ─────────────────────────────────────────────────────────
 // The persistent, VS Code-like workspace for a Create Course guided project.
@@ -253,7 +254,7 @@ export const ProjectWorkspace: React.FC<ProjectWorkspaceProps> = ({ courseId, on
       setProject(res.project)
       if (res.stdout) appendTerminal(makeTerminalLine('stdout', res.stdout))
       if (res.stderr) appendTerminal(makeTerminalLine('stderr', res.stderr))
-      appendTerminal(makeTerminalLine(res.status === 'project_complete' ? 'success' : 'info', res.feedback))
+      appendTerminal(makeTerminalLine('info', res.feedback))
       if (res.status === 'project_complete') {
         setCelebrate(true)
       }
@@ -442,19 +443,19 @@ export const ProjectWorkspace: React.FC<ProjectWorkspaceProps> = ({ courseId, on
                 </button>
               </div>
 
-              <textarea
-                className="pw-editor"
+              <CodeEditor
                 value={activeFile?.content ?? ''}
-                onChange={(e) => updateActiveFile(e.target.value)}
+                onChange={updateActiveFile}
+                filename={activePath || 'main.py'}
+                variant="workspace"
+                showHeader={false}
+                ariaLabel={`Editor for ${activePath}`}
                 onKeyDown={(e) => {
                   if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') {
                     e.preventDefault()
                     handleRun()
                   }
                 }}
-                spellCheck={false}
-                aria-label={`Editor for ${activePath}`}
-                placeholder="Write your code here. Your work persists across the whole project."
               />
 
               <div className="pw-editor-toolbar">
@@ -489,7 +490,7 @@ export const ProjectWorkspace: React.FC<ProjectWorkspaceProps> = ({ courseId, on
                 Step {currentMilestone.order} · +{currentMilestone.xp_reward} XP
               </span>
               <h3 className="pw-microstep-title">
-                {lesson.hook || currentMilestone.title}
+                {lesson?.hook || currentMilestone.title}
               </h3>
               {lesson?.observation && (
                 <p className="pw-observation">{lesson.observation}</p>
@@ -503,7 +504,7 @@ export const ProjectWorkspace: React.FC<ProjectWorkspaceProps> = ({ courseId, on
                 <p className="pw-hint">💡 {compactText(currentMilestone.microstep.hint, 220)}</p>
               )}
               <div className="pw-microstep-controls">
-                {lesson.teach && (
+                {lesson?.teach && (
                   <button
                     className="pw-why"
                     onClick={() =>
@@ -525,9 +526,9 @@ export const ProjectWorkspace: React.FC<ProjectWorkspaceProps> = ({ courseId, on
                   {expandedWhy === currentMilestone.id ? 'Hide' : 'Why?'}
                 </button>
               </div>
-              {expandedLearn === currentMilestone.id && lesson.teach && (
+              {expandedLearn === currentMilestone.id && lesson?.teach && (
                 <div className="pw-why-body">
-                  <p>{lesson.teach}</p>
+                  <p>{lesson?.teach}</p>
                 </div>
               )}
               {showExample && currentMilestone.example && (

@@ -25,7 +25,7 @@
       "concepts": [
         "py-auto"
       ],
-      "starter_code": "def filter_log_lines(lines: list[str], keyword: str) -> list[str]:\n    return [line for line in lines if keyword in line]\n",
+      "starter_code": "def filter_log_lines(lines: list[str], keyword: str) -> list[str]:\n    # TODO: keep only lines that contain the keyword\n    return []\n",
       "solution_code": "def filter_log_lines(lines: list[str], keyword: str) -> list[str]:\n    return [line for line in lines if keyword in line]\n",
       "tests": [
         {
@@ -38,7 +38,18 @@
         "required_test_names": [
           "test_filter_log_lines"
         ]
-      }
+      },
+      "source": {
+        "name": "Python official documentation (docs.python.org) — Reading and Writing Files — with keyword and line iteration (Tutorial)",
+        "url": "https://docs.python.org/3/tutorial/inputoutput.html#reading-and-writing-files",
+        "license": "Python documentation license (PSF)"
+      },
+      "learning_objectives": [
+        "Filter text lines with membership tests and list comprehensions",
+        "Process file-like line data without manual accumulator loops",
+        "Return a new list containing exactly the lines that match a keyword"
+      ],
+      "xp_reward": 10
     }
   ]
 }

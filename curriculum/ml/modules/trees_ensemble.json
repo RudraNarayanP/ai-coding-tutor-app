@@ -15,10 +15,10 @@
     {
       "id": "tree-stump",
       "title": "1. Decision Stump",
-      "description": "Implement `stump_predict(x, threshold)` \u2192 1 if x>=threshold else 0.",
+      "description": "Implement `stump_predict(x, threshold)` → 1 if x>=threshold else 0.",
       "order": 21,
       "difficulty": "intermediate",
-      "duration_minutes": 8,
+      "duration_minutes": 5,
       "type": "learn",
       "section_id": "sec-ml-1",
       "section_title": "Section 1: ML Foundations",
@@ -42,7 +42,13 @@
         "required_test_names": [
           "test_stump"
         ]
-      }
+      },
+      "source": {
+        "name": "scikit-learn User Guide — Decision Trees — a tree stump is a single split test",
+        "url": "https://scikit-learn.org/stable/modules/tree.html",
+        "license": "BSD 3-Clause (scikit-learn documentation)"
+      },
+      "xp_reward": 10
     },
     {
       "id": "tree-gini",
@@ -50,7 +56,7 @@
       "description": "Implement `gini(labels)` for a list of class labels.",
       "order": 22,
       "difficulty": "intermediate",
-      "duration_minutes": 8,
+      "duration_minutes": 5,
       "type": "learn",
       "section_id": "sec-ml-1",
       "section_title": "Section 1: ML Foundations",
@@ -74,7 +80,13 @@
         "required_test_names": [
           "test_gini"
         ]
-      }
+      },
+      "source": {
+        "name": "scikit-learn User Guide — Decision Trees — 'Gini: H(Q_m) = Σ_k p_mk (1 - p_mk)' classification criterion",
+        "url": "https://scikit-learn.org/stable/modules/tree.html",
+        "license": "BSD 3-Clause (scikit-learn documentation)"
+      },
+      "xp_reward": 10
     },
     {
       "id": "tree-best-split",
@@ -106,15 +118,21 @@
         "required_test_names": [
           "test_best_split"
         ]
-      }
+      },
+      "source": {
+        "name": "scikit-learn User Guide — Decision Trees — finding the best split at each node",
+        "url": "https://scikit-learn.org/stable/modules/tree.html",
+        "license": "BSD 3-Clause (scikit-learn documentation)"
+      },
+      "xp_reward": 25
     },
     {
       "id": "tree-bagging",
       "title": "4. Majority Vote Ensemble (Practice)",
-      "description": "Implement `majority_vote(pred_lists)` \u2014 each pred_lists[i] is predictions from one model. Tie \u2192 min label.",
+      "description": "Implement `majority_vote(pred_lists)` — each pred_lists[i] is predictions from one model. Tie → min label.",
       "order": 24,
       "difficulty": "intermediate",
-      "duration_minutes": 8,
+      "duration_minutes": 6,
       "type": "practice",
       "section_id": "sec-ml-1",
       "section_title": "Section 1: ML Foundations",
@@ -138,7 +156,13 @@
         "required_test_names": [
           "test_majority_vote"
         ]
-      }
+      },
+      "source": {
+        "name": "scikit-learn User Guide — Ensemble methods — 'combine the predictions of several base estimators'",
+        "url": "https://scikit-learn.org/stable/modules/ensemble.html",
+        "license": "BSD 3-Clause (scikit-learn documentation)"
+      },
+      "xp_reward": 15
     },
     {
       "id": "tree-checkpoint",
@@ -146,7 +170,7 @@
       "description": "Implement `should_stop(depth, max_depth, labels)` True if depth>=max_depth or all labels equal.",
       "order": 25,
       "difficulty": "intermediate",
-      "duration_minutes": 8,
+      "duration_minutes": 10,
       "type": "checkpoint",
       "section_id": "sec-ml-1",
       "section_title": "Section 1: ML Foundations",
@@ -170,7 +194,13 @@
         "required_test_names": [
           "test_should_stop"
         ]
-      }
+      },
+      "source": {
+        "name": "scikit-learn User Guide — Decision Trees — stopping criteria (depth, pure nodes)",
+        "url": "https://scikit-learn.org/stable/modules/tree.html",
+        "license": "BSD 3-Clause (scikit-learn documentation)"
+      },
+      "xp_reward": 40
     }
   ]
 }

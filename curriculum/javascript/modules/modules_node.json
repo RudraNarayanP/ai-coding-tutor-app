@@ -2,12 +2,20 @@
   "id": "js-modules-node",
   "title": "Unit 4: Modules & Node.js",
   "order": 4,
-  "concepts": [{ "id": "js-node", "title": "Node.js & Web Foundations", "prerequisites": ["js-async"] }],
+  "concepts": [
+    {
+      "id": "js-node",
+      "title": "Node.js & Web Foundations",
+      "prerequisites": [
+        "js-async"
+      ]
+    }
+  ],
   "lessons": [
     {
       "id": "js-04",
       "title": "4. Node.js & Application Foundations",
-      "description": "Build modern JavaScript web application services and module structures.",
+      "description": "Checkpoint: implement `createServerConfig(port = 8080)` using a default parameter (default function parameters initialize named parameters when no value is passed) and return the shorthand object { port, env: 'development' }. Tests check createServerConfig(3000).port === 3000, createServerConfig().port === 8080, and env === 'development'.",
       "order": 4,
       "difficulty": "intermediate",
       "duration_minutes": 10,
@@ -15,17 +23,75 @@
       "section_id": "sec-js-2",
       "section_title": "Section 2: Async & Node",
       "test_out_eligible": true,
-      "concepts": ["js-node"],
-      "starter_code": "function createServerConfig(port = 8080) {\n    return { port, env: 'development' };\n}\nmodule.exports = { createServerConfig };\n",
+      "concepts": [
+        "js-node"
+      ],
+      "starter_code": "// TODO: default the port and return the config object described above\nfunction createServerConfig(port) {\n    return {};\n}\nmodule.exports = { createServerConfig };\n",
       "solution_code": "function createServerConfig(port = 8080) {\n    return { port, env: 'development' };\n}\nmodule.exports = { createServerConfig };\n",
       "tests": [
         {
           "name": "test_server_config",
-          "unittest_code": "const cfg = solution.createServerConfig(3000);\nif (cfg.port !== 3000) throw new Error('Port mismatch');",
-          "required": true
+          "required": true,
+          "unittest_code": "const cfg = solution.createServerConfig(3000);\nif (cfg.port !== 3000) throw new Error('Port mismatch');\nconst dflt = solution.createServerConfig();\nif (dflt.port !== 8080) throw new Error('Expected default port 8080');\nif (cfg.env !== 'development' || dflt.env !== 'development') throw new Error(\"Expected env 'development'\");"
         }
       ],
-      "completion_requirements": { "required_test_names": ["test_server_config"] }
+      "completion_requirements": {
+        "required_test_names": [
+          "test_server_config"
+        ]
+      },
+      "learning_objectives": [
+        "Use default parameter values for optional arguments",
+        "Use shorthand property names in object literals",
+        "Apply core JavaScript syntax under checkpoint conditions"
+      ],
+      "source": {
+        "name": "MDN Web Docs — Functions — Default parameters: 'allow named parameters to be initialized with default values if no value or undefined is passed'",
+        "url": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Functions/Default_parameters",
+        "license": "CC0 1.0 Universal (MDN Web Docs)"
+      },
+      "xp_reward": 40
+    },
+    {
+      "id": "js-07",
+      "title": "7. ES Modules: import & export",
+      "description": "Modules provide top-level scoping — nothing is global unless explicitly exported. Replace the placeholders: export a const appName with the value 'Patchwork' and export a function formatTitle(title) that returns a template literal: `${title} - ${appName}` (note the hyphen and spaces). The test imports your module as an ES module.",
+      "order": 7,
+      "difficulty": "beginner",
+      "duration_minutes": 6,
+      "type": "practice",
+      "section_id": "sec-js-2",
+      "section_title": "Section 2: Async & Node",
+      "test_out_eligible": false,
+      "concepts": [
+        "js-node"
+      ],
+      "prerequisites": [],
+      "learning_objectives": [
+        "Export named bindings with ES module syntax",
+        "Use template literals to compose strings",
+        "Know that module scope is not global scope"
+      ],
+      "source": {
+        "name": "MDN Web Docs — Guide — JavaScript modules: 'Modules provide top-level scoping'",
+        "url": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Modules",
+        "license": "CC0 1.0 Universal (MDN Web Docs)"
+      },
+      "starter_code": "// TODO: export the app name, then build the title from it\nexport const appName = '';\n\nexport function formatTitle(title) {\n    return title;\n}\n",
+      "solution_code": "export const appName = 'Patchwork';\n\nexport function formatTitle(title) {\n    return `${title} - ${appName}`;\n}\n",
+      "tests": [
+        {
+          "name": "test_es_module_exports",
+          "required": true,
+          "unittest_code": "if (solution.appName !== 'Patchwork') throw new Error('appName mismatch');\nif (solution.formatTitle('Learn') !== 'Learn - Patchwork') throw new Error('formatTitle mismatch');"
+        }
+      ],
+      "completion_requirements": {
+        "required_test_names": [
+          "test_es_module_exports"
+        ]
+      },
+      "xp_reward": 15
     }
   ]
 }

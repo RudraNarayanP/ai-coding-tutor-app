@@ -16,7 +16,7 @@
       "description": "Implement `join_url(base, path)` avoiding double/missing slashes.",
       "order": 1,
       "difficulty": "intermediate",
-      "duration_minutes": 8,
+      "duration_minutes": 5,
       "type": "learn",
       "section_id": "sec-fs-1",
       "section_title": "Section 1: Full-Stack Client Patterns",
@@ -40,7 +40,13 @@
         "required_test_names": [
           "test_join_url"
         ]
-      }
+      },
+      "source": {
+        "name": "Python docs — String Methods — str.rstrip() / str.lstrip()",
+        "url": "https://docs.python.org/3/library/stdtypes.html#string-methods",
+        "license": "Python documentation license (PSF)"
+      },
+      "xp_reward": 10
     },
     {
       "id": "fs-query-string",
@@ -48,7 +54,7 @@
       "description": "Implement `query_string(params)` as sorted k=v pairs with urllib.parse.quote.",
       "order": 2,
       "difficulty": "intermediate",
-      "duration_minutes": 8,
+      "duration_minutes": 5,
       "type": "learn",
       "section_id": "sec-fs-1",
       "section_title": "Section 1: Full-Stack Client Patterns",
@@ -72,7 +78,13 @@
         "required_test_names": [
           "test_query_string"
         ]
-      }
+      },
+      "source": {
+        "name": "Python docs — urllib.parse.quote — 'Replace special characters in string using the %xx escape.'",
+        "url": "https://docs.python.org/3/library/urllib.parse.html",
+        "license": "Python documentation license (PSF)"
+      },
+      "xp_reward": 10
     },
     {
       "id": "fs-parse-json",
@@ -104,15 +116,21 @@
         "required_test_names": [
           "test_parse_json_response"
         ]
-      }
+      },
+      "source": {
+        "name": "MDN — HTTP response status codes — 4xx client errors / 5xx server errors",
+        "url": "https://developer.mozilla.org/en-US/docs/Web/HTTP/Reference/Status",
+        "license": "CC0 1.0 Universal (MDN Web Docs)"
+      },
+      "xp_reward": 25
     },
     {
       "id": "fs-headers",
       "title": "4. Merge Headers (Practice)",
-      "description": "Implement `merge_headers(base, extra)` \u2014 extra wins on conflicts.",
+      "description": "Implement `merge_headers(base, extra)` — extra wins on conflicts.",
       "order": 4,
       "difficulty": "intermediate",
-      "duration_minutes": 8,
+      "duration_minutes": 6,
       "type": "practice",
       "section_id": "sec-fs-1",
       "section_title": "Section 1: Full-Stack Client Patterns",
@@ -136,7 +154,39 @@
         "required_test_names": [
           "test_merge_headers"
         ]
-      }
+      },
+      "source": {
+        "name": "MDN — HTTP Authorization request header",
+        "url": "https://developer.mozilla.org/en-US/docs/Web/HTTP/Reference/Headers/Authorization",
+        "license": "CC0 1.0 Universal (MDN Web Docs)"
+      },
+      "xp_reward": 15,
+      "sublessons": [
+        {
+          "id": "fs-headers-order-1-sub",
+          "title": "Order the steps",
+          "order": 1,
+          "exercises": [
+            {
+              "id": "fs-headers-order-1",
+              "type": "ordering",
+              "question": "Put the steps of `4. Merge Headers (Practice)` back in order. Each line depends on the one before it.",
+              "options": [
+                "out.update(extra)",
+                "return out",
+                "out = dict(base)"
+              ],
+              "correct_answer": [
+                "out = dict(base)",
+                "out.update(extra)",
+                "return out"
+              ],
+              "explanation": "The order the solution in “4. Merge Headers (Practice)” actually runs in.",
+              "xp_reward": 10
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "fs-http-checkpoint",
@@ -144,7 +194,7 @@
       "description": "Implement `build_request(method, url, headers=None, json_body=None)` returning method/url/headers/body.",
       "order": 5,
       "difficulty": "intermediate",
-      "duration_minutes": 8,
+      "duration_minutes": 10,
       "type": "checkpoint",
       "section_id": "sec-fs-1",
       "section_title": "Section 1: Full-Stack Client Patterns",
@@ -168,7 +218,13 @@
         "required_test_names": [
           "test_build_request"
         ]
-      }
+      },
+      "source": {
+        "name": "Python docs — json — JSON encoder and decoder (json.dumps request bodies)",
+        "url": "https://docs.python.org/3/library/json.html",
+        "license": "Python documentation license (PSF)"
+      },
+      "xp_reward": 40
     }
   ]
 }

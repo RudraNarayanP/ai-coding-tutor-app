@@ -16,7 +16,7 @@
       "description": "Implement `predict(x, w, b)` = w*x + b for scalars.",
       "order": 1,
       "difficulty": "intermediate",
-      "duration_minutes": 8,
+      "duration_minutes": 5,
       "type": "learn",
       "section_id": "sec-ml-1",
       "section_title": "Section 1: ML Foundations",
@@ -40,15 +40,21 @@
         "required_test_names": [
           "test_predict"
         ]
-      }
+      },
+      "source": {
+        "name": "Google Machine Learning Crash Course — Linear regression — 'y' = b + w_1x_1'",
+        "url": "https://developers.google.com/machine-learning/crash-course/linear-regression",
+        "license": "CC BY 4.0 (Google Machine Learning Crash Course)"
+      },
+      "xp_reward": 10
     },
     {
       "id": "linreg-mse",
       "title": "2. Mean Squared Error",
-      "description": "Implement `mse(y_true, y_pred)`.",
+      "description": "Implement `mse(y_true, y_pred)` returning the mean of the squared residuals (mean squared error). The test checks mse([1, 2], [1, 4]) == 2.0.",
       "order": 2,
       "difficulty": "intermediate",
-      "duration_minutes": 8,
+      "duration_minutes": 5,
       "type": "learn",
       "section_id": "sec-ml-1",
       "section_title": "Section 1: ML Foundations",
@@ -72,12 +78,18 @@
         "required_test_names": [
           "test_mse"
         ]
-      }
+      },
+      "source": {
+        "name": "scikit-learn User Guide — 3.4 Metrics and scoring — regression metrics (mean_squared_error)",
+        "url": "https://scikit-learn.org/stable/modules/model_evaluation.html",
+        "license": "BSD 3-Clause (scikit-learn documentation)"
+      },
+      "xp_reward": 10
     },
     {
       "id": "linreg-gd-step",
       "title": "3. Gradient Descent Step",
-      "description": "Implement `gd_step(xs, ys, w, b, lr)` one step for y\u2248w*x+b. Return (w_new, b_new).",
+      "description": "Implement `gd_step(xs, ys, w, b, lr)` one step for y≈w*x+b. Return (w_new, b_new).",
       "order": 3,
       "difficulty": "intermediate",
       "duration_minutes": 8,
@@ -104,7 +116,13 @@
         "required_test_names": [
           "test_gd_step"
         ]
-      }
+      },
+      "source": {
+        "name": "Google Machine Learning Crash Course — Gradient descent — 'iteratively finds the weights and bias that produce the model with the lowest loss'",
+        "url": "https://developers.google.com/machine-learning/crash-course/linear-regression/gradient-descent",
+        "license": "CC BY 4.0 (Google Machine Learning Crash Course)"
+      },
+      "xp_reward": 25
     },
     {
       "id": "linreg-closed-form",
@@ -112,7 +130,7 @@
       "description": "Implement `fit_slope(xs, ys)` for y=w*x (no intercept): w = sum(x*y)/sum(x*x).",
       "order": 4,
       "difficulty": "intermediate",
-      "duration_minutes": 8,
+      "duration_minutes": 6,
       "type": "practice",
       "section_id": "sec-ml-1",
       "section_title": "Section 1: ML Foundations",
@@ -136,15 +154,21 @@
         "required_test_names": [
           "test_fit_slope"
         ]
-      }
+      },
+      "source": {
+        "name": "Google Machine Learning Crash Course — Linear regression — the linear model equation",
+        "url": "https://developers.google.com/machine-learning/crash-course/linear-regression",
+        "license": "CC BY 4.0 (Google Machine Learning Crash Course)"
+      },
+      "xp_reward": 15
     },
     {
       "id": "linreg-checkpoint",
-      "title": "5. Checkpoint: R\u00b2 Score",
+      "title": "5. Checkpoint: R² Score",
       "description": "Implement `r2(y_true, y_pred)`. Return 0 if total sum of squares is 0.",
       "order": 5,
       "difficulty": "intermediate",
-      "duration_minutes": 8,
+      "duration_minutes": 10,
       "type": "checkpoint",
       "section_id": "sec-ml-1",
       "section_title": "Section 1: ML Foundations",
@@ -168,7 +192,13 @@
         "required_test_names": [
           "test_r2"
         ]
-      }
+      },
+      "source": {
+        "name": "Google Machine Learning Crash Course — Glossary: R-squared — 'square of the Pearson correlation coefficient between the values that a model predicted and ground truth'",
+        "url": "https://developers.google.com/machine-learning/glossary/metrics",
+        "license": "CC BY 4.0 (Google Machine Learning Crash Course)"
+      },
+      "xp_reward": 40
     }
   ]
 }

@@ -6,7 +6,9 @@
     {
       "id": "booleans",
       "title": "Booleans & Logical Operators",
-      "prerequisites": ["variables"]
+      "prerequisites": [
+        "variables"
+      ]
     }
   ],
   "lessons": [
@@ -21,8 +23,12 @@
       "section_id": "section-2",
       "section_title": "Section 2: Control Flow",
       "test_out_eligible": false,
-      "concepts": ["booleans"],
-      "prerequisites": ["variables"],
+      "concepts": [
+        "booleans"
+      ],
+      "prerequisites": [
+        "variables"
+      ],
       "learning_objectives": [
         "Use boolean values and the `and` operator"
       ],
@@ -36,8 +42,16 @@
         }
       ],
       "completion_requirements": {
-        "required_test_names": ["test_can_drive"]
-      }
+        "required_test_names": [
+          "test_can_drive"
+        ]
+      },
+      "source": {
+        "name": "Python official documentation (docs.python.org) — 6.11 Boolean Operations — and, or, not (Language Reference)",
+        "url": "https://docs.python.org/3/reference/expressions.html#boolean-operations",
+        "license": "Python documentation license (PSF)"
+      },
+      "xp_reward": 10
     },
     {
       "id": "booleans-step-2",
@@ -50,8 +64,12 @@
       "section_id": "section-2",
       "section_title": "Section 2: Control Flow",
       "test_out_eligible": false,
-      "concepts": ["booleans"],
-      "prerequisites": ["variables"],
+      "concepts": [
+        "booleans"
+      ],
+      "prerequisites": [
+        "variables"
+      ],
       "learning_objectives": [
         "Use `or` and `not` logical operators"
       ],
@@ -65,110 +83,221 @@
         }
       ],
       "completion_requirements": {
-        "required_test_names": ["test_can_enter_club"]
-      }
+        "required_test_names": [
+          "test_can_enter_club"
+        ]
+      },
+      "source": {
+        "name": "Python official documentation (docs.python.org) — 6.11 Boolean Operations — and, or, not (Language Reference)",
+        "url": "https://docs.python.org/3/reference/expressions.html#boolean-operations",
+        "license": "Python documentation license (PSF)"
+      },
+      "xp_reward": 10,
+      "sublessons": [
+        {
+          "id": "bool-or-not-sub",
+          "title": "Predict the output",
+          "order": 1,
+          "exercises": [
+            {
+              "id": "bool-or-not-out-1",
+              "type": "output_prediction",
+              "question": "What does this program print?\n\n```python\ndef can_enter_club(has_vip_pass, is_on_guestlist):\n    return has_vip_pass or is_on_guestlist\n\nprint(can_enter_club(False, True), can_enter_club(False, False), not can_enter_club(True, False))\n```",
+              "options": [
+                "True False True",
+                "False False True",
+                "True False False"
+              ],
+              "correct_answer": "True False False",
+              "explanation": "`or` is True when at least one side is True, so (False, True) gives True and (False, False) gives False; `not` then flips the third call, which was True, to False. The other options are what `and` instead of `or`, or dropping the `not`, would print.",
+              "xp_reward": 10
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "booleans-01",
       "title": "3. Ghost Gobble Arcade Game",
-      "description": "In this exercise, you need to implement the rules from Pac-Man using boolean logic.",
+      "description": "Pac-Man may eat a ghost only while the power pellet is active AND he is touching a ghost. Implement eat_ghost(power_pellet_active, touching_ghost) so it returns True exactly when both inputs are True (all four combinations are tested).",
       "order": 8,
       "difficulty": "beginner",
-      "duration_minutes": 15,
+      "duration_minutes": 8,
       "type": "challenge",
       "section_id": "section-2",
       "section_title": "Section 2: Control Flow",
       "test_out_eligible": false,
-      "concepts": ["booleans"],
-      "prerequisites": ["variables"],
+      "concepts": [
+        "booleans"
+      ],
+      "prerequisites": [
+        "variables"
+      ],
       "learning_objectives": [
         "Combine and, or, and not to model game logic"
       ],
-      "starter_code": "def eat_ghost(power_pellet_active, touching_ghost):\n    return power_pellet_active and touching_ghost\n",
+      "starter_code": "def eat_ghost(power_pellet_active, touching_ghost):\n    # TODO: return True only when the pellet is active AND a ghost is touched\n    return False\n",
       "solution_code": "def eat_ghost(power_pellet_active, touching_ghost):\n    return power_pellet_active and touching_ghost\n",
       "tests": [
         {
           "name": "test_ghost_gets_eaten",
-          "unittest_code": "def test_ghost_gets_eaten(self):\n    self.assertEqual(eat_ghost(True, True), True)",
-          "required": true
+          "required": true,
+          "description": "eat_ghost is True only when both inputs are True.",
+          "unittest_code": "def test_ghost_gets_eaten(self):\n    self.assertEqual(eat_ghost(True, True), True)\n    self.assertEqual(eat_ghost(True, False), False)\n    self.assertEqual(eat_ghost(False, True), False)\n    self.assertEqual(eat_ghost(False, False), False)\n"
         }
       ],
       "completion_requirements": {
-        "required_test_names": ["test_ghost_gets_eaten"]
-      }
+        "required_test_names": [
+          "test_ghost_gets_eaten"
+        ]
+      },
+      "source": {
+        "name": "Python official documentation (docs.python.org) — 6.11 Boolean Operations — and (Language Reference)",
+        "url": "https://docs.python.org/3/reference/expressions.html#boolean-operations",
+        "license": "Python documentation license (PSF)"
+      },
+      "xp_reward": 25
     },
     {
       "id": "booleans-practice-1",
       "title": "4. Security System Access (Practice)",
-      "description": "Implement `unlock_door(has_keycard, passcode_correct, is_emergency)`.",
+      "description": "Implement unlock_door(has_keycard, passcode_correct, is_emergency): the door opens when the emergency override is active, OR when the keycard is held AND the passcode is correct. Every combination listed in the tests must hold.",
       "order": 9,
       "difficulty": "beginner",
-      "duration_minutes": 5,
+      "duration_minutes": 6,
       "type": "practice",
       "section_id": "section-2",
       "section_title": "Section 2: Control Flow",
       "test_out_eligible": false,
-      "concepts": ["booleans"],
-      "prerequisites": ["variables"],
+      "concepts": [
+        "booleans"
+      ],
+      "prerequisites": [
+        "variables"
+      ],
       "learning_objectives": [
         "Apply boolean logic to access security problems"
       ],
-      "starter_code": "def unlock_door(has_keycard, passcode_correct, is_emergency):\n    return is_emergency or (has_keycard and passcode_correct)\n",
+      "starter_code": "def unlock_door(has_keycard, passcode_correct, is_emergency):\n    # TODO: return True when is_emergency OR (has_keycard AND passcode_correct)\n    return False\n",
       "solution_code": "def unlock_door(has_keycard, passcode_correct, is_emergency):\n    return is_emergency or (has_keycard and passcode_correct)\n",
       "tests": [
         {
           "name": "test_unlock_door",
-          "unittest_code": "def test_unlock_door(self):\n    self.assertTrue(unlock_door(False, False, True))",
-          "required": true
+          "required": true,
+          "description": "Emergency override or keycard+passcode opens the door.",
+          "unittest_code": "def test_unlock_door(self):\n    self.assertTrue(unlock_door(False, False, True))\n    self.assertTrue(unlock_door(True, True, False))\n    self.assertFalse(unlock_door(True, False, False))\n    self.assertFalse(unlock_door(False, True, False))\n    self.assertFalse(unlock_door(False, False, False))\n"
         }
       ],
       "completion_requirements": {
-        "required_test_names": ["test_unlock_door"]
-      }
+        "required_test_names": [
+          "test_unlock_door"
+        ]
+      },
+      "source": {
+        "name": "Python official documentation (docs.python.org) — 6.11 Boolean Operations — or / and (Language Reference)",
+        "url": "https://docs.python.org/3/reference/expressions.html#boolean-operations",
+        "license": "Python documentation license (PSF)"
+      },
+      "xp_reward": 15,
+      "sublessons": [
+        {
+          "id": "access-rule-sub",
+          "title": "Select the combinations that open the door",
+          "order": 1,
+          "exercises": [
+            {
+              "id": "access-rule-multi-1",
+              "type": "select_multiple",
+              "question": "The rule is: the door opens when the emergency override is active, OR when the keycard is held AND the passcode is correct. Select every combination that opens the door. (keycard, passcode, emergency)",
+              "options": [
+                "keycard + correct passcode, no emergency",
+                "no keycard, no passcode, emergency active",
+                "no keycard, correct passcode, emergency active",
+                "keycard, wrong passcode, no emergency",
+                "no keycard, no passcode, no emergency"
+              ],
+              "correct_answer": [
+                "keycard + correct passcode, no emergency",
+                "no keycard, no passcode, emergency active",
+                "no keycard, correct passcode, emergency active"
+              ],
+              "explanation": "Emergency alone opens the door whatever else is true; without it, both the keycard and the correct passcode are needed.",
+              "xp_reward": 10
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "booleans-checkpoint",
       "title": "5. Section 2 Checkpoint: Control Flow Mastery",
-      "description": "Demonstrate complete understanding of boolean logic.",
+      "description": "A camera device can take a photo only when it has a working camera module AND its memory is not full. Implement can_take_photo(has_camera, memory_full) — all four input combinations are tested.",
       "order": 10,
       "difficulty": "beginner",
-      "duration_minutes": 5,
+      "duration_minutes": 10,
       "type": "checkpoint",
       "section_id": "section-2",
       "section_title": "Section 2: Control Flow",
       "test_out_eligible": true,
-      "concepts": ["booleans"],
-      "prerequisites": ["variables"],
+      "concepts": [
+        "booleans"
+      ],
+      "prerequisites": [
+        "variables"
+      ],
       "learning_objectives": [
         "Pass boolean checkpoint challenge"
       ],
-      "starter_code": "def can_take_photo(has_camera, memory_full):\n    return has_camera and not memory_full\n",
+      "starter_code": "def can_take_photo(has_camera, memory_full):\n    # TODO: return True only when has_camera is True AND memory_full is False\n    return False\n",
       "solution_code": "def can_take_photo(has_camera, memory_full):\n    return has_camera and not memory_full\n",
       "tests": [
         {
           "name": "test_can_take_photo",
-          "unittest_code": "def test_can_take_photo(self):\n    self.assertTrue(can_take_photo(True, False))",
-          "required": true
+          "required": true,
+          "description": "Photo allowed only with a camera and free memory.",
+          "unittest_code": "def test_can_take_photo(self):\n    self.assertTrue(can_take_photo(True, False))\n    self.assertFalse(can_take_photo(True, True))\n    self.assertFalse(can_take_photo(False, False))\n    self.assertFalse(can_take_photo(False, True))\n"
         }
       ],
       "completion_requirements": {
-        "required_test_names": ["test_can_take_photo"]
+        "required_test_names": [
+          "test_can_take_photo"
+        ]
       },
       "mastery_exam": [
         {
           "id": "py-bool-chk-1",
           "type": "mcq",
-          "question": "What is the result of True and False in Python?",
-          "options": ["False", "True", "None", "Error"],
-          "correct_answer": "False"
+          "question": "What does `not True` evaluate to in Python?",
+          "options": [
+            "True",
+            "None",
+            "False",
+            "Error"
+          ],
+          "correct_answer": "False",
+          "explanation": "and is only True when BOTH operands are True.",
+          "xp_reward": 10
         },
         {
           "id": "py-bool-chk-2",
           "type": "fill_blank",
           "question": "Flip boolean value: result = ___ True",
-          "correct_answer": "not"
+          "correct_answer": [
+            "not"
+          ],
+          "blanks": [
+            "not"
+          ],
+          "explanation": "The not operator flips True to False.",
+          "xp_reward": 10
         }
-      ]
+      ],
+      "source": {
+        "name": "Python official documentation (docs.python.org) — 6.11 Boolean Operations — not / and (Language Reference)",
+        "url": "https://docs.python.org/3/reference/expressions.html#boolean-operations",
+        "license": "Python documentation license (PSF)"
+      },
+      "xp_reward": 40
     }
   ]
 }

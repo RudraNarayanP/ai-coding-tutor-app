@@ -8,7 +8,14 @@ import uuid
 from contextlib import asynccontextmanager
 from pathlib import Path
 
-from .materials import Material, MaterialCompletionRequest, MaterialCompletionResponse
+from .hearts import HeartStore
+from .materials import (
+    Material,
+    MaterialCompletionRequest,
+    MaterialCompletionResponse,
+    PublicMaterial,
+    to_public,
+)
 from .materials_data import MATERIALS
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
@@ -103,6 +110,21 @@ class ExerciseFeedbackRequest(BaseModel):
 
 base_path = Path(__file__).resolve().parent
 curriculum_root = base_path.parent / "curriculum"
+
+
+def _env_path(var: str, default: Path) -> Path:
+    """A writable-state directory that ops (and pytest) can redirect via env."""
+    raw = os.getenv(var, "").strip()
+    return Path(raw) if raw else default
+
+
+# All authoritative runtime state lives here. Overridable so an automated run
+# can never mutate a real learner's progression, hearts or saved projects.
+state_root = _env_path("PATCHWORK_STATE_DIR", base_path)
+project_store_root = _env_path(
+    "PATCHWORK_PROJECT_DIR", curriculum_root / "generated" / "projects"
+)
+
 ingestion_service = SourceIngestionService()
 
 
@@ -110,16 +132,18 @@ loaded_curriculums = load_all_curriculums()
 loaded_stores = {}
 for lang, curr in loaded_curriculums.items():
     if lang.startswith("custom-"):
-        loaded_stores[lang] = ProgressionStore(curr, storage_path=base_path / f"progression_state_generated_{lang}.json")
+        loaded_stores[lang] = ProgressionStore(curr, storage_path=state_root / f"progression_state_generated_{lang}.json")
     else:
-        loaded_stores[lang] = ProgressionStore(curr, storage_path=base_path / f"progression_state_{lang}.json")
+        loaded_stores[lang] = ProgressionStore(curr, storage_path=state_root / f"progression_state_{lang}.json")
 
-user_store = UserStore(storage_path=base_path / "users_state.json")
-feedback_store = FeedbackStore(storage_path=base_path / "feedback_state.json")
+user_store = UserStore(storage_path=state_root / "users_state.json")
+# Hearts live on the server so the constraint cannot be edited away in devtools.
+heart_store = HeartStore(storage_path=state_root / "hearts_state.json")
+feedback_store = FeedbackStore(storage_path=state_root / "feedback_state.json")
 
 # Create Course guided-project state (isolated from lessons/curriculum). Stored
 # under curriculum/generated/projects/ which is already gitignored.
-project_store = ProjectStore(storage_dir=curriculum_root / "generated" / "projects")
+project_store = ProjectStore(storage_dir=project_store_root)
 
 lesson_engine = LessonEngine(
     executor=sandbox,
@@ -134,7 +158,23 @@ current_provider_id = os.getenv("AI_PROVIDER", "ollama").lower().strip()
 def get_current_provider() -> AIProvider:
     return get_ai_provider(current_provider_id)
 
-tutor_service = TutorService(provider=get_current_provider())
+
+def _lesson_for_reference(lesson_id: str):
+    """Server-side lookup of a lesson's canonical code for spoiler detection.
+
+    The reference solution is never sent to the provider — it is only used to
+    recognise when a "hint" has actually handed over the answer.
+    """
+    try:
+        return lesson_engine.get_lesson(lesson_id)
+    except KeyError:
+        return None
+
+
+tutor_service = TutorService(
+    provider=get_current_provider(),
+    lesson_lookup=_lesson_for_reference,
+)
 
 COURSE_METADATA = {
     "python": {
@@ -288,7 +328,17 @@ async def get_courses():
 
 
 
-@app.get("/api/materials", response_model=list[Material])
+@app.get("/api/mistakes")
+async def list_mistakes(language: str | None = None, limit: int = 10):
+    """Exercises the learner got wrong, re-served until they stick.
+
+    A missed step is queued immediately; it leaves after two consecutive
+    correct re-solves with a gap between them.
+    """
+    return {"due": lesson_engine.due_mistakes(language=language, limit=max(1, min(limit, 50)))}
+
+
+@app.get("/api/materials", response_model=list[PublicMaterial])
 async def list_materials(language: str | None = None, stage: str | None = None, concept: str | None = None):
     results = MATERIALS
     if language:
@@ -297,7 +347,7 @@ async def list_materials(language: str | None = None, stage: str | None = None, 
         results = [m for m in results if m.recommended_stage.lower().strip() == stage.lower().strip()]
     if concept:
         results = [m for m in results if concept in m.concept_tags]
-    return results
+    return [to_public(m) for m in results]
 
 
 @app.post("/api/materials/{material_id}/complete", response_model=MaterialCompletionResponse)
@@ -380,14 +430,60 @@ async def get_lesson_solution(lesson_id: str):
     return {"solution_code": lesson_engine.get_solution_code(lesson)}
 
 
-async def submit_lesson(lesson_id: str, request: CodeSubmission) -> ProgressionResult:
+@app.get("/api/lessons/{lesson_id}/exercises/{exercise_id}/solution")
+async def get_exercise_solution(lesson_id: str, exercise_id: str):
+    """The canonical answer for one exercise step.
+
+    Exercise steps render the same "Show full answer" affordance as lesson
+    code, so they need the same capability; without this the button would
+    silently paste the wrong thing on a step.
+    """
     try:
-        return await lesson_engine.run_lesson(lesson_id, request.code)
+        exercise = lesson_engine.get_exercise(lesson_id, exercise_id)
+    except KeyError as exc:
+        raise HTTPException(status_code=404, detail={"error": "exercise_not_found"}) from exc
+
+    answer = exercise.correct_answer
+    return {
+        "exercise_id": exercise.id,
+        "type": exercise.type,
+        "solution_code": exercise.solution_code,
+        "answer": answer if isinstance(answer, str) else None,
+        "answers": [str(a) for a in answer] if isinstance(answer, list) else None,
+        "starter_code": exercise.starter_code,
+        "blanks": exercise.blanks,
+        "question": exercise.question,
+    }
+
+
+async def submit_lesson(lesson_id: str, request: CodeSubmission) -> ProgressionResult:
+    if not heart_store.can_attempt():
+        raise HTTPException(
+            status_code=403,
+            detail={
+                "error": "out_of_hearts",
+                "hearts": heart_store.status().as_dict(),
+                "message": "Out of hearts. Review your missed steps to earn one back.",
+            },
+        )
+    try:
+        result = await lesson_engine.run_lesson(lesson_id, request.code)
     except SandboxError as exc:
         raise HTTPException(
             status_code=exc.status_code,
             detail={"error": "sandbox_unavailable", "message": str(exc)},
         ) from exc
+    # The server owns the pool, so a failed assessment is charged here rather
+    # than in the browser where it could be edited away.
+    if not result.passed:
+        result.hearts = heart_store.consume().as_dict()
+    elif result.graduated:
+        # Clearing the lesson's own task out of the review queue is rewarded
+        # exactly like clearing a step is.
+        result.hearts = heart_store.refund().as_dict()
+    else:
+        result.hearts = heart_store.status().as_dict()
+    return result
 
 
 @app.post("/api/lessons/{lesson_id}/run", response_model=ProgressionResult)
@@ -417,12 +513,51 @@ async def run_exercise_code(lesson_id: str, exercise_id: str, request: CodeSubmi
         ) from exc
 
 
+@app.get("/api/hearts")
+async def get_hearts():
+    """Current heart pool, with time-based regen already applied."""
+    return heart_store.status().as_dict()
+
+
+class HeartSettingsRequest(BaseModel):
+    unlimited: bool | None = None
+    max_hearts: int | None = Field(default=None, ge=1, le=10)
+
+
+@app.post("/api/hearts/settings")
+async def set_hearts_settings(request: HeartSettingsRequest):
+    if request.max_hearts is not None:
+        heart_store.set_max(request.max_hearts)
+    if request.unlimited is not None:
+        heart_store.set_unlimited(request.unlimited)
+    return heart_store.status().as_dict()
+
+
+@app.post("/api/hearts/refill")
+async def refill_hearts():
+    return heart_store.refill().as_dict()
+
+
 @app.post("/api/lessons/{lesson_id}/submit-exercise")
 async def submit_exercise(lesson_id: str, request: ExerciseSubmissionRequest, user_id: str = "default_user"):
     try:
         lesson_engine.get_lesson(lesson_id)
     except KeyError as exc:
         raise HTTPException(status_code=404, detail={"error": "lesson_not_found"}) from exc
+
+    # Replaying a missed step is always allowed: it is the way back into the
+    # lesson path when the pool is empty, and graduating it refunds a heart.
+    is_replay = lesson_engine.is_queued(request.exercise_id)
+    if not is_replay and not heart_store.can_attempt():
+        raise HTTPException(
+            status_code=403,
+            detail={
+                "error": "out_of_hearts",
+                "hearts": heart_store.status().as_dict(),
+                "message": "Out of hearts. Review your missed steps to earn one back, "
+                           "or wait for a refill.",
+            },
+        )
     try:
         res = await lesson_engine.submit_exercise(
             lesson_id=lesson_id,
@@ -452,6 +587,13 @@ async def submit_exercise(lesson_id: str, request: ExerciseSubmissionRequest, us
         }
     if res.get("xp_awarded", 0) > 0:
         user_store.update_user_xp(user_id, res["xp_awarded"])
+    if not res.get("passed"):
+        res["hearts"] = heart_store.consume().as_dict()
+    elif res.get("graduated"):
+        # Clearing a miss is rewarded, not just permitted.
+        res["hearts"] = heart_store.refund().as_dict()
+    else:
+        res["hearts"] = heart_store.status().as_dict()
     return res
 
 
@@ -884,7 +1026,7 @@ async def reset_progression(language: str | None = None):
             reset_langs.append(lang)
 
     # Also clean generic progression_state.json if it exists
-    generic_file = base_path / "progression_state.json"
+    generic_file = state_root / "progression_state.json"
     if generic_file.exists():
         try:
             generic_file.write_text("[]", encoding="utf-8")

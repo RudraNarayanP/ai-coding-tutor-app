@@ -2,7 +2,15 @@
   "id": "sql-u14",
   "title": "Unit 14: Window Functions",
   "order": 14,
-  "concepts": [{ "id": "sql-window", "title": "OVER, PARTITION BY, ROW_NUMBER", "prerequisites": ["sql-views"] }],
+  "concepts": [
+    {
+      "id": "sql-window",
+      "title": "OVER, PARTITION BY, ROW_NUMBER",
+      "prerequisites": [
+        "sql-views"
+      ]
+    }
+  ],
   "lessons": [
     {
       "id": "sql-14",
@@ -10,15 +18,37 @@
       "description": "Calculate employee salary rank within each department using `ROW_NUMBER() OVER (PARTITION BY department ORDER BY salary DESC)`.",
       "order": 14,
       "difficulty": "advanced",
-      "duration_minutes": 10,
+      "duration_minutes": 5,
       "type": "learn",
       "section_id": "sec-sql-4",
       "section_title": "Section 4: Mastery & Analytics",
-      "concepts": ["sql-window"],
-      "starter_code": "SELECT first_name, department, salary, ROW_NUMBER() OVER (PARTITION BY department ORDER BY salary DESC) AS rank FROM employees;\n",
+      "concepts": [
+        "sql-window"
+      ],
+      "starter_code": "-- TODO: add rank = ROW_NUMBER() OVER (PARTITION BY department ORDER BY salary DESC)\nSELECT first_name, department, salary FROM employees WHERE 0;\n",
       "solution_code": "SELECT first_name, department, salary, ROW_NUMBER() OVER (PARTITION BY department ORDER BY salary DESC) AS rank FROM employees;\n",
-      "tests": [{ "name": "test_window_rank", "test_code": "assert len(rows) >= 5 and columns[3] == 'rank'", "required": true }],
-      "completion_requirements": { "required_test_names": ["test_window_rank"] }
+      "tests": [
+        {
+          "name": "test_window_rank",
+          "test_code": "assert len(rows) >= 5 and columns[3] == 'rank'",
+          "required": true
+        }
+      ],
+      "completion_requirements": {
+        "required_test_names": [
+          "test_window_rank"
+        ]
+      },
+      "source": {
+        "name": "SQLite official documentation (sqlite.org) — Window functions — 'input values are taken from a window of one or more rows'",
+        "url": "https://sqlite.org/windowfunctions.html",
+        "license": "Public domain (SQLite documentation)"
+      },
+      "learning_objectives": [
+        "Compute per-row results without collapsing rows using OVER()",
+        "Partition a window with PARTITION BY and order it with ORDER BY"
+      ],
+      "xp_reward": 10
     }
   ]
 }

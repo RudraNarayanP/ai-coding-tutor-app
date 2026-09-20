@@ -6,7 +6,9 @@
     {
       "id": "string-methods",
       "title": "Built-in String Methods",
-      "prerequisites": ["strings"]
+      "prerequisites": [
+        "strings"
+      ]
     }
   ],
   "lessons": [
@@ -18,12 +20,16 @@
       "difficulty": "beginner",
       "duration_minutes": 5,
       "type": "learn",
-      "concepts": ["string-methods"],
-      "prerequisites": ["strings"],
+      "concepts": [
+        "string-methods"
+      ],
+      "prerequisites": [
+        "strings"
+      ],
       "learning_objectives": [
         "Transform string case and test endings"
       ],
-      "starter_code": "def make_loud(s):\n    # TODO: Return s.upper()\n    pass\n\ndef is_question(s):\n    # TODO: Return s.endswith('?')\n    pass\n",
+      "starter_code": "def make_loud(s):\n    # TODO: return s in capital letters\n    pass\n\ndef is_question(s):\n    # TODO: return True when s ends with a question mark\n    pass\n",
       "tests": [
         {
           "name": "test_string_methods_1",
@@ -32,8 +38,17 @@
         }
       ],
       "completion_requirements": {
-        "required_test_names": ["test_string_methods_1"]
-      }
+        "required_test_names": [
+          "test_string_methods_1"
+        ]
+      },
+      "solution_code": "def make_loud(s):\n    return s.upper()\n\n\ndef is_question(s):\n    return s.endswith('?')\n",
+      "source": {
+        "name": "Python official documentation (docs.python.org) — String Methods — Text Sequence Type str",
+        "url": "https://docs.python.org/3/library/stdtypes.html#string-methods",
+        "license": "Python documentation license (PSF)"
+      },
+      "xp_reward": 10
     },
     {
       "id": "string-methods-step-2",
@@ -43,12 +58,16 @@
       "difficulty": "beginner",
       "duration_minutes": 5,
       "type": "learn",
-      "concepts": ["string-methods"],
-      "prerequisites": ["strings"],
+      "concepts": [
+        "string-methods"
+      ],
+      "prerequisites": [
+        "strings"
+      ],
       "learning_objectives": [
         "Clean strings using strip() and replace()"
       ],
-      "starter_code": "def clean_and_censor(s, word, mask):\n    # TODO: Return s.strip().replace(word, mask)\n    pass\n",
+      "starter_code": "def clean_and_censor(s, word, mask):\n    # TODO: trim the ends, then swap word for mask\n    pass\n",
       "tests": [
         {
           "name": "test_clean_and_censor",
@@ -57,8 +76,17 @@
         }
       ],
       "completion_requirements": {
-        "required_test_names": ["test_clean_and_censor"]
-      }
+        "required_test_names": [
+          "test_clean_and_censor"
+        ]
+      },
+      "solution_code": "def clean_and_censor(s, word, mask):\n    return s.strip().replace(word, mask)\n",
+      "source": {
+        "name": "Python official documentation (docs.python.org) — String Methods — Text Sequence Type str",
+        "url": "https://docs.python.org/3/library/stdtypes.html#string-methods",
+        "license": "Python documentation license (PSF)"
+      },
+      "xp_reward": 10
     },
     {
       "id": "string-methods-01",
@@ -66,10 +94,14 @@
       "description": "Clean and format essay text using built-in string methods.",
       "order": 33,
       "difficulty": "beginner",
-      "duration_minutes": 15,
+      "duration_minutes": 8,
       "type": "challenge",
-      "concepts": ["string-methods"],
-      "prerequisites": ["strings"],
+      "concepts": [
+        "string-methods"
+      ],
+      "prerequisites": [
+        "strings"
+      ],
       "learning_objectives": [
         "Use .title(), .endswith(), .strip(), and .replace()",
         "Clean up user text input and fix spacing issues",
@@ -110,7 +142,9 @@
         "name": "Exercism Python Track — Little Sister's Essay",
         "url": "https://github.com/exercism/python/tree/main/exercises/concept/little-sisters-essay",
         "license": "MIT"
-      }
+      },
+      "solution_code": "def capitalize_title(title):\n    \"\"\"Return title in title case.\"\"\"\n    return title.title()\n\n\ndef check_sentence_ending(sentence):\n    \"\"\"Return True if sentence ends with a period.\"\"\"\n    return sentence.endswith('.')\n\n\ndef clean_up_spacing(sentence):\n    \"\"\"Strip leading and trailing whitespace.\"\"\"\n    return sentence.strip()\n\n\ndef replace_word_choice(sentence, old_word, new_word):\n    \"\"\"Replace old_word with new_word in sentence.\"\"\"\n    return sentence.replace(old_word, new_word)\n",
+      "xp_reward": 25
     },
     {
       "id": "string-methods-practice-1",
@@ -118,14 +152,18 @@
       "description": "Sanitize user input: lowercased and whitespace-trimmed.",
       "order": 34,
       "difficulty": "beginner",
-      "duration_minutes": 5,
+      "duration_minutes": 6,
       "type": "practice",
-      "concepts": ["string-methods"],
-      "prerequisites": ["strings"],
+      "concepts": [
+        "string-methods"
+      ],
+      "prerequisites": [
+        "strings"
+      ],
       "learning_objectives": [
         "Sanitize inputs using chained string methods"
       ],
-      "starter_code": "def sanitize_email(raw_email):\n    # TODO: Return raw_email.strip().lower()\n    pass\n",
+      "starter_code": "def sanitize_email(raw_email):\n    # TODO: return the address trimmed and in lower case\n    pass\n",
       "tests": [
         {
           "name": "test_sanitize_email",
@@ -134,23 +172,36 @@
         }
       ],
       "completion_requirements": {
-        "required_test_names": ["test_sanitize_email"]
-      }
+        "required_test_names": [
+          "test_sanitize_email"
+        ]
+      },
+      "solution_code": "def sanitize_email(raw_email):\n    return raw_email.strip().lower()\n",
+      "source": {
+        "name": "Python official documentation (docs.python.org) — String Methods — Text Sequence Type str",
+        "url": "https://docs.python.org/3/library/stdtypes.html#string-methods",
+        "license": "Python documentation license (PSF)"
+      },
+      "xp_reward": 15
     },
     {
       "id": "string-methods-checkpoint",
       "title": "5. Unit 7 Checkpoint: String Methods Mastery",
-      "description": "Verify string method execution.",
+      "description": "hashtagify(word) must turn any raw word into a hashtag: strip surrounding whitespace, lowercase it, and prefix it with \"#\" (e.g. ' Python ' -> '#python').",
       "order": 35,
       "difficulty": "beginner",
-      "duration_minutes": 5,
+      "duration_minutes": 10,
       "type": "checkpoint",
-      "concepts": ["string-methods"],
-      "prerequisites": ["strings"],
+      "concepts": [
+        "string-methods"
+      ],
+      "prerequisites": [
+        "strings"
+      ],
       "learning_objectives": [
         "Complete string methods check"
       ],
-      "starter_code": "def hashtagify(word):\n    # TODO: Return \"#\" + word.strip().lower()\n    pass\n",
+      "starter_code": "def hashtagify(word):\n    # TODO: return the word dressed up as a hashtag\n    pass\n",
       "tests": [
         {
           "name": "test_hashtagify",
@@ -159,8 +210,17 @@
         }
       ],
       "completion_requirements": {
-        "required_test_names": ["test_hashtagify"]
-      }
+        "required_test_names": [
+          "test_hashtagify"
+        ]
+      },
+      "solution_code": "def hashtagify(word):\n    return \"#\" + word.strip().lower()\n",
+      "source": {
+        "name": "Python official documentation (docs.python.org) — String Methods — Text Sequence Type str",
+        "url": "https://docs.python.org/3/library/stdtypes.html#string-methods",
+        "license": "Python documentation license (PSF)"
+      },
+      "xp_reward": 40
     }
   ]
 }

@@ -9,6 +9,18 @@ class CompanionQuestion(BaseModel):
     explanation: Optional[str] = None
 
 
+class PublicCompanionQuestion(BaseModel):
+    """Companion question without the answer key.
+
+    ``/api/materials`` is fetched when the library is opened, long before the
+    learner answers, and grading happens server-side in ``complete_material``
+    — so the client never needs ``correct_answer``.
+    """
+
+    question: str
+    options: list[str]
+
+
 class Material(BaseModel):
     id: str
     title: str
@@ -33,6 +45,15 @@ class Material(BaseModel):
     is_visualizer: bool = False
     is_challenge: bool = False
     companion_question: Optional[CompanionQuestion] = None
+
+
+class PublicMaterial(Material):
+    companion_question: Optional[PublicCompanionQuestion] = None
+
+
+def to_public(material: Material) -> PublicMaterial:
+    """Project a material for the browser, dropping the companion answer key."""
+    return PublicMaterial.model_validate(material.model_dump())
 
 
 class MaterialCompletionRequest(BaseModel):

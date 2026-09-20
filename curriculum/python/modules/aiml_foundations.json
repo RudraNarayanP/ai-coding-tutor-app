@@ -25,7 +25,7 @@
       "concepts": [
         "py-aiml"
       ],
-      "starter_code": "def dot_product(vec_a: list[float], vec_b: list[float]) -> float:\n    return sum(a * b for a, b in zip(vec_a, vec_b))\n",
+      "starter_code": "def dot_product(vec_a: list[float], vec_b: list[float]) -> float:\n    # TODO: sum the element-wise products of zip(vec_a, vec_b)\n    return 0.0\n",
       "solution_code": "def dot_product(vec_a: list[float], vec_b: list[float]) -> float:\n    return sum(a * b for a, b in zip(vec_a, vec_b))\n",
       "tests": [
         {
@@ -38,7 +38,18 @@
         "required_test_names": [
           "test_dot_product"
         ]
-      }
+      },
+      "source": {
+        "name": "Dive into Deep Learning §2.3 Linear Algebra — dot product is 'a sum over the products of the elements at the same position'",
+        "url": "https://d2l.ai/chapter_preliminaries/linear-algebra.html",
+        "license": "Apache 2.0 (Dive into Deep Learning book)"
+      },
+      "learning_objectives": [
+        "Compute the dot product of two equal-length vectors",
+        "Pair elements positionally with zip()",
+        "Accumulate element-wise products with a generator expression and sum()"
+      ],
+      "xp_reward": 10
     }
   ]
 }

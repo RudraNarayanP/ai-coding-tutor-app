@@ -6,7 +6,9 @@
     {
       "id": "java-methods",
       "title": "Methods, Return Values & Overloading",
-      "prerequisites": ["java-arrays"]
+      "prerequisites": [
+        "java-arrays"
+      ]
     }
   ],
   "lessons": [
@@ -18,8 +20,12 @@
       "difficulty": "beginner",
       "duration_minutes": 5,
       "type": "learn",
-      "concepts": ["java-methods"],
-      "prerequisites": ["java-arrays"],
+      "concepts": [
+        "java-methods"
+      ],
+      "prerequisites": [
+        "java-arrays"
+      ],
       "learning_objectives": [
         "Overload methods with different parameter types in Java"
       ],
@@ -33,23 +39,35 @@
         }
       ],
       "completion_requirements": {
-        "required_test_names": ["test_overloaded_multiply"]
-      }
+        "required_test_names": [
+          "test_overloaded_multiply"
+        ]
+      },
+      "source": {
+        "name": "Oracle Java Tutorials — Overloading Methods — 'methods within a class can have the same name if they have different parameter lists'",
+        "url": "https://docs.oracle.com/javase/tutorial/java/javaOO/methods.html",
+        "license": "Oracle Free Use Terms and Conditions (documentation)"
+      },
+      "xp_reward": 10
     },
     {
       "id": "java-methods-step-2",
       "title": "2. Helper Methods & Formatting",
-      "description": "Break down problems into small private/public helper methods. Implement `formatName(String firstName, String lastName)`.",
+      "description": "Break down problems into small private/public helper methods. Implement `formatName(String firstName, String lastName)` returning the last name, a comma and a space, then the first name.",
       "order": 22,
       "difficulty": "beginner",
       "duration_minutes": 5,
       "type": "learn",
-      "concepts": ["java-methods"],
-      "prerequisites": ["java-arrays"],
+      "concepts": [
+        "java-methods"
+      ],
+      "prerequisites": [
+        "java-arrays"
+      ],
       "learning_objectives": [
         "Format strings with String.format or concatenation in Java"
       ],
-      "starter_code": "public class Solution {\n    public static String formatName(String firstName, String lastName) {\n        // TODO: Return \"LastName, FirstName\"\n        return \"\";\n    }\n}\n",
+      "starter_code": "public class Solution {\n    public static String formatName(String firstName, String lastName) {\n        // TODO: return \"last, first\"\n        return \"\";\n    }\n}\n",
       "solution_code": "public class Solution {\n    public static String formatName(String firstName, String lastName) {\n        return lastName + \", \" + firstName;\n    }\n}\n",
       "tests": [
         {
@@ -59,23 +77,35 @@
         }
       ],
       "completion_requirements": {
-        "required_test_names": ["test_format_name"]
-      }
+        "required_test_names": [
+          "test_format_name"
+        ]
+      },
+      "source": {
+        "name": "Oracle Java Tutorials — Defining Methods",
+        "url": "https://docs.oracle.com/javase/tutorial/java/javaOO/methods.html",
+        "license": "Oracle Free Use Terms and Conditions (documentation)"
+      },
+      "xp_reward": 10
     },
     {
       "id": "java-methods-01",
       "title": "3. Currency Exchange Calculator (Concept Challenge)",
-      "description": "Implement currency exchange conversion methods.",
+      "description": "Implement currency exchange conversion: the converted amount is `amount * exchangeRate`.",
       "order": 23,
       "difficulty": "beginner",
-      "duration_minutes": 10,
+      "duration_minutes": 8,
       "type": "challenge",
-      "concepts": ["java-methods"],
-      "prerequisites": ["java-arrays"],
+      "concepts": [
+        "java-methods"
+      ],
+      "prerequisites": [
+        "java-arrays"
+      ],
       "learning_objectives": [
         "Build modular conversion methods"
       ],
-      "starter_code": "public class Solution {\n    public static double convert(double amount, double exchangeRate) {\n        // TODO: Return amount * exchangeRate\n        return 0.0;\n    }\n}\n",
+      "starter_code": "public class Solution {\n    public static double convert(double amount, double exchangeRate) {\n        // TODO: return the converted amount\n        return 0.0;\n    }\n}\n",
       "solution_code": "public class Solution {\n    public static double convert(double amount, double exchangeRate) {\n        return amount * exchangeRate;\n    }\n}\n",
       "tests": [
         {
@@ -85,19 +115,31 @@
         }
       ],
       "completion_requirements": {
-        "required_test_names": ["test_convert"]
-      }
+        "required_test_names": [
+          "test_convert"
+        ]
+      },
+      "source": {
+        "name": "Oracle Java Tutorials — Defining Methods — return values",
+        "url": "https://docs.oracle.com/javase/tutorial/java/javaOO/methods.html",
+        "license": "Oracle Free Use Terms and Conditions (documentation)"
+      },
+      "xp_reward": 25
     },
     {
       "id": "java-methods-practice-1",
       "title": "4. String Sanitization (Practice)",
-      "description": "Sanitize and trim input strings.",
+      "description": "Implement sanitize(String input): remove leading/trailing whitespace with trim() and convert to lowercase with toLowerCase() — return \"\" for null input. The test expects sanitize(\"  JAVA  \") to equal \"java\".",
       "order": 24,
       "difficulty": "beginner",
-      "duration_minutes": 5,
+      "duration_minutes": 6,
       "type": "practice",
-      "concepts": ["java-methods"],
-      "prerequisites": ["java-arrays"],
+      "concepts": [
+        "java-methods"
+      ],
+      "prerequisites": [
+        "java-arrays"
+      ],
       "learning_objectives": [
         "Use String methods like trim() and toLowerCase()"
       ],
@@ -111,19 +153,31 @@
         }
       ],
       "completion_requirements": {
-        "required_test_names": ["test_sanitize"]
-      }
+        "required_test_names": [
+          "test_sanitize"
+        ]
+      },
+      "source": {
+        "name": "Java SE 21 API — String.trim() and String.toLowerCase()",
+        "url": "https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html",
+        "license": "Oracle Free Use Terms and Conditions (documentation)"
+      },
+      "xp_reward": 15
     },
     {
       "id": "java-methods-checkpoint",
       "title": "5. Unit 5 Checkpoint: Methods Mastery",
-      "description": "Verify method creation and invocation.",
+      "description": "Implement power(int base, int exponent) returning base raised to exponent as an int — e.g. Math.pow with an int cast, or a multiplying loop. The test expects power(2, 3) == 8.",
       "order": 25,
       "difficulty": "beginner",
-      "duration_minutes": 5,
+      "duration_minutes": 10,
       "type": "checkpoint",
-      "concepts": ["java-methods"],
-      "prerequisites": ["java-arrays"],
+      "concepts": [
+        "java-methods"
+      ],
+      "prerequisites": [
+        "java-arrays"
+      ],
       "learning_objectives": [
         "Pass Java methods checkpoint"
       ],
@@ -137,8 +191,16 @@
         }
       ],
       "completion_requirements": {
-        "required_test_names": ["test_power"]
-      }
+        "required_test_names": [
+          "test_power"
+        ]
+      },
+      "source": {
+        "name": "Oracle Java Tutorials — Defining Methods",
+        "url": "https://docs.oracle.com/javase/tutorial/java/javaOO/methods.html",
+        "license": "Oracle Free Use Terms and Conditions (documentation)"
+      },
+      "xp_reward": 40
     }
   ]
 }

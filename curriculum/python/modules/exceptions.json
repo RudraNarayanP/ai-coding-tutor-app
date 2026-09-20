@@ -48,7 +48,13 @@
       "static_hints": [
         "try:",
         "except ZeroDivisionError:"
-      ]
+      ],
+      "source": {
+        "name": "Python official documentation (docs.python.org) — Handling Exceptions — try/except clauses (Tutorial: Errors and Exceptions)",
+        "url": "https://docs.python.org/3/tutorial/errors.html#handling-exceptions",
+        "license": "Python documentation license (PSF)"
+      },
+      "xp_reward": 10
     },
     {
       "id": "exceptions-step-2",
@@ -82,7 +88,13 @@
         "required_test_names": [
           "test_invalid_age"
         ]
-      }
+      },
+      "source": {
+        "name": "Python official documentation (docs.python.org) — Defining and Naming Exceptions — derive exceptions from Exception (Tutorial)",
+        "url": "https://docs.python.org/3/tutorial/errors.html#defining-and-naming-exceptions",
+        "license": "Python documentation license (PSF)"
+      },
+      "xp_reward": 10
     },
     {
       "id": "exceptions-01",
@@ -90,7 +102,7 @@
       "description": "Implement `retry_call(fn, retries)` that calls `fn` up to `retries` times, returning the first success or re-raising the last exception.",
       "order": 73,
       "difficulty": "intermediate",
-      "duration_minutes": 10,
+      "duration_minutes": 8,
       "type": "challenge",
       "section_id": "sec-py-intermed",
       "section_title": "Section 2: Intermediate Python",
@@ -122,7 +134,13 @@
           "test_retry_success",
           "test_retry_exhaust"
         ]
-      }
+      },
+      "source": {
+        "name": "Python official documentation (docs.python.org) — Handling Exceptions — re-raising with bare raise (Tutorial)",
+        "url": "https://docs.python.org/3/tutorial/errors.html#raising-exceptions",
+        "license": "Python documentation license (PSF)"
+      },
+      "xp_reward": 25
     },
     {
       "id": "exceptions-practice-1",
@@ -130,7 +148,7 @@
       "description": "Write `parse_ints(values)` that converts strings to ints, skipping values that raise `ValueError`.",
       "order": 74,
       "difficulty": "intermediate",
-      "duration_minutes": 5,
+      "duration_minutes": 6,
       "type": "practice",
       "section_id": "sec-py-intermed",
       "section_title": "Section 2: Intermediate Python",
@@ -156,7 +174,13 @@
         "required_test_names": [
           "test_parse_ints"
         ]
-      }
+      },
+      "source": {
+        "name": "Python official documentation (docs.python.org) — Handling Exceptions — except ValueError handlers (Tutorial)",
+        "url": "https://docs.python.org/3/tutorial/errors.html#handling-exceptions",
+        "license": "Python documentation license (PSF)"
+      },
+      "xp_reward": 15
     },
     {
       "id": "exceptions-checkpoint",
@@ -164,7 +188,7 @@
       "description": "Implement `read_config(data)` that raises `KeyError` wrapped as `ValueError('missing key')` when 'host' is absent.",
       "order": 75,
       "difficulty": "intermediate",
-      "duration_minutes": 5,
+      "duration_minutes": 10,
       "type": "checkpoint",
       "section_id": "sec-py-intermed",
       "section_title": "Section 2: Intermediate Python",
@@ -177,7 +201,7 @@
       "learning_objectives": [
         "Translate KeyError into a clearer ValueError"
       ],
-      "starter_code": "def read_config(data):\n    # TODO: return data['host']; on KeyError raise ValueError('missing key')\n    pass\n",
+      "starter_code": "def read_config(data):\n    # TODO: return the host from data, raising ValueError if absent\n    pass\n",
       "solution_code": "def read_config(data):\n    try:\n        return data['host']\n    except KeyError:\n        raise ValueError('missing key')\n",
       "tests": [
         {
@@ -190,7 +214,13 @@
         "required_test_names": [
           "test_read_config"
         ]
-      }
+      },
+      "source": {
+        "name": "Python official documentation (docs.python.org) — Raising Exceptions — raise ValueError(...) (Tutorial)",
+        "url": "https://docs.python.org/3/tutorial/errors.html#raising-exceptions",
+        "license": "Python documentation license (PSF)"
+      },
+      "xp_reward": 40
     }
   ]
 }

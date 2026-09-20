@@ -6,7 +6,12 @@
     {
       "id": "tuples",
       "title": "Tuples, Immutability, & Unpacking",
-      "prerequisites": ["booleans", "loops", "conditionals", "numbers"]
+      "prerequisites": [
+        "booleans",
+        "loops",
+        "conditionals",
+        "numbers"
+      ]
     }
   ],
   "lessons": [
@@ -18,8 +23,12 @@
       "difficulty": "intermediate",
       "duration_minutes": 5,
       "type": "learn",
-      "concepts": ["tuples"],
-      "prerequisites": ["numbers"],
+      "concepts": [
+        "tuples"
+      ],
+      "prerequisites": [
+        "numbers"
+      ],
       "learning_objectives": [
         "Create and index tuples"
       ],
@@ -32,8 +41,17 @@
         }
       ],
       "completion_requirements": {
-        "required_test_names": ["test_tuple_basics"]
-      }
+        "required_test_names": [
+          "test_tuple_basics"
+        ]
+      },
+      "solution_code": "def make_point(x, y):\n    return (x, y)\n\n\ndef get_x(point):\n    return point[0]\n",
+      "source": {
+        "name": "Python official documentation (docs.python.org) — Tuple Types — Built-in Types (immutable sequences)",
+        "url": "https://docs.python.org/3/library/stdtypes.html#tuple-types",
+        "license": "Python documentation license (PSF)"
+      },
+      "xp_reward": 10
     },
     {
       "id": "tuples-step-2",
@@ -43,8 +61,12 @@
       "difficulty": "intermediate",
       "duration_minutes": 5,
       "type": "learn",
-      "concepts": ["tuples"],
-      "prerequisites": ["numbers"],
+      "concepts": [
+        "tuples"
+      ],
+      "prerequisites": [
+        "numbers"
+      ],
       "learning_objectives": [
         "Unpack and combine tuples with +"
       ],
@@ -57,8 +79,17 @@
         }
       ],
       "completion_requirements": {
-        "required_test_names": ["test_swap_combine"]
-      }
+        "required_test_names": [
+          "test_swap_combine"
+        ]
+      },
+      "solution_code": "def swap_and_combine(t1, t2):\n    a, b = t1\n    c, d = t2\n    return (b, a, d, c)\n",
+      "source": {
+        "name": "Python official documentation (docs.python.org) — Tuple Types — Built-in Types (unpacking)",
+        "url": "https://docs.python.org/3/library/stdtypes.html#tuple-types",
+        "license": "Python documentation license (PSF)"
+      },
+      "xp_reward": 10
     },
     {
       "id": "tuples-01",
@@ -66,10 +97,17 @@
       "description": "Match coordinate records and clean data using tuple indexing, conversion, and unpacking.",
       "order": 53,
       "difficulty": "intermediate",
-      "duration_minutes": 20,
+      "duration_minutes": 8,
       "type": "challenge",
-      "concepts": ["tuples"],
-      "prerequisites": ["booleans", "loops", "conditionals", "numbers"],
+      "concepts": [
+        "tuples"
+      ],
+      "prerequisites": [
+        "booleans",
+        "loops",
+        "conditionals",
+        "numbers"
+      ],
       "learning_objectives": [
         "Index and slice tuple elements",
         "Convert coordinate strings into tuple format",
@@ -116,7 +154,9 @@
         "name": "Exercism Python Track — Tisbury Treasure Hunt",
         "url": "https://github.com/exercism/python/tree/main/exercises/concept/tisbury-treasure-hunt",
         "license": "MIT"
-      }
+      },
+      "solution_code": "def get_coordinate(record):\n    \"\"\"Return the coordinate from a (treasure, coordinate) tuple.\"\"\"\n    return record[1]\n\n\ndef convert_coordinate(coordinate):\n    \"\"\"Split coordinate string into a tuple of its characters.\"\"\"\n    return tuple(coordinate)\n\n\ndef compare_records(azara_record, rui_record):\n    \"\"\"Return True if coordinates match.\"\"\"\n    return convert_coordinate(get_coordinate(azara_record)) == rui_record[1]\n\n\ndef create_record(azara_record, rui_record):\n    \"\"\"Combine records if coordinates match, else 'not a match'.\"\"\"\n    if compare_records(azara_record, rui_record):\n        return azara_record + rui_record\n    return 'not a match'\n\n\ndef clean_up(combined_record_group):\n    \"\"\"Remove redundant coordinate field (index 1) from each record.\"\"\"\n    report = (str(record[:1] + record[2:]) + '\\n'\n            for record in combined_record_group)\n    return ''.join(report)\n",
+      "xp_reward": 25
     },
     {
       "id": "tuples-practice-1",
@@ -124,14 +164,18 @@
       "description": "Parse a coordinate tuple `(lat, lon)` and return string `\"Lat: {lat}, Lon: {lon}\"`.",
       "order": 54,
       "difficulty": "intermediate",
-      "duration_minutes": 5,
+      "duration_minutes": 6,
       "type": "practice",
-      "concepts": ["tuples"],
-      "prerequisites": ["numbers"],
+      "concepts": [
+        "tuples"
+      ],
+      "prerequisites": [
+        "numbers"
+      ],
       "learning_objectives": [
         "Unpack coordinate tuples into descriptive strings"
       ],
-      "starter_code": "def format_location(coord):\n    # TODO: lat, lon = coord; return f\"Lat: {lat}, Lon: {lon}\"\n    pass\n",
+      "starter_code": "def format_location(coord):\n    # TODO: unpack the coordinate and build the label from the task\n    pass\n",
       "tests": [
         {
           "name": "test_format_location",
@@ -140,8 +184,17 @@
         }
       ],
       "completion_requirements": {
-        "required_test_names": ["test_format_location"]
-      }
+        "required_test_names": [
+          "test_format_location"
+        ]
+      },
+      "solution_code": "def format_location(coord):\n    lat, lon = coord\n    return f\"Lat: {lat}, Lon: {lon}\"\n",
+      "source": {
+        "name": "Python official documentation (docs.python.org) — Tuple Types — Built-in Types (unpacking)",
+        "url": "https://docs.python.org/3/library/stdtypes.html#tuple-types",
+        "license": "Python documentation license (PSF)"
+      },
+      "xp_reward": 15
     },
     {
       "id": "tuples-checkpoint",
@@ -149,10 +202,14 @@
       "description": "Demonstrate tuple immutability and unpacking.",
       "order": 55,
       "difficulty": "intermediate",
-      "duration_minutes": 5,
+      "duration_minutes": 10,
       "type": "checkpoint",
-      "concepts": ["tuples"],
-      "prerequisites": ["numbers"],
+      "concepts": [
+        "tuples"
+      ],
+      "prerequisites": [
+        "numbers"
+      ],
       "learning_objectives": [
         "Master tuple records"
       ],
@@ -165,8 +222,17 @@
         }
       ],
       "completion_requirements": {
-        "required_test_names": ["test_get_min_max"]
-      }
+        "required_test_names": [
+          "test_get_min_max"
+        ]
+      },
+      "solution_code": "def get_min_max(numbers):\n    return (min(numbers), max(numbers))\n",
+      "source": {
+        "name": "Python official documentation (docs.python.org) — min() and max() — Built-in Functions",
+        "url": "https://docs.python.org/3/library/functions.html#min",
+        "license": "Python documentation license (PSF)"
+      },
+      "xp_reward": 40
     }
   ]
 }

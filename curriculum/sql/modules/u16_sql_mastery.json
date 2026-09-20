@@ -2,7 +2,15 @@
   "id": "sql-u16",
   "title": "Unit 16: SQL Mastery",
   "order": 16,
-  "concepts": [{ "id": "sql-mastery", "title": "Comprehensive SQL Exam", "prerequisites": ["sql-analytics"] }],
+  "concepts": [
+    {
+      "id": "sql-mastery",
+      "title": "Comprehensive SQL Exam",
+      "prerequisites": [
+        "sql-analytics"
+      ]
+    }
+  ],
   "lessons": [
     {
       "id": "sql-16",
@@ -10,31 +18,67 @@
       "description": "Comprehensive mixed mastery assessment covering the full SQL track.",
       "order": 16,
       "difficulty": "advanced",
-      "duration_minutes": 15,
+      "duration_minutes": 10,
       "type": "checkpoint",
       "section_id": "sec-sql-4",
       "section_title": "Section 4: Mastery & Analytics",
       "test_out_eligible": true,
-      "concepts": ["sql-mastery"],
-      "starter_code": "SELECT c.name, COUNT(o.id) AS total_orders FROM customers c LEFT JOIN orders o ON c.id = o.customer_id GROUP BY c.name;\n",
+      "concepts": [
+        "sql-mastery"
+      ],
+      "starter_code": "-- TODO: left-join customers to orders and count each customer's orders\nSELECT c.name, 0 AS total_orders FROM customers c WHERE 0 GROUP BY c.name;\n",
       "solution_code": "SELECT c.name, COUNT(o.id) AS total_orders FROM customers c LEFT JOIN orders o ON c.id = o.customer_id GROUP BY c.name;\n",
-      "tests": [{ "name": "test_sql_mastery_exam", "test_code": "assert len(rows) >= 4", "required": true }],
-      "completion_requirements": { "required_test_names": ["test_sql_mastery_exam"] },
+      "tests": [
+        {
+          "name": "test_sql_mastery_exam",
+          "test_code": "assert len(rows) >= 4",
+          "required": true
+        }
+      ],
+      "completion_requirements": {
+        "required_test_names": [
+          "test_sql_mastery_exam"
+        ]
+      },
       "mastery_exam": [
         {
           "id": "sql-final-1",
           "type": "mcq",
           "question": "Which SQL clause filters grouped rows after aggregation?",
-          "options": ["HAVING", "WHERE", "ORDER BY", "GROUP BY"],
-          "correct_answer": "HAVING"
+          "options": [
+            "WHERE",
+            "HAVING",
+            "ORDER BY",
+            "GROUP BY"
+          ],
+          "correct_answer": "HAVING",
+          "explanation": "WHERE filters rows before grouping; HAVING filters after aggregation.",
+          "xp_reward": 10
         },
         {
           "id": "sql-final-2",
           "type": "fill_blank",
           "question": "Type keyword to remove duplicate rows: SELECT ___ country FROM customers;",
-          "correct_answer": "DISTINCT"
+          "correct_answer": [
+            "DISTINCT"
+          ],
+          "blanks": [
+            "DISTINCT"
+          ],
+          "explanation": "SELECT DISTINCT removes duplicate rows from the result.",
+          "xp_reward": 10
         }
-      ]
+      ],
+      "source": {
+        "name": "SQLite official documentation (sqlite.org) — SQL As Understood By SQLite — supported statement overview",
+        "url": "https://sqlite.org/lang.html",
+        "license": "Public domain (SQLite documentation)"
+      },
+      "learning_objectives": [
+        "Combine filtering, joining, grouping and aggregation under exam conditions",
+        "Keep counting customers with zero orders via LEFT JOIN"
+      ],
+      "xp_reward": 45
     }
   ]
 }

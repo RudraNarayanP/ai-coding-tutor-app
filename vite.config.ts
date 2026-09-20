@@ -1,13 +1,20 @@
 import react from '@vitejs/plugin-react'
 import { defineConfig } from 'vitest/config'
 
+// The dev proxy target is configurable so a browser session can be pointed at a
+// backend whose writable state lives in a temp directory (PATCHWORK_STATE_DIR).
+// Answering exercises in a browser otherwise mutates the real learner's
+// progression, hearts and mistake queue, which makes end-to-end verification of
+// graded content needless risky. Unset means the normal local API.
+const apiTarget = process.env.VITE_API_PROXY || 'http://localhost:8000'
+
 export default defineConfig({
   plugins: [react()],
   server: {
     port: 5173,
     proxy: {
       '/api': {
-        target: 'http://localhost:8000',
+        target: apiTarget,
         changeOrigin: true,
       },
     },
@@ -16,7 +23,7 @@ export default defineConfig({
     port: 5173,
     proxy: {
       '/api': {
-        target: 'http://localhost:8000',
+        target: apiTarget,
         changeOrigin: true,
       },
     },

@@ -6,7 +6,13 @@
     {
       "id": "loops",
       "title": "For Loops, Range, & Comprehensions",
-      "prerequisites": ["variables", "comparisons", "lists", "list-methods", "strings"]
+      "prerequisites": [
+        "variables",
+        "comparisons",
+        "lists",
+        "list-methods",
+        "strings"
+      ]
     }
   ],
   "lessons": [
@@ -18,8 +24,12 @@
       "difficulty": "intermediate",
       "duration_minutes": 5,
       "type": "learn",
-      "concepts": ["loops"],
-      "prerequisites": ["lists"],
+      "concepts": [
+        "loops"
+      ],
+      "prerequisites": [
+        "lists"
+      ],
       "learning_objectives": [
         "Iterate using for loops and range()"
       ],
@@ -32,8 +42,17 @@
         }
       ],
       "completion_requirements": {
-        "required_test_names": ["test_sum_squares"]
-      }
+        "required_test_names": [
+          "test_sum_squares"
+        ]
+      },
+      "solution_code": "def sum_squares(n):\n    total = 0\n    for i in range(1, n + 1):\n        total += i * i\n    return total\n",
+      "source": {
+        "name": "Python official documentation (docs.python.org) — 4.2. for Statements — Conditional Control (range())",
+        "url": "https://docs.python.org/3/tutorial/controlflow.html#for-statements",
+        "license": "Python documentation license (PSF)"
+      },
+      "xp_reward": 10
     },
     {
       "id": "loops-step-2",
@@ -43,8 +62,12 @@
       "difficulty": "intermediate",
       "duration_minutes": 5,
       "type": "learn",
-      "concepts": ["loops"],
-      "prerequisites": ["lists"],
+      "concepts": [
+        "loops"
+      ],
+      "prerequisites": [
+        "lists"
+      ],
       "learning_objectives": [
         "Build list comprehensions and use enumerate"
       ],
@@ -57,8 +80,17 @@
         }
       ],
       "completion_requirements": {
-        "required_test_names": ["test_double_evens"]
-      }
+        "required_test_names": [
+          "test_double_evens"
+        ]
+      },
+      "solution_code": "def double_evens(numbers):\n    return [x * 2 for x in numbers if x % 2 == 0]\n",
+      "source": {
+        "name": "Python official documentation (docs.python.org) — 5.1.3. List Comprehensions — Data Structures",
+        "url": "https://docs.python.org/3/tutorial/datastructures.html#list-comprehensions",
+        "license": "Python documentation license (PSF)"
+      },
+      "xp_reward": 10
     },
     {
       "id": "loops-01",
@@ -66,10 +98,18 @@
       "description": "Organize student test scores using loops, range(), enumerate(), zip(), and list comprehensions.",
       "order": 48,
       "difficulty": "intermediate",
-      "duration_minutes": 25,
+      "duration_minutes": 8,
       "type": "challenge",
-      "concepts": ["loops"],
-      "prerequisites": ["variables", "comparisons", "lists", "list-methods", "strings"],
+      "concepts": [
+        "loops"
+      ],
+      "prerequisites": [
+        "variables",
+        "comparisons",
+        "lists",
+        "list-methods",
+        "strings"
+      ],
       "learning_objectives": [
         "Iterate over lists using for loops and list comprehensions",
         "Use range(), enumerate(), and zip()",
@@ -122,22 +162,28 @@
         "name": "Exercism Python Track — Making the Grade",
         "url": "https://github.com/exercism/python/tree/main/exercises/concept/making-the-grade",
         "license": "MIT"
-      }
+      },
+      "solution_code": "def round_scores(student_scores):\n    \"\"\"Return scores rounded to nearest integer.\"\"\"\n    return [round(score) for score in student_scores]\n\n\ndef count_failed_students(student_scores):\n    \"\"\"Count scores at or below 40.\"\"\"\n    return sum(1 for score in student_scores if score <= 40)\n\n\ndef above_threshold(student_scores, threshold):\n    \"\"\"Return scores at or above threshold.\"\"\"\n    return [score for score in student_scores if score >= threshold]\n\n\ndef letter_grades(highest):\n    \"\"\"Return lower thresholds for D, C, B, A bands.\"\"\"\n    increment = (highest - 40) // 4\n    return [41 + i * increment for i in range(4)]\n\n\ndef student_ranking(student_scores, student_names):\n    \"\"\"Return ranking strings.\"\"\"\n    return [f'{index}. {name}: {score}'\n            for index, (name, score) in enumerate(zip(student_names, student_scores), start=1)]\n\n\ndef perfect_score(student_info):\n    \"\"\"Return first [name, 100] pair, or [] if none.\"\"\"\n    for name, score in student_info:\n        if score == 100:\n            return [name, 100]\n    return []\n",
+      "xp_reward": 25
     },
     {
       "id": "loops-practice-1",
       "title": "4. Discount Price Applier (Practice)",
-      "description": "Apply a percentage discount to all prices in a list using a comprehension.",
+      "description": "Apply a percentage discount to all prices in a list using a comprehension: each price is reduced by `discount_pct` percent.",
       "order": 49,
       "difficulty": "intermediate",
-      "duration_minutes": 5,
+      "duration_minutes": 6,
       "type": "practice",
-      "concepts": ["loops"],
-      "prerequisites": ["lists"],
+      "concepts": [
+        "loops"
+      ],
+      "prerequisites": [
+        "lists"
+      ],
       "learning_objectives": [
         "Apply list comprehensions to price transformations"
       ],
-      "starter_code": "def apply_discounts(prices, discount_pct):\n    # TODO: Return [p * (1 - discount_pct / 100) for p in prices]\n    pass\n",
+      "starter_code": "def apply_discounts(prices, discount_pct):\n    # TODO: return a new list with every price discounted\n    pass\n",
       "tests": [
         {
           "name": "test_apply_discounts",
@@ -146,19 +192,32 @@
         }
       ],
       "completion_requirements": {
-        "required_test_names": ["test_apply_discounts"]
-      }
+        "required_test_names": [
+          "test_apply_discounts"
+        ]
+      },
+      "solution_code": "def apply_discounts(prices, discount_pct):\n    return [p * (1 - discount_pct / 100) for p in prices]\n",
+      "source": {
+        "name": "Python official documentation (docs.python.org) — 5.1.3. List Comprehensions — Data Structures",
+        "url": "https://docs.python.org/3/tutorial/datastructures.html#list-comprehensions",
+        "license": "Python documentation license (PSF)"
+      },
+      "xp_reward": 15
     },
     {
       "id": "loops-checkpoint",
       "title": "5. Unit 10 Checkpoint: Loops Mastery",
-      "description": "Confirm loop iteration skills.",
+      "description": "filter_long_words(words, min_len) must return, via a list comprehension, only the words whose length is at least min_len.",
       "order": 50,
       "difficulty": "intermediate",
-      "duration_minutes": 5,
+      "duration_minutes": 10,
       "type": "checkpoint",
-      "concepts": ["loops"],
-      "prerequisites": ["lists"],
+      "concepts": [
+        "loops"
+      ],
+      "prerequisites": [
+        "lists"
+      ],
       "learning_objectives": [
         "Master loop filtering and iteration"
       ],
@@ -171,8 +230,17 @@
         }
       ],
       "completion_requirements": {
-        "required_test_names": ["test_filter_long_words"]
-      }
+        "required_test_names": [
+          "test_filter_long_words"
+        ]
+      },
+      "solution_code": "def filter_long_words(words, min_len):\n    return [w for w in words if len(w) >= min_len]\n",
+      "source": {
+        "name": "Python official documentation (docs.python.org) — 5.1.3. List Comprehensions — Data Structures",
+        "url": "https://docs.python.org/3/tutorial/datastructures.html#list-comprehensions",
+        "license": "Python documentation license (PSF)"
+      },
+      "xp_reward": 40
     }
   ]
 }

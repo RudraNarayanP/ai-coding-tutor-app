@@ -21,12 +21,14 @@
       "section_id": "section-1",
       "section_title": "Section 1: Foundations",
       "test_out_eligible": false,
-      "concepts": ["cpp-variables"],
+      "concepts": [
+        "cpp-variables"
+      ],
       "prerequisites": [],
       "learning_objectives": [
         "Recognize a C++ program and print text using std::cout"
       ],
-      "starter_code": "#include <iostream>\n#include <string>\n\nstd::string get_language() {\n    return \"C++\";\n}\n",
+      "starter_code": "#include <iostream>\n#include <string>\n\nstd::string get_language() {\n    // TODO: return the language name\n    return \"\";\n}\n",
       "solution_code": "#include <iostream>\n#include <string>\n\nstd::string get_language() {\n    return \"C++\";\n}\n",
       "tests": [
         {
@@ -36,7 +38,9 @@
         }
       ],
       "completion_requirements": {
-        "required_test_names": ["test_get_language"]
+        "required_test_names": [
+          "test_get_language"
+        ]
       },
       "sublessons": [
         {
@@ -60,11 +64,16 @@
             {
               "id": "cpp-ex-1b",
               "type": "mcq",
-              "question": "In C++, std::cout << \"Hello!\"; is used to display text on the screen. What will std::cout << \"Welcome!\"; output?",
-              "options": ["Welcome!", "Hello!", "std::cout", "Nothing"],
-              "correct_answer": "Welcome!",
+              "question": "In C++, `std::cout` prints the value of what follows it. What will `std::cout << 7 + 5;` display?",
+              "options": [
+                "7 + 5",
+                "75",
+                "12",
+                "Nothing"
+              ],
+              "correct_answer": "12",
               "xp_reward": 10,
-              "explanation": "std::cout outputs the string inside double quotes."
+              "explanation": "std::cout evaluates the expression and prints the result, so 7 + 5 shows 12."
             }
           ]
         },
@@ -77,8 +86,12 @@
               "id": "cpp-ex-2a",
               "type": "fill_blank",
               "question": "Complete the C++ line to print 'C++': std::cout << ___ ;",
-              "blanks": ["\"C++\""],
-              "correct_answer": "\"C++\"",
+              "blanks": [
+                "\"C++\""
+              ],
+              "correct_answer": [
+                "\"C++\""
+              ],
               "xp_reward": 10,
               "explanation": "Text in C++ is wrapped in double quotes."
             },
@@ -87,7 +100,7 @@
               "type": "code",
               "title": "Return C++ string",
               "question": "Return the string \"C++\" from get_language().",
-              "starter_code": "#include <string>\n\nstd::string get_language() {\n    // TODO: Return \"C++\"\n    return \"\";\n}\n",
+              "starter_code": "#include <string>\n\nstd::string get_language() {\n    // TODO: return the language name as a string\n    return \"\";\n}\n",
               "solution_code": "#include <string>\n\nstd::string get_language() {\n    return \"C++\";\n}\n",
               "tests": [
                 {
@@ -106,17 +119,39 @@
           "id": "cpp-exam-1",
           "type": "mcq",
           "question": "Which C++ command displays output to the terminal?",
-          "options": ["std::cout", "std::cin", "return", "include"],
-          "correct_answer": "std::cout"
+          "options": [
+            "std::cin",
+            "std::cout",
+            "return",
+            "include"
+          ],
+          "correct_answer": "std::cout",
+          "explanation": "std::cout is C++ standard output stream; std::cin reads input instead.",
+          "xp_reward": 10
         },
         {
           "id": "cpp-exam-2",
           "type": "fill_blank",
-          "question": "What symbol ends statements in C++?",
-          "correct_answer": ";"
+          "question": "Fill in the symbol that ends a C++ statement: int x = 5___",
+          "correct_answer": [
+            ";"
+          ],
+          "blanks": [
+            ";"
+          ],
+          "explanation": "Every C++ statement ends with a semicolon.",
+          "xp_reward": 10
         }
       ],
-      "static_hints": ["return \"C++\";"]
+      "static_hints": [
+        "return \"C++\";"
+      ],
+      "source": {
+        "name": "cppreference.com — std::cout — global object controlling output to stdout",
+        "url": "https://en.cppreference.com/w/cpp/io/cout",
+        "license": "CC BY-SA 4.0 (cppreference.com)"
+      },
+      "xp_reward": 10
     },
     {
       "id": "cpp-variables-step-2",
@@ -129,12 +164,14 @@
       "section_id": "section-1",
       "section_title": "Section 1: Foundations",
       "test_out_eligible": false,
-      "concepts": ["cpp-variables"],
+      "concepts": [
+        "cpp-variables"
+      ],
       "prerequisites": [],
       "learning_objectives": [
         "Use int primitive arithmetic in C++"
       ],
-      "starter_code": "int calculate_total(int price, int quantity) {\n    // TODO: Return price * quantity\n    return 0;\n}\n",
+      "starter_code": "int calculate_total(int price, int quantity) {\n    // TODO: return the cost of `quantity` items at `price` each\n    return 0;\n}\n",
       "solution_code": "int calculate_total(int price, int quantity) {\n    return price * quantity;\n}\n",
       "tests": [
         {
@@ -144,27 +181,39 @@
         }
       ],
       "completion_requirements": {
-        "required_test_names": ["test_calculate_total"]
+        "required_test_names": [
+          "test_calculate_total"
+        ]
       },
-      "static_hints": ["return price * quantity;"]
+      "static_hints": [
+        "return price * quantity;"
+      ],
+      "source": {
+        "name": "cppreference.com — Fundamental types — int, basic integer type",
+        "url": "https://en.cppreference.com/w/cpp/language/types",
+        "license": "CC BY-SA 4.0 (cppreference.com)"
+      },
+      "xp_reward": 10
     },
     {
       "id": "cpp-variables-01",
       "title": "3. Rocket Payload Fuel Calculator",
-      "description": "Calculate required rocket fuel mass in C++.",
+      "description": "Calculate required rocket fuel mass in C++: fuel equals `payload_mass * distance * 0.15`.",
       "order": 3,
       "difficulty": "beginner",
-      "duration_minutes": 10,
+      "duration_minutes": 8,
       "type": "challenge",
       "section_id": "section-1",
       "section_title": "Section 1: Foundations",
       "test_out_eligible": false,
-      "concepts": ["cpp-variables"],
+      "concepts": [
+        "cpp-variables"
+      ],
       "prerequisites": [],
       "learning_objectives": [
         "Combine double variables and floating point math in C++"
       ],
-      "starter_code": "double calculate_fuel(double payload_mass, double distance) {\n    // TODO: Return payload_mass * distance * 0.15\n    return 0.0;\n}\n",
+      "starter_code": "double calculate_fuel(double payload_mass, double distance) {\n    // TODO: return the fuel mass for this payload and distance\n    return 0.0;\n}\n",
       "solution_code": "double calculate_fuel(double payload_mass, double distance) {\n    return payload_mass * distance * 0.15;\n}\n",
       "tests": [
         {
@@ -174,8 +223,44 @@
         }
       ],
       "completion_requirements": {
-        "required_test_names": ["test_calculate_fuel"]
-      }
+        "required_test_names": [
+          "test_calculate_fuel"
+        ]
+      },
+      "source": {
+        "name": "cppreference.com — Built-in multiplicative operators * / %",
+        "url": "https://en.cppreference.com/w/cpp/language/operator_arithmetic",
+        "license": "CC BY-SA 4.0 (cppreference.com)"
+      },
+      "xp_reward": 25,
+      "sublessons": [
+        {
+          "id": "cpp-half-value-sub",
+          "title": "Select the ones that keep 2.5",
+          "order": 1,
+          "exercises": [
+            {
+              "id": "cpp-half-value-multi-1",
+              "type": "select_multiple",
+              "question": "Each declaration below is meant to end up holding 2.5. Select every one that actually does.",
+              "options": [
+                "double x = 5.0 / 2.0;",
+                "double y = 5 / 2;",
+                "double z = 2.5;",
+                "int w = 5.0 / 2.0;",
+                "float v = 2.5f;"
+              ],
+              "correct_answer": [
+                "double x = 5.0 / 2.0;",
+                "double z = 2.5;",
+                "float v = 2.5f;"
+              ],
+              "explanation": "`5 / 2` is integer division and yields 2 before the double ever sees it, and `int w` truncates the 2.5 it is given. One operand written as a decimal is enough to make the division floating-point.",
+              "xp_reward": 10
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "cpp-variables-practice-1",
@@ -183,17 +268,19 @@
       "description": "Calculate circle area using pi * radius * radius.",
       "order": 4,
       "difficulty": "beginner",
-      "duration_minutes": 5,
+      "duration_minutes": 6,
       "type": "practice",
       "section_id": "section-1",
       "section_title": "Section 1: Foundations",
       "test_out_eligible": false,
-      "concepts": ["cpp-variables"],
+      "concepts": [
+        "cpp-variables"
+      ],
       "prerequisites": [],
       "learning_objectives": [
         "Calculate geometric area in C++"
       ],
-      "starter_code": "double circle_area(double radius) {\n    const double pi = 3.141592653589793;\n    // TODO: Return pi * radius * radius\n    return 0.0;\n}\n",
+      "starter_code": "double circle_area(double radius) {\n    const double pi = 3.141592653589793;\n    // TODO: return the area of a circle with this radius\n    return 0.0;\n}\n",
       "solution_code": "double circle_area(double radius) {\n    const double pi = 3.141592653589793;\n    return pi * radius * radius;\n}\n",
       "tests": [
         {
@@ -203,21 +290,31 @@
         }
       ],
       "completion_requirements": {
-        "required_test_names": ["test_circle_area"]
-      }
+        "required_test_names": [
+          "test_circle_area"
+        ]
+      },
+      "source": {
+        "name": "cppreference.com — Built-in arithmetic operators",
+        "url": "https://en.cppreference.com/w/cpp/language/operator_arithmetic",
+        "license": "CC BY-SA 4.0 (cppreference.com)"
+      },
+      "xp_reward": 15
     },
     {
       "id": "cpp-variables-checkpoint",
       "title": "5. Section 1 Checkpoint: C++ Foundations Mastery",
-      "description": "Verify C++ fundamental type operations.",
+      "description": "Checkpoint for variables and arithmetic: implement square(int x) returning x * x. The test asserts square(6) == 36.",
       "order": 5,
       "difficulty": "beginner",
-      "duration_minutes": 5,
+      "duration_minutes": 10,
       "type": "checkpoint",
       "section_id": "section-1",
       "section_title": "Section 1: Foundations",
       "test_out_eligible": true,
-      "concepts": ["cpp-variables"],
+      "concepts": [
+        "cpp-variables"
+      ],
       "prerequisites": [],
       "learning_objectives": [
         "Pass C++ variables checkpoint"
@@ -232,23 +329,45 @@
         }
       ],
       "completion_requirements": {
-        "required_test_names": ["test_square"]
+        "required_test_names": [
+          "test_square"
+        ]
       },
       "mastery_exam": [
         {
           "id": "cpp-chk-1",
           "type": "mcq",
           "question": "Which C++ statement includes the string library?",
-          "options": ["#include <string>", "#include <iostream>", "#include <stdio.h>", "#include <vector>"],
-          "correct_answer": "#include <string>"
+          "options": [
+            "#include <string>",
+            "#include <stdio.h>",
+            "#include <vector>",
+            "#include <iostream>"
+          ],
+          "correct_answer": "#include <string>",
+          "explanation": "#include <string> pulls in std::string; iostream is for streams.",
+          "xp_reward": 10
         },
         {
           "id": "cpp-chk-2",
           "type": "fill_blank",
           "question": "Complete the C++ main function return: return ___;",
-          "correct_answer": "0;"
+          "correct_answer": [
+            "0"
+          ],
+          "blanks": [
+            "0"
+          ],
+          "explanation": "main returns 0 to signal success to the operating system.",
+          "xp_reward": 10
         }
-      ]
+      ],
+      "source": {
+        "name": "cppreference.com — Built-in arithmetic operators",
+        "url": "https://en.cppreference.com/w/cpp/language/operator_arithmetic",
+        "license": "CC BY-SA 4.0 (cppreference.com)"
+      },
+      "xp_reward": 40
     }
   ]
 }

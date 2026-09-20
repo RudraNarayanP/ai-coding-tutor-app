@@ -45,7 +45,53 @@
         "required_test_names": [
           "test_graph"
         ]
-      }
+      },
+      "source": {
+        "name": "Python official documentation (docs.python.org) — Classes — __init__ and instance attributes (Tutorial)",
+        "url": "https://docs.python.org/3/tutorial/classes.html",
+        "license": "Python documentation license (PSF)"
+      },
+      "xp_reward": 10,
+      "sublessons": [
+        {
+          "id": "graph-repr-sub",
+          "title": "Match the operation",
+          "order": 1,
+          "exercises": [
+            {
+              "id": "graph-repr-match-1",
+              "type": "matching",
+              "question": "This graph keeps an adjacency list and treats every edge as undirected. Match each call to what it does to `self.adj`.",
+              "pairs": [
+                {
+                  "left": "add_edge('a', 'b')",
+                  "right": "'b' is listed under 'a' and 'a' under 'b'"
+                },
+                {
+                  "left": "neighbors('a')",
+                  "right": "a list of the nodes directly joined to 'a'"
+                },
+                {
+                  "left": "neighbors('zzz')",
+                  "right": "an empty list, because the node is absent"
+                },
+                {
+                  "left": "add_edge('a', 'b') twice",
+                  "right": "'b' appears under 'a' two times"
+                }
+              ],
+              "correct_answer": {
+                "add_edge('a', 'b')": "'b' is listed under 'a' and 'a' under 'b'",
+                "neighbors('a')": "a list of the nodes directly joined to 'a'",
+                "neighbors('zzz')": "an empty list, because the node is absent",
+                "add_edge('a', 'b') twice": "'b' appears under 'a' two times"
+              },
+              "explanation": "Edges are stored in both directions, a missing node falls back to an empty list, and appending never de-duplicates.",
+              "xp_reward": 10
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "graph-traversals-step-2",
@@ -79,7 +125,13 @@
         "required_test_names": [
           "test_dfs"
         ]
-      }
+      },
+      "source": {
+        "name": "Python official documentation (docs.python.org) — The while statement (Language Reference)",
+        "url": "https://docs.python.org/3/reference/compound_stmts.html#while",
+        "license": "Python documentation license (PSF)"
+      },
+      "xp_reward": 10
     },
     {
       "id": "graph-traversals-01",
@@ -87,7 +139,7 @@
       "description": "Return BFS visit order from a start node.",
       "order": 33,
       "difficulty": "intermediate",
-      "duration_minutes": 10,
+      "duration_minutes": 8,
       "type": "challenge",
       "section_id": "sec-dsa-1",
       "section_title": "Section 1: Data Structures & Algorithms",
@@ -113,7 +165,13 @@
         "required_test_names": [
           "test_bfs"
         ]
-      }
+      },
+      "source": {
+        "name": "Python official documentation (docs.python.org) — collections.deque — 'thread-safe, memory efficient appends and pops ... O(1)'",
+        "url": "https://docs.python.org/3/library/collections.html#collections.deque",
+        "license": "Python documentation license (PSF)"
+      },
+      "xp_reward": 25
     },
     {
       "id": "graph-traversals-practice-1",
@@ -121,7 +179,7 @@
       "description": "Unweighted shortest path length via BFS (edges count), or -1 if unreachable.",
       "order": 34,
       "difficulty": "intermediate",
-      "duration_minutes": 5,
+      "duration_minutes": 6,
       "type": "practice",
       "section_id": "sec-dsa-1",
       "section_title": "Section 1: Data Structures & Algorithms",
@@ -147,7 +205,13 @@
         "required_test_names": [
           "test_shortest"
         ]
-      }
+      },
+      "source": {
+        "name": "Python official documentation (docs.python.org) — collections.deque — popleft and O(1) ends",
+        "url": "https://docs.python.org/3/library/collections.html#collections.deque",
+        "license": "Python documentation license (PSF)"
+      },
+      "xp_reward": 15
     },
     {
       "id": "graph-traversals-checkpoint",
@@ -155,7 +219,7 @@
       "description": "Return True if an undirected graph is connected (all nodes reachable from any).",
       "order": 35,
       "difficulty": "intermediate",
-      "duration_minutes": 5,
+      "duration_minutes": 10,
       "type": "checkpoint",
       "section_id": "sec-dsa-1",
       "section_title": "Section 1: Data Structures & Algorithms",
@@ -181,7 +245,13 @@
         "required_test_names": [
           "test_connected"
         ]
-      }
+      },
+      "source": {
+        "name": "Python official documentation (docs.python.org) — collections.deque — queue operations",
+        "url": "https://docs.python.org/3/library/collections.html#collections.deque",
+        "license": "Python documentation license (PSF)"
+      },
+      "xp_reward": 40
     }
   ]
 }

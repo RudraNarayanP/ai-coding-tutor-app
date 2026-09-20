@@ -6,7 +6,9 @@
     {
       "id": "cpp-classes",
       "title": "Classes, Member Functions & Encapsulation",
-      "prerequisites": ["cpp-vectors"]
+      "prerequisites": [
+        "cpp-vectors"
+      ]
     }
   ],
   "lessons": [
@@ -18,12 +20,16 @@
       "difficulty": "intermediate",
       "duration_minutes": 5,
       "type": "learn",
-      "concepts": ["cpp-classes"],
-      "prerequisites": ["cpp-vectors"],
+      "concepts": [
+        "cpp-classes"
+      ],
+      "prerequisites": [
+        "cpp-vectors"
+      ],
       "learning_objectives": [
         "Define C++ class with constructor and getter member functions"
       ],
-      "starter_code": "#include <string>\n\nclass Player {\nprivate:\n    std::string name_;\n    int health_;\npublic:\n    Player(const std::string& name, int health = 100)\n        : name_(name), health_(health) {}\n\n    std::string get_name() const { return name_; }\n    int get_health() const { return health_; }\n};\n",
+      "starter_code": "#include <string>\n\nclass Player {\nprivate:\n    std::string name_;\n    int health_;\npublic:\n    // TODO: initialize name_ and health_ in a member initializer list\n    Player(const std::string& name, int health = 100)\n        : name_(), health_(0) {}\n\n    std::string get_name() const { return name_; }\n    int get_health() const { return health_; }\n};\n",
       "solution_code": "#include <string>\n\nclass Player {\nprivate:\n    std::string name_;\n    int health_;\npublic:\n    Player(const std::string& name, int health = 100)\n        : name_(name), health_(health) {}\n\n    std::string get_name() const { return name_; }\n    int get_health() const { return health_; }\n};\n",
       "tests": [
         {
@@ -33,8 +39,16 @@
         }
       ],
       "completion_requirements": {
-        "required_test_names": ["test_player_init"]
-      }
+        "required_test_names": [
+          "test_player_init"
+        ]
+      },
+      "source": {
+        "name": "cppreference.com — Member initializer lists in constructor definitions",
+        "url": "https://en.cppreference.com/w/cpp/language/initializer_list",
+        "license": "CC BY-SA 4.0 (cppreference.com)"
+      },
+      "xp_reward": 10
     },
     {
       "id": "cpp-classes-step-2",
@@ -44,8 +58,12 @@
       "difficulty": "intermediate",
       "duration_minutes": 5,
       "type": "learn",
-      "concepts": ["cpp-classes"],
-      "prerequisites": ["cpp-vectors"],
+      "concepts": [
+        "cpp-classes"
+      ],
+      "prerequisites": [
+        "cpp-vectors"
+      ],
       "learning_objectives": [
         "Implement member functions that modify object state"
       ],
@@ -59,8 +77,16 @@
         }
       ],
       "completion_requirements": {
-        "required_test_names": ["test_take_damage"]
-      }
+        "required_test_names": [
+          "test_take_damage"
+        ]
+      },
+      "source": {
+        "name": "cppreference.com — Class specifier — data members and member functions",
+        "url": "https://en.cppreference.com/w/cpp/language/class",
+        "license": "CC BY-SA 4.0 (cppreference.com)"
+      },
+      "xp_reward": 10
     },
     {
       "id": "cpp-classes-01",
@@ -68,10 +94,14 @@
       "description": "Encapsulate account balance and transaction operations in C++.",
       "order": 28,
       "difficulty": "intermediate",
-      "duration_minutes": 10,
+      "duration_minutes": 8,
       "type": "challenge",
-      "concepts": ["cpp-classes"],
-      "prerequisites": ["cpp-vectors"],
+      "concepts": [
+        "cpp-classes"
+      ],
+      "prerequisites": [
+        "cpp-vectors"
+      ],
       "learning_objectives": [
         "Implement BankAccount class with deposit and withdraw methods"
       ],
@@ -85,8 +115,16 @@
         }
       ],
       "completion_requirements": {
-        "required_test_names": ["test_bank_account"]
-      }
+        "required_test_names": [
+          "test_bank_account"
+        ]
+      },
+      "source": {
+        "name": "cppreference.com — Class specifier — access specifiers and members",
+        "url": "https://en.cppreference.com/w/cpp/language/class",
+        "license": "CC BY-SA 4.0 (cppreference.com)"
+      },
+      "xp_reward": 25
     },
     {
       "id": "cpp-classes-practice-1",
@@ -94,14 +132,18 @@
       "description": "Calculate area and perimeter in a Rectangle class.",
       "order": 29,
       "difficulty": "intermediate",
-      "duration_minutes": 5,
+      "duration_minutes": 6,
       "type": "practice",
-      "concepts": ["cpp-classes"],
-      "prerequisites": ["cpp-vectors"],
+      "concepts": [
+        "cpp-classes"
+      ],
+      "prerequisites": [
+        "cpp-vectors"
+      ],
       "learning_objectives": [
         "Compute geometric values in C++ member functions"
       ],
-      "starter_code": "class Rectangle {\nprivate:\n    double width_;\n    double height_;\npublic:\n    Rectangle(double width, double height)\n        : width_(width), height_(height) {}\n\n    double area() const {\n        // TODO: Return width_ * height_\n        return 0.0;\n    }\n};\n",
+      "starter_code": "class Rectangle {\nprivate:\n    double width_;\n    double height_;\npublic:\n    Rectangle(double width, double height)\n        : width_(width), height_(height) {}\n\n    double area() const {\n        // TODO: return the area of this rectangle\n        return 0.0;\n    }\n};\n",
       "solution_code": "class Rectangle {\nprivate:\n    double width_;\n    double height_;\npublic:\n    Rectangle(double width, double height)\n        : width_(width), height_(height) {}\n\n    double area() const {\n        return width_ * height_;\n    }\n};\n",
       "tests": [
         {
@@ -111,8 +153,16 @@
         }
       ],
       "completion_requirements": {
-        "required_test_names": ["test_rectangle"]
-      }
+        "required_test_names": [
+          "test_rectangle"
+        ]
+      },
+      "source": {
+        "name": "cppreference.com — Class specifier",
+        "url": "https://en.cppreference.com/w/cpp/language/class",
+        "license": "CC BY-SA 4.0 (cppreference.com)"
+      },
+      "xp_reward": 15
     },
     {
       "id": "cpp-classes-checkpoint",
@@ -120,10 +170,14 @@
       "description": "Verify C++ object-oriented encapsulation.",
       "order": 30,
       "difficulty": "intermediate",
-      "duration_minutes": 5,
+      "duration_minutes": 10,
       "type": "checkpoint",
-      "concepts": ["cpp-classes"],
-      "prerequisites": ["cpp-vectors"],
+      "concepts": [
+        "cpp-classes"
+      ],
+      "prerequisites": [
+        "cpp-vectors"
+      ],
       "learning_objectives": [
         "Pass C++ classes checkpoint"
       ],
@@ -137,8 +191,16 @@
         }
       ],
       "completion_requirements": {
-        "required_test_names": ["test_counter"]
-      }
+        "required_test_names": [
+          "test_counter"
+        ]
+      },
+      "source": {
+        "name": "cppreference.com — Class specifier",
+        "url": "https://en.cppreference.com/w/cpp/language/class",
+        "license": "CC BY-SA 4.0 (cppreference.com)"
+      },
+      "xp_reward": 40
     }
   ]
 }

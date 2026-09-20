@@ -2,7 +2,15 @@
   "id": "sql-u8",
   "title": "Unit 8: JOINs",
   "order": 8,
-  "concepts": [{ "id": "sql-joins", "title": "INNER and LEFT JOINs", "prerequisites": ["sql-group-by"] }],
+  "concepts": [
+    {
+      "id": "sql-joins",
+      "title": "INNER and LEFT JOINs",
+      "prerequisites": [
+        "sql-group-by"
+      ]
+    }
+  ],
   "lessons": [
     {
       "id": "sql-08",
@@ -10,15 +18,37 @@
       "description": "Join customers and orders on customers.id = orders.customer_id to select customer name and total_amount.",
       "order": 8,
       "difficulty": "intermediate",
-      "duration_minutes": 10,
+      "duration_minutes": 5,
       "type": "learn",
       "section_id": "sec-sql-2",
       "section_title": "Section 2: Aggregation & Joins",
-      "concepts": ["sql-joins"],
-      "starter_code": "SELECT c.name, o.total_amount FROM customers c INNER JOIN orders o ON c.id = o.customer_id;\n",
+      "concepts": [
+        "sql-joins"
+      ],
+      "starter_code": "-- TODO: pair each customer with the total_amount of each of their orders\nSELECT c.name, o.total_amount FROM customers c JOIN orders o ON 0;\n",
       "solution_code": "SELECT c.name, o.total_amount FROM customers c INNER JOIN orders o ON c.id = o.customer_id;\n",
-      "tests": [{ "name": "test_customer_orders_join", "test_code": "assert len(rows) >= 5 and columns[0] == 'name'", "required": true }],
-      "completion_requirements": { "required_test_names": ["test_customer_orders_join"] }
+      "tests": [
+        {
+          "name": "test_customer_orders_join",
+          "test_code": "assert len(rows) >= 5 and columns[0] == 'name'",
+          "required": true
+        }
+      ],
+      "completion_requirements": {
+        "required_test_names": [
+          "test_customer_orders_join"
+        ]
+      },
+      "source": {
+        "name": "SQLite official documentation (sqlite.org) — SELECT — join operators including INNER/CROSS JOIN",
+        "url": "https://sqlite.org/lang_select.html",
+        "license": "Public domain (SQLite documentation)"
+      },
+      "learning_objectives": [
+        "Combine rows from two tables with INNER JOIN ... ON",
+        "Use table aliases to keep join queries readable"
+      ],
+      "xp_reward": 10
     }
   ]
 }

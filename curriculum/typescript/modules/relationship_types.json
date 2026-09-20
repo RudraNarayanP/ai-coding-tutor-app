@@ -13,7 +13,7 @@
     {
       "id": "ts-01",
       "title": "1. TypeScript & Static Typing",
-      "description": "TypeScript builds on top of JavaScript by adding explicit type annotations.",
+      "description": "TypeScript adds explicit type annotations on top of JavaScript's string, number, and boolean primitives. Implement the exported formatGreeting(name: string, isDeveloper: boolean): string so it returns 'Hello <name>' and appends ' (Dev)' only when isDeveloper is true. Tests check both branches.",
       "order": 1,
       "difficulty": "beginner",
       "duration_minutes": 5,
@@ -21,17 +21,115 @@
       "section_id": "sec-ts-1",
       "section_title": "Section 1: Type System",
       "test_out_eligible": false,
-      "concepts": ["ts-types"],
-      "starter_code": "export function formatGreeting(name: string, isDeveloper: boolean): string {\n    return `Hello ${name}${isDeveloper ? ' (Dev)' : ''}`;\n}\n",
+      "concepts": [
+        "ts-types"
+      ],
+      "starter_code": "export function formatGreeting(name: string, isDeveloper: boolean): string {\n    // TODO: build 'Hello <name>' plus ' (Dev)' when isDeveloper\n    return '';\n}\n",
       "solution_code": "export function formatGreeting(name: string, isDeveloper: boolean): string {\n    return `Hello ${name}${isDeveloper ? ' (Dev)' : ''}`;\n}\n",
       "tests": [
         {
           "name": "test_format_greeting",
-          "unittest_code": "if (solution.formatGreeting('Alice', true) !== 'Hello Alice (Dev)') throw new Error('Format error');",
-          "required": true
+          "required": true,
+          "unittest_code": "if (solution.formatGreeting('Alice', true) !== 'Hello Alice (Dev)') throw new Error('Dev greeting failed');\nif (solution.formatGreeting('Bob', false) !== 'Hello Bob') throw new Error('Plain greeting failed');"
         }
       ],
-      "completion_requirements": { "required_test_names": ["test_format_greeting"] }
+      "completion_requirements": {
+        "required_test_names": [
+          "test_format_greeting"
+        ]
+      },
+      "learning_objectives": [
+        "Annotate parameters and return types with lowercase primitives",
+        "Use template literals with embedded ternaries",
+        "Export functions from TypeScript modules"
+      ],
+      "source": {
+        "name": "TypeScript Handbook — Everyday Types — 'The primitives: string, number, and boolean'",
+        "url": "https://www.typescriptlang.org/docs/handbook/2/everyday-types.html",
+        "license": "CC BY 4.0 (TypeScript documentation)"
+      },
+      "xp_reward": 10,
+      "sublessons": [
+        {
+          "id": "ts-annotations-sub",
+          "title": "Match annotation to values",
+          "order": 1,
+          "exercises": [
+            {
+              "id": "ts-annotations-match-1",
+              "type": "matching",
+              "question": "TypeScript annotates JavaScript's primitives with lowercase type names. Match each annotation to the values it accepts.",
+              "pairs": [
+                {
+                  "left": ": string",
+                  "right": "text such as 'Alice'"
+                },
+                {
+                  "left": ": number",
+                  "right": "42 and 3.5 alike"
+                },
+                {
+                  "left": ": boolean",
+                  "right": "true or false only"
+                },
+                {
+                  "left": ") : string",
+                  "right": "the type of the value the function hands back"
+                }
+              ],
+              "correct_answer": {
+                ": string": "text such as 'Alice'",
+                ": number": "42 and 3.5 alike",
+                ": boolean": "true or false only",
+                ") : string": "the type of the value the function hands back"
+              },
+              "explanation": "Parameter annotations sit before the parameter, the return annotation after the parentheses, and `number` covers integers and decimals.",
+              "xp_reward": 10
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "ts-05",
+      "title": "5. Primitives and typeof Guards",
+      "description": "JavaScript's three most common primitives are string, number, and boolean (always lowercase in TypeScript). Implement the exported describeValue(value: string | number | boolean): string that uses a typeof type guard to return exactly 'string', 'number', or 'boolean'. The test checks all three primitives.",
+      "order": 5,
+      "difficulty": "beginner",
+      "duration_minutes": 5,
+      "type": "learn",
+      "section_id": "sec-ts-1",
+      "section_title": "Section 1: Type System",
+      "test_out_eligible": false,
+      "concepts": [
+        "ts-types"
+      ],
+      "prerequisites": [],
+      "learning_objectives": [
+        "Work with the string, number, and boolean primitives",
+        "Combine unions with typeof type guards",
+        "Return literal strings from exhaustive checks"
+      ],
+      "source": {
+        "name": "TypeScript Handbook — Everyday Types — 'JavaScript has three very commonly used primitives: string, number, and boolean'",
+        "url": "https://www.typescriptlang.org/docs/handbook/2/everyday-types.html",
+        "license": "CC BY 4.0 (TypeScript documentation)"
+      },
+      "starter_code": "export function describeValue(value: string | number | boolean): string {\n    // TODO: return the name of the value's primitive type\n    return '';\n}\n",
+      "solution_code": "export function describeValue(value: string | number | boolean): string {\n    if (typeof value === 'number') return 'number';\n    if (typeof value === 'boolean') return 'boolean';\n    return 'string';\n}\n",
+      "tests": [
+        {
+          "name": "test_describe_value",
+          "required": true,
+          "unittest_code": "if (solution.describeValue('a') !== 'string') throw new Error('string case');\nif (solution.describeValue(3) !== 'number') throw new Error('number case');\nif (solution.describeValue(false) !== 'boolean') throw new Error('boolean case');"
+        }
+      ],
+      "completion_requirements": {
+        "required_test_names": [
+          "test_describe_value"
+        ]
+      },
+      "xp_reward": 10
     }
   ]
 }

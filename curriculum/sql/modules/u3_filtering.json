@@ -2,7 +2,15 @@
   "id": "sql-u3",
   "title": "Unit 3: Filtering",
   "order": 3,
-  "concepts": [{ "id": "sql-where", "title": "Filtering with WHERE", "prerequisites": ["sql-select"] }],
+  "concepts": [
+    {
+      "id": "sql-where",
+      "title": "Filtering with WHERE",
+      "prerequisites": [
+        "sql-select"
+      ]
+    }
+  ],
   "lessons": [
     {
       "id": "sql-03",
@@ -14,11 +22,75 @@
       "type": "learn",
       "section_id": "sec-sql-1",
       "section_title": "Section 1: Querying Data",
-      "concepts": ["sql-where"],
-      "starter_code": "SELECT name, price FROM products WHERE price > 100;\n",
+      "concepts": [
+        "sql-where"
+      ],
+      "starter_code": "-- TODO: select name and price of products that cost more than 100\nSELECT name, price FROM products WHERE 0;\n",
       "solution_code": "SELECT name, price FROM products WHERE price > 100;\n",
-      "tests": [{ "name": "test_filter_products", "test_code": "assert all(r[1] > 100 for r in rows)", "required": true }],
-      "completion_requirements": { "required_test_names": ["test_filter_products"] }
+      "tests": [
+        {
+          "name": "test_filter_products",
+          "test_code": "assert sorted(r[1] for r in rows) == [299.0, 350.0, 1299.99]",
+          "required": true,
+          "description": "Result set must match the expected rows exactly."
+        }
+      ],
+      "completion_requirements": {
+        "required_test_names": [
+          "test_filter_products"
+        ]
+      },
+      "source": {
+        "name": "SQLite official documentation (sqlite.org) — Expressions in WHERE clauses — BETWEEN, IN, LIKE operators",
+        "url": "https://sqlite.org/lang_expr.html",
+        "license": "Public domain (SQLite documentation)"
+      },
+      "learning_objectives": [
+        "Filter rows with WHERE and comparison operators",
+        "Match sets and ranges with IN and BETWEEN",
+        "Find text patterns with LIKE"
+      ],
+      "xp_reward": 10,
+      "sublessons": [
+        {
+          "id": "sql-03-match-1-sub",
+          "title": "Match clause to purpose",
+          "order": 1,
+          "exercises": [
+            {
+              "id": "sql-03-match-1",
+              "type": "matching",
+              "question": "Match each SQL clause to the job it does in a query.",
+              "pairs": [
+                {
+                  "left": "WHERE",
+                  "right": "keeps only the rows that pass a test"
+                },
+                {
+                  "left": "LIKE",
+                  "right": "matches a text pattern with % and _"
+                },
+                {
+                  "left": "IN",
+                  "right": "matches any value from a listed set"
+                },
+                {
+                  "left": "BETWEEN",
+                  "right": "matches values inside a range"
+                }
+              ],
+              "correct_answer": {
+                "WHERE": "keeps only the rows that pass a test",
+                "LIKE": "matches a text pattern with % and _",
+                "IN": "matches any value from a listed set",
+                "BETWEEN": "matches values inside a range"
+              },
+              "explanation": "All four filter rows; they differ in *how* a row is matched — a test, a pattern, a set, or a range.",
+              "xp_reward": 15
+            }
+          ]
+        }
+      ]
     }
   ]
 }

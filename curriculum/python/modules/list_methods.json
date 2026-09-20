@@ -6,7 +6,9 @@
     {
       "id": "list-methods",
       "title": "In-place List Mutation & Sorting",
-      "prerequisites": ["lists"]
+      "prerequisites": [
+        "lists"
+      ]
     }
   ],
   "lessons": [
@@ -18,8 +20,12 @@
       "difficulty": "beginner",
       "duration_minutes": 5,
       "type": "learn",
-      "concepts": ["list-methods"],
-      "prerequisites": ["lists"],
+      "concepts": [
+        "list-methods"
+      ],
+      "prerequisites": [
+        "lists"
+      ],
       "learning_objectives": [
         "Mutate lists using append, insert, and pop"
       ],
@@ -32,8 +38,17 @@
         }
       ],
       "completion_requirements": {
-        "required_test_names": ["test_manage_queue"]
-      }
+        "required_test_names": [
+          "test_manage_queue"
+        ]
+      },
+      "solution_code": "def manage_queue(queue, person):\n    queue.append(person)\n    return queue\n",
+      "source": {
+        "name": "Python official documentation (docs.python.org) — 5.1.1. Lists as Stacks — Data Structures (append/pop)",
+        "url": "https://docs.python.org/3/tutorial/datastructures.html",
+        "license": "Python documentation license (PSF)"
+      },
+      "xp_reward": 10
     },
     {
       "id": "list-methods-step-2",
@@ -43,12 +58,16 @@
       "difficulty": "beginner",
       "duration_minutes": 5,
       "type": "learn",
-      "concepts": ["list-methods"],
-      "prerequisites": ["lists"],
+      "concepts": [
+        "list-methods"
+      ],
+      "prerequisites": [
+        "lists"
+      ],
       "learning_objectives": [
         "Search and sort lists"
       ],
-      "starter_code": "def count_and_sort(lst, target):\n    # TODO: Return tuple (lst.count(target), sorted(lst))\n    pass\n",
+      "starter_code": "def count_and_sort(lst, target):\n    # TODO: return how often target appears, and the sorted list\n    pass\n",
       "tests": [
         {
           "name": "test_count_sort",
@@ -57,8 +76,17 @@
         }
       ],
       "completion_requirements": {
-        "required_test_names": ["test_count_sort"]
-      }
+        "required_test_names": [
+          "test_count_sort"
+        ]
+      },
+      "solution_code": "def count_and_sort(lst, target):\n    return (lst.count(target), sorted(lst))\n",
+      "source": {
+        "name": "Python official documentation (docs.python.org) — 5.1. More on Lists (count) + Sorting — Data Structures",
+        "url": "https://docs.python.org/3/tutorial/datastructures.html#sorting-lists",
+        "license": "Python documentation license (PSF)"
+      },
+      "xp_reward": 10
     },
     {
       "id": "list-methods-01",
@@ -66,10 +94,14 @@
       "description": "Manage coaster queues using `.append()`, `.insert()`, `.remove()`, `.pop()`, `.count()`, `.index()`, and `sorted()`.",
       "order": 43,
       "difficulty": "beginner",
-      "duration_minutes": 20,
+      "duration_minutes": 8,
       "type": "challenge",
-      "concepts": ["list-methods"],
-      "prerequisites": ["lists"],
+      "concepts": [
+        "list-methods"
+      ],
+      "prerequisites": [
+        "lists"
+      ],
       "learning_objectives": [
         "Add elements with .append() and .insert()",
         "Remove elements with .remove() and .pop()",
@@ -128,7 +160,9 @@
         "name": "Exercism Python Track — Chaitana's Colossal Coaster",
         "url": "https://github.com/exercism/python/tree/main/exercises/concept/chaitanas-colossal-coaster",
         "license": "MIT"
-      }
+      },
+      "solution_code": "def add_me_to_the_queue(express_queue, normal_queue, ticket_type, person_name):\n    \"\"\"Append person to the appropriate queue and return it.\"\"\"\n    queue = express_queue if ticket_type == 1 else normal_queue\n    queue.append(person_name)\n    return queue\n\n\ndef find_my_friend(queue, friend_name):\n    \"\"\"Return the index of friend_name in queue.\"\"\"\n    return queue.index(friend_name)\n\n\ndef add_me_with_my_friends(queue, index, person_name):\n    \"\"\"Insert person_name at index and return queue.\"\"\"\n    queue.insert(index, person_name)\n    return queue\n\n\ndef remove_the_mean_person(queue, person_name):\n    \"\"\"Remove first occurrence of person_name and return queue.\"\"\"\n    queue.remove(person_name)\n    return queue\n\n\ndef how_many_namefellows(queue, person_name):\n    \"\"\"Return count of person_name occurrences.\"\"\"\n    return queue.count(person_name)\n\n\ndef remove_the_last_person(queue):\n    \"\"\"Remove and return last person.\"\"\"\n    return queue.pop()\n\n\ndef sorted_names(queue):\n    \"\"\"Return alphabetically sorted copy of queue.\"\"\"\n    return sorted(queue)\n",
+      "xp_reward": 25
     },
     {
       "id": "list-methods-practice-1",
@@ -136,10 +170,14 @@
       "description": "Implement a task stack: add tasks with `.append()`, process the top task with `.pop()`.",
       "order": 44,
       "difficulty": "beginner",
-      "duration_minutes": 5,
+      "duration_minutes": 6,
       "type": "practice",
-      "concepts": ["list-methods"],
-      "prerequisites": ["lists"],
+      "concepts": [
+        "list-methods"
+      ],
+      "prerequisites": [
+        "lists"
+      ],
       "learning_objectives": [
         "Implement LIFO stack with list methods"
       ],
@@ -152,23 +190,36 @@
         }
       ],
       "completion_requirements": {
-        "required_test_names": ["test_process_task"]
-      }
+        "required_test_names": [
+          "test_process_task"
+        ]
+      },
+      "solution_code": "def process_task(task_stack):\n    if task_stack:\n        return task_stack.pop()\n    return None\n",
+      "source": {
+        "name": "Python official documentation (docs.python.org) — 5.1.1. Lists as Stacks — Data Structures",
+        "url": "https://docs.python.org/3/tutorial/datastructures.html",
+        "license": "Python documentation license (PSF)"
+      },
+      "xp_reward": 15
     },
     {
       "id": "list-methods-checkpoint",
       "title": "5. Unit 9 Checkpoint: List Methods Mastery",
-      "description": "Confirm list mutation and searching.",
+      "description": "reverse_and_sort(lst) must return a NEW list with the numbers sorted from largest to smallest — use sorted(lst, reverse=True) so the original list stays unchanged.",
       "order": 45,
       "difficulty": "beginner",
-      "duration_minutes": 5,
+      "duration_minutes": 10,
       "type": "checkpoint",
-      "concepts": ["list-methods"],
-      "prerequisites": ["lists"],
+      "concepts": [
+        "list-methods"
+      ],
+      "prerequisites": [
+        "lists"
+      ],
       "learning_objectives": [
         "Pass list methods evaluation"
       ],
-      "starter_code": "def reverse_and_sort(lst):\n    # TODO: Return sorted(lst, reverse=True)\n    pass\n",
+      "starter_code": "def reverse_and_sort(lst):\n    # TODO: return a new list ordered from largest to smallest\n    pass\n",
       "tests": [
         {
           "name": "test_reverse_and_sort",
@@ -177,8 +228,17 @@
         }
       ],
       "completion_requirements": {
-        "required_test_names": ["test_reverse_and_sort"]
-      }
+        "required_test_names": [
+          "test_reverse_and_sort"
+        ]
+      },
+      "solution_code": "def reverse_and_sort(lst):\n    return sorted(lst, reverse=True)\n",
+      "source": {
+        "name": "Python official documentation (docs.python.org) — Sorting — sorted() (Built-in Functions) — sorted()",
+        "url": "https://docs.python.org/3/howto/sorting.html",
+        "license": "Python documentation license (PSF)"
+      },
+      "xp_reward": 40
     }
   ]
 }

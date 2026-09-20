@@ -6,7 +6,11 @@
     {
       "id": "functions",
       "title": "Functions, Parameters, & Docstrings",
-      "prerequisites": ["variables", "numbers", "conditionals"]
+      "prerequisites": [
+        "variables",
+        "numbers",
+        "conditionals"
+      ]
     }
   ],
   "lessons": [
@@ -18,8 +22,13 @@
       "difficulty": "intermediate",
       "duration_minutes": 5,
       "type": "learn",
-      "concepts": ["functions"],
-      "prerequisites": ["variables", "numbers"],
+      "concepts": [
+        "functions"
+      ],
+      "prerequisites": [
+        "variables",
+        "numbers"
+      ],
       "learning_objectives": [
         "Define functions using def and return values"
       ],
@@ -32,8 +41,17 @@
         }
       ],
       "completion_requirements": {
-        "required_test_names": ["test_double"]
-      }
+        "required_test_names": [
+          "test_double"
+        ]
+      },
+      "solution_code": "def double(x):\n    return x * 2\n",
+      "source": {
+        "name": "Python official documentation (docs.python.org) — 4.8. Defining Functions — Control Flow",
+        "url": "https://docs.python.org/3/tutorial/controlflow.html#defining-functions",
+        "license": "Python documentation license (PSF)"
+      },
+      "xp_reward": 10
     },
     {
       "id": "functions-step-2",
@@ -43,12 +61,17 @@
       "difficulty": "intermediate",
       "duration_minutes": 5,
       "type": "learn",
-      "concepts": ["functions"],
-      "prerequisites": ["variables", "numbers"],
+      "concepts": [
+        "functions"
+      ],
+      "prerequisites": [
+        "variables",
+        "numbers"
+      ],
       "learning_objectives": [
         "Pass multiple parameters and write function docstrings"
       ],
-      "starter_code": "def area_of_rectangle(width, height):\n    \"\"\"Calculate rectangle area.\"\"\"\n    # TODO: Return width * height\n    pass\n",
+      "starter_code": "def area_of_rectangle(width, height):\n    \"\"\"Calculate rectangle area.\"\"\"\n    # TODO: return the area\n    pass\n",
       "tests": [
         {
           "name": "test_area_docstring",
@@ -57,8 +80,17 @@
         }
       ],
       "completion_requirements": {
-        "required_test_names": ["test_area_docstring"]
-      }
+        "required_test_names": [
+          "test_area_docstring"
+        ]
+      },
+      "solution_code": "def area_of_rectangle(width, height):\n    \"\"\"Calculate rectangle area.\"\"\"\n    return width * height\n",
+      "source": {
+        "name": "Python official documentation (docs.python.org) — 4.8. Defining Functions (docstrings) — Control Flow",
+        "url": "https://docs.python.org/3/tutorial/controlflow.html#defining-functions",
+        "license": "Python documentation license (PSF)"
+      },
+      "xp_reward": 10
     },
     {
       "id": "functions-01",
@@ -66,10 +98,16 @@
       "description": "Bind names to values with constants, define functions using def and return, accept arguments with parameters, and document code with docstrings.",
       "order": 63,
       "difficulty": "intermediate",
-      "duration_minutes": 25,
+      "duration_minutes": 8,
       "type": "challenge",
-      "concepts": ["functions"],
-      "prerequisites": ["variables", "numbers", "conditionals"],
+      "concepts": [
+        "functions"
+      ],
+      "prerequisites": [
+        "variables",
+        "numbers",
+        "conditionals"
+      ],
       "learning_objectives": [
         "Define constants using SCREAMING_SNAKE_CASE",
         "Write functions with parameters, def, and return",
@@ -116,22 +154,29 @@
         "name": "Exercism Python Track — Guido's Gorgeous Lasagna",
         "url": "https://github.com/exercism/python/tree/main/exercises/concept/guidos-gorgeous-lasagna",
         "license": "MIT"
-      }
+      },
+      "solution_code": "EXPECTED_BAKE_TIME = 40\nPREPARATION_TIME = 2\n\n\ndef bake_time_remaining(elapsed_bake_time):\n    \"\"\"Calculate the bake time remaining.\n\n    Parameters:\n        elapsed_bake_time (int): The baking time already elapsed.\n\n    Returns:\n        int: Remaining bake time derived from EXPECTED_BAKE_TIME.\n    \"\"\"\n    return EXPECTED_BAKE_TIME - elapsed_bake_time\n\n\ndef preparation_time_in_minutes(number_of_layers):\n    \"\"\"Calculate total preparation time for the given number of layers.\"\"\"\n    return number_of_layers * PREPARATION_TIME\n\n\ndef elapsed_time_in_minutes(number_of_layers, elapsed_bake_time):\n    \"\"\"Return total elapsed time (preparation plus baking).\"\"\"\n    return preparation_time_in_minutes(number_of_layers) + elapsed_bake_time\n",
+      "xp_reward": 25
     },
     {
       "id": "functions-practice-1",
       "title": "4. Recipe Portions Calculator (Practice)",
-      "description": "Calculate scaled recipe quantities for `servings` people.",
+      "description": "Calculate scaled recipe quantities: multiply `base_amount` by the ratio of `target_servings` to `base_servings`.",
       "order": 64,
       "difficulty": "intermediate",
-      "duration_minutes": 5,
+      "duration_minutes": 6,
       "type": "practice",
-      "concepts": ["functions"],
-      "prerequisites": ["variables", "numbers"],
+      "concepts": [
+        "functions"
+      ],
+      "prerequisites": [
+        "variables",
+        "numbers"
+      ],
       "learning_objectives": [
         "Define functions for recipe scaling"
       ],
-      "starter_code": "def scale_recipe(base_amount, base_servings, target_servings):\n    \"\"\"Return scaled amount for target_servings.\"\"\"\n    # TODO: Return base_amount * (target_servings / base_servings)\n    pass\n",
+      "starter_code": "def scale_recipe(base_amount, base_servings, target_servings):\n    \"\"\"Return scaled amount for target_servings.\"\"\"\n    # TODO: return the scaled amount\n    pass\n",
       "tests": [
         {
           "name": "test_scale_recipe",
@@ -140,8 +185,17 @@
         }
       ],
       "completion_requirements": {
-        "required_test_names": ["test_scale_recipe"]
-      }
+        "required_test_names": [
+          "test_scale_recipe"
+        ]
+      },
+      "solution_code": "def scale_recipe(base_amount, base_servings, target_servings):\n    \"\"\"Return scaled amount for target_servings.\"\"\"\n    return base_amount * (target_servings / base_servings)\n",
+      "source": {
+        "name": "Python official documentation (docs.python.org) — 4.8. Defining Functions — Control Flow",
+        "url": "https://docs.python.org/3/tutorial/controlflow.html#defining-functions",
+        "license": "Python documentation license (PSF)"
+      },
+      "xp_reward": 15
     },
     {
       "id": "functions-checkpoint",
@@ -149,10 +203,16 @@
       "description": "Complete the final curriculum checkpoint.",
       "order": 65,
       "difficulty": "intermediate",
-      "duration_minutes": 5,
+      "duration_minutes": 10,
       "type": "checkpoint",
-      "concepts": ["functions"],
-      "prerequisites": ["variables", "numbers", "conditionals"],
+      "concepts": [
+        "functions"
+      ],
+      "prerequisites": [
+        "variables",
+        "numbers",
+        "conditionals"
+      ],
       "learning_objectives": [
         "Master function definition and docstrings"
       ],
@@ -165,8 +225,17 @@
         }
       ],
       "completion_requirements": {
-        "required_test_names": ["test_is_even"]
-      }
+        "required_test_names": [
+          "test_is_even"
+        ]
+      },
+      "solution_code": "def is_even(n):\n    \"\"\"Return True if n is even.\"\"\"\n    return n % 2 == 0\n",
+      "source": {
+        "name": "Python official documentation (docs.python.org) — 4.8. Defining Functions — Control Flow",
+        "url": "https://docs.python.org/3/tutorial/controlflow.html#defining-functions",
+        "license": "Python documentation license (PSF)"
+      },
+      "xp_reward": 40
     }
   ]
 }

@@ -18,7 +18,7 @@
       "description": "Implement `auth_header(token)` returning an Authorization bearer header dict.",
       "order": 16,
       "difficulty": "intermediate",
-      "duration_minutes": 8,
+      "duration_minutes": 5,
       "type": "learn",
       "section_id": "sec-fs-1",
       "section_title": "Section 1: Full-Stack Client Patterns",
@@ -42,7 +42,13 @@
         "required_test_names": [
           "test_auth_header"
         ]
-      }
+      },
+      "source": {
+        "name": "FastAPI docs — Security: 'a header Authorization with a value of Bearer plus the token'",
+        "url": "https://fastapi.tiangolo.com/tutorial/security/first-steps/",
+        "license": "MIT (FastAPI documentation)"
+      },
+      "xp_reward": 10
     },
     {
       "id": "fs-auth-store",
@@ -50,7 +56,7 @@
       "description": "Implement `TokenStore` with set/get/clear methods.",
       "order": 17,
       "difficulty": "intermediate",
-      "duration_minutes": 8,
+      "duration_minutes": 5,
       "type": "learn",
       "section_id": "sec-fs-1",
       "section_title": "Section 1: Full-Stack Client Patterns",
@@ -74,7 +80,13 @@
         "required_test_names": [
           "test_token_store"
         ]
-      }
+      },
+      "source": {
+        "name": "FastAPI docs — Security first steps — client-side bearer token flow",
+        "url": "https://fastapi.tiangolo.com/tutorial/security/first-steps/",
+        "license": "MIT (FastAPI documentation)"
+      },
+      "xp_reward": 10
     },
     {
       "id": "fs-auth-jwt-payload",
@@ -106,7 +118,43 @@
         "required_test_names": [
           "test_jwt_payload"
         ]
-      }
+      },
+      "source": {
+        "name": "FastAPI docs — OAuth2 JWT — 'It is not encrypted, so, anyone could recover the information from the contents. But it's signed.'",
+        "url": "https://fastapi.tiangolo.com/tutorial/security/oauth2-jwt/",
+        "license": "MIT (FastAPI documentation)"
+      },
+      "xp_reward": 25,
+      "sublessons": [
+        {
+          "id": "fs-auth-jwt-payload-order-1-sub",
+          "title": "Order the steps",
+          "order": 1,
+          "exercises": [
+            {
+              "id": "fs-auth-jwt-payload-order-1",
+              "type": "ordering",
+              "question": "Put the steps of `3. Decode JWT Payload (no verify)` back in order. Each line depends on the one before it.",
+              "options": [
+                "payload = parts[1]",
+                "pad = '=' * (-len(payload) % 4)",
+                "raw = base64.urlsafe_b64decode(payload + pad)",
+                "return json.loads(raw.decode('utf-8'))",
+                "parts = token.split('.')"
+              ],
+              "correct_answer": [
+                "parts = token.split('.')",
+                "payload = parts[1]",
+                "pad = '=' * (-len(payload) % 4)",
+                "raw = base64.urlsafe_b64decode(payload + pad)",
+                "return json.loads(raw.decode('utf-8'))"
+              ],
+              "explanation": "The order the solution in “3. Decode JWT Payload (no verify)” actually runs in.",
+              "xp_reward": 10
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "fs-auth-expired",
@@ -114,7 +162,7 @@
       "description": "Implement `is_expired(payload, now)` True if payload exp <= now.",
       "order": 19,
       "difficulty": "intermediate",
-      "duration_minutes": 8,
+      "duration_minutes": 6,
       "type": "practice",
       "section_id": "sec-fs-1",
       "section_title": "Section 1: Full-Stack Client Patterns",
@@ -138,7 +186,13 @@
         "required_test_names": [
           "test_is_expired"
         ]
-      }
+      },
+      "source": {
+        "name": "FastAPI docs — OAuth2 JWT — signed token claims (sub/expiry)",
+        "url": "https://fastapi.tiangolo.com/tutorial/security/oauth2-jwt/",
+        "license": "MIT (FastAPI documentation)"
+      },
+      "xp_reward": 15
     },
     {
       "id": "fs-auth-checkpoint",
@@ -146,7 +200,7 @@
       "description": "Implement `should_refresh(payload, now, skew=30)` True if exp - now <= skew.",
       "order": 20,
       "difficulty": "intermediate",
-      "duration_minutes": 8,
+      "duration_minutes": 10,
       "type": "checkpoint",
       "section_id": "sec-fs-1",
       "section_title": "Section 1: Full-Stack Client Patterns",
@@ -170,7 +224,13 @@
         "required_test_names": [
           "test_should_refresh"
         ]
-      }
+      },
+      "source": {
+        "name": "FastAPI docs — OAuth2 JWT — token expiry and re-login flow",
+        "url": "https://fastapi.tiangolo.com/tutorial/security/oauth2-jwt/",
+        "license": "MIT (FastAPI documentation)"
+      },
+      "xp_reward": 40
     }
   ]
 }

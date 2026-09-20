@@ -1,5 +1,19 @@
-import React, { useMemo, useState } from 'react'
+import React, { useState } from 'react'
 import { ExerciseFeedback } from './ExerciseFeedback'
+import { CodeEditor } from './CodeEditor'
+import ExerciseWorkspace, { exerciseFilename } from './ExerciseWorkspace'
+import LessonSourceNote, { type LessonSourceInfo } from './LessonSourceNote'
+import {
+  ExerciseAnswerInput,
+  FILL_TYPES,
+  CODE_TYPES,
+} from './ExerciseAnswerInput'
+import {
+  assembleFillBlankCode,
+  blankCount,
+  buildFillBlankTemplate,
+  extractAnswersFromEdited,
+} from '../utils/assembleFillBlankCode'
 
 interface Props {
   exercise: any
@@ -15,43 +29,32 @@ interface Props {
   onRetry: () => void
   onRunCode?: () => void
   isRunningCode?: boolean
-  codeTestsPassed?: boolean
   lessonId?: string | null
-}
-
-const MCQ_TYPES = ['mcq', 'true_false', 'output_prediction', 'debugging', 'identify_error']
-const FILL_TYPES = ['fill_blank', 'code_completion']
-const CODE_TYPES = ['code', 'tiny_coding', 'identify_mistake']
-
-function usesInlineCodeEditor(exercise: { type?: string; starter_code?: string; code?: string }) {
-  const exType = (exercise.type || 'code').toLowerCase().trim()
-  return FILL_TYPES.includes(exType) && !!(exercise.starter_code || exercise.code)
-}
-
-function shuffled<T>(items: T[]): T[] {
-  const arr = [...items]
-  for (let i = arr.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1))
-    ;[arr[i], arr[j]] = [arr[j], arr[i]]
-  }
-  return arr
+  onBack?: () => void
+  soundEnabled?: boolean
+  onToggleSound?: () => void
+  runResults?: Array<{ name: string; passed: boolean; required: boolean; description?: string; error?: string | null }> | null
+  language?: string
+  /** Source attribution + objectives of the lesson this exercise belongs to. */
+  lessonSource?: LessonSourceInfo | null
+  lessonObjectives?: string[]
+  combo?: number
+  lessonType?: string
+  /** Workspace slots so exercise steps get the same tutor chrome as lessons. */
+  footerExtra?: React.ReactNode
+  outputExtra?: React.ReactNode
+  taskExtra?: React.ReactNode
+  banner?: React.ReactNode
 }
 
 const ExercisePanel: React.FC<Props> = (props) => {
-  const {exercise, exerciseInput, exercisePhase, exerciseFeedback, exercisePosition, exerciseTotal, completedExerciseCount, onInputChange, onSubmit, onContinue, onRetry, codeTestsPassed, lessonId} = props
+  const {exercise, exerciseInput, exercisePhase, exerciseFeedback, exercisePosition, exerciseTotal, completedExerciseCount, onInputChange, onSubmit, onContinue, onRetry, lessonId} = props
   const [showDeepDive, setShowDeepDive] = useState(false)
   const exType = (exercise.type || 'code').toLowerCase().trim()
-  const opts = exercise.options || []
   const exState = exerciseInput[exercise.id] || {}
   const disabled = exercisePhase === 'checking' || exercisePhase === 'correct'
 
   const pct = exerciseTotal > 0 ? (completedExerciseCount / exerciseTotal) * 100 : 0
-
-  const shuffledRights: string[] = useMemo(() => {
-    const pairs: Array<{ left: string; right: string }> = exercise.pairs || []
-    return shuffled<string>(pairs.map((p) => p.right))
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [exercise.id])
 
   const setState = (patch: Record<string, any>) => {
     onInputChange((prev: any) => ({ ...prev, [exercise.id]: { ...prev[exercise.id], ...patch } }))
@@ -175,7 +178,7 @@ const ExercisePanel: React.FC<Props> = (props) => {
             exerciseId={exercise.id}
             lessonId={lessonId ?? null}
           />
-          <button className="duo-button duo-button-primary" style={{ marginTop: '12px', padding: '12px 24px' }} onClick={onContinue}>Continue →</button>
+          <button className="duo-button duo-button-primary" style={{ marginTop: '12px', padding: '12px 24px' }} onClick={onContinue}>Continue &rarr;</button>
         </div>
       )
     }
@@ -197,285 +200,124 @@ const ExercisePanel: React.FC<Props> = (props) => {
         </div>
       )
     }
-    const isCodeExercise = CODE_TYPES.includes(exType) || usesInlineCodeEditor(exercise)
-    const continueLabel = isCodeExercise && codeTestsPassed ? 'Continue →' : 'Check Answer'
-
     return (
       <button className="duo-button duo-button-primary" style={{ marginTop: '16px', padding: '12px 24px' }}
-        onClick={isCodeExercise && codeTestsPassed ? onContinue : onSubmit}
-        disabled={exercisePhase === 'checking'}>
-        {exercisePhase === 'checking' ? 'Saving…' : continueLabel}
+        onClick={onSubmit} disabled={exercisePhase === 'checking'}>
+        {exercisePhase === 'checking' ? 'Checking...' : 'Check Answer'}
       </button>
     )
   }
 
-  const renderMcq = () => (
-    <div className="exercise-options-grid">
-      {(opts.length > 0 ? opts : exType === 'true_false' ? ['True', 'False'] : []).map((opt: string) => (
-        <button key={opt}
-          className={`exercise-option-btn ${exState.answer === opt ? 'selected' : ''}`}
-          disabled={disabled}
-          onClick={() => setState({ answer: opt })}
-        >{opt}</button>
-      ))}
-    </div>
-  )
+  const renderFillBlank = () => {
+    const template = buildFillBlankTemplate(
+      exercise.starter_code || exercise.code || '',
+      exercise.blanks,
+      exercise.question
+    )
+    const empty = Array.from({ length: blankCount(template) }, () => '')
+    const raw = exState.code
+    const value = raw && !String(raw).includes('___')
+      ? raw
+      : assembleFillBlankCode(template, exState.answers?.length ? exState.answers : empty)
 
-  const renderFillBlank = () => (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-      {((exercise.blanks && exercise.blanks.length > 0) ? exercise.blanks : ['_']).map((_: any, idx: number) => (
-        <div key={idx} style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-          <label style={{ fontWeight: 700, fontSize: '14px' }}>Blank {idx + 1}:</label>
-          <input type="text" value={exState.answers?.[idx] || exState.answer || ''}
-            placeholder="Type answer here..." disabled={disabled}
-            onChange={(e) => {
-              const val = e.target.value
-              onInputChange((prev: any) => {
-                const curAns = [...(prev[exercise.id]?.answers || [])]
-                curAns[idx] = val
-                return { ...prev, [exercise.id]: { ...prev[exercise.id], answers: curAns, answer: curAns[0] } }
-              })
-            }}
-            style={{ padding: '8px 12px', borderRadius: '8px', border: '2px solid var(--line)', fontWeight: 700, fontSize: '14px', background: 'var(--input-bg)', color: 'var(--ink)' }}
-          />
-        </div>
-      ))}
-    </div>
-  )
-
-  const renderSelectMultiple = () => (
-    <div className="exercise-options-grid">
-      {opts.map((opt: string) => {
-        const s = new Set<string>(exState.answers || []); const sel = s.has(opt)
-        return (
-          <button key={opt} className={`exercise-option-btn ${sel ? 'selected' : ''}`}
-            onClick={() => {
-              const n = new Set(s)
-              if (sel) n.delete(opt); else n.add(opt)
-              setState({ answers: Array.from(n) })
-            }}
-            disabled={disabled}
-          >{sel ? '☑ ' : '☐ '}{opt}</button>
-        )
-      })}
-    </div>
-  )
+    return (
+      <CodeEditor
+        value={value}
+        disabled={disabled}
+        filename={exerciseFilename(exercise, props.language)}
+        variant="workspace"
+        onChange={(next) => {
+          const answers = extractAnswersFromEdited(template, next)
+          setState({ code: next, answers, answer: answers[0] ?? '' })
+        }}
+        onKeyDown={(e) => {
+          if ((e.ctrlKey || e.shiftKey) && e.key === 'Enter') {
+            e.preventDefault()
+            props.onRunCode?.()
+          }
+        }}
+      />
+    )
+  }
 
   const renderCode = () => {
     const rawStarter = exercise.starter_code || exercise.code || ''
     const starter = (rawStarter.includes("___") || rawStarter.includes("---")) ? '' : rawStarter
     const value = exState.code ?? starter
     return (
-      <div className="exercise-code-block">
-        <label className="exercise-code-label" htmlFor={`code-input-${exercise.id}`}>
-          Your code:
-        </label>
-        <textarea
-          id={`code-input-${exercise.id}`}
-          className="exercise-code-textarea"
-          value={value}
-          disabled={disabled}
-          spellCheck={false}
-          rows={Math.min(10, Math.max(3, (value || starter).split("\n").length + 2))}
-          aria-label="Your code answer"
-          placeholder="Write your code here…"
-          onChange={(e) => setState({ code: e.target.value })}
-          onKeyDown={(e) => {
-            if ((e.ctrlKey || e.shiftKey) && e.key === 'Enter') {
-              e.preventDefault()
-              if (props.onRunCode && !disabled && !props.isRunningCode) {
-                props.onRunCode()
-              }
-              return
-            }
-            if (e.key === 'Tab') {
-              e.preventDefault()
-              const target = e.target as HTMLTextAreaElement
-              const start = target.selectionStart
-              const end = target.selectionEnd
-              const next = value.substring(0, start) + '    ' + value.substring(end)
-              setState({ code: next })
-              requestAnimationFrame(() => {
-                target.selectionStart = target.selectionEnd = start + 4
-              })
-            }
-          }}
-        />
-        <div className="exercise-code-actions">
-          {props.onRunCode && (
-            <button
-              type="button"
-              className="duo-button duo-button-primary"
-              disabled={disabled || props.isRunningCode}
-              onClick={props.onRunCode}
-            >
-              {props.isRunningCode ? 'Running…' : 'Run code'}
-            </button>
-          )}
-          <button
-            type="button"
-            className="duo-button duo-button-secondary exercise-code-reset"
-            disabled={disabled || !starter}
-            onClick={() => setState({ code: starter })}
-          >
-            Reset to starter
-          </button>
-        </div>
-      </div>
-    )
-  }
-
-  const renderOrdering = () => {
-    const orderVal: string[] = exState.order || []
-    const remaining = [...opts]
-    orderVal.forEach((picked) => {
-      const idx = remaining.indexOf(picked)
-      if (idx >= 0) remaining.splice(idx, 1)
-    })
-    return (
-      <div className="exercise-ordering">
-        <div className="exercise-ordering-sequence" aria-label="Your sequence">
-          {orderVal.length === 0 && (
-            <span className="exercise-ordering-empty">Tap the blocks below in the correct order…</span>
-          )}
-          {orderVal.map((item, idx) => (
-            <button
-              key={`${item}-${idx}`}
-              type="button"
-              className="exercise-chip exercise-chip-placed"
-              disabled={disabled}
-              onClick={() => setState({ order: orderVal.filter((_, i) => i !== idx) })}
-              aria-label={`Remove ${item} from sequence`}
-            >
-              {idx + 1}. {item} ✕
-            </button>
-          ))}
-        </div>
-        <div className="exercise-chip-pool">
-          {remaining.map((opt: string, idx: number) => (
-            <button
-              key={`${opt}-${idx}`}
-              type="button"
-              className="exercise-chip"
-              disabled={disabled}
-              onClick={() => setState({ order: [...orderVal, opt] })}
-            >
-              {opt}
-            </button>
-          ))}
-        </div>
-        {orderVal.length > 0 && (
-          <button
-            type="button"
-            className="duo-button duo-button-secondary exercise-code-reset"
-            disabled={disabled}
-            onClick={() => setState({ order: [] })}
-          >
-            Clear
-          </button>
-        )}
-      </div>
-    )
-  }
-
-  const renderMatching = () => {
-    const pairs = exercise.pairs || []
-    const lefts: string[] = pairs.map((p: any) => p.left)
-    const matched: Array<{ left: string; right: string }> = exState.pairs || []
-    const selectedLeft: string | null = exState.selectedLeft ?? null
-    const matchedLefts = new Set(matched.map((p) => p.left))
-    const matchedRights = new Set(matched.map((p) => p.right))
-
-    const pickLeft = (left: string) => {
-      if (matchedLefts.has(left)) {
-        setState({ pairs: matched.filter((p) => p.left !== left) })
-        return
-      }
-      setState({ selectedLeft: selectedLeft === left ? null : left })
-    }
-    const pickRight = (right: string) => {
-      if (!selectedLeft) return
-      const next = matched.filter((p) => p.left !== selectedLeft && p.right !== right)
-      next.push({ left: selectedLeft, right })
-      setState({ pairs: next, selectedLeft: null })
-    }
-
-    return (
-      <div className="exercise-matching">
-        <div className="exercise-matching-cols">
-          <div className="exercise-matching-col">
-            {lefts.map((left: string, idx: number) => (
-              <button
-                key={`${left}-${idx}`}
-                type="button"
-                className={`exercise-chip ${matchedLefts.has(left) ? 'exercise-chip-placed' : ''} ${selectedLeft === left ? 'exercise-chip-active' : ''}`}
-                disabled={disabled}
-                onClick={() => pickLeft(left)}
-              >
-                {left}
-              </button>
-            ))}
-          </div>
-          <div className="exercise-matching-col">
-            {shuffledRights.map((right: string, idx: number) => (
-              <button
-                key={`${right}-${idx}`}
-                type="button"
-                className={`exercise-chip ${matchedRights.has(right) ? 'exercise-chip-placed' : ''}`}
-                disabled={disabled || !selectedLeft}
-                onClick={() => pickRight(right)}
-              >
-                {right}
-              </button>
-            ))}
-          </div>
-        </div>
-        <p className="duo-empty-note">
-          {matched.length === 0
-            ? 'Tap an item on the left, then its match on the right.'
-            : `${matched.length} of ${lefts.length} paired — tap a paired left item to unpair it.`}
-        </p>
-      </div>
-    )
-  }
-
-  const renderGeneric = () => (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-      <label style={{ fontWeight: 700, fontSize: '14px' }} htmlFor={`generic-input-${exercise.id}`}>
-        Your answer:
-      </label>
-      <input
-        id={`generic-input-${exercise.id}`}
-        type="text"
-        value={exState.answer || ''}
-        placeholder="Type your answer here…"
+      <CodeEditor
+        value={value}
         disabled={disabled}
-        onChange={(e) => setState({ answer: e.target.value })}
-        style={{ padding: '10px 14px', borderRadius: '10px', border: '2px solid var(--line)', fontWeight: 700, fontSize: '15px', background: 'var(--input-bg)', color: 'var(--ink)' }}
+        filename={exerciseFilename(exercise, props.language)}
+        variant="workspace"
+        ariaLabel="Your code answer"
+        onChange={(next) => setState({ code: next })}
+        onKeyDown={(e) => {
+          if ((e.ctrlKey || e.shiftKey) && e.key === 'Enter') {
+            e.preventDefault()
+            props.onRunCode?.()
+          }
+        }}
       />
-    </div>
-  )
+    )
+  }
 
   const renderAnswerInput = () => {
-    if (MCQ_TYPES.includes(exType)) return renderMcq()
-    if (FILL_TYPES.includes(exType) && usesInlineCodeEditor(exercise)) return renderCode()
     if (FILL_TYPES.includes(exType)) return renderFillBlank()
-    if (exType === 'select_multiple') return renderSelectMultiple()
-    if (exType === 'ordering') return renderOrdering()
-    if (exType === 'matching') return renderMatching()
     if (CODE_TYPES.includes(exType)) return renderCode()
-    return renderGeneric()
+    return (
+      <ExerciseAnswerInput
+        exercise={exercise}
+        exType={exType}
+        exState={exState}
+        disabled={disabled}
+        setState={setState}
+      />
+    )
   }
 
-  const showStarterBlock =
-    (exercise.starter_code || exercise.code) &&
-    !CODE_TYPES.includes(exType) &&
-    !usesInlineCodeEditor(exercise)
+  const showStarterBlock = (exercise.starter_code || exercise.code) && !CODE_TYPES.includes(exType) && !FILL_TYPES.includes(exType)
+
+  if (props.onBack) {
+    return (
+      <ExerciseWorkspace
+        exercise={exercise}
+        exType={exType}
+        exerciseInput={exerciseInput}
+        exercisePhase={exercisePhase}
+        exerciseFeedback={exerciseFeedback}
+        exercisePosition={exercisePosition}
+        exerciseTotal={exerciseTotal}
+        completedExerciseCount={completedExerciseCount}
+        onInputChange={onInputChange}
+        onSubmit={onSubmit}
+        onContinue={onContinue}
+        onRetry={onRetry}
+        onRun={props.onRunCode}
+        isRunning={props.isRunningCode}
+        onBack={props.onBack}
+        soundEnabled={props.soundEnabled ?? true}
+        onToggleSound={props.onToggleSound ?? (() => {})}
+        lessonId={lessonId}
+        runResults={props.runResults}
+        language={props.language}
+        lessonSource={props.lessonSource}
+        lessonObjectives={props.lessonObjectives}
+        combo={props.combo}
+        lessonType={props.lessonType}
+        footerExtra={props.footerExtra}
+        outputExtra={props.outputExtra}
+        taskExtra={props.taskExtra}
+        banner={props.banner}
+      />
+    )
+  }
 
   return (
     <div className="exercise-interactive-box">
       {renderInfo()}
       {renderMicroInstruction()}
+      <LessonSourceNote source={props.lessonSource} objectives={props.lessonObjectives} />
       <h3 style={{ fontSize: '18px', fontWeight: 800, marginBottom: '12px', color: 'var(--ink)' }}>
         {exercise.question || exercise.title || 'Complete the exercise:'}
       </h3>

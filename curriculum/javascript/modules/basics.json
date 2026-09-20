@@ -13,7 +13,7 @@
     {
       "id": "js-01",
       "title": "1. Modern JavaScript Variables & Functions",
-      "description": "Learn `const`, `let`, arrow functions, and arrays in modern JavaScript.",
+      "description": "An arrow function expression has a shorter syntax compared to function expressions. Implement `calculateTotal(price, tax)` as a `const` arrow function returning `price + price * tax`, and export it with `module.exports = { calculateTotal }`. The tests check calculateTotal(100, 0.1) === 110 and calculateTotal(50, 0.2) === 60.",
       "order": 1,
       "difficulty": "beginner",
       "duration_minutes": 5,
@@ -21,18 +21,22 @@
       "section_id": "sec-js-1",
       "section_title": "Section 1: JS Core",
       "test_out_eligible": false,
-      "concepts": ["js-vars"],
-      "starter_code": "const calculateTotal = (price, tax) => price + (price * tax);\nmodule.exports = { calculateTotal };\n",
+      "concepts": [
+        "js-vars"
+      ],
+      "starter_code": "// TODO: make calculateTotal a const arrow function that adds the tax\nfunction calculateTotal(price, tax) {\n    return 0;\n}\nmodule.exports = { calculateTotal };\n",
       "solution_code": "const calculateTotal = (price, tax) => price + (price * tax);\nmodule.exports = { calculateTotal };\n",
       "tests": [
         {
           "name": "test_calculate_total",
-          "unittest_code": "const { assert } = require('node:assert');\nconst { calculateTotal } = solution;\nif (calculateTotal(100, 0.1) !== 110) throw new Error('Expected 110');",
-          "required": true
+          "required": true,
+          "unittest_code": "const { calculateTotal } = solution;\nif (calculateTotal(100, 0.1) !== 110) throw new Error('Expected 110');\nif (calculateTotal(50, 0.2) !== 60) throw new Error('Expected 60');"
         }
       ],
       "completion_requirements": {
-        "required_test_names": ["test_calculate_total"]
+        "required_test_names": [
+          "test_calculate_total"
+        ]
       },
       "sublessons": [
         {
@@ -44,8 +48,90 @@
               "id": "js-ex-1",
               "type": "mcq",
               "question": "Which keyword defines block-scoped variables that cannot be reassigned?",
-              "options": ["const", "let", "var", "function"],
-              "correct_answer": "const"
+              "options": [
+                "let",
+                "var",
+                "function",
+                "const"
+              ],
+              "correct_answer": "const",
+              "explanation": "const is block-scoped and cannot be reassigned; let can be.",
+              "xp_reward": 10
+            }
+          ]
+        }
+      ],
+      "learning_objectives": [
+        "Declare constants with const (block-scoped, no reassignment)",
+        "Write arrow functions as compact expressions",
+        "Export functions with module.exports"
+      ],
+      "source": {
+        "name": "MDN Web Docs — Functions guide — 'An arrow function expression has a shorter syntax compared to function expressions'",
+        "url": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Functions",
+        "license": "CC0 1.0 Universal (MDN Web Docs)"
+      },
+      "xp_reward": 10
+    },
+    {
+      "id": "js-05",
+      "title": "5. Mapping Over Arrays",
+      "description": "Array.prototype.map() returns a new array containing the results of invoking a function on every element in the calling array. Implement doubleAll(numbers) as an arrow function returning a new array with every value doubled via map, exported with module.exports. The test checks doubleAll([1, 2, 3]) produces [2, 4, 6].",
+      "order": 5,
+      "difficulty": "beginner",
+      "duration_minutes": 5,
+      "type": "learn",
+      "section_id": "sec-js-1",
+      "section_title": "Section 1: JS Core",
+      "test_out_eligible": false,
+      "concepts": [
+        "js-vars"
+      ],
+      "prerequisites": [],
+      "learning_objectives": [
+        "Transform every array element with map()",
+        "Understand that map returns a NEW array",
+        "Compose arrow functions with built-in array methods"
+      ],
+      "source": {
+        "name": "MDN Web Docs — GlobalObjects — Array.prototype.map(): 'Returns a new array containing the results of invoking a function on every element'",
+        "url": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/map",
+        "license": "CC0 1.0 Universal (MDN Web Docs)"
+      },
+      "starter_code": "// TODO: build a new array with every value doubled\nfunction doubleAll(numbers) {\n    return [];\n}\nmodule.exports = { doubleAll };\n",
+      "solution_code": "const doubleAll = (numbers) => numbers.map((n) => n * 2);\nmodule.exports = { doubleAll };\n",
+      "tests": [
+        {
+          "name": "test_double_all",
+          "required": true,
+          "unittest_code": "const a = solution.doubleAll([1, 2, 3]);\nif (a.join(',') !== '2,4,6') throw new Error('Expected 2,4,6');\nconst empty = solution.doubleAll([]);\nif (empty.length !== 0) throw new Error('Empty array must stay empty');"
+        }
+      ],
+      "completion_requirements": {
+        "required_test_names": [
+          "test_double_all"
+        ]
+      },
+      "xp_reward": 10,
+      "sublessons": [
+        {
+          "id": "js-05-mcq-1-sub",
+          "title": "What map gives back",
+          "order": 1,
+          "exercises": [
+            {
+              "id": "js-05-mcq-1",
+              "type": "mcq",
+              "question": "What does `numbers.map(double)` return?",
+              "options": [
+                "the original array, changed in place",
+                "a single accumulated total",
+                "a brand new array holding each transformed value",
+                "undefined, because the callback has no return value"
+              ],
+              "correct_answer": "a brand new array holding each transformed value",
+              "explanation": "`map` never mutates its receiver: it builds and returns a new array of the callback's results.",
+              "xp_reward": 10
             }
           ]
         }

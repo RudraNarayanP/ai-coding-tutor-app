@@ -6,7 +6,10 @@
     {
       "id": "conditionals",
       "title": "If, Elif, & Else Branching",
-      "prerequisites": ["variables", "booleans"]
+      "prerequisites": [
+        "variables",
+        "booleans"
+      ]
     }
   ],
   "lessons": [
@@ -18,8 +21,13 @@
       "difficulty": "beginner",
       "duration_minutes": 5,
       "type": "learn",
-      "concepts": ["conditionals"],
-      "prerequisites": ["variables", "booleans"],
+      "concepts": [
+        "conditionals"
+      ],
+      "prerequisites": [
+        "variables",
+        "booleans"
+      ],
       "learning_objectives": [
         "Use basic if-else branching"
       ],
@@ -32,8 +40,17 @@
         }
       ],
       "completion_requirements": {
-        "required_test_names": ["test_evaluate_grade"]
-      }
+        "required_test_names": [
+          "test_evaluate_grade"
+        ]
+      },
+      "solution_code": "def evaluate_grade(score):\n    if score >= 50:\n        return \"Pass\"\n    return \"Fail\"\n",
+      "source": {
+        "name": "Python official documentation (docs.python.org) — 4.1. if Statements — Conditional Control",
+        "url": "https://docs.python.org/3/tutorial/controlflow.html#if-statements",
+        "license": "Python documentation license (PSF)"
+      },
+      "xp_reward": 10
     },
     {
       "id": "conditionals-step-2",
@@ -43,8 +60,13 @@
       "difficulty": "beginner",
       "duration_minutes": 5,
       "type": "learn",
-      "concepts": ["conditionals"],
-      "prerequisites": ["variables", "booleans"],
+      "concepts": [
+        "conditionals"
+      ],
+      "prerequisites": [
+        "variables",
+        "booleans"
+      ],
       "learning_objectives": [
         "Chain conditions using elif"
       ],
@@ -57,19 +79,56 @@
         }
       ],
       "completion_requirements": {
-        "required_test_names": ["test_temperature_status"]
-      }
+        "required_test_names": [
+          "test_temperature_status"
+        ]
+      },
+      "solution_code": "def temperature_status(temp):\n    if temp < 15:\n        return \"Cold\"\n    elif temp <= 28:\n        return \"Warm\"\n    return \"Hot\"\n",
+      "source": {
+        "name": "Python official documentation (docs.python.org) — 4.1. if Statements — Conditional Control",
+        "url": "https://docs.python.org/3/tutorial/controlflow.html#if-statements",
+        "license": "Python documentation license (PSF)"
+      },
+      "xp_reward": 10,
+      "sublessons": [
+        {
+          "id": "elif-boundary-dbg-sub",
+          "title": "Find the defect",
+          "order": 1,
+          "exercises": [
+            {
+              "id": "elif-boundary-dbg-1",
+              "type": "debugging",
+              "question": "The lesson defines Cold below 15, Warm from 15 through 28, and Hot above 28. This program prints `Hot Warm Hot` for `(28, 15, 29)`. What is wrong with it?\n\n```python\ndef temperature_status(temp):\n    if temp < 15:\n        return \"Cold\"\n    elif temp < 28:\n        return \"Warm\"\n    return \"Hot\"\n\n```",
+              "options": [
+                "`if temp < 15` should be `if temp <= 15`, so 15 counts as Cold",
+                "the final `return \"Hot\"` should be `return \"Warm\"`",
+                "`elif temp < 28` should be `elif temp <= 28`, so 28 counts as Warm",
+                "nothing is wrong - `Hot` is correct for 28 because it is the last branch"
+              ],
+              "correct_answer": "`elif temp < 28` should be `elif temp <= 28`, so 28 counts as Warm",
+              "explanation": "Only the upper boundary is off: 28 fails both `< 15` and `< 28`, so it falls through to Hot. The lower boundary already treats 15 as Warm, which is what the lesson asks for.",
+              "xp_reward": 10
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "conditionals-01",
       "title": "3. Meltdown Mitigation (Concept Challenge)",
-      "description": "Control nuclear reactor safety using multi-condition if/elif/else logic.",
+      "description": "Control a nuclear reactor with multi-condition if/elif/else logic.\n\n1. is_criticality_balanced(temperature, neutrons_emitted): return True when the reactor is balanced, i.e. temperature is below 800 AND neutrons_emitted is above 500.\n2. reactor_efficiency(voltage, current, theoretical_max_power): compute the percentage (voltage * current / theoretical_max_power) * 100 and return its band: green for >= 80, orange for >= 60, red for >= 30, and black below 30.\n3. fail_safe(temperature, neutrons_produced_per_second, threshold): compare temperature * neutrons_produced_per_second with the threshold and return LOW below 90% of the threshold, NORMAL from 90% up to and including 110%, and DANGER above 110%.",
       "order": 18,
       "difficulty": "beginner",
-      "duration_minutes": 20,
+      "duration_minutes": 8,
       "type": "challenge",
-      "concepts": ["conditionals"],
-      "prerequisites": ["variables", "booleans"],
+      "concepts": [
+        "conditionals"
+      ],
+      "prerequisites": [
+        "variables",
+        "booleans"
+      ],
       "learning_objectives": [
         "Use if, elif, and else statements to control execution flow",
         "Evaluate numbers against threshold ranges",
@@ -122,7 +181,32 @@
         "name": "Exercism Python Track — Meltdown Mitigation",
         "url": "https://github.com/exercism/python/tree/main/exercises/concept/meltdown-mitigation",
         "license": "MIT"
-      }
+      },
+      "solution_code": "def is_criticality_balanced(temperature, neutrons_emitted):\n    \"\"\"Return True when reactor is balanced.\"\"\"\n    return temperature < 800 and neutrons_emitted > 500\n\n\ndef reactor_efficiency(voltage, current, theoretical_max_power):\n    \"\"\"Return efficiency band as a colour string.\"\"\"\n    percentage_value = ((voltage * current) / theoretical_max_power) * 100\n    if percentage_value >= 80:\n        return \"green\"\n    if percentage_value >= 60:\n        return \"orange\"\n    if percentage_value >= 30:\n        return \"red\"\n    return \"black\"\n\n\ndef fail_safe(temperature, neutrons_produced_per_second, threshold):\n    \"\"\"Return safety status string.\"\"\"\n    if temperature * neutrons_produced_per_second < 0.9 * threshold:\n        return \"LOW\"\n    if temperature * neutrons_produced_per_second <= 1.1 * threshold:\n        return \"NORMAL\"\n    return \"DANGER\"\n",
+      "xp_reward": 25,
+      "sublessons": [
+        {
+          "id": "conditionals-01-dbg-1-sub",
+          "title": "Find the bug",
+          "order": 1,
+          "exercises": [
+            {
+              "id": "conditionals-01-dbg-1",
+              "type": "debugging",
+              "question": "This grader should return \"A\" for a score of 95 but returns \"B\" instead. Why?\n\nif score >= 80:\n    return \"B\"\nelif score >= 90:\n    return \"A\"",
+              "options": [
+                "`elif` cannot follow a plain `if`",
+                "The 80 test matches first, so the 90 branch is never reached",
+                "90 is not greater than 80",
+                "Python compares the strings \"A\" and \"B\", not the numbers"
+              ],
+              "correct_answer": "The 80 test matches first, so the 90 branch is never reached",
+              "explanation": "`if`/`elif` stops at the first true test, so the narrowest threshold must be checked first (90 before 80).",
+              "xp_reward": 15
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "conditionals-practice-1",
@@ -130,10 +214,15 @@
       "description": "Implement `traffic_action(color)` returning \"Stop\" for Red, \"Prepare\" for Yellow, \"Go\" for Green.",
       "order": 19,
       "difficulty": "beginner",
-      "duration_minutes": 5,
+      "duration_minutes": 6,
       "type": "practice",
-      "concepts": ["conditionals"],
-      "prerequisites": ["variables", "booleans"],
+      "concepts": [
+        "conditionals"
+      ],
+      "prerequisites": [
+        "variables",
+        "booleans"
+      ],
       "learning_objectives": [
         "Apply conditional branching to traffic state machines"
       ],
@@ -146,8 +235,17 @@
         }
       ],
       "completion_requirements": {
-        "required_test_names": ["test_traffic_action"]
-      }
+        "required_test_names": [
+          "test_traffic_action"
+        ]
+      },
+      "solution_code": "def traffic_action(color):\n    if color == \"red\":\n        return \"Stop\"\n    if color == \"yellow\":\n        return \"Prepare\"\n    return \"Go\"\n",
+      "source": {
+        "name": "Python official documentation (docs.python.org) — 4.1. if Statements — Conditional Control",
+        "url": "https://docs.python.org/3/tutorial/controlflow.html#if-statements",
+        "license": "Python documentation license (PSF)"
+      },
+      "xp_reward": 15
     },
     {
       "id": "conditionals-checkpoint",
@@ -155,10 +253,15 @@
       "description": "Demonstrate complete conditional flow control.",
       "order": 20,
       "difficulty": "beginner",
-      "duration_minutes": 5,
+      "duration_minutes": 10,
       "type": "checkpoint",
-      "concepts": ["conditionals"],
-      "prerequisites": ["variables", "booleans"],
+      "concepts": [
+        "conditionals"
+      ],
+      "prerequisites": [
+        "variables",
+        "booleans"
+      ],
       "learning_objectives": [
         "Complete conditional flow evaluation"
       ],
@@ -171,8 +274,17 @@
         }
       ],
       "completion_requirements": {
-        "required_test_names": ["test_discount_rate"]
-      }
+        "required_test_names": [
+          "test_discount_rate"
+        ]
+      },
+      "solution_code": "def discount_rate(is_member, total_spent):\n    if is_member and total_spent >= 100:\n        return 0.2\n    if is_member:\n        return 0.1\n    return 0.0\n",
+      "source": {
+        "name": "Python official documentation (docs.python.org) — 4.1. if Statements — Conditional Control",
+        "url": "https://docs.python.org/3/tutorial/controlflow.html#if-statements",
+        "license": "Python documentation license (PSF)"
+      },
+      "xp_reward": 40
     }
   ]
 }

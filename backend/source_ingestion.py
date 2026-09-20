@@ -46,6 +46,18 @@ class SourceIngestionService:
 
 
     @staticmethod
+    def extract_youtube_video_ids(text: str) -> list[str]:
+        pattern = r'(?:v=|/live/|/v/|youtu\.be/|/embed/)([a-zA-Z0-9_-]{11})'
+        matches = re.findall(pattern, text)
+        deduped = []
+        seen = set()
+        for m in matches:
+            if m not in seen:
+                seen.add(m)
+                deduped.append(m)
+        return deduped
+
+    @staticmethod
     def extract_youtube_video_id(url: str) -> str | None:
         parsed = urlparse(url)
         if parsed.netloc in ("youtube.com", "www.youtube.com", "m.youtube.com"):

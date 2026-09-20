@@ -2,7 +2,15 @@
   "id": "sql-u7",
   "title": "Unit 7: GROUP BY",
   "order": 7,
-  "concepts": [{ "id": "sql-group-by", "title": "GROUP BY and HAVING", "prerequisites": ["sql-agg"] }],
+  "concepts": [
+    {
+      "id": "sql-group-by",
+      "title": "GROUP BY and HAVING",
+      "prerequisites": [
+        "sql-agg"
+      ]
+    }
+  ],
   "lessons": [
     {
       "id": "sql-07",
@@ -14,11 +22,34 @@
       "type": "learn",
       "section_id": "sec-sql-2",
       "section_title": "Section 2: Aggregation & Joins",
-      "concepts": ["sql-group-by"],
-      "starter_code": "SELECT customer_id, COUNT(*) AS order_count FROM orders GROUP BY customer_id HAVING order_count > 1;\n",
+      "concepts": [
+        "sql-group-by"
+      ],
+      "starter_code": "-- TODO: count orders per customer, keeping only customers with more than one order\nSELECT customer_id, 0 AS order_count FROM orders WHERE 0 GROUP BY customer_id;\n",
       "solution_code": "SELECT customer_id, COUNT(*) AS order_count FROM orders GROUP BY customer_id HAVING order_count > 1;\n",
-      "tests": [{ "name": "test_group_by_customer", "test_code": "assert all(r[1] > 1 for r in rows)", "required": true }],
-      "completion_requirements": { "required_test_names": ["test_group_by_customer"] }
+      "tests": [
+        {
+          "name": "test_group_by_customer",
+          "test_code": "assert sorted(rows) == [(1, 3), (2, 2)]",
+          "required": true,
+          "description": "Result set must match the expected rows exactly."
+        }
+      ],
+      "completion_requirements": {
+        "required_test_names": [
+          "test_group_by_customer"
+        ]
+      },
+      "source": {
+        "name": "SQLite official documentation (sqlite.org) — SELECT — GROUP BY and HAVING clauses",
+        "url": "https://sqlite.org/lang_select.html",
+        "license": "Public domain (SQLite documentation)"
+      },
+      "learning_objectives": [
+        "Collapse rows into groups with GROUP BY",
+        "Filter groups after aggregation with HAVING"
+      ],
+      "xp_reward": 10
     }
   ]
 }

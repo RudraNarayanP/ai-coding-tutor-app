@@ -2,7 +2,15 @@
   "id": "sql-u5",
   "title": "Unit 5: Changing Data",
   "order": 5,
-  "concepts": [{ "id": "sql-dml", "title": "INSERT, UPDATE, DELETE", "prerequisites": ["sql-order-limit"] }],
+  "concepts": [
+    {
+      "id": "sql-dml",
+      "title": "INSERT, UPDATE, DELETE",
+      "prerequisites": [
+        "sql-order-limit"
+      ]
+    }
+  ],
   "lessons": [
     {
       "id": "sql-05",
@@ -14,11 +22,34 @@
       "type": "learn",
       "section_id": "sec-sql-1",
       "section_title": "Section 1: Querying Data",
-      "concepts": ["sql-dml"],
-      "starter_code": "INSERT INTO courses (id, title, category, price) VALUES (5, 'AI Web Apps', 'Web', 0.0);\nSELECT * FROM courses WHERE id = 5;\n",
+      "concepts": [
+        "sql-dml"
+      ],
+      "starter_code": "-- TODO: insert the course (id 5, 'AI Web Apps', 'Web', 0.0) then select it back\nSELECT * FROM courses WHERE 0;\n",
       "solution_code": "INSERT INTO courses (id, title, category, price) VALUES (5, 'AI Web Apps', 'Web', 0.0);\nSELECT * FROM courses WHERE id = 5;\n",
-      "tests": [{ "name": "test_insert_course", "test_code": "assert len(rows) == 1 and rows[0][1] == 'AI Web Apps'", "required": true }],
-      "completion_requirements": { "required_test_names": ["test_insert_course"] }
+      "tests": [
+        {
+          "name": "test_insert_course",
+          "test_code": "assert len(rows) == 1 and rows[0][1] == 'AI Web Apps'",
+          "required": true
+        }
+      ],
+      "completion_requirements": {
+        "required_test_names": [
+          "test_insert_course"
+        ]
+      },
+      "source": {
+        "name": "SQLite official documentation (sqlite.org) — INSERT — 'creates one or more new rows in an existing table'",
+        "url": "https://sqlite.org/lang_insert.html",
+        "license": "Public domain (SQLite documentation)"
+      },
+      "learning_objectives": [
+        "Add rows with INSERT INTO ... VALUES",
+        "Modify existing rows with UPDATE ... SET ... WHERE",
+        "Remove rows with DELETE FROM ... WHERE"
+      ],
+      "xp_reward": 10
     }
   ]
 }

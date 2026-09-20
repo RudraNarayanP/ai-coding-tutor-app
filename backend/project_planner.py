@@ -100,6 +100,24 @@ _STOPWORDS = {
     "all", "those", "these", "they", "what", "how", "why", "when", "who",
 }
 
+# Words that sit after "import the ..." in ordinary English and are never a
+# package name. Without this, "import the modules we need" produced a milestone
+# checking for `import modules`, which no learner can satisfy.
+_GENERIC_IMPORT_NOUNS = {
+    "module", "modules", "package", "packages", "library", "libraries",
+    "standard", "necessary", "required", "needed", "following", "several",
+    "other", "others", "relevant", "basic", "common", "appropriate",
+    "corresponding", "respective", "same", "both", "these", "those",
+    "code", "file", "files", "function", "functions", "class", "classes",
+    "method", "methods", "thing", "stuff", "everything", "something",
+}
+
+
+def _is_generic_import_name(name: str) -> bool:
+    root = (name or "").split(".")[0].strip().lower()
+    return root in _GENERIC_IMPORT_NOUNS
+
+
 _ACTION_VERBS = (
     "install",
     "import",
@@ -445,11 +463,17 @@ def _extract_target(sentence: str) -> tuple[str, str] | None:
         )
         if mf:
             module = mf.group(1)
-        return ("import", _canonical_import_name(module))
+        canonical = _canonical_import_name(module)
+        if not _reject(canonical) and not _is_generic_import_name(canonical):
+            return ("import", canonical)
+        return None
 
     m = re.search(rf"\bfrom\s+({_IDENT})\s+import\b", sentence, IC)
     if m:
-        return ("import", _canonical_import_name(m.group(1)))
+        canonical = _canonical_import_name(m.group(1))
+        if not _reject(canonical) and not _is_generic_import_name(canonical):
+            return ("import", canonical)
+        return None
 
     # "the forward method", "the train function" — name precedes the keyword.
     m = re.search(rf"\b(?:the\s+)({_IDENT})\s+(?:method|function)\b", sentence, IC)
@@ -1411,9 +1435,79 @@ def _plan_from_chapters(doc: SourceDocument, chapters: list[str], title: str, co
     return _finalize_planned_project(project)
 
 
+def _dedupe_milestones(milestones: list) -> list:
+    """Drop a milestone that repeats an earlier one.
+
+    Two steps built from the same source quote and the same verification check
+    are one step said twice. Left in, they produce duplicate titles such as
+    "Print output" appearing twice, which `is_hollow_guided_project` reads as a
+    hollow course — so a perfectly good project becomes permanently unopenable
+    after it has already been saved.
+    """
+    seen = set()
+    kept = []
+    for milestone in milestones:
+        check = milestone.checks[0] if milestone.checks else None
+        signature = (
+            milestone.title.strip().lower(),
+            check.kind if check else "",
+            (check.target if check else "").strip().lower(),
+            (milestone.source_quote or "").strip().lower()[:120],
+        )
+        if signature in seen:
+            continue
+        seen.add(signature)
+        kept.append(milestone)
+    for index, milestone in enumerate(kept, start=1):
+        milestone.order = index
+    return kept
+
+
+def _local_module_names(project: ProjectCourse) -> set[str]:
+    """Module names that exist as importable files inside this project."""
+    names = set()
+    for file in project.workspace_files:
+        stem = (file.path or "").split("/")[-1].rsplit(".", 1)[0].strip().lower()
+        if stem:
+            names.add(stem)
+    return names
+
+
+def _drops_unimportable_local_modules(milestones: list, project: ProjectCourse) -> list:
+    """Remove milestones that only ask for a local module this project lacks.
+
+    A tutorial that says "create ratelimit.py" then "from ratelimit import ..."
+    is two files. The generated project is one file (`main.py`), so an
+    `import ratelimit` check can never pass, and the learner stalls on it with no
+    way forward. Third-party names (requests, tiktoken) are untouched — they are
+    installed, not authored, so they remain legitimate checks.
+    """
+    available = _local_module_names(project)
+    authored = {
+        m.group(1).lower()
+        for m in re.finditer(r"([A-Za-z_][A-Za-z0-9_]*)\.py", project.source_excerpt or "")
+    }
+    kept = []
+    for milestone in milestones:
+        blocking = [
+            c for c in (milestone.checks or [])
+            if c.kind == "import"
+            and (c.target or "").split(".")[0].lower() in authored
+            and (c.target or "").split(".")[0].lower() not in available
+        ]
+        if blocking and len(milestone.checks or []) == len(blocking):
+            continue  # the whole step is unreachable in a single-file project
+        milestone.checks = [c for c in (milestone.checks or []) if c not in blocking]
+        kept.append(milestone)
+    for index, milestone in enumerate(kept, start=1):
+        milestone.order = index
+    return kept
+
+
 def _finalize_planned_project(project: ProjectCourse) -> ProjectCourse:
-    """Stage 3 — drop malformed milestones; reject the plan if too little remains."""
+    """Stage 3 — drop malformed and repeated milestones; reject if too little remains."""
     project.milestones = filter_invalid_milestones(project.milestones)
+    project.milestones = _drops_unimportable_local_modules(_dedupe_milestones(project.milestones), project)
     require_accept(evaluate_milestones(project.milestones, project.project_goal, stage="planning"))
     polish_project_copy(project)
     return project

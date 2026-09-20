@@ -560,26 +560,74 @@ describe('Hint button behavior', () => {
       (call) => String(call[0]).includes('/api/tutor')
     )
     expect(tutorCall).toBeDefined()
+    const payload = JSON.parse(
+      String((tutorCall?.[1] as { body?: string } | undefined)?.body ?? '{}')
+    )
+    // The nudge ladder needs the objective and the learner's own code to work from.
+    expect(payload).toHaveProperty('learning_objective')
+    expect(payload.hint_level).toBeGreaterThanOrEqual(1)
+    expect(payload.hint_level).toBeLessThanOrEqual(4)
+    // A real model answer is credited to the model, not labelled as a fallback.
+    expect(screen.getByRole('status', { name: /Tutor feedback/ })).toHaveTextContent(/AI hint/i)
+    expect(screen.getByRole('status', { name: /Tutor feedback/ })).toHaveTextContent(/nudge 1 of 4/)
   })
 
-  it('inserts solution directly into editor when View Solution is clicked', async () => {
+  it('saturates the hint level at 4 so repeated taps never break the tutor', async () => {
     const user = userEvent.setup()
     const fetchMock = setupFetch({ ollamaAvailable: true })
     render(<App />)
     await openCurrentLesson(user)
 
-    const solutionBtn = screen.getByRole('button', { name: /View Solution/ })
-    await user.click(solutionBtn)
+    const hintBtn = screen.getByRole('button', { name: /Request a hint/ })
+    for (let i = 0; i < 6; i += 1) {
+      await user.click(hintBtn)
+      await waitFor(() =>
+        expect(screen.getByRole('status', { name: /Tutor feedback/ })).toHaveTextContent(
+          'Think about what a variable stores.'
+        )
+      )
+    }
+    const levels = (fetchMock as ReturnType<typeof vi.fn>).mock.calls
+      .filter((call) => String(call[0]).includes('/api/tutor'))
+      .map(
+        (call) =>
+          JSON.parse(String((call[1] as { body?: string } | undefined)?.body ?? '{}'))
+            .hint_level as number
+      )
+    expect(levels).toEqual([1, 2, 3, 4, 4, 4])
+  })
 
-    await waitFor(() => {
-      const editor = screen.getByRole<HTMLTextAreaElement>('textbox', { name: /Code editor/ })
-      expect(editor.value).toContain('# Canonical solution')
-    })
+  it('asks twice before pasting the answer, then lets the learner undo it', async () => {
+    const user = userEvent.setup()
+    const fetchMock = setupFetch({ ollamaAvailable: true })
+    render(<App />)
+    await openCurrentLesson(user)
 
-    const solutionCall = (fetchMock as ReturnType<typeof vi.fn>).mock.calls.find(
-      (call) => String(call[0]).includes('/solution')
-    )
-    expect(solutionCall).toBeDefined()
+    const editor = () => screen.getByRole<HTMLTextAreaElement>('textbox', { name: /Code editor/ })
+    const ownCode = editor().value
+
+    // A single tap must never hand over the answer — the lightbulb is for hints.
+    await user.click(screen.getByRole('button', { name: /Show full answer/ }))
+    expect(screen.getByRole('status', { name: /Tutor feedback/ })).toHaveTextContent(/not a hint/i)
+    expect(editor().value).toBe(ownCode)
+    expect(
+      (fetchMock as ReturnType<typeof vi.fn>).mock.calls.some((call) =>
+        String(call[0]).includes('/solution')
+      )
+    ).toBe(false)
+
+    // Confirming pastes it, keeps the learner's code recoverable, and says so.
+    await user.click(screen.getByRole('button', { name: /Confirm: paste the complete answer/ }))
+    await waitFor(() => expect(editor().value).toContain('# Canonical solution'))
+    expect(
+      (fetchMock as ReturnType<typeof vi.fn>).mock.calls.some((call) =>
+        String(call[0]).includes('/solution')
+      )
+    ).toBe(true)
+
+    await user.click(screen.getByRole('button', { name: /Restore my code/ }))
+    await waitFor(() => expect(editor().value).toBe(ownCode))
+    expect(screen.queryByRole('button', { name: /Restore my code/ })).not.toBeInTheDocument()
   })
 })
 
@@ -674,7 +722,7 @@ describe('AI unavailable state', () => {
     expect(screen.getByText(/Ollama ready/)).toBeInTheDocument()
   })
 
-  it('feedback panel shows AI unavailable message after hint attempt fails', async () => {
+  it('labels the nudge as an offline coach tip when the AI cannot answer', async () => {
     const user = userEvent.setup()
     setupFetch({ ollamaAvailable: true })
 
@@ -683,7 +731,12 @@ describe('AI unavailable state', () => {
         return Promise.resolve({
           ok: true,
           json: () =>
-            Promise.resolve({ available: false, message: 'Offline', hint_level: 1 }),
+            Promise.resolve({
+              available: true,
+              source: 'offline',
+              message: 'Read the first red check and change only the line that produces it.',
+              hint_level: 1,
+            }),
         })
       }
       if (url.includes('/api/courses/select')) {
@@ -731,8 +784,18 @@ describe('AI unavailable state', () => {
 
     await waitFor(() =>
       expect(screen.getByRole('status', { name: /Tutor feedback/ })).toHaveTextContent(
-        /Offline/
+        /Coach tip/i
       )
+    )
+    expect(screen.getByRole('status', { name: /Tutor feedback/ })).toHaveTextContent(
+      /offline fallback/i
+    )
+    expect(screen.getByRole('status', { name: /Tutor feedback/ })).toHaveTextContent(
+      /Read the first red check/
+    )
+    // A learner must never be handed a provider error where a hint belongs.
+    expect(screen.getByRole('status', { name: /Tutor feedback/ })).not.toHaveTextContent(
+      /unavailable\.$/i
     )
   })
 })
@@ -774,12 +837,41 @@ describe('State Persistence & Sound Settings', () => {
 
   it('restores draft code from localStorage for current lesson', async () => {
     const user = userEvent.setup()
-    localStorage.setItem('patchwork_code_lesson-2', 'draft_code = 123\n')
+    localStorage.setItem(
+      'patchwork_code_lesson-2',
+      JSON.stringify({ v: 1, base: '# Write your code here\n', code: 'draft_code = 123\n' }),
+    )
     setupFetch()
     render(<App />)
     await openCurrentLesson(user)
 
     const editor = screen.getByRole<HTMLTextAreaElement>('textbox', { name: /Code editor/ })
     expect(editor.value).toBe('draft_code = 123\n')
+  })
+
+  it('drops a draft whose starter code has since been revised', async () => {
+    const user = userEvent.setup()
+    localStorage.setItem(
+      'patchwork_code_lesson-2',
+      JSON.stringify({ v: 1, base: '// TODO: return the old skeleton\n', code: 'stale\n' }),
+    )
+    setupFetch()
+    render(<App />)
+    await openCurrentLesson(user)
+
+    const editor = screen.getByRole<HTMLTextAreaElement>('textbox', { name: /Code editor/ })
+    expect(editor.value).toBe('# Write your code here\n')
+    expect(localStorage.getItem('patchwork_code_lesson-2')).toContain('Write your code here')
+  })
+
+  it('drops pre-envelope drafts that cannot be attributed to a starter', async () => {
+    const user = userEvent.setup()
+    localStorage.setItem('patchwork_code_lesson-2', 'draft_code = 123\n')
+    setupFetch()
+    render(<App />)
+    await openCurrentLesson(user)
+
+    const editor = screen.getByRole<HTMLTextAreaElement>('textbox', { name: /Code editor/ })
+    expect(editor.value).toBe('# Write your code here\n')
   })
 })
