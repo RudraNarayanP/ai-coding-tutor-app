@@ -2,7 +2,15 @@
   "id": "sql-u15",
   "title": "Unit 15: Real-World SQL",
   "order": 15,
-  "concepts": [{ "id": "sql-analytics", "title": "Practical Database Queries", "prerequisites": ["sql-window"] }],
+  "concepts": [
+    {
+      "id": "sql-analytics",
+      "title": "Practical Database Queries",
+      "prerequisites": [
+        "sql-window"
+      ]
+    }
+  ],
   "lessons": [
     {
       "id": "sql-15",
@@ -10,15 +18,37 @@
       "description": "Write a report joining customers, orders, and products to find total spending per customer.",
       "order": 15,
       "difficulty": "advanced",
-      "duration_minutes": 10,
+      "duration_minutes": 6,
       "type": "practice",
       "section_id": "sec-sql-4",
       "section_title": "Section 4: Mastery & Analytics",
-      "concepts": ["sql-analytics"],
-      "starter_code": "SELECT c.name, SUM(o.total_amount) AS total_spent FROM customers c JOIN orders o ON c.id = o.customer_id GROUP BY c.name ORDER BY total_spent DESC;\n",
+      "concepts": [
+        "sql-analytics"
+      ],
+      "starter_code": "-- TODO: report each customer's name and total spent (join + group + order by total)\nSELECT c.name, 0 AS total_spent FROM customers c WHERE 0 GROUP BY c.name;\n",
       "solution_code": "SELECT c.name, SUM(o.total_amount) AS total_spent FROM customers c JOIN orders o ON c.id = o.customer_id GROUP BY c.name ORDER BY total_spent DESC;\n",
-      "tests": [{ "name": "test_business_report", "test_code": "assert len(rows) >= 3 and rows[0][1] > 1000", "required": true }],
-      "completion_requirements": { "required_test_names": ["test_business_report"] }
+      "tests": [
+        {
+          "name": "test_business_report",
+          "test_code": "assert len(rows) >= 3 and rows[0][1] > 1000",
+          "required": true
+        }
+      ],
+      "completion_requirements": {
+        "required_test_names": [
+          "test_business_report"
+        ]
+      },
+      "source": {
+        "name": "SQLite official documentation (sqlite.org) — SELECT — joins, GROUP BY and ORDER BY for reporting queries",
+        "url": "https://sqlite.org/lang_select.html",
+        "license": "Public domain (SQLite documentation)"
+      },
+      "learning_objectives": [
+        "Chain join, aggregate, group and sort in one analytical query",
+        "Order report rows by a computed aggregate"
+      ],
+      "xp_reward": 15
     }
   ]
 }

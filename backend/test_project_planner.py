@@ -3,6 +3,7 @@ import pytest
 
 from backend.project_planner import (
     ProjectGroundingError,
+    _extract_target,
     looks_like_raw_transcript,
     plan_project,
     validate_project,
@@ -483,3 +484,100 @@ def test_long_unpunctuated_transcript_does_not_exceed_field_limits():
     for milestone in project.milestones:
         assert len(milestone.source_grounded_description) <= 2000
         assert len(milestone.source_quote) <= 2000
+
+
+# ---------------------------------------------------------------------------
+# Import targets must be real modules, never English nouns from the prose
+# ---------------------------------------------------------------------------
+
+GENERIC_PROSE = [
+    "Import the modules we need",
+    "At the top, import the standard library modules we use",
+    "import several other libraries",
+    "import the required packages",
+    "import the following code",
+]
+
+
+@pytest.mark.parametrize("sentence", GENERIC_PROSE)
+def test_generic_nouns_after_import_are_not_turned_into_checks(sentence):
+    """Regression: this produced `Your code imports modules`, which nobody can pass."""
+    assert _extract_target(sentence) is None
+
+
+@pytest.mark.parametrize(
+    "sentence,expected",
+    [
+        ("import time", ("import", "time")),
+        ("from functools import wraps", ("import", "functools")),
+        ("import the collections module", ("import", "collections")),
+        ("Install the requests package", ("import", "requests")),
+        ("import numpy as np", ("import", "numpy")),
+    ],
+)
+def test_real_module_names_still_extract(sentence, expected):
+    assert _extract_target(sentence) == expected
+
+
+def test_planned_project_has_no_unimportable_import_check():
+    """Every import check in a planned project must name a real module."""
+    import sys as _sys
+
+    doc = _doc(
+        "# Build a Rate Limiter\n\n"
+        "## Step 1: Import the modules we need\n\n"
+        "At the top, import the standard library modules we use:\n\n"
+        "```python\nimport time\nfrom functools import wraps\n```\n\n"
+        "## Step 2: Define the counter\n\n"
+        "```python\nclass FixedWindowCounter:\n    def allow(self):\n        return True\n```\n\n"
+        "## Step 3: Run it\n\n"
+        "```bash\npython main.py\n```\n",
+        title="Build a Rate Limiter",
+    )
+    project = plan_project(doc, title="Build a Rate Limiter", course_id="project-ratelimit")
+    stdlib = set(_sys.stdlib_module_names)
+    for milestone in project.milestones:
+        for check in milestone.checks:
+            if check.kind != "import":
+                continue
+            root = (check.target or "").split(".")[0].lower()
+            assert root in stdlib or root in {"ratelimit", "demo", "main"}, (
+                f"{milestone.id}: unimportable check for `{check.target}`"
+            )
+
+
+def test_no_milestone_requires_importing_a_local_module_the_project_lacks():
+    """Regression: `import ratelimit` in a single-file project is unpassable.
+
+    A tutorial that authors `ratelimit.py` and then imports it describes two
+    files. The generated project has only `main.py`, so that check could never
+    pass and the learner stalled at 77% with no way forward.
+    """
+    doc = _doc(
+        "# Build a Rate Limiter\n\n"
+        "## Step 1: Create ratelimit.py\n\n"
+        "```python\nimport time\nfrom functools import wraps\n\n"
+        "class RateLimitExceeded(Exception):\n    pass\n\n"
+        "class TokenBucket:\n    def __init__(self, capacity, rate):\n"
+        "        self.capacity = capacity\n\n    def allow(self):\n        return True\n```\n\n"
+        "## Step 2: Import ratelimit in demo.py\n\n"
+        "```python\nfrom ratelimit import TokenBucket, RateLimitExceeded\n\n"
+        "bucket = TokenBucket(10, 1)\nprint(bucket.allow())\n```\n\n"
+        "## Step 3: Run it\n\n"
+        "```bash\npython main.py\n```\n",
+        title="Build a Rate Limiter",
+    )
+    project = plan_project(doc, title="Build a Rate Limiter", course_id="project-localmod")
+    importable = {
+        (f.path or "").split("/")[-1].rsplit(".", 1)[0].lower()
+        for f in project.workspace_files
+    }
+    for milestone in project.milestones:
+        for check in milestone.checks:
+            if check.kind != "import":
+                continue
+            root = (check.target or "").split(".")[0].lower()
+            authored_in_source = f"{root}.py" in (doc.plain_text or "")
+            assert not authored_in_source or root in importable, (
+                f"{milestone.id}: requires `import {root}`, a file this project has none of"
+            )

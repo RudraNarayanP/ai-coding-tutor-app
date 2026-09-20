@@ -6,7 +6,9 @@
     {
       "id": "cpp-vectors",
       "title": "std::vector & Standard Library Containers",
-      "prerequisites": ["cpp-functions"]
+      "prerequisites": [
+        "cpp-functions"
+      ]
     }
   ],
   "lessons": [
@@ -18,8 +20,12 @@
       "difficulty": "intermediate",
       "duration_minutes": 5,
       "type": "learn",
-      "concepts": ["cpp-vectors"],
-      "prerequisites": ["cpp-functions"],
+      "concepts": [
+        "cpp-vectors"
+      ],
+      "prerequisites": [
+        "cpp-functions"
+      ],
       "learning_objectives": [
         "Iterate over std::vector<int> using range-based for loop"
       ],
@@ -33,8 +39,16 @@
         }
       ],
       "completion_requirements": {
-        "required_test_names": ["test_vector_sum"]
-      }
+        "required_test_names": [
+          "test_vector_sum"
+        ]
+      },
+      "source": {
+        "name": "cppreference.com — std::vector — 'a sequence container that encapsulates dynamic size arrays'",
+        "url": "https://en.cppreference.com/w/cpp/container/vector",
+        "license": "CC BY-SA 4.0 (cppreference.com)"
+      },
+      "xp_reward": 10
     },
     {
       "id": "cpp-vectors-step-2",
@@ -44,8 +58,12 @@
       "difficulty": "intermediate",
       "duration_minutes": 5,
       "type": "learn",
-      "concepts": ["cpp-vectors"],
-      "prerequisites": ["cpp-functions"],
+      "concepts": [
+        "cpp-vectors"
+      ],
+      "prerequisites": [
+        "cpp-functions"
+      ],
       "learning_objectives": [
         "Filter vector elements with push_back"
       ],
@@ -59,8 +77,16 @@
         }
       ],
       "completion_requirements": {
-        "required_test_names": ["test_filter_evens"]
-      }
+        "required_test_names": [
+          "test_filter_evens"
+        ]
+      },
+      "source": {
+        "name": "cppreference.com — std::vector",
+        "url": "https://en.cppreference.com/w/cpp/container/vector",
+        "license": "CC BY-SA 4.0 (cppreference.com)"
+      },
+      "xp_reward": 10
     },
     {
       "id": "cpp-vectors-01",
@@ -68,10 +94,14 @@
       "description": "Find maximum element in a std::vector<double>.",
       "order": 23,
       "difficulty": "intermediate",
-      "duration_minutes": 10,
+      "duration_minutes": 8,
       "type": "challenge",
-      "concepts": ["cpp-vectors"],
-      "prerequisites": ["cpp-functions"],
+      "concepts": [
+        "cpp-vectors"
+      ],
+      "prerequisites": [
+        "cpp-functions"
+      ],
       "learning_objectives": [
         "Track max element in std::vector<double>"
       ],
@@ -85,19 +115,31 @@
         }
       ],
       "completion_requirements": {
-        "required_test_names": ["test_find_max"]
-      }
+        "required_test_names": [
+          "test_find_max"
+        ]
+      },
+      "source": {
+        "name": "cppreference.com — std::vector",
+        "url": "https://en.cppreference.com/w/cpp/container/vector",
+        "license": "CC BY-SA 4.0 (cppreference.com)"
+      },
+      "xp_reward": 25
     },
     {
       "id": "cpp-vectors-practice-1",
       "title": "4. Vector Reversal (Practice)",
-      "description": "Reverse a std::vector in C++.",
+      "description": "Practice: implement reverse_vector(std::vector<int>& numbers) reversing the vector in place — std::reverse(numbers.begin(), numbers.end()) or manual two-end swapping. The test asserts {1, 2, 3} becomes {3, 2, 1}.",
       "order": 24,
       "difficulty": "intermediate",
-      "duration_minutes": 5,
+      "duration_minutes": 6,
       "type": "practice",
-      "concepts": ["cpp-vectors"],
-      "prerequisites": ["cpp-functions"],
+      "concepts": [
+        "cpp-vectors"
+      ],
+      "prerequisites": [
+        "cpp-functions"
+      ],
       "learning_objectives": [
         "Use std::reverse or swap with vector"
       ],
@@ -111,19 +153,31 @@
         }
       ],
       "completion_requirements": {
-        "required_test_names": ["test_reverse_vector"]
-      }
+        "required_test_names": [
+          "test_reverse_vector"
+        ]
+      },
+      "source": {
+        "name": "cppreference.com — std::reverse — 'Reverses the order of the elements in the target range'",
+        "url": "https://en.cppreference.com/w/cpp/algorithm/reverse",
+        "license": "CC BY-SA 4.0 (cppreference.com)"
+      },
+      "xp_reward": 15
     },
     {
       "id": "cpp-vectors-checkpoint",
       "title": "5. Unit 5 Checkpoint: C++ Vectors Mastery",
-      "description": "Verify C++ vector skills.",
+      "description": "Checkpoint for vectors: implement contains_value(const std::vector<int>& vec, int target) returning true when target appears in vec — a range-based for loop fits well. The test checks contains_value({10,20,30}, 20) is true and contains_value({10,20,30}, 99) is false.",
       "order": 25,
       "difficulty": "intermediate",
-      "duration_minutes": 5,
+      "duration_minutes": 10,
       "type": "checkpoint",
-      "concepts": ["cpp-vectors"],
-      "prerequisites": ["cpp-functions"],
+      "concepts": [
+        "cpp-vectors"
+      ],
+      "prerequisites": [
+        "cpp-functions"
+      ],
       "learning_objectives": [
         "Pass C++ vectors checkpoint"
       ],
@@ -137,8 +191,16 @@
         }
       ],
       "completion_requirements": {
-        "required_test_names": ["test_contains_value"]
-      }
+        "required_test_names": [
+          "test_contains_value"
+        ]
+      },
+      "source": {
+        "name": "cppreference.com — std::vector",
+        "url": "https://en.cppreference.com/w/cpp/container/vector",
+        "license": "CC BY-SA 4.0 (cppreference.com)"
+      },
+      "xp_reward": 40
     }
   ]
 }

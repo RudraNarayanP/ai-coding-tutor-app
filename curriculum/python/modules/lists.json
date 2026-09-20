@@ -6,7 +6,10 @@
     {
       "id": "lists",
       "title": "Lists & Basic Sequence Operations",
-      "prerequisites": ["conditionals", "strings"]
+      "prerequisites": [
+        "conditionals",
+        "strings"
+      ]
     }
   ],
   "lessons": [
@@ -18,8 +21,13 @@
       "difficulty": "beginner",
       "duration_minutes": 5,
       "type": "learn",
-      "concepts": ["lists"],
-      "prerequisites": ["conditionals", "strings"],
+      "concepts": [
+        "lists"
+      ],
+      "prerequisites": [
+        "conditionals",
+        "strings"
+      ],
       "learning_objectives": [
         "Create lists, access elements by index, and sum totals"
       ],
@@ -32,8 +40,17 @@
         }
       ],
       "completion_requirements": {
-        "required_test_names": ["test_first_and_sum"]
-      }
+        "required_test_names": [
+          "test_first_and_sum"
+        ]
+      },
+      "solution_code": "def get_first_and_sum(numbers):\n    return (numbers[0], sum(numbers))\n",
+      "source": {
+        "name": "Python official documentation (docs.python.org) — 3.1.3. Lists — Introduction (indexing, len, sum)",
+        "url": "https://docs.python.org/3/tutorial/introduction.html#lists",
+        "license": "Python documentation license (PSF)"
+      },
+      "xp_reward": 10
     },
     {
       "id": "lists-step-2",
@@ -43,8 +60,13 @@
       "difficulty": "beginner",
       "duration_minutes": 5,
       "type": "learn",
-      "concepts": ["lists"],
-      "prerequisites": ["conditionals", "strings"],
+      "concepts": [
+        "lists"
+      ],
+      "prerequisites": [
+        "conditionals",
+        "strings"
+      ],
       "learning_objectives": [
         "Combine lists with + and check membership with in"
       ],
@@ -57,8 +79,17 @@
         }
       ],
       "completion_requirements": {
-        "required_test_names": ["test_combine_check"]
-      }
+        "required_test_names": [
+          "test_combine_check"
+        ]
+      },
+      "solution_code": "def combine_and_check(list1, list2, target):\n    combined = list1 + list2\n    return target in combined\n",
+      "source": {
+        "name": "Python official documentation (docs.python.org) — 3.1.3. Lists — Introduction (concatenation, membership)",
+        "url": "https://docs.python.org/3/tutorial/introduction.html#lists",
+        "license": "Python documentation license (PSF)"
+      },
+      "xp_reward": 10
     },
     {
       "id": "lists-01",
@@ -66,10 +97,15 @@
       "description": "Track playing cards and calculate hand statistics using lists.",
       "order": 38,
       "difficulty": "beginner",
-      "duration_minutes": 20,
+      "duration_minutes": 8,
       "type": "challenge",
-      "concepts": ["lists"],
-      "prerequisites": ["conditionals", "strings"],
+      "concepts": [
+        "lists"
+      ],
+      "prerequisites": [
+        "conditionals",
+        "strings"
+      ],
       "learning_objectives": [
         "Index and slice lists",
         "Concatenate lists with +",
@@ -128,7 +164,9 @@
         "name": "Exercism Python Track — Card Games",
         "url": "https://github.com/exercism/python/tree/main/exercises/concept/card-games",
         "license": "MIT"
-      }
+      },
+      "solution_code": "def get_rounds(number):\n    \"\"\"Return current and next two round numbers.\"\"\"\n    return [number, number + 1, number + 2]\n\n\ndef concatenate_rounds(rounds_1, rounds_2):\n    \"\"\"Concatenate two round lists.\"\"\"\n    return rounds_1 + rounds_2\n\n\ndef list_contains_round(rounds, number):\n    \"\"\"Return True if number is in rounds.\"\"\"\n    return number in rounds\n\n\ndef card_average(hand):\n    \"\"\"Return average card value.\"\"\"\n    return sum(hand) / len(hand)\n\n\ndef approx_average_is_average(hand):\n    \"\"\"Return True if first/last average or middle card equals true average.\"\"\"\n    true_avg = card_average(hand)\n    flat_avg = (hand[0] + hand[-1]) / 2\n    median = hand[len(hand) // 2]\n    return true_avg in (flat_avg, median)\n\n\ndef average_even_is_average_odd(hand):\n    \"\"\"Return True if even-indexed average equals odd-indexed average.\"\"\"\n    return card_average(hand[::2]) == card_average(hand[1::2])\n\n\ndef maybe_double_last(hand):\n    \"\"\"Double the last card if it is a Jack (11).\"\"\"\n    if hand[-1] == 11:\n        hand[-1] = 22\n    return hand\n",
+      "xp_reward": 25
     },
     {
       "id": "lists-practice-1",
@@ -136,14 +174,19 @@
       "description": "Calculate total weight of items: `sum(weights)`.",
       "order": 39,
       "difficulty": "beginner",
-      "duration_minutes": 5,
+      "duration_minutes": 6,
       "type": "practice",
-      "concepts": ["lists"],
-      "prerequisites": ["conditionals", "strings"],
+      "concepts": [
+        "lists"
+      ],
+      "prerequisites": [
+        "conditionals",
+        "strings"
+      ],
       "learning_objectives": [
         "Sum list totals"
       ],
-      "starter_code": "def total_weight(item_weights):\n    # TODO: Return sum(item_weights)\n    pass\n",
+      "starter_code": "def total_weight(item_weights):\n    # TODO: return the weight of everything added together\n    pass\n",
       "tests": [
         {
           "name": "test_total_weight",
@@ -152,23 +195,37 @@
         }
       ],
       "completion_requirements": {
-        "required_test_names": ["test_total_weight"]
-      }
+        "required_test_names": [
+          "test_total_weight"
+        ]
+      },
+      "solution_code": "def total_weight(item_weights):\n    return sum(item_weights)\n",
+      "source": {
+        "name": "Python official documentation (docs.python.org) — 3.1.3. Lists — Introduction",
+        "url": "https://docs.python.org/3/tutorial/introduction.html#lists",
+        "license": "Python documentation license (PSF)"
+      },
+      "xp_reward": 15
     },
     {
       "id": "lists-checkpoint",
       "title": "5. Unit 8 Checkpoint: Lists Mastery",
-      "description": "Prove your list skills.",
+      "description": "middle_element(lst) must return the middle item of an odd-length list using len(lst) // 2 for the integer middle index.",
       "order": 40,
       "difficulty": "beginner",
-      "duration_minutes": 5,
+      "duration_minutes": 10,
       "type": "checkpoint",
-      "concepts": ["lists"],
-      "prerequisites": ["conditionals", "strings"],
+      "concepts": [
+        "lists"
+      ],
+      "prerequisites": [
+        "conditionals",
+        "strings"
+      ],
       "learning_objectives": [
         "Master list indexing and operations"
       ],
-      "starter_code": "def middle_element(lst):\n    # TODO: Return lst[len(lst) // 2]\n    pass\n",
+      "starter_code": "def middle_element(lst):\n    # TODO: return the middle item of this odd-length list\n    pass\n",
       "tests": [
         {
           "name": "test_middle_element",
@@ -177,8 +234,17 @@
         }
       ],
       "completion_requirements": {
-        "required_test_names": ["test_middle_element"]
-      }
+        "required_test_names": [
+          "test_middle_element"
+        ]
+      },
+      "solution_code": "def middle_element(lst):\n    return lst[len(lst) // 2]\n",
+      "source": {
+        "name": "Python official documentation (docs.python.org) — 3.1.3. Lists — Introduction",
+        "url": "https://docs.python.org/3/tutorial/introduction.html#lists",
+        "license": "Python documentation license (PSF)"
+      },
+      "xp_reward": 40
     }
   ]
 }

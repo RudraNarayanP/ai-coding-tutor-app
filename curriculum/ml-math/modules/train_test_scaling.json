@@ -18,7 +18,7 @@
       "description": "Implement `train_test_split(xs, ratio)` returning (train, test); train gets floor(n*ratio).",
       "order": 21,
       "difficulty": "intermediate",
-      "duration_minutes": 8,
+      "duration_minutes": 5,
       "type": "learn",
       "section_id": "sec-mlmath-1",
       "section_title": "Section 1: Math & Data for ML",
@@ -42,7 +42,13 @@
         "required_test_names": [
           "test_split"
         ]
-      }
+      },
+      "source": {
+        "name": "scikit-learn User Guide — Cross-validation — 'hold out part of the available data as a test set'",
+        "url": "https://scikit-learn.org/stable/modules/cross_validation.html",
+        "license": "BSD 3-Clause (scikit-learn documentation)"
+      },
+      "xp_reward": 10
     },
     {
       "id": "split-shuffle",
@@ -50,7 +56,7 @@
       "description": "Implement `shuffle_split(xs, ratio, seed)` using random.Random(seed).shuffle on a copy.",
       "order": 22,
       "difficulty": "intermediate",
-      "duration_minutes": 8,
+      "duration_minutes": 5,
       "type": "learn",
       "section_id": "sec-mlmath-1",
       "section_title": "Section 1: Math & Data for ML",
@@ -74,7 +80,13 @@
         "required_test_names": [
           "test_shuffle_split"
         ]
-      }
+      },
+      "source": {
+        "name": "Python official documentation (docs.python.org) — random — 'Shuffle the sequence x in place.'",
+        "url": "https://docs.python.org/3/library/random.html",
+        "license": "Python documentation license (PSF)"
+      },
+      "xp_reward": 10
     },
     {
       "id": "scale-minmax",
@@ -106,7 +118,13 @@
         "required_test_names": [
           "test_minmax"
         ]
-      }
+      },
+      "source": {
+        "name": "scikit-learn User Guide — Preprocessing — MinMaxScaler: scale features between a given minimum and maximum",
+        "url": "https://scikit-learn.org/stable/modules/preprocessing.html",
+        "license": "BSD 3-Clause (scikit-learn documentation)"
+      },
+      "xp_reward": 25
     },
     {
       "id": "scale-standardize",
@@ -114,7 +132,7 @@
       "description": "Implement `standardize(xs)` to zero mean / unit variance (population). All zeros if var==0.",
       "order": 24,
       "difficulty": "intermediate",
-      "duration_minutes": 8,
+      "duration_minutes": 6,
       "type": "practice",
       "section_id": "sec-mlmath-1",
       "section_title": "Section 1: Math & Data for ML",
@@ -138,7 +156,41 @@
         "required_test_names": [
           "test_standardize"
         ]
-      }
+      },
+      "source": {
+        "name": "scikit-learn User Guide — Preprocessing — StandardScaler utility class",
+        "url": "https://scikit-learn.org/stable/modules/preprocessing.html",
+        "license": "BSD 3-Clause (scikit-learn documentation)"
+      },
+      "xp_reward": 15,
+      "sublessons": [
+        {
+          "id": "standardize-zero-sub",
+          "title": "Select the all-zero results",
+          "order": 1,
+          "exercises": [
+            {
+              "id": "standardize-zero-multi-1",
+              "type": "select_multiple",
+              "question": "`standardize(xs)` returns all zeros exactly when the population variance is 0. Select every input that produces an all-zero result.",
+              "options": [
+                "[5, 5, 5]",
+                "[0, 0]",
+                "[7]",
+                "[1, 2, 3]",
+                "[1, 0]"
+              ],
+              "correct_answer": [
+                "[5, 5, 5]",
+                "[0, 0]",
+                "[7]"
+              ],
+              "explanation": "Variance is 0 only when no value differs from the mean: identical values, and any single-element list. [1, 2, 3] and [1, 0] both spread around their mean.",
+              "xp_reward": 10
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "scale-checkpoint",
@@ -146,7 +198,7 @@
       "description": "Implement `fit_minmax(train)` returning (lo, hi) and `transform_minmax(xs, lo, hi)`.",
       "order": 25,
       "difficulty": "intermediate",
-      "duration_minutes": 8,
+      "duration_minutes": 10,
       "type": "checkpoint",
       "section_id": "sec-mlmath-1",
       "section_title": "Section 1: Math & Data for ML",
@@ -170,7 +222,13 @@
         "required_test_names": [
           "test_fit_transform"
         ]
-      }
+      },
+      "source": {
+        "name": "scikit-learn User Guide — Preprocessing — scaling transformers learn data parameters then transform",
+        "url": "https://scikit-learn.org/stable/modules/preprocessing.html",
+        "license": "BSD 3-Clause (scikit-learn documentation)"
+      },
+      "xp_reward": 40
     }
   ]
 }

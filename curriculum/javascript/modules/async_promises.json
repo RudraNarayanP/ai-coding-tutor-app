@@ -2,29 +2,95 @@
   "id": "js-async-promises",
   "title": "Unit 3: Async & Promises",
   "order": 3,
-  "concepts": [{ "id": "js-async", "title": "Promises, async/await, fetch", "prerequisites": ["js-dom"] }],
+  "concepts": [
+    {
+      "id": "js-async",
+      "title": "Promises, async/await, fetch",
+      "prerequisites": [
+        "js-dom"
+      ]
+    }
+  ],
   "lessons": [
     {
       "id": "js-03",
       "title": "3. Async/Await & APIs",
-      "description": "Master asynchronous JavaScript execution with Promises and async/await.",
+      "description": "An async function always returns a promise, and await suspends until that promise settles. Implement `fetchUserData(userId)` as an async function resolving to { id: userId, active: true }, exported with module.exports. The test awaits it and checks both fields.",
       "order": 3,
       "difficulty": "intermediate",
       "duration_minutes": 5,
       "type": "learn",
       "section_id": "sec-js-2",
       "section_title": "Section 2: Async & Node",
-      "concepts": ["js-async"],
-      "starter_code": "async function fetchUserData(userId) {\n    return { id: userId, active: true };\n}\nmodule.exports = { fetchUserData };\n",
+      "concepts": [
+        "js-async"
+      ],
+      "starter_code": "// TODO: return the user record described in the task\nasync function fetchUserData(userId) {\n    return {};\n}\nmodule.exports = { fetchUserData };\n",
       "solution_code": "async function fetchUserData(userId) {\n    return { id: userId, active: true };\n}\nmodule.exports = { fetchUserData };\n",
       "tests": [
         {
           "name": "test_async_user",
-          "unittest_code": "(async () => {\n    const res = await solution.fetchUserData(42);\n    if (res.id !== 42) throw new Error('Expected id 42');\n})();",
-          "required": true
+          "required": true,
+          "unittest_code": "const res = await solution.fetchUserData(42);\nif (res.id !== 42) throw new Error('Expected id 42');\nif (res.active !== true) throw new Error('Expected active true');"
         }
       ],
-      "completion_requirements": { "required_test_names": ["test_async_user"] }
+      "completion_requirements": {
+        "required_test_names": [
+          "test_async_user"
+        ]
+      },
+      "learning_objectives": [
+        "Declare async functions that return promises",
+        "Await asynchronous results in test code",
+        "Resolve structured objects asynchronously"
+      ],
+      "source": {
+        "name": "MDN Web Docs — Statements — async_function: 'An async function ... always returns a promise'",
+        "url": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/async_function",
+        "license": "CC0 1.0 Universal (MDN Web Docs)"
+      },
+      "xp_reward": 10
+    },
+    {
+      "id": "js-06",
+      "title": "6. Promise Chaining with then()",
+      "description": "The then() method takes callback functions for the fulfilled case of a Promise and returns a new Promise. Implement getUserLabel(userId) that returns fetchUserData(userId).then(user => user.name), where the provided fetchUserData resolves { name: 'User' + userId }. Export { getUserLabel }; the test awaits it and expects 'User7' for id 7.",
+      "order": 6,
+      "difficulty": "beginner",
+      "duration_minutes": 5,
+      "type": "learn",
+      "section_id": "sec-js-2",
+      "section_title": "Section 2: Async & Node",
+      "test_out_eligible": false,
+      "concepts": [
+        "js-async"
+      ],
+      "prerequisites": [],
+      "learning_objectives": [
+        "Chain transformations onto promises with then()",
+        "Understand that then() returns a new promise",
+        "Mix async functions with explicit promise chaining"
+      ],
+      "source": {
+        "name": "MDN Web Docs — GlobalObjects — Promise.then(): 'takes up to two arguments: callback functions for the fulfilled and rejected cases'",
+        "url": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise/then",
+        "license": "CC0 1.0 Universal (MDN Web Docs)"
+      },
+      "starter_code": "async function fetchUserData(userId) {\n    return { name: 'User' + userId };\n}\n\nfunction getUserLabel(userId) {\n    // TODO: resolve the user, then return just the name\n    return Promise.resolve('');\n}\nmodule.exports = { getUserLabel };\n",
+      "solution_code": "async function fetchUserData(userId) {\n    return { name: 'User' + userId };\n}\n\nfunction getUserLabel(userId) {\n    return fetchUserData(userId).then((user) => user.name);\n}\nmodule.exports = { getUserLabel };\n",
+      "tests": [
+        {
+          "name": "test_promise_chain",
+          "required": true,
+          "unittest_code": "const label = await solution.getUserLabel(7);\nif (label !== 'User7') throw new Error('Expected User7, got ' + label);"
+        }
+      ],
+      "completion_requirements": {
+        "required_test_names": [
+          "test_promise_chain"
+        ]
+      },
+      "xp_reward": 10
     }
   ]
 }

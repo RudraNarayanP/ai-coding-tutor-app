@@ -21,12 +21,14 @@
       "section_id": "section-1",
       "section_title": "Section 1: Foundations",
       "test_out_eligible": false,
-      "concepts": ["java-variables"],
+      "concepts": [
+        "java-variables"
+      ],
       "prerequisites": [],
       "learning_objectives": [
         "Declare a Java class and return a String literal"
       ],
-      "starter_code": "public class Solution {\n    public static String getLanguage() {\n        // TODO: Return \"Java\"\n        return null;\n    }\n}\n",
+      "starter_code": "public class Solution {\n    public static String getLanguage() {\n        // TODO: return the name of the language\n        return null;\n    }\n}\n",
       "solution_code": "public class Solution {\n    public static String getLanguage() {\n        return \"Java\";\n    }\n}\n",
       "tests": [
         {
@@ -36,7 +38,9 @@
         }
       ],
       "completion_requirements": {
-        "required_test_names": ["test_get_language"]
+        "required_test_names": [
+          "test_get_language"
+        ]
       },
       "sublessons": [
         {
@@ -47,8 +51,13 @@
             {
               "id": "java-ex-1a",
               "type": "mcq",
-              "question": "Which keyword is used to return a value from a Java method?",
-              "options": ["return", "yield", "output", "send"],
+              "question": "Which keyword sends a value back to the caller of a Java method?",
+              "options": [
+                "yield",
+                "output",
+                "return",
+                "send"
+              ],
               "correct_answer": "return",
               "xp_reward": 10,
               "explanation": "In Java, the 'return' keyword sends a result back from a method."
@@ -56,10 +65,14 @@
             {
               "id": "java-ex-1b",
               "type": "fill_blank",
-              "question": "Complete the return statement to return \"Java\":",
+              "question": "Complete the return statement so the method gives back the language name:",
               "starter_code": "return ___;",
-              "blanks": ["\"Java\""],
-              "correct_answer": "\"Java\"",
+              "blanks": [
+                "\"Java\""
+              ],
+              "correct_answer": [
+                "\"Java\""
+              ],
               "xp_reward": 10,
               "explanation": "Java String literals use double quotes, e.g., \"Java\"."
             }
@@ -93,18 +106,40 @@
         {
           "id": "java-exam-1",
           "type": "mcq",
-          "question": "What is the return type of public static String getLanguage()?",
-          "options": ["String", "int", "void", "char"],
-          "correct_answer": "String"
+          "question": "Which Java type does a method declare when it produces a whole number?",
+          "options": [
+            "int",
+            "String",
+            "void",
+            "char"
+          ],
+          "correct_answer": "String",
+          "explanation": "The method signature declares String as its return type.",
+          "xp_reward": 10
         },
         {
           "id": "java-exam-2",
           "type": "fill_blank",
-          "question": "Which String literal equals Java?",
-          "correct_answer": "Java"
+          "question": "Type the Java String literal for Java: String lang = ___;",
+          "correct_answer": [
+            "\"Java\""
+          ],
+          "blanks": [
+            "\"Java\""
+          ],
+          "explanation": "Java String literals are wrapped in double quotes.",
+          "xp_reward": 10
         }
       ],
-      "static_hints": ["return \"Java\";"]
+      "static_hints": [
+        "return \"Java\";"
+      ],
+      "source": {
+        "name": "Oracle Java Tutorials — Defining Methods",
+        "url": "https://docs.oracle.com/javase/tutorial/java/javaOO/methods.html",
+        "license": "Oracle Free Use Terms and Conditions (documentation)"
+      },
+      "xp_reward": 10
     },
     {
       "id": "java-variables-step-2",
@@ -117,12 +152,14 @@
       "section_id": "section-1",
       "section_title": "Section 1: Foundations",
       "test_out_eligible": false,
-      "concepts": ["java-variables"],
+      "concepts": [
+        "java-variables"
+      ],
       "prerequisites": [],
       "learning_objectives": [
         "Use primitive int type and arithmetic in Java"
       ],
-      "starter_code": "public class Solution {\n    public static int calculateTotal(int price, int quantity) {\n        // TODO: Return price * quantity\n        return 0;\n    }\n}\n",
+      "starter_code": "public class Solution {\n    public static int calculateTotal(int price, int quantity) {\n        // TODO: return the total cost\n        return 0;\n    }\n}\n",
       "solution_code": "public class Solution {\n    public static int calculateTotal(int price, int quantity) {\n        return price * quantity;\n    }\n}\n",
       "tests": [
         {
@@ -132,27 +169,39 @@
         }
       ],
       "completion_requirements": {
-        "required_test_names": ["test_calculate_total"]
+        "required_test_names": [
+          "test_calculate_total"
+        ]
       },
-      "static_hints": ["return price * quantity;"]
+      "static_hints": [
+        "return price * quantity;"
+      ],
+      "source": {
+        "name": "Oracle Java Tutorials — Declaring and Initializing Variables (int primitives)",
+        "url": "https://docs.oracle.com/javase/tutorial/java/nutsandbolts/variables.html",
+        "license": "Oracle Free Use Terms and Conditions (documentation)"
+      },
+      "xp_reward": 10
     },
     {
       "id": "java-variables-01",
       "title": "3. Coffee Shop Order Billing",
-      "description": "Calculate total order cost including sales tax.",
+      "description": "Calculate total order cost including sales tax: multiply `itemPrice` by `count`, then apply `taxRate` as a fraction.",
       "order": 3,
       "difficulty": "beginner",
-      "duration_minutes": 10,
+      "duration_minutes": 8,
       "type": "challenge",
       "section_id": "section-1",
       "section_title": "Section 1: Foundations",
       "test_out_eligible": false,
-      "concepts": ["java-variables"],
+      "concepts": [
+        "java-variables"
+      ],
       "prerequisites": [],
       "learning_objectives": [
         "Combine double primitive math and casting in Java"
       ],
-      "starter_code": "public class Solution {\n    public static double calculateBill(double itemPrice, int count, double taxRate) {\n        // TODO: Return (itemPrice * count) * (1.0 + taxRate)\n        return 0.0;\n    }\n}\n",
+      "starter_code": "public class Solution {\n    public static double calculateBill(double itemPrice, int count, double taxRate) {\n        // TODO: return the bill total including tax\n        return 0.0;\n    }\n}\n",
       "solution_code": "public class Solution {\n    public static double calculateBill(double itemPrice, int count, double taxRate) {\n        return (itemPrice * count) * (1.0 + taxRate);\n    }\n}\n",
       "tests": [
         {
@@ -162,26 +211,36 @@
         }
       ],
       "completion_requirements": {
-        "required_test_names": ["test_calculate_bill"]
-      }
+        "required_test_names": [
+          "test_calculate_bill"
+        ]
+      },
+      "source": {
+        "name": "Oracle Java Tutorials — Operator Precedence — multiplicative and additive operators",
+        "url": "https://docs.oracle.com/javase/tutorial/java/nutsandbolts/operators.html",
+        "license": "Oracle Free Use Terms and Conditions (documentation)"
+      },
+      "xp_reward": 25
     },
     {
       "id": "java-variables-practice-1",
       "title": "4. Temperature Conversion (Practice)",
-      "description": "Convert Fahrenheit temperature to Celsius.",
+      "description": "Convert Fahrenheit temperature to Celsius using `(fahrenheit - 32) * 5 / 9`.",
       "order": 4,
       "difficulty": "beginner",
-      "duration_minutes": 5,
+      "duration_minutes": 6,
       "type": "practice",
       "section_id": "section-1",
       "section_title": "Section 1: Foundations",
       "test_out_eligible": false,
-      "concepts": ["java-variables"],
+      "concepts": [
+        "java-variables"
+      ],
       "prerequisites": [],
       "learning_objectives": [
         "Apply formula (F - 32) * 5/9 using doubles"
       ],
-      "starter_code": "public class Solution {\n    public static double fahrenheitToCelsius(double fahrenheit) {\n        // TODO: Return (fahrenheit - 32.0) * 5.0 / 9.0\n        return 0.0;\n    }\n}\n",
+      "starter_code": "public class Solution {\n    public static double fahrenheitToCelsius(double fahrenheit) {\n        // TODO: return the temperature in Celsius\n        return 0.0;\n    }\n}\n",
       "solution_code": "public class Solution {\n    public static double fahrenheitToCelsius(double fahrenheit) {\n        return (fahrenheit - 32.0) * 5.0 / 9.0;\n    }\n}\n",
       "tests": [
         {
@@ -191,8 +250,16 @@
         }
       ],
       "completion_requirements": {
-        "required_test_names": ["test_conversion"]
-      }
+        "required_test_names": [
+          "test_conversion"
+        ]
+      },
+      "source": {
+        "name": "Oracle Java Tutorials — Operator Precedence — multiplicative and additive operators",
+        "url": "https://docs.oracle.com/javase/tutorial/java/nutsandbolts/operators.html",
+        "license": "Oracle Free Use Terms and Conditions (documentation)"
+      },
+      "xp_reward": 15
     },
     {
       "id": "java-variables-checkpoint",
@@ -200,12 +267,14 @@
       "description": "Verify Java variable declaration and math operations.",
       "order": 5,
       "difficulty": "beginner",
-      "duration_minutes": 5,
+      "duration_minutes": 10,
       "type": "checkpoint",
       "section_id": "section-1",
       "section_title": "Section 1: Foundations",
       "test_out_eligible": true,
-      "concepts": ["java-variables"],
+      "concepts": [
+        "java-variables"
+      ],
       "prerequisites": [],
       "learning_objectives": [
         "Pass Java variables checkpoint challenge"
@@ -220,23 +289,45 @@
         }
       ],
       "completion_requirements": {
-        "required_test_names": ["test_square"]
+        "required_test_names": [
+          "test_square"
+        ]
       },
       "mastery_exam": [
         {
           "id": "java-chk-1",
           "type": "mcq",
-          "question": "Which type represents a integer in Java?",
-          "options": ["int", "String", "boolean", "float"],
-          "correct_answer": "int"
+          "question": "Which type represents an integer in Java?",
+          "options": [
+            "int",
+            "boolean",
+            "float",
+            "String"
+          ],
+          "correct_answer": "int",
+          "explanation": "int is the primitive type for whole numbers in Java.",
+          "xp_reward": 10
         },
         {
           "id": "java-chk-2",
           "type": "fill_blank",
           "question": "Complete method declaration: public static ___ getNumber() { return 42; }",
-          "correct_answer": "int"
+          "correct_answer": [
+            "int"
+          ],
+          "blanks": [
+            "int"
+          ],
+          "explanation": "Returning 42 means the method must declare an int return type.",
+          "xp_reward": 10
         }
-      ]
+      ],
+      "source": {
+        "name": "Oracle Java Tutorials — Operator Precedence — multiplicative and additive operators",
+        "url": "https://docs.oracle.com/javase/tutorial/java/nutsandbolts/operators.html",
+        "license": "Oracle Free Use Terms and Conditions (documentation)"
+      },
+      "xp_reward": 40
     }
   ]
 }

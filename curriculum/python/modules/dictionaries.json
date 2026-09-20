@@ -6,7 +6,11 @@
     {
       "id": "dictionaries",
       "title": "Dictionaries & Key-Value Mapping",
-      "prerequisites": ["loops", "lists", "tuples"]
+      "prerequisites": [
+        "loops",
+        "lists",
+        "tuples"
+      ]
     }
   ],
   "lessons": [
@@ -18,12 +22,16 @@
       "difficulty": "intermediate",
       "duration_minutes": 5,
       "type": "learn",
-      "concepts": ["dictionaries"],
-      "prerequisites": ["lists"],
+      "concepts": [
+        "dictionaries"
+      ],
+      "prerequisites": [
+        "lists"
+      ],
       "learning_objectives": [
         "Access and assign dictionary keys and use .get()"
       ],
-      "starter_code": "def get_item_count(inventory, item):\n    # TODO: Return inventory.get(item, 0)\n    pass\n",
+      "starter_code": "def get_item_count(inventory, item):\n    # TODO: return the count for item, or 0 when it is missing\n    pass\n",
       "tests": [
         {
           "name": "test_get_item_count",
@@ -32,8 +40,17 @@
         }
       ],
       "completion_requirements": {
-        "required_test_names": ["test_get_item_count"]
-      }
+        "required_test_names": [
+          "test_get_item_count"
+        ]
+      },
+      "solution_code": "def get_item_count(inventory, item):\n    return inventory.get(item, 0)\n",
+      "source": {
+        "name": "Python official documentation (docs.python.org) — Mapping Types — dict.get() (Standard Types)",
+        "url": "https://docs.python.org/3/library/stdtypes.html#mapping-types-dict",
+        "license": "Python documentation license (PSF)"
+      },
+      "xp_reward": 10
     },
     {
       "id": "dictionaries-step-2",
@@ -43,8 +60,13 @@
       "difficulty": "intermediate",
       "duration_minutes": 5,
       "type": "learn",
-      "concepts": ["dictionaries"],
-      "prerequisites": ["loops", "lists"],
+      "concepts": [
+        "dictionaries"
+      ],
+      "prerequisites": [
+        "loops",
+        "lists"
+      ],
       "learning_objectives": [
         "Iterate over key-value pairs with .items()"
       ],
@@ -57,8 +79,17 @@
         }
       ],
       "completion_requirements": {
-        "required_test_names": ["test_total_count"]
-      }
+        "required_test_names": [
+          "test_total_count"
+        ]
+      },
+      "solution_code": "def total_inventory_count(inventory):\n    return sum(inventory.values())\n",
+      "source": {
+        "name": "Python official documentation (docs.python.org) — 5.5. Dictionaries — Data Structures (view objects)",
+        "url": "https://docs.python.org/3/tutorial/datastructures.html#dictionaries",
+        "license": "Python documentation license (PSF)"
+      },
+      "xp_reward": 10
     },
     {
       "id": "dictionaries-01",
@@ -66,10 +97,16 @@
       "description": "Create and mutate store inventory using dictionary methods.",
       "order": 58,
       "difficulty": "intermediate",
-      "duration_minutes": 20,
+      "duration_minutes": 8,
       "type": "challenge",
-      "concepts": ["dictionaries"],
-      "prerequisites": ["loops", "lists", "tuples"],
+      "concepts": [
+        "dictionaries"
+      ],
+      "prerequisites": [
+        "loops",
+        "lists",
+        "tuples"
+      ],
       "learning_objectives": [
         "Create dictionaries from collections",
         "Use .get() and dict assignment to update counts",
@@ -117,7 +154,9 @@
         "name": "Exercism Python Track — Inventory Management",
         "url": "https://github.com/exercism/python/tree/main/exercises/concept/inventory-management",
         "license": "MIT"
-      }
+      },
+      "solution_code": "def create_inventory(items):\n    \"\"\"Create inventory dict from item list.\"\"\"\n    inventory = {}\n    for item in items:\n        inventory[item] = inventory.get(item, 0) + 1\n    return inventory\n\n\ndef add_items(inventory, items):\n    \"\"\"Increment or add items in inventory.\"\"\"\n    for item in items:\n        inventory[item] = inventory.get(item, 0) + 1\n    return inventory\n\n\ndef decrement_items(inventory, items):\n    \"\"\"Decrement counts, never below zero; ignore unknown items.\"\"\"\n    for item in items:\n        if item in inventory and inventory[item] > 0:\n            inventory[item] -= 1\n    return inventory\n\n\ndef remove_item(inventory, item):\n    \"\"\"Remove item from inventory if present.\"\"\"\n    if item in inventory:\n        del inventory[item]\n    return inventory\n\n\ndef list_inventory(inventory):\n    \"\"\"Return list of (item, count) for items with count > 0.\"\"\"\n    return [(item, count) for item, count in inventory.items() if count > 0]\n",
+      "xp_reward": 25
     },
     {
       "id": "dictionaries-practice-1",
@@ -125,10 +164,15 @@
       "description": "Count word occurrences in a list using a dictionary.",
       "order": 59,
       "difficulty": "intermediate",
-      "duration_minutes": 5,
+      "duration_minutes": 6,
       "type": "practice",
-      "concepts": ["dictionaries"],
-      "prerequisites": ["loops", "lists"],
+      "concepts": [
+        "dictionaries"
+      ],
+      "prerequisites": [
+        "loops",
+        "lists"
+      ],
       "learning_objectives": [
         "Aggregate frequencies with dictionaries"
       ],
@@ -141,8 +185,17 @@
         }
       ],
       "completion_requirements": {
-        "required_test_names": ["test_count_words"]
-      }
+        "required_test_names": [
+          "test_count_words"
+        ]
+      },
+      "solution_code": "def count_words(words):\n    counts = {}\n    for word in words:\n        counts[word] = counts.get(word, 0) + 1\n    return counts\n",
+      "source": {
+        "name": "Python official documentation (docs.python.org) — 5.5. Dictionaries — Data Structures",
+        "url": "https://docs.python.org/3/tutorial/datastructures.html#dictionaries",
+        "license": "Python documentation license (PSF)"
+      },
+      "xp_reward": 15
     },
     {
       "id": "dictionaries-checkpoint",
@@ -150,10 +203,15 @@
       "description": "Verify dictionary mapping comprehension.",
       "order": 60,
       "difficulty": "intermediate",
-      "duration_minutes": 5,
+      "duration_minutes": 10,
       "type": "checkpoint",
-      "concepts": ["dictionaries"],
-      "prerequisites": ["loops", "lists"],
+      "concepts": [
+        "dictionaries"
+      ],
+      "prerequisites": [
+        "loops",
+        "lists"
+      ],
       "learning_objectives": [
         "Master dictionary lookup and mutation"
       ],
@@ -166,8 +224,17 @@
         }
       ],
       "completion_requirements": {
-        "required_test_names": ["test_merge_inventories"]
-      }
+        "required_test_names": [
+          "test_merge_inventories"
+        ]
+      },
+      "solution_code": "def merge_inventories(inv1, inv2):\n    merged = dict(inv1)\n    for item, count in inv2.items():\n        merged[item] = merged.get(item, 0) + count\n    return merged\n",
+      "source": {
+        "name": "Python official documentation (docs.python.org) — 5.5. Dictionaries — Data Structures",
+        "url": "https://docs.python.org/3/tutorial/datastructures.html#dictionaries",
+        "license": "Python documentation license (PSF)"
+      },
+      "xp_reward": 40
     }
   ]
 }

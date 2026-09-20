@@ -2,7 +2,15 @@
   "id": "sql-u11",
   "title": "Unit 11: Database Design",
   "order": 11,
-  "concepts": [{ "id": "sql-design", "title": "Keys & Constraints", "prerequisites": ["sql-ctes"] }],
+  "concepts": [
+    {
+      "id": "sql-design",
+      "title": "Keys & Constraints",
+      "prerequisites": [
+        "sql-ctes"
+      ]
+    }
+  ],
   "lessons": [
     {
       "id": "sql-11",
@@ -14,11 +22,74 @@
       "type": "learn",
       "section_id": "sec-sql-3",
       "section_title": "Section 3: Advanced SQL & Design",
-      "concepts": ["sql-design"],
-      "starter_code": "CREATE TABLE projects (\n    id INTEGER PRIMARY KEY,\n    title TEXT NOT NULL,\n    budget REAL CHECK (budget >= 0)\n);\nSELECT name FROM sqlite_master WHERE type='table' AND name='projects';\n",
+      "concepts": [
+        "sql-design"
+      ],
+      "starter_code": "-- TODO: create table projects (id INTEGER PRIMARY KEY, title TEXT NOT NULL, budget REAL CHECK (budget >= 0))\nSELECT name FROM sqlite_master WHERE 0;\n",
       "solution_code": "CREATE TABLE projects (\n    id INTEGER PRIMARY KEY,\n    title TEXT NOT NULL,\n    budget REAL CHECK (budget >= 0)\n);\nSELECT name FROM sqlite_master WHERE type='table' AND name='projects';\n",
-      "tests": [{ "name": "test_create_projects_table", "test_code": "assert len(rows) == 1 and rows[0][0] == 'projects'", "required": true }],
-      "completion_requirements": { "required_test_names": ["test_create_projects_table"] }
+      "tests": [
+        {
+          "name": "test_create_projects_table",
+          "test_code": "assert len(rows) == 1 and rows[0][0] == 'projects'",
+          "required": true
+        }
+      ],
+      "completion_requirements": {
+        "required_test_names": [
+          "test_create_projects_table"
+        ]
+      },
+      "source": {
+        "name": "SQLite official documentation (sqlite.org) — CREATE TABLE — PRIMARY KEY, NOT NULL and CHECK constraints",
+        "url": "https://sqlite.org/lang_createtable.html",
+        "license": "Public domain (SQLite documentation)"
+      },
+      "learning_objectives": [
+        "Define tables with CREATE TABLE and typed columns",
+        "Guarantee uniqueness with PRIMARY KEY",
+        "Reject bad data with NOT NULL and CHECK constraints"
+      ],
+      "xp_reward": 10,
+      "sublessons": [
+        {
+          "id": "sql-11-match-sub",
+          "title": "Match each constraint to what it guarantees",
+          "order": 1,
+          "exercises": [
+            {
+              "id": "sql-11-match-1",
+              "type": "matching",
+              "question": "The `projects` table in this lesson declares three constraints and a column type. Match each to what it guarantees.",
+              "pairs": [
+                {
+                  "left": "PRIMARY KEY",
+                  "right": "one row per value, and it is never missing"
+                },
+                {
+                  "left": "NOT NULL",
+                  "right": "the column must be given a value"
+                },
+                {
+                  "left": "CHECK (budget >= 0)",
+                  "right": "rejects a value outside the allowed range"
+                },
+                {
+                  "left": "REAL",
+                  "right": "stores a decimal number, not a whole number"
+                }
+              ],
+              "correct_answer": {
+                "PRIMARY KEY": "one row per value, and it is never missing",
+                "NOT NULL": "the column must be given a value",
+                "CHECK (budget >= 0)": "rejects a value outside the allowed range",
+                "REAL": "stores a decimal number, not a whole number"
+              },
+              "explanation": "`id INTEGER PRIMARY KEY` both identifies the row and implies it is present; NOT NULL only requires a value; CHECK is the range test; REAL is the floating-point type.",
+              "xp_reward": 10
+            }
+          ]
+        }
+      ]
     }
   ]
 }

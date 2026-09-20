@@ -35,3 +35,60 @@ export function safeRemoveItem(key: string): void {
     console.warn(`localStorage.removeItem failed for key "${key}":`, err)
   }
 }
+
+/**
+ * Code drafts are stored as an envelope that records which starter code they
+ * were based on. When the curriculum ships a new starter for a lesson — for
+ * example when a leaked answer is replaced with a real skeleton — the stored
+ * base no longer matches, so the draft is dropped and the learner sees the
+ * fixed skeleton instead of stale text. Drafts written before envelopes
+ * existed cannot be attributed to any starter and are dropped for the same
+ * reason.
+ */
+const DRAFT_ENVELOPE_VERSION = 1
+
+interface CodeDraftEnvelope {
+  v: number
+  base: string
+  code: string
+}
+
+export function codeDraftKey(lessonId: string): string {
+  return `patchwork_code_${lessonId}`
+}
+
+export function writeCodeDraft(key: string, starterCode: string, code: string): void {
+  const envelope: CodeDraftEnvelope = {
+    v: DRAFT_ENVELOPE_VERSION,
+    base: starterCode,
+    code,
+  }
+  safeSetItem(key, JSON.stringify(envelope))
+}
+
+export function readCodeDraft(key: string, starterCode: string): string | null {
+  const raw = safeGetItem(key)
+  if (raw === null) return null
+  let parsed: unknown
+  try {
+    parsed = JSON.parse(raw)
+  } catch {
+    safeRemoveItem(key)
+    return null
+  }
+  if (!isCodeDraftEnvelope(parsed) || parsed.v !== DRAFT_ENVELOPE_VERSION) {
+    safeRemoveItem(key)
+    return null
+  }
+  if (parsed.base !== starterCode) {
+    safeRemoveItem(key)
+    return null
+  }
+  return parsed.code
+}
+
+function isCodeDraftEnvelope(value: unknown): value is CodeDraftEnvelope {
+  if (typeof value !== 'object' || value === null) return false
+  const candidate = value as Partial<CodeDraftEnvelope>
+  return typeof candidate.base === 'string' && typeof candidate.code === 'string'
+}

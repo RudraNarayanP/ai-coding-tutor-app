@@ -2,7 +2,15 @@
   "id": "sql-u6",
   "title": "Unit 6: Aggregation",
   "order": 6,
-  "concepts": [{ "id": "sql-agg", "title": "COUNT, SUM, AVG, MIN, MAX", "prerequisites": ["sql-dml"] }],
+  "concepts": [
+    {
+      "id": "sql-agg",
+      "title": "COUNT, SUM, AVG, MIN, MAX",
+      "prerequisites": [
+        "sql-dml"
+      ]
+    }
+  ],
   "lessons": [
     {
       "id": "sql-06",
@@ -14,11 +22,33 @@
       "type": "learn",
       "section_id": "sec-sql-2",
       "section_title": "Section 2: Aggregation & Joins",
-      "concepts": ["sql-agg"],
-      "starter_code": "SELECT SUM(total_amount) AS total_revenue, AVG(total_amount) AS avg_order FROM orders;\n",
+      "concepts": [
+        "sql-agg"
+      ],
+      "starter_code": "-- TODO: compute total revenue and average order value from orders\nSELECT 0 AS total_revenue, 0 AS avg_order WHERE 0;\n",
       "solution_code": "SELECT SUM(total_amount) AS total_revenue, AVG(total_amount) AS avg_order FROM orders;\n",
-      "tests": [{ "name": "test_order_aggregates", "test_code": "assert len(rows) == 1 and rows[0][0] > 0", "required": true }],
-      "completion_requirements": { "required_test_names": ["test_order_aggregates"] }
+      "tests": [
+        {
+          "name": "test_order_aggregates",
+          "test_code": "assert len(rows) == 1 and rows[0][0] > 0",
+          "required": true
+        }
+      ],
+      "completion_requirements": {
+        "required_test_names": [
+          "test_order_aggregates"
+        ]
+      },
+      "source": {
+        "name": "SQLite official documentation (sqlite.org) — Aggregate functions — avg() 'returns the average value of all non-NULL X within a group'",
+        "url": "https://sqlite.org/lang_aggfunc.html",
+        "license": "Public domain (SQLite documentation)"
+      },
+      "learning_objectives": [
+        "Summarize a whole table with SUM(), AVG() and COUNT()",
+        "Give aggregate results readable names with AS aliases"
+      ],
+      "xp_reward": 10
     }
   ]
 }

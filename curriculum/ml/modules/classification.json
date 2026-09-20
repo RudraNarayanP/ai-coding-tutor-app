@@ -15,10 +15,10 @@
     {
       "id": "clf-sigmoid",
       "title": "1. Sigmoid",
-      "description": "Implement `sigmoid(z)` = 1/(1+e^{-z}).",
+      "description": "Implement `sigmoid(z)` returning the logistic function 1 / (1 + e^-z) using math.exp. The tests check sigmoid(0) == 0.5 and sigmoid(10) > 0.99.",
       "order": 6,
       "difficulty": "intermediate",
-      "duration_minutes": 8,
+      "duration_minutes": 5,
       "type": "learn",
       "section_id": "sec-ml-1",
       "section_title": "Section 1: ML Foundations",
@@ -42,7 +42,13 @@
         "required_test_names": [
           "test_sigmoid"
         ]
-      }
+      },
+      "source": {
+        "name": "Google Machine Learning Crash Course — Glossary: 'logistic regression — a model that uses a logistic function to predict the probability of a binary outcome'",
+        "url": "https://developers.google.com/machine-learning/glossary",
+        "license": "CC BY 4.0 (Google Machine Learning Crash Course)"
+      },
+      "xp_reward": 10
     },
     {
       "id": "clf-logistic-predict",
@@ -50,7 +56,7 @@
       "description": "Implement `logistic_predict(x, w, b, threshold=0.5)` returning 0/1.",
       "order": 7,
       "difficulty": "intermediate",
-      "duration_minutes": 8,
+      "duration_minutes": 5,
       "type": "learn",
       "section_id": "sec-ml-1",
       "section_title": "Section 1: ML Foundations",
@@ -74,12 +80,18 @@
         "required_test_names": [
           "test_logistic_predict"
         ]
-      }
+      },
+      "source": {
+        "name": "Google Machine Learning Crash Course — Glossary: logistic regression (probability of a binary outcome)",
+        "url": "https://developers.google.com/machine-learning/glossary",
+        "license": "CC BY 4.0 (Google Machine Learning Crash Course)"
+      },
+      "xp_reward": 10
     },
     {
       "id": "clf-knn",
       "title": "3. k-NN Classify",
-      "description": "Implement `knn_classify(x, points, labels, k)` majority vote of k nearest (1D). Tie \u2192 smaller label.",
+      "description": "Implement `knn_classify(x, points, labels, k)` majority vote of k nearest (1D). Tie → smaller label.",
       "order": 8,
       "difficulty": "intermediate",
       "duration_minutes": 8,
@@ -106,15 +118,50 @@
         "required_test_names": [
           "test_knn"
         ]
-      }
+      },
+      "source": {
+        "name": "scikit-learn User Guide — Nearest Neighbors — 'Classification is computed from a simple majority vote of the nearest neighbors'",
+        "url": "https://scikit-learn.org/stable/modules/neighbors.html",
+        "license": "BSD 3-Clause (scikit-learn documentation)"
+      },
+      "xp_reward": 25,
+      "sublessons": [
+        {
+          "id": "knn-rule-sub",
+          "title": "Select what the rule guarantees",
+          "order": 1,
+          "exercises": [
+            {
+              "id": "knn-rule-multi-1",
+              "type": "select_multiple",
+              "question": "The lesson's classifier takes the majority vote of the `k` nearest labels in 1D and breaks a tie toward the smaller label. Select every statement that follows from that rule.",
+              "options": [
+                "with k = 1 the nearest label alone decides",
+                "a 1-1 tie between two labels returns the smaller label",
+                "distance is measured as the absolute difference from `x`",
+                "increasing `k` can change the predicted label",
+                "the prediction is always the label of the farthest point"
+              ],
+              "correct_answer": [
+                "with k = 1 the nearest label alone decides",
+                "a 1-1 tie between two labels returns the smaller label",
+                "distance is measured as the absolute difference from `x`",
+                "increasing `k` can change the predicted label"
+              ],
+              "explanation": "Voting is over the k nearest by absolute distance, and ties resolve downward; a larger k pulls more neighbours into the vote, so the winner can flip.",
+              "xp_reward": 10
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "clf-accuracy",
       "title": "4. Accuracy (Practice)",
-      "description": "Implement `accuracy(y_true, y_pred)`.",
+      "description": "Implement `accuracy(y_true, y_pred)`: the fraction of positions where the prediction equals the label. The test checks accuracy([1, 0, 1], [1, 1, 1]) == 2/3.",
       "order": 9,
       "difficulty": "intermediate",
-      "duration_minutes": 8,
+      "duration_minutes": 6,
       "type": "practice",
       "section_id": "sec-ml-1",
       "section_title": "Section 1: ML Foundations",
@@ -138,7 +185,13 @@
         "required_test_names": [
           "test_accuracy"
         ]
-      }
+      },
+      "source": {
+        "name": "scikit-learn User Guide — 3.4 Metrics and scoring — classification metrics (accuracy)",
+        "url": "https://scikit-learn.org/stable/modules/model_evaluation.html",
+        "license": "BSD 3-Clause (scikit-learn documentation)"
+      },
+      "xp_reward": 15
     },
     {
       "id": "clf-checkpoint",
@@ -146,7 +199,7 @@
       "description": "Implement `precision_recall(y_true, y_pred)` returning (precision, recall) for positive class 1. Use 0 if denom 0.",
       "order": 10,
       "difficulty": "intermediate",
-      "duration_minutes": 8,
+      "duration_minutes": 10,
       "type": "checkpoint",
       "section_id": "sec-ml-1",
       "section_title": "Section 1: ML Foundations",
@@ -170,7 +223,13 @@
         "required_test_names": [
           "test_precision_recall"
         ]
-      }
+      },
+      "source": {
+        "name": "scikit-learn User Guide — 3.4 Metrics and scoring — precision, recall and f1-score",
+        "url": "https://scikit-learn.org/stable/modules/model_evaluation.html",
+        "license": "BSD 3-Clause (scikit-learn documentation)"
+      },
+      "xp_reward": 40
     }
   ]
 }

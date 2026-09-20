@@ -83,3 +83,24 @@ def test_container_is_removed_after_execution():
     run({"code": "print('done')", "tests": [{"name": "cleanup"}]})
     containers = subprocess.run(["docker", "ps", "-a", "--filter", "name=patchwork-run-", "--format", "{{.Names}}"], capture_output=True, text=True, check=True)
     assert "patchwork-run-" not in containers.stdout
+
+
+def test_compiled_languages_get_a_longer_execution_budget():
+    """javac/g++ compile inside the same window the program then runs in.
+
+    A trivial Java submission measured 11.6-15.8s against the container's
+    0.5 CPU / 128 MB limits, so the old single 10s budget randomly reported a
+    correct answer as "Student execution timed out" - and since a lesson miss
+    now costs a heart, that flake punished the learner for the toolchain.
+    """
+    from backend.sandbox import SandboxLimits, sandbox as real_sandbox
+
+    limits = SandboxLimits()
+    assert limits.compiled_timeout_seconds > limits.timeout_seconds
+    assert real_sandbox._budget({"language": "java"}) == limits.compiled_timeout_seconds
+    assert real_sandbox._budget({"language": "CPP"}) == limits.compiled_timeout_seconds
+    # Interpreted languages must keep the short cap: an infinite loop still has
+    # to be cut off quickly.
+    assert real_sandbox._budget({"language": "python"}) == limits.timeout_seconds
+    assert real_sandbox._budget({"language": "javascript"}) == limits.timeout_seconds
+    assert real_sandbox._budget({}) == limits.timeout_seconds

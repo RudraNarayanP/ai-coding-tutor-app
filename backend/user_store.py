@@ -3,6 +3,7 @@ import json
 import time
 from pathlib import Path
 from pydantic import BaseModel, Field
+from .xp_curve import level_from_xp
 
 
 class UserProfile(BaseModel):
@@ -107,7 +108,7 @@ class UserStore:
         user = self.get_or_create_user(user_id)
         if xp_amount > 0:
             user.xp += xp_amount
-            user.level = max(1, user.xp // 100 + 1)
+            user.level = level_from_xp(user.xp)
             user.last_active = time.time()
             self._save()
         return user
@@ -115,7 +116,7 @@ class UserStore:
     def set_user_xp(self, user_id: str, total_xp: int) -> UserProfile:
         user = self.get_or_create_user(user_id)
         user.xp = max(0, total_xp)
-        user.level = max(1, user.xp // 100 + 1)
+        user.level = level_from_xp(user.xp)
         user.last_active = time.time()
         self._save()
         return user

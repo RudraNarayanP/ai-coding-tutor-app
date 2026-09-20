@@ -6,7 +6,9 @@
     {
       "id": "sql-select",
       "title": "SELECT & Column Aliases",
-      "prerequisites": ["sql-db-basics"]
+      "prerequisites": [
+        "sql-db-basics"
+      ]
     }
   ],
   "lessons": [
@@ -21,10 +23,17 @@
       "section_id": "sec-sql-1",
       "section_title": "Section 1: Querying Data",
       "test_out_eligible": false,
-      "concepts": ["sql-select"],
-      "prerequisites": ["sql-db-basics"],
-      "learning_objectives": ["Select specific columns", "Use AS for aliases", "Use DISTINCT"],
-      "starter_code": "-- TODO: Select distinct country from customers\nSELECT DISTINCT country FROM customers;\n",
+      "concepts": [
+        "sql-select"
+      ],
+      "prerequisites": [
+        "sql-db-basics"
+      ],
+      "learning_objectives": [
+        "Project only the columns you need instead of SELECT *",
+        "Remove duplicate result rows with DISTINCT"
+      ],
+      "starter_code": "-- TODO: select each country only once (duplicate rows removed)\nSELECT country FROM customers WHERE 0;\n",
       "solution_code": "SELECT DISTINCT country FROM customers;\n",
       "tests": [
         {
@@ -34,8 +43,16 @@
         }
       ],
       "completion_requirements": {
-        "required_test_names": ["test_distinct_countries"]
-      }
+        "required_test_names": [
+          "test_distinct_countries"
+        ]
+      },
+      "source": {
+        "name": "SQLite official documentation (sqlite.org) — SELECT with DISTINCT — 'duplicate rows are removed'",
+        "url": "https://sqlite.org/lang_select.html",
+        "license": "Public domain (SQLite documentation)"
+      },
+      "xp_reward": 10
     }
   ]
 }

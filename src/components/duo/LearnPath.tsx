@@ -8,6 +8,7 @@ export type PathLesson = {
   duration_minutes: number
   status: 'completed' | 'current' | 'locked'
   type?: 'learn' | 'practice' | 'checkpoint' | 'challenge'
+  xp_reward?: number
   unit_id?: string
   unit_title?: string
   section_id?: string
@@ -93,16 +94,23 @@ export function LearnPath({
             >
               <button
                 id={`lesson-node-${item.id}`}
-                className={`duo-path-circle-btn ${item.status}`}
+                className={`duo-path-circle-btn ${item.status}${item.type === 'checkpoint' ? ' duo-path-circle-btn--boss' : ''}${item.status === 'current' ? ' duo-path-circle-btn--pulse' : ''}`}
                 onClick={() => onSelectLesson(item)}
                 disabled={item.status === 'locked' || isLoadingLesson}
                 title={item.title}
                 aria-current={isActive ? 'page' : undefined}
-                aria-label={`${item.title} — ${statusLabel(item, isActive)}`}
+                aria-label={`${item.title} — ${statusLabel(item, isActive)}${item.type === 'checkpoint' ? ' — boss checkpoint' : ''}${item.xp_reward ? `, ${item.xp_reward} XP reward` : ''}`}
               >
                 {item.status === 'current' && <div className="duo-start-dialog">START</div>}
                 <span>{nodeIcon(item)}</span>
               </button>
+              {item.status !== 'locked' && item.xp_reward ? (
+                <span
+                  className={`duo-path-xp-badge${item.type === 'checkpoint' ? ' duo-path-xp-badge--boss' : ''}`}
+                >
+                  {item.type === 'checkpoint' ? '👑 ' : ''}+{item.xp_reward} XP
+                </span>
+              ) : null}
               {showMascot ? (
                 <div className="duo-path-mascot">
                   <PatchworkCharacter name="patch" state="idle" size={72} />

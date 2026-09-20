@@ -6,7 +6,9 @@
     {
       "id": "numbers",
       "title": "Integers, Floats, & Numeric Operations",
-      "prerequisites": ["variables"]
+      "prerequisites": [
+        "variables"
+      ]
     }
   ],
   "lessons": [
@@ -18,8 +20,12 @@
       "difficulty": "beginner",
       "duration_minutes": 5,
       "type": "learn",
-      "concepts": ["numbers"],
-      "prerequisites": ["variables"],
+      "concepts": [
+        "numbers"
+      ],
+      "prerequisites": [
+        "variables"
+      ],
       "learning_objectives": [
         "Distinguish between `/` and `//` division operators"
       ],
@@ -32,8 +38,57 @@
         }
       ],
       "completion_requirements": {
-        "required_test_names": ["test_divisions"]
-      }
+        "required_test_names": [
+          "test_divisions"
+        ]
+      },
+      "solution_code": "def float_div(a, b):\n    return a / b\n\n\ndef integer_div(a, b):\n    return a // b\n",
+      "source": {
+        "name": "Python official documentation (docs.python.org) — 3.1.1. Numbers — Introduction (division operators)",
+        "url": "https://docs.python.org/3/tutorial/introduction.html#numbers",
+        "license": "Python documentation license (PSF)"
+      },
+      "xp_reward": 10,
+      "sublessons": [
+        {
+          "id": "division-kinds-sub",
+          "title": "Match the operation",
+          "order": 1,
+          "exercises": [
+            {
+              "id": "division-kinds-match-1",
+              "type": "matching",
+              "question": "This lesson separates true division from floor division. Match each expression to the value it produces.",
+              "pairs": [
+                {
+                  "left": "7 / 2",
+                  "right": "3.5"
+                },
+                {
+                  "left": "7 // 2",
+                  "right": "3"
+                },
+                {
+                  "left": "7 % 2",
+                  "right": "1"
+                },
+                {
+                  "left": "-7 // 2",
+                  "right": "-4"
+                }
+              ],
+              "correct_answer": {
+                "7 / 2": "3.5",
+                "7 // 2": "3",
+                "7 % 2": "1",
+                "-7 // 2": "-4"
+              },
+              "explanation": "`/` keeps the fraction, `//` rounds *down*, and `%` is the remainder. Rounding down, not toward zero, is why -7 // 2 is -4.",
+              "xp_reward": 10
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "numbers-step-2",
@@ -43,12 +98,16 @@
       "difficulty": "beginner",
       "duration_minutes": 5,
       "type": "learn",
-      "concepts": ["numbers"],
-      "prerequisites": ["variables"],
+      "concepts": [
+        "numbers"
+      ],
+      "prerequisites": [
+        "variables"
+      ],
       "learning_objectives": [
         "Calculate remainders using modulo %"
       ],
-      "starter_code": "def get_remainder(dividend, divisor):\n    # TODO: Return dividend % divisor\n    pass\n",
+      "starter_code": "def get_remainder(dividend, divisor):\n    # TODO: return what is left over after dividing evenly\n    pass\n",
       "tests": [
         {
           "name": "test_remainder",
@@ -57,8 +116,48 @@
         }
       ],
       "completion_requirements": {
-        "required_test_names": ["test_remainder"]
-      }
+        "required_test_names": [
+          "test_remainder"
+        ]
+      },
+      "solution_code": "def get_remainder(dividend, divisor):\n    return dividend % divisor\n",
+      "source": {
+        "name": "Python official documentation (docs.python.org) — 3.1.1. Numbers — Introduction",
+        "url": "https://docs.python.org/3/tutorial/introduction.html#numbers",
+        "license": "Python documentation license (PSF)"
+      },
+      "xp_reward": 10,
+      "sublessons": [
+        {
+          "id": "last-digit-code-sub",
+          "title": "Write it with modulo",
+          "order": 1,
+          "exercises": [
+            {
+              "id": "last-digit-code-1",
+              "type": "code",
+              "question": "Implement `last_digit(n)` returning the ones digit of a non-negative integer - the same remainder idea this lesson uses, with 10.",
+              "starter_code": "def last_digit(n):\n    # TODO: return the ones digit\n    return 0\n",
+              "solution_code": "def last_digit(n):\n    return n % 10\n",
+              "tests": [
+                {
+                  "name": "test_last_digit_multi",
+                  "unittest_code": "def test_last_digit_multi(self):\n    self.assertEqual(last_digit(123), 3)\n"
+                },
+                {
+                  "name": "test_last_digit_single",
+                  "unittest_code": "def test_last_digit_single(self):\n    self.assertEqual(last_digit(7), 7)\n"
+                },
+                {
+                  "name": "test_last_digit_round",
+                  "unittest_code": "def test_last_digit_round(self):\n    self.assertEqual(last_digit(40), 0)\n"
+                }
+              ],
+              "xp_reward": 15
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "numbers-01",
@@ -66,10 +165,14 @@
       "description": "Calculate currency exchanges using division, modulo, and floor division.",
       "order": 13,
       "difficulty": "beginner",
-      "duration_minutes": 20,
+      "duration_minutes": 8,
       "type": "challenge",
-      "concepts": ["numbers"],
-      "prerequisites": ["variables"],
+      "concepts": [
+        "numbers"
+      ],
+      "prerequisites": [
+        "variables"
+      ],
       "learning_objectives": [
         "Perform float division and floor division with //",
         "Calculate remainders using the modulo % operator",
@@ -122,7 +225,32 @@
         "name": "Exercism Python Track — Currency Exchange",
         "url": "https://github.com/exercism/python/tree/main/exercises/concept/currency-exchange",
         "license": "MIT"
-      }
+      },
+      "solution_code": "def exchange_money(budget, exchange_rate):\n    \"\"\"Return budget divided by exchange_rate.\"\"\"\n    return budget / exchange_rate\n\n\ndef get_change(budget, exchanging_value):\n    \"\"\"Return what is left after exchanging.\"\"\"\n    return budget - exchanging_value\n\n\ndef get_value_of_bills(denomination, number_of_bills):\n    \"\"\"Return total value of bills.\"\"\"\n    return denomination * number_of_bills\n\n\ndef get_number_of_bills(amount, denomination):\n    \"\"\"Return how many whole bills fit in amount.\"\"\"\n    return amount // denomination\n\n\ndef get_leftover_of_bills(amount, denomination):\n    \"\"\"Return leftover after exchanging into whole bills.\"\"\"\n    return amount % denomination\n\n\ndef exchangeable_value(budget, exchange_rate, spread, denomination):\n    \"\"\"Return max value obtainable in whole bills after spread fee.\"\"\"\n    actual_rate = exchange_rate * (1 + spread / 100)\n    exchanged = budget / actual_rate\n    return exchanged - exchanged % denomination\n",
+      "xp_reward": 25,
+      "sublessons": [
+        {
+          "id": "numbers-01-out-1-sub",
+          "title": "Predict the value",
+          "order": 1,
+          "exercises": [
+            {
+              "id": "numbers-01-out-1",
+              "type": "output_prediction",
+              "question": "What does `17 // 5` evaluate to in Python?",
+              "options": [
+                "3",
+                "3.4",
+                "2",
+                "4"
+              ],
+              "correct_answer": "3",
+              "explanation": "`//` is floor division: 17 divided by 5 is 3.4, and flooring gives 3. `/` would have produced 3.4.",
+              "xp_reward": 10
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "numbers-practice-1",
@@ -130,10 +258,14 @@
       "description": "Calculate total bill per person including tip.",
       "order": 14,
       "difficulty": "beginner",
-      "duration_minutes": 5,
+      "duration_minutes": 6,
       "type": "practice",
-      "concepts": ["numbers"],
-      "prerequisites": ["variables"],
+      "concepts": [
+        "numbers"
+      ],
+      "prerequisites": [
+        "variables"
+      ],
       "learning_objectives": [
         "Apply arithmetic calculations to realistic bill splitting"
       ],
@@ -146,8 +278,17 @@
         }
       ],
       "completion_requirements": {
-        "required_test_names": ["test_split_bill"]
-      }
+        "required_test_names": [
+          "test_split_bill"
+        ]
+      },
+      "solution_code": "def split_bill(total_bill, tip_percentage, people):\n    return total_bill * (1 + tip_percentage / 100) / people\n",
+      "source": {
+        "name": "Python official documentation (docs.python.org) — 3.1.1. Numbers — Introduction",
+        "url": "https://docs.python.org/3/tutorial/introduction.html#numbers",
+        "license": "Python documentation license (PSF)"
+      },
+      "xp_reward": 15
     },
     {
       "id": "numbers-checkpoint",
@@ -155,10 +296,14 @@
       "description": "Check your understanding of arithmetic operations.",
       "order": 15,
       "difficulty": "beginner",
-      "duration_minutes": 5,
+      "duration_minutes": 10,
       "type": "checkpoint",
-      "concepts": ["numbers"],
-      "prerequisites": ["variables"],
+      "concepts": [
+        "numbers"
+      ],
+      "prerequisites": [
+        "variables"
+      ],
       "learning_objectives": [
         "Master numeric calculations"
       ],
@@ -171,8 +316,17 @@
         }
       ],
       "completion_requirements": {
-        "required_test_names": ["test_convert_hours"]
-      }
+        "required_test_names": [
+          "test_convert_hours"
+        ]
+      },
+      "solution_code": "def convert_hours_to_minutes(hours):\n    return hours * 60\n",
+      "source": {
+        "name": "Python official documentation (docs.python.org) — 3.1.1. Numbers — Introduction",
+        "url": "https://docs.python.org/3/tutorial/introduction.html#numbers",
+        "license": "Python documentation license (PSF)"
+      },
+      "xp_reward": 40
     }
   ]
 }

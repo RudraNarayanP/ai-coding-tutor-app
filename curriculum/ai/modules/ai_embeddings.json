@@ -18,7 +18,7 @@
       "description": "Implement `emb_dot(a, b)` for equal-length float lists.",
       "order": 9,
       "difficulty": "intermediate",
-      "duration_minutes": 8,
+      "duration_minutes": 5,
       "type": "learn",
       "section_id": "sec-ai-2",
       "section_title": "Section 2: Production AI Apps",
@@ -42,7 +42,13 @@
         "required_test_names": [
           "test_emb_dot"
         ]
-      }
+      },
+      "source": {
+        "name": "Dive into Deep Learning §2.3 Linear Algebra — dot product is 'a sum over the products of the elements at the same position'",
+        "url": "https://d2l.ai/chapter_preliminaries/linear-algebra.html",
+        "license": "Apache 2.0 (Dive into Deep Learning book)"
+      },
+      "xp_reward": 10
     },
     {
       "id": "ai-emb-cosine",
@@ -50,7 +56,7 @@
       "description": "Implement `most_similar(query, corpus)` returning index of max cosine similarity.",
       "order": 10,
       "difficulty": "intermediate",
-      "duration_minutes": 8,
+      "duration_minutes": 5,
       "type": "learn",
       "section_id": "sec-ai-2",
       "section_title": "Section 2: Production AI Apps",
@@ -74,7 +80,13 @@
         "required_test_names": [
           "test_most_similar"
         ]
-      }
+      },
+      "source": {
+        "name": "Google Machine Learning — Measuring similarity from embeddings: 'choose one of these three similarity measures: Cosine'",
+        "url": "https://developers.google.com/machine-learning/clustering/dnn-clustering/supervised-similarity",
+        "license": "CC BY 4.0 (Google Machine Learning Crash Course)"
+      },
+      "xp_reward": 10
     },
     {
       "id": "ai-emb-topk",
@@ -106,7 +118,39 @@
         "required_test_names": [
           "test_topk"
         ]
-      }
+      },
+      "source": {
+        "name": "Dive into Deep Learning §2.3 — dot products ranked across vectors",
+        "url": "https://d2l.ai/chapter_preliminaries/linear-algebra.html",
+        "license": "Apache 2.0 (Dive into Deep Learning book)"
+      },
+      "xp_reward": 25,
+      "sublessons": [
+        {
+          "id": "ai-emb-topk-order-1-sub",
+          "title": "Order the steps",
+          "order": 1,
+          "exercises": [
+            {
+              "id": "ai-emb-topk-order-1",
+              "type": "ordering",
+              "question": "Put the steps of `11. Top-K Retrieval` back in order. Each line depends on the one before it.",
+              "options": [
+                "return [i for _, i in scored[:k]]",
+                "scored = [(sum(a * b for a, b in zip(query, v)), i) for i, v in enumerate(corpus)]",
+                "scored.sort(key=lambda t: (-t[0], t[1]))"
+              ],
+              "correct_answer": [
+                "scored = [(sum(a * b for a, b in zip(query, v)), i) for i, v in enumerate(corpus)]",
+                "scored.sort(key=lambda t: (-t[0], t[1]))",
+                "return [i for _, i in scored[:k]]"
+              ],
+              "explanation": "The order the solution in “11. Top-K Retrieval” actually runs in.",
+              "xp_reward": 10
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "ai-emb-meanpool",
@@ -114,7 +158,7 @@
       "description": "Implement `mean_pool(token_vecs)` averaging equal-length vectors.",
       "order": 12,
       "difficulty": "intermediate",
-      "duration_minutes": 8,
+      "duration_minutes": 6,
       "type": "practice",
       "section_id": "sec-ai-2",
       "section_title": "Section 2: Production AI Apps",
@@ -138,7 +182,13 @@
         "required_test_names": [
           "test_mean_pool"
         ]
-      }
+      },
+      "source": {
+        "name": "Dive into Deep Learning §2.3 — averaging vectors element-wise",
+        "url": "https://d2l.ai/chapter_preliminaries/linear-algebra.html",
+        "license": "Apache 2.0 (Dive into Deep Learning book)"
+      },
+      "xp_reward": 15
     },
     {
       "id": "ai-emb-checkpoint",
@@ -146,7 +196,7 @@
       "description": "Implement `softmax(xs)` for a list of floats.",
       "order": 13,
       "difficulty": "intermediate",
-      "duration_minutes": 8,
+      "duration_minutes": 10,
       "type": "checkpoint",
       "section_id": "sec-ai-2",
       "section_title": "Section 2: Production AI Apps",
@@ -170,7 +220,41 @@
         "required_test_names": [
           "test_softmax"
         ]
-      }
+      },
+      "source": {
+        "name": "Google Machine Learning — 'The softmax layer maps a vector of scores to a probability distribution'",
+        "url": "https://developers.google.com/machine-learning/recommendation/dnn/softmax",
+        "license": "CC BY 4.0 (Google Machine Learning Crash Course)"
+      },
+      "xp_reward": 40,
+      "sublessons": [
+        {
+          "id": "ai-emb-checkpoint-order-1-sub",
+          "title": "Order the steps",
+          "order": 1,
+          "exercises": [
+            {
+              "id": "ai-emb-checkpoint-order-1",
+              "type": "ordering",
+              "question": "Put the steps of `13. Checkpoint: Softmax Scores` back in order. Each line depends on the one before it.",
+              "options": [
+                "return [e / s for e in exps]",
+                "m = max(xs)",
+                "exps = [math.exp(x - m) for x in xs]",
+                "s = sum(exps)"
+              ],
+              "correct_answer": [
+                "m = max(xs)",
+                "exps = [math.exp(x - m) for x in xs]",
+                "s = sum(exps)",
+                "return [e / s for e in exps]"
+              ],
+              "explanation": "The order the solution in “13. Checkpoint: Softmax Scores” actually runs in.",
+              "xp_reward": 10
+            }
+          ]
+        }
+      ]
     }
   ]
 }

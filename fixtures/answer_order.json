@@ -1,0 +1,693 @@
+[
+  {
+    "id": "ai-01-tf-1",
+    "options": [
+      "True",
+      "False"
+    ],
+    "displayed": [
+      "True",
+      "False"
+    ]
+  },
+  {
+    "id": "ai-02-multi-1",
+    "options": [
+      "type",
+      "name",
+      "description",
+      "parameters",
+      "temperature",
+      "api_key"
+    ],
+    "displayed": [
+      "api_key",
+      "temperature",
+      "name",
+      "type",
+      "parameters",
+      "description"
+    ]
+  },
+  {
+    "id": "ai-emb-topk-order-1",
+    "options": [
+      "return [i for _, i in scored[:k]]",
+      "scored = [(sum(a * b for a, b in zip(query, v)), i) for i, v in enumerate(corpus)]",
+      "scored.sort(key=lambda t: (-t[0], t[1]))"
+    ],
+    "displayed": [
+      "scored.sort(key=lambda t: (-t[0], t[1]))",
+      "scored = [(sum(a * b for a, b in zip(query, v)), i) for i, v in enumerate(corpus)]",
+      "return [i for _, i in scored[:k]]"
+    ]
+  },
+  {
+    "id": "ai-emb-checkpoint-order-1",
+    "options": [
+      "return [e / s for e in exps]",
+      "m = max(xs)",
+      "exps = [math.exp(x - m) for x in xs]",
+      "s = sum(exps)"
+    ],
+    "displayed": [
+      "return [e / s for e in exps]",
+      "exps = [math.exp(x - m) for x in xs]",
+      "s = sum(exps)",
+      "m = max(xs)"
+    ]
+  },
+  {
+    "id": "ai-prompt-fewshot-order-1",
+    "options": [
+      "blocks.append(f'Input: {query}\\nOutput:')",
+      "return '\\n\\n'.join(blocks)",
+      "blocks = [f'Input: {inp}\\nOutput: {out}' for inp, out in examples]"
+    ],
+    "displayed": [
+      "blocks = [f'Input: {inp}\\nOutput: {out}' for inp, out in examples]",
+      "blocks.append(f'Input: {query}\\nOutput:')",
+      "return '\\n\\n'.join(blocks)"
+    ]
+  },
+  {
+    "id": "cpp-ex-1a",
+    "options": [
+      "It gives step-by-step instructions for the computer to follow",
+      "It physically cleans the computer processor",
+      "It makes the internet faster automatically"
+    ],
+    "displayed": [
+      "It makes the internet faster automatically",
+      "It physically cleans the computer processor",
+      "It gives step-by-step instructions for the computer to follow"
+    ]
+  },
+  {
+    "id": "cpp-ex-1b",
+    "options": [
+      "7 + 5",
+      "75",
+      "12",
+      "Nothing"
+    ],
+    "displayed": [
+      "75",
+      "Nothing",
+      "12",
+      "7 + 5"
+    ]
+  },
+  {
+    "id": "cpp-exam-1",
+    "options": [
+      "std::cin",
+      "std::cout",
+      "return",
+      "include"
+    ],
+    "displayed": [
+      "return",
+      "std::cout",
+      "include",
+      "std::cin"
+    ]
+  },
+  {
+    "id": "cpp-half-value-multi-1",
+    "options": [
+      "double x = 5.0 / 2.0;",
+      "double y = 5 / 2;",
+      "double z = 2.5;",
+      "int w = 5.0 / 2.0;",
+      "float v = 2.5f;"
+    ],
+    "displayed": [
+      "double y = 5 / 2;",
+      "double z = 2.5;",
+      "float v = 2.5f;",
+      "int w = 5.0 / 2.0;",
+      "double x = 5.0 / 2.0;"
+    ]
+  },
+  {
+    "id": "cpp-chk-1",
+    "options": [
+      "#include <string>",
+      "#include <iostream>",
+      "#include <stdio.h>",
+      "#include <vector>"
+    ],
+    "displayed": [
+      "#include <string>",
+      "#include <iostream>",
+      "#include <stdio.h>",
+      "#include <vector>"
+    ]
+  },
+  {
+    "id": "cpp-power-loop-dbg-1",
+    "options": [
+      "`i <= exp` runs one multiplication too many; it should be `i < exp`",
+      "the loop should start at `int i = 1` so the exponent is counted",
+      "`result` should be initialised to 0 so the first multiply seeds it",
+      "nothing is wrong; 2^5 is 64"
+    ],
+    "displayed": [
+      "`i <= exp` runs one multiplication too many; it should be `i < exp`",
+      "nothing is wrong; 2^5 is 64",
+      "the loop should start at `int i = 1` so the exponent is counted",
+      "`result` should be initialised to 0 so the first multiply seeds it"
+    ]
+  },
+  {
+    "id": "cpp-const-ref-multi-1",
+    "options": [
+      "const std::string& name",
+      "std::string name",
+      "const std::string& text",
+      "std::string& ref"
+    ],
+    "displayed": [
+      "std::string name",
+      "const std::string& name",
+      "const std::string& text",
+      "std::string& ref"
+    ]
+  },
+  {
+    "id": "cpp-ptr-01-mcq-1",
+    "options": [
+      "*ptr",
+      "ptr",
+      "&value",
+      "ptr->value"
+    ],
+    "displayed": [
+      "ptr",
+      "ptr->value",
+      "&value",
+      "*ptr"
+    ]
+  },
+  {
+    "id": "cpp-perf-01-multi-1",
+    "options": [
+      "<algorithm>",
+      "<vector>",
+      "<string>",
+      "<cstring>"
+    ],
+    "displayed": [
+      "<algorithm>",
+      "<cstring>",
+      "<string>",
+      "<vector>"
+    ]
+  },
+  {
+    "id": "big-o-step-1-out-1",
+    "options": [
+      "10",
+      "15",
+      "21"
+    ],
+    "displayed": [
+      "10",
+      "15",
+      "21"
+    ]
+  },
+  {
+    "id": "twosum-hashmap-multi-1",
+    "options": [
+      "`seen` maps each value it has passed to that value's index",
+      "for each number it looks up `target - number` before storing it",
+      "the returned pair is ordered as the earlier index then the later one",
+      "it sorts the numbers before searching",
+      "it compares every pair of numbers with two nested loops"
+    ],
+    "displayed": [
+      "it sorts the numbers before searching",
+      "for each number it looks up `target - number` before storing it",
+      "`seen` maps each value it has passed to that value's index",
+      "it compares every pair of numbers with two nested loops",
+      "the returned pair is ordered as the earlier index then the later one"
+    ]
+  },
+  {
+    "id": "fs-headers-order-1",
+    "options": [
+      "out.update(extra)",
+      "return out",
+      "out = dict(base)"
+    ],
+    "displayed": [
+      "out = dict(base)",
+      "out.update(extra)",
+      "return out"
+    ]
+  },
+  {
+    "id": "fs-state-update-order-1",
+    "options": [
+      "out[key] = value",
+      "return out",
+      "out = dict(state)"
+    ],
+    "displayed": [
+      "out = dict(state)",
+      "return out",
+      "out[key] = value"
+    ]
+  },
+  {
+    "id": "fs-auth-jwt-payload-order-1",
+    "options": [
+      "payload = parts[1]",
+      "pad = '=' * (-len(payload) % 4)",
+      "raw = base64.urlsafe_b64decode(payload + pad)",
+      "return json.loads(raw.decode('utf-8'))",
+      "parts = token.split('.')"
+    ],
+    "displayed": [
+      "pad = '=' * (-len(payload) % 4)",
+      "return json.loads(raw.decode('utf-8'))",
+      "parts = token.split('.')",
+      "raw = base64.urlsafe_b64decode(payload + pad)",
+      "payload = parts[1]"
+    ]
+  },
+  {
+    "id": "java-ex-1a",
+    "options": [
+      "yield",
+      "output",
+      "send",
+      "return"
+    ],
+    "displayed": [
+      "yield",
+      "return",
+      "output",
+      "send"
+    ]
+  },
+  {
+    "id": "java-exam-1",
+    "options": [
+      "int",
+      "void",
+      "String",
+      "char"
+    ],
+    "displayed": [
+      "void",
+      "char",
+      "String",
+      "int"
+    ]
+  },
+  {
+    "id": "java-chk-1",
+    "options": [
+      "String",
+      "int",
+      "boolean",
+      "float"
+    ],
+    "displayed": [
+      "String",
+      "boolean",
+      "float",
+      "int"
+    ]
+  },
+  {
+    "id": "js-ex-1",
+    "options": [
+      "const",
+      "let",
+      "var",
+      "function"
+    ],
+    "displayed": [
+      "const",
+      "var",
+      "let",
+      "function"
+    ]
+  },
+  {
+    "id": "js-02-tf-1",
+    "options": [
+      "True",
+      "False"
+    ],
+    "displayed": [
+      "True",
+      "False"
+    ]
+  },
+  {
+    "id": "js-05-mcq-1",
+    "options": [
+      "a brand new array holding each transformed value",
+      "the original array, changed in place",
+      "a single accumulated total",
+      "undefined, because the callback has no return value"
+    ],
+    "displayed": [
+      "undefined, because the callback has no return value",
+      "the original array, changed in place",
+      "a single accumulated total",
+      "a brand new array holding each transformed value"
+    ]
+  },
+  {
+    "id": "knn-rule-multi-1",
+    "options": [
+      "with k = 1 the nearest label alone decides",
+      "a 1-1 tie between two labels returns the smaller label",
+      "distance is measured as the absolute difference from `x`",
+      "increasing `k` can change the predicted label",
+      "the prediction is always the label of the farthest point"
+    ],
+    "displayed": [
+      "distance is measured as the absolute difference from `x`",
+      "a 1-1 tie between two labels returns the smaller label",
+      "the prediction is always the label of the farthest point",
+      "increasing `k` can change the predicted label",
+      "with k = 1 the nearest label alone decides"
+    ]
+  },
+  {
+    "id": "stats-zscore-out-1",
+    "options": [
+      "4",
+      "-1.0",
+      "1.0",
+      "6.0"
+    ],
+    "displayed": [
+      "1.0",
+      "6.0",
+      "4",
+      "-1.0"
+    ]
+  },
+  {
+    "id": "standardize-zero-multi-1",
+    "options": [
+      "[5, 5, 5]",
+      "[0, 0]",
+      "[7]",
+      "[1, 2, 3]",
+      "[1, 0]"
+    ],
+    "displayed": [
+      "[5, 5, 5]",
+      "[1, 2, 3]",
+      "[0, 0]",
+      "[1, 0]",
+      "[7]"
+    ]
+  },
+  {
+    "id": "py-ex-1a",
+    "options": [
+      "==",
+      "->",
+      ":=",
+      "="
+    ],
+    "displayed": [
+      "->",
+      ":=",
+      "==",
+      "="
+    ]
+  },
+  {
+    "id": "py-exam-1",
+    "options": [
+      "int",
+      "bool",
+      "str",
+      "float"
+    ],
+    "displayed": [
+      "bool",
+      "float",
+      "int",
+      "str"
+    ]
+  },
+  {
+    "id": "py-chk-1",
+    "options": [
+      "hello",
+      "'hello'",
+      "123",
+      "True"
+    ],
+    "displayed": [
+      "123",
+      "hello",
+      "True",
+      "'hello'"
+    ]
+  },
+  {
+    "id": "bool-or-not-out-1",
+    "options": [
+      "True False False",
+      "False False True",
+      "True False True"
+    ],
+    "displayed": [
+      "True False False",
+      "True False True",
+      "False False True"
+    ]
+  },
+  {
+    "id": "access-rule-multi-1",
+    "options": [
+      "keycard + correct passcode, no emergency",
+      "no keycard, no passcode, emergency active",
+      "no keycard, correct passcode, emergency active",
+      "keycard, wrong passcode, no emergency",
+      "no keycard, no passcode, no emergency"
+    ],
+    "displayed": [
+      "no keycard, no passcode, no emergency",
+      "no keycard, correct passcode, emergency active",
+      "keycard, wrong passcode, no emergency",
+      "no keycard, no passcode, emergency active",
+      "keycard + correct passcode, no emergency"
+    ]
+  },
+  {
+    "id": "py-bool-chk-1",
+    "options": [
+      "False",
+      "True",
+      "None",
+      "Error"
+    ],
+    "displayed": [
+      "None",
+      "Error",
+      "False",
+      "True"
+    ]
+  },
+  {
+    "id": "numbers-01-out-1",
+    "options": [
+      "3",
+      "3.4",
+      "2",
+      "4"
+    ],
+    "displayed": [
+      "3.4",
+      "3",
+      "2",
+      "4"
+    ]
+  },
+  {
+    "id": "elif-boundary-dbg-1",
+    "options": [
+      "`elif temp < 28` should be `elif temp <= 28`, so 28 counts as Warm",
+      "`if temp < 15` should be `if temp <= 15`, so 15 counts as Cold",
+      "the final `return \"Hot\"` should be `return \"Warm\"`",
+      "nothing is wrong - `Hot` is correct for 28 because it is the last branch"
+    ],
+    "displayed": [
+      "`elif temp < 28` should be `elif temp <= 28`, so 28 counts as Warm",
+      "nothing is wrong - `Hot` is correct for 28 because it is the last branch",
+      "`if temp < 15` should be `if temp <= 15`, so 15 counts as Cold",
+      "the final `return \"Hot\"` should be `return \"Warm\"`"
+    ]
+  },
+  {
+    "id": "conditionals-01-dbg-1",
+    "options": [
+      "The 80 test matches first, so the 90 branch is never reached",
+      "`elif` cannot follow a plain `if`",
+      "90 is not greater than 80",
+      "Python compares the strings \"A\" and \"B\", not the numbers"
+    ],
+    "displayed": [
+      "90 is not greater than 80",
+      "Python compares the strings \"A\" and \"B\", not the numbers",
+      "`elif` cannot follow a plain `if`",
+      "The 80 test matches first, so the 90 branch is never reached"
+    ]
+  },
+  {
+    "id": "pytest-testing-01-order-1",
+    "options": [
+      "return data",
+      "data = factory()",
+      "callback(data)",
+      "data.clear()"
+    ],
+    "displayed": [
+      "data = factory()",
+      "data.clear()",
+      "return data",
+      "callback(data)"
+    ]
+  },
+  {
+    "id": "sql-ex-1a",
+    "options": [
+      "A column name",
+      "A database server",
+      "A single record / entry",
+      "An index key"
+    ],
+    "displayed": [
+      "A database server",
+      "A single record / entry",
+      "A column name",
+      "An index key"
+    ]
+  },
+  {
+    "id": "sql-m-1a",
+    "options": [
+      "Query log",
+      "Schema",
+      "Transaction buffer",
+      "View"
+    ],
+    "displayed": [
+      "Query log",
+      "Schema",
+      "Transaction buffer",
+      "View"
+    ]
+  },
+  {
+    "id": "sql-final-1",
+    "options": [
+      "WHERE",
+      "ORDER BY",
+      "GROUP BY",
+      "HAVING"
+    ],
+    "displayed": [
+      "HAVING",
+      "ORDER BY",
+      "WHERE",
+      "GROUP BY"
+    ]
+  },
+  {
+    "id": "ts-generics-multi-1",
+    "options": [
+      "private value: T; declared on the class",
+      "this.value = value inside the constructor",
+      "getValue(): T returning the stored value",
+      "constructor(private value: T) parameter-property shorthand"
+    ],
+    "displayed": [
+      "getValue(): T returning the stored value",
+      "this.value = value inside the constructor",
+      "private value: T; declared on the class",
+      "constructor(private value: T) parameter-property shorthand"
+    ]
+  },
+  {
+    "id": "fixture:unicode",
+    "options": [
+      "café",
+      "naïve",
+      "coöperate",
+      "日本語"
+    ],
+    "displayed": [
+      "coöperate",
+      "naïve",
+      "café",
+      "日本語"
+    ]
+  },
+  {
+    "id": "fixture:empty-id",
+    "options": [
+      "a",
+      "b",
+      "c"
+    ],
+    "displayed": [
+      "b",
+      "c",
+      "a"
+    ]
+  },
+  {
+    "id": "",
+    "options": [
+      "x",
+      "y",
+      "z"
+    ],
+    "displayed": [
+      "x",
+      "y",
+      "z"
+    ]
+  },
+  {
+    "id": "fixture:two-only",
+    "options": [
+      "True",
+      "False"
+    ],
+    "displayed": [
+      "True",
+      "False"
+    ]
+  },
+  {
+    "id": "fixture:symbols",
+    "options": [
+      "&&",
+      "||",
+      "!",
+      "% 2 == 0"
+    ],
+    "displayed": [
+      "% 2 == 0",
+      "!",
+      "||",
+      "&&"
+    ]
+  }
+]

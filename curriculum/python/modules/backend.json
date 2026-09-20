@@ -15,7 +15,7 @@
     {
       "id": "py-backend-01",
       "title": "1. Building REST API Endpoint Response Objects",
-      "description": "Format backend REST API response dictionaries with status codes and payloads.",
+      "description": "Format backend REST API response dictionaries: `make_api_response(data, status)` returns a dict with the status code under `status_code` and the payload under `body`.",
       "order": 107,
       "difficulty": "intermediate",
       "duration_minutes": 5,
@@ -25,7 +25,7 @@
       "concepts": [
         "py-backend"
       ],
-      "starter_code": "def make_api_response(data: dict, status: int = 200) -> dict:\n    return {\"status_code\": status, \"body\": data}\n",
+      "starter_code": "def make_api_response(data: dict, status: int = 200) -> dict:\n    # TODO: return the response envelope described in the task\n    return {}\n",
       "solution_code": "def make_api_response(data: dict, status: int = 200) -> dict:\n    return {\"status_code\": status, \"body\": data}\n",
       "tests": [
         {
@@ -38,7 +38,18 @@
         "required_test_names": [
           "test_api_response"
         ]
-      }
+      },
+      "source": {
+        "name": "Python official documentation (docs.python.org) — More on Defining Functions — 'specify a default value for one or more arguments' (Tutorial)",
+        "url": "https://docs.python.org/3/tutorial/controlflow.html#more-on-defining-functions",
+        "license": "Python documentation license (PSF)"
+      },
+      "learning_objectives": [
+        "Build API response payloads as dictionaries with fixed keys",
+        "Use a default parameter value for optional arguments",
+        "Compose status codes and bodies into a single response object"
+      ],
+      "xp_reward": 10
     }
   ]
 }

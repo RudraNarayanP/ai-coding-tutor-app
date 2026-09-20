@@ -2,7 +2,15 @@
   "id": "sql-u9",
   "title": "Unit 9: NULL & CASE",
   "order": 9,
-  "concepts": [{ "id": "sql-case", "title": "NULL Handling & CASE", "prerequisites": ["sql-joins"] }],
+  "concepts": [
+    {
+      "id": "sql-case",
+      "title": "NULL Handling & CASE",
+      "prerequisites": [
+        "sql-joins"
+      ]
+    }
+  ],
   "lessons": [
     {
       "id": "sql-09",
@@ -14,11 +22,33 @@
       "type": "learn",
       "section_id": "sec-sql-2",
       "section_title": "Section 2: Aggregation & Joins",
-      "concepts": ["sql-case"],
-      "starter_code": "SELECT name, price, CASE WHEN price < 50 THEN 'Budget' ELSE 'Premium' END AS price_tier FROM products;\n",
+      "concepts": [
+        "sql-case"
+      ],
+      "starter_code": "-- TODO: add a price_tier column: 'Budget' under 50, otherwise 'Premium'\nSELECT name, price FROM products WHERE 0;\n",
       "solution_code": "SELECT name, price, CASE WHEN price < 50 THEN 'Budget' ELSE 'Premium' END AS price_tier FROM products;\n",
-      "tests": [{ "name": "test_case_tier", "test_code": "assert len(rows) >= 5 and columns[2] == 'price_tier'", "required": true }],
-      "completion_requirements": { "required_test_names": ["test_case_tier"] }
+      "tests": [
+        {
+          "name": "test_case_tier",
+          "test_code": "assert len(rows) >= 5 and columns[2] == 'price_tier'",
+          "required": true
+        }
+      ],
+      "completion_requirements": {
+        "required_test_names": [
+          "test_case_tier"
+        ]
+      },
+      "source": {
+        "name": "SQLite official documentation (sqlite.org) — The CASE expression — WHEN/THEN/ELSE branches",
+        "url": "https://sqlite.org/lang_expr.html#the_case_expression",
+        "license": "Public domain (SQLite documentation)"
+      },
+      "learning_objectives": [
+        "Handle missing data: NULL is not a value but a marker for 'no data'",
+        "Branch per row with CASE WHEN ... THEN ... ELSE ... END"
+      ],
+      "xp_reward": 10
     }
   ]
 }

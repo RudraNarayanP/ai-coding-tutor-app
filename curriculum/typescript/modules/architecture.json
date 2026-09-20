@@ -2,12 +2,20 @@
   "id": "ts-architecture",
   "title": "Unit 4: Application Architecture",
   "order": 4,
-  "concepts": [{ "id": "ts-arch", "title": "Typed Application Design", "prerequisites": ["ts-generics"] }],
+  "concepts": [
+    {
+      "id": "ts-arch",
+      "title": "Typed Application Design",
+      "prerequisites": [
+        "ts-generics"
+      ]
+    }
+  ],
   "lessons": [
     {
       "id": "ts-04",
       "title": "4. Enterprise Application Architecture",
-      "description": "Design modular, type-safe API client wrappers and domain interfaces.",
+      "description": "Checkpoint: export interface ApiResponse<T> { data: T; status: number; } and implement the generic function wrapData<T>(data: T): ApiResponse<T> returning { data, status: 200 }. Tests wrap both a number and an object and check status plus data for each.",
       "order": 4,
       "difficulty": "advanced",
       "duration_minutes": 10,
@@ -15,17 +23,75 @@
       "section_id": "sec-ts-2",
       "section_title": "Section 2: Architecture",
       "test_out_eligible": true,
-      "concepts": ["ts-arch"],
-      "starter_code": "export interface ApiResponse<T> {\n    data: T;\n    status: number;\n}\n\nexport function wrapData<T>(data: T): ApiResponse<T> {\n    return { data, status: 200 };\n}\n",
+      "concepts": [
+        "ts-arch"
+      ],
+      "starter_code": "export interface ApiResponse<T> {\n    data: T;\n    status: number;\n}\n\nexport function wrapData<T>(data: T): ApiResponse<T> {\n    // TODO: return the data together with the OK status code\n    throw new Error(\"not implemented\");\n}\n",
       "solution_code": "export interface ApiResponse<T> {\n    data: T;\n    status: number;\n}\n\nexport function wrapData<T>(data: T): ApiResponse<T> {\n    return { data, status: 200 };\n}\n",
       "tests": [
         {
           "name": "test_api_response_wrap",
-          "unittest_code": "const res = solution.wrapData({ ok: true });\nif (res.status !== 200 || !res.data.ok) throw new Error('Wrap failed');",
-          "required": true
+          "required": true,
+          "unittest_code": "const num = solution.wrapData(5);\nif (num.status !== 200 || num.data !== 5) throw new Error('number wrap failed');\nconst res = solution.wrapData({ ok: true });\nif (res.status !== 200 || !res.data.ok) throw new Error('object wrap failed');"
         }
       ],
-      "completion_requirements": { "required_test_names": ["test_api_response_wrap"] }
+      "completion_requirements": {
+        "required_test_names": [
+          "test_api_response_wrap"
+        ]
+      },
+      "learning_objectives": [
+        "Combine interfaces and generics in API types",
+        "Write generic functions with type parameters",
+        "Apply TypeScript foundations under checkpoint conditions"
+      ],
+      "source": {
+        "name": "TypeScript Handbook — Generics — working with generic classes and functions",
+        "url": "https://www.typescriptlang.org/docs/handbook/2/generics.html",
+        "license": "CC BY 4.0 (TypeScript documentation)"
+      },
+      "xp_reward": 45
+    },
+    {
+      "id": "ts-07",
+      "title": "7. Readonly Fields in Classes",
+      "description": "Class fields may be prefixed with the readonly modifier, which prevents assignments to the field outside of the constructor. Export a class Server with `readonly port: number` initialized in the constructor and a method portAddress(): string returning `http://localhost:${this.port}`. Tests construct Server(8080) and check both the field and the address.",
+      "order": 7,
+      "difficulty": "beginner",
+      "duration_minutes": 6,
+      "type": "practice",
+      "section_id": "sec-ts-2",
+      "section_title": "Section 2: Architecture",
+      "test_out_eligible": false,
+      "concepts": [
+        "ts-arch"
+      ],
+      "prerequisites": [],
+      "learning_objectives": [
+        "Mark class fields readonly and initialize them in the constructor",
+        "Expose computed accessors as class methods",
+        "Use template literals inside class methods"
+      ],
+      "source": {
+        "name": "TypeScript Handbook — Classes — readonly modifier: 'prevents assignments to the field outside of the constructor'",
+        "url": "https://www.typescriptlang.org/docs/handbook/2/classes.html",
+        "license": "CC BY 4.0 (TypeScript documentation)"
+      },
+      "starter_code": "export class Server {\n    readonly port: number;\n\n    constructor(port: number) {\n        // TODO: store the port\n        this.port = 0;\n    }\n\n    portAddress(): string {\n        // TODO: build the localhost URL\n        return '';\n    }\n}\n",
+      "solution_code": "export class Server {\n    readonly port: number;\n\n    constructor(port: number) {\n        this.port = port;\n    }\n\n    portAddress(): string {\n        return `http://localhost:${this.port}`;\n    }\n}\n",
+      "tests": [
+        {
+          "name": "test_readonly_server",
+          "required": true,
+          "unittest_code": "const s = new solution.Server(8080);\nif (s.port !== 8080) throw new Error('port field');\nif (s.portAddress() !== 'http://localhost:8080') throw new Error('address');"
+        }
+      ],
+      "completion_requirements": {
+        "required_test_names": [
+          "test_readonly_server"
+        ]
+      },
+      "xp_reward": 15
     }
   ]
 }

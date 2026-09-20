@@ -18,7 +18,7 @@
       "description": "Implement `set_field(state, key, value)` returning a new dict.",
       "order": 11,
       "difficulty": "intermediate",
-      "duration_minutes": 8,
+      "duration_minutes": 5,
       "type": "learn",
       "section_id": "sec-fs-1",
       "section_title": "Section 1: Full-Stack Client Patterns",
@@ -42,7 +42,39 @@
         "required_test_names": [
           "test_set_field"
         ]
-      }
+      },
+      "source": {
+        "name": "React docs — Updating Objects in State — 'Instead of mutating them, you should always replace them.'",
+        "url": "https://react.dev/learn/updating-objects-in-state",
+        "license": "CC BY 4.0 (React documentation)"
+      },
+      "xp_reward": 10,
+      "sublessons": [
+        {
+          "id": "fs-state-update-order-1-sub",
+          "title": "Order the steps",
+          "order": 1,
+          "exercises": [
+            {
+              "id": "fs-state-update-order-1",
+              "type": "ordering",
+              "question": "Put the steps of `1. Immutable Set Field` back in order. Each line depends on the one before it.",
+              "options": [
+                "out[key] = value",
+                "return out",
+                "out = dict(state)"
+              ],
+              "correct_answer": [
+                "out = dict(state)",
+                "out[key] = value",
+                "return out"
+              ],
+              "explanation": "The order the solution in “1. Immutable Set Field” actually runs in.",
+              "xp_reward": 10
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "fs-state-reducer",
@@ -50,7 +82,7 @@
       "description": "Implement `reduce(state, action)` handling inc and set actions for {'count': int}.",
       "order": 12,
       "difficulty": "intermediate",
-      "duration_minutes": 8,
+      "duration_minutes": 5,
       "type": "learn",
       "section_id": "sec-fs-1",
       "section_title": "Section 1: Full-Stack Client Patterns",
@@ -74,7 +106,48 @@
         "required_test_names": [
           "test_reduce"
         ]
-      }
+      },
+      "source": {
+        "name": "React docs — useReducer — 'a React Hook that lets you add a reducer to your component'",
+        "url": "https://react.dev/reference/react/useReducer",
+        "license": "CC BY 4.0 (React documentation)"
+      },
+      "xp_reward": 10,
+      "sublessons": [
+        {
+          "id": "reducer-dec-sub",
+          "title": "Extend the reducer",
+          "order": 1,
+          "exercises": [
+            {
+              "id": "reducer-dec-code-1",
+              "type": "code",
+              "question": "Extend the reducer: implement `reduce(state, action)` for a `{'count': int}` state so `{'type': 'dec'}` lowers the count by one and an unknown type returns the state unchanged. Never mutate the old state object.",
+              "starter_code": "def reduce(state, action):\n    t = action.get('type')\n    if t == 'inc':\n        return {'count': state['count'] + 1}\n    # TODO: handle 'dec', and leave the state alone for anything else\n    return state\n",
+              "solution_code": "def reduce(state, action):\n    t = action.get('type')\n    if t == 'inc':\n        return {'count': state['count'] + 1}\n    if t == 'dec':\n        return {'count': state['count'] - 1}\n    return state\n",
+              "tests": [
+                {
+                  "name": "test_dec",
+                  "unittest_code": "def test_dec(self):\n    self.assertEqual(reduce({'count': 3}, {'type': 'dec'}), {'count': 2})\n"
+                },
+                {
+                  "name": "test_unknown_action_keeps_state",
+                  "unittest_code": "def test_unknown_action_keeps_state(self):\n    self.assertEqual(reduce({'count': 5}, {'type': 'nope'}), {'count': 5})\n"
+                },
+                {
+                  "name": "test_inc_still_works",
+                  "unittest_code": "def test_inc_still_works(self):\n    self.assertEqual(reduce({'count': 0}, {'type': 'inc'}), {'count': 1})\n"
+                },
+                {
+                  "name": "test_returns_a_new_object",
+                  "unittest_code": "def test_returns_a_new_object(self):\n    original = {'count': 1}\n    result = reduce(original, {'type': 'dec'})\n    self.assertEqual(original, {'count': 1})\n    self.assertIsNot(original, result)\n"
+                }
+              ],
+              "xp_reward": 15
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "fs-state-list",
@@ -106,7 +179,13 @@
         "required_test_names": [
           "test_upsert_item"
         ]
-      }
+      },
+      "source": {
+        "name": "React docs — Updating Objects and Arrays in State — immutable replacement",
+        "url": "https://react.dev/learn/updating-objects-in-state",
+        "license": "CC BY 4.0 (React documentation)"
+      },
+      "xp_reward": 25
     },
     {
       "id": "fs-state-select",
@@ -114,7 +193,7 @@
       "description": "Implement `select_active(items)` returning those with active True.",
       "order": 14,
       "difficulty": "intermediate",
-      "duration_minutes": 8,
+      "duration_minutes": 6,
       "type": "practice",
       "section_id": "sec-fs-1",
       "section_title": "Section 1: Full-Stack Client Patterns",
@@ -138,7 +217,13 @@
         "required_test_names": [
           "test_select_active"
         ]
-      }
+      },
+      "source": {
+        "name": "React docs — Managing state with reducers — reading state for derived lists",
+        "url": "https://react.dev/reference/react/useReducer",
+        "license": "CC BY 4.0 (React documentation)"
+      },
+      "xp_reward": 15
     },
     {
       "id": "fs-state-checkpoint",
@@ -146,7 +231,7 @@
       "description": "Implement `apply_actions(state, actions)` folding a reducer over actions.",
       "order": 15,
       "difficulty": "intermediate",
-      "duration_minutes": 8,
+      "duration_minutes": 10,
       "type": "checkpoint",
       "section_id": "sec-fs-1",
       "section_title": "Section 1: Full-Stack Client Patterns",
@@ -170,7 +255,13 @@
         "required_test_names": [
           "test_apply_actions"
         ]
-      }
+      },
+      "source": {
+        "name": "React docs — useReducer — applying sequential actions",
+        "url": "https://react.dev/reference/react/useReducer",
+        "license": "CC BY 4.0 (React documentation)"
+      },
+      "xp_reward": 40
     }
   ]
 }

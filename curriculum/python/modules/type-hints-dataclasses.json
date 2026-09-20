@@ -45,7 +45,13 @@
         "required_test_names": [
           "test_add"
         ]
-      }
+      },
+      "source": {
+        "name": "Python official documentation (docs.python.org) — typing — annotating parameters and return types",
+        "url": "https://docs.python.org/3/library/typing.html",
+        "license": "Python documentation license (PSF)"
+      },
+      "xp_reward": 10
     },
     {
       "id": "type-hints-dataclasses-step-2",
@@ -79,7 +85,13 @@
         "required_test_names": [
           "test_point"
         ]
-      }
+      },
+      "source": {
+        "name": "Python official documentation (docs.python.org) — dataclasses — @dataclass generates __init__ for annotated fields",
+        "url": "https://docs.python.org/3/library/dataclasses.html",
+        "license": "Python documentation license (PSF)"
+      },
+      "xp_reward": 10
     },
     {
       "id": "type-hints-dataclasses-01",
@@ -87,7 +99,7 @@
       "description": "Create an immutable `Config` dataclass and a helper that updates via `dataclasses.replace`.",
       "order": 98,
       "difficulty": "intermediate",
-      "duration_minutes": 10,
+      "duration_minutes": 8,
       "type": "challenge",
       "section_id": "sec-py-intermed",
       "section_title": "Section 2: Intermediate Python",
@@ -100,7 +112,7 @@
       "learning_objectives": [
         "Use frozen=True and replace()"
       ],
-      "starter_code": "from dataclasses import dataclass, replace\n\n@dataclass(frozen=True)\nclass Config:\n    host: str\n    port: int = 80\n\ndef with_port(cfg: Config, port: int) -> Config:\n    # TODO: return replace(cfg, port=port)\n    pass\n",
+      "starter_code": "from dataclasses import dataclass, replace\n\n@dataclass(frozen=True)\nclass Config:\n    host: str\n    port: int = 80\n\ndef with_port(cfg: Config, port: int) -> Config:\n    # TODO: return a new Config that uses the given port\n    pass\n",
       "solution_code": "from dataclasses import dataclass, replace\n\n@dataclass(frozen=True)\nclass Config:\n    host: str\n    port: int = 80\n\ndef with_port(cfg: Config, port: int) -> Config:\n    return replace(cfg, port=port)\n",
       "tests": [
         {
@@ -113,7 +125,13 @@
         "required_test_names": [
           "test_config"
         ]
-      }
+      },
+      "source": {
+        "name": "Python official documentation (docs.python.org) — dataclasses — frozen=True and dataclasses.replace()",
+        "url": "https://docs.python.org/3/library/dataclasses.html",
+        "license": "Python documentation license (PSF)"
+      },
+      "xp_reward": 25
     },
     {
       "id": "type-hints-dataclasses-practice-1",
@@ -121,7 +139,7 @@
       "description": "Implement `greet(name: str, title: str | None = None) -> str`.",
       "order": 99,
       "difficulty": "intermediate",
-      "duration_minutes": 5,
+      "duration_minutes": 6,
       "type": "practice",
       "section_id": "sec-py-intermed",
       "section_title": "Section 2: Intermediate Python",
@@ -147,7 +165,13 @@
         "required_test_names": [
           "test_greet"
         ]
-      }
+      },
+      "source": {
+        "name": "Python official documentation (docs.python.org) — typing — 'Unions can now be written as X | Y' (PEP 604 change note)",
+        "url": "https://docs.python.org/3/library/typing.html",
+        "license": "Python documentation license (PSF)"
+      },
+      "xp_reward": 15
     },
     {
       "id": "type-hints-dataclasses-checkpoint",
@@ -155,7 +179,7 @@
       "description": "Define `@dataclass` `Pair` with a generic-feeling `swap` method returning a new Pair.",
       "order": 100,
       "difficulty": "intermediate",
-      "duration_minutes": 5,
+      "duration_minutes": 10,
       "type": "checkpoint",
       "section_id": "sec-py-intermed",
       "section_title": "Section 2: Intermediate Python",
@@ -168,7 +192,7 @@
       "learning_objectives": [
         "Return a new dataclass instance from a method"
       ],
-      "starter_code": "from dataclasses import dataclass\n\n@dataclass\nclass Pair:\n    left: str\n    right: str\n\n    def swap(self) -> 'Pair':\n        # TODO: return Pair(self.right, self.left)\n        pass\n",
+      "starter_code": "from dataclasses import dataclass\n\n@dataclass\nclass Pair:\n    left: str\n    right: str\n\n    def swap(self) -> 'Pair':\n        # TODO: return a Pair with the two sides exchanged\n        pass\n",
       "solution_code": "from dataclasses import dataclass\n\n@dataclass\nclass Pair:\n    left: str\n    right: str\n\n    def swap(self) -> 'Pair':\n        return Pair(self.right, self.left)\n",
       "tests": [
         {
@@ -181,7 +205,13 @@
         "required_test_names": [
           "test_pair_swap"
         ]
-      }
+      },
+      "source": {
+        "name": "Python official documentation (docs.python.org) — dataclasses — generated __init__ and methods on dataclasses",
+        "url": "https://docs.python.org/3/library/dataclasses.html",
+        "license": "Python documentation license (PSF)"
+      },
+      "xp_reward": 40
     }
   ]
 }

@@ -6,7 +6,9 @@
     {
       "id": "cpp-conditionals",
       "title": "If-Else & Logical Operators in C++",
-      "prerequisites": ["cpp-variables"]
+      "prerequisites": [
+        "cpp-variables"
+      ]
     }
   ],
   "lessons": [
@@ -18,8 +20,12 @@
       "difficulty": "beginner",
       "duration_minutes": 5,
       "type": "learn",
-      "concepts": ["cpp-conditionals"],
-      "prerequisites": ["cpp-variables"],
+      "concepts": [
+        "cpp-conditionals"
+      ],
+      "prerequisites": [
+        "cpp-variables"
+      ],
       "learning_objectives": [
         "Use if-else and % modulo operator in C++"
       ],
@@ -33,23 +39,35 @@
         }
       ],
       "completion_requirements": {
-        "required_test_names": ["test_is_even"]
-      }
+        "required_test_names": [
+          "test_is_even"
+        ]
+      },
+      "source": {
+        "name": "cppreference.com — if statement (with else branch)",
+        "url": "https://en.cppreference.com/w/cpp/language/if",
+        "license": "CC BY-SA 4.0 (cppreference.com)"
+      },
+      "xp_reward": 10
     },
     {
       "id": "cpp-conditionals-step-2",
       "title": "2. Logical Operators (&&, ||, !)",
-      "description": "C++ uses `&&` for AND, `||` for OR, and `!` for NOT. Implement `can_drive(bool has_license, bool is_sober)`.",
+      "description": "C++ uses `&&` for AND, `||` for OR, and `!` for NOT. Implement `can_drive(bool has_license, bool is_sober)`, which is true only when the driver holds a licence and is sober.",
       "order": 7,
       "difficulty": "beginner",
       "duration_minutes": 5,
       "type": "learn",
-      "concepts": ["cpp-conditionals"],
-      "prerequisites": ["cpp-variables"],
+      "concepts": [
+        "cpp-conditionals"
+      ],
+      "prerequisites": [
+        "cpp-variables"
+      ],
       "learning_objectives": [
         "Use logical AND && and OR || in C++"
       ],
-      "starter_code": "bool can_drive(bool has_license, bool is_sober) {\n    // TODO: Return has_license && is_sober\n    return false;\n}\n",
+      "starter_code": "bool can_drive(bool has_license, bool is_sober) {\n    // TODO: return true only when both conditions hold\n    return false;\n}\n",
       "solution_code": "bool can_drive(bool has_license, bool is_sober) {\n    return has_license && is_sober;\n}\n",
       "tests": [
         {
@@ -59,8 +77,56 @@
         }
       ],
       "completion_requirements": {
-        "required_test_names": ["test_can_drive"]
-      }
+        "required_test_names": [
+          "test_can_drive"
+        ]
+      },
+      "source": {
+        "name": "cppreference.com — Conditional AND (&&) / OR (||) operators",
+        "url": "https://en.cppreference.com/w/cpp/language/operator_logical",
+        "license": "CC BY-SA 4.0 (cppreference.com)"
+      },
+      "xp_reward": 10,
+      "sublessons": [
+        {
+          "id": "cpp-logic-ops-sub",
+          "title": "Match the operator to its rule",
+          "order": 1,
+          "exercises": [
+            {
+              "id": "cpp-logic-ops-match-1",
+              "type": "matching",
+              "question": "Match each C++ expression to when it is true.",
+              "pairs": [
+                {
+                  "left": "a && b",
+                  "right": "both a and b are true"
+                },
+                {
+                  "left": "a || b",
+                  "right": "at least one of a and b is true"
+                },
+                {
+                  "left": "!flag",
+                  "right": "flag is false"
+                },
+                {
+                  "left": "n % 2 == 0",
+                  "right": "n divides by 2 with no remainder"
+                }
+              ],
+              "correct_answer": {
+                "a && b": "both a and b are true",
+                "a || b": "at least one of a and b is true",
+                "!flag": "flag is false",
+                "n % 2 == 0": "n divides by 2 with no remainder"
+              },
+              "explanation": "`&&` needs both, `||` needs one, `!` flips, and `%` gives the remainder that decides divisibility.",
+              "xp_reward": 10
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "cpp-conditionals-01",
@@ -68,10 +134,14 @@
       "description": "Return alarm status based on reactor core temperature.",
       "order": 8,
       "difficulty": "beginner",
-      "duration_minutes": 10,
+      "duration_minutes": 8,
       "type": "challenge",
-      "concepts": ["cpp-conditionals"],
-      "prerequisites": ["cpp-variables"],
+      "concepts": [
+        "cpp-conditionals"
+      ],
+      "prerequisites": [
+        "cpp-variables"
+      ],
       "learning_objectives": [
         "Implement multi-stage if-else status checks"
       ],
@@ -85,8 +155,16 @@
         }
       ],
       "completion_requirements": {
-        "required_test_names": ["test_alarm_status"]
-      }
+        "required_test_names": [
+          "test_alarm_status"
+        ]
+      },
+      "source": {
+        "name": "cppreference.com — if-else statements",
+        "url": "https://en.cppreference.com/w/cpp/language/if",
+        "license": "CC BY-SA 4.0 (cppreference.com)"
+      },
+      "xp_reward": 25
     },
     {
       "id": "cpp-conditionals-practice-1",
@@ -94,10 +172,14 @@
       "description": "Check if 3 side lengths can form a valid triangle.",
       "order": 9,
       "difficulty": "beginner",
-      "duration_minutes": 5,
+      "duration_minutes": 6,
       "type": "practice",
-      "concepts": ["cpp-conditionals"],
-      "prerequisites": ["cpp-variables"],
+      "concepts": [
+        "cpp-conditionals"
+      ],
+      "prerequisites": [
+        "cpp-variables"
+      ],
       "learning_objectives": [
         "Apply triangle inequality theorem in C++"
       ],
@@ -111,19 +193,31 @@
         }
       ],
       "completion_requirements": {
-        "required_test_names": ["test_triangle"]
-      }
+        "required_test_names": [
+          "test_triangle"
+        ]
+      },
+      "source": {
+        "name": "cppreference.com — if statement",
+        "url": "https://en.cppreference.com/w/cpp/language/if",
+        "license": "CC BY-SA 4.0 (cppreference.com)"
+      },
+      "xp_reward": 15
     },
     {
       "id": "cpp-conditionals-checkpoint",
       "title": "5. Unit 2 Checkpoint: C++ Conditionals Mastery",
-      "description": "Verify C++ control flow mastery.",
+      "description": "Checkpoint for control flow: implement max_of_three(int a, int b, int c) returning the largest of the three values — nested if/else comparisons or std::max(a, std::max(b, c)). The test asserts max_of_three(10, 42, 25) == 42.",
       "order": 10,
       "difficulty": "beginner",
-      "duration_minutes": 5,
+      "duration_minutes": 10,
       "type": "checkpoint",
-      "concepts": ["cpp-conditionals"],
-      "prerequisites": ["cpp-variables"],
+      "concepts": [
+        "cpp-conditionals"
+      ],
+      "prerequisites": [
+        "cpp-variables"
+      ],
       "learning_objectives": [
         "Pass C++ conditionals checkpoint"
       ],
@@ -137,8 +231,16 @@
         }
       ],
       "completion_requirements": {
-        "required_test_names": ["test_max_three"]
-      }
+        "required_test_names": [
+          "test_max_three"
+        ]
+      },
+      "source": {
+        "name": "cppreference.com — if statement",
+        "url": "https://en.cppreference.com/w/cpp/language/if",
+        "license": "CC BY-SA 4.0 (cppreference.com)"
+      },
+      "xp_reward": 40
     }
   ]
 }

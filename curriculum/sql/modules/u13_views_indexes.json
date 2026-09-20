@@ -2,7 +2,15 @@
   "id": "sql-u13",
   "title": "Unit 13: Views & Indexes",
   "order": 13,
-  "concepts": [{ "id": "sql-views", "title": "Views & Index Optimization", "prerequisites": ["sql-tx"] }],
+  "concepts": [
+    {
+      "id": "sql-views",
+      "title": "Views & Index Optimization",
+      "prerequisites": [
+        "sql-tx"
+      ]
+    }
+  ],
   "lessons": [
     {
       "id": "sql-13",
@@ -14,11 +22,33 @@
       "type": "learn",
       "section_id": "sec-sql-3",
       "section_title": "Section 3: Advanced SQL & Design",
-      "concepts": ["sql-views"],
-      "starter_code": "CREATE VIEW active_users AS SELECT username, email FROM users WHERE role != 'guest';\nCREATE INDEX idx_users_email ON users(email);\nSELECT * FROM active_users;\n",
+      "concepts": [
+        "sql-views"
+      ],
+      "starter_code": "-- TODO: create view active_users (username, email of non-guests) and an index on users(email)\nSELECT username, email FROM users WHERE 0;\n",
       "solution_code": "CREATE VIEW active_users AS SELECT username, email FROM users WHERE role != 'guest';\nCREATE INDEX idx_users_email ON users(email);\nSELECT * FROM active_users;\n",
-      "tests": [{ "name": "test_view_created", "test_code": "assert len(rows) >= 4", "required": true }],
-      "completion_requirements": { "required_test_names": ["test_view_created"] }
+      "tests": [
+        {
+          "name": "test_view_created",
+          "test_code": "assert len(rows) >= 4",
+          "required": true
+        }
+      ],
+      "completion_requirements": {
+        "required_test_names": [
+          "test_view_created"
+        ]
+      },
+      "source": {
+        "name": "SQLite official documentation (sqlite.org) — CREATE VIEW — 'assigns a name to a pre-packaged SELECT statement'",
+        "url": "https://sqlite.org/lang_createview.html",
+        "license": "Public domain (SQLite documentation)"
+      },
+      "learning_objectives": [
+        "Store a query as a reusable view with CREATE VIEW",
+        "Speed up lookups with CREATE INDEX on frequently queried columns"
+      ],
+      "xp_reward": 10
     }
   ]
 }

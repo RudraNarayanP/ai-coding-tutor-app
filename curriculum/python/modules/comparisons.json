@@ -6,7 +6,11 @@
     {
       "id": "comparisons",
       "title": "Equality & Relational Comparisons",
-      "prerequisites": ["variables", "booleans", "conditionals"]
+      "prerequisites": [
+        "variables",
+        "booleans",
+        "conditionals"
+      ]
     }
   ],
   "lessons": [
@@ -18,8 +22,13 @@
       "difficulty": "beginner",
       "duration_minutes": 5,
       "type": "learn",
-      "concepts": ["comparisons"],
-      "prerequisites": ["variables", "conditionals"],
+      "concepts": [
+        "comparisons"
+      ],
+      "prerequisites": [
+        "variables",
+        "conditionals"
+      ],
       "learning_objectives": [
         "Compare values using ==, !=, <, >"
       ],
@@ -32,8 +41,57 @@
         }
       ],
       "completion_requirements": {
-        "required_test_names": ["test_comparisons"]
-      }
+        "required_test_names": [
+          "test_comparisons"
+        ]
+      },
+      "solution_code": "def is_equal(a, b):\n    return a == b\n\n\ndef is_greater(a, b):\n    return a > b\n",
+      "source": {
+        "name": "Python official documentation (docs.python.org) — Comparisons — Expressions (Language Reference) — Expressions",
+        "url": "https://docs.python.org/3/reference/expressions.html#comparisons",
+        "license": "Python documentation license (PSF)"
+      },
+      "xp_reward": 10,
+      "sublessons": [
+        {
+          "id": "compare-ops-sub",
+          "title": "Match the operator",
+          "order": 1,
+          "exercises": [
+            {
+              "id": "compare-ops-match-1",
+              "type": "matching",
+              "question": "Match each comparison operator to the question it asks.",
+              "pairs": [
+                {
+                  "left": "a == b",
+                  "right": "do the two values hold the same content?"
+                },
+                {
+                  "left": "a != b",
+                  "right": "are the two values different?"
+                },
+                {
+                  "left": "a > b",
+                  "right": "is a strictly larger than b?"
+                },
+                {
+                  "left": "a <= b",
+                  "right": "is a no more than b?"
+                }
+              ],
+              "correct_answer": {
+                "a == b": "do the two values hold the same content?",
+                "a != b": "are the two values different?",
+                "a > b": "is a strictly larger than b?",
+                "a <= b": "is a no more than b?"
+              },
+              "explanation": "`==` and `=` are not the same thing: one compares, the other assigns.",
+              "xp_reward": 10
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "comparisons-step-2",
@@ -43,8 +101,13 @@
       "difficulty": "beginner",
       "duration_minutes": 5,
       "type": "learn",
-      "concepts": ["comparisons"],
-      "prerequisites": ["variables", "conditionals"],
+      "concepts": [
+        "comparisons"
+      ],
+      "prerequisites": [
+        "variables",
+        "conditionals"
+      ],
       "learning_objectives": [
         "Chain comparisons concisely"
       ],
@@ -57,8 +120,17 @@
         }
       ],
       "completion_requirements": {
-        "required_test_names": ["test_in_range"]
-      }
+        "required_test_names": [
+          "test_in_range"
+        ]
+      },
+      "solution_code": "def in_range(x, low, high):\n    return low <= x <= high\n",
+      "source": {
+        "name": "Python official documentation (docs.python.org) — Comparisons — chained comparisons (Language Reference)",
+        "url": "https://docs.python.org/3/reference/expressions.html#comparisons",
+        "license": "Python documentation license (PSF)"
+      },
+      "xp_reward": 10
     },
     {
       "id": "comparisons-01",
@@ -66,10 +138,16 @@
       "description": "Implement Black Jack card counting rules using relational comparisons.",
       "order": 23,
       "difficulty": "beginner",
-      "duration_minutes": 20,
+      "duration_minutes": 8,
       "type": "challenge",
-      "concepts": ["comparisons"],
-      "prerequisites": ["variables", "booleans", "conditionals"],
+      "concepts": [
+        "comparisons"
+      ],
+      "prerequisites": [
+        "variables",
+        "booleans",
+        "conditionals"
+      ],
       "learning_objectives": [
         "Use equality == and inequality operators !=, <, >, <=, >=",
         "Chain comparison expressions",
@@ -122,7 +200,9 @@
         "name": "Exercism Python Track — Black Jack",
         "url": "https://github.com/exercism/python/tree/main/exercises/concept/black-jack",
         "license": "MIT"
-      }
+      },
+      "solution_code": "FACE_CARDS = {'K', 'Q', 'J'}\n\n\ndef value_of_card(card):\n    \"\"\"Return numeric value of a card.\"\"\"\n    if card in FACE_CARDS:\n        return 10\n    if card == \"A\":\n        return 1\n    return int(card)\n\n\ndef higher_card(card_one, card_two):\n    \"\"\"Return the higher card, or both as a tuple if equal.\"\"\"\n    v1, v2 = value_of_card(card_one), value_of_card(card_two)\n    if v1 > v2:\n        return card_one\n    if v2 > v1:\n        return card_two\n    return (card_one, card_two)\n\n\ndef value_of_ace(card_one, card_two):\n    \"\"\"Return 11 if safe, else 1.\"\"\"\n    total = value_of_card(card_one) + value_of_card(card_two)\n    if card_one == \"A\":\n        total += 10\n    if card_two == \"A\":\n        total += 10\n    return 11 if total + 11 <= 21 else 1\n\n\ndef is_blackjack(card_one, card_two):\n    \"\"\"Return True if hand totals 21 with an ace and a 10-value card.\"\"\"\n    cards = (card_one, card_two)\n    return 'A' in cards and any(value_of_card(c) == 10 for c in cards)\n\n\ndef can_split_pairs(card_one, card_two):\n    \"\"\"Return True if cards have equal value.\"\"\"\n    return value_of_card(card_one) == value_of_card(card_two)\n\n\ndef can_double_down(card_one, card_two):\n    \"\"\"Return True if hand totals 9, 10, or 11.\"\"\"\n    return value_of_card(card_one) + value_of_card(card_two) in (9, 10, 11)\n",
+      "xp_reward": 25
     },
     {
       "id": "comparisons-practice-1",
@@ -130,10 +210,15 @@
       "description": "Determine if a person can ride a rollercoaster: `age >= 10` and `height_cm >= 130`.",
       "order": 24,
       "difficulty": "beginner",
-      "duration_minutes": 5,
+      "duration_minutes": 6,
       "type": "practice",
-      "concepts": ["comparisons"],
-      "prerequisites": ["variables", "conditionals"],
+      "concepts": [
+        "comparisons"
+      ],
+      "prerequisites": [
+        "variables",
+        "conditionals"
+      ],
       "learning_objectives": [
         "Apply multiple relational comparisons"
       ],
@@ -146,19 +231,33 @@
         }
       ],
       "completion_requirements": {
-        "required_test_names": ["test_can_ride"]
-      }
+        "required_test_names": [
+          "test_can_ride"
+        ]
+      },
+      "solution_code": "def can_ride(age, height_cm):\n    return age >= 10 and height_cm >= 130\n",
+      "source": {
+        "name": "Python official documentation (docs.python.org) — Comparisons — Expressions (Language Reference) — Expressions",
+        "url": "https://docs.python.org/3/reference/expressions.html#comparisons",
+        "license": "Python documentation license (PSF)"
+      },
+      "xp_reward": 15
     },
     {
       "id": "comparisons-checkpoint",
       "title": "5. Unit 5 Checkpoint: Comparisons Mastery",
-      "description": "Confirm your comparison logic.",
+      "description": "compare_scores(score_a, score_b) must return \"A\" when score_a is greater, \"B\" when score_b is greater, and \"Tie\" when both are equal — practicing comparison operators and if/elif/else.",
       "order": 25,
       "difficulty": "beginner",
-      "duration_minutes": 5,
+      "duration_minutes": 10,
       "type": "checkpoint",
-      "concepts": ["comparisons"],
-      "prerequisites": ["variables", "conditionals"],
+      "concepts": [
+        "comparisons"
+      ],
+      "prerequisites": [
+        "variables",
+        "conditionals"
+      ],
       "learning_objectives": [
         "Master relational comparison logic"
       ],
@@ -171,8 +270,17 @@
         }
       ],
       "completion_requirements": {
-        "required_test_names": ["test_compare_scores"]
-      }
+        "required_test_names": [
+          "test_compare_scores"
+        ]
+      },
+      "solution_code": "def compare_scores(score_a, score_b):\n    if score_a > score_b:\n        return \"A\"\n    if score_b > score_a:\n        return \"B\"\n    return \"Tie\"\n",
+      "source": {
+        "name": "Python official documentation (docs.python.org) — Comparisons — Expressions (Language Reference) — Expressions",
+        "url": "https://docs.python.org/3/reference/expressions.html#comparisons",
+        "license": "Python documentation license (PSF)"
+      },
+      "xp_reward": 40
     }
   ]
 }

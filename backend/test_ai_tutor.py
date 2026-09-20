@@ -111,27 +111,37 @@ def test_hint_level_previous_hints_code_and_results_reach_provider():
 
 
 def test_session_hints_are_retained_for_later_requests():
-    provider = FakeProvider("First hint")
+    provider = FakeProvider("Start from the check that is still red.")
     service = TutorService(provider)
     run(service.tutor(request(previous_hints=[])))
-    provider.message = "Second hint"
+    provider.message = "Now look at the line that produces that value."
     run(service.tutor(request(previous_hints=[])))
-    assert provider.requests[1].previous_hints == ["First hint"]
+    assert provider.requests[1].previous_hints == ["Start from the check that is still red."]
 
 
-def test_unavailable_provider_returns_safe_response():
+def test_unavailable_provider_still_delivers_a_hint():
+    """A dead provider must never cost the learner their nudge.
+
+    The old behaviour surfaced "AI provider unavailable" inside the hint box,
+    which read like the tutor was broken. Hints now fall back to a
+    curriculum-grounded nudge while the diagnostic stays on the response.
+    """
     provider = FakeProvider(error=AIProviderError("AI provider unavailable", provider="fake", code="tutor_unavailable"))
-    response = run(TutorService(provider).tutor(request()))
-    assert response.available is False
+    response = run(TutorService(provider, backoff_seconds=0).tutor(request()))
+    assert response.available is True
+    assert response.source == "offline"
     assert response.error == "tutor_unavailable"
-    assert "AI provider unavailable" in response.message
+    assert "AI provider unavailable" not in response.message
+    assert response.message.strip()
 
 
-def test_invalid_provider_response_is_handled():
+def test_invalid_provider_response_falls_back_instead_of_going_blank():
     provider = FakeProvider(message="")
-    response = run(TutorService(provider).tutor(request()))
-    assert response.available is False
-    assert response.error == "invalid_response"
+    response = run(TutorService(provider, backoff_seconds=0).tutor(request()))
+    assert response.available is True
+    assert response.source == "offline"
+    assert response.error == "contract_violation"
+    assert len(response.message.split()) <= 45
 
 
 def test_ordinary_hint_cannot_return_complete_code():
@@ -163,3 +173,26 @@ def test_progression_does_not_need_a_provider():
 
     result = run(LessonEngine(Executor(), ProgressionStore(CURRICULUM), CURRICULUM).run_lesson("variables-step-1", "pass"))
     assert result.completed is True
+
+
+def test_hint_essay_is_condensed_for_flow_state():
+    essay = (
+        "Great work! You are on the right track. The key concept here is that **arrow functions** "
+        "let you write concise function expressions. When the function body is a single expression, "
+        "you can omit the curly braces and the return keyword. "
+        + chr(10) + chr(10) +
+        "- **Operator precedence** matters when combining operations." + chr(10) +
+        "- **module.exports** is the standard way to make your function available to tests."
+    )
+    provider = FakeProvider(message=essay)
+    response = run(TutorService(provider).tutor(request()))
+    assert response.available is True
+    assert len(response.message) <= 260
+    assert "**" not in response.message
+    assert chr(10) + "- " not in response.message
+
+
+def test_short_plain_hint_passes_through_unchanged():
+    provider = FakeProvider(message="Try tracing the value through one iteration.")
+    response = run(TutorService(provider).tutor(request()))
+    assert response.message == "Try tracing the value through one iteration."

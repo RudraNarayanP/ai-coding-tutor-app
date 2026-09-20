@@ -2,29 +2,75 @@
   "id": "js-browser-dom",
   "title": "Unit 2: Browser & DOM Manipulation",
   "order": 2,
-  "concepts": [{ "id": "js-dom", "title": "DOM & Event Handling", "prerequisites": ["js-vars"] }],
+  "concepts": [
+    {
+      "id": "js-dom",
+      "title": "DOM & Event Handling",
+      "prerequisites": [
+        "js-vars"
+      ]
+    }
+  ],
   "lessons": [
     {
       "id": "js-02",
       "title": "2. DOM & Event Fundamentals",
-      "description": "Understand document query selectors, element creation, and event listeners.",
+      "description": "The textContent property represents the text content of a DOM node. Implement `createButton(text)` as an arrow function that returns an object modelling a <button> element: { tag: 'button', textContent: text, disabled: false }. Export { createButton }. The test checks all three fields.",
       "order": 2,
       "difficulty": "beginner",
       "duration_minutes": 5,
       "type": "learn",
       "section_id": "sec-js-1",
       "section_title": "Section 1: JS Core",
-      "concepts": ["js-dom"],
-      "starter_code": "const createButton = (text) => ({\n    tag: 'button',\n    textContent: text,\n    disabled: false\n});\nmodule.exports = { createButton };\n",
+      "concepts": [
+        "js-dom"
+      ],
+      "starter_code": "// TODO: return the button object described in the task\nconst createButton = (text) => ({\n    tag: '', textContent: '', disabled: true\n});\nmodule.exports = { createButton };\n",
       "solution_code": "const createButton = (text) => ({\n    tag: 'button',\n    textContent: text,\n    disabled: false\n});\nmodule.exports = { createButton };\n",
       "tests": [
         {
           "name": "test_create_button",
-          "unittest_code": "const { createButton } = solution;\nif (createButton('Click Me').textContent !== 'Click Me') throw new Error('Button text mismatch');",
-          "required": true
+          "required": true,
+          "unittest_code": "const { createButton } = solution;\nconst b = createButton('Click Me');\nif (b.textContent !== 'Click Me') throw new Error('Button text mismatch');\nif (b.tag !== 'button') throw new Error('Expected tag button');\nif (b.disabled !== false) throw new Error('Expected disabled false');"
         }
       ],
-      "completion_requirements": { "required_test_names": ["test_create_button"] }
+      "completion_requirements": {
+        "required_test_names": [
+          "test_create_button"
+        ]
+      },
+      "learning_objectives": [
+        "Model DOM element state as plain JavaScript objects",
+        "Use textContent as the DOM API defines it",
+        "Return object literals from arrow functions"
+      ],
+      "source": {
+        "name": "MDN Web Docs — Node.textContent — 'represents the text content of the node and its descendants'",
+        "url": "https://developer.mozilla.org/en-US/docs/Web/API/Node/textContent",
+        "license": "CC0 1.0 Universal (MDN Web Docs)"
+      },
+      "xp_reward": 10,
+      "sublessons": [
+        {
+          "id": "js-02-tf-sub",
+          "title": "Check the idea",
+          "order": 1,
+          "exercises": [
+            {
+              "id": "js-02-tf-1",
+              "type": "true_false",
+              "options": [
+                "True",
+                "False"
+              ],
+              "question": "In `const createButton = (text) => { tag: 'button' }` the braces hand back that object, so an arrow function never needs parentheses around a returned object literal.",
+              "correct_answer": "False",
+              "explanation": "With braces, `{` opens the function body, so `tag: 'button'` is a labelled statement and the function returns undefined. Wrapping the object in parentheses - `=> ({ tag: 'button' })` - is what makes it the value handed back.",
+              "xp_reward": 10
+            }
+          ]
+        }
+      ]
     }
   ]
 }

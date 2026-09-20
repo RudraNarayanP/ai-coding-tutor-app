@@ -1,5 +1,7 @@
 from pydantic import BaseModel, Field, field_validator
 
+from .blank_template import public_starter_code
+
 
 class ConceptDefinition(BaseModel):
     id: str = Field(pattern=r"^[a-z0-9-]+$", min_length=1, max_length=80)
@@ -146,8 +148,11 @@ class PublicExerciseView(BaseModel):
     title: str = ""
     type: str = "code"
     question: str = ""
+    micro_explanation: str = ""
+    worked_example: str = ""
+    worked_example_takeaway: str = ""
+    deep_dive: str = ""
     options: list[str] = []
-    blanks: list[str] = []
     pairs: list[MatchingPair] = []
     starter_code: str = ""
     hints: list[str] = []
@@ -160,6 +165,38 @@ class PublicSubLessonView(BaseModel):
     description: str = ""
     order: int = 1
     exercises: list[PublicExerciseView] = []
+
+
+def public_exercise_view(
+    e: "ExerciseDefinition", teaching_fields: bool = True
+) -> "PublicExerciseView":
+    """Project one exercise for the browser, with any answer key removed.
+
+    ``blanks`` is byte-identical to ``correct_answer`` in the curriculum, so it
+    is never shipped; the starter is blanked here instead. Shared by the lesson
+    payload and the mistake-queue endpoint so neither can drift back to
+    leaking the key.
+
+    ``teaching_fields`` is off for mastery exams: a graded exam should not
+    arrive with the worked example that a learning step uses to teach the idea.
+    """
+    return PublicExerciseView(
+        id=e.id,
+        title=e.title,
+        type=e.type,
+        question=e.question,
+        micro_explanation=(getattr(e, "micro_explanation", "") or "") if teaching_fields else "",
+        worked_example=getattr(e, "worked_example", "") or "" if teaching_fields else "",
+        worked_example_takeaway=(
+            getattr(e, "worked_example_takeaway", "") or "" if teaching_fields else ""
+        ),
+        deep_dive=getattr(e, "deep_dive", "") or "" if teaching_fields else "",
+        options=e.options,
+        pairs=e.pairs,
+        starter_code=public_starter_code(e.type, e.starter_code, e.blanks, e.question),
+        hints=e.hints if teaching_fields else [],
+        xp_reward=e.xp_reward,
+    )
 
 
 class PublicLessonView(BaseModel):
@@ -203,43 +240,11 @@ class PublicLessonView(BaseModel):
                 title=s.title,
                 description=s.description,
                 order=s.order,
-                exercises=[
-                    PublicExerciseView(
-                        id=e.id,
-                        title=e.title,
-                        type=e.type,
-                        question=e.question,
-                        micro_explanation=getattr(e, "micro_explanation", "") or "",
-                        worked_example=getattr(e, "worked_example", "") or "",
-                        worked_example_takeaway=getattr(e, "worked_example_takeaway", "") or "",
-                        deep_dive=getattr(e, "deep_dive", "") or "",
-                        options=e.options,
-                        blanks=e.blanks,
-                        pairs=e.pairs,
-                        starter_code=e.starter_code,
-                        hints=e.hints,
-                        xp_reward=e.xp_reward,
-                    )
-                    for e in s.exercises
-                ],
+                exercises=[public_exercise_view(e) for e in s.exercises],
             )
             for s in lesson.sublessons
         ]
-        exam_views = [
-            PublicExerciseView(
-                id=e.id,
-                title=e.title,
-                type=e.type,
-                question=e.question,
-                options=e.options,
-                blanks=e.blanks,
-                pairs=e.pairs,
-                starter_code=e.starter_code,
-                hints=e.hints,
-                xp_reward=e.xp_reward,
-            )
-            for e in lesson.mastery_exam
-        ]
+        exam_views = [public_exercise_view(e, teaching_fields=False) for e in lesson.mastery_exam]
         return cls(
             id=lesson.id,
             title=lesson.title,
@@ -290,6 +295,7 @@ class LessonSummary(BaseModel):
     unit_title: str | None = None
     type: str | None = None
     test_out_eligible: bool = False
+    xp_reward: int = 0
 
 
 class TestResult(BaseModel):
@@ -313,6 +319,11 @@ class ProgressionResult(BaseModel):
     stderr: str = ""
     execution_time_ms: int = 0
     error: str | None = None
+    xp_awarded: int = 0
+    hearts: dict | None = None
+    # True when passing this lesson task cleared it from the mistake queue, i.e.
+    # the learner just graduated a miss. The heart pool refunds on it.
+    graduated: bool = False
 
 
 class ProgressionState(BaseModel):
@@ -333,9 +344,13 @@ class LessonProgress(BaseModel):
     lesson_id: str
     total_exercises: int = 0
     completed_exercise_ids: list[str] = Field(default_factory=list)
+    cleared_exercise_ids: list[str] = Field(default_factory=list)
+    queued_exercise_ids: list[str] = Field(default_factory=list)
     attempt_counts: dict[str, int] = Field(default_factory=dict)
     last_results: dict[str, str] = Field(default_factory=dict)
     lesson_completed: bool = False
-    next_action: str = "answer"  # "answer" | "lesson_complete"
+    lesson_mastered: bool = False
+    mastery: dict = Field(default_factory=dict)
+    next_action: str = "answer"  # "answer" | "review" | "lesson_complete"
     next_lesson_id: str | None = None
     progress: dict = Field(default_factory=dict)  # {"completed": int, "total": int}

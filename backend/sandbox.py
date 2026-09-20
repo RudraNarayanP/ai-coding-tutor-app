@@ -20,11 +20,23 @@ class SandboxError(Exception):
 @dataclass(frozen=True)
 class SandboxLimits:
     timeout_seconds: float = 10
+    # javac and g++ compile inside the same window the program then runs in,
+    # and the container is deliberately capped at 0.5 CPU / 128 MB to contain
+    # hostile submissions. A trivial Java class measures ~12s end to end under
+    # those limits, so one shared 10s budget randomly reported a correct
+    # submission as "Student execution timed out" - a false failure that now
+    # also costs a heart. Compiled languages get a longer, still-bounded
+    # window; interpreted ones keep the short cap.
+    compiled_timeout_seconds: float = 40
     memory: str = "128m"
     cpus: str = "0.5"
     pids: str = "32"
     max_output_bytes: int = 64 * 1024
     max_code_bytes: int = 64 * 1024
+    # fsize ulimit is in BYTES. 65536 (the old value) breaks g++/javac: their
+    # intermediate object files exceed 64 KiB. 256 MiB still bounds runaway
+    # disk writes while letting compiler toolchains work in /tmp.
+    max_file_bytes: int = 256 * 1024 * 1024
 
 
 _RUNNER_PATH = Path(__file__).resolve().parent.parent / "sandbox" / "runner.py"
@@ -82,15 +94,24 @@ class DockerSandbox:
             )
         return self._docker_available
 
+    _COMPILED = ("java", "cpp", "c++")
+
+    def _budget(self, payload: dict) -> float:
+        """Execution window for this submission's language."""
+        lang = str(payload.get("language") or "").lower().strip()
+        return (self.limits.compiled_timeout_seconds if lang in self._COMPILED
+                else self.limits.timeout_seconds)
+
     async def _run_local(self, payload: dict) -> dict:
         """Execute student code in-process via sandbox/runner.py when Docker is down."""
+        budget = self._budget(payload)
 
         def invoke() -> subprocess.CompletedProcess[bytes]:
             return subprocess.run(
                 [sys.executable, "-I", str(_RUNNER_PATH)],
                 input=json.dumps(payload).encode("utf-8"),
                 capture_output=True,
-                timeout=self.limits.timeout_seconds + 10,
+                timeout=budget + 10,
             )
 
         started = time.perf_counter()
@@ -131,7 +152,9 @@ class DockerSandbox:
         code_bytes = payload["code"].encode("utf-8")
         if len(code_bytes) > self.limits.max_code_bytes:
             raise SandboxError("Submitted code exceeds the 64 KiB limit.", 413)
-        if not await self._probe_docker():
+        # Preview runs always use the host runner so learners see fresh stdout logic
+        # without rebuilding the Docker image after runner changes.
+        if payload.get("mode") == "preview" or not await self._probe_docker():
             return await self._run_local(payload)
         await self._ensure_image()
         container = f"patchwork-run-{uuid.uuid4().hex}"
@@ -140,8 +163,9 @@ class DockerSandbox:
             "--tmpfs", "/tmp:exec,size=64m", "--cap-drop=ALL",
             "--security-opt=no-new-privileges", "--user", "10001:10001",
             "--memory", self.limits.memory, "--cpus", self.limits.cpus,
-            "--pids-limit", self.limits.pids, "--ulimit", "nofile=64:64",
-            "--ulimit", "fsize=65536:65536", "--entrypoint", "python", self.image,
+            "--pids-limit", self.limits.pids, "--ulimit", "nofile=256:256",
+            "--ulimit", f"fsize={self.limits.max_file_bytes}:{self.limits.max_file_bytes}",
+            "--entrypoint", "python", self.image,
             "-c", "import time; time.sleep(60)",
         ]
         try:
@@ -153,7 +177,7 @@ class DockerSandbox:
             if code != 0:
                 raise SandboxError(f"Could not start the sandbox container: {stderr.decode(errors='replace')[-500:]}")
             try:
-                code, stdout, stderr = await self._docker("exec", "--interactive", container, "python", "-I", "/sandbox/runner.py", input_data=json.dumps(payload).encode(), timeout=self.limits.timeout_seconds, timeout_message="Student execution timed out.")
+                code, stdout, stderr = await self._docker("exec", "--interactive", container, "python", "-I", "/sandbox/runner.py", input_data=json.dumps(payload).encode(), timeout=self._budget(payload), timeout_message="Student execution timed out.")
             except SandboxError as exc:
                 if exc.status_code == 408:
                     return {"passed": False, "tests": [], "stdout": "", "stderr": str(exc), "execution_time_ms": round((time.perf_counter() - started) * 1000), "error": "timeout"}

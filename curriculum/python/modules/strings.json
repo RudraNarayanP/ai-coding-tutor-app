@@ -6,7 +6,10 @@
     {
       "id": "strings",
       "title": "Strings, Indexing, & Slicing",
-      "prerequisites": ["variables", "conditionals"]
+      "prerequisites": [
+        "variables",
+        "conditionals"
+      ]
     }
   ],
   "lessons": [
@@ -18,8 +21,12 @@
       "difficulty": "beginner",
       "duration_minutes": 5,
       "type": "learn",
-      "concepts": ["strings"],
-      "prerequisites": ["variables"],
+      "concepts": [
+        "strings"
+      ],
+      "prerequisites": [
+        "variables"
+      ],
       "learning_objectives": [
         "Concatenate strings and index single characters"
       ],
@@ -32,8 +39,17 @@
         }
       ],
       "completion_requirements": {
-        "required_test_names": ["test_string_basics"]
-      }
+        "required_test_names": [
+          "test_string_basics"
+        ]
+      },
+      "solution_code": "def combine(a, b):\n    return a + b\n\n\ndef get_first_and_last(s):\n    return s[0] + s[-1]\n",
+      "source": {
+        "name": "Python official documentation (docs.python.org) — 3.1.2. Text (Strings) — indexing and concatenation",
+        "url": "https://docs.python.org/3/tutorial/introduction.html#strings",
+        "license": "Python documentation license (PSF)"
+      },
+      "xp_reward": 10
     },
     {
       "id": "strings-step-2",
@@ -43,8 +59,12 @@
       "difficulty": "beginner",
       "duration_minutes": 5,
       "type": "learn",
-      "concepts": ["strings"],
-      "prerequisites": ["variables"],
+      "concepts": [
+        "strings"
+      ],
+      "prerequisites": [
+        "variables"
+      ],
       "learning_objectives": [
         "Extract substrings with slicing [start:end]"
       ],
@@ -57,8 +77,17 @@
         }
       ],
       "completion_requirements": {
-        "required_test_names": ["test_slicing"]
-      }
+        "required_test_names": [
+          "test_slicing"
+        ]
+      },
+      "solution_code": "def drop_last_char(s):\n    return s[:-1]\n\n\ndef get_prefix(s, n):\n    return s[:n]\n",
+      "source": {
+        "name": "Python official documentation (docs.python.org) — 3.1.2. Text (Strings) — slicing",
+        "url": "https://docs.python.org/3/tutorial/introduction.html#strings",
+        "license": "Python documentation license (PSF)"
+      },
+      "xp_reward": 10
     },
     {
       "id": "strings-01",
@@ -66,10 +95,15 @@
       "description": "Transform words using string concatenation, indexing, slicing, and joining.",
       "order": 28,
       "difficulty": "beginner",
-      "duration_minutes": 20,
+      "duration_minutes": 8,
       "type": "challenge",
-      "concepts": ["strings"],
-      "prerequisites": ["variables", "conditionals"],
+      "concepts": [
+        "strings"
+      ],
+      "prerequisites": [
+        "variables",
+        "conditionals"
+      ],
       "learning_objectives": [
         "Concatenate strings with +",
         "Index and slice strings with positive and negative indices",
@@ -110,7 +144,9 @@
         "name": "Exercism Python Track — Little Sister's Vocabulary",
         "url": "https://github.com/exercism/python/tree/main/exercises/concept/little-sisters-vocab",
         "license": "MIT"
-      }
+      },
+      "solution_code": "def add_prefix_un(word):\n    \"\"\"Return word with 'un' prefix.\"\"\"\n    return 'un' + word\n\n\ndef make_word_groups(vocab_words):\n    \"\"\"Return prefix and prefixed words joined by ' :: '.\"\"\"\n    prefix = vocab_words[0]\n    return ' :: '.join([prefix] + [prefix + w for w in vocab_words[1:]])\n\n\ndef remove_suffix_ness(word):\n    \"\"\"Remove -ness suffix, fixing iness -> y spelling.\"\"\"\n    root = word[:-4]\n    if root.endswith('i'):\n        return root[:-1] + 'y'\n    return root\n\n\ndef adjective_to_verb(sentence, index):\n    \"\"\"Return the word at index with -en appended, removing trailing punctuation.\"\"\"\n    word = sentence.split()[index]\n    return word.rstrip('.') + 'en'\n",
+      "xp_reward": 25
     },
     {
       "id": "strings-practice-1",
@@ -118,14 +154,18 @@
       "description": "Format user details into an ID badge string: `\"ID: \" + name.upper() + \" (\" + role + \")\"`.",
       "order": 29,
       "difficulty": "beginner",
-      "duration_minutes": 5,
+      "duration_minutes": 6,
       "type": "practice",
-      "concepts": ["strings"],
-      "prerequisites": ["variables"],
+      "concepts": [
+        "strings"
+      ],
+      "prerequisites": [
+        "variables"
+      ],
       "learning_objectives": [
         "Combine string building techniques"
       ],
-      "starter_code": "def format_badge(name, role):\n    # TODO: Return \"ID: \" + name + \" (\" + role + \")\"\n    pass\n",
+      "starter_code": "def format_badge(name, role):\n    # TODO: return the badge text for this name and role\n    pass\n",
       "tests": [
         {
           "name": "test_format_badge",
@@ -134,23 +174,36 @@
         }
       ],
       "completion_requirements": {
-        "required_test_names": ["test_format_badge"]
-      }
+        "required_test_names": [
+          "test_format_badge"
+        ]
+      },
+      "solution_code": "def format_badge(name, role):\n    return \"ID: \" + name + \" (\" + role + \")\"\n",
+      "source": {
+        "name": "Python official documentation (docs.python.org) — 3.1.2. Text (Strings) — Introduction",
+        "url": "https://docs.python.org/3/tutorial/introduction.html#strings",
+        "license": "Python documentation license (PSF)"
+      },
+      "xp_reward": 15
     },
     {
       "id": "strings-checkpoint",
       "title": "5. Unit 6 Checkpoint: Strings Mastery",
-      "description": "Prove your string manipulation skills.",
+      "description": "wrap_string(s, char) must surround s with char on both sides, returning char + s + char using string concatenation.",
       "order": 30,
       "difficulty": "beginner",
-      "duration_minutes": 5,
+      "duration_minutes": 10,
       "type": "checkpoint",
-      "concepts": ["strings"],
-      "prerequisites": ["variables"],
+      "concepts": [
+        "strings"
+      ],
+      "prerequisites": [
+        "variables"
+      ],
       "learning_objectives": [
         "Master string slicing and building"
       ],
-      "starter_code": "def wrap_string(s, char):\n    # TODO: Return char + s + char\n    pass\n",
+      "starter_code": "def wrap_string(s, char):\n    # TODO: return s with char on both sides\n    pass\n",
       "tests": [
         {
           "name": "test_wrap_string",
@@ -159,8 +212,17 @@
         }
       ],
       "completion_requirements": {
-        "required_test_names": ["test_wrap_string"]
-      }
+        "required_test_names": [
+          "test_wrap_string"
+        ]
+      },
+      "solution_code": "def wrap_string(s, char):\n    return char + s + char\n",
+      "source": {
+        "name": "Python official documentation (docs.python.org) — 3.1.2. Text (Strings) — Introduction",
+        "url": "https://docs.python.org/3/tutorial/introduction.html#strings",
+        "license": "Python documentation license (PSF)"
+      },
+      "xp_reward": 40
     }
   ]
 }

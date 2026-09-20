@@ -44,7 +44,13 @@
         "required_test_names": [
           "test_append"
         ]
-      }
+      },
+      "source": {
+        "name": "Python official documentation (docs.python.org) — Classes — objects, attributes, and methods (Tutorial)",
+        "url": "https://docs.python.org/3/tutorial/classes.html",
+        "license": "Python documentation license (PSF)"
+      },
+      "xp_reward": 10
     },
     {
       "id": "linked-lists-step-2",
@@ -78,7 +84,44 @@
         "required_test_names": [
           "test_prepend"
         ]
-      }
+      },
+      "source": {
+        "name": "Python official documentation (docs.python.org) — Classes — instance state and self (Tutorial)",
+        "url": "https://docs.python.org/3/tutorial/classes.html",
+        "license": "Python documentation license (PSF)"
+      },
+      "xp_reward": 10,
+      "sublessons": [
+        {
+          "id": "ll-traverse-sub",
+          "title": "Write a traversal",
+          "order": 1,
+          "exercises": [
+            {
+              "id": "ll-sum-code-1",
+              "type": "code",
+              "question": "Implement `sum_values(head)` that walks the list from `head` and returns the total of every `value`, or 0 for an empty list.",
+              "starter_code": "class ListNode:\n    def __init__(self, value, next=None):\n        self.value = value\n        self.next = next\n\ndef sum_values(head):\n    # TODO: walk the list, adding each value\n    return 0\n",
+              "solution_code": "class ListNode:\n    def __init__(self, value, next=None):\n        self.value = value\n        self.next = next\n\ndef sum_values(head):\n    total = 0\n    node = head\n    while node is not None:\n        total += node.value\n        node = node.next\n    return total\n",
+              "tests": [
+                {
+                  "name": "test_sum_values",
+                  "unittest_code": "def test_sum_values(self):\n    head = ListNode(1, ListNode(2, ListNode(3)))\n    self.assertEqual(sum_values(head), 6)\n"
+                },
+                {
+                  "name": "test_sum_empty",
+                  "unittest_code": "def test_sum_empty(self):\n    self.assertEqual(sum_values(None), 0)\n"
+                },
+                {
+                  "name": "test_sum_single",
+                  "unittest_code": "def test_sum_single(self):\n    self.assertEqual(sum_values(ListNode(7)), 7)\n"
+                }
+              ],
+              "xp_reward": 15
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "linked-lists-01",
@@ -86,7 +129,7 @@
       "description": "Reverse a singly linked list in place; return the new head.",
       "order": 13,
       "difficulty": "intermediate",
-      "duration_minutes": 10,
+      "duration_minutes": 8,
       "type": "challenge",
       "section_id": "sec-dsa-1",
       "section_title": "Section 1: Data Structures & Algorithms",
@@ -112,7 +155,13 @@
         "required_test_names": [
           "test_reverse_ll"
         ]
-      }
+      },
+      "source": {
+        "name": "Python official documentation (docs.python.org) — The while statement (Language Reference)",
+        "url": "https://docs.python.org/3/reference/compound_stmts.html#while",
+        "license": "Python documentation license (PSF)"
+      },
+      "xp_reward": 25
     },
     {
       "id": "linked-lists-practice-1",
@@ -120,7 +169,7 @@
       "description": "Return the middle node's value using slow/fast pointers (for even length, return the second middle).",
       "order": 14,
       "difficulty": "intermediate",
-      "duration_minutes": 5,
+      "duration_minutes": 6,
       "type": "practice",
       "section_id": "sec-dsa-1",
       "section_title": "Section 1: Data Structures & Algorithms",
@@ -146,7 +195,13 @@
         "required_test_names": [
           "test_middle"
         ]
-      }
+      },
+      "source": {
+        "name": "Python official documentation (docs.python.org) — Classes — attribute traversal (Tutorial)",
+        "url": "https://docs.python.org/3/tutorial/classes.html",
+        "license": "Python documentation license (PSF)"
+      },
+      "xp_reward": 15
     },
     {
       "id": "linked-lists-checkpoint",
@@ -154,7 +209,7 @@
       "description": "Detect whether a linked list has a cycle (Floyd).",
       "order": 15,
       "difficulty": "intermediate",
-      "duration_minutes": 5,
+      "duration_minutes": 10,
       "type": "checkpoint",
       "section_id": "sec-dsa-1",
       "section_title": "Section 1: Data Structures & Algorithms",
@@ -180,7 +235,13 @@
         "required_test_names": [
           "test_cycle"
         ]
-      }
+      },
+      "source": {
+        "name": "Python official documentation (docs.python.org) — The while statement — Floyd two-pointer cycle detection loop (Language Reference)",
+        "url": "https://docs.python.org/3/reference/compound_stmts.html#while",
+        "license": "Python documentation license (PSF)"
+      },
+      "xp_reward": 40
     }
   ]
 }

@@ -2,20 +2,30 @@
   "id": "cpp-memory-management",
   "title": "Unit 8: Dynamic Memory & RAII",
   "order": 8,
-  "concepts": [{ "id": "cpp-raii", "title": "Dynamic Allocation & Smart Pointers", "prerequisites": ["cpp-pointers"] }],
+  "concepts": [
+    {
+      "id": "cpp-raii",
+      "title": "Dynamic Allocation & Smart Pointers",
+      "prerequisites": [
+        "cpp-pointers"
+      ]
+    }
+  ],
   "lessons": [
     {
       "id": "cpp-mem-01",
       "title": "1. Smart Pointers & RAII",
-      "description": "Use `std::unique_ptr` and RAII patterns for automated memory management.",
+      "description": "Use `std::unique_ptr` and RAII patterns for automated memory management. Implement `makeHeapInt(int value)` returning a `std::unique_ptr<int>` that owns a heap-allocated copy of `value`; prefer the `std::make_unique` factory.",
       "order": 32,
       "difficulty": "advanced",
       "duration_minutes": 5,
       "type": "learn",
       "section_id": "sec-cpp-2",
       "section_title": "Section 2: Systems & Memory",
-      "concepts": ["cpp-raii"],
-      "starter_code": "#include <memory>\n\ninline std::unique_ptr<int> makeHeapInt(int value) {\n    return std::make_unique<int>(value);\n}\n",
+      "concepts": [
+        "cpp-raii"
+      ],
+      "starter_code": "#include <memory>\n\ninline std::unique_ptr<int> makeHeapInt(int value) {\n    // TODO: return a unique_ptr owning a heap copy of value\n    return std::unique_ptr<int>();\n}\n",
       "solution_code": "#include <memory>\n\ninline std::unique_ptr<int> makeHeapInt(int value) {\n    return std::make_unique<int>(value);\n}\n",
       "tests": [
         {
@@ -24,7 +34,22 @@
           "required": true
         }
       ],
-      "completion_requirements": { "required_test_names": ["test_unique_ptr"] }
+      "completion_requirements": {
+        "required_test_names": [
+          "test_unique_ptr"
+        ]
+      },
+      "source": {
+        "name": "cppreference.com — std::unique_ptr — smart pointer that owns and disposes its object",
+        "url": "https://en.cppreference.com/w/cpp/memory/unique_ptr",
+        "license": "CC BY-SA 4.0 (cppreference.com)"
+      },
+      "learning_objectives": [
+        "Explain RAII: std::unique_ptr disposes its object when it goes out of scope",
+        "Allocate a managed heap object with std::make_unique<T>(value)",
+        "Dereference a std::unique_ptr with * like a raw pointer"
+      ],
+      "xp_reward": 10
     }
   ]
 }

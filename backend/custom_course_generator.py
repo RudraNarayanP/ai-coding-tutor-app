@@ -12,6 +12,7 @@ from typing import Any, Literal
 from pydantic import BaseModel, Field
 
 from .ai_provider import AIProvider, AIProviderError, get_ai_provider
+from .exercise_types import requires_answer_key
 from .lesson_models import (
     ConceptDefinition,
     CourseDefinition,
@@ -890,7 +891,7 @@ class CurriculumGenerator:
             '    "id": "lesson_id",\n'
             '    "title": "Lesson Title",\n'
             '    "description": "Comprehensive description tied to source content",\n'
-            '    "starter_code": "code snippet or note",\n'
+            '    "starter_code": "an UNSOLVED skeleton: signatures and a TODO comment only, never the finished answer",\n'
             '    "exercises": [\n'
             "      {\n"
             '        "id": "ex_id",\n'
@@ -1105,7 +1106,7 @@ class CurriculumGenerator:
 
         lesson_title = f"{order}. {slot.type.title()}: {c_title}"
         lesson_desc = f"Master {c_title} through {slot.type} exercises."
-        starter_code = f"# Solution code for {c_title}\nprint('{c_title}')\n"
+        starter_code = f"# {c_title}\n# Write your solution below, then press Run.\n\n"
         exercises: list[ExerciseDefinition] = []
 
         # Structured per-lesson LLM payload (difficulty-scaled generation)
@@ -1146,6 +1147,11 @@ class CurriculumGenerator:
                 if ex_type not in ("mcq", "fill_blank", "code_completion", "tiny_coding", "true_false", "matching", "ordering"):
                     ex_type = "mcq"
 
+                if requires_answer_key(ex_type) and not ans:
+                    # No key means no gradeable item; emitting one would either
+                    # auto-pass or mark correct work wrong.
+                    continue
+
                 exercises.append(
                     ExerciseDefinition(
                         id=f"{lesson_id}-ex-{e_idx}",
@@ -1157,10 +1163,13 @@ class CurriculumGenerator:
                         worked_example_takeaway=raw_ex.get("worked_example_takeaway") or "",
                         deep_dive=raw_ex.get("deep_dive") or "",
                         options=clean_opts,
-                        correct_answer=ans or clean_opts[0],
+                        # An answer-keyed item with no key cannot be graded, and
+                        # defaulting to the first option silently makes option 1
+                        # correct for every such item. Drop it instead.
+                        correct_answer=ans,
                         explanation=raw_ex.get("explanation") or f"This directly relates to {c_title} as covered in {topic_name}.",
                         starter_code=raw_ex.get("starter_code") or ("" if ex_type == "mcq" else "# Enter your solution\n"),
-                        solution_code=raw_ex.get("solution_code") or ("print('ok')\n" if ex_type in ("tiny_coding", "code_completion") else None),
+                        solution_code=raw_ex.get("solution_code"),
                         xp_reward=15,
                     )
                 )
@@ -1451,7 +1460,7 @@ def build_custom_curriculum_from_text(
             type="learn",
             section_id="section-1",
             section_title="Section 1: Foundations",
-            starter_code=f"# Write notes or python logic for {course_title}\nprint('Learning: {course_title}')\n",
+            starter_code=f"# {course_title}\n# Write your notes or Python logic below.\n\n",
             concepts=[c.id for c in concepts[:1]],
             learning_objectives=["Understand core principles", "Review key terminology"],
             sublessons=[
@@ -1492,7 +1501,7 @@ def build_custom_curriculum_from_text(
             type="practice",
             section_id="section-1",
             section_title="Section 1: Foundations",
-            starter_code=f"# Practice exercise\ndef process_content():\n    return 'success'\n",
+            starter_code=f"# Practice exercise\ndef process_content():\n    # TODO: implement the behaviour the task asks for\n    pass\n",
             concepts=[c.id for c in concepts[1:2]],
             learning_objectives=["Practice practical code patterns", "Implement basic algorithms"],
             xp_reward=20,
@@ -1510,7 +1519,7 @@ def build_custom_curriculum_from_text(
             type="review",
             section_id="section-1",
             section_title="Section 1: Foundations",
-            starter_code="# Review solution\nresult = True\n",
+            starter_code="# Review task\n# Write your solution below\nresult = None\n",
             concepts=[c.id for c in concepts[1:2]],
             xp_reward=20,
         )
@@ -1527,7 +1536,7 @@ def build_custom_curriculum_from_text(
             type="challenge",
             section_id="section-2",
             section_title="Section 2: Advanced Mastery",
-            starter_code="# Challenge: Solve full requirement\n",
+            starter_code="# Challenge: solve the full requirement\n# Write your solution below, then press Run.\n\n",
             concepts=[c.id for c in concepts[2:]],
             xp_reward=30,
         )
@@ -1545,7 +1554,7 @@ def build_custom_curriculum_from_text(
             section_id="section-2",
             section_title="Section 2: Advanced Mastery",
             test_out_eligible=True,
-            starter_code="# Checkpoint assessment code\n",
+            starter_code="# Checkpoint: apply what this unit taught you\n# Write your solution below, then press Run.\n\n",
             concepts=[c.id for c in concepts],
             xp_reward=50,
         )

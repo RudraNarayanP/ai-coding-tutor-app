@@ -16,7 +16,7 @@
       "description": "Implement `dot(a, b)` for equal-length lists of numbers.",
       "order": 1,
       "difficulty": "intermediate",
-      "duration_minutes": 8,
+      "duration_minutes": 5,
       "type": "learn",
       "section_id": "sec-mlmath-1",
       "section_title": "Section 1: Math & Data for ML",
@@ -40,7 +40,13 @@
         "required_test_names": [
           "test_dot"
         ]
-      }
+      },
+      "source": {
+        "name": "Dive into Deep Learning — §2.3 Linear Algebra — dot product is 'a sum over the products of the elements at the same position'",
+        "url": "https://d2l.ai/chapter_preliminaries/linear-algebra.html",
+        "license": "Apache 2.0 (Dive into Deep Learning book)"
+      },
+      "xp_reward": 10
     },
     {
       "id": "vectors-norm",
@@ -48,7 +54,7 @@
       "description": "Implement `l2_norm(v)` returning sqrt(sum of squares).",
       "order": 2,
       "difficulty": "intermediate",
-      "duration_minutes": 8,
+      "duration_minutes": 5,
       "type": "learn",
       "section_id": "sec-mlmath-1",
       "section_title": "Section 1: Math & Data for ML",
@@ -72,7 +78,13 @@
         "required_test_names": [
           "test_l2_norm"
         ]
-      }
+      },
+      "source": {
+        "name": "Dive into Deep Learning — §2.3 Linear Algebra — 'the l_2 norm measures the (Euclidean) length of a vector'",
+        "url": "https://d2l.ai/chapter_preliminaries/linear-algebra.html",
+        "license": "Apache 2.0 (Dive into Deep Learning book)"
+      },
+      "xp_reward": 10
     },
     {
       "id": "matrix-transpose",
@@ -104,7 +116,13 @@
         "required_test_names": [
           "test_transpose"
         ]
-      }
+      },
+      "source": {
+        "name": "Dive into Deep Learning — §2.3 Linear Algebra — transpose exchanges rows and columns",
+        "url": "https://d2l.ai/chapter_preliminaries/linear-algebra.html",
+        "license": "Apache 2.0 (Dive into Deep Learning book)"
+      },
+      "xp_reward": 25
     },
     {
       "id": "matrix-multiply",
@@ -112,7 +130,7 @@
       "description": "Implement `matvec(A, x)` multiplying matrix A by vector x.",
       "order": 4,
       "difficulty": "intermediate",
-      "duration_minutes": 8,
+      "duration_minutes": 6,
       "type": "practice",
       "section_id": "sec-mlmath-1",
       "section_title": "Section 1: Math & Data for ML",
@@ -136,7 +154,44 @@
         "required_test_names": [
           "test_matvec"
         ]
-      }
+      },
+      "source": {
+        "name": "Dive into Deep Learning — §2.3 Linear Algebra — 'The matrix-vector product Ax is ... the dot product' of each row",
+        "url": "https://d2l.ai/chapter_preliminaries/linear-algebra.html",
+        "license": "Apache 2.0 (Dive into Deep Learning book)"
+      },
+      "xp_reward": 15,
+      "sublessons": [
+        {
+          "id": "dot-code-sub",
+          "title": "Write the inner product",
+          "order": 1,
+          "exercises": [
+            {
+              "id": "dot-code-1",
+              "type": "code",
+              "question": "Implement `dot(a, b)` returning the sum of the elementwise products of two equal-length sequences - the inner operation `matvec` repeats for every row.",
+              "starter_code": "def dot(a, b):\n    # TODO: multiply matching elements together and add them up\n    return 0\n",
+              "solution_code": "def dot(a, b):\n    return sum(x * y for x, y in zip(a, b))\n",
+              "tests": [
+                {
+                  "name": "test_dot_basic",
+                  "unittest_code": "def test_dot_basic(self):\n    self.assertEqual(dot([1, 2, 3], [4, 5, 6]), 32)\n"
+                },
+                {
+                  "name": "test_dot_zeros",
+                  "unittest_code": "def test_dot_zeros(self):\n    self.assertEqual(dot([9, 8], [0, 0]), 0)\n"
+                },
+                {
+                  "name": "test_dot_negatives",
+                  "unittest_code": "def test_dot_negatives(self):\n    self.assertEqual(dot([1, -2], [3, 4]), -5)\n"
+                }
+              ],
+              "xp_reward": 15
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "vectors-checkpoint",
@@ -144,7 +199,7 @@
       "description": "Implement `cosine_sim(a, b)` = dot/(||a|| ||b||). Return 0 if either norm is 0.",
       "order": 5,
       "difficulty": "intermediate",
-      "duration_minutes": 8,
+      "duration_minutes": 10,
       "type": "checkpoint",
       "section_id": "sec-mlmath-1",
       "section_title": "Section 1: Math & Data for ML",
@@ -168,7 +223,13 @@
         "required_test_names": [
           "test_cosine_sim"
         ]
-      }
+      },
+      "source": {
+        "name": "Google Machine Learning Glossary/docs — Measuring similarity from embeddings (Cosine similarity)",
+        "url": "https://developers.google.com/machine-learning/clustering/dnn-clustering/supervised-similarity",
+        "license": "CC BY 4.0 (Google Machine Learning Crash Course)"
+      },
+      "xp_reward": 40
     }
   ]
 }

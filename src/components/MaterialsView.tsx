@@ -5,12 +5,14 @@ interface MaterialsViewProps {
   materials: Material[]
   completedMaterialIds: string[]
   onCompleteMaterial: (id: string, user_answer?: string) => Promise<MaterialCompletionResult | null>
+  variant?: 'default' | 'workspace'
 }
 
 export const MaterialsView: React.FC<MaterialsViewProps> = ({
   materials,
   completedMaterialIds,
   onCompleteMaterial,
+  variant = 'default',
 }) => {
   const [filterStage, setFilterStage] = useState<string>('all')
   const [selectedAnswers, setSelectedAnswers] = useState<Record<string, string>>({})
@@ -44,7 +46,7 @@ export const MaterialsView: React.FC<MaterialsViewProps> = ({
   }
 
   return (
-    <div className="duo-materials-view" style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
+    <div className={`duo-materials-view${variant === 'workspace' ? ' duo-materials-view--workspace' : ''}`} style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
       <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
         <h2 style={{ fontSize: '24px', fontWeight: 900, color: 'var(--ink)' }}>Curated Learning Resources</h2>
         <p style={{ fontSize: '15px', color: 'var(--ink-soft)', fontWeight: 600 }}>
