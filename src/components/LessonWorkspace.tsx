@@ -121,7 +121,7 @@ export const LessonWorkspace: React.FC<LessonWorkspaceProps> = ({
       </div>
 
       {/* Code editor */}
-      <CodeEditor value={code} onChange={onCodeChange} filename="exercise.py" />
+      <CodeEditor value={code} onChange={onCodeChange} filename="exercise.py" variant="workspace" />
 
       {/* Tutor feedback */}
       {(tutorFeedback || tutorLoading) && (

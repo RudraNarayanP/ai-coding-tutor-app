@@ -403,6 +403,24 @@ class LessonEngine:
             }
         )
 
+    async def _execute_preview(self, lang: str, code: str) -> dict:
+        if lang.lower().strip() != "python":
+            return {
+                "passed": False,
+                "tests": [],
+                "stdout": "",
+                "stderr": f"Preview run is not supported for {lang}.",
+                "error": "unsupported_language",
+            }
+        return await self.executor.run(
+            {
+                "language": lang,
+                "code": code,
+                "tests": [],
+                "mode": "preview",
+            }
+        )
+
     def _tests_from_execution(self, tests_spec: list, execution: dict) -> tuple[list[TestResult], bool]:
         result_by_name = {
             result.get("name"): result for result in execution.get("tests", [])
@@ -438,7 +456,18 @@ class LessonEngine:
         if exercise is None:
             raise KeyError(f"Exercise '{exercise_id}' not found in lesson '{lesson_id}'.")
         if not exercise.tests:
-            raise KeyError(f"Exercise '{exercise_id}' has no runnable tests.")
+            execution = await self._execute_preview(lang, code)
+            return ProgressionResult(
+                lesson_id=lesson_id,
+                passed=execution.get("error") is None,
+                completed=False,
+                next_lesson_id=None,
+                tests=[],
+                stdout=execution.get("stdout", ""),
+                stderr=execution.get("stderr", ""),
+                execution_time_ms=execution.get("execution_time_ms", 0),
+                error=execution.get("error"),
+            )
 
         execution = await self._execute_tests(lang, code, exercise.tests)
         tests, passed = self._tests_from_execution(exercise.tests, execution)

@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 
 interface CodeEditorProps {
   value: string
@@ -6,28 +6,49 @@ interface CodeEditorProps {
   onKeyDown?: (e: React.KeyboardEvent<HTMLTextAreaElement>) => void
   disabled?: boolean
   filename?: string
+  variant?: 'default' | 'workspace'
+  ariaLabel?: string
+  showHeader?: boolean
 }
 
-// ─── CodeEditor ──────────────────────────────────────────────────────────────
-// Textarea-based editor with a synchronized line-number gutter. Preserves the
-// keyboard contract the tests rely on:
-//   - Tab inserts indentation
-//   - Ctrl+Enter / Shift+Enter triggers onRun
-
+// Shared full-pane editor used by Learn, Practice, Create, and lesson workspaces.
 export const CodeEditor: React.FC<CodeEditorProps> = ({
   value,
   onChange,
   onKeyDown,
   disabled = false,
   filename = 'exercise.py',
+  variant = 'default',
+  ariaLabel = 'Code editor',
+  showHeader = true,
 }) => {
-  const lineCount = value.split('\n').length
+  const bodyRef = useRef<HTMLDivElement>(null)
+  const [fittedLines, setFittedLines] = useState(24)
+  const contentLines = Math.max(1, value.split('\n').length)
+  const lineCount = Math.max(contentLines, fittedLines)
+
+  useEffect(() => {
+    const el = bodyRef.current
+    if (!el) return
+
+    const update = () => {
+      const lineHeight = 24
+      const padding = 32
+      const next = Math.floor((el.clientHeight - padding) / lineHeight)
+      if (next > 0) setFittedLines(next)
+    }
+
+    update()
+    if (typeof ResizeObserver === 'undefined') return
+    const observer = new ResizeObserver(update)
+    observer.observe(el)
+    return () => observer.disconnect()
+  }, [variant])
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
     if (onKeyDown) {
       onKeyDown(e)
     }
-    // Expose a run callback via a custom event so App stays in control.
     if ((e.ctrlKey && e.key === 'Enter') || (e.shiftKey && e.key === 'Enter')) {
       e.preventDefault()
       window.dispatchEvent(new CustomEvent('patchwork:run'))
@@ -47,11 +68,15 @@ export const CodeEditor: React.FC<CodeEditorProps> = ({
   }
 
   return (
-    <div className="code-editor">
-      <div className="code-editor-header">
-        <span className="code-editor-filename">{filename}</span>
-      </div>
-      <div className="code-editor-body">
+    <div className={`code-editor${variant === 'workspace' ? ' code-editor--workspace' : ''}`}>
+      {showHeader && (
+        <div className="code-editor-header">
+          <span className="code-editor-filename">
+            {filename}
+          </span>
+        </div>
+      )}
+      <div ref={bodyRef} className="code-editor-body">
         <div className="line-numbers" aria-hidden="true">
           {Array.from({ length: lineCount }, (_, i) => (
             <div key={i} className="line-number">
@@ -59,16 +84,19 @@ export const CodeEditor: React.FC<CodeEditorProps> = ({
             </div>
           ))}
         </div>
-        <textarea
-          className="code-editor-textarea"
-          value={value}
-          onChange={(e) => onChange(e.target.value)}
-          onKeyDown={handleKeyDown}
-          disabled={disabled}
-          spellCheck={false}
-          aria-label="Code editor"
-          role="textbox"
-        />
+        <div className="code-editor-input">
+          <textarea
+            className="code-editor-textarea"
+            value={value}
+            onChange={(e) => onChange(e.target.value)}
+            onKeyDown={handleKeyDown}
+            disabled={disabled}
+            readOnly={disabled}
+            spellCheck={false}
+            aria-label={ariaLabel}
+            role="textbox"
+          />
+        </div>
       </div>
     </div>
   )

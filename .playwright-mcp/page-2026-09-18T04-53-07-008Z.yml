@@ -1,0 +1,59 @@
+- generic "Coding exercise workspace" [ref=e398]:
+  - banner [ref=e399]:
+    - button "Exit exercise" [ref=e400] [cursor=pointer]: ✕
+    - progressbar "Lesson progress" [ref=e401]
+    - generic [ref=e402]:
+      - button "Feedback" [ref=e403] [cursor=pointer]:
+        - generic [aria-hidden] [ref=e404]: 💬
+        - text: Feedback
+      - button "Mute audio" [ref=e405] [cursor=pointer]:
+        - generic [aria-hidden] [ref=e406]: 🔊
+        - text: Audio
+  - generic [ref=e407]:
+    - complementary "Task instructions" [ref=e408]:
+      - generic [ref=e409]: Learn
+      - generic [ref=e410]:
+        - generic [ref=e411]:
+          - generic [aria-hidden] [ref=e412]: 📋
+          - text: YOUR TASK
+        - 'heading "Step 1: Calculate Ticket Total" [level=2] [ref=e413]'
+        - paragraph [ref=e414]: "3 tickets cost $12 each. Calculate ticket_total using multiplication:"
+        - list [ref=e415]:
+          - listitem [ref=e416]:
+            - generic [ref=e417]: "1"
+            - generic [ref=e418]: Multiplication (*) calculates the total cost of multiple identical items.
+          - listitem [ref=e419]:
+            - generic [ref=e420]: "2"
+            - generic [ref=e421]:
+              - text: Fill in the blank with
+              - code [ref=e422]: num_tickets
+              - text: .
+          - listitem [ref=e423]:
+            - generic [ref=e424]: "3"
+            - generic [ref=e425]: Multiplication gives us $36 for 3 tickets.
+    - generic [ref=e426]:
+      - generic [ref=e427]:
+        - main "Code editor" [ref=e428]:
+          - generic [ref=e429]:
+            - generic [ref=e430]:
+              - generic [ref=e431]: calculate_ticket_total.py
+              - generic [ref=e433]:
+                - generic [aria-hidden] [ref=e434]:
+                  - generic [ref=e435]: "1"
+                  - generic [ref=e436]: "2"
+                  - generic [ref=e437]: "3"
+                - textbox "Code editor" [ref=e438]: ticket_price = 12 num_tickets = 3 ticket_total = ticket_price * ___
+            - button "Reset code" [ref=e439] [cursor=pointer]: ↺
+        - complementary "Output" [ref=e440]:
+          - generic [ref=e441]:
+            - generic [ref=e442]: Output
+            - button "Clear output" [ref=e443] [cursor=pointer]: 🗑
+      - contentinfo [ref=e445]:
+        - button "BACK" [ref=e447] [cursor=pointer]:
+          - generic [aria-hidden] [ref=e448]: ←
+          - text: BACK
+        - generic [ref=e449]:
+          - button "RUN" [ref=e450] [cursor=pointer]:
+            - generic [aria-hidden] [ref=e451]: ▷
+            - text: RUN
+          - button "SUBMIT" [ref=e452] [cursor=pointer]

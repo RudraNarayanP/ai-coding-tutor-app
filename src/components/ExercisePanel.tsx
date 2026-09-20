@@ -1,5 +1,13 @@
 import React, { useMemo, useState } from 'react'
 import { ExerciseFeedback } from './ExerciseFeedback'
+import { CodeEditor } from './CodeEditor'
+import ExerciseWorkspace from './ExerciseWorkspace'
+import {
+  assembleFillBlankCode,
+  blankCount,
+  buildFillBlankTemplate,
+  extractAnswersFromEdited,
+} from '../utils/assembleFillBlankCode'
 
 interface Props {
   exercise: any
@@ -16,6 +24,11 @@ interface Props {
   onRunCode?: () => void
   isRunningCode?: boolean
   lessonId?: string | null
+  onBack?: () => void
+  soundEnabled?: boolean
+  onToggleSound?: () => void
+  runResults?: Array<{ name: string; passed: boolean; required: boolean; description?: string; error?: string | null }> | null
+  language?: string
 }
 
 const MCQ_TYPES = ['mcq', 'true_false', 'output_prediction', 'debugging', 'identify_error']
@@ -211,27 +224,37 @@ const ExercisePanel: React.FC<Props> = (props) => {
     </div>
   )
 
-  const renderFillBlank = () => (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-      {((exercise.blanks && exercise.blanks.length > 0) ? exercise.blanks : ['_']).map((_: any, idx: number) => (
-        <div key={idx} style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-          <label style={{ fontWeight: 700, fontSize: '14px' }}>Blank {idx + 1}:</label>
-          <input type="text" value={exState.answers?.[idx] || exState.answer || ''}
-            placeholder="Type answer here..." disabled={disabled}
-            onChange={(e) => {
-              const val = e.target.value
-              onInputChange((prev: any) => {
-                const curAns = [...(prev[exercise.id]?.answers || [])]
-                curAns[idx] = val
-                return { ...prev, [exercise.id]: { ...prev[exercise.id], answers: curAns, answer: curAns[0] } }
-              })
-            }}
-            style={{ padding: '8px 12px', borderRadius: '8px', border: '2px solid var(--line)', fontWeight: 700, fontSize: '14px', background: 'var(--input-bg)', color: 'var(--ink)' }}
-          />
-        </div>
-      ))}
-    </div>
-  )
+  const renderFillBlank = () => {
+    const template = buildFillBlankTemplate(
+      exercise.starter_code || exercise.code || '',
+      exercise.blanks,
+      exercise.question
+    )
+    const empty = Array.from({ length: blankCount(template) }, () => '')
+    const raw = exState.code
+    const value = raw && !String(raw).includes('___')
+      ? raw
+      : assembleFillBlankCode(template, exState.answers?.length ? exState.answers : empty)
+
+    return (
+      <CodeEditor
+        value={value}
+        disabled={disabled}
+        filename="exercise.py"
+        variant="workspace"
+        onChange={(next) => {
+          const answers = extractAnswersFromEdited(template, next)
+          setState({ code: next, answers, answer: answers[0] ?? '' })
+        }}
+        onKeyDown={(e) => {
+          if ((e.ctrlKey || e.shiftKey) && e.key === 'Enter') {
+            e.preventDefault()
+            props.onRunCode?.()
+          }
+        }}
+      />
+    )
+  }
 
   const renderSelectMultiple = () => (
     <div className="exercise-options-grid">
@@ -256,55 +279,20 @@ const ExercisePanel: React.FC<Props> = (props) => {
     const starter = (rawStarter.includes("___") || rawStarter.includes("---")) ? '' : rawStarter
     const value = exState.code ?? starter
     return (
-      <div className="exercise-code-block">
-        <label className="exercise-code-label" htmlFor={`code-input-${exercise.id}`}>
-          Your code:
-        </label>
-        <textarea
-          id={`code-input-${exercise.id}`}
-          className="exercise-code-textarea"
-          value={value}
-          disabled={disabled}
-          spellCheck={false}
-          rows={Math.min(10, Math.max(3, (value || starter).split("\n").length + 2))}
-          aria-label="Your code answer"
-          placeholder="Write your code here…"
-          onChange={(e) => setState({ code: e.target.value })}
-          onKeyDown={(e) => {
-            if (e.key === 'Tab') {
-              e.preventDefault()
-              const target = e.target as HTMLTextAreaElement
-              const start = target.selectionStart
-              const end = target.selectionEnd
-              const next = value.substring(0, start) + '    ' + value.substring(end)
-              setState({ code: next })
-              requestAnimationFrame(() => {
-                target.selectionStart = target.selectionEnd = start + 4
-              })
-            }
-          }}
-        />
-        <div className="exercise-code-actions">
-          {props.onRunCode && (
-            <button
-              type="button"
-              className="duo-button duo-button-primary"
-              disabled={disabled || props.isRunningCode}
-              onClick={props.onRunCode}
-            >
-              {props.isRunningCode ? 'Running…' : 'Run code'}
-            </button>
-          )}
-          <button
-            type="button"
-            className="duo-button duo-button-secondary exercise-code-reset"
-            disabled={disabled || !starter}
-            onClick={() => setState({ code: starter })}
-          >
-            Reset to starter
-          </button>
-        </div>
-      </div>
+      <CodeEditor
+        value={value}
+        disabled={disabled}
+        filename="exercise.py"
+        variant="workspace"
+        ariaLabel="Your code answer"
+        onChange={(next) => setState({ code: next })}
+        onKeyDown={(e) => {
+          if ((e.ctrlKey || e.shiftKey) && e.key === 'Enter') {
+            e.preventDefault()
+            props.onRunCode?.()
+          }
+        }}
+      />
     )
   }
 
@@ -449,7 +437,36 @@ const ExercisePanel: React.FC<Props> = (props) => {
     return renderGeneric()
   }
 
-  const showStarterBlock = (exercise.starter_code || exercise.code) && !CODE_TYPES.includes(exType)
+  const showStarterBlock = (exercise.starter_code || exercise.code) && !CODE_TYPES.includes(exType) && !FILL_TYPES.includes(exType)
+
+  const isCodingExercise = CODE_TYPES.includes(exType) || FILL_TYPES.includes(exType)
+
+  if (isCodingExercise && props.onBack) {
+    return (
+      <ExerciseWorkspace
+        exercise={exercise}
+        exType={exType}
+        exerciseInput={exerciseInput}
+        exercisePhase={exercisePhase}
+        exerciseFeedback={exerciseFeedback}
+        exercisePosition={exercisePosition}
+        exerciseTotal={exerciseTotal}
+        completedExerciseCount={completedExerciseCount}
+        onInputChange={onInputChange}
+        onSubmit={onSubmit}
+        onContinue={onContinue}
+        onRetry={onRetry}
+        onRun={props.onRunCode}
+        isRunning={props.isRunningCode}
+        onBack={props.onBack}
+        soundEnabled={props.soundEnabled ?? true}
+        onToggleSound={props.onToggleSound ?? (() => {})}
+        lessonId={lessonId}
+        runResults={props.runResults}
+        language={props.language}
+      />
+    )
+  }
 
   return (
     <div className="exercise-interactive-box">

@@ -1,0 +1,57 @@
+- generic "Coding exercise workspace" [ref=f1e399]:
+  - banner [ref=f1e400]:
+    - button "Exit exercise" [ref=f1e401] [cursor=pointer]: ✕
+    - progressbar "Lesson progress" [ref=f1e402]
+    - generic [ref=f1e403]:
+      - button "Feedback" [ref=f1e404] [cursor=pointer]:
+        - generic [aria-hidden] [ref=f1e405]: 💬
+        - text: Feedback
+      - button "Mute audio" [ref=f1e406] [cursor=pointer]:
+        - generic [aria-hidden] [ref=f1e407]: 🔊
+        - text: Audio
+  - generic [ref=f1e408]:
+    - complementary "Task instructions" [ref=f1e409]:
+      - generic [ref=f1e410]: Learn
+      - generic [ref=f1e411]:
+        - generic [ref=f1e412]:
+          - generic [aria-hidden] [ref=f1e413]: 📋
+          - text: YOUR TASK
+        - 'heading "Step 1: Calculate Ticket Total" [level=2] [ref=f1e414]'
+        - paragraph [ref=f1e415]: "3 tickets cost $12 each. Calculate ticket_total using multiplication:"
+        - list [ref=f1e416]:
+          - listitem [ref=f1e417]:
+            - generic [ref=f1e418]: "1"
+            - generic [ref=f1e419]: Multiplication (*) calculates the total cost of multiple identical items.
+          - listitem [ref=f1e420]:
+            - generic [ref=f1e421]: "2"
+            - generic [ref=f1e422]:
+              - text: Fill in the blank with
+              - code [ref=f1e423]: num_tickets
+              - text: .
+          - listitem [ref=f1e424]:
+            - generic [ref=f1e425]: "3"
+            - generic [ref=f1e426]: Multiplication gives us $36 for 3 tickets.
+    - generic [ref=f1e427]:
+      - generic [ref=f1e428]:
+        - main "Code editor" [ref=f1e429]:
+          - generic [ref=f1e430]:
+            - region "Code terminal" [ref=f1e431]:
+              - tablist "Panel" [ref=f1e433]:
+                - tab "calculate_ticket_total.py" [selected] [ref=f1e434]
+              - code [ref=f1e437]:
+                - text: ticket_price = 12 num_tickets = 3 ticket_total = ticket_price *
+                - textbox "Blank 1" [ref=f1e438]
+            - button "Reset code" [ref=f1e439] [cursor=pointer]: ↺
+        - complementary "Output" [ref=f1e440]:
+          - generic [ref=f1e441]:
+            - generic [ref=f1e442]: Output
+            - button "Clear output" [ref=f1e443] [cursor=pointer]: 🗑
+      - contentinfo [ref=f1e445]:
+        - button "BACK" [ref=f1e447] [cursor=pointer]:
+          - generic [aria-hidden] [ref=f1e448]: ←
+          - text: BACK
+        - generic [ref=f1e449]:
+          - button "RUN" [ref=f1e450] [cursor=pointer]:
+            - generic [aria-hidden] [ref=f1e451]: ▷
+            - text: RUN
+          - button "SUBMIT" [ref=f1e452] [cursor=pointer]

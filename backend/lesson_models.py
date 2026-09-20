@@ -146,6 +146,10 @@ class PublicExerciseView(BaseModel):
     title: str = ""
     type: str = "code"
     question: str = ""
+    micro_explanation: str = ""
+    worked_example: str = ""
+    worked_example_takeaway: str = ""
+    deep_dive: str = ""
     options: list[str] = []
     blanks: list[str] = []
     pairs: list[MatchingPair] = []

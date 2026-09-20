@@ -131,7 +131,9 @@ class DockerSandbox:
         code_bytes = payload["code"].encode("utf-8")
         if len(code_bytes) > self.limits.max_code_bytes:
             raise SandboxError("Submitted code exceeds the 64 KiB limit.", 413)
-        if not await self._probe_docker():
+        # Preview runs always use the host runner so learners see fresh stdout logic
+        # without rebuilding the Docker image after runner changes.
+        if payload.get("mode") == "preview" or not await self._probe_docker():
             return await self._run_local(payload)
         await self._ensure_image()
         container = f"patchwork-run-{uuid.uuid4().hex}"

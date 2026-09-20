@@ -9,6 +9,7 @@ import {
 } from '../../utils/projectApi'
 import { compactText, milestoneDescription, sourceExcerpt, whyExplanation } from './learnerCopy'
 import { ProjectTerminal, makeTerminalLine, shellPrompt, type TerminalLine } from './ProjectTerminal'
+import { CodeEditor } from '../CodeEditor'
 
 // ─── ProjectWorkspace ─────────────────────────────────────────────────────────
 // The persistent, VS Code-like workspace for a Create Course guided project.
@@ -442,19 +443,19 @@ export const ProjectWorkspace: React.FC<ProjectWorkspaceProps> = ({ courseId, on
                 </button>
               </div>
 
-              <textarea
-                className="pw-editor"
+              <CodeEditor
                 value={activeFile?.content ?? ''}
-                onChange={(e) => updateActiveFile(e.target.value)}
+                onChange={updateActiveFile}
+                filename={activePath || 'main.py'}
+                variant="workspace"
+                showHeader={false}
+                ariaLabel={`Editor for ${activePath}`}
                 onKeyDown={(e) => {
                   if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') {
                     e.preventDefault()
                     handleRun()
                   }
                 }}
-                spellCheck={false}
-                aria-label={`Editor for ${activePath}`}
-                placeholder="Write your code here. Your work persists across the whole project."
               />
 
               <div className="pw-editor-toolbar">

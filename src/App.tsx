@@ -25,6 +25,13 @@ loseHeart,
   levelFromXp,
 } from './utils/gamification'
 import { playPatchworkSound } from './utils/audio'
+import {
+  allBlanksFilled,
+  assembleFillBlankCode,
+  buildFillBlankTemplate,
+  extractAnswersFromEdited,
+  isFillBlankCodeComplete,
+} from './utils/assembleFillBlankCode'
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 type TestResult = {
@@ -36,6 +43,7 @@ type TestResult = {
 }
 
 const CODE_EXERCISE_TYPES = ['code', 'tiny_coding', 'identify_mistake']
+const FILL_EXERCISE_TYPES = ['fill_blank', 'code_completion']
 
 type LessonSummary = {
   id: string
@@ -286,6 +294,10 @@ function App() {
   const currentExerciseIsCode = useMemo(() => {
     if (!currentExercise) return false
     return CODE_EXERCISE_TYPES.includes((currentExercise.type || 'code').toLowerCase().trim())
+  }, [currentExercise])
+  const currentExerciseIsFill = useMemo(() => {
+    if (!currentExercise) return false
+    return FILL_EXERCISE_TYPES.includes((currentExercise.type || '').toLowerCase().trim())
   }, [currentExercise])
   const showLessonRunCode = !lessonHasExercises || lessonComplete || currentExerciseIsCode
 
@@ -562,8 +574,26 @@ setIsLessonActive(true)
   }, [code, lesson])
 
   const getRunnableCode = useCallback(() => {
-    if (currentExerciseIsCode && currentExercise) {
+    if (currentExercise && (currentExerciseIsCode || currentExerciseIsFill)) {
       const exState = exerciseInput[currentExercise.id] || {}
+      if (currentExerciseIsFill) {
+        const template = buildFillBlankTemplate(
+          currentExercise.starter_code || currentExercise.code || '',
+          currentExercise.blanks,
+          currentExercise.question
+        )
+        const edited = exState.code
+        if (edited && !edited.includes('___')) return edited
+        const answers: string[] = (exState.answers?.length
+          ? exState.answers
+          : edited
+            ? extractAnswersFromEdited(template, edited)
+            : exState.answer
+              ? [exState.answer]
+              : []
+        ).map((answer: string) => String(answer ?? '').split('___').join(''))
+        return assembleFillBlankCode(template, answers)
+      }
       return (
         exState.code ??
         currentExercise.starter_code ??
@@ -572,20 +602,58 @@ setIsLessonActive(true)
       )
     }
     return code
-  }, [currentExerciseIsCode, currentExercise, exerciseInput, code])
+  }, [currentExerciseIsCode, currentExerciseIsFill, currentExercise, exerciseInput, code])
 
   // ─── Run Code & Tests ───────────────────────────────────────────────────────
   const runTests = useCallback(async () => {
     if (!lesson) return
     const codeToRun = getRunnableCode()
+
+    if (currentExerciseIsFill && currentExercise) {
+      const template = buildFillBlankTemplate(
+        currentExercise.starter_code || currentExercise.code || '',
+        currentExercise.blanks,
+        currentExercise.question
+      )
+      const exState = exerciseInput[currentExercise.id] || {}
+      const edited = exState.code
+      const answers: string[] = (exState.answers?.length
+        ? exState.answers
+        : edited
+          ? extractAnswersFromEdited(template, edited)
+          : exState.answer
+            ? [exState.answer]
+            : []
+      ).map((answer: string) => String(answer ?? '').split('___').join(''))
+      const blanksReady = edited
+        ? isFillBlankCodeComplete(template, edited)
+        : allBlanksFilled(template, answers)
+      if (!blanksReady) {
+        setCharState('confused')
+        setCharSpeech('Fill in every blank before running your code.')
+        setExerciseInput((prev: any) => ({
+          ...prev,
+          [currentExercise.id]: {
+            ...prev[currentExercise.id],
+            runOutput: { error: 'Fill in every blank before running.' },
+          },
+        }))
+        return
+      }
+    }
+
     setIsRunning(true)
     setResults(null)
     setCharState('thinking')
-    setCharSpeech('Testing your code against strict test cases…')
+    setCharSpeech(
+      currentExerciseIsFill
+        ? 'Running your code…'
+        : 'Testing your code against strict test cases…'
+    )
 
     try {
       const runUrl =
-        lessonHasExercises && currentExerciseIsCode && currentExercise
+        lessonHasExercises && (currentExerciseIsCode || currentExerciseIsFill) && currentExercise
           ? `/api/lessons/${lesson.id}/exercises/${currentExercise.id}/run`
           : `/api/lessons/${lesson.id}/run`
 
@@ -604,6 +672,33 @@ setIsLessonActive(true)
           data?.message ||
           'Code execution failed. Make sure the backend is running.'
         throw new Error(message)
+      }
+
+      if (currentExerciseIsFill && currentExercise) {
+        const runError = data.error || null
+        const runOutput = {
+          stdout: data.stdout || '',
+          stderr: data.stderr || '',
+          error: runError,
+        }
+        setExerciseInput((prev: any) => ({
+          ...prev,
+          [currentExercise.id]: {
+            ...prev[currentExercise.id],
+            runOutput,
+          },
+        }))
+        if (runError) {
+          playPatchworkSound('error', soundEnabled)
+          setCharState('confused')
+          setCharSpeech(runError)
+        } else {
+          playPatchworkSound('success', soundEnabled)
+          setCharState('happy')
+          setCharSpeech('Code ran! Check the output, then tap Check Answer to continue.')
+          setFeedback('Code ran — tap Check Answer to save progress and continue.')
+        }
+        return
       }
 
       setResults(data.tests || [])
@@ -668,7 +763,9 @@ setIsLessonActive(true)
     lessons,
     lessonHasExercises,
     currentExerciseIsCode,
+    currentExerciseIsFill,
     currentExercise,
+    exerciseInput,
     fetchLessons,
     fetchProgression,
   ])
@@ -766,7 +863,20 @@ setIsLessonActive(true)
     if (['mcq', 'true_false', 'output_prediction', 'debugging', 'identify_error'].includes(exType)) {
       payload = { answer: inputState.answer || '' }
     } else if (['fill_blank', 'code_completion'].includes(exType)) {
-      payload = { answers: inputState.answers || (inputState.answer ? [inputState.answer] : []) }
+      const template = buildFillBlankTemplate(
+        ex.starter_code || '',
+        ex.blanks,
+        ex.question
+      )
+      const edited = inputState.code
+      const answers = (
+        edited
+          ? extractAnswersFromEdited(template, edited)
+          : (inputState.answers || (inputState.answer ? [inputState.answer] : []))
+      ).map((a: string) =>
+        String(a ?? '').split('___').join('').split('\n')[0].trim()
+      )
+      payload = { answers, code: edited }
     } else if (exType === 'select_multiple') {
       payload = { answers: inputState.answers || inputState.selected || [] }
     } else if (exType === 'ordering') {
@@ -980,8 +1090,34 @@ setExercisePhase('incorrect')
   const profileStreak = userProfile?.streak
   const dailyProgress = getDailyProgress()
 
+  const isCodingType = (ex: Exercise | null | undefined) => {
+    if (!ex) return false
+    const t = (ex.type || 'code').toLowerCase().trim()
+    return CODE_EXERCISE_TYPES.includes(t) || FILL_EXERCISE_TYPES.includes(t)
+  }
+
+  const lastCompletedCodingExercise = allExercises.filter(
+    (ex) => isCodingType(ex) && completedExerciseIds.has(ex.id)
+  ).at(-1) ?? null
+
+  const codingFeedbackActive =
+    !currentExercise &&
+    (exercisePhase === 'correct' || exercisePhase === 'incorrect') &&
+    exerciseFeedback !== null &&
+    lastCompletedCodingExercise !== null
+
+  const workspaceExercise = currentExercise ?? (codingFeedbackActive ? lastCompletedCodingExercise : null)
+
+  const isCodingWorkspace =
+    isLessonActive &&
+    lessonHasExercises &&
+    workspaceExercise !== null &&
+    isCodingType(workspaceExercise)
+
+  const handleExerciseBack = () => setIsLessonActive(false)
+
   return (
-    <div className="duo-layout">
+    <div className={`duo-layout${isCodingWorkspace ? ' duo-layout--exercise-focus' : ''}${activeTab === 'practice' ? ' duo-layout--practice' : ''}`}>
       {/* ─── Left Sidebar Navigation Bar ─────────────────────────────────── */}
       <aside className="duo-nav-sidebar" aria-label="Main Navigation">
         <div className="duo-logo-area">
@@ -1132,7 +1268,8 @@ setExercisePhase('incorrect')
 
       {/* ─── Main Viewport Area ─────────────────────────────────────────── */}
       <div className="duo-main-viewport">
-        {/* Top Sticky Header Bar */}
+        {/* Top Sticky Header Bar (hidden during fullscreen coding exercises) */}
+        {!isCodingWorkspace && activeTab !== 'practice' && (
         <header className="duo-top-header" role="banner">
           <div className="duo-header-left">
             <button
@@ -1178,6 +1315,7 @@ setExercisePhase('incorrect')
             </div>
           </div>
         </header>
+        )}
 
         {backendError && (
           <div className="backend-error-banner" role="alert" style={{ background: '#fee2e2', color: '#991b1b', padding: '10px 24px', fontWeight: 700, fontSize: '14px' }}>
@@ -1194,6 +1332,29 @@ setExercisePhase('incorrect')
               </div>
             )}
             {isLessonActive && lesson ? (
+              isCodingWorkspace && workspaceExercise ? (
+                <ExercisePanel
+                  exercise={workspaceExercise}
+                  exerciseInput={exerciseInput}
+                  exercisePhase={exercisePhase}
+                  exerciseFeedback={exerciseFeedback}
+                  exercisePosition={exercisePosition}
+                  exerciseTotal={exerciseTotal}
+                  completedExerciseCount={completedExerciseCount}
+                  onInputChange={setExerciseInput}
+                  onSubmit={() => submitSubLessonExercise({ ...workspaceExercise, sublessonId: workspaceExercise.sublessonId })}
+                  onContinue={continueToNextExercise}
+                  onRetry={retryCurrentExercise}
+                  onRunCode={runTests}
+                  isRunningCode={isRunning}
+                  lessonId={lesson.id}
+                  onBack={handleExerciseBack}
+                  soundEnabled={soundEnabled}
+                  onToggleSound={toggleSound}
+                  runResults={results}
+                  language={selectedLanguage}
+                />
+              ) : (
               /* ─── FOCUSED LESSON WORKSPACE ────────────────────────────── */
               <div className="duo-exercise-stage">
                 <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '16px' }}>
@@ -1253,17 +1414,19 @@ setExercisePhase('incorrect')
                       onSubmit={() => submitSubLessonExercise({ ...currentExercise, sublessonId: currentExercise.sublessonId })}
                       onContinue={continueToNextExercise}
                       onRetry={retryCurrentExercise}
-                      onRunCode={runTests}
+                      onRunCode={
+                        currentExerciseIsCode || currentExerciseIsFill ? runTests : undefined
+                      }
                       isRunningCode={isRunning}
                       lessonId={lesson.id}
                     />
                   ) : (
-                    <CodeEditor value={code} onChange={setCode} filename="exercise.py" onKeyDown={handleEditorKeyDown} />
+                    <CodeEditor value={code} onChange={setCode} filename="exercise.py" variant="workspace" onKeyDown={handleEditorKeyDown} />
                   )}
                 </main>
 
                 {/* Immediate Test Results */}
-                {results && (
+                {results && !isCodingWorkspace && (
                   <div
                     ref={resultsRef}
                     className={`duo-feedback-panel ${allPassed ? 'success' : 'error'}`}
@@ -1365,6 +1528,7 @@ setExercisePhase('incorrect')
                 </div>
 
               </div>
+              )
             ) : (
               <LearnPath
                 lessons={safeLessons}
@@ -1378,7 +1542,7 @@ setExercisePhase('incorrect')
         )}
 
         {activeTab === 'practice' && (
-          <div className="duo-page-container">
+          <div className="duo-page-container duo-page-container--practice">
             <PracticeHub
               lessons={safeLessons}
               isLoadingLesson={isLoadingLesson}
@@ -1387,6 +1551,7 @@ setExercisePhase('incorrect')
                 void loadLesson(item, true)
               }}
               onOpenGuidebook={() => setIsGuidebookOpen(true)}
+              onBack={() => setActiveTab('learn')}
               materials={materials}
               completedMaterialIds={completedMaterialIds}
               onCompleteMaterial={handleCompleteMaterial}

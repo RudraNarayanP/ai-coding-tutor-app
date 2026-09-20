@@ -1,0 +1,137 @@
+- generic [ref=f3e3]:
+  - complementary "Main Navigation" [ref=f3e4]:
+    - generic [ref=f3e5]: patchwork
+    - navigation "App Navigation Tabs" [ref=f3e7]:
+      - button "🏠 LEARN" [ref=f3e8] [cursor=pointer]:
+        - generic [ref=f3e9]: 🏠
+        - generic [ref=f3e10]: LEARN
+      - button "💪 PRACTICE" [ref=f3e11] [cursor=pointer]:
+        - generic [ref=f3e12]: 💪
+        - generic [ref=f3e13]: PRACTICE
+      - button "🎯 QUESTS" [ref=f3e14] [cursor=pointer]:
+        - generic [ref=f3e15]: 🎯
+        - generic [ref=f3e16]: QUESTS
+      - button "📚 COURSES" [ref=f3e17] [cursor=pointer]:
+        - generic [ref=f3e18]: 📚
+        - generic [ref=f3e19]: COURSES
+      - button "✨ CREATE" [ref=f3e20] [cursor=pointer]:
+        - generic [ref=f3e21]: ✨
+        - generic [ref=f3e22]: CREATE
+      - button "🛡️ LEADERBOARDS" [ref=f3e23] [cursor=pointer]:
+        - generic [ref=f3e24]: 🛡️
+        - generic [ref=f3e25]: LEADERBOARDS
+      - button "👤 PROFILE" [ref=f3e26] [cursor=pointer]:
+        - generic [ref=f3e27]: 👤
+        - generic [ref=f3e28]: PROFILE
+    - generic [ref=f3e29]:
+      - generic [ref=f3e30]:
+        - button "Mute audio feedback" [ref=f3e31] [cursor=pointer]: 🔊 Sound
+        - button "AI tutor on" [ref=f3e32] [cursor=pointer]: AI On
+      - combobox "Select AI Provider" [ref=f3e34]:
+        - option "⚠ Ollama (Local)"
+        - option "⚠ OpenAI"
+        - option "⚠ Anthropic Claude"
+        - option "✓ OpenRouter" [selected]
+        - option "⚠ Google Gemini"
+      - button "⚙️ Settings" [ref=f3e36] [cursor=pointer]
+      - generic [ref=f3e37]: OpenRouter ready
+  - generic "Practice workspace" [ref=f3e873]:
+    - banner [ref=f3e874]:
+      - button "Back to Learn" [ref=f3e875] [cursor=pointer]: ✕
+      - progressbar "Course progress" [ref=f3e876]
+      - generic [ref=f3e878]: 💪 Practice
+    - generic [ref=f3e880]:
+      - complementary "Practice tasks" [ref=f3e881]:
+        - generic [ref=f3e882]: Practice
+        - generic [ref=f3e883]:
+          - generic [ref=f3e884]:
+            - generic [aria-hidden] [ref=f3e885]: 📋
+            - text: YOUR TASK
+          - heading "Today's Review" [level=2] [ref=f3e886]
+          - paragraph [ref=f3e887]: Rewind a lesson, open extra practice, or check the guidebook — same tools as before, in one workspace.
+          - list [ref=f3e888]:
+            - listitem [ref=f3e889]:
+              - 'button "1 Unit Rewind Continue your current lesson: 4. Cinema Ticket Billing (Practice)" [ref=f3e890] [cursor=pointer]':
+                - generic [ref=f3e891]: "1"
+                - generic [ref=f3e892]:
+                  - generic [ref=f3e893]: Unit Rewind
+                  - generic [ref=f3e894]: "Continue your current lesson: 4. Cinema Ticket Billing (Practice)"
+            - listitem [ref=f3e895]:
+              - button "2 Practice lessons Open 4. Cinema Ticket Billing (Practice)" [ref=f3e896] [cursor=pointer]:
+                - generic [ref=f3e897]: "2"
+                - generic [ref=f3e898]:
+                  - generic [ref=f3e899]: Practice lessons
+                  - generic [ref=f3e900]: Open 4. Cinema Ticket Billing (Practice)
+            - listitem [ref=f3e901]:
+              - button "3 Completed lessons 3 completed — reopen 3. Recipe Preparation Calculator" [ref=f3e902] [cursor=pointer]:
+                - generic [ref=f3e903]: "3"
+                - generic [ref=f3e904]:
+                  - generic [ref=f3e905]: Completed lessons
+                  - generic [ref=f3e906]: 3 completed — reopen 3. Recipe Preparation Calculator
+            - listitem [ref=f3e907]:
+              - button "4 Guidebook Open syntax and concept reference for the active course" [ref=f3e908] [cursor=pointer]:
+                - generic [ref=f3e909]: "4"
+                - generic [ref=f3e910]:
+                  - generic [ref=f3e911]: Guidebook
+                  - generic [ref=f3e912]: Open syntax and concept reference for the active course
+            - listitem [ref=f3e913]:
+              - button "5 Learning resources 3 curated resources for this course" [ref=f3e914] [cursor=pointer]:
+                - generic [ref=f3e915]: "5"
+                - generic [ref=f3e916]:
+                  - generic [ref=f3e917]: Learning resources
+                  - generic [ref=f3e918]: 3 curated resources for this course
+      - generic [ref=f3e919]:
+        - generic [ref=f3e920]:
+          - main "Practice session" [ref=f3e921]:
+            - generic [ref=f3e922]:
+              - generic [ref=f3e924]:
+                - generic [aria-hidden] [ref=f3e925]: 📘
+                - text: guidebook.md
+              - generic [ref=f3e926]:
+                - heading "Course guidebook" [level=3] [ref=f3e942]
+                - paragraph [ref=f3e928]: Open the syntax and concept reference for the active course whenever you need a quick reminder.
+          - complementary "Output" [ref=f3e929]:
+            - generic [ref=f3e932]:
+              - generic [ref=f3e933]: Ready
+              - generic [ref=f3e934]: 3 lessons completed
+              - generic [ref=f3e935]: 0/3 resources completed
+        - contentinfo [ref=f3e936]:
+          - button "BACK" [ref=f3e938] [cursor=pointer]:
+            - generic [aria-hidden] [ref=f3e939]: ←
+            - text: BACK
+          - button "OPEN" [active] [ref=f3e943] [cursor=pointer]
+  - dialog "Contextual Guidebook" [ref=f3e945]:
+    - generic [ref=f3e946]:
+      - generic [ref=f3e947]:
+        - heading "📖 Guidebook" [level=2] [ref=f3e948]
+        - paragraph [ref=f3e949]: PYTHON Syntax Reference
+      - button "Close Guidebook" [ref=f3e950] [cursor=pointer]: ×
+    - generic [ref=f3e951]:
+      - generic [ref=f3e952]:
+        - heading "Variable Assignment" [level=3] [ref=f3e953]
+        - paragraph [ref=f3e954]: Assigns a value to a named variable in memory.
+        - generic [ref=f3e955]: "SYNTAX:"
+        - code [ref=f3e957]: variable_name = value
+        - generic [ref=f3e958]: "EXAMPLE:"
+        - code [ref=f3e960]: x = 42 name = 'Alice'
+      - generic [ref=f3e961]:
+        - heading "Function Definition" [level=3] [ref=f3e962]
+        - paragraph [ref=f3e963]: Defines a reusable block of code that takes arguments and returns a value.
+        - generic [ref=f3e964]: "SYNTAX:"
+        - code [ref=f3e966]: "def function_name(param1, param2): return result"
+        - generic [ref=f3e967]: "EXAMPLE:"
+        - code [ref=f3e969]: "def add(a, b): return a + b"
+      - generic [ref=f3e970]:
+        - heading "Conditional Branching" [level=3] [ref=f3e971]
+        - paragraph [ref=f3e972]: Executes code blocks conditionally based on boolean evaluations.
+        - generic [ref=f3e973]: "SYNTAX:"
+        - code [ref=f3e975]: "if condition: ... elif other_condition: ... else: ..."
+        - generic [ref=f3e976]: "EXAMPLE:"
+        - code [ref=f3e978]: "if score >= 90: print('Grade A') else: print('Pass')"
+      - generic [ref=f3e979]:
+        - heading "List Comprehension" [level=3] [ref=f3e980]
+        - paragraph [ref=f3e981]: Concise syntax to construct a new list by transforming an existing iterable.
+        - generic [ref=f3e982]: "SYNTAX:"
+        - code [ref=f3e984]: "[expression for item in iterable if condition]"
+        - generic [ref=f3e985]: "EXAMPLE:"
+        - code [ref=f3e987]: squares = [x**2 for x in range(5)]
