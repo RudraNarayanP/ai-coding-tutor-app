@@ -206,6 +206,33 @@ def run_python_unittest_test(student_code: str, student_ns: dict, exec_error: st
     }
 
 
+def run_python_preview(code: str) -> dict:
+    """Execute student code and return stdout/stderr without running tests."""
+    ns: dict = {"__name__": "__main__"}
+    stdout, stderr, error = exec_student_code(code, ns)
+    if error is None and not stdout.strip():
+        var_lines: list[str] = []
+        for name, val in sorted(ns.items()):
+            if name.startswith("_") or name == "__builtins__":
+                continue
+            if callable(val):
+                continue
+            try:
+                var_lines.append(f"{name} = {repr(val)}")
+            except Exception:  # noqa: BLE001
+                var_lines.append(f"{name} = <{type(val).__name__}>")
+        if var_lines:
+            stdout = "\n".join(var_lines)
+    return {
+        "name": "preview",
+        "passed": error is None,
+        "error": error,
+        "stdout": stdout,
+        "stderr": stderr,
+        "execution_time_ms": 0,
+    }
+
+
 def run_python_tests(code: str, tests: list[dict]) -> list[dict]:
     if not tests:
         return []
@@ -722,29 +749,45 @@ def run_js_ts_tests(language: str, code: str, tests: list[dict]) -> list[dict]:
             runner_file = os.path.join(tmpdir, f"test_{test['name']}{ext}")
 
             if test_body:
-                full_test_src = f"""
-const solution = require('./solution${ext}');
-try {{
-    {test_body}
-    console.log("TEST_PASSED");
-}} catch (err) {{
-    console.error(err && err.message ? err.message : String(err));
-    process.exit(1);
-}}
-"""
-                # Handle ES module vs CommonJS export fallback
-                if "export " in code or "import " in code:
+                is_esm = re.search(r"^\s*(import|export)\b", code, re.MULTILINE) or \
+                    re.search(r"\bexport\s+(default|const|function|class)\b", code)
+                # Always run the test body inside an async function so that
+                # `await` works in tests and async assertions are actually
+                # awaited (instead of floating as unhandled rejections).
+                indented_body = textwrap.indent(test_body, "    ")
+                if is_esm:
                     full_test_src = f"""
-import * as solution from './solution${ext}';
-import { assert_fn } from 'node:assert';
+import * as solution from './solution{ext}';
+const __runTest = async () => {{
+{indented_body}
+}};
 try {{
-    {test_body}
+    await __runTest();
     console.log("TEST_PASSED");
 }} catch (err) {{
     console.error(err && err.message ? err.message : String(err));
     process.exit(1);
 }}
 """
+                else:
+                    full_test_src = f"""
+const solution = require('./solution{ext}');
+const __runTest = async () => {{
+{indented_body}
+}};
+__runTest().then(() => {{
+    console.log("TEST_PASSED");
+}}).catch((err) => {{
+    console.error(err && err.message ? err.message : String(err));
+    process.exit(1);
+}});
+"""
+                # Node treats .ts/.js as CommonJS unless the package opts into
+                # ESM; mark the sandbox package as a module for ESM student code.
+                if is_esm:
+                    with open(os.path.join(tmpdir, "package.json"), "w",
+                              encoding="utf-8") as f:
+                        f.write('{"type": "module"}\n')
             else:
                 full_test_src = code
 
@@ -753,6 +796,9 @@ try {{
 
             cmd = ["node"]
             if is_ts:
+                # strip-only runs identically on Node >=20.19 (sandbox image)
+                # and Node 22/24 (dev hosts). Curriculum TS must therefore
+                # avoid transform-only syntax (parameter properties, enums).
                 cmd.append("--experimental-strip-types")
             cmd.append(runner_file)
 
@@ -828,6 +874,28 @@ def main() -> None:
         language = request.get("language", "python")
         code = request["code"]
         tests = request.get("tests", [])
+        mode = request.get("mode", "test")
+        if mode == "preview":
+            lang = language.lower().strip()
+            if lang in ("python", "py", ""):
+                preview = run_python_preview(code)
+            else:
+                preview = {
+                    "name": "preview",
+                    "passed": False,
+                    "error": f"Preview run is not supported for {language}.",
+                    "stdout": "",
+                    "stderr": "",
+                    "execution_time_ms": 0,
+                }
+            print(json.dumps({
+                "passed": preview["passed"],
+                "tests": [preview],
+                "stdout": preview.get("stdout", ""),
+                "stderr": preview.get("stderr", ""),
+                "error": preview.get("error"),
+            }))
+            return
         results = run_all_tests(language, code, tests)
         all_stdout = "\n".join(r["stdout"] for r in results if r["stdout"])
         all_stderr = "\n".join(r["stderr"] for r in results if r["stderr"])
