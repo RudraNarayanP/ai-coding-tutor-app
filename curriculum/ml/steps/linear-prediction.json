@@ -1,0 +1,253 @@
+{
+  "skill": "linear-prediction",
+  "concept": "linear-prediction",
+  "objective": "Compute a linear prediction by hand, implement it, and fix it when the weights are swapped",
+  "story": {
+    "why_this": "Everything a model knows at runtime is one number pushed through one formula. Before we can talk about improving predictions we have to be able to make one.",
+    "why_next": "Predictions can be wrong — so the next concept measures how wrong."
+  },
+  "note": "Authored, not generated. Every distractor below is a real novice misconception, and the graded steps reuse the harness's own execution checks so the key can be proved both ways.",
+  "steps": [
+    {
+      "id": "lp-intro",
+      "stage": "introduce",
+      "widget": "present",
+      "concept": "linear-prediction",
+      "order": 1,
+      "stakes": "free",
+      "content": {
+        "lead": "A model turns one input number into one prediction.",
+        "symbols": {
+          "x": "the input you are asking about",
+          "w": "weight — how much a change in x moves the answer",
+          "b": "bias — the answer when x is zero"
+        },
+        "formula": "prediction = w * x + b",
+        "say": "Read it as: scale the input by w, then shift the result by b."
+      },
+      "action": "Let's see it"
+    },
+    {
+      "id": "lp-worked",
+      "stage": "show",
+      "widget": "present",
+      "concept": "linear-prediction",
+      "order": 1,
+      "stakes": "free",
+      "content": {
+        "lead": "Put numbers in and watch the order of operations.",
+        "given": "x = 3, w = 2, b = 1",
+        "lines": [
+          "prediction = w * x + b",
+          "prediction = 2 * 3 + 1",
+          "prediction = 7"
+        ],
+        "takeaway": "Multiply first, then shift. w decides the steepness, b decides where the line starts."
+      },
+      "action": "Continue"
+    },
+    {
+      "id": "lp-predict-up",
+      "stage": "interact",
+      "widget": "mcq",
+      "concept": "linear-prediction",
+      "order": 1,
+      "stakes": "free",
+      "targets_misconception": "formula_error",
+      "question": "x = 4, w = 3, b = 2. What is the prediction?",
+      "options": ["14", "9", "6", "24"],
+      "correct_answer": "14",
+      "feedback": {
+        "14": "Right — 3 scaled by 4 gives 12, then the bias shifts it to 14.",
+        "9": "You shifted before scaling. Multiply first: 3 * 4, then add 2.",
+        "6": "That is w + b. w is not added to anything — it scales x.",
+        "24": "That multiplies all three. b is a shift, not another factor."
+      },
+      "explanation": "w is the only thing that touches x; b is applied once, afterwards."
+    },
+    {
+      "id": "lp-match-symbols",
+      "stage": "interact",
+      "widget": "matching",
+      "concept": "linear-prediction",
+      "order": 2,
+      "stakes": "free",
+      "targets_misconception": "variable-as-container",
+      "question": "Match each symbol to what it does.",
+      "pairs": [
+        { "left": "w", "right": "how strongly the input counts" },
+        { "left": "b", "right": "the prediction when the input is zero" },
+        { "left": "x", "right": "the number you are asking about" }
+      ],
+      "feedback": {
+        "w": "A weight scales. Double w and every change in x counts twice as much.",
+        "b": "Bias is the starting value — set x to zero and b is all that is left."
+      }
+    },
+    {
+      "id": "lp-build",
+      "stage": "guided",
+      "widget": "ordering",
+      "concept": "linear-prediction",
+      "order": 1,
+      "difficulty": 1,
+      "stakes": "free",
+      "question": "Put the lines in the order that computes a prediction.",
+      "options": [
+        "w = 2",
+        "x = 3",
+        "prediction = w * x + b",
+        "print(prediction)"
+      ],
+      "correct_order": ["w = 2", "x = 3", "prediction = w * x + b", "print(prediction)"],
+      "remediation_of": null,
+      "feedback": {
+        "hint": "A name has to hold a value before the line that reads it can run."
+      }
+    },
+    {
+      "id": "lp-worked-easier",
+      "stage": "show",
+      "widget": "present",
+      "concept": "linear-prediction",
+      "order": 2,
+      "stakes": "free",
+      "remediation_of": "lp-fill",
+      "content": {
+        "lead": "Here is the same function almost finished.",
+        "lines": [
+          "def predict(x, w, b):",
+          "    #  w * x  is the scaled input",
+          "    return w * x + b"
+        ],
+        "takeaway": "The body is one expression: scale, then shift. Nothing else happens."
+      },
+      "action": "Try the blank again"
+    },
+    {
+      "id": "lp-fill",
+      "stage": "scaffolded",
+      "widget": "code_completion",
+      "concept": "linear-prediction",
+      "order": 1,
+      "difficulty": 1,
+      "stakes": "free",
+      "targets_misconception": "wrong_variable",
+      "question": "Complete the prediction so it scales the input, then shifts it.",
+      "starter_code": "def predict(x, w, b):\n    return w * ___ + b\n",
+      "solution_code": "def predict(x, w, b):\n    return w * x + b\n",
+      "blanks": ["x"],
+      "feedback": {
+        "b": "b is the shift at the end. The thing being scaled is the input.",
+        "w": "w already sits in front of the blank — putting it again squares the weight."
+      },
+      "tests": [
+        { "name": "test_fill_predict", "unittest_code": "def test_fill_predict(self):\n    self.assertEqual(predict(2, 3, 1), 7)\n", "required": true }
+      ]
+    },
+    {
+      "id": "lp-independent",
+      "stage": "independent",
+      "widget": "code",
+      "concept": "linear-prediction",
+      "order": 1,
+      "difficulty": 2,
+      "stakes": "charged",
+      "question": "Write predict(x, w, b) from scratch. No blanks this time.",
+      "starter_code": "def predict(x, w, b):\n    pass\n",
+      "solution_code": "def predict(x, w, b):\n    return w * x + b\n",
+      "hints": [
+        "One expression is enough — you do not need a temporary variable.",
+        "Which of the three names gets scaled, and which one is only added?"
+      ],
+      "tests": [
+        { "name": "test_predict", "unittest_code": "def test_predict(self):\n    self.assertEqual(predict(2, 3, 1), 7)\n", "required": true },
+        { "name": "test_predict_zero_input_uses_bias", "unittest_code": "def test_predict_zero_input_uses_bias(self):\n    self.assertEqual(predict(0, 5, -2), -2)\n", "required": true }
+      ]
+    },
+    {
+      "id": "lp-debug",
+      "stage": "explain",
+      "widget": "identify_error",
+      "concept": "linear-prediction",
+      "order": 1,
+      "stakes": "free",
+      "targets_misconception": "wrong_variable",
+      "question": "This returns 8 for x = 3, w = 2, b = 1 instead of 7. What is wrong?",
+      "code": "def predict(x, w, b):\n    return x * b + w\n",
+      "options": [
+        "x and b are multiplied, so the input is scaled by the bias",
+        "the addition should happen before the multiplication",
+        "the function needs a return type annotation",
+        "nothing is wrong; 8 is the correct prediction"
+      ],
+      "correct_answer": "x and b are multiplied, so the input is scaled by the bias",
+      "feedback": {
+        "x and b are multiplied, so the input is scaled by the bias": "Yes — w and b have been swapped, so the input is scaled by 1 and shifted by 2.",
+        "the addition should happen before the multiplication": "Order of operations is not the problem here; the names in the product are."
+      },
+      "explanation": "Swapping two similarly-shaped names is the most common slip in this formula. Reading the line as English — 'scale the input by the weight' — catches it."
+    },
+    {
+      "id": "lp-transfer",
+      "stage": "transfer",
+      "widget": "code",
+      "concept": "linear-prediction",
+      "order": 1,
+      "difficulty": 3,
+      "stakes": "charged",
+      "question": "Same shape, new story: an invoice charges per item plus a flat fee. Write total(items, price, fee).",
+      "starter_code": "def total(items, price, fee):\n    pass\n",
+      "solution_code": "def total(items, price, fee):\n    return price * items + fee\n",
+      "hints": [
+        "Which quantity is being scaled, and which one only shifts the result?",
+        "Write one example invoice out by hand before you touch the editor."
+      ],
+      "tests": [
+        { "name": "test_total", "unittest_code": "def test_total(self):\n    self.assertEqual(total(3, 2, 1), 7)\n", "required": true },
+        { "name": "test_total_no_items", "unittest_code": "def test_total_no_items(self):\n    self.assertEqual(total(0, 9, 4), 4)\n", "required": true }
+      ]
+    },
+    {
+      "id": "lp-recall",
+      "stage": "review",
+      "widget": "output_prediction",
+      "concept": "linear-prediction",
+      "order": 1,
+      "stakes": "free",
+      "question": "Later, without the formula in front of you: what does this print?",
+      "code": "def predict(x, w, b):\n    return w * x + b\n\nprint(predict(10, 0, 4))\n",
+      "options": ["4", "0", "10", "14"],
+      "correct_answer": "4",
+      "feedback": {
+        "4": "Right — with w = 0 the input contributes nothing and only the bias remains.",
+        "0": "That would erase the shift. b still applies even when w is zero."
+      },
+      "explanation": "A weight of zero removes the input's influence entirely; the bias is what is left."
+    },
+    {
+      "id": "lp-mixed-check",
+      "stage": "mastery",
+      "widget": "select_multiple",
+      "concept": "linear-prediction",
+      "order": 1,
+      "difficulty": 3,
+      "stakes": "charged",
+      "question": "w is doubled and b is unchanged. Which statements hold for prediction(x, w, b)?",
+      "options": [
+        "the gap between x = 1 and x = 2 doubles",
+        "the value at x = 0 stays the same",
+        "every prediction doubles",
+        "the value at x = 0 doubles"
+      ],
+      "correct_answer": [
+        "the gap between x = 1 and x = 2 doubles",
+        "the value at x = 0 stays the same"
+      ],
+      "feedback": {
+        "every prediction doubles": "Only true at x = 0 is false — the shift is untouched, so the outputs are not simply scaled."
+      },
+      "explanation": "This is the mixed check: it asks about the two jobs the two names do, which only separates if you actually hold the model."
+    }
+  ]
+}
