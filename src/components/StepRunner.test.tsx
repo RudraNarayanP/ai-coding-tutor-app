@@ -150,16 +150,23 @@ describe('StepRunner', () => {
     expect(props.advance).toHaveBeenCalledTimes(1)
   })
 
-  it('hints are released one rung at a time, and counting them costs evidence', () => {
+  it('hints are released one rung at a time, and never run out mid-sentence', () => {
     const ladderStep = step({ id: 'lp-independent', stage: 'independent', widget: 'code',
                               question: 'Write predict().',
                               starter_code: 'def predict(x, w, b):\n    pass\n',
                               hints: ['Which name gets scaled?', 'One expression is enough.'] })
 
-    /** The real parent: tapping a hint raises the count, which gates the next. */
+    /** The real parent: authored first, then the generated ladder, then stop. */
     function Harness() {
       const [used, setUsed] = useState(0)
-      const props = baseProps([ladderStep], { hintsUsed: used, bumpHints: () => setUsed((n) => n + 1) })
+      const [extra, setExtra] = useState<string[]>([])
+      const bump = () => {
+        if (used < 2) setUsed((n) => n + 1)
+        else setExtra((list) => [...list, `Nudge ${list.length + 1}: name the value the check wants.`])
+      }
+      const props = baseProps([ladderStep], {
+        hintsUsed: used, extraHints: extra, bumpHints: bump,
+      })
       return <StepRunner {...(props as any)} />
     }
 
@@ -172,8 +179,28 @@ describe('StepRunner', () => {
 
     fireEvent.click(screen.getByRole('button', { name: /Hint 2 of 2/ }))
     expect(screen.getByText('One expression is enough.')).toBeInTheDocument()
-    // No third rung to farm: the ladder caps help and still expects an answer.
+    // No third authored card to farm...
     expect(screen.queryByRole('button', { name: /Hint 3/ })).not.toBeInTheDocument()
+    // ...but the request is not over: the tutor ladder takes it from here.
+    fireEvent.click(screen.getByRole('button', { name: /Ask for a nudge \(1 of 2\)/ }))
+    expect(screen.getByText(/Nudge 1/)).toBeInTheDocument()
+    expect(screen.getByText('One expression is enough.')).toBeInTheDocument()
+
+    fireEvent.click(screen.getByRole('button', { name: /Ask for a nudge \(2 of 2\)/ }))
+    expect(screen.getByText(/Nudge 2/)).toBeInTheDocument()
+    // Both ladders capped: the note appears, everything already revealed stays.
+    expect(screen.getByText(/No more hints/)).toBeInTheDocument()
+    expect(screen.getByText('Which name gets scaled?')).toBeInTheDocument()
+  })
+
+  it('a rung with no authored hints can still be helped', () => {
+    const bare = step({ id: 'lp-fill', stage: 'scaffolded', widget: 'code_completion',
+                        question: 'Complete the line.', hints: [] })
+    const props = baseProps([bare])
+    render(<StepRunner {...(props as any)} />)
+    // Silence on the hint button is how a learner ends up clicking "Show full
+    // answer": lp-fill ships no hints at all, so the nudge ladder is the offer.
+    expect(screen.getByRole('button', { name: /Ask for a nudge \(1 of 2\)/ })).toBeInTheDocument()
   })
 
   it('an editor rung is edited as code, and stays disabled once it has passed', () => {

@@ -14,6 +14,9 @@ import ExerciseAnswerInput from '../components/ExerciseAnswerInput'
 import { CodeEditor } from '../components/CodeEditor'
 import type { LadderSession, LadderStep, StepOutcome } from '../learning/useStepSession'
 
+/** Must match EXTRA_HINTS_PER_STEP in `learning/useStepSession.ts`. */
+const AI_HINTS = 2
+
 type RunnerProps = {
   session: LadderSession
   step: LadderStep | null
@@ -24,7 +27,9 @@ type RunnerProps = {
   clearOutcome: () => void
   busy: boolean
   hintsUsed: number
-  bumpHints: () => void
+  extraHints?: string[]
+  hintBusy?: boolean
+  bumpHints: () => void | Promise<void>
   advance: () => void
   markSeen: () => void
   attempt: () => Promise<StepOutcome | null>
@@ -61,6 +66,8 @@ export function StepRunner(props: RunnerProps) {
           outcome={outcome}
           busy={props.busy}
           hintsUsed={props.hintsUsed}
+          extraHints={props.extraHints}
+          hintBusy={props.hintBusy}
           bumpHints={props.bumpHints}
           onAdvance={props.advance}
           onAttempt={props.attempt}
@@ -144,7 +151,9 @@ function PracticeCard(props: {
   outcome: StepOutcome | null
   busy: boolean
   hintsUsed: number
-  bumpHints: () => void
+  extraHints?: string[]
+  hintBusy?: boolean
+  bumpHints: () => void | Promise<void>
   onAdvance: () => void
   onAttempt: () => Promise<StepOutcome | null>
   onRetry: () => void
@@ -165,6 +174,11 @@ function PracticeCard(props: {
   )
   const isEditor = isEditorish(step)
   const answered = hasAnswer(step, input)
+  const authored = step.hints ?? []
+  const extra = props.extraHints ?? []
+  const moreAuthoredHints = props.hintsUsed < authored.length
+  const canAskAI = !moreAuthoredHints && extra.length < AI_HINTS
+  const revealed = [...authored.slice(0, props.hintsUsed), ...extra]
 
   return (
     <div className="lr-card">
@@ -203,35 +217,37 @@ function PracticeCard(props: {
       ) : null}
 
       <div className="lr-actions">
-        {(step.hints?.length ?? 0) > 0 ? (
-          <div className="lr-hints">
-            {props.hintsUsed < step.hints!.length ? (
+        <div className="lr-hints">
+            {moreAuthoredHints || canAskAI ? (
               <button
                 type="button"
                 className="duo-button duo-button-secondary lr-hint-btn"
                 onClick={() => {
-                  props.bumpHints()
                   setShowHints(true)
+                  void props.bumpHints()
                 }}
-                disabled={busy}
+                disabled={busy || props.hintBusy}
               >
-                💡 Hint {props.hintsUsed + 1} of {step.hints!.length}
+                {props.hintBusy
+                  ? 'Thinking…'
+                  : moreAuthoredHints
+                    ? `💡 Hint ${props.hintsUsed + 1} of ${authored.length}`
+                    : `💡 Ask for a nudge (${extra.length + 1} of ${AI_HINTS})`}
               </button>
             ) : (
-              // The button retires when the ladder runs out; the hints already
-              // asked for stay on screen, or the last tap would erase its own
-              // reward and the learner would be told "no more" mid-sentence.
+              // Both ladders ran out. The hints already asked for stay on screen,
+              // or the last tap would erase its own reward and the learner would
+              // be told "no more" mid-sentence.
               <span className="lr-hint-exhausted">No more hints — this one is yours.</span>
             )}
-            {showHints && props.hintsUsed > 0 ? (
+            {showHints && revealed.length > 0 ? (
               <ol className="lr-hint-list">
-                {step.hints!.slice(0, props.hintsUsed).map((hint, i) => (
+                {revealed.map((hint, i) => (
                   <li key={i}>{hint}</li>
                 ))}
               </ol>
             ) : null}
           </div>
-        ) : null}
 
         {outcome?.passed ? (
           <button type="button" className="duo-button duo-button-primary lr-cta" onClick={props.onAdvance}>
@@ -263,7 +279,10 @@ function CompletionScreen({ session, outcome, onNextLesson, onExit }: {
   onNextLesson: (lessonId: string) => void
   onExit: () => void
 }) {
-  const demonstrated = outcome?.demonstrated ?? session.demonstrated
+  // The lesson's own concept, from the session the server regenerated after the
+  // last attempt — not `outcome.demonstrated`, which describes the step attempted
+  // and may be a retrieval hook for a concept an earlier lesson taught.
+  const demonstrated = session.demonstrated
   const nextLesson = outcome?.next_lesson_id ?? null
   const earned = outcome?.xp_awarded ?? 0
   return (
