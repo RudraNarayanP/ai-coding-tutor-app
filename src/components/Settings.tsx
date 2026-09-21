@@ -26,6 +26,67 @@ interface SettingsResponse {
   current_provider: string
 }
 
+// ─── Reading the settings payload ─────────────────────────────────────────────
+//
+// `await response.json() as SettingsResponse` was a cast, not a check. Anything
+// the server returned — `{}` from a proxy or gateway error, a body from an older
+// backend, a row that is null — became `settings`, and the first
+// `settings.providers.map` then threw through the whole component tree, so one
+// malformed response took the entire app down rather than just this panel.
+//
+// So the payload is read here, once, before it is stored. A body without a
+// provider list is refused and reported through the panel's existing error state
+// — that is the opposite of hiding a backend failure: the learner sees that the
+// settings could not be loaded instead of seeing nothing at all.
+
+function readHealthStatus(row: unknown): ProviderInfo['health_status'] {
+  if (typeof row !== 'object' || row === null) return null
+  const h = row as Partial<NonNullable<ProviderInfo['health_status']>>
+  return {
+    available: h.available === true,
+    reason: typeof h.reason === 'string' ? h.reason : null,
+    error: typeof h.error === 'string' ? h.error : null,
+  }
+}
+
+/** A provider row the panel can render, or null when it is not a usable row. */
+function readProviderRow(row: unknown): ProviderInfo | null {
+  if (typeof row !== 'object' || row === null) return null
+  const p = row as Record<string, unknown>
+  if (typeof p.id !== 'string' || !p.id) return null
+  return {
+    id: p.id,
+    // The id doubles as the label, because a card with no name is a blank tile
+    // the learner cannot select or talk about.
+    name: typeof p.name === 'string' && p.name ? p.name : p.id,
+    has_key: p.has_key === true,
+    key_masked: typeof p.key_masked === 'string' ? p.key_masked : null,
+    model: typeof p.model === 'string' ? p.model : '',
+    configured: p.configured === true,
+    available: p.available === true,
+    health_status: readHealthStatus(p.health_status),
+    setup_instructions:
+      typeof p.setup_instructions === 'string' ? p.setup_instructions : null,
+    error: typeof p.error === 'string' ? p.error : null,
+  }
+}
+
+/** The settings body, or null when it is not the shape this panel can show. */
+function readSettingsPayload(value: unknown): SettingsResponse | null {
+  if (typeof value !== 'object' || value === null) return null
+  const raw = (value as { providers?: unknown }).providers
+  if (!Array.isArray(raw)) return null
+  const providers = raw
+    .map(readProviderRow)
+    .filter((p): p is ProviderInfo => p !== null)
+  const current = (value as { current_provider?: unknown }).current_provider
+  return {
+    providers,
+    current_provider:
+      typeof current === 'string' ? current : providers[0]?.id ?? '',
+  }
+}
+
 interface ValidationResult {
   valid: boolean
   error: string | null
@@ -106,6 +167,11 @@ export default function Settings({
   const [saving, setSaving] = useState(false)
   const [saveMessage, setSaveMessage] = useState<string | null>(null)
 
+  // The one place the panel reads the provider list from, so no render path has
+  // to assume the array exists.
+  const providers = settings?.providers ?? []
+  const activeProviderInfo = providers.find((p) => p.id === activeProvider) ?? null
+
   // Fetch settings on mount
   const fetchSettings = useCallback(async () => {
     if (!isOpen) return
@@ -114,9 +180,21 @@ export default function Settings({
     try {
       const response = await fetch(`${backendUrl}/api/settings`)
       if (!response.ok) throw new Error(`HTTP ${response.status}`)
-      const data = await response.json() as SettingsResponse
-      setSettings(data)
+      const data = await response.json()
+      const parsed = readSettingsPayload(data)
+      if (!parsed) {
+        // Named separately from the unreachable-backend message on purpose: this
+        // server answered, but not with something this panel can show.
+        setSettings(null)
+        setError(
+          'The backend returned settings without a provider list, so provider ' +
+            'configuration is unavailable. Check that the backend matches this app.'
+        )
+        return
+      }
+      setSettings(parsed)
     } catch (err) {
+      setSettings(null)
       setError('Failed to load settings. Is the backend running?')
       console.error('Settings fetch error:', err)
     } finally {
@@ -131,7 +209,7 @@ export default function Settings({
   // Reset form when switching providers
   useEffect(() => {
     if (activeProvider) {
-      const provider = settings?.providers.find(p => p.id === activeProvider)
+      const provider = providers.find(p => p.id === activeProvider)
       if (provider) {
         setModel(provider.model || '')
         setApiKey('')
@@ -330,9 +408,17 @@ export default function Settings({
               <div className="settings-section">
                 <h3>🤖 AI Providers</h3>
                 <p className="setting-hint">Select a provider to configure. Keys are encrypted and stored securely.</p>
-                
+
+                {providers.length === 0 ? (
+                  // A well-formed response that simply listed nobody: say so, and
+                  // leave the gameplay half of the panel usable above it.
+                  <div className="settings-error">
+                    The backend reported no providers, so none can be configured
+                    from here.
+                  </div>
+                ) : (
                 <div className="provider-grid">
-                  {settings.providers.map(provider => (
+                  {providers.map(provider => (
                     <div
                       key={provider.id}
                       className={`provider-card ${activeProvider === provider.id ? 'active' : ''}`}
@@ -356,16 +442,19 @@ export default function Settings({
                     </div>
                   ))}
                 </div>
+                )}
               </div>
 
-              {/* Provider Configuration Panel */}
-              {activeProvider && (
+              {/* Provider Configuration Panel — gated on an actual row, not on the
+                  selected id: the id has a default, so gating on it alone offered
+                  to "Configure " a provider the backend never reported. */}
+              {activeProviderInfo && (
                 <div className="settings-section provider-config">
-                  <h3>Configure {settings.providers.find(p => p.id === activeProvider)?.name}</h3>
+                  <h3>Configure {activeProviderInfo.name}</h3>
                   
-                  {settings.providers.find(p => p.id === activeProvider)?.setup_instructions && (
+                  {activeProviderInfo.setup_instructions && (
                     <div className="setup-instructions">
-                      💡 {settings.providers.find(p => p.id === activeProvider)?.setup_instructions}
+                      💡 {activeProviderInfo.setup_instructions}
                     </div>
                   )}
 
@@ -448,10 +537,10 @@ export default function Settings({
                         ⚡ Set as Active Provider
                       </button>
                     )}
-                    {settings.providers.find(p => p.id === activeProvider)?.has_key && (
+                    {activeProviderInfo?.has_key && (
                       <button
                         className="btn-danger"
-                        onClick={() => handleDelete(activeProvider)}
+                        onClick={() => handleDelete(activeProviderInfo.id)}
                         disabled={saving}
                       >
                         🗑️ Remove Key

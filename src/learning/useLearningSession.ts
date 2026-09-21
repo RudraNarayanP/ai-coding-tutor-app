@@ -296,29 +296,94 @@ export function useLearningSession() {
     : -1
   const pinnedExercise = pinnedExerciseIndex >= 0 ? allExercises[pinnedExerciseIndex] : null
 
-  // A step is addressable once the learner has been served it — i.e. it is the
-  // derived current step, or it is already completed (Browser Back lands here).
-  // Anything further ahead is treated as a stale/hand-edited URL and normalised
-  // away below rather than handed out as a free preview of later work.
+  // A step is addressable once the learner has been served it — the derived
+  // current step, or any completed one. Browser Back lands on a completed step,
+  // including after the lesson finished, so the URL and the screen agree instead
+  // of Back appearing to do nothing. Anything further ahead is a stale or
+  // hand-edited URL and is normalised away below, never handed out as a preview
+  // of work the learner has not reached.
   const pinIsReachable =
     pinnedExercise !== null &&
     (pinnedExercise.id === derivedExercise?.id || completedExerciseIds.has(pinnedExercise.id))
 
-  // Once the lesson is finished there is no step to pin: the completion
-  // celebration is the screen, and it lives on the bare lesson route.
   const lessonHasExercises = allExercises.length > 0
   const allExercisesDone = lessonHasExercises && derivedExercise === null
 
-  const currentExercise = allExercisesDone ? null : pinIsReachable ? pinnedExercise : derivedExercise
+  // The URL wins when it names a step this learner has met; otherwise the screen
+  // shows whatever the server's progress says is owed — nothing, once finished,
+  // which is the lesson-complete screen on the bare /lesson/:id route.
+  const currentExercise = pinIsReachable ? pinnedExercise : derivedExercise
   const currentExerciseIndex = currentExercise
     ? allExercises.findIndex((ex) => ex.id === currentExercise.id)
     : -1
   /** Reviewing a step that is already graded: read-only, no re-award. */
   const isReviewingCompletedStep =
-    currentExercise !== null && !allExercisesDone && currentExercise.id !== derivedExercise?.id
+    currentExercise !== null && currentExercise.id !== derivedExercise?.id
 
   // Lesson complete = lesson has exercises AND every one of them is completed.
   const lessonComplete = allExercisesDone
+
+  /**
+   * What comes after this lesson. Server-first — the progression response owns
+   * it — with the course order as the fallback for a server that says nothing.
+   * Derived rather than remembered, so returning to a finished lesson can still
+   * offer "Next Lesson" without the one-shot celebration state.
+   */
+  const nextLessonId = useMemo(() => {
+    if (lessonProgress?.next_lesson_id) return lessonProgress.next_lesson_id
+    const idx = lessons.findIndex((l) => l.id === lesson?.id)
+    return idx >= 0 && idx < lessons.length - 1 ? lessons[idx + 1].id : null
+  }, [lessonProgress?.next_lesson_id, lessons, lesson?.id])
+
+  /**
+   * The lesson-complete panel's content, from whichever evidence exists — derived
+   * once here rather than separately by the screen that draws it and the handler
+   * that follows its button.
+   *
+   * Right after the last answer it is the celebration grading raised, with the XP
+   * line and the no-mistakes badge. Returning to a finished lesson later (Back
+   * from the next lesson, a refresh, a pasted link) leaves no such one-shot state,
+   * but the server still reports every step done, so the same panel appears
+   * without restating XP and without a badge that cannot be proven.
+   */
+  const completion = useMemo(
+    () =>
+      celebration ??
+      (lessonComplete && lesson
+        ? {
+            xpEarned: 0,
+            nextLessonId,
+            mistakeFree: false,
+            boss: lesson.type === 'checkpoint',
+          }
+        : null),
+    [celebration, lessonComplete, lesson, nextLessonId]
+  )
+
+  /**
+   * Put the session into the lesson-complete state: the reward panel and where
+   * "Next Lesson" points afterwards.
+   *
+   * Called by whatever actually finishes the lesson — the last graded answer, or
+   * a passing run for a lesson with no steps at all — and never by the panel's
+   * own button. That ordering is the whole point: at the moment a multi-step
+   * lesson finishes there is nothing left to tap, because grading the last step
+   * also ends the step sequence, so a completion that waited for a tap could
+   * never be reached.
+   */
+  const celebrateLessonCompletion = useCallback(
+    (earnedXp: number, serverNextLessonId?: string | null) => {
+      setCelebration({
+        xpEarned: earnedXp,
+        // The server owns what comes next; the course order is only a fallback.
+        nextLessonId: serverNextLessonId ?? nextLessonId,
+        mistakeFree: visitMistakesRef.current === 0,
+        boss: (lesson?.type || '') === 'checkpoint',
+      })
+    },
+    [nextLessonId, lesson?.type],
+  )
+
 
   const exercisePosition = lessonHasExercises && currentExerciseIndex >= 0 ? currentExerciseIndex + 1 : 0
   const exerciseTotal = allExercises.length
@@ -870,18 +935,7 @@ export function useLearningSession() {
         fetchLessons()
         fetchProgression()
 
-        const nextId =
-          data.next_lesson_id ||
-          (() => {
-            const idx = lessons.findIndex((l) => l.id === lesson?.id)
-            return idx >= 0 && idx < lessons.length - 1 ? lessons[idx + 1].id : null
-          })()
-        setCelebration({
-          xpEarned: runXp,
-          nextLessonId: nextId ?? null,
-          mistakeFree: visitMistakesRef.current === 0,
-          boss,
-        })
+        celebrateLessonCompletion(runXp, data.next_lesson_id ?? null)
       } else {
         playPatchworkSound('error', soundEnabled)
         setCharState('confused')
@@ -918,6 +972,7 @@ export function useLearningSession() {
     exerciseInput,
     fetchLessons,
     fetchProgression,
+    celebrateLessonCompletion,
   ])
 
   // ─── Ask AI Tutor ──────────────────────────────────────────────────────────
@@ -1217,9 +1272,18 @@ export function useLearningSession() {
         if (owedNext) {
           navigate(exercisePath(lesson.id, owedNext.id))
         } else {
-          // Nothing owed: the lesson is over. The celebration belongs to the
-          // lesson route, and it replaces — finishing is not a place you go back
-          // into, so Back from it leaves the lesson.
+          // Nothing owed: this answer finished the lesson. The reward belongs to
+          // the lesson route, and it replaces — finishing is not a place you go
+          // back into, so Back from the celebration leaves the lesson.
+          const boss = (lesson?.type || '') === 'checkpoint'
+          playPatchworkSound(boss ? 'checkpoint_complete' : 'lesson_complete', soundEnabled)
+          setCharState('celebrate')
+          setCharSpeech(
+            boss
+              ? 'Outstanding job! You mastered this checkpoint!'
+              : 'Awesome work! You completed every exercise in this lesson.'
+          )
+          celebrateLessonCompletion(data.xp_awarded || 0, data.next_lesson_id ?? null)
           navigate(lessonPath(lesson.id), { replace: true })
         }
       } else {
@@ -1260,7 +1324,6 @@ setExercisePhase('incorrect')
   // the URL follow the step the learner lands on.
   const continueToNextExercise = () => {
     const wasLessonComplete = lessonComplete
-    const earnedXp = exerciseFeedback?.xpAwarded ?? 0
     const nextStep = derivedExercise
     setExerciseInput((prev: any) => {
       if (!currentExercise) return prev
@@ -1282,22 +1345,11 @@ setExercisePhase('incorrect')
     }
 
     if (wasLessonComplete) {
-      const nextId =
-        lessonProgress?.next_lesson_id ||
-        (() => {
-          const idx = lessons.findIndex((l) => l.id === lesson?.id)
-          return idx >= 0 && idx < lessons.length - 1 ? lessons[idx + 1].id : null
-        })()
-      const boss = (lesson?.type || '') === 'checkpoint'
-      if (boss) playPatchworkSound('checkpoint_complete', soundEnabled)
-      setCelebration({
-        xpEarned: earnedXp,
-        nextLessonId: nextId ?? null,
-        mistakeFree: visitMistakesRef.current === 0,
-        boss,
-      })
-      // No navigation here: the URL already came back to /lesson/:id when the
-      // last step was graded, and the celebration is that screen.
+      // Reached from a cleared step after the lesson was finished (Back or a
+      // pasted URL). The reward itself was raised by the answer that ended the
+      // lesson, so this only puts the URL back on the lesson where that panel
+      // lives — it must not re-award, and it replaces rather than stacks.
+      navigate(lessonPath(lesson.id), { replace: true })
     }
   }
 
@@ -1345,7 +1397,7 @@ setExercisePhase('incorrect')
   // home to the one the learner just finished, which is what they expect after
   // tapping "Next Lesson".
   const goToNextLesson = () => {
-    const nextId = celebration?.nextLessonId
+    const nextId = completion?.nextLessonId
     setCelebration(null)
     if (nextId) {
       navigate(lessonPath(nextId))
@@ -1514,215 +1566,6 @@ setExercisePhase('incorrect')
   // Everything the screens need. Exposed as one object so a screen can
   // destructure the same names the old App JSX used, and the returned
   // component trees stay byte-identical to what they replaced.
-  return {
-    activeCourse,
-    addNote,
-    aiEnabled,
-    allExercises,
-    allExercisesDone,
-    allPassed,
-    answerArmed,
-    appOwnsHistory,
-    applyCourseLanguage,
-    applyHearts,
-    askSolution,
-    askTutor,
-    backendError,
-    celebration,
-    charSpeech,
-    charState,
-    charSubTab,
-    code,
-    codingFeedbackActive,
-    completedCount,
-    completedExerciseCount,
-    completedExerciseIds,
-    completedMaterialIds,
-    consecutiveCorrect,
-    continueToNextExercise,
-    courseIsUnknown,
-    coursePathTitle,
-    courses,
-    currentExercise,
-    currentExerciseIndex,
-    currentExerciseIsCode,
-    currentExerciseIsFill,
-    currentProviderStatus,
-    customTitle,
-    dailyProgress,
-    derivedExercise,
-    derivedExerciseIndex,
-    dueReviewIds,
-    editorRef,
-    exerciseFeedback,
-    exerciseInput,
-    exercisePhase,
-    exercisePosition,
-    exerciseTotal,
-    failedRequired,
-    feedback,
-    fetchCourses,
-    fetchLeaderboard,
-    fetchLessonProgress,
-    fetchLessons,
-    fetchProgression,
-    fetchProviders,
-    fetchUserProfile,
-    gamification,
-    getRunnableCode,
-    goBack,
-    goToNextLesson,
-    goUpstream,
-    handleCompleteMaterial,
-    handleCourseChange,
-    handleEditorKeyDown,
-    handleExerciseBack,
-    handleGenerateCourse,
-    handleProviderSelection,
-    handleRunTestOut,
-    hearts,
-    hintDisabled,
-    hintLevel,
-    isAiAvailable,
-    isCodingType,
-    isExerciseWorkspace,
-    isGeneratingCourse,
-    isGuidebookOpen,
-    isLessonActive,
-    isLoadingLesson,
-    isReviewingCompletedStep,
-    isRunning,
-    isTutorLoading,
-    lastCompletedCodingExercise,
-    leaderboardEntries,
-    lesson,
-    lessonComplete,
-    lessonError,
-    lessonHasExercises,
-    lessonIsOpen,
-    lessonProgress,
-    lessonWorkspaceExercise,
-    lessons,
-    lessonsRef,
-    level,
-    loadLesson,
-    location,
-    materialInput,
-    materialType,
-    materials,
-    maxHearts,
-    mistakes,
-    navigate,
-    noteInput,
-    openCourse,
-    openLesson,
-    openUnit,
-    params,
-    pinIsReachable,
-    pinnedExercise,
-    pinnedExerciseId,
-    pinnedExerciseIndex,
-    practiceActivity,
-    practiceActivityIsValid,
-    previousHints,
-    profileStreak,
-    progressPct,
-    providersOverview,
-    refreshMistakes,
-    restoreAnsweredBuffer,
-    restoreSnapshot,
-    results,
-    resultsRef,
-    retryCurrentExercise,
-    routeCourseId,
-    routeLessonId,
-    runTests,
-    safeLessons,
-    secondsToNextHeart,
-    selectPracticeActivity,
-    selectedLanguage,
-    selectedProvider,
-    sessionNotes,
-    setAiEnabled,
-    setAnswerArmed,
-    setBackendError,
-    setCelebration,
-    setCharSpeech,
-    setCharState,
-    setCharSubTab,
-    setCode,
-    setCompletedMaterialIds,
-    setConsecutiveCorrect,
-    setCourses,
-    setCustomTitle,
-    setExerciseFeedback,
-    setExerciseInput,
-    setExercisePhase,
-    setFeedback,
-    setGamification,
-    setHearts,
-    setHintLevel,
-    setIsGeneratingCourse,
-    setIsGuidebookOpen,
-    setIsLoadingLesson,
-    setIsRunning,
-    setIsTutorLoading,
-    setLeaderboardEntries,
-    setLesson,
-    setLessonError,
-    setLessonProgress,
-    setLessons,
-    setLevel,
-    setMaterialInput,
-    setMaterialType,
-    setMaterials,
-    setMaxHearts,
-    setMistakes,
-    setNoteInput,
-    setPreviousHints,
-    setProvidersOverview,
-    setRestoreSnapshot,
-    setResults,
-    setSecondsToNextHeart,
-    setSelectedLanguage,
-    setSelectedProvider,
-    setSessionNotes,
-    setShowCreateModal,
-    setShowOutofHeartsModal,
-    setShowSettings,
-    setShowTestOutModal,
-    setSoundEnabled,
-    setTestOutResult,
-    setTestOutSubmissions,
-    setTutorLevel,
-    setTutorSource,
-    setUnlimitedHearts,
-    setUserProfile,
-    setXp,
-    setXpGainPopup,
-    showCreateModal,
-    showLessonRunCode,
-    showOutofHeartsModal,
-    showSettings,
-    showTestOutModal,
-    soundEnabled,
-    submitSubLessonExercise,
-    testOutResult,
-    testOutSubmissions,
-    toggleSound,
-    triggerXpGain,
-    tutorLevel,
-    tutorSource,
-    unlimitedHearts,
-    upstreamPath,
-    userProfile,
-    view,
-    visitMistakesRef,
-    workspaceExercise,
-    xp,
-    xpGainPopup,
-  }
-
   // The session surface. One object so each screen can destructure the same
   // names the old App JSX closed over, which keeps the moved markup identical
   // to what it replaced.
@@ -1740,6 +1583,7 @@ setExercisePhase('incorrect')
     askSolution,
     askTutor,
     backendError,
+    celebrateLessonCompletion,
     celebration,
     charSpeech,
     charState,
@@ -1750,217 +1594,7 @@ setExercisePhase('incorrect')
     completedExerciseCount,
     completedExerciseIds,
     completedMaterialIds,
-    consecutiveCorrect,
-    continueToNextExercise,
-    courseIsUnknown,
-    coursePathTitle,
-    courses,
-    currentExercise,
-    currentExerciseIndex,
-    currentExerciseIsCode,
-    currentExerciseIsFill,
-    currentProviderStatus,
-    customTitle,
-    dailyProgress,
-    derivedExercise,
-    derivedExerciseIndex,
-    dueReviewIds,
-    editorRef,
-    exerciseFeedback,
-    exerciseInput,
-    exercisePhase,
-    exercisePosition,
-    exerciseTotal,
-    failedRequired,
-    feedback,
-    fetchCourses,
-    fetchLeaderboard,
-    fetchLessonProgress,
-    fetchLessons,
-    fetchProgression,
-    fetchProviders,
-    fetchUserProfile,
-    gamification,
-    getRunnableCode,
-    goBack,
-    goToNextLesson,
-    goUpstream,
-    handleCompleteMaterial,
-    handleCourseChange,
-    handleEditorKeyDown,
-    handleExerciseBack,
-    handleGenerateCourse,
-    handleProviderSelection,
-    handleRunTestOut,
-    hearts,
-    hintDisabled,
-    hintLevel,
-    isAiAvailable,
-    isCodingType,
-    isExerciseWorkspace,
-    isGeneratingCourse,
-    isGuidebookOpen,
-    isLessonActive,
-    isLoadingLesson,
-    isReviewingCompletedStep,
-    isRunning,
-    isTutorLoading,
-    lastCompletedCodingExercise,
-    leaderboardEntries,
-    lesson,
-    lessonComplete,
-    lessonError,
-    lessonHasExercises,
-    lessonIsOpen,
-    lessonProgress,
-    lessonWorkspaceExercise,
-    lessons,
-    lessonsRef,
-    level,
-    loadLesson,
-    location,
-    materialInput,
-    materialType,
-    materials,
-    maxHearts,
-    mistakes,
-    navigate,
-    noteInput,
-    openCourse,
-    openLesson,
-    openUnit,
-    params,
-    pinIsReachable,
-    pinnedExercise,
-    pinnedExerciseId,
-    pinnedExerciseIndex,
-    practiceActivity,
-    practiceActivityIsValid,
-    previousHints,
-    profileStreak,
-    progressPct,
-    providersOverview,
-    refreshMistakes,
-    restoreAnsweredBuffer,
-    restoreSnapshot,
-    results,
-    resultsRef,
-    retryCurrentExercise,
-    routeCourseId,
-    routeLessonId,
-    runTests,
-    safeLessons,
-    secondsToNextHeart,
-    selectPracticeActivity,
-    selectedLanguage,
-    selectedProvider,
-    sessionNotes,
-    setAiEnabled,
-    setAnswerArmed,
-    setBackendError,
-    setCelebration,
-    setCharSpeech,
-    setCharState,
-    setCharSubTab,
-    setCode,
-    setCompletedMaterialIds,
-    setConsecutiveCorrect,
-    setCourses,
-    setCustomTitle,
-    setExerciseFeedback,
-    setExerciseInput,
-    setExercisePhase,
-    setFeedback,
-    setGamification,
-    setHearts,
-    setHintLevel,
-    setIsGeneratingCourse,
-    setIsGuidebookOpen,
-    setIsLoadingLesson,
-    setIsRunning,
-    setIsTutorLoading,
-    setLeaderboardEntries,
-    setLesson,
-    setLessonError,
-    setLessonProgress,
-    setLessons,
-    setLevel,
-    setMaterialInput,
-    setMaterialType,
-    setMaterials,
-    setMaxHearts,
-    setMistakes,
-    setNoteInput,
-    setPreviousHints,
-    setProvidersOverview,
-    setRestoreSnapshot,
-    setResults,
-    setSecondsToNextHeart,
-    setSelectedLanguage,
-    setSelectedProvider,
-    setSessionNotes,
-    setShowCreateModal,
-    setShowOutofHeartsModal,
-    setShowSettings,
-    setShowTestOutModal,
-    setSoundEnabled,
-    setTestOutResult,
-    setTestOutSubmissions,
-    setTutorLevel,
-    setTutorSource,
-    setUnlimitedHearts,
-    setUserProfile,
-    setXp,
-    setXpGainPopup,
-    showCreateModal,
-    showLessonRunCode,
-    showOutofHeartsModal,
-    showSettings,
-    showTestOutModal,
-    soundEnabled,
-    submitSubLessonExercise,
-    testOutResult,
-    testOutSubmissions,
-    toggleSound,
-    triggerXpGain,
-    tutorLevel,
-    tutorSource,
-    unlimitedHearts,
-    upstreamPath,
-    userProfile,
-    view,
-    visitMistakesRef,
-    workspaceExercise,
-    xp,
-    xpGainPopup,
-  }
-  // The session surface. One object so each screen can destructure the same
-  // names the old App JSX closed over, which keeps the moved markup identical
-  // to what it replaced.
-  return {
-    activeCourse,
-    addNote,
-    aiEnabled,
-    allExercises,
-    allExercisesDone,
-    allPassed,
-    answerArmed,
-    appOwnsHistory,
-    applyCourseLanguage,
-    applyHearts,
-    askSolution,
-    askTutor,
-    backendError,
-    celebration,
-    charSpeech,
-    charState,
-    charSubTab,
-    code,
-    codingFeedbackActive,
-    completedCount,
-    completedExerciseCount,
-    completedExerciseIds,
-    completedMaterialIds,
+    completion,
     consecutiveCorrect,
     continueToNextExercise,
     courseIsSwitching,
@@ -2037,6 +1671,7 @@ setExercisePhase('incorrect')
     maxHearts,
     mistakes,
     navigate,
+    nextLessonId,
     noteInput,
     openCourse,
     openLesson,

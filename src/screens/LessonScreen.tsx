@@ -38,7 +38,7 @@ export function LessonScreen() {
     answerArmed,
     askSolution,
     askTutor,
-    celebration,
+    completion,
     code,
     completedExerciseCount,
     consecutiveCorrect,
@@ -300,26 +300,26 @@ export function LessonScreen() {
         </>
       }
       banner={
-        celebration && (
-          <div className={`duo-feedback-panel success ew-lesson-celebration${celebration.mistakeFree ? ' ew-celebration--perfect' : ''}${celebration.boss ? ' ew-celebration--boss' : ''}`} role="status">
+        completion && (
+          <div className={`duo-feedback-panel success ew-lesson-celebration${completion.mistakeFree ? ' ew-celebration--perfect' : ''}${completion.boss ? ' ew-celebration--boss' : ''}`} role="status">
             <div className="duo-feedback-title">
-              <span>{celebration.boss ? '👑 BOSS CLEARED!' : '🎉 Lesson Complete!'}</span>
-              {celebration.mistakeFree && (
+              <span>{completion.boss ? '👑 BOSS CLEARED!' : '🎉 Lesson Complete!'}</span>
+              {completion.mistakeFree && (
                 <span className="ew-perfect-badge">⚡ PERFECT — no mistakes!</span>
               )}
             </div>
             <p style={{ fontWeight: 700, marginBottom: '8px' }}>
-              {celebration.boss
+              {completion.boss
                 ? 'You just mastered a checkpoint — the hardest lesson in the unit!'
                 : 'Awesome work! You completed every exercise in this lesson.'}
             </p>
-            {celebration.xpEarned > 0 && (
+            {completion.xpEarned > 0 && (
               <p style={{ fontWeight: 700, color: '#16a34a', marginBottom: '16px' }}>
-                +{celebration.xpEarned} XP earned
+                +{completion.xpEarned} XP earned
               </p>
             )}
             <div style={{ display: 'flex', gap: '12px' }}>
-              {celebration.nextLessonId ? (
+              {completion.nextLessonId ? (
                 <button className="duo-button duo-button-primary" onClick={goToNextLesson}>
                   Next Lesson →
                 </button>

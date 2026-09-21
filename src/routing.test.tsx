@@ -207,6 +207,120 @@ describe('Returning to a cleared step', () => {
   })
 })
 
+describe('Multi-exercise lesson completion', () => {
+  /**
+   * Answer the step on screen and let the app move on. Returns nothing; every
+   * caller asserts on the URL and the panel it expects afterwards.
+   */
+  async function solve(user: ReturnType<typeof userEvent.setup>, option: RegExp) {
+    await user.click(await screen.findByRole('button', { name: option }))
+    await user.click(await screen.findByRole('button', { name: /^SUBMIT$/ }))
+    await new Promise((r) => setTimeout(r, 120))
+  }
+
+  async function openLesson(user: ReturnType<typeof userEvent.setup>) {
+    render(<App />)
+    await user.click(await screen.findByRole('button', { name: /Variables — Current lesson/ }))
+    await waitFor(() => expect(at()).toBe('/lesson/lesson-2'))
+    await screen.findByText('Which line stores a value?')
+  }
+
+  it('advances on a non-final answer without ending the lesson', async () => {
+    const user = userEvent.setup()
+    await openLesson(user)
+
+    await solve(user, /name = "Ada"/)
+    await waitFor(() => expect(at()).toBe('/lesson/lesson-2/exercise/ex-2'))
+    expect(document.body.textContent).not.toMatch(/Lesson Complete/)
+    expect(screen.queryByRole('button', { name: /Next Lesson/i })).not.toBeInTheDocument()
+  })
+
+  it('shows the completion panel after the final answer and Next Lesson walks on', async () => {
+    const user = userEvent.setup()
+    await openLesson(user)
+
+    await solve(user, /name = "Ada"/)
+    await solve(user, /^print\(name\)$/)
+    expect(document.body.textContent).not.toMatch(/Lesson Complete/)
+
+    await solve(user, /A value/)
+
+    // The last answer both finishes the lesson and brings up the reward, so the
+    // URL comes to rest on the lesson rather than on a step that no longer exists.
+    await waitFor(() => expect(at()).toBe('/lesson/lesson-2'))
+    await waitFor(() =>
+      expect(document.body.textContent).toMatch(/Lesson Complete/)
+    )
+    expect(document.body.textContent).toMatch(/\+10 XP earned/)
+
+    await user.click(await screen.findByRole('button', { name: /Next Lesson/i }))
+    await waitFor(() => expect(at()).toBe('/lesson/lesson-3'))
+    await screen.findByText('Write the code and run it.', {}, { timeout: 3000 })
+  })
+
+  it('keeps the completion panel and the URL together across Back and Forward', async () => {
+    const user = userEvent.setup()
+    await openLesson(user)
+    await solve(user, /name = "Ada"/)
+    await solve(user, /^print\(name\)$/)
+    await solve(user, /A value/)
+    await waitFor(() => expect(at()).toBe('/lesson/lesson-2'))
+    await screen.findByText(/Lesson Complete/)
+
+    // Back over the steps just cleared: each is read-only, none re-awards.
+    back()
+    await waitFor(() => expect(at()).toBe('/lesson/lesson-2/exercise/ex-2'))
+    await waitFor(() => expect(document.body.textContent).toMatch(/already cleared this step/i))
+    expect(screen.queryByRole('button', { name: /^SUBMIT$/ })).not.toBeInTheDocument()
+
+    // Forward returns to the finished lesson, reward panel still on screen.
+    forward()
+    await waitFor(() => expect(at()).toBe('/lesson/lesson-2'))
+    await screen.findByText(/Lesson Complete/)
+  })
+
+  it('keeps the completion panel and Next Lesson when returning to a finished lesson', async () => {
+    const user = userEvent.setup()
+    await openLesson(user)
+    await solve(user, /name = "Ada"/)
+    await solve(user, /^print\(name\)$/)
+    await solve(user, /A value/)
+    await waitFor(() => expect(at()).toBe('/lesson/lesson-2'))
+    await screen.findByText(/Lesson Complete/)
+
+    // On to the next lesson, then Back into the one just finished. The one-shot
+    // celebration is long gone by then; the panel comes back because the server
+    // still reports every step done — and it does not restate the XP.
+    await user.click(await screen.findByRole('button', { name: /Next Lesson/i }))
+    await waitFor(() => expect(at()).toBe('/lesson/lesson-3'))
+    back()
+    await waitFor(() => expect(at()).toBe('/lesson/lesson-2'))
+    await screen.findByText(/Lesson Complete/)
+    expect(document.body.textContent).not.toMatch(/\+10 XP earned/)
+    await user.click(screen.getByRole('button', { name: /Next Lesson/i }))
+    await waitFor(() => expect(at()).toBe('/lesson/lesson-3'))
+  })
+
+  it('does not reopen a step when a finished lesson is refreshed', async () => {
+    const user = userEvent.setup()
+    await openLesson(user)
+    await solve(user, /name = "Ada"/)
+    await solve(user, /^print\(name\)$/)
+    await solve(user, /A value/)
+    await waitFor(() => expect(at()).toBe('/lesson/lesson-2'))
+
+    // A fresh mount rebuilds from the server's progress, which says everything is
+    // done: no step can be re-entered and no XP can be offered twice.
+    cleanup()
+    render(<App />)
+    await waitFor(() => expect(at()).toBe('/lesson/lesson-2'), { timeout: 3000 })
+    await new Promise((r) => setTimeout(r, 400))
+    expect(document.body.textContent).not.toMatch(/Which line stores a value\?/)
+    expect(screen.queryByRole('button', { name: /^SUBMIT$/ })).not.toBeInTheDocument()
+    expect(screen.getByRole('button', { name: /Back to Map/i })).toBeInTheDocument()
+  })
+})
+
 describe('Deep links', () => {  it('opens a lesson straight from its URL', async () => {
     goto('/lesson/lesson-2')
     render(<App />)

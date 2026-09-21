@@ -13,7 +13,7 @@ const courses = [
     id: 'python-foundations',
     title: 'Python Foundations & Automation',
     language: 'python',
-    lesson_count: 2,
+    lesson_count: 3,
     completed_count: 0,
   },
 ]
@@ -37,6 +37,17 @@ const lessons = [
     difficulty: 'beginner',
     duration_minutes: 8,
     status: 'current',
+    unit_id: 'unit-basics',
+    unit_title: 'Unit 1: Talking to the Computer',
+    section_title: 'Section 1',
+  },
+  {
+    id: 'lesson-3',
+    title: 'Loops',
+    order: 3,
+    difficulty: 'beginner',
+    duration_minutes: 10,
+    status: 'locked',
     unit_id: 'unit-basics',
     unit_title: 'Unit 1: Talking to the Computer',
     section_title: 'Section 1',
@@ -166,6 +177,22 @@ export function setupFetch() {
     const lessonMatch = url.match(/\/api\/lessons\/([^/?]+)$/)
     if (lessonMatch) {
       const id = decodeURIComponent(lessonMatch[1])
+      if (id === 'lesson-1' || id === 'lesson-3') {
+        // A lesson with no steps of its own: one open-ended code task, which is
+        // how most of Patchwork's curriculum is shaped.
+        return Promise.resolve(respond({
+          id,
+          title: id === 'lesson-1' ? 'Hello, World!' : 'Loops',
+          description: 'Write the code and run it.',
+          order: id === 'lesson-1' ? 1 : 3,
+          difficulty: 'beginner',
+          duration_minutes: 5,
+          starter_code: '# your code\n',
+          unit_id: 'unit-basics',
+          unit_title: 'Unit 1: Talking to the Computer',
+          sublessons: [],
+        }))
+      }
       if (id !== 'lesson-2') {
         // The backend's real answer for an id it does not know.
         return Promise.resolve(respond({ detail: { error: 'lesson_not_found' } }, false, 404))
