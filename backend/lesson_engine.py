@@ -78,6 +78,10 @@ class ProgressionStore:
         self._last_results: dict[str, str] = {}
         self._mistakes: dict[str, dict] = {}
         self._first_attempt_misses: set[str] = set()
+        # Per-concept ladder state (rungs cleared, evidence kinds, recall timing).
+        # Kept separate from the exercise bookkeeping because a concept is not an item: it is
+        # cleared by several steps and demonstrated by several kinds of evidence.
+        self._concepts: dict[str, dict] = {}
         self._xp: int = 0
         self._level: int = 1
         self._load()
@@ -101,6 +105,11 @@ class ProgressionStore:
                             {k: int(v) for k, v in (data.get("attempt_counts") or {}).items()}
                         )
                         self._last_results.update(data.get("last_results") or {})
+                        concepts = data.get("concepts") or {}
+                        if isinstance(concepts, dict):
+                            self._concepts.update(
+                                {k: v for k, v in concepts.items() if isinstance(v, dict)}
+                            )
                         loaded = data.get("mistake_queue") or {}
                         self._first_attempt_misses.update(
                             str(x) for x in (data.get("first_attempt_misses") or [])
@@ -135,6 +144,7 @@ class ProgressionStore:
                     "last_results": dict(self._last_results),
                     "mistake_queue": dict(self._mistakes),
                     "first_attempt_misses": sorted(self._first_attempt_misses),
+                    "concepts": {k: dict(v) for k, v in self._concepts.items()},
                     "xp": self._xp,
                     "level": self._level,
                 }
@@ -234,6 +244,24 @@ class ProgressionStore:
 
     def last_result(self, exercise_id: str) -> str | None:
         return self._last_results.get(exercise_id)
+
+    def concept_state(self, concept: str) -> dict:
+        """Ladder state for one concept: cleared rungs, evidence, recall timing.
+
+        A copy, never the live dict: callers mutate it and hand it back through
+        :meth:`set_concept_state`, so a half-applied update cannot be observed.
+        """
+        with self._lock:
+            return dict(self._concepts.get(concept) or {})
+
+    def set_concept_state(self, concept: str, state: dict) -> None:
+        with self._lock:
+            self._concepts[concept] = dict(state)
+            self._write_locked()
+
+    def all_concept_states(self) -> dict[str, dict]:
+        with self._lock:
+            return {k: dict(v) for k, v in self._concepts.items()}
 
     def mistake_queue(self, now: float | None = None) -> list[dict]:
         """Every queued mistake, oldest-due first."""

@@ -8,6 +8,7 @@ import uuid
 from contextlib import asynccontextmanager
 from pathlib import Path
 
+from . import learning_service
 from .hearts import HeartStore
 from .materials import (
     Material,
@@ -595,6 +596,114 @@ async def submit_exercise(lesson_id: str, request: ExerciseSubmissionRequest, us
     else:
         res["hearts"] = heart_store.status().as_dict()
     return res
+
+
+# ─── Learning sessions: the teaching ladder ──────────────────────────────────
+# A lesson with an authored step pool serves a generated session; every other
+# lesson keeps its existing exercise flow untouched. Failing a teaching rung never
+# consumes a heart and never blocks an attempt -- that is the difference between a
+# lesson that teaches and a lesson that bills you for reading it.
+
+class StepAttemptRequest(BaseModel):
+    payload: dict = Field(default_factory=dict)
+    hints_used: int = Field(default=0, ge=0, le=8)
+
+
+def _session_language(lesson_id: str, language: str | None) -> str:
+    try:
+        lesson_engine.get_lesson(lesson_id)
+    except KeyError as exc:
+        raise HTTPException(status_code=404, detail={"error": "lesson_not_found"}) from exc
+    return (language or lesson_engine.get_lesson_language(lesson_id)).lower().strip()
+
+
+@app.get("/api/lessons/{lesson_id}/session")
+async def get_learning_session(lesson_id: str, language: str | None = None):
+    lang = _session_language(lesson_id, language)
+    session = learning_service.session_for(lesson_engine, lesson_id, lang)
+    if session is None:
+        raise HTTPException(
+            status_code=404,
+            detail={"error": "no_step_pool", "lesson_id": lesson_id,
+                    "message": "This lesson has no authored teaching steps yet."},
+        )
+    return session
+
+
+@app.post("/api/lessons/{lesson_id}/steps/{step_id}/seen")
+async def mark_step_seen(lesson_id: str, step_id: str, language: str | None = None):
+    """Acknowledge a presentation rung so the session resumes past it.
+
+    Awards nothing on purpose: reading a worked example is not evidence, and paying
+    for it turns the reward channel into an attendance counter.
+    """
+    lang = _session_language(lesson_id, language)
+    pool = learning_service.pool_for(lang, lesson_id)
+    if pool is None:
+        raise HTTPException(status_code=404, detail={"error": "no_step_pool", "lesson_id": lesson_id})
+    step = pool.by_id(step_id)
+    if step is None:
+        raise HTTPException(status_code=404, detail={"error": "step_not_found", "step_id": step_id})
+    if learning_service.presentation_step(lang, lesson_id, step_id) is None:
+        raise HTTPException(
+            status_code=400,
+            detail={"error": "not_a_presentation_step", "step_id": step_id,
+                    "message": "Graded steps must be attempted, not acknowledged."},
+        )
+    store = lesson_engine.stores.get(lang, lesson_engine.store)
+    return learning_service.mark_step_seen(store, pool, step)
+
+
+@app.post("/api/lessons/{lesson_id}/steps/{step_id}/attempt")
+async def attempt_learning_step(lesson_id: str, step_id: str, request: StepAttemptRequest,
+                                user_id: str = "default_user"):
+    lang = _session_language(lesson_id, None)
+    if learning_service.pool_for(lang, lesson_id) is None:
+        raise HTTPException(status_code=404, detail={"error": "no_step_pool", "lesson_id": lesson_id})
+
+    charging = learning_service.charge_for(lang, lesson_id, step_id)
+    replay = lesson_engine.is_queued(step_id)
+    # Free-to-fail rungs stay available with an empty pool: a learner who has run
+    # out of hearts must still be able to read and practise, which is the way back.
+    if charging and not replay and not heart_store.can_attempt():
+        raise HTTPException(
+            status_code=403,
+            detail={
+                "error": "out_of_hearts",
+                "hearts": heart_store.status().as_dict(),
+                "message": "Out of hearts. Review a missed step or read ahead for free "
+                           "to earn one back.",
+            },
+        )
+
+    try:
+        res = await learning_service.attempt_step(
+            lesson_engine, lesson_id, lang, step_id, request.payload,
+            hints_used=request.hints_used,
+        )
+    except ValueError as exc:
+        raise HTTPException(status_code=400, detail={"error": "step_not_gradable",
+                                                     "message": str(exc)}) from exc
+    except KeyError as exc:
+        raise HTTPException(status_code=404, detail={"error": "step_not_found",
+                                                     "message": str(exc)}) from exc
+
+    if res.get("xp_awarded", 0) > 0:
+        user_store.update_user_xp(user_id, res["xp_awarded"])
+    if not res["passed"] and charging:
+        res["hearts"] = heart_store.consume().as_dict()
+    elif res.get("graduated"):
+        res["hearts"] = heart_store.refund().as_dict()
+    else:
+        res["hearts"] = heart_store.status().as_dict()
+    return res
+
+
+@app.get("/api/concepts")
+async def get_concepts(language: str | None = None):
+    """The headline learning number: concepts demonstrated, not minutes spent."""
+    lang = (language or lesson_engine.active_language).lower().strip()
+    return learning_service.concepts_summary(lesson_engine, lang)
 
 
 @app.post("/api/feedback")
