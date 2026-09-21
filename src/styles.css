@@ -367,6 +367,29 @@ select option { background: var(--card); color: var(--ink); }
   gap: 4px;
 }
 
+/*
+ * The unit banner doubles as the link into `/course/:courseId/unit/:unitId`.
+ * It must read as the same banner, so it inherits everything and only adds the
+ * two affordances a clickable thing needs.
+ */
+.duo-unit-info--link {
+  appearance: none;
+  background: none;
+  border: 0;
+  margin: 0;
+  padding: 0;
+  font: inherit;
+  color: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+.duo-unit-info--link:hover .duo-unit-title,
+.duo-unit-info--link:focus-visible .duo-unit-title {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
 .duo-unit-subtitle {
   font-size: 12px;
   font-weight: 800;

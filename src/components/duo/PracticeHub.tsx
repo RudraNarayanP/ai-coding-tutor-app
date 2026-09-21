@@ -17,9 +17,18 @@ interface PracticeHubProps {
   onCompleteMaterial?: (id: string, user_answer?: string) => Promise<MaterialCompletionResult | null>
   /** Missed exercises the server wants re-served; empty when nothing is due. */
   mistakes?: MistakeItem[]
+  /**
+   * Which card is open. Left uncontrolled the hub keeps its own default, which
+   * is how it behaved before routing. `/practice/:activity` passes both props so
+   * the URL answers the question instead — see PracticeScreen.
+   */
+  activity?: ActivityId
+  onActivityChange?: (activity: ActivityId) => void
   /** Active course id or language, so the file tab never claims `.py` in JS. */
   language?: string
 }
+
+export type PracticeActivityId = ActivityId
 
 function lessonFilename(lesson: PathLesson | null, language?: string): string {
   return slugFilename(lesson?.title || '', language, 'practice')
@@ -36,6 +45,8 @@ export function PracticeHub({
   onCompleteMaterial,
   mistakes = [],
   language,
+  activity: activityFromRoute,
+  onActivityChange,
 }: PracticeHubProps) {
   const current = lessons.find((l) => l.status === 'current')
   const completed = lessons.filter((l) => l.status === 'completed')
@@ -60,7 +71,13 @@ export function PracticeHub({
   const practiceEnabled = Boolean(firstPractice) && !isLoadingLesson
   const completedEnabled = Boolean(lastCompleted) && !isLoadingLesson
 
-  const [activity, setActivity] = useState<ActivityId>(mistakes.length > 0 ? 'mistakes' : 'rewind')
+  const [chosenActivity, setChosenActivity] = useState<ActivityId>(
+    mistakes.length > 0 ? 'mistakes' : 'rewind'
+  )
+  // One source per mode: the URL when the router is driving, otherwise the
+  // hub's own state — which is how it behaves standalone (and in its tests).
+  const activity = activityFromRoute ?? chosenActivity
+  const setActivity = onActivityChange ?? setChosenActivity
   const [selectedPractice, setSelectedPractice] = useState<PathLesson | null>(firstPractice)
   const [selectedCompleted, setSelectedCompleted] = useState<PathLesson | null>(lastCompleted)
 

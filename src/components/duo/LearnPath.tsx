@@ -1,4 +1,5 @@
 import { PatchworkCharacter } from '../PatchworkCharacters'
+import { groupLessonsIntoUnits } from './courseDisplay'
 
 export type PathLesson = {
   id: string
@@ -21,6 +22,17 @@ interface LearnPathProps {
   isLoadingLesson: boolean
   onSelectLesson: (lesson: PathLesson) => void
   onOpenGuidebook: () => void
+  /**
+   * Show one unit's lessons instead of the whole course. The route
+   * `/course/:courseId/unit/:unitId` sets it; the course map leaves it unset.
+   */
+  unitFilter?: string | null
+  /**
+   * Makes the unit banner a link into that unit. Only passed on the course map —
+   * inside the unit itself the banner is a heading again, because there is no
+   * deeper place for it to go.
+   */
+  onOpenUnit?: (unitId: string) => void
 }
 
 function statusLabel(lesson: PathLesson, isActive: boolean): string {
@@ -46,35 +58,47 @@ export function LearnPath({
   isLoadingLesson,
   onSelectLesson,
   onOpenGuidebook,
+  unitFilter = null,
+  onOpenUnit,
 }: LearnPathProps) {
   const currentLesson = lessons.find((l) => l.status === 'current') || lessons.find((l) => l.id === activeLessonId)
 
-  const unitsMap = new Map<string, { id: string; title: string; sectionTitle?: string; lessons: PathLesson[] }>()
-  lessons.forEach((item, idx) => {
-    const unitId = item.unit_id || `unit-${Math.floor(idx / 4) + 1}`
-    const unitTitle = item.unit_title || `Unit ${Math.floor(idx / 4) + 1}`
-    if (!unitsMap.has(unitId)) {
-      unitsMap.set(unitId, { id: unitId, title: unitTitle, sectionTitle: item.section_title, lessons: [] })
-    }
-    unitsMap.get(unitId)!.lessons.push(item)
-  })
-  const unitGroups = Array.from(unitsMap.values())
+  // Grouped from the full course list even when one unit is being shown, so the
+  // "UNIT 7" caption matches on the map and inside the unit.
+  const unitGroups = groupLessonsIntoUnits(lessons)
   const focusIndex = Math.max(
     0,
     unitGroups.findIndex((u) => u.lessons.some((l) => l.id === currentLesson?.id))
   )
-  const focusUnit = unitGroups[focusIndex] ?? unitGroups[0]
+  const filteredUnit = unitFilter ? unitGroups.find((u) => u.id === unitFilter) ?? null : null
+  const focusUnit = unitFilter ? filteredUnit : unitGroups[focusIndex] ?? unitGroups[0]
+  const shownLessons = unitFilter ? filteredUnit?.lessons ?? [] : lessons
 
   return (
     <div className="duo-learn-stage">
       {focusUnit ? (
         <div className="duo-unit-banner duo-unit-banner-cyan">
-          <div className="duo-unit-info">
-            <span className="duo-unit-subtitle">
-              {focusUnit.sectionTitle ? `${focusUnit.sectionTitle} · ` : ''}UNIT {focusIndex + 1}
-            </span>
-            <span className="duo-unit-title">{focusUnit.title}</span>
-          </div>
+          {onOpenUnit ? (
+            <button
+              type="button"
+              className="duo-unit-info duo-unit-info--link"
+              onClick={() => onOpenUnit(focusUnit.id)}
+              aria-label={`Open ${focusUnit.title}`}
+              title="View this unit on its own"
+            >
+              <span className="duo-unit-subtitle">
+                {focusUnit.sectionTitle ? `${focusUnit.sectionTitle} · ` : ''}UNIT {focusIndex + 1}
+              </span>
+              <span className="duo-unit-title">{focusUnit.title}</span>
+            </button>
+          ) : (
+            <div className="duo-unit-info">
+              <span className="duo-unit-subtitle">
+                {focusUnit.sectionTitle ? `${focusUnit.sectionTitle} · ` : ''}UNIT {focusIndex + 1}
+              </span>
+              <span className="duo-unit-title">{focusUnit.title}</span>
+            </div>
+          )}
           <button type="button" className="duo-guidebook-btn" onClick={onOpenGuidebook}>
             GUIDEBOOK
           </button>
@@ -82,7 +106,7 @@ export function LearnPath({
       ) : null}
 
       <nav aria-label="Lessons" className="duo-path-tree">
-        {lessons.map((item, idx) => {
+        {shownLessons.map((item, idx) => {
           const isActive = activeLessonId === item.id
           const offset = OFFSETS[idx % OFFSETS.length]
           const showMascot = currentLesson?.id === item.id
