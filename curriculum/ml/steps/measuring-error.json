@@ -1,0 +1,247 @@
+{
+  "skill": "measuring-error",
+  "lesson": "linreg-mse",
+  "concept": "measuring-error",
+  "objective": "Measure how wrong a set of predictions is, and write the function that does it",
+  "story": {
+    "why_this": "A prediction is only useful once you can say how wrong it is.",
+    "why_next": "Once error is a number, we can change the weights to make that number smaller."
+  },
+  "note": "The first step is deliberately not new material: it retrieves linear prediction, so a learner arriving here meets one old idea and one new one rather than two new ones. Authored, not generated.",
+  "steps": [
+    {
+      "id": "me-retrieve-predict",
+      "concept": "linear-prediction",
+      "stage": "review",
+      "widget": "output_prediction",
+      "order": 1,
+      "stakes": "free",
+      "question": "Before the new idea, one from last time. What does this print?",
+      "code": "def predict(x, w, b):\n    return w * x + b\n\nprint(predict(2, 3, 1))\n",
+      "options": ["6", "7", "5"],
+      "correct_answer": "7",
+      "feedback": {
+        "6": "That is 3 * 2 without the bias. The shift is added once, at the end.",
+        "5": "That swaps w and b. Here 2 is the input, 3 is the weight."
+      },
+      "explanation": "Scale the input, then shift the result. Keep that shape; today we ask how far its output was from the truth."
+    },
+    {
+      "id": "me-intro",
+      "stage": "introduce",
+      "widget": "present",
+      "concept": "measuring-error",
+      "order": 1,
+      "stakes": "free",
+      "content": {
+        "lead": "A model's prediction and the truth are usually different numbers. The difference is the error.",
+        "symbols": {
+          "y_true": "what actually happened",
+          "y_pred": "what the model said",
+          "residual": "y_pred - y_true"
+        },
+        "formula": "error = prediction - truth",
+        "say": "Read it as: how far did we overshoot? Negative means we undershot."
+      },
+      "action": "Let's see it"
+    },
+    {
+      "id": "me-worked",
+      "stage": "show",
+      "widget": "present",
+      "concept": "measuring-error",
+      "order": 1,
+      "stakes": "free",
+      "content": {
+        "lead": "Two predictions, two errors, one number to describe them.",
+        "given": "y_true = [1, 2]   y_pred = [1, 4]",
+        "lines": [
+          "residual 1 = 1 - 1 =  0    squared: 0 * 0 = 0",
+          "residual 2 = 4 - 2 =  2    squared: 2 * 2 = 4",
+          "mean of the squares = (0 + 4) / 2 = 2.0"
+        ],
+        "takeaway": "Squaring makes each residual positive and punishes big misses harder; the mean makes the number independent of how many rows you looked at."
+      },
+      "action": "Continue"
+    },
+    {
+      "id": "me-why-squared",
+      "stage": "interact",
+      "widget": "mcq",
+      "concept": "measuring-error",
+      "order": 1,
+      "stakes": "free",
+      "targets_misconception": "formula_error",
+      "question": "Errors of +3 and -3 cancel if you just add them. What fixes that without discarding the sign information?",
+      "options": [
+        "square each error before averaging",
+        "drop the negative sign from the total",
+        "divide by the number of rows twice",
+        "add the predictions instead of the errors"
+      ],
+      "correct_answer": "square each error before averaging",
+      "feedback": {
+        "drop the negative sign from the total": "Taking the absolute value would also work, and that metric exists - but it is not what mean squared error does.",
+        "divide by the number of rows twice": "Scaling the average does not stop positive and negative from cancelling first."
+      },
+      "explanation": "Squaring makes every term non-negative before the mean is taken, which is what makes MSE a size-of-mistake measure rather than a signed one."
+    },
+    {
+      "id": "me-match-steps",
+      "stage": "guided",
+      "widget": "ordering",
+      "concept": "measuring-error",
+      "order": 1,
+      "difficulty": 1,
+      "stakes": "free",
+      "question": "Put the steps of mean squared error in the order they happen.",
+      "options": [
+        "diff = y_pred - y_true",
+        "sq = diff * diff",
+        "total = sum(sq)",
+        "mse = total / n"
+      ],
+      "correct_order": [
+        "diff = y_pred - y_true",
+        "sq = diff * diff",
+        "total = sum(sq)",
+        "mse = total / n"
+      ],
+      "feedback": {
+        "hint": "You cannot divide by the count before you have the sum."
+      }
+    },
+    {
+      "id": "me-worked-easier",
+      "stage": "show",
+      "widget": "present",
+      "concept": "measuring-error",
+      "order": 2,
+      "stakes": "free",
+      "remediation_of": "me-fill",
+      "content": {
+        "lead": "Here is the same function with the loop written out.",
+        "lines": [
+          "def mse(y_true, y_pred):",
+          "    total = 0",
+          "    for t, p in zip(y_true, y_pred):",
+          "        total = total + (p - t) ** 2",
+          "    return total / len(y_true)"
+        ],
+        "takeaway": "Square each residual, add them up, divide by how many there were."
+      },
+      "action": "Try the blank again"
+    },
+    {
+      "id": "me-fill",
+      "stage": "scaffolded",
+      "widget": "code_completion",
+      "concept": "measuring-error",
+      "order": 1,
+      "difficulty": 1,
+      "stakes": "free",
+      "targets_misconception": "formula_error",
+      "question": "Complete the squared term so a negative residual still counts as a mistake.",
+      "starter_code": "def mse(y_true, y_pred):\n    diffs = [(p - t) for t, p in zip(y_true, y_pred)]\n    squares = [___ for d in diffs]\n    return sum(squares) / len(diffs)\n",
+      "solution_code": "def mse(y_true, y_pred):\n    diffs = [(p - t) for t, p in zip(y_true, y_pred)]\n    squares = [d ** 2 for d in diffs]\n    return sum(squares) / len(diffs)\n",
+      "blanks": ["d ** 2"],
+      "correct_answer": ["d ** 2"],
+      "feedback": {
+        "d": "That keeps the sign, so a miss above and a miss below cancel each other out.",
+        "abs(d)": "Absolute value stops the cancelling too - but this metric squares, which punishes a large miss more than a small one."
+      },
+      "tests": [
+        { "name": "test_fill_mse", "unittest_code": "def test_fill_mse(self):\n    self.assertEqual(mse([1, 2], [1, 4]), 2.0)\n", "required": true }
+      ]
+    },
+    {
+      "id": "me-independent",
+      "stage": "independent",
+      "widget": "code",
+      "concept": "measuring-error",
+      "order": 1,
+      "difficulty": 2,
+      "stakes": "charged",
+      "question": "Write mse(y_true, y_pred) yourself: the mean of the squared residuals.",
+      "starter_code": "def mse(y_true, y_pred):\n    pass\n",
+      "solution_code": "def mse(y_true, y_pred):\n    n = len(y_true)\n    return sum((p - t) ** 2 for t, p in zip(y_true, y_pred)) / n\n",
+      "hints": [
+        "One pass over the pairs: for each pair, how far apart are they?",
+        "You need the count of pairs, not the count of one list's items twice."
+      ],
+      "tests": [
+        { "name": "test_mse_basic", "unittest_code": "def test_mse_basic(self):\n    self.assertEqual(mse([1, 2], [1, 4]), 2.0)\n", "required": true },
+        { "name": "test_mse_perfect", "unittest_code": "def test_mse_perfect(self):\n    self.assertEqual(mse([3, 3], [3, 3]), 0.0)\n", "required": true },
+        { "name": "test_mse_undershoot_counts", "unittest_code": "def test_mse_undershoot_counts(self):\n    self.assertEqual(mse([5], [3]), 4.0)\n", "required": true }
+      ]
+    },
+    {
+      "id": "me-debug",
+      "stage": "explain",
+      "widget": "identify_error",
+      "concept": "measuring-error",
+      "order": 1,
+      "stakes": "free",
+      "targets_misconception": "sign_of_residual",
+      "question": "mse([1, 2], [1, 4]) should be 2.0 but returns 1.0. What is wrong?",
+      "code": "def mse(y_true, y_pred):\n    diffs = [t - p for t, p in zip(y_true, y_pred)]\n    return sum(diffs) / len(diffs)\n",
+      "options": [
+        "the differences are averaged without being squared",
+        "the subtraction order makes the residuals negative",
+        "len(diffs) should be len(y_pred)",
+        "zip should be replaced by indexing"
+      ],
+      "correct_answer": "the differences are averaged without being squared",
+      "feedback": {
+        "the subtraction order makes the residuals negative": "Reversing the subtraction alone would give -2, not 1.0 - the signs cancel on the way to the average, which is the real bug.",
+        "len(diffs) should be len(y_pred)": "The divisor is right here; it is what is summed that is wrong."
+      },
+      "explanation": "Two bugs are hiding in one line: without squaring, an overshoot and an undershoot cancel. Squaring fixes both at once, which is why it is the middle step and not an afterthought."
+    },
+    {
+      "id": "me-transfer",
+      "stage": "transfer",
+      "widget": "code",
+      "concept": "measuring-error",
+      "order": 1,
+      "difficulty": 3,
+      "stakes": "charged",
+      "question": "Same idea, new job: a weather station logs forecast vs actual. Write mean_squared_error(forecast, actual) and return a float.",
+      "starter_code": "def mean_squared_error(forecast, actual):\n    pass\n",
+      "solution_code": "def mean_squared_error(forecast, actual):\n    n = len(actual)\n    return sum((f - a) ** 2 for f, a in zip(forecast, actual)) / n\n",
+      "hints": [
+        "Which argument is the prediction this time? The shape of the answer does not care, but the story does.",
+        "Two points, off by 2 and by 0: what should come out?"
+      ],
+      "tests": [
+        { "name": "test_mse_new_names", "unittest_code": "def test_mse_new_names(self):\n    self.assertEqual(mean_squared_error([10, 12], [10, 10]), 2.0)\n", "required": true },
+        { "name": "test_mse_exact_forecast", "unittest_code": "def test_mse_exact_forecast(self):\n    self.assertEqual(mean_squared_error([1, 2, 3], [1, 2, 3]), 0.0)\n", "required": true }
+      ]
+    },
+    {
+      "id": "me-mixed-check",
+      "stage": "mastery",
+      "widget": "select_multiple",
+      "concept": "measuring-error",
+      "order": 1,
+      "difficulty": 3,
+      "stakes": "charged",
+      "question": "MSE is 2.0 for two rows. Which statements must hold?",
+      "options": [
+        "the squared errors add to 4.0",
+        "at least one prediction differs from its truth",
+        "every prediction is exactly 2 too high",
+        "the average residual is zero"
+      ],
+      "correct_answer": [
+        "the squared errors add to 4.0",
+        "at least one prediction differs from its truth"
+      ],
+      "feedback": {
+        "every prediction is exactly 2 too high": "That is one way to reach 2.0, not the only one - a single miss of 2 and an exact hit also does it.",
+        "the average residual is zero": "Squared terms are non-negative, so their mean can only be zero if every prediction is exact."
+      },
+      "explanation": "This is the mixed check: it asks what MSE can and cannot tell you, which only separates if you are reasoning about the quantity rather than recomputing a formula."
+    }
+  ]
+}

@@ -11,6 +11,8 @@ from backend import step_pool
 from backend.step_pool import load_pool
 
 REAL_POOL = Path(__file__).resolve().parents[1] / "curriculum" / "ml" / "steps" / "linear-prediction.json"
+MSE_POOL = Path(__file__).resolve().parents[1] / "curriculum" / "ml" / "steps" / "measuring-error.json"
+SHIPPED_POOLS = pytest.mark.parametrize("path", [REAL_POOL, MSE_POOL], ids=["linear-prediction", "measuring-error"])
 
 
 def pool_dict(**over) -> dict:
@@ -40,12 +42,53 @@ def write(tmp_path: Path, payload: dict) -> Path:
     return path
 
 
-def test_the_shipped_pool_loads_and_validates():
-    pool = load_pool(REAL_POOL)
-    assert pool.lesson_id == "linreg-predict"
+@SHIPPED_POOLS
+def test_a_shipped_pool_loads_and_validates(path):
+    """Every pool that ships is one a learner can actually be handed.
+
+    Both real pools run through the same gates: this is the check that a second
+    authored concept did not slip past the rules the first one was written under.
+    """
+    pool = load_pool(path)
     assert len(pool.steps) >= 10
     assert {s["stage"] for s in pool.steps} >= {"introduce", "show", "interact", "guided",
                                                 "scaffolded", "independent", "explain", "transfer"}
+    # The ladder teaches exactly one concept; anything else is a retrieval hook.
+    for step in pool.steps:
+        foreign = (step.get("concept") or pool.concept) != pool.concept
+        assert not foreign or step["stage"] == "review", (
+            f"{step['id']} reaches outside {pool.concept} without being a review rung"
+        )
+
+
+def test_the_two_shipped_pools_teach_different_concepts():
+    """Proves the architecture generalises rather than special-casing one lesson."""
+    predict, mse = load_pool(REAL_POOL), load_pool(MSE_POOL)
+    assert (predict.lesson_id, predict.concept) == ("linreg-predict", "linear-prediction")
+    assert (mse.lesson_id, mse.concept) == ("linreg-mse", "measuring-error")
+    assert mse.steps[0]["concept"] == predict.concept, "the causal link is authored, not implied"
+
+
+def test_a_step_cannot_reach_another_concept_through_a_teaching_rung(tmp_path):
+    """Foreign material may only be retrieved, never taught or charged against.
+
+    Authoring `independent` under another concept would spend a learner's heart on
+    a lesson that never undertook to teach them that thing.
+    """
+    with pytest.raises(ValueError, match="must be stage 'review'"):
+        load_pool(write(tmp_path, pool_dict(steps=[{
+            "id": "steal", "concept": "some-other-lesson", "stage": "interact",
+            "widget": "mcq", "question": "q", "options": ["1", "2"],
+            "correct_answer": "1", "feedback": {"2": "no"},
+        }])))
+
+
+def test_a_review_rung_must_explain_a_wrong_answer_too(tmp_path):
+    with pytest.raises(ValueError, match="per-answer feedback"):
+        load_pool(write(tmp_path, pool_dict(steps=[{
+            "id": "bare-recall", "stage": "review", "widget": "mcq",
+            "question": "q", "options": ["1", "2"], "correct_answer": "1",
+        }])))
 
 
 def test_a_gradable_step_without_the_key_its_widget_needs_is_refused(tmp_path):

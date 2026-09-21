@@ -23,6 +23,9 @@ from backend.session_generator import (
 POOL_PATH = (
     Path(__file__).resolve().parents[1] / "curriculum" / "ml" / "steps" / "linear-prediction.json"
 )
+MSE_POOL_PATH = (
+    Path(__file__).resolve().parents[1] / "curriculum" / "ml" / "steps" / "measuring-error.json"
+)
 
 
 @pytest.fixture(scope="module")
@@ -32,8 +35,19 @@ def pool() -> list[dict]:
 
 
 @pytest.fixture(scope="module")
+def mse_pool() -> list[dict]:
+    assert MSE_POOL_PATH.exists(), f"authored step pool is missing: {MSE_POOL_PATH}"
+    return json.loads(MSE_POOL_PATH.read_text(encoding="utf-8"))["steps"]
+
+
+@pytest.fixture(scope="module")
 def steps(pool) -> list[Step]:
     return [Step.from_dict(raw) for raw in pool]
+
+
+@pytest.fixture(scope="module")
+def mse_steps(mse_pool) -> list[Step]:
+    return [Step.from_dict(raw) for raw in mse_pool]
 
 
 def ids(session) -> list[str]:
@@ -112,6 +126,84 @@ def test_a_demonstrated_concept_opens_on_retrieval_and_a_mixed_check(steps):
     session = generate_session(steps, [state])
     assert stages(session) == [Stage.INTERACT, Stage.MASTERY]
     assert all("faded" in s.reason or "mixed-skill" in s.reason for s in session.steps)
+
+
+def test_fading_waits_for_the_ladder_to_finish(steps):
+    """A demonstrated concept must not delete the rung the learner is standing on.
+
+    Measured in the browser: after `independent` and `explain` the concept counts
+    as demonstrated, and the session regenerated itself into a mixed-skill check —
+    dropping `lp-transfer`, the one rung where the learner uses the idea on a
+    problem they have never seen, before they had been asked to do it.
+    """
+    mid_ladder = ConceptState(
+        concept="linear-prediction",
+        cleared_steps={"lp-intro", "lp-worked", "lp-predict-up", "lp-match-symbols",
+                       "lp-build", "lp-fill", "lp-independent", "lp-debug"},
+        evidence={"independent", "debugged"},
+    )
+    assert mid_ladder.demonstrated, "the evidence rule really does fire this early"
+    session = generate_session(steps, [mid_ladder])
+    assert "lp-transfer" in ids(session), ids(session)
+    assert Stage.MASTERY not in stages(session), "no test-out while the ladder is unfinished"
+    assert all(s.stakes is not Stakes.CHARGED or s.step.id == "lp-transfer"
+               for s in session.steps)
+
+
+def test_a_finished_and_demonstrated_concept_fades_on_the_next_visit(steps):
+    walked = ConceptState(
+        concept="linear-prediction",
+        cleared_steps={"lp-intro", "lp-worked", "lp-predict-up", "lp-match-symbols",
+                       "lp-build", "lp-fill", "lp-independent", "lp-debug", "lp-transfer"},
+        evidence={"independent", "debugged"},
+    )
+    session = generate_session(steps, [walked])
+    assert Stage.MASTERY in stages(session)
+    assert "lp-transfer" not in ids(session)
+
+
+def test_a_finished_concept_revises_by_retrieving_not_by_re_reading(steps):
+    """The review session must ask for the idea, not show the lesson again.
+
+    Plain ladder order was the first attempt at this and it produced lp-intro,
+    lp-worked and the easier worked example: three cards whose only verb is
+    "continue", served to a learner who has already demonstrated the concept.
+    """
+    proven = ConceptState(
+        concept="linear-prediction",
+        cleared_steps={s.id for s in steps},
+        evidence={"independent", "debugged", "transferred", "applied", "delayed_recall"},
+        last_recall_at=10_000.0,
+        interval_seconds=300.0,
+    )
+    session = generate_session(steps, [proven], now=10_000.0)
+    chosen = ids(session)
+    assert chosen, "a finished concept still has something to do"
+    assert "lp-intro" not in chosen and "lp-worked" not in chosen, chosen
+    assert all(s.step.widget != "present" for s in session.steps), chosen
+    assert all(s.bonus for s in session.steps)
+
+
+def test_a_passed_mixed_check_is_not_asked_again(steps):
+    """A demonstrated concept must not be turned into a permanent exit ticket.
+
+    The fade used to pick the mastery step from *unused* steps rather than
+    un-cleared ones, so a learner who had already proved it was handed the same
+    charged check on every visit — the one rung that costs a heart, forever.
+    """
+    proven = ConceptState(
+        concept="linear-prediction",
+        cleared_steps={"lp-intro", "lp-worked", "lp-predict-up", "lp-match-symbols",
+                       "lp-build", "lp-fill", "lp-independent", "lp-debug",
+                       "lp-transfer", "lp-mixed-check"},
+        evidence={"independent", "debugged", "transferred", "applied"},
+        last_recall_at=0.0,
+        interval_seconds=300.0,
+    )
+    session = generate_session(steps, [proven], now=10_000.0)
+    assert "lp-mixed-check" not in ids(session)
+    assert session.steps, "a finished concept still has something to retrieve"
+    assert all(s.bonus for s in session.steps), [s.step.id for s in session.steps]
 
 
 def test_guided_success_alone_is_not_enough_to_be_faded(steps):
@@ -210,6 +302,53 @@ def test_a_not_yet_due_concept_adds_nothing():
     fresh = ConceptState(concept="c", last_recall_at=990.0, interval_seconds=300.0)
     session = generate_session(pool, [fresh], now=1000.0)
     assert session.bonus_count == 0
+
+
+# ─── Rule 9: a retrieval hook is never a first encounter ─────────────────────
+
+def test_a_second_authored_concept_walks_the_same_ladder(mse_steps):
+    """The architecture, not the one lesson: MSE goes through the same rungs."""
+    session = generate_session(mse_steps)
+    assert stages(session) == list(LADDER)
+    assert [s.step.concept for s in session.steps if not s.bonus] == ["measuring-error"] * 8
+
+
+def test_a_hook_for_a_concept_the_learner_never_met_stays_silent(mse_steps):
+    """The pool opens by retrieving linear prediction; a novice never saw it.
+
+    Without this rule a learner who walks straight from the course map into
+    "Mean Squared Error" would be handed a quiz on the previous lesson as their
+    first screen — the exact behaviour the transformation was asked to end.
+    """
+    session = generate_session(mse_steps, [])
+    assert "me-retrieve-predict" not in ids(session)
+    assert session.bonus_count == 0
+
+
+def test_a_due_hook_joins_the_next_lesson_as_bonus_practice(mse_steps):
+    learned = ConceptState(
+        concept="linear-prediction",
+        cleared_steps={"lp-intro", "lp-independent", "lp-transfer"},
+        evidence={"independent", "transferred"},
+        last_recall_at=0.0,
+        interval_seconds=300.0,
+    )
+    novice = ConceptState(concept="measuring-error")
+    session = generate_session(mse_steps, [learned, novice], now=10_000.0)
+    assert ids(session)[:8] == ids(generate_session(mse_steps, [novice]))
+    assert session.planned == 8, "the promised length must not move"
+    last = session.steps[-1]
+    assert last.step.id == "me-retrieve-predict" and last.bonus
+    assert "linear-prediction due for retrieval" in last.reason
+
+
+def test_an_unseen_concept_with_a_teaching_rung_is_still_walked():
+    """Rule 9 silences hooks, not new material: only introduction can be first contact."""
+    pool = [
+        {"id": "teach", "stage": "introduce", "widget": "present", "concept": "new"},
+        {"id": "ask", "stage": "interact", "widget": "mcq", "concept": "new"},
+    ]
+    assert ids(generate_session(pool)) == ["teach", "ask"]
 
 
 # ─── Determinism, traceability, and the interval rule ────────────────────────

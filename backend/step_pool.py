@@ -110,7 +110,7 @@ def _missing_key_reason(widget: str, raw: dict) -> str | None:
     return "needs tests or a solution_code to be graded"
 
 
-def _validate(raw: dict, source: Path, seen_ids: set[str]) -> None:
+def _validate(raw: dict, source: Path, seen_ids: set[str], pool_concept: str | None = None) -> None:
     def fail(message: str) -> None:
         raise ValueError(f"{source.name}: step {raw.get('id')!r} {message}")
 
@@ -124,6 +124,17 @@ def _validate(raw: dict, source: Path, seen_ids: set[str]) -> None:
         stage = Stage(str(raw["stage"]))
     except (KeyError, ValueError):
         fail(f"has unknown stage {raw.get('stage')!r}; ladder is {[s.value for s in LADDER]}")
+
+    # A step that names another concept is a retrieval hook for something an
+    # earlier lesson taught, and hooks only exist at the review rung. Authoring a
+    # foreign `independent` step would charge a learner's heart against a concept
+    # this lesson never undertook to teach.
+    named = raw.get("concept")
+    if pool_concept and named and named != pool_concept and stage is not Stage.REVIEW:
+        fail(
+            f"names foreign concept {named!r} at the {stage.value} rung; a step for a "
+            "concept this pool does not teach must be stage 'review'"
+        )
 
     widget = str(raw.get("widget") or raw.get("type") or "")
     if widget != PRESENTATION_WIDGET and widget not in GRADABLE_WIDGETS:
@@ -144,7 +155,7 @@ def _validate(raw: dict, source: Path, seen_ids: set[str]) -> None:
     if stakes == Stakes.CHARGED.value and stage in NON_CHARGED_STAGES:
         fail(f"is a {stage.value} rung authored charged; teaching rungs are free to fail")
 
-    if stage in (Stage.INTERACT, Stage.GUIDED, Stage.SCAFFOLDED, Stage.EXPLAIN):
+    if stage in (Stage.INTERACT, Stage.GUIDED, Stage.SCAFFOLDED, Stage.EXPLAIN, Stage.REVIEW):
         feedback = raw.get("feedback")
         if not isinstance(feedback, dict) or not feedback:
             fail("can be answered wrongly but ships no per-answer feedback")
@@ -169,7 +180,7 @@ def load_pool(path: Path) -> StepPool:
 
     seen: set[str] = set()
     for step in steps:
-        _validate(step, path, seen)
+        _validate(step, path, seen, pool_concept=raw.get("concept"))
         seen.add(step["id"])
 
     # Remediation links are checked after every id is known, so a typo points at
@@ -180,10 +191,23 @@ def load_pool(path: Path) -> StepPool:
             raise ValueError(f"{path.name}: step {step['id']!r} remediates unknown step {target!r}")
 
     concepts = {step.get("concept") for step in steps if step.get("concept")}
+    concept = raw.get("concept")
+    if not concept and len(concepts) > 1:
+        # A pool that names several concepts teaches the one it gives a first
+        # encounter to; the others are retrieval hooks. Getting this backwards
+        # would file a learner's evidence under the wrong concept.
+        taught = sorted(
+            {
+                str(s.get("concept"))
+                for s in steps
+                if s.get("concept") and Stage(str(s["stage"])) in (Stage.INTRODUCE, Stage.SHOW)
+            }
+        )
+        concept = taught[0] if len(taught) == 1 else raw["skill"]
     return StepPool(
         skill=raw["skill"],
         lesson_id=raw["lesson"],
-        concept=raw.get("concept") or (concepts.pop() if len(concepts) == 1 else raw["skill"]),
+        concept=concept or (concepts.pop() if len(concepts) == 1 else raw["skill"]),
         objective=raw.get("objective", ""),
         story=raw.get("story") or {},
         steps=tuple(steps),

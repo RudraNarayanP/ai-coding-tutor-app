@@ -15,9 +15,11 @@ The rules, in the order they apply:
                      scaffolded → independent → explain → transfer.
 2. Resume          — rungs already cleared are not re-taught; the session starts at
                      the first uncleared rung.
-3. Fading          — a concept already demonstrated drops the teaching rungs and
-                     opens with one retrieval prompt (expertise reversal: guidance
-                     becomes redundant, then harmful, as prior knowledge grows).
+3. Fading          — a concept already demonstrated *and* fully walked drops the
+                     teaching rungs and opens with one retrieval prompt (expertise
+                     reversal: guidance becomes redundant, then harmful, as prior
+                     knowledge grows). It never fades a ladder the learner is
+                     still inside.
 4. Remediation     — repeated misses at a rung insert a simpler worked example
                      before asking again.
 5. Misconception   — a recorded misconception inserts a step that targets it ahead
@@ -29,6 +31,14 @@ The rules, in the order they apply:
                      editor rungs in row.
 8. Review as bonus — due retrieval is appended *past* the known end, so the progress
                      indicator never shrinks or moves backwards mid-session.
+9. First contact   — a step that names a concept this pool does not teach is a
+                     retrieval hook for something an earlier lesson taught. It fires
+                     for a learner who has met that concept (rules 3 and 8) and stays
+                     silent for one who has not: nobody should be handed a quiz on
+                     material they never saw.
+
+9 is why the generator is handed the learner state for *every* concept a pool names,
+not just the pool's own: a hook is only as good as the history it can read.
 """
 
 from __future__ import annotations
@@ -265,6 +275,19 @@ def _strongest_misconception(state: ConceptState) -> str | None:
 NON_INTERACTIVE_WIDGETS = frozenset({"present"})
 
 
+def _ladder_finished(pool_for: Sequence[Step], done: set[str]) -> bool:
+    """Has the learner been through every rung this concept asks them to produce?
+
+    Fading is a claim about a *finished* piece of work. Applied halfway through a
+    lesson it deletes the rung the learner is standing in front of: clearing
+    `independent` and then `explain` already counts as demonstrated, so without
+    this check the transfer rung — the one where they use the idea on a problem
+    they have not seen — vanished from the session mid-lesson.
+    """
+    charged = [s.id for s in pool_for if s.stage in (Stage.INDEPENDENT, Stage.TRANSFER)]
+    return all(step_id in done for step_id in charged)
+
+
 def generate_session(
     pool: Iterable[Step | dict[str, Any]],
     learner: Iterable[ConceptState] = (),
@@ -302,16 +325,27 @@ def generate_session(
             continue
         done = set(state.cleared_steps)
 
-        # Rule 3 — fade the teaching rungs once the concept is demonstrated.
-        if state.demonstrated:
+        # Rule 9 — a group of steps that only retrieve is a hook for a concept an
+        # earlier lesson taught, so it has nothing to say to a learner who never
+        # met it. Their first contact with a concept must always be instruction.
+        if not state.seen and not any(
+            s.stage in (Stage.INTRODUCE, Stage.SHOW) for s in pool_for
+        ):
+            continue
+
+        # Rule 3 — fade the teaching rungs once the concept is demonstrated *and*
+        # every rung of this ladder has been walked. Fading is a between-sessions
+        # decision; mid-lesson it would re-route the learner past their own work.
+        if state.demonstrated and _ladder_finished(pool_for, done):
             retrieval = _pick(pool_for, done, stage=Stage.INTERACT)
             if retrieval is not None:
                 add(retrieval, f"faded: {concept} already demonstrated, opening on retrieval "
                                "instead of re-teaching")
-                done = used  # never re-walk this concept's ladder
             # The gate that separates "did it once" from "demonstrated" is a
-            # mixed-skill check, not a higher score on the same item.
-            check = _pick(pool_for, used, stage=Stage.MASTERY)
+            # mixed-skill check, not a higher score on the same item. A check the
+            # learner has already passed stays passed: re-serving it every visit
+            # turns a demonstrated concept into a permanent exit ticket.
+            check = _pick(pool_for, used | done, stage=Stage.MASTERY)
             if check is not None:
                 add(
                     check,
@@ -407,13 +441,44 @@ def generate_session(
             continue
 
     if not out:
-        # Everything authored was already cleared: a retrieval-only session beats
-        # reserving the learner into a lesson with nothing new in it.
-        for step in sorted(steps, key=_rank)[:3]:
+        # Every rung is cleared, so the visit is review. Rank by how much each step
+        # asks the learner to *retrieve*: a session that opened with the worked
+        # example again (which is what plain ladder order gives) re-shows a concept
+        # to someone who has already proved it, and acknowledges reading instead of
+        # testing memory. `present` steps are last, and only if nothing else exists.
+        retrievable = [s for s in steps if s.widget != PRESENTATION_WIDGET]
+        pool = sorted(retrievable, key=_retrieval_rank) or list(steps)
+        for step in pool[:3]:
             add(step, "retrieval-only: every rung of this skill is already cleared",
                 bonus=True)
 
     return Session(steps=tuple(out), concepts=tuple(concepts))
+
+
+#: Widgets that ask for no retrieval at all, so they never lead a review session.
+PRESENTATION_WIDGET = "present"
+
+#: Lower is more worth retrieving. Delayed recall and the mixed check are the two
+#: that say something about the memory; a fill blank is the weakest.
+_RETRIEVAL_ORDER = (
+    Stage.REVIEW,
+    Stage.MASTERY,
+    Stage.INTERACT,
+    Stage.EXPLAIN,
+    Stage.TRANSFER,
+    Stage.INDEPENDENT,
+    Stage.GUIDED,
+    Stage.SCAFFOLDED,
+    Stage.SHOW,
+    Stage.INTRODUCE,
+)
+
+
+def _retrieval_rank(step: Step) -> tuple[int, int, str]:
+    try:
+        return (_RETRIEVAL_ORDER.index(step.stage), step.order, step.id)
+    except ValueError:
+        return (len(_RETRIEVAL_ORDER), step.order, step.id)
 
 
 def _placement_reason(step: Step, state: ConceptState, wants_hint: str | None) -> str:

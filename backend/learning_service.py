@@ -19,7 +19,13 @@ from typing import Any
 
 from backend import step_pool
 from backend.learning_models import Stage, Stakes
-from backend.session_generator import ConceptState, Step, generate_session, next_interval
+from backend.session_generator import (
+    BASE_INTERVAL_SECONDS,
+    ConceptState,
+    Step,
+    generate_session,
+    next_interval,
+)
 
 #: XP for clearing a rung by production rather than by being shown. Steps may
 #: override with ``xp_reward``; teaching rungs award nothing, because reading a
@@ -80,6 +86,24 @@ def _persist(state: ConceptState) -> dict[str, Any]:
     }
 
 
+def concepts_in_pool(pool) -> list[str]:
+    """Every concept the pool's steps name, this pool's own concept first.
+
+    A pool may author *retrieval hooks* for a concept another lesson taught —
+    "Mean Squared Error" opens by asking for a prediction, because error is only
+    interesting once you have a prediction to be wrong about. Those hooks belong
+    to a different concept, and the learner's history with *that* concept is what
+    decides whether the hook can be served at all.
+    """
+    named = [str(s.get("concept") or pool.concept) for s in pool.steps]
+    return sorted({pool.concept, *named})
+
+
+def states_for(store, pool) -> dict[str, ConceptState]:
+    """Learner state for every concept in the pool, keyed by concept."""
+    return {c: concept_view(store.concept_state(c), c) for c in concepts_in_pool(pool)}
+
+
 def _submitted_label(widget: str, payload: dict) -> str | None:
     """The answer as the learner saw it, for authored per-answer feedback."""
     if widget in ("mcq", "true_false", "output_prediction", "identify_error", "identify_mistake", "short_answer"):
@@ -91,6 +115,15 @@ def _submitted_label(widget: str, payload: dict) -> str | None:
     if widget == "ordering":
         order = payload.get("order") or payload.get("answers") or []
         return " | ".join(str(o) for o in order) if order else None
+    if widget in ("fill_blank", "code_completion"):
+        # What was typed into the blank, so a step that authored a repair for the
+        # common wrong fill ("d" instead of "d ** 2") can actually say it. Without
+        # this the answer text falls through to generic feedback and the authored
+        # misconception repair is dead data in the pool.
+        answers = payload.get("answers") or []
+        if isinstance(answers, str):
+            return answers
+        return str(answers[0]) if answers else None
     return None
 
 
@@ -107,18 +140,28 @@ def authored_feedback(step: dict, widget: str, payload: dict, fallback: str) -> 
     return fallback, label
 
 
+def _is_due(state: ConceptState, now: float) -> bool:
+    return bool(state.interval_seconds) and state.last_recall_at is not None \
+        and (now - state.last_recall_at) >= state.interval_seconds
+
+
 def session_for(lesson_engine, lesson_id: str, language: str) -> dict[str, Any] | None:
     """The generated session for a ladder lesson, or None if it has no pool."""
     pool = step_pool.pool_for_lesson(language, lesson_id)
     if pool is None:
         return None
     store = lesson_engine.stores.get(language, lesson_engine.store)
-    state = concept_view(store.concept_state(pool.concept), pool.concept)
-    session = generate_session(pool.as_generator_pool(), [state], now=_now())
     now = _now()
+    # Every concept the pool names, not just its own: a retrieval hook for an old
+    # concept can only be served if the generator can see what the learner showed
+    # about *that* concept.
+    states = states_for(store, pool)
+    state = states[pool.concept]
+    session = generate_session(pool.as_generator_pool(), list(states.values()), now=now)
     steps = []
     for entry in session.steps:
         raw = pool.by_id(entry.step.id) or {}
+        own = states.get(entry.step.concept) or state
         steps.append(
             {
                 **entry.as_public(),
@@ -132,10 +175,8 @@ def session_for(lesson_engine, lesson_id: str, language: str) -> dict[str, Any] 
                 "content": raw.get("content", {}),
                 "action": raw.get("action", ""),
                 "hints": raw.get("hints", []),
-                "cleared": entry.step.id in state.cleared_steps,
-                "due": bool(state.interval_seconds)
-                and state.last_recall_at is not None
-                and (now - state.last_recall_at) >= state.interval_seconds,
+                "cleared": entry.step.id in own.cleared_steps,
+                "due": _is_due(own, now),
             }
         )
     return {
@@ -146,6 +187,13 @@ def session_for(lesson_engine, lesson_id: str, language: str) -> dict[str, Any] 
         "story": pool.story,
         "planned_steps": session.planned,
         "bonus_steps": session.bonus_count,
+        # How far through the lesson a learner starting from zero would get. The
+        # session list only holds what is still owed, so without this the client
+        # cannot tell "3 of 8" from "1 of 3" and the progress bar restarts every
+        # time a rung is answered. Derived from the generator rather than counted
+        # off the pool, because the pool also carries remediation and mixed-skill
+        # rungs that a first visit never reaches.
+        "ladder_steps": generate_session(pool.as_generator_pool(), [], now=0.0).planned,
         "steps": steps,
         "trace": session.trace(),
         "demonstrated": state.demonstrated,
@@ -161,9 +209,10 @@ def mark_step_seen(store, pool, step: dict, *, now: float | None = None) -> dict
     displaces learning.
     """
     moment = _now() if now is None else now
-    state = concept_view(store.concept_state(pool.concept), pool.concept)
+    concept = str(step.get("concept") or pool.concept)
+    state = concept_view(store.concept_state(concept), concept)
     state.cleared_steps.add(step["id"])
-    store.set_concept_state(pool.concept, _persist(state))
+    store.set_concept_state(concept, _persist(state))
     return {"step_id": step["id"], "cleared": sorted(state.cleared_steps), "xp_awarded": 0}
 
 
@@ -186,6 +235,9 @@ async def attempt_step(lesson_engine, lesson_id: str, language: str, step_id: st
         raise KeyError(f"step {step_id!r} is not part of {pool.skill}")
     stage = Stage(step["stage"])
     widget = step["widget"]
+    # A step belongs to the concept it names, which for a retrieval hook is the
+    # concept an earlier lesson taught — not the one this lesson is about.
+    step_concept = str(step.get("concept") or pool.concept)
     if widget == step_pool.PRESENTATION_WIDGET:
         raise ValueError("presentation steps are marked seen, never attempted")
 
@@ -203,7 +255,7 @@ async def attempt_step(lesson_engine, lesson_id: str, language: str, step_id: st
     attempt_count = store.record_attempt(step_id, passed, lesson_id=lesson_id)
     graduated = step_id in queued_before and step_id not in store.queued_exercise_ids()
 
-    state = concept_view(store.concept_state(pool.concept), pool.concept)
+    state = concept_view(store.concept_state(step_concept), step_concept)
     hinted = hints_used > 0
     xp_awarded = 0
 
@@ -225,6 +277,13 @@ async def attempt_step(lesson_engine, lesson_id: str, language: str, step_id: st
                 state.strong_recalls += 1
                 state.last_recall_at = moment
                 state.interval_seconds = next_interval(state.interval_seconds, True)
+            elif state.last_recall_at is None:
+                # Seed the clock. Without this a concept whose pool authors no
+                # review step could never become due, and spaced retrieval would
+                # silently apply only to the concepts someone happened to write a
+                # card for.
+                state.last_recall_at = moment
+                state.interval_seconds = BASE_INTERVAL_SECONDS
         if first_clear:
             xp_awarded += store.add_xp(int(step.get("xp_reward", STAGE_XP.get(stage, 0)) or 0))
     else:
@@ -233,17 +292,25 @@ async def attempt_step(lesson_engine, lesson_id: str, language: str, step_id: st
         if stage is Stage.REVIEW:
             state.last_recall_at = moment
             state.interval_seconds = next_interval(0.0, False)
+        elif state.last_recall_at is None:
+            state.last_recall_at = moment
+            state.interval_seconds = BASE_INTERVAL_SECONDS
         target = step.get("targets_misconception") or payload.get("misconception")
         if target:
             state.misconceptions[str(target)] = state.misconceptions.get(str(target), 0) + 1
     if hinted:
         state.hinted_steps.add(step_id)
-    store.set_concept_state(pool.concept, _persist(state))
+    store.set_concept_state(step_concept, _persist(state))
 
     lesson_completed = False
     next_lesson_id = None
-    rungs = _complete_rungs(pool, state)
-    if rungs and all(rid in state.cleared_steps for rid in rungs):
+    # Completing a lesson is a claim about the lesson's own concept, so it reads
+    # that concept's state even when the step just attempted was a hook for
+    # another one.
+    owned = state if step_concept == pool.concept else \
+        concept_view(store.concept_state(pool.concept), pool.concept)
+    rungs = _complete_rungs(pool, owned)
+    if rungs and all(rid in owned.cleared_steps for rid in rungs):
         if lesson_id not in store.state().completed_lesson_ids:
             store.mark_completed(lesson_id)
             xp_awarded += store.add_xp(lesson.xp_reward or 10)
@@ -256,7 +323,10 @@ async def attempt_step(lesson_engine, lesson_id: str, language: str, step_id: st
     return {
         "step_id": step_id,
         "stage": stage.value,
-        "concept": pool.concept,
+        # What the *attempted step* proved, which for a retrieval hook is a
+        # concept from an earlier lesson. The completion screen reads the lesson's
+        # own state from ``session`` instead, so the two cannot be confused.
+        "concept": step_concept,
         "passed": passed,
         "state": "correct" if passed else "incorrect",
         "attempt_count": attempt_count,
@@ -268,7 +338,7 @@ async def attempt_step(lesson_engine, lesson_id: str, language: str, step_id: st
         "total_xp": store.state().xp,
         "level": store.state().level,
         "evidence": sorted(state.evidence),
-        "demonstrated": concept_view(_persist(state), pool.concept).demonstrated,
+        "demonstrated": concept_view(_persist(state), step_concept).demonstrated,
         "graduated": graduated,
         "still_queued": step_id in store.queued_exercise_ids(),
         "lesson_completed": lesson_completed,
