@@ -234,6 +234,23 @@ export function useLearningSession() {
     api.hearts().then(applyHearts)
   }, [applyHearts])
 
+  // The headline number is what the learner can demonstrate, not how long they
+  // have been here — attendance is the metric that is easy to game and the one
+  // that teaches nothing. Refetched on navigation, which is when it can change.
+  const [concepts, setConcepts] = useState<{ demonstrated: number; total: number } | null>(null)
+  useEffect(() => {
+    let cancelled = false
+    fetch(`/api/concepts?language=${encodeURIComponent(selectedLanguage)}`)
+      .then((res) => (res.ok ? res.json() : null))
+      .then((data) => {
+        if (!cancelled && data) setConcepts({ demonstrated: data.demonstrated, total: data.total })
+      })
+      .catch(() => {})
+    return () => {
+      cancelled = true
+    }
+  }, [selectedLanguage, location.pathname])
+
   const triggerXpGain = useCallback((amount: number) => {
     if (amount > 0) {
       setXpGainPopup(amount)
@@ -1595,6 +1612,7 @@ setExercisePhase('incorrect')
     completedExerciseIds,
     completedMaterialIds,
     completion,
+    concepts,
     consecutiveCorrect,
     continueToNextExercise,
     courseIsSwitching,
@@ -1711,6 +1729,7 @@ setExercisePhase('incorrect')
     setCharSubTab,
     setCode,
     setCompletedMaterialIds,
+    setConcepts,
     setConsecutiveCorrect,
     setCourses,
     setCustomTitle,
@@ -1780,5 +1799,6 @@ setExercisePhase('incorrect')
     workspaceExercise,
     xp,
     xpGainPopup,
+
   }
 }

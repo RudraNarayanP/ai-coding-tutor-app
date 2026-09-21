@@ -2575,3 +2575,84 @@ select option { background: var(--card); color: var(--ink); }
 #restore-code-button {
   border-style: dashed;
 }
+
+/* ─── Teaching ladder (StepRunner) ───────────────────────────────────────────
+   One rung per screen, one primary verb. Reuses the existing theme tokens so a
+   ladder lesson and an ordinary lesson look like the same product. */
+.duo-page-container--ladder {
+  display: flex;
+  justify-content: center;
+  padding: 24px 16px 64px;
+}
+
+.lr-root {
+  width: 100%;
+  max-width: 620px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.lr-rail { display: flex; flex-direction: column; gap: 8px; }
+.lr-rail-head { display: flex; justify-content: space-between; align-items: baseline; }
+.lr-skill { font-size: 13px; font-weight: 900; letter-spacing: .04em; text-transform: uppercase; color: var(--muted); }
+.lr-count { font-size: 13px; font-weight: 800; color: var(--muted); font-variant-numeric: tabular-nums; }
+.lr-dots { display: flex; align-items: center; gap: 6px; }
+.lr-dot { width: 22px; height: 6px; border-radius: 999px; background: var(--line); }
+.lr-dot.is-done { background: var(--green); }
+.lr-dot.is-now { background: var(--green); box-shadow: 0 0 0 3px rgba(83, 206, 155, .25); }
+.lr-bonus { margin-left: 8px; font-size: 11px; font-weight: 800; color: var(--muted); white-space: nowrap; }
+.lr-stage { font-size: 11px; font-weight: 900; letter-spacing: .08em; text-transform: uppercase; color: var(--ink-soft); }
+.lr-stage--independent, .lr-stage--transfer, .lr-stage--mastery { color: var(--green); }
+
+.lr-card {
+  background: var(--card-bg, var(--input-bg));
+  border: 2px solid var(--line);
+  border-radius: 16px;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+.lr-card--done { border-color: var(--green); }
+.lr-lead { margin: 0; font-size: 20px; font-weight: 900; line-height: 1.25; }
+.lr-given, .lr-say { margin: 0; font-size: 15px; font-weight: 700; color: var(--ink-soft); }
+.lr-question { margin: 0; font-size: 17px; font-weight: 800; line-height: 1.4; }
+.lr-formula, .lr-lines, .lr-takeaway { border-radius: 12px; padding: 12px 14px; }
+.lr-formula, .lr-lines {
+  background: var(--input-bg);
+  border: 2px solid var(--line);
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 15px;
+  line-height: 1.6;
+  white-space: pre-wrap;
+  margin: 0;
+}
+.lr-takeaway { background: rgba(83, 206, 155, .12); font-weight: 800; font-size: 14px; }
+.lr-symbols { display: grid; gap: 8px; margin: 0; }
+.lr-symbol { display: grid; grid-template-columns: 40px 1fr; gap: 10px; align-items: baseline; }
+.lr-symbol dt { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-weight: 900; color: var(--green); }
+.lr-symbol dd { margin: 0; font-size: 14px; font-weight: 700; color: var(--ink-soft); }
+
+.lr-feedback { margin: 0; }
+.lr-feedback .duo-feedback-title { display: flex; justify-content: space-between; gap: 12px; }
+.lr-xp { color: var(--green); font-weight: 900; }
+.lr-xp-total { font-weight: 900; color: var(--green); margin: 0; }
+.lr-why { font-size: 14px; font-weight: 700; color: var(--ink-soft); margin: 6px 0 0; }
+.lr-free-note { margin: 8px 0 0; font-size: 13px; font-weight: 800; color: var(--muted); }
+.lr-reason { margin: 0; font-size: 12px; font-weight: 700; color: var(--muted); }
+.lr-hint-exhausted { font-size: 13px; font-weight: 800; color: var(--muted); }
+.lr-evidence { list-style: none; padding: 0; margin: 0; display: grid; gap: 6px; font-weight: 800; font-size: 15px; }
+.lr-next-why { margin: 0; font-size: 14px; font-weight: 700; color: var(--ink-soft); }
+.lr-actions { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; justify-content: flex-end; }
+.lr-cta { min-width: 168px; justify-content: center; }
+.lr-hints { margin-right: auto; display: flex; flex-direction: column; gap: 8px; }
+.lr-hint-list { margin: 0; padding-left: 20px; font-size: 14px; font-weight: 700; color: var(--ink-soft); display: grid; gap: 4px; }
+
+.lr-metric { display: flex; flex-direction: column; align-items: center; line-height: 1.1; }
+.lr-metric-val { font-weight: 900; }
+.lr-metric-lbl { font-size: 10px; text-transform: uppercase; letter-spacing: .06em; color: var(--muted); }
+
+@media (prefers-reduced-motion: reduce) {
+  .lr-dot.is-now { animation: none; }
+}

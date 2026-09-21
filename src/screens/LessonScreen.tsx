@@ -8,11 +8,15 @@
  * session with no help from React state.
  */
 
+import { useNavigate } from 'react-router-dom'
 import { useLearning } from '../learning/useLearning'
+import { useStepSession } from '../learning/useStepSession'
+import { StepRunner } from '../components/StepRunner'
 import ExercisePanel from '../components/ExercisePanel'
 import ExerciseWorkspace from '../components/ExerciseWorkspace'
 import { TutorActions } from '../components/TutorActions'
 import { DEFAULT_FEEDBACK, LANGUAGE_FILE_EXT } from '../learning/types'
+import { lessonPath } from '../learning/routes'
 import { NotFoundScreen } from './NotFoundScreen'
 
 /**
@@ -31,6 +35,7 @@ const CLEARED_STEP_FEEDBACK = {
 }
 
 export function LessonScreen() {
+  const navigate = useNavigate()
   const {
     addNote,
     aiEnabled,
@@ -89,7 +94,10 @@ export function LessonScreen() {
     tutorLevel,
     tutorSource,
     workspaceExercise,
+    params,
   } = useLearning()
+
+  const ladder = useStepSession(params.lessonId ?? null)
 
   // ─── One tutor affordance, shared by every workspace surface ───────────────
   // Exercise steps and lesson-level code used to render different chrome, which
@@ -144,6 +152,22 @@ export function LessonScreen() {
       </div>
     </aside>
   ) : null
+
+  // A lesson with authored teaching steps runs the ladder; everything else keeps
+  // the existing exercise flow, so the 300+ lessons that are not ladders yet are
+  // untouched by this branch.
+  if (ladder.mode === 'ladder' && ladder.session) {
+    return (
+      <div className="duo-page-container duo-page-container--ladder">
+        <StepRunner
+          {...ladder}
+          session={ladder.session}
+          onExit={goBack}
+          onNextLesson={(lessonId) => navigate(lessonPath(lessonId))}
+        />
+      </div>
+    )
+  }
 
   if (lessonError === 'not_found') {
     // A lesson the server says does not exist is the route's problem, not the

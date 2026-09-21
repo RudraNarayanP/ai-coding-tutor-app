@@ -55,6 +55,7 @@ export function AppLayout() {
     backendError,
     code,
     completedCount,
+    concepts,
     coursePathTitle,
     courses,
     currentProviderStatus,
@@ -240,6 +241,20 @@ export function AppLayout() {
             <div className="duo-stat-pill xp" title="Total XP" aria-label={`XP: ${xp}, Level: ${level}`}>
               <span>⭐ {xp} XP</span>
             </div>
+            {/* The number that matters: concepts the learner has demonstrated
+                independently. XP and streak stay, but they are not the goal. */}
+            {concepts && concepts.total > 0 ? (
+              <div
+                className="duo-stat-pill"
+                title={`${concepts.demonstrated} of ${concepts.total} concepts demonstrated independently`}
+                aria-label={`Concepts demonstrated: ${concepts.demonstrated}`}
+              >
+                <span className="lr-metric">
+                  <span className="lr-metric-val">🧠 {concepts.demonstrated}</span>
+                  <span className="lr-metric-lbl">demonstrated</span>
+                </span>
+              </div>
+            ) : null}
             <div
               className="duo-stat-pill hearts"
               title={
