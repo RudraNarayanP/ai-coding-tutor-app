@@ -16,6 +16,8 @@ from backend.starter_leak_audit import (
     LessonView,
     audit,
     audit_lesson,
+    displayed_answer_first,
+    iter_steps,
     normalise,
     structure,
 )
@@ -306,3 +308,69 @@ def test_answer_position_bias_ignores_a_spread_set(tmp_path):
 def test_shipped_curriculum_balances_answer_positions_per_type():
     rules = {leak.rule for leak in audit(CURRICULUM_ROOT)}
     assert "answer_position_bias" not in rules
+
+
+# ── the ladder's authored step pools are under the same gates ────────────────
+
+def _steps_tree(tmp_path: Path, steps: list[dict]) -> Path:
+    root = tmp_path / "curriculum"
+    directory = root / "testcourse" / "steps"
+    directory.mkdir(parents=True)
+    (directory / "pool.json").write_text(
+        json.dumps({"skill": "s", "lesson": "l", "concept": "c", "steps": steps}),
+        encoding="utf-8",
+    )
+    return root
+
+
+def test_a_step_that_shows_its_key_first_is_flagged(tmp_path):
+    """A step is an exercise to the client, so the display-order gate must see it.
+
+    This is not hypothetical: the first authored retrieval hook shipped with its
+    key in the slot the shuffled display renders first — winnable by always
+    tapping the leftmost option, and invisible while the gates read only lessons.
+    """
+    from backend.answer_order import key_shown_first
+
+    # The stored arrangement of the real item, before it was reordered: this is
+    # the exact data that shipped and passed every lesson-only gate.
+    step_id = "me-retrieve-predict"
+    stored = ["7", "6", "5"]
+    assert key_shown_first(step_id, stored, "7"), "the fixture must reproduce the exploit"
+    root = _steps_tree(tmp_path, [{
+        "id": step_id, "stage": "review", "widget": "output_prediction",
+        "question": "What does this print?",
+        "options": stored, "correct_answer": "7",
+        "feedback": {"6": "That is the product without the bias."},
+    }])
+    leaks = displayed_answer_first(root)
+    assert [leak.lesson_id for leak in leaks] == [step_id]
+    assert all(leak.scope == "exercise" for leak in leaks)
+
+
+def test_a_scaffolded_step_cannot_hand_over_its_own_answer(tmp_path):
+    root = _steps_tree(tmp_path, [{
+        "id": "spoiler", "stage": "scaffolded", "widget": "code",
+        "question": "finish it",
+        "starter_code": "def score(x):\n    # TODO: return hours * rate + bonus\n    pass\n",
+        "solution_code": "def score(x):\n    return hours * rate + bonus\n",
+    }])
+    views = list(iter_steps(root))
+    assert [v.lesson_id for v in views] == ["l/spoiler"]
+    assert "todo_quotes_answer" in {leak.rule for leak in audit_lesson(views[0])}
+    assert any(leak.scope == "step" for leak in audit(root))
+
+
+def test_the_shipped_ladder_steps_never_show_their_key_first():
+    """The positive control for the gate above, on the content that ships."""
+    from backend.answer_order import key_shown_first
+    from backend.starter_leak_audit import iter_step_exercises
+
+    checked = 0
+    for _lesson, step, _path in iter_step_exercises(CURRICULUM_ROOT):
+        options, answer = step.get("options") or [], step.get("correct_answer")
+        if not isinstance(options, list) or len(options) < 3 or not isinstance(answer, str):
+            continue
+        assert not key_shown_first(str(step.get("id")), options, answer), step.get("id")
+        checked += 1
+    assert checked >= 5, f"only {checked} step items checked — the gate is idle"

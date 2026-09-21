@@ -104,6 +104,30 @@ def iter_items():
             items += list(lesson.mastery_exam or [])
             for exercise in items:
                 yield language, lesson, exercise
+        yield from iter_step_items(language)
+
+
+def iter_step_items(language: str):
+    """The ladder's authored steps, graded by the same rule as everything else.
+
+    Hand-authored content is where a silent auto-pass is *easiest* to introduce —
+    one widget whose key sits in a field the grader never reads — and a step that
+    accepts a wrong answer is worse than no step, because the ladder records it as
+    evidence that the learner can write the code.
+    """
+    from types import SimpleNamespace
+
+    from backend import step_pool
+
+    for pool in step_pool.pools_for_language(language):
+        for step in pool.steps:
+            if step["widget"] == step_pool.PRESENTATION_WIDGET:
+                continue
+            yield (
+                language,
+                SimpleNamespace(id=pool.lesson_id),
+                step_pool.step_as_exercise(pool, step),
+            )
 
 
 def main() -> int:

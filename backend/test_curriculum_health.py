@@ -17,7 +17,7 @@ import pytest
 
 from backend.curriculum_loader import load_all_curriculums
 from backend.exercise_types import ALL_TYPES, widget_for
-from backend.starter_leak_audit import iter_exercises
+from backend.starter_leak_audit import iter_exercises, iter_step_exercises
 
 CURRICULUMS = load_all_curriculums()
 
@@ -185,4 +185,11 @@ def test_curriculum_json_is_readable_by_the_same_path_the_audit_uses():
     # iter_exercises yields (lesson, exercise, path) straight from the JSON files.
     raw = {(lesson.get("id"), exercise.get("id")) for lesson, exercise, _p in iter_exercises()}
     loaded = {(lesson_id, exercise.id) for _l, lesson_id, exercise in EXERCISES}
-    assert loaded == raw, "the loader and the raw-JSON audit disagree about what exists"
+    # Ladder steps are content the audit must also see, and they are not in the
+    # loader's lesson list because a step pool is not a lesson. Subtracting them
+    # keeps the agreement assertion about the thing it was written for: a lesson
+    # file the loader silently skips would still hide its leaks here.
+    steps = {(lesson.get("id"), exercise.get("id")) for lesson, exercise, _p in iter_step_exercises()}
+    assert loaded == raw - steps, "the loader and the raw-JSON audit disagree about what exists"
+    assert steps <= raw
+    assert len(steps) >= 20, f"only {len(steps)} step items reached the audit view"

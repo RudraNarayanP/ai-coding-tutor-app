@@ -896,8 +896,16 @@ class LessonEngine:
 
             passed = (ans.lower() == exp.lower()) if exp else False
 
-            # Index match support: if user sent option index (0-based)
-            if not passed and exercise.options and ans.isdigit():
+            # Index match support: a caller that sends the option's 0-based
+            # position is still understood. But a digit that is itself one of the
+            # visible choices is the value the learner picked, never a position:
+            # reading "0" as "option 0" handed the answer away on every numeric
+            # choice list, where the distractors are numbers too. Measured on
+            # shipped content — `lp-recall` (options 4/0/10/14, key 4) graded the
+            # authored wrong answer "0" as *correct*, and the ladder stores that
+            # result as evidence the learner can predict an output.
+            choices = [str(option).strip() for option in (exercise.options or [])]
+            if not passed and exercise.options and ans.isdigit() and ans not in choices:
                 idx = int(ans)
                 if 0 <= idx < len(exercise.options):
                     opt_val = exercise.options[idx].strip()

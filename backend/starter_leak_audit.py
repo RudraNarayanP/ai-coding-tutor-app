@@ -178,6 +178,58 @@ EXERCISE_PROSE_FIELDS = (
 )
 
 
+def iter_steps(root: Path = CURRICULUM_ROOT) -> Iterable[LessonView]:
+    """Yield a view for every authored ladder step carrying starter and solution code.
+
+    The step pools are the newest place an answer can be handed over, and a
+    scaffolded rung is *by construction* near-complete code — exactly the shape
+    that has leaked before. Same rules, applied to the new content type.
+    """
+    for path in sorted(root.glob("*/steps/*.json")):
+        try:
+            payload = json.loads(path.read_text(encoding="utf-8"))
+        except (OSError, json.JSONDecodeError):
+            continue
+        if not isinstance(payload, dict):
+            continue
+        lesson_id = payload.get("lesson") or payload.get("skill") or "?"
+        for step in payload.get("steps") or []:
+            if not isinstance(step, dict):
+                continue
+            starter = step.get("starter_code") or ""
+            solution = step.get("solution_code") or ""
+            if not (starter.strip() and solution.strip()):
+                continue
+            yield LessonView(
+                lesson={**step, "id": f"{lesson_id}/{step.get('id', '?')}"},
+                path=path,
+                starter_lines=starter.splitlines(),
+                solution_lines=solution.splitlines(),
+                scope="step",
+            )
+
+
+def iter_step_exercises(root: Path = CURRICULUM_ROOT) -> Iterable[tuple[dict, dict, Path]]:
+    """Yield the ladder's authored steps as exercise items, for the option gates.
+
+    A step is an exercise to the client — same widgets, same per-id reshuffle —
+    so every distribution rule that protects a graded item has to see it. Without
+    this, authoring twenty new multiple-choice *steps* could re-create a lopsided
+    answer key that the audit exists to catch.
+    """
+    for path in sorted(root.glob("*/steps/*.json")):
+        try:
+            payload = json.loads(path.read_text(encoding="utf-8"))
+        except (OSError, json.JSONDecodeError):
+            continue
+        if not isinstance(payload, dict):
+            continue
+        lesson = {"id": payload.get("lesson") or payload.get("skill") or "?"}
+        for step in payload.get("steps") or []:
+            if isinstance(step, dict):
+                yield lesson, {**step, "type": step.get("widget") or step.get("type")}, path
+
+
 def iter_exercises(root: Path = CURRICULUM_ROOT) -> Iterable[tuple[dict, dict, Path]]:
     """Yield ``(lesson, exercise, path)`` for sublesson and mastery-exam items."""
     for path, lesson in iter_raw_lessons(root):
@@ -190,6 +242,7 @@ def iter_exercises(root: Path = CURRICULUM_ROOT) -> Iterable[tuple[dict, dict, P
             for exercise in exercises:
                 if isinstance(exercise, dict):
                     yield lesson, exercise, path
+    yield from iter_step_exercises(root)
 
 
 def exercise_code_view(lesson: dict, exercise: dict, path: Path) -> LessonView | None:
@@ -661,6 +714,8 @@ def audit(root: Path = CURRICULUM_ROOT) -> list[Leak]:
     """Audit every curriculum lesson and exercise; return all leaks found."""
     leaks: list[Leak] = []
     for view in iter_lessons(root):
+        leaks.extend(audit_lesson(view))
+    for view in iter_steps(root):
         leaks.extend(audit_lesson(view))
     leaks.extend(audit_exercises(root))
     leaks.extend(mcq_position_bias(root))

@@ -163,6 +163,21 @@ def test_mcq_accepts_a_zero_based_option_index():
     assert grade(ex, {"answer": "1"})[0] is True
 
 
+def test_a_digit_that_is_a_visible_choice_is_the_value_not_the_position():
+    """Regression: on a numeric choice list the index rule was an auto-pass.
+
+    `lp-recall` asks what `predict(10, 0, 4)` prints with options 4/0/10/14. The
+    authored wrong answer "0" is also index 0, which is the key — so the old rule
+    graded a learner who had multiplied nothing as correct, and the ladder filed
+    that as evidence.
+    """
+    ex = exercise_of("output_prediction", "4", options=["4", "0", "10", "14"])
+    assert grade(ex, {"answer": "4"})[0] is True
+    assert grade(ex, {"answer": "0"})[0] is False, "0 is a choice here, not a position"
+    assert grade(ex, {"answer": "10"})[0] is False
+    assert grade(ex, {"answer": "14"})[0] is False
+
+
 def test_open_code_exercise_still_accepts_a_submission():
     ex = exercise_of("code", None, starter_code="print('hi')")
     passed, _ = grade(ex, {"code": "print('hi')"})
