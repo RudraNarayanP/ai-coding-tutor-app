@@ -90,16 +90,42 @@ def test_a_real_chaptered_video_becomes_a_grounded_course(corpus: list[Source]) 
         "9. Embedding Dot Product",
     ],
 )
-def test_the_chapter_matcher_cannot_name_real_curriculum_steps(heading: str) -> None:
-    """Under-coverage, pinned.
+def test_a_chapter_heading_alone_still_names_no_artifact(heading: str) -> None:
+    """The chapter route's limit, measured rather than wished away.
 
-    Each of these is a real lesson title in this app's own curriculum and each asks
-    the learner to implement a named function, yet `_chapter_check` derives no
-    verification from any of them — so a video chaptered this way becomes no course
-    at all. Fixing the matcher should delete entries here deliberately, not discover
-    the change through a learner's empty Create tab.
+    `_chapter_check` sees only the heading, and a bare noun phrase carries no
+    verifiable name: the artifact lives in the instruction beneath it. The route
+    that rescues these units is the sentence extractor in `plan_project`, which now
+    reads the code form in that instruction (see `test_chapter_derivation.py`) — so
+    the unit becomes a course, but not through its chapter list. An earlier attempt
+    to anchor each heading onto its own sentence was measured and cut: it rescued
+    nothing that the sentence route did not already handle, and it matched
+    neighbouring lessons' compound names ("1. Linear Prediction" → `logistic_predict`).
     """
     assert _chapter_check(heading) is None
+
+
+def test_real_curriculum_units_now_plan_as_build_sequences(corpus: list[Source]) -> None:
+    """The yield this file was written to make visible.
+
+    Before `_extract_target` could read "`mse(y_true, y_pred)`", neither of these
+    units produced a course at all: 0 of 24 chaptered sources became 4. They are
+    measured here as the concrete content a learner would get.
+    """
+    for key, symbols in (
+        ("chapters:linear_regression:titles", ["predict", "mse", "gd_step", "fit_slope", "r2"]),
+        ("chapters:classification:titles", ["sigmoid", "logistic_predict", "knn_classify",
+                                            "accuracy", "precision_recall"]),
+    ):
+        source = next(s for s in corpus if s.key == key)
+        project = plan_project(source.doc, title=source.doc.title, course_id="corpus-yield")
+        found = [m.checks[0].target for m in measure.interior(project)
+                 if m.checks and m.checks[0].kind == "symbol"]
+        assert found == symbols, f"{key}: {found}"
+        assert usability_problem(project) is None
+        # Every step quotes the sentence its check came from.
+        for milestone in measure.interior(project):
+            assert milestone.source_quote and "`" in milestone.source_quote, milestone.title
 
 
 def test_most_chaptered_material_yields_nothing_at_all(corpus: list[Source]) -> None:

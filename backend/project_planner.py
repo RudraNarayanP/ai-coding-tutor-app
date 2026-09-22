@@ -156,6 +156,17 @@ _IDENT = r"[A-Za-z_][A-Za-z0-9_]*"
 _FIELD_MAX = 2000
 _STEP_CHUNK_MAX = 800
 
+#: Verbs that promise a definition rather than a mention.
+_DEFINE_VERB = (
+    r"implement|define|write|create|build|add|declare|code|develop|start(?:ing)?"
+)
+#: A construction verb followed closely by a backticked call is the source telling
+#: you the name of the thing to define: "Implement `mse(y_true, y_pred)` returning…"
+_SPANNED_DEFINITION = re.compile(
+    rf"\b(?:{_DEFINE_VERB})\b[^.!?\n]{{0,30}}?`({_IDENT})\s*\(",
+    re.IGNORECASE,
+)
+
 # Speech-to-text / filler patterns that must never appear in learner-facing copy.
 _TRANSCRIPT_FILLER = re.compile(
     r"\b(uh+|u+m+|er+|ah+|huh|yeah|y'know|you know|sort of|kind of|kinda|sorta|"
@@ -474,6 +485,15 @@ def _extract_target(sentence: str) -> tuple[str, str] | None:
         if not _reject(canonical) and not _is_generic_import_name(canonical):
             return ("import", canonical)
         return None
+
+    # A code-formatted call after a construction verb names the artifact directly:
+    # "Implement `mse(y_true, y_pred)` returning the mean of the squared residuals".
+    # This must be checked *before* the prose pattern below, or a sentence that
+    # describes the function ("returning the logistic function") wins and the
+    # learner is asked to define `logistic` — a name the source never uses.
+    spanned = _SPANNED_DEFINITION.search(sentence)
+    if spanned and not _reject(spanned.group(1)):
+        return ("symbol", spanned.group(1))
 
     # "the forward method", "the train function" — name precedes the keyword.
     m = re.search(rf"\b(?:the\s+)({_IDENT})\s+(?:method|function)\b", sentence, IC)

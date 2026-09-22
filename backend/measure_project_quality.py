@@ -42,7 +42,8 @@ courses as they sit on disk.
 
 What the numbers showed, and what stopped a rule from being written:
 
-* **The chapter path's defect is under-coverage, not leniency.** Of 24 chaptered
+* **The chapter path's defect is under-coverage, not leniency.** *(count confirmed,
+  cause wrong — see round 3 below)* Of 24 chaptered
   sources, 16 yield *no* derivable check for any heading: `_chapter_check` cannot
   name a verification for "1. Linear Prediction", "4. Whitespace Tokenize" or
   "2. Token Store" — real, implementable steps, in this app's own curriculum — while
@@ -91,7 +92,49 @@ What the numbers showed, and what stopped a rule from being written:
   check vocabulary, not a threshold, and it is where a real fix belongs — a check that
   runs the earlier milestones' artifacts together — which is a feature, not a gate.
 
-Verdict: no production validation rule is justified by this corpus. The one defect the
+Round 3 — why the chapter path produced nothing, and what one rule changed
+--------------------------------------------------------------------------
+The "starved" bullet above was a count without a cause. Attributing every dropped
+heading to the gate that rejected it (`derivation_report`, printed below) showed the
+loss was not the chapter matcher's vocabulary. A chapter heading is a creator's
+summary — "2. Mean Squared Error", "4. Whitespace Tokenize" — and the artifact it
+names is spelled out in the sentence underneath it, in code form:
+"Implement \`mse(y_true, y_pred)\` returning the mean of the squared residuals".
+`_extract_target`, the planner's only reader of prose, had patterns for `def x`, for
+"define a function called x" and for "the forward method", but not for a backticked
+call after a construction verb. The information was in the source and nothing read it.
+
+One rule, added for that reason and nothing else: a construction verb followed within
+the clause by a backticked call yields \`symbol <name>\` — checked *before* the prose
+pattern, which read "returning the logistic function" as a demand to define
+\`logistic\`. That second half is the correctness part: the old order produced
+milestones the source itself could not satisfy, and \`sigmoid\` sat in backticks one
+word away.
+
+Measured on the corpus's 24 chaptered sources, with and without the rule:
+
+  courses          4 -> 8        (2 labelled good, 2 unknown; no \`poor\` source moved)
+  interior steps                 24 -> 44
+  symbol checks       1 -> 21    (AST-verifiable, so each is a real artifact)
+  code_contains      23 -> 23    (unchanged: the curated route was not touched)
+
+Two things this did *not* do, both of which were tried. The chapter route still
+derives nothing from a noun-phrase heading — the four rescued units came through
+`plan_project`'s sentence extractor, which is the path that reads prose; and an
+anchor that paired each heading with the body sentence sharing its subject was built,
+measured, and cut: it rescued nothing the sentence route had not already rescued, and
+it mis-attributed neighbours ("1. Linear Prediction" → \`logistic_predict\`) because
+"prediction" and "predict" only share a prefix. Adding it would have raised the yield
+number without raising the number of courses a learner could not already get.
+
+The remaining ceiling is upstream and deliberate: of the 20 chaptered sources that
+still produce nothing, 14 are refused by `evaluate_source` before planning — including
+6 genuinely buildable curriculum units labelled good, which the source gate reads as
+"ambiguous_technical" because a lesson-title list with no code-bearing description
+around it looks like a topic, not a tutorial. That is a gate decision with its own
+evidence requirements, not a derivation problem.
+
+Verdict: no production *validation* rule is justified by this corpus. The one defect the
 corpus newly *shows* (test scaffolding harvested as deliverables; step counts that mean
 "this file mentions these names" rather than "the program was assembled") is a planner
 capability gap. Fixing it means giving the planner more information about the source,
@@ -162,13 +205,19 @@ LABELS = ("good", "poor", "unknown")
 # ─── Planning, with the route recorded ───────────────────────────────────────
 
 def plan_with_route(source: Source) -> tuple[ProjectCourse | None, str, str]:
-    """Run the real planner; report which branch fired and any refusal reason."""
+    """Run the real planner; report which branch *built* the course, and any refusal.
+
+    `plan_project` tries the chapter route first and swallows its refusal, so
+    recording an attempt would credit chapters with a course the sentence extractor
+    actually produced. The tracer only counts a route when it returns.
+    """
     fired: list[str] = []
     original = project_planner._plan_from_chapters
 
     def tracer(*args, **kwargs):  # noqa: ANN002, ANN003
+        project = original(*args, **kwargs)
         fired.append("chapters")
-        return original(*args, **kwargs)
+        return project
 
     project_planner._plan_from_chapters = tracer
     try:
@@ -178,13 +227,13 @@ def plan_with_route(source: Source) -> tuple[ProjectCourse | None, str, str]:
         return None, route, f"{type(exc).__name__}: {str(exc)[:90]}"
     finally:
         project_planner._plan_from_chapters = original
-    if not fired:
+    if fired:
+        route = "chapters"
+    else:
         concepts = project_planner._concepts_from_prose(
             project_planner._gather_source_text(source.doc), source.doc.title
         )
         route = "prose" if len(concepts) >= 2 else "sentences"
-    else:
-        route = "chapters"
     return project, route, ""
 
 
@@ -409,6 +458,78 @@ def chapter_yield(records: list[Record]) -> None:
           f" {len(alive)} become a course.")
 
 
+def why_dropped(heading: str) -> str:
+    """Which gate in `_chapter_check`'s order rejected this heading.
+
+    Attribution matters: "the chapter path produces nothing" is four different
+    problems — a meta heading (correct), lecture wording (correct), a noun-phrase
+    heading whose artifact is only in the body (a derivation gap), or a heading too
+    generic to verify (correct). Only the third is fixable by derivation.
+    """
+    cleaned = project_planner._clean_chapter(heading)
+    low = cleaned.lower()
+    if project_planner._looks_meta_heading(cleaned):
+        return "meta-heading (correct refusal)"
+    if re.search(r"\b(what is|intro to|introduction|history|why |overview)\b", low):
+        return "lecture-wording (correct refusal)"
+    if not project_planner.is_implementable_step(cleaned) and not project_planner._match_concept_tokens(cleaned):
+        from backend import source_quality as sq
+
+        if sq.is_dangling_or_document_task(cleaned):
+            return "dangling/document (correct refusal)"
+        if sq.is_generic_bare_task(cleaned):
+            return "generic-bare-task (correct refusal)"
+        if sq.is_conceptual_heading(cleaned):
+            return "conceptual-heading (correct refusal)"
+        absent = []
+        if not sq.has_code_artifact(cleaned):
+            absent.append("no-code-form")
+        if not sq._library_hits(cleaned):
+            absent.append("no-library")
+        if not sq._specific_phrase_hits(cleaned):
+            absent.append("no-technique-phrase")
+        if not sq._construct_hits(cleaned):
+            absent.append("no-construct-noun")
+        return "heading-names-nothing: " + "+".join(absent)
+    return "implementable but no check derived"
+
+
+def derivation_report(records: list[Record]) -> None:
+    """The check kinds the planner can derive, and where each corpus heading lands."""
+    print("\nderivation attribution over chaptered sources (which gate rejected what):")
+    reasons: Counter = Counter()
+    kinds: Counter = Counter()
+    for record in records:
+        if record.doc is None:
+            continue
+        for chapter in project_planner._collect_chapters(record.doc):
+            check = project_planner._chapter_check(chapter)
+            if check is None:
+                reasons[why_dropped(chapter)] += 1
+            else:
+                kinds[check.kind] += 1
+    total = sum(reasons.values()) + sum(kinds.values())
+    print(f"  {total} headings across the corpus -> {sum(kinds.values())} derive a check "
+          f"from the heading alone")
+    for kind, count in kinds.most_common():
+        print(f"    {count:>4}  derives {kind}")
+    for reason, count in reasons.most_common():
+        print(f"    {count:>4}  {reason}")
+
+    # What the routes actually produced, kind by kind, over planned courses.
+    produced: Counter = Counter()
+    for record in records:
+        if record.project is None:
+            continue
+        for m in record.project.milestones:
+            if m.checks:
+                produced[m.checks[0].kind] += 1
+    print("  check kinds in the courses that exist: "
+          + "  ".join(f"{k}={n}" for k, n in produced.most_common()))
+    print("  `import`/`symbol`/`function_call` are the kinds the grader verifies from")
+    print("  the AST; `code_contains` needs a curated token; `run_ok` needs the sandbox.")
+
+
 def main() -> int:
     corpus = build_corpus()
     rows: list[tuple[Source, ProjectCourse | None, str, str]] = []
@@ -552,6 +673,7 @@ def main() -> int:
         print(f"  {key:<14} accepted {a:<10} refused {b:<10} {verdict}")
 
     chapter_yield(records)
+    derivation_report(records)
 
     # --- corpus composition -------------------------------------------------
     print("\ncorpus composition:")
