@@ -99,21 +99,21 @@ heading to the gate that rejected it (`derivation_report`, printed below) showed
 loss was not the chapter matcher's vocabulary. A chapter heading is a creator's
 summary — "2. Mean Squared Error", "4. Whitespace Tokenize" — and the artifact it
 names is spelled out in the sentence underneath it, in code form:
-"Implement \`mse(y_true, y_pred)\` returning the mean of the squared residuals".
+"Implement `mse(y_true, y_pred)` returning the mean of the squared residuals".
 `_extract_target`, the planner's only reader of prose, had patterns for `def x`, for
 "define a function called x" and for "the forward method", but not for a backticked
 call after a construction verb. The information was in the source and nothing read it.
 
 One rule, added for that reason and nothing else: a construction verb followed within
-the clause by a backticked call yields \`symbol <name>\` — checked *before* the prose
+the clause by a backticked call yields ``symbol <name>`` — checked *before* the prose
 pattern, which read "returning the logistic function" as a demand to define
-\`logistic\`. That second half is the correctness part: the old order produced
-milestones the source itself could not satisfy, and \`sigmoid\` sat in backticks one
+``logistic``. That second half is the correctness part: the old order produced
+milestones the source itself could not satisfy, and ``sigmoid`` sat in backticks one
 word away.
 
 Measured on the corpus's 24 chaptered sources, with and without the rule:
 
-  courses          4 -> 8        (2 labelled good, 2 unknown; no \`poor\` source moved)
+  courses          4 -> 8        (2 labelled good, 2 unknown; no ``poor`` source moved)
   interior steps                 24 -> 44
   symbol checks       1 -> 21    (AST-verifiable, so each is a real artifact)
   code_contains      23 -> 23    (unchanged: the curated route was not touched)
@@ -123,7 +123,7 @@ derives nothing from a noun-phrase heading — the four rescued units came throu
 `plan_project`'s sentence extractor, which is the path that reads prose; and an
 anchor that paired each heading with the body sentence sharing its subject was built,
 measured, and cut: it rescued nothing the sentence route had not already rescued, and
-it mis-attributed neighbours ("1. Linear Prediction" → \`logistic_predict\`) because
+it mis-attributed neighbours ("1. Linear Prediction" → ``logistic_predict``) because
 "prediction" and "predict" only share a prefix. Adding it would have raised the yield
 number without raising the number of courses a learner could not already get.
 
@@ -133,6 +133,42 @@ still produce nothing, 14 are refused by `evaluate_source` before planning — i
 "ambiguous_technical" because a lesson-title list with no code-bearing description
 around it looks like a topic, not a tutorial. That is a gate decision with its own
 evidence requirements, not a derivation problem.
+
+Round 4 — the source gate, measured the same way
+-------------------------------------------------
+`evaluate_source` was refusing 14 of the 24 chaptered sources, 6 of them units of this
+app's own curriculum. Tracing its branch order (`backend/source_gate_trace.py`, kept
+honest by a test that replays it against the production decision on every corpus
+source) showed the refusals were not the "is this a tutorial" question the gate's
+message claims to answer. Three of its tests — the implementation cluster,
+`_classify_source_type`'s `real_code`, and its fourth structure alternative — all ask
+whether the text contains a literal `def`/`class`/`import`. Every source this feature
+actually ingests is prose: a transcript, a video description, a README. No real source
+says `def mse(y_true, y_pred):`; a tutorial says "Implement ``mse(y_true, y_pred)``
+returning the mean of the squared residuals". The gate was asking a question its own
+input format cannot answer, and the domain word lists (`_LIBRARIES`,
+`_SPECIFIC_PHRASES`, `_CONSTRUCTS`) then decided per *topic*: linear regression and
+k-NN were in the tables, tokenizers, auth and decorators were not.
+
+Priced as a counterfactual before being written: accepting a code-formatted call or
+class name as definition evidence moved 10 chaptered sources from insufficient to
+accepted (5 curriculum units × 2 outline flavours), refused nothing that had been
+accepted, and moved no lecture, news, assistant-tips, documentation or README source at
+all. Each newly accepted source then planned 5-7 milestones carrying 3-5 checks that
+the verifier decides both ways — pass for the code the source prescribes, fail for the
+starter file. That is the shipped rule. Corpus-wide: courses planned from the 53
+sources went 17 -> 31; the chaptered slice 4 -> 18 of 24.
+
+Two honest results from the same measurement. `graph_traversals` was labelled good in
+this corpus on the strength of its lesson *titles*, but its descriptions name no
+artifact in code form ("Represent an undirected graph and add edges."), so no
+mechanically verifiable check exists for it and the rule correctly leaves it refused;
+its label is now `unknown`. And a bare lowercase code span is deliberately *not*
+accepted as a deliverable name: "Implement ``shout`` that uppercases the string returned
+by the wrapped function" yields no check, which is under-coverage, because the
+alternative was the prose pattern's answer — ``symbol wrapped`` — a step inventing a
+function the lesson never asked for. The prose pattern is now suppressed whenever the
+sentence has already shown its artifact in code form.
 
 Verdict: no production *validation* rule is justified by this corpus. The one defect the
 corpus newly *shows* (test scaffolding harvested as deliverables; step counts that mean
@@ -530,6 +566,50 @@ def derivation_report(records: list[Record]) -> None:
     print("  the AST; `code_contains` needs a curated token; `run_ok` needs the sandbox.")
 
 
+def gate_report(sources: list[Source]) -> None:
+    """Where the source gate stops real material, and what a candidate would cost.
+
+    `evaluate_source` answers one word; the trace names the clause that decided it
+    (`backend.source_gate_trace`). The counterfactual sweep then re-decides every
+    source under each named candidate: a candidate that is already shipped must
+    change nothing, which is how this file knows the rule in production is the rule
+    that was measured.
+    """
+    from backend.source_gate_trace import COUNTERFACTUALS, trace_source_gate, with_patch
+
+    categories: Counter = Counter()
+    by_label: dict[str, Counter] = defaultdict(Counter)
+    for source in sources:
+        trace = trace_source_gate(source.doc, source.doc.title)
+        categories[(trace.decision, trace.branch, trace.reason)] += 1
+        by_label[trace.decision][source.label] += 1
+
+    print("\nsource gate: which clause decides, over every corpus source:")
+    for (decision, branch, reason), count in categories.most_common():
+        print(f"  {count:>3}  {decision:<12} {branch:<26} {reason}")
+    print("  by label: " + "  ".join(
+        f"{decision}={dict(by_label[decision])}" for decision in ("accept", "reject", "insufficient")
+        if by_label[decision]))
+
+    print("\ncounterfactual pricing (a shipped candidate must now change nothing):")
+    base = {s.key: trace_source_gate(s.doc, s.doc.title).decision for s in sources}
+    for name in COUNTERFACTUALS:
+        with with_patch(name):
+            moved = [
+                (s.key, s.label, base[s.key], trace_source_gate(s.doc, s.doc.title).decision)
+                for s in sources
+            ]
+        flips = [m for m in moved if m[2] != m[3]]
+        toward_accept = [f for f in flips if f[3] == "accept"]
+        away = [f for f in flips if f[3] != "accept"]
+        verdict = "already shipped (no change)" if not flips else (
+            f"would rescue {len(toward_accept)}, would refuse {len(away)}"
+        )
+        print(f"  {name:<30} {len(flips):>2} flips  {verdict}")
+        for key, label, was, now in away:
+            print(f"    REGRESSION {key} [{label}] {was} -> {now}")
+
+
 def main() -> int:
     corpus = build_corpus()
     rows: list[tuple[Source, ProjectCourse | None, str, str]] = []
@@ -674,6 +754,7 @@ def main() -> int:
 
     chapter_yield(records)
     derivation_report(records)
+    gate_report(corpus)
 
     # --- corpus composition -------------------------------------------------
     print("\ncorpus composition:")

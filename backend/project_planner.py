@@ -160,12 +160,19 @@ _STEP_CHUNK_MAX = 800
 _DEFINE_VERB = (
     r"implement|define|write|create|build|add|declare|code|develop|start(?:ing)?"
 )
-#: A construction verb followed closely by a backticked call is the source telling
-#: you the name of the thing to define: "Implement `mse(y_true, y_pred)` returning…"
+#: A construction verb followed closely by a backticked code span is the source
+#: telling you the name of the thing to build: "Implement `mse(y_true, y_pred)`
+#: returning…", "Implement `TokenStore` with set/get/clear methods". A call form or a
+#: PascalCase/snake_case name is unambiguously Python; a bare lowercase word is not
+#: ("Create `venv`", "add a `prompt`"), so it is not accepted here. The verb is
+#: matched case-insensitively by a scoped flag on purpose: a global IGNORECASE would
+#: make the PascalCase branch match any word at all.
 _SPANNED_DEFINITION = re.compile(
-    rf"\b(?:{_DEFINE_VERB})\b[^.!?\n]{{0,30}}?`({_IDENT})\s*\(",
-    re.IGNORECASE,
+    rf"\b(?i:{_DEFINE_VERB})\b[^.!?\n]{{0,30}}?"
+    rf"`({_IDENT}\s*\(|[A-Z][A-Za-z0-9_]*[A-Z][A-Za-z0-9_]*|[a-z][a-z0-9]*_[a-z0-9_]*)[^`]*`"
 )
+#: Any code span at all, used to suppress the loose prose pattern below.
+_ANY_CODE_SPAN = re.compile(r"`[^`]+`")
 
 # Speech-to-text / filler patterns that must never appear in learner-facing copy.
 _TRANSCRIPT_FILLER = re.compile(
@@ -486,18 +493,22 @@ def _extract_target(sentence: str) -> tuple[str, str] | None:
             return ("import", canonical)
         return None
 
-    # A code-formatted call after a construction verb names the artifact directly:
-    # "Implement `mse(y_true, y_pred)` returning the mean of the squared residuals".
-    # This must be checked *before* the prose pattern below, or a sentence that
-    # describes the function ("returning the logistic function") wins and the
-    # learner is asked to define `logistic` — a name the source never uses.
+    # A code-formatted name after a construction verb is the artifact the source
+    # names directly: "Implement `mse(y_true, y_pred)` returning the mean of the
+    # squared residuals". Checked *before* the prose pattern below.
     spanned = _SPANNED_DEFINITION.search(sentence)
-    if spanned and not _reject(spanned.group(1)):
-        return ("symbol", spanned.group(1))
+    if spanned:
+        name = spanned.group(1).split("(")[0].strip()
+        if name and not _reject(name):
+            return ("symbol", name)
 
     # "the forward method", "the train function" — name precedes the keyword.
+    # Suppressed once the sentence has already shown its artifact in code form:
+    # "Implement `shout` that uppercases the string returned by the wrapped function"
+    # names `shout`, and reading "the wrapped function" as a demand to define
+    # `wrapped` would invent a step the source never asked for.
     m = re.search(rf"\b(?:the\s+)({_IDENT})\s+(?:method|function)\b", sentence, IC)
-    if m and not _reject(m.group(1)):
+    if m and not _reject(m.group(1)) and not _ANY_CODE_SPAN.search(sentence):
         return ("symbol", m.group(1))
 
     # "def name", or "define/write a function called name" — name follows keyword.

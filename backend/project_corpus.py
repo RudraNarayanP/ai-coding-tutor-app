@@ -237,8 +237,10 @@ MODULES: list[tuple[str, str, str]] = [
      "one tokenizer pipeline: tokenize -> normalize -> build_vocab -> encode"),
     ("curriculum/ai/modules/ai_embeddings.json", "unknown",
      "independent similarity helpers"),
-    ("curriculum/dsa/modules/graph_traversals.json", "good",
-     "one graph type, then DFS, then BFS and distances over it"),
+    ("curriculum/dsa/modules/graph_traversals.json", "unknown",
+     "one graph type, then DFS, then BFS and distances over it — but relabelled from "
+     "`good` after measuring: no lesson description names an artifact in code form, so "
+     "nothing about it is mechanically verifiable and the gate rightly keeps refusing it"),
     ("curriculum/python/modules/decorators.json", "unknown",
      "decorator drills, each its own function"),
     ("curriculum/fullstack/modules/auth_tokens.json", "good",

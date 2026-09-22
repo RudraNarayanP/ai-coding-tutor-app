@@ -245,12 +245,30 @@ _BUILD_INTENT = re.compile(
 _CODE_IMPORT = re.compile(
     r"\bimport\s+[A-Za-z_][A-Za-z0-9_.]*\b|\bfrom\s+[A-Za-z_][A-Za-z0-9_.]*\s+import\b"
 )
+#: A definition written as Python source — or as a Markdown tutorial says one.
+#:
+#: Every source this feature ingests arrives as prose: a pasted transcript, a video
+#: description, a README. None of them contains a literal `def foo():` line, and a
+#: tutorial names the function it builds by putting it in a code span —
+#: "Implement `mse(y_true, y_pred)` returning the mean of the squared residuals",
+#: "Implement `TokenStore` with set/get/clear methods". Without this alternative the
+#: gate asks a question no real source can answer yes to, and its refusal message
+#: ("isn't enough reliable material to create a meaningful coding project") fires on
+#: curriculum that names five artifacts in code form.
+#: Measured on the 53-source corpus: this third alternative changes 10 chaptered
+#: sources from insufficient to accepted, refuses nothing that was accepted, moves
+#: no lecture, news, assistant-tips or documentation source, and each newly accepted
+#: source then plans 3-5 checks the verifier decides both ways.
+_CODE_SPAN_DEFINITION = re.compile(
+    r"`\s*(?:[A-Za-z_][A-Za-z0-9_]*\s*\([^`]*\)|[A-Z][A-Za-z0-9_]*[A-Z][A-Za-z0-9_]*)\s*`"
+)
 _CODE_DEF = re.compile(
     r"\bdef\s+[A-Za-z_]"
     r"|\bclass\s+(?:called\s+)?[A-Z][A-Za-z0-9_]*"
     r"|\bfunction\s+called\s+[A-Za-z_]"
     r"|\b(?:async )?function\s+[A-Za-z_][A-Za-z0-9_]*\s*\("
     r"|\b(?:const|let|var)\s+[A-Za-z_][A-Za-z0-9_]*\s*="
+    r"|(?:" + _CODE_SPAN_DEFINITION.pattern + r")"
 )
 _CODE_FILE = re.compile(r"\b[\w.-]+\.(?:py|js|ts|tsx|jsx|java|cpp|cc|h|hpp|sql|ipynb|rs|go)\b")
 _DOTTED_API = re.compile(r"\b[a-zA-Z_][a-zA-Z0-9_]*\.[a-zA-Z_][a-zA-Z0-9_.]*")
