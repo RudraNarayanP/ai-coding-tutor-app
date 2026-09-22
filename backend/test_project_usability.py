@@ -307,3 +307,114 @@ def test_the_rule_gets_the_real_stored_projects_right():
             counter += 1
             assert usability_problem(project) is None, f"{project.title}: {usability_problem(project)}"
     assert talk and counter, f"expected both shapes on disk, saw talk={talk} counter={counter}"
+
+
+# ─── what the measured corpus says about *raising* the bar ───────────────────
+#
+# These are not behaviour changes. They pin the results of
+# `python -m backend.measure_project_quality` so that the next person who reaches
+# for a quality threshold finds the measurement already recorded, and so a rule
+# that contradicts it fails a test instead of a learner's afternoon.
+
+def test_the_minimal_case_people_worry_about_is_already_refused():
+    """One import and one run does not pass. It has never passed."""
+    project = course([
+        milestone(1, "Import os", "import", "os"),
+        milestone(2, "Run it", "run_ok"),
+    ])
+    assert "enough concrete implementation steps" in usability_problem(project)
+
+
+def test_two_naming_checks_is_a_chosen_floor_not_an_oversight():
+    """`test_source_quality` asserts `>= 2` non-setup, non-run checks for a source it
+    calls valid, so this floor is a decision with a test behind it. Raising it to
+    three would not be a tightening; it would contradict that assertion."""
+    two_steps = course([
+        milestone(1, "Import os", "import", "os"),
+        milestone(2, "Define main", "symbol", "main"),
+        milestone(3, "Run it", "run_ok"),
+    ])
+    assert usability_problem(two_steps) is None
+
+
+def test_depth_is_not_what_makes_the_bad_course_bad():
+    """The refused course on disk has five distinct substantive checks.
+
+    Most accepted courses have fewer. So "require more steps" rejects good content
+    and keeps the content it was written for: the talk is not thin, it is the same
+    checkpoint nine times.
+    """
+    def distinct_naming(project: ProjectCourse) -> int:
+        return len({
+            m.checks[0].target.strip().lower()
+            for m in project.milestones
+            if m.checks and m.checks[0].kind in ("import", "symbol", "function_call", "code_contains")
+            and m.checks[0].target.strip()
+        })
+
+    talk = distinct_naming(LLM_TALK_COURSE())
+    good = distinct_naming(course([
+        milestone(1, "Import collections", "import", "collections"),
+        milestone(2, "Define count_words", "symbol", "count_words"),
+        milestone(3, "Define sample", "symbol", "sample"),
+        milestone(4, "Run it", "run_ok"),
+    ]))
+    assert talk > good, "a deeper minimum would accept the bad course and reject the good one"
+
+
+def test_generic_share_cannot_replace_the_repeated_checkpoint_rule():
+    """Four real steps and two identically-named run checkpoints: refused today,
+    and its generic share is only 0.33. Any "most milestones are generic" rule
+    accepts it, which would make a previously rejected project acceptable."""
+    project = course([
+        milestone(1, "Import os", "import", "os"),
+        milestone(2, "Import sys", "import", "sys"),
+        milestone(3, "Define read", "symbol", "read"),
+        milestone(4, "Define main", "symbol", "main"),
+        milestone(5, "Run and verify", "run_ok"),
+        milestone(6, "Run and verify", "run_ok"),
+    ])
+    generic = sum(1 for m in project.milestones if m.checks[0].kind not in
+                  ("import", "symbol", "function_call", "code_contains"))
+    assert generic / len(project.milestones) < 0.5
+    assert refused(usability_problem(project)), usability_problem(project)
+
+
+def test_a_long_tutorial_with_legitimate_run_checkpoints_is_accepted_today():
+    """What a title-uniqueness rule would start rejecting, and the corpus has no
+    accepted example to price that against — which is why that rule is not in."""
+    project = course([
+        milestone(1, "Import requests", "import", "requests"),
+        milestone(2, "Define fetch", "symbol", "fetch"),
+        milestone(3, "Run it", "stdout_contains", "fetched"),
+        milestone(4, "Define parse", "symbol", "parse"),
+        milestone(5, "Run it", "stdout_contains", "parsed"),
+        milestone(6, "Call main", "function_call", "main"),
+    ])
+    assert usability_problem(project) is None
+
+
+def test_copy_presence_is_not_a_usable_gate():
+    """`teach`/`example` come from a best-effort LLM call that must never block a
+    course, so a rule requiring them would reject good content at random."""
+    no_copy = course([
+        milestone(1, "Import json", "import", "json"),
+        milestone(2, "Define load", "symbol", "load"),
+        milestone(3, "Call load", "function_call", "load"),
+    ])
+    assert all(not m.teach and not m.example for m in no_copy.milestones)
+    assert usability_problem(no_copy) is None
+
+
+def test_the_measurement_harness_sees_the_whole_corpus():
+    """The script is the evidence behind every decision above; if it silently loses
+    projects — same-titled files, a planner exception — the evidence is wrong."""
+    from backend import measure_project_quality as measure
+
+    stored = measure.stored_projects()
+    planned = measure.planned_projects()
+    assert len(stored) == len(list((Path(__file__).resolve().parents[1]
+                                    / "curriculum/generated/projects").glob("*.json")))
+    assert len({*stored, *planned}) == len(stored) + len(planned), "labels must not collide"
+    assert len(planned) >= 5, f"only {len(planned)} transcripts planned into projects"
+    assert any(measure.usability_problem(p) for p in stored.values()), "the bad course should still be caught"
