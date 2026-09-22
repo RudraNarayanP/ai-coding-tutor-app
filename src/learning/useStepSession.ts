@@ -25,12 +25,12 @@ export type LadderStep = {
   question?: string
   options?: string[]
   pairs?: { left: string; right: string }[]
-  blanks?: string[]
-  correct_order?: string[]
   starter_code?: string
   content?: Record<string, any>
   action?: string
   hints?: string[]
+  /** A guided project's production rung: what the workspace must satisfy. */
+  checks?: string[]
   cleared: boolean
 }
 
@@ -44,6 +44,11 @@ export type LadderSession = {
   bonus_steps: number
   /** Every rung of this concept, cleared or not — the honest denominator. */
   ladder_steps?: number
+  /**
+   * A guided project's production rung, kept out of `steps` on purpose: it is
+   * answered in the workspace by running the program, not by a card.
+   */
+  build?: LadderStep | null
   steps: LadderStep[]
   trace: string[]
   demonstrated: boolean
@@ -78,6 +83,35 @@ const OFFLINE_NUDGE =
   'Read the question again and name, out loud or in a comment, the one value it asks ' +
   'for. Then change only the line that produces that value.'
 
+/**
+ * Where a ladder's three verbs live.
+ *
+ * The guided-project flow (`/api/create-course/projects/...`) serves the same
+ * session shape from a different place, and one runner should teach both. Without
+ * this the honest move is a second hook, and a second hook is how the two surfaces
+ * start disagreeing about what a rung does — which is the bug class this whole
+ * feature exists to remove.
+ */
+export type LadderEndpoints = {
+  session: (id: string) => string
+  seen: (id: string, stepId: string) => string
+  attempt: (id: string, stepId: string) => string
+}
+
+export const LESSON_ENDPOINTS: LadderEndpoints = {
+  session: (id) => `/api/lessons/${encodeURIComponent(id)}/session`,
+  seen: (id, step) => `/api/lessons/${encodeURIComponent(id)}/steps/${encodeURIComponent(step)}/seen`,
+  attempt: (id, step) => `/api/lessons/${encodeURIComponent(id)}/steps/${encodeURIComponent(step)}/attempt`,
+}
+
+export const PROJECT_ENDPOINTS: LadderEndpoints = {
+  session: (id) => `/api/create-course/projects/${encodeURIComponent(id)}/session`,
+  seen: (id, step) => `/api/create-course/projects/${encodeURIComponent(id)}/session/${encodeURIComponent(step)}/seen`,
+  // A derived project rung has nothing to grade (see `project_ladder.recall_rung`);
+  // the workspace's NEXT gate is the project's only production check.
+  attempt: (id, step) => `/api/create-course/projects/${encodeURIComponent(id)}/session/${encodeURIComponent(step)}/attempt`,
+}
+
 /** Shape check, not a cast: the ladder only takes over a real session. */
 export function isLadderSession(value: unknown): value is LadderSession {
   if (typeof value !== 'object' || value === null) return false
@@ -91,7 +125,7 @@ export function isLadderSession(value: unknown): value is LadderSession {
   )
 }
 
-export function useStepSession(lessonId: string | null) {
+export function useStepSession(lessonId: string | null, endpoints: LadderEndpoints = LESSON_ENDPOINTS) {
   const [mode, setMode] = useState<LadderMode>('loading')
   const [session, setSession] = useState<LadderSession | null>(null)
   const [index, setIndex] = useState(0)
@@ -101,6 +135,8 @@ export function useStepSession(lessonId: string | null) {
   const [hintsUsed, setHintsUsed] = useState(0)
   const [extraHints, setExtraHints] = useState<string[]>([])
   const [hintBusy, setHintBusy] = useState(false)
+  /** Bumped to re-read the server's session; see `refresh` below. */
+  const [nonce, setNonce] = useState(0)
 
   useEffect(() => {
     if (!lessonId) {
@@ -116,7 +152,7 @@ export function useStepSession(lessonId: string | null) {
     // what makes the double mount harmless: the abandoned run cannot write.
     let cancelled = false
     setMode('loading')
-    fetch(`/api/lessons/${encodeURIComponent(lessonId)}/session`)
+    fetch(endpoints.session(lessonId))
       .then(async (res) => {
         if (cancelled) return
         // 404 with no_step_pool is the normal case for a lesson that has not
@@ -153,7 +189,18 @@ export function useStepSession(lessonId: string | null) {
     return () => {
       cancelled = true
     }
-  }, [lessonId])
+  }, [lessonId, endpoints, nonce])
+
+  /**
+   * Re-read the session from the server.
+   *
+   * A guided project advances outside the runner — the learner writes code in the
+   * workspace and presses NEXT, which is the milestone's production rung — so
+   * nothing in this hook's own event set knows to reload. Rather than mirror the
+   * ladder's state on the client and guess, the surface that moved the milestone
+   * says so.
+   */
+  const refresh = useCallback(() => setNonce((n) => n + 1), [])
 
   const step = session?.steps[index] ?? null
 
@@ -217,7 +264,7 @@ export function useStepSession(lessonId: string | null) {
     setBusy(true)
     try {
       const res = await fetch(
-        `/api/lessons/${encodeURIComponent(session.lesson_id)}/steps/${encodeURIComponent(step.id)}/seen`,
+        endpoints.seen(session.lesson_id, step.id),
         { method: 'POST' },
       )
       if (res.ok) {
@@ -227,7 +274,7 @@ export function useStepSession(lessonId: string | null) {
     } finally {
       setBusy(false)
     }
-  }, [session, step, applySession])
+  }, [session, step, applySession, endpoints])
 
   const attempt = useCallback(async () => {
     if (!session || !step) return null
@@ -235,7 +282,7 @@ export function useStepSession(lessonId: string | null) {
     try {
       const payload = payloadFor(step, input[step.id] || {})
       const res = await fetch(
-        `/api/lessons/${encodeURIComponent(session.lesson_id)}/steps/${encodeURIComponent(step.id)}/attempt`,
+        endpoints.attempt(session.lesson_id, step.id),
         {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
@@ -330,7 +377,11 @@ export function useStepSession(lessonId: string | null) {
     // generator drops cleared rungs from the session, so counting only what came
     // back made the bar restart ("3 / 8" then "1 / 5") every time a rung was
     // answered — the opposite of the "one more lesson" pull it is supposed to be.
-    const owed = session.steps.filter((s) => !s.cleared && !s.bonus).length
+    const buildOwed = session.build && !session.build.cleared ? 1 : 0
+    // A guided project keeps its production rung in `build` rather than in `steps`
+    // — the learner answers it in the workspace — so it has to count as owed here,
+    // or the bar starts one short of full on the very first card.
+    const owed = session.steps.filter((s) => !s.cleared && !s.bonus).length + buildOwed
     const total = session.ladder_steps || session.planned_steps || session.steps.length
     if (total === 0) return { done: 0, total: session.steps.length, bonus: 0 }
     return {
@@ -358,6 +409,7 @@ export function useStepSession(lessonId: string | null) {
     advance,
     markSeen,
     attempt,
+    refresh,
     progress,
     finished: Boolean(session)
       && (celebrate || index >= (session?.steps.length ?? 0)),

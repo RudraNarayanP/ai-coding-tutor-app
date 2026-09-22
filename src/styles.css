@@ -1490,6 +1490,30 @@ select option { background: var(--card); color: var(--ink); }
 .pw-milestone-body { display: flex; flex-direction: column; gap: 2px; flex: 1; }
 .pw-milestone-title { font-size: 13px; font-weight: 800; }
 .pw-milestone-xp { font-size: 11px; font-weight: 800; color: var(--yellow); }
+/* A step a suggestion or a pre-filled workspace carried: complete, unproven. Dimmer
+   than the green of work the learner wrote themselves. */
+.pw-milestone-icon.pw-milestone-helped { color: var(--ink-soft); }
+.pw-milestone-due {
+  margin-left: 6px; font-size: 10px; font-weight: 800; letter-spacing: 0.4px;
+  color: var(--orange); text-transform: uppercase; white-space: nowrap;
+}
+/* The milestone's teaching rungs, rendered by the same runner a lesson uses. */
+.pw-rungs { display: flex; flex-direction: column; gap: 8px; }
+.pw-rungs-note { font-size: 11px; font-weight: 700; color: var(--ink-soft); margin: 2px 0 0; }
+/* What NEXT will verify, stated before the attempt rather than after the failure. */
+.pw-requirements {
+  margin: 8px 0 0; padding: 8px 10px; list-style: none;
+  background: var(--surface-sunken); border: 2px solid var(--line); border-radius: 10px;
+  font-size: 12px; font-weight: 700; color: var(--ink);
+}
+.pw-requirements li { display: flex; gap: 6px; }
+.pw-requirements li::before { content: '·'; color: var(--blue); font-weight: 900; }
+/* End-of-project: what was learned, which a completion percentage cannot say. */
+.pw-summary { margin-top: 12px; text-align: left; }
+.pw-summary-lead { font-size: 14px; font-weight: 900; color: var(--green); margin: 0 0 6px; }
+.pw-summary-list { margin: 0 0 8px; padding-left: 18px; font-size: 12px; font-weight: 700; }
+.pw-summary-help, .pw-summary-due { font-size: 12px; font-weight: 700; color: var(--ink-soft); margin: 4px 0; }
+.pw-summary-due { color: var(--orange); }
 .pw-techstack { margin-top: 14px; display: flex; flex-wrap: wrap; gap: 6px; align-items: center; }
 .pw-techstack-label { font-size: 11px; font-weight: 800; color: var(--ink-soft); width: 100%; }
 .pw-tech-pill { font-size: 11px; font-weight: 800; padding: 3px 8px; border-radius: 999px; background: var(--surface-sunken); border: 2px solid var(--line); }

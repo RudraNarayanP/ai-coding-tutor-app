@@ -166,7 +166,8 @@ function PracticeCard(props: {
       type: step.widget,
       question: step.question || '',
       options: step.options || [],
-      blanks: step.blanks || [],
+      // No `blanks`: for a fill rung that array *is* the answer key, so the server
+      // never sends it. The editor renders the task from `starter_code`.
       pairs: step.pairs || [],
       starter_code: step.starter_code || '',
     }),

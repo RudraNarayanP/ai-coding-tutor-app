@@ -22,6 +22,10 @@ export type ProjectMilestone = {
   example: string
   celebrate: string
   xp_reward: number
+  /** Finished and older than its recall gap — the honest spacing signal. */
+  review_due?: boolean
+  /** The learner wrote this step's code without help. */
+  built_unaided?: boolean
 }
 
 export type WorkspaceFile = {
@@ -56,9 +60,28 @@ export type CheckResult = {
   detail: string
 }
 
+/** What the learner actually did, returned when the last milestone passes. */
+export type ProjectLearningSummary = {
+  title: string
+  milestones_built: string[]
+  built_unaided: string[]
+  completed_with_help: string[]
+  xp: number
+  files_changed: number
+  tech_stack: string[]
+  steps_overdue_for_review: number
+}
+
 export type NextResult = {
   status: 'incomplete' | 'project_complete'
-  advanced: { milestone_id: string; title: string; xp_awarded: number; already_completed: boolean }[]
+  advanced: {
+    milestone_id: string
+    title: string
+    xp_awarded: number
+    already_completed: boolean
+    /** Built without an applied suggestion and after being taught the step. */
+    unaided?: boolean
+  }[]
   current_milestone: ProjectMilestone | null
   checks: CheckResult[]
   feedback: string
@@ -68,6 +91,7 @@ export type NextResult = {
   completion_percent: number
   completed: boolean
   project: ProjectView
+  summary?: ProjectLearningSummary | null
 }
 
 export type RunResult = {
@@ -214,8 +238,20 @@ export const projectApi = {
       jsonOrThrow<TerminalResult>(r)
     ),
 
-  next: (courseId: string, files: WorkspaceFile[]) =>
-    post(`${BASE}/${encodeURIComponent(courseId)}/next`, { files }).then((r) => jsonOrThrow<NextResult>(r)),
+  /**
+   * `helped` is the workspace's own account of whether it applied an AI
+   * suggestion to this step. It changes nothing about completing or XP — only
+   * whether the step counts as work the learner produced.
+   */
+  next: (courseId: string, files: WorkspaceFile[], helped = false) =>
+    post(`${BASE}/${encodeURIComponent(courseId)}/next`, { files, helped }).then((r) => jsonOrThrow<NextResult>(r)),
+
+  session: (courseId: string) =>
+    fetch(`${BASE}/${encodeURIComponent(courseId)}/session`).then((r) => jsonOrThrow<unknown>(r)),
+
+  markRungSeen: (courseId: string, stepId: string) =>
+    fetch(`${BASE}/${encodeURIComponent(courseId)}/session/${encodeURIComponent(stepId)}/seen`, { method: 'POST' })
+      .then((r) => jsonOrThrow<unknown>(r)),
 
   guidance: (courseId: string, files: WorkspaceFile[], question = '') =>
     post(`${BASE}/${encodeURIComponent(courseId)}/guidance`, { files, question }).then((r) =>

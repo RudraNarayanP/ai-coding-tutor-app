@@ -10,6 +10,8 @@ import {
 import { compactText, milestoneDescription, sourceExcerpt, whyExplanation } from './learnerCopy'
 import { ProjectTerminal, makeTerminalLine, shellPrompt, type TerminalLine } from './ProjectTerminal'
 import { CodeEditor } from '../CodeEditor'
+import { PROJECT_ENDPOINTS, useStepSession } from '../../learning/useStepSession'
+import { StepRunner } from '../StepRunner'
 
 // ─── ProjectWorkspace ─────────────────────────────────────────────────────────
 // The persistent, VS Code-like workspace for a Create Course guided project.
@@ -84,6 +86,25 @@ export const ProjectWorkspace: React.FC<ProjectWorkspaceProps> = ({ courseId, on
   const historyRef = useRef<string[]>([])
   const historyIndexRef = useRef(-1)
 
+  /**
+   * The current milestone as rungs, from the same generator that teaches a lesson.
+   *
+   * The workspace used to open on the task and hide the teaching behind three
+   * toggles — "Learn more", "Show example", "Why?" — which is the same "tester, not
+   * teacher" shape the curriculum ladder was built to end: the copy was there, and
+   * almost nobody tapped it on their way to the editor. Here the idea and the worked
+   * example are rungs the learner passes through before NEXT means anything.
+   */
+  const ladder = useStepSession(project?.course_id ?? null, PROJECT_ENDPOINTS)
+
+  /**
+   * Whether this milestone's code was written with help. Set when a suggestion is
+   * applied or guidance is asked for; reported to the NEXT gate; cleared when the
+   * milestone changes. Completing is not the same claim as producing, and only the
+   * client can tell the two apart.
+   */
+  const helpedRef = useRef(false)
+
   const appendTerminal = useCallback((...lines: TerminalLine[]) => {
     setTerminalLines((prev) => [...prev, ...lines])
   }, [])
@@ -110,6 +131,8 @@ export const ProjectWorkspace: React.FC<ProjectWorkspaceProps> = ({ courseId, on
   useEffect(() => {
     setShowExample(false)
     setExpandedLearn(null)
+    // Help is per milestone: being carried through step 3 says nothing about step 4.
+    helpedRef.current = false
   }, [currentStepKey])
 
   // ── Autosave (debounced) ───────────────────────────────────────────────────
@@ -248,13 +271,19 @@ export const ProjectWorkspace: React.FC<ProjectWorkspaceProps> = ({ courseId, on
       return [...prev, makeTerminalLine('info', '— Verifying milestone —')]
     })
     try {
-      const res = await projectApi.next(courseId, files)
+      const res = await projectApi.next(courseId, files, helpedRef.current)
       setNextResult(res)
       setChecks(res.checks || [])
       setProject(res.project)
       if (res.stdout) appendTerminal(makeTerminalLine('stdout', res.stdout))
       if (res.stderr) appendTerminal(makeTerminalLine('stderr', res.stderr))
       appendTerminal(makeTerminalLine('info', res.feedback))
+      if (res.advanced?.some((a) => a.xp_awarded > 0)) {
+        // The milestone moved outside the runner, so the runner cannot know to
+        // reload: the next milestone's teaching cards are a different session.
+        helpedRef.current = false
+        ladder.refresh()
+      }
       if (res.status === 'project_complete') {
         setCelebrate(true)
       }
@@ -284,6 +313,10 @@ export const ProjectWorkspace: React.FC<ProjectWorkspaceProps> = ({ courseId, on
 
   const handleAskAi = async () => {
     setAskingAi(true)
+    // Asking is help even if the suggestion is ignored: the learner looked. The
+    // gate treats this milestone's production as supported, so it completes and
+    // pays XP but never claims they wrote it.
+    helpedRef.current = true
     try {
       const res = await projectApi.guidance(courseId, files, question)
       setGuidance(res)
@@ -350,6 +383,12 @@ export const ProjectWorkspace: React.FC<ProjectWorkspaceProps> = ({ courseId, on
   const passedTests = checks.filter((c) => c.passed).length
   const lesson = currentMilestone ? lessonCopy(currentMilestone) : null
 
+  /**
+   * Teaching rungs outstanding for this milestone. While they stand, NEXT is
+   * disabled: a gate the learner can walk past is not a gate.
+   */
+  const teaching = ladder.mode === 'ladder' && !!ladder.step
+
   return (
     <div className="pw-root" aria-label="Guided project workspace">
       {/* Header */}
@@ -397,11 +436,31 @@ export const ProjectWorkspace: React.FC<ProjectWorkspaceProps> = ({ courseId, on
                 className={`pw-milestone pw-milestone-${m.status}`}
                 aria-current={m.status === 'current' ? 'step' : undefined}
               >
-                <span className="pw-milestone-icon">
+                <span
+                  className={`pw-milestone-icon${m.status === 'completed' && !m.built_unaided ? ' pw-milestone-helped' : ''}`}
+                  title={
+                    m.status === 'completed'
+                      ? m.built_unaided
+                        ? 'You wrote this one yourself'
+                        : 'Completed, but with help or already in the workspace'
+                      : undefined
+                  }
+                >
                   {m.status === 'completed' ? '✓' : m.status === 'current' ? '▶' : '○'}
                 </span>
                 <div className="pw-milestone-body">
-                  <span className="pw-milestone-title">{m.title}</span>
+                  <span className="pw-milestone-title">
+                    {m.title}
+                    {/* A step older than its recall gap. A project cannot quiz an
+                        old step fairly — the answer is in this very list — so
+                        spacing is shown rather than tested, and the way to clear
+                        it is to make the program run again. */}
+                    {m.review_due && (
+                      <span className="pw-milestone-due" title="Older than its recall gap — run the project to prove it still holds">
+                        ↻ due
+                      </span>
+                    )}
+                  </span>
                   {m.status === 'current' && milestoneDescription(m) && (
                     <span className="pw-milestone-source">{milestoneDescription(m)}</span>
                   )}
@@ -482,9 +541,22 @@ export const ProjectWorkspace: React.FC<ProjectWorkspaceProps> = ({ courseId, on
           </div>
         </main>
 
-        {/* Right: AI guidance + NEXT */}
+        {/* Right: the ladder's rungs, then AI guidance + NEXT */}
         <aside className="pw-guide" aria-label="AI guidance">
           {currentMilestone ? (
+            teaching && ladder.session ? (
+              <div className="pw-rungs" role="region" aria-label="Learn this step">
+                <StepRunner
+                  {...ladder}
+                  session={ladder.session}
+                  onExit={onExit}
+                  onNextLesson={() => {}}
+                />
+                <p className="pw-rungs-note">
+                  NEXT unlocks after this step’s rungs — the idea, then the example, then your code.
+                </p>
+              </div>
+            ) : (
             <div className="pw-microstep">
               <span className="pw-microstep-label">
                 Step {currentMilestone.order} · +{currentMilestone.xp_reward} XP
@@ -500,6 +572,16 @@ export const ProjectWorkspace: React.FC<ProjectWorkspaceProps> = ({ courseId, on
                   <strong>Do this:</strong> {lesson.action}
                 </p>
               )}
+              {/* What NEXT will actually verify, named up front. The server already
+                  knows these (they are the milestone's behavioural checks) and used
+                  to withhold them until the learner had failed once. */}
+              {ladder.session?.build?.checks?.length ? (
+                <ul className="pw-requirements" aria-label="What this step must satisfy">
+                  {ladder.session.build.checks.map((text) => (
+                    <li key={text}>{text}</li>
+                  ))}
+                </ul>
+              ) : null}
               {compactText(currentMilestone.microstep.hint, 220) && (
                 <p className="pw-hint">💡 {compactText(currentMilestone.microstep.hint, 220)}</p>
               )}
@@ -545,6 +627,7 @@ export const ProjectWorkspace: React.FC<ProjectWorkspaceProps> = ({ courseId, on
                 </div>
               )}
             </div>
+            )
           ) : (
             <div className="pw-microstep">
               <h3 className="pw-microstep-title">🎉 Project complete!</h3>
@@ -617,12 +700,14 @@ export const ProjectWorkspace: React.FC<ProjectWorkspaceProps> = ({ courseId, on
           <button
             className="duo-button duo-button-primary pw-next"
             onClick={handleNext}
-            disabled={verifying || project.completed}
+            disabled={verifying || project.completed || teaching}
           >
-            {verifying ? 'Verifying…' : project.completed ? 'Completed 🎉' : 'NEXT →'}
+            {verifying ? 'Verifying…' : project.completed ? 'Completed 🎉' : teaching ? 'Read the step first' : 'NEXT →'}
           </button>
           <p className="pw-next-hint">
-            NEXT inspects your actual workspace and verifies real progress — implement it your own way.
+            {teaching
+              ? 'This step still has rungs to go through. The idea first, then the example, then your code.'
+              : 'NEXT inspects your actual workspace and verifies real progress — implement it your own way.'}
           </p>
         </aside>
       </div>
@@ -633,6 +718,36 @@ export const ProjectWorkspace: React.FC<ProjectWorkspaceProps> = ({ courseId, on
             <h2>🎉 You shipped it!</h2>
             <p>You built “{project.title}” end-to-end, verified against the source.</p>
             <p className="pw-celebrate-xp">⚡ {project.xp} XP earned</p>
+            {/* What was learned, not that a bar filled. A percentage says the
+                checklist ran out; this says which steps the learner wrote
+                themselves and which came with help — the honest version. */}
+            {nextResult?.summary && (
+              <div className="pw-summary">
+                <p className="pw-summary-lead">
+                  {nextResult.summary.built_unaided.length} of {nextResult.summary.milestones_built.length}{' '}
+                  steps you wrote yourself
+                </p>
+                {nextResult.summary.built_unaided.length > 0 && (
+                  <ul className="pw-summary-list">
+                    {nextResult.summary.built_unaided.map((t) => (
+                      <li key={t}>✓ {t}</li>
+                    ))}
+                  </ul>
+                )}
+                {nextResult.summary.completed_with_help.length > 0 && (
+                  <p className="pw-summary-help">
+                    With help: {nextResult.summary.completed_with_help.join(', ')} — worth rebuilding
+                    those without the suggestion open.
+                  </p>
+                )}
+                {nextResult.summary.steps_overdue_for_review > 0 && (
+                  <p className="pw-summary-due">
+                    ↻ {nextResult.summary.steps_overdue_for_review} step(s) are older than their recall
+                    gap. Run the project; if it still works, they held.
+                  </p>
+                )}
+              </div>
+            )}
             <div className="pw-celebrate-actions">
               <button className="duo-button duo-button-secondary" onClick={() => setCelebrate(false)}>
                 Keep exploring
