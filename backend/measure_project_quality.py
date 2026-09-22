@@ -1,6 +1,7 @@
-"""Measure guided-project quality signals against the real corpus. Dev script, not a gate.
+"""Measure guided-project quality signals against a real-material corpus.
 
-Run it before adding any rule to ``project_planner.usability_problem``.
+Dev script, not a gate. Run it before adding any rule to
+``project_planner.usability_problem``:
 
     python -m backend.measure_project_quality
 
@@ -21,162 +22,547 @@ floor it might otherwise be tempting to raise:
 * **Generic dominance cannot replace the duplicated-title rule.** A course with four
   real steps and two identically-titled "Run and verify" milestones is refused today
   by the blocklist and sits at 0.33 generic. Any "more than half the milestones are
-  generic" threshold accepts it, so the blocklist is currently load-bearing. Whether
-  it should be replaced by "milestone titles must be distinct" cannot be tested
-  here: zero accepted projects repeat a title, so there is no legitimate
-  repeated-title project to price the false rejection against.
+  generic" threshold accepts it, so the blocklist is currently load-bearing.
 * **Instructional-copy signals are unusable at load.** ``teach``/``example`` are
   filled by ``enrich_project``, a best-effort LLM call that "must not block a valid
   course". Every project planned without a working provider has empty copy, so a
   rule keyed on it would refuse good projects according to whether an API was
   reachable when they were created.
 
-What would let a rule be added
-------------------------------
-The corpus is 3 stored projects and 8 planner runs over the transcripts already in
-the test suite, with exactly one poor-but-planned example between them. To justify a
-threshold, the corpus needs, for each candidate shape, at least one accepted and one
-rejected example that the signal separates:
+Round 2 — the chapter path, on real material
+--------------------------------------------
+The corpus was rebuilt from content that already exists in this repository
+(``backend.project_corpus``): the stored transcripts of sources the app really
+ingested, the reader-proxy page of a real chaptered video parsed by the production
+chapter parser, chapter lists assembled from this app's own authored curriculum,
+and non-tutorial technical prose (the project README, engineering reports, curriculum
+dumps). Labels come from the rubric in that module and are fixed before planning.
+Result: 53 sources, 17 of which plan into a course, 36 refused upstream — plus the 3
+courses as they sit on disk.
 
-1. a long build-along with several legitimate "run it and see" checkpoints — to
-   price generic-dominance and ``run_ok >= 3`` against real content instead of
-   against a count;
-2. a tutorial whose chapters genuinely repeat a step name, so title-uniqueness can
-   be tested for false rejection rather than assumed safe;
-3. a second poor source of a *different* kind (a talk with one code mention, a
-   course that only configures a tool) — one negative example cannot fit a
-   threshold, and 0.5-versus-0.64 is not a margin, it is a coincidence with n=1;
-4. several accepted projects with only two substantive steps — to confirm the floor
-   the suite already asserts (``test_source_quality`` requires
-   ``>= 2`` non-setup, non-run checks) is not accidentally raised by a new rule.
+What the numbers showed, and what stopped a rule from being written:
 
-Until those exist, the honest rule set is the current one, and this script is the
-evidence that it was checked rather than assumed.
+* **The chapter path's defect is under-coverage, not leniency.** Of 24 chaptered
+  sources, 16 yield *no* derivable check for any heading: `_chapter_check` cannot
+  name a verification for "1. Linear Prediction", "4. Whitespace Tokenize" or
+  "2. Token Store" — real, implementable steps, in this app's own curriculum — while
+  it keeps 7 of 8 headings for a GPT-2-shaped chapter list and 6 of 8 for the
+  micrograd one. Only 4 of the 24 become a course. The matcher's vocabulary is two
+  videos' worth of curated tokens (``CONCEPT_TOKENS``), so the path only fires on
+  material that resembles them. Adding a quality *floor* there can only delete more
+  of the legitimate content it already refuses.
+* **Chapter milestones are curated inferences, and that is load-bearing.** The
+  "untraceable concept" signal — a ``code_contains`` token that appears nowhere in the
+  source (``data loader lite`` -> ``DataLoader|dataloader``, ``cross entropy loss`` ->
+  ``cross_entropy``) — fires on the two best chapter projects in the corpus. A
+  "milestone checks must be traceable to the source" rule would refuse them, so
+  source-traceability cannot gate that route.
+* **Progression between milestones is a property of the shape of build-alongs.** The
+  GPT-2 chapter projects score ``chain`` 0.17-0.25, the lowest in the corpus among
+  legitimate content, because a from-scratch model video's chapters are parallel
+  subsystems (loss, dataloader, attention) that never reference each other. A rule
+  demanding that each step reuse an earlier step's artifact would reject exactly the
+  deepest content the feature can produce.
+* **"Grounded identifier" is not measurable on prose sources.** Requiring a symbol's
+  name to appear *as code* in the source refused 13 projects, including both stored
+  word-frequency build-alongs, because the source text is English ("import the
+  collections module") rather than code. The talk's ``call hallucination`` — the one
+  defect that looked clean before it was measured — is now refused two stages
+  upstream (``evaluate_source`` answers ``reject/unrelated`` for its stored
+  transcript), and its signal value (0.0) sits inside the accepted range (0.0-0.5),
+  so the rule guards nothing and separates nobody.
+* **Duplicate verification is already handled, by the planner itself.** No freshly
+  planned project repeats a ``(kind, target)`` pair or a title — ``seen_checks`` and
+  ``_dedupe_milestones`` drop those before a course exists — so a stricter version of
+  that rule is a measured no-op, and the price of loosening it cannot be estimated.
+  The looser "nested identifier" definition does fire 4-5 times per curriculum dump
+  project (``emb_dot`` vs ``test_emb_dot``), a real content problem recurring across
+  three independent sources — and it also fires on ``app`` vs ``create_app`` and on
+  ``backward|grad`` vs ``backward|grad|parameters``, both legitimate. A deliverable's
+  test harness genuinely is a different artifact from the deliverable; deciding which
+  one the learner owes needs to know what the source was *about*, which no
+  token-overlap predicate can supply. Recorded as a gap, not a rule.
+* **The final milestone cannot express dependence.** 19 of the 20 measured courses
+  close with a bare ``run_ok``; the closer is the planner's shape, not the source's,
+  so "does the ending depend on the earlier work" has no variance to measure. What no
+  check in the corpus requires is that the pieces *fit*: every check names an
+  identifier in one persistent `main.py`, so a project can satisfy all of them with
+  code that never composes into the thing the source built. That is a limit of the
+  check vocabulary, not a threshold, and it is where a real fix belongs — a check that
+  runs the earlier milestones' artifacts together — which is a feature, not a gate.
+
+Verdict: no production validation rule is justified by this corpus. The one defect the
+corpus newly *shows* (test scaffolding harvested as deliverables; step counts that mean
+"this file mentions these names" rather than "the program was assembled") is a planner
+capability gap. Fixing it means giving the planner more information about the source,
+not refusing more sources.
+
+Reading the tables
+------------------
+``route`` is which branch of ``plan_project`` produced the course: ``chapters``
+(creator-authored outline), ``prose`` (implementable concepts named in the
+title/description), ``sentences`` (step sentences in the transcript), ``stored``
+(measured on the file on disk, because planning it today is impossible). A row under
+``NOT PLANNED`` died before a course existed, which is evidence about the upstream
+gates, not about milestone quality.
+
+Signal columns, all computed over *interior* milestones — the ``file_exists main.py``
+opener and the trailing bare ``run_ok`` are removed by kind and position, never by
+title: ``ms`` their count, ``tdiv`` distinct titles / count, ``dup`` repeated
+``(kind, target)`` pairs, ``near`` pairs whose identifier tokens nest, ``chain`` share
+of steps that name something an earlier step already required, ``kinds`` distinct check
+kinds, ``build`` share of steps whose check names code to write, ``ground``/``gshare``
+identifier checks whose name appears in the source *as code*, ``trace`` ``code_contains``
+tokens actually present in the source, ``spch`` stored fields that read as raw
+transcript (which projection scrubs before a learner sees them), ``close`` the final
+milestone's check kind.
 """
 
 from __future__ import annotations
 
-import importlib
-import json
-import os
 import atexit
+import os
+import re
 import shutil
 import tempfile
-from collections import Counter
+from collections import Counter, defaultdict
+from dataclasses import dataclass, field
 from pathlib import Path
 
-# Importing the test modules pulls in backend.main, which builds stores at import
-# time. Redirect every writable path before that happens, exactly as conftest does,
-# so running a measurement can never touch a learner's real state.
+# Importing the planner's test modules pulls in backend.main, which builds stores at
+# import time. Redirect every writable path before that happens, exactly as conftest
+# does, so running a measurement can never touch a learner's real state.
 _ROOT = Path(__file__).resolve().parents[1]
 _RUN = tempfile.mkdtemp(prefix="patchwork_measure_")
 os.environ.setdefault("PATCHWORK_STATE_DIR", _RUN)
 os.environ.setdefault("PATCHWORK_PROJECT_DIR", str(Path(_RUN) / "projects"))
-# ...and clean it up on the way out, or every run leaves a directory behind.
 atexit.register(shutil.rmtree, _RUN, ignore_errors=True)
 
+from backend import project_planner  # noqa: E402
+from backend.project_corpus import (  # noqa: E402
+    LABELS,
+    Source,
+    build_corpus,
+    stored_courses,
+)
 from backend.project_models import ProjectCourse  # noqa: E402
-from backend.project_planner import plan_project, usability_problem  # noqa: E402
+from backend.project_planner import (  # noqa: E402
+    SUBSTANTIVE_CHECK_KINDS,
+    looks_like_raw_transcript,
+    plan_project,
+    usability_problem,
+)
 from backend.source_ingestion import SourceDocument  # noqa: E402
+from backend.source_quality import evaluate_ingestion, evaluate_source  # noqa: E402
 
-SUBSTANTIVE = {"import", "symbol", "function_call", "code_contains"}
-TRANSCRIPT_MODULES = ("backend.test_project_planner", "backend.test_source_quality")
-MIN_LENGTH = 60
-
-
-def stored_projects() -> dict[str, ProjectCourse]:
-    out: dict[str, ProjectCourse] = {}
-    directory = _ROOT / "curriculum" / "generated" / "projects"
-    for path in sorted(directory.glob("*.json")):
-        try:
-            project = ProjectCourse(**json.loads(path.read_text(encoding="utf-8")))
-        except (OSError, json.JSONDecodeError, Exception):  # noqa: BLE001 - a bad file is not our business
-            continue
-        # Keyed by course_id, not title: the store legitimately holds two
-        # "Word Frequency Counter" projects, and labelling by title silently drops
-        # one of them from a corpus whose whole job is counting.
-        out[f"stored:{project.course_id[8:]}:{project.title[:18]}"] = project
-    return out
+IDENT_KINDS = frozenset({"import", "symbol", "function_call"})
+LABELS = ("good", "poor", "unknown")
 
 
-def planned_projects() -> dict[str, ProjectCourse]:
-    """Plan every real transcript the test suite already carries."""
-    out: dict[str, ProjectCourse] = {}
-    for module_name in TRANSCRIPT_MODULES:
-        module = importlib.import_module(module_name)
-        for name in sorted(dir(module)):
-            value = getattr(module, name)
-            if not (name.isupper() and isinstance(value, str) and len(value) > MIN_LENGTH):
+# ─── Planning, with the route recorded ───────────────────────────────────────
+
+def plan_with_route(source: Source) -> tuple[ProjectCourse | None, str, str]:
+    """Run the real planner; report which branch fired and any refusal reason."""
+    fired: list[str] = []
+    original = project_planner._plan_from_chapters
+
+    def tracer(*args, **kwargs):  # noqa: ANN002, ANN003
+        fired.append("chapters")
+        return original(*args, **kwargs)
+
+    project_planner._plan_from_chapters = tracer
+    try:
+        project = plan_project(source.doc, title=source.doc.title, course_id="measured")
+    except Exception as exc:  # noqa: BLE001 - refusing a source is a result, not a crash
+        route = fired[0] if fired else "prose/sentences"
+        return None, route, f"{type(exc).__name__}: {str(exc)[:90]}"
+    finally:
+        project_planner._plan_from_chapters = original
+    if not fired:
+        concepts = project_planner._concepts_from_prose(
+            project_planner._gather_source_text(source.doc), source.doc.title
+        )
+        route = "prose" if len(concepts) >= 2 else "sentences"
+    else:
+        route = "chapters"
+    return project, route, ""
+
+
+# ─── Signals ─────────────────────────────────────────────────────────────────
+
+def _tokens(text: str) -> set[str]:
+    return {t for t in re.findall(r"[a-z0-9]+", (text or "").lower()) if len(t) > 1}
+
+
+def _code_context_hits(target: str, blob: str) -> bool:
+    """True when the source shows this name *as code*, not merely says the word."""
+    if not target:
+        return False
+    root = target.split(".")[0]
+    needles = (
+        f"`{target}`", f"`{root}`",
+        f"def {target}", f"class {target}", f"import {target}",
+        f"from {target}", f"{target}(", f"{target} =", f".{target}",
+        f"{target.split('|')[0]}(",
+    )
+    low = blob.lower()
+    if any(n.lower() in low for n in needles):
+        return True
+    # snake_case / dotted / CamelCase names are code morphology wherever they appear.
+    if re.search(rf"\b{re.escape(target)}\b", blob) and ("_" in target or "." in target
+                                                         or any(c.isupper() for c in target[1:])):
+        return True
+    return False
+
+
+def interior(project: ProjectCourse) -> list:
+    """Milestones the planner derived from the source, minus its two sentinels.
+
+    ``plan_project`` always opens with ``file_exists main.py`` and always closes
+    with a bare ``run_ok``. Those are the container, not content: counting them as
+    steps is what made the talk look six steps deep, and excluding them structurally
+    (by check kind and position) avoids a title blocklist.
+    """
+    ms = list(project.milestones)
+    if ms and ms[0].checks and ms[0].checks[0].kind == "file_exists":
+        ms = ms[1:]
+    if ms and ms[-1].checks and ms[-1].checks[0].kind == "run_ok" and not (ms[-1].checks[0].target or ""):
+        ms = ms[:-1]
+    return ms
+
+
+def signals(project: ProjectCourse, blob: str) -> dict:
+    ms = interior(project)
+    checks = [(m.checks[0].kind, (m.checks[0].target or "").strip()) for m in ms if m.checks]
+    naming = [(k, t) for k, t in checks if k in SUBSTANTIVE_CHECK_KINDS and t]
+    idents = [(k, t) for k, t in naming if k in IDENT_KINDS]
+    contains = [(k, t) for k, t in naming if k == "code_contains"]
+
+    titles = [ (m.title or "").strip().lower() for m in ms ]
+    title_dups = sum(c - 1 for c in Counter(titles).values() if c > 1)
+
+    exact_dups = sum(c - 1 for c in Counter((k, t.lower()) for k, t in naming).values() if c > 1)
+    near = 0
+    for i, (ki, ti) in enumerate(naming):
+        for (kj, tj) in naming[i + 1:]:
+            if ki != kj:
                 continue
-            title = name.replace("_", " ").title()
-            doc = SourceDocument(
-                source_type="transcript", source_url="", source_hash="h",
-                title=title, plain_text=value,
-            )
-            try:
-                out[f"{module_name.split('.')[-1]}:{name}"] = plan_project(
-                    doc, title=title, course_id="measured"
-                )
-            except Exception:  # noqa: BLE001 - refused sources produce no project, which is the point
+            a, b = _tokens(ti), _tokens(tj)
+            if not a or not b or a == b:
                 continue
-    return out
+            if a < b or b < a:
+                near += 1
 
+    seen: set[str] = set()
+    linked = 0
+    for m in ms:
+        here = _tokens(m.title) | _tokens(m.checks[0].target if m.checks else "")
+        if seen and (here & seen):
+            linked += 1
+        seen |= here
+    chain_share = round(linked / max(len(ms) - 1, 1), 2)
 
-def signals(project: ProjectCourse) -> dict[str, float | int]:
-    checks = [
-        (m.checks[0].kind, (m.checks[0].target or "").strip().lower())
-        for m in project.milestones if m.checks
+    near_pairs = [
+        f"{ti} ⊂ {tj}"
+        for i, (ki, ti) in enumerate(naming)
+        for (kj, tj) in naming[i + 1:]
+        if ki == kj and _tokens(ti) and _tokens(ti) != _tokens(tj)
+        and (_tokens(ti) < _tokens(tj) or _tokens(tj) < _tokens(ti))
     ]
-    kinds = [k for k, _ in checks]
-    naming = [t for k, t in checks if k in SUBSTANTIVE and t]
-    generic = len(kinds) - len(naming)
-    titles = Counter((m.title or "").strip().lower() for m in project.milestones)
+    ungrounded = [t for _k, t in idents if not _code_context_hits(t, blob)]
+    untraceable = [
+        t for _k, t in contains
+        if not any(alt.strip().lower() in blob.lower() for alt in t.split("|") if alt.strip())
+    ]
+    speech_fields = sorted({
+        field
+        for m in ms
+        for field, value in (
+            ("action", m.microstep.action), ("observation", m.microstep.observation),
+            ("hook", m.hook), ("teach", m.teach), ("example", m.example),
+            ("description", m.source_grounded_description),
+        )
+        if looks_like_raw_transcript(value or "")
+    })
+    grounded = len(idents) - len(ungrounded)
+    traceable = len(contains) - len(untraceable)
+    repeated = [t for t, c in Counter(titles).items() if c > 1]
+    n = max(len(ms), 1)
     return {
-        "milestones": len(project.milestones),
-        "substantive": len(naming),
-        "distinct_steps": len(set(naming)),
-        "generic": generic,
-        "generic_share": round(generic / max(len(kinds), 1), 2),
-        "repeated_titles": sum(c - 1 for c in titles.values() if c > 1),
+        "ms": len(ms),
+        "tdiv": round(1 - title_dups / n, 2),
+        "tdup": title_dups,
+        "dup": exact_dups,
+        "near": len(near_pairs),
+        "near_pairs": near_pairs,
+        "chain": chain_share,
+        "kinds": len({k for k, _ in checks}),
+        "build": round(len(naming) / n, 2),
+        "grounded": f"{grounded}/{len(idents)}" if idents else "-",
+        "gshare": round(grounded / len(idents), 2) if idents else -1.0,
+        "ungrounded": ungrounded,
+        "trc": f"{traceable}/{len(contains)}" if contains else "-",
+        "untraceable": untraceable,
+        "speech": len(speech_fields),
+        "speech_fields": speech_fields,
+        "repeated_titles": repeated,
+        "closer": (project.milestones[-1].checks[0].kind
+                   if project.milestones and project.milestones[-1].checks else "?"),
     }
 
 
+# ─── Candidate rules, priced against the corpus ──────────────────────────────
+
+CANDIDATES: list[tuple[str, str, callable, callable]] = [
+    ("near-dup",
+     "two milestones whose checks name nested identifiers (sigmoid / test_sigmoid)",
+     lambda s: s["near"] > 0,
+     lambda s: s["near_pairs"][:3]),
+    ("ungrounded-ident",
+     "an import/symbol/call check whose name never appears as code in the source",
+     lambda s: bool(s["ungrounded"]),
+     lambda s: s["ungrounded"][:3]),
+    ("half-ungrounded",
+     "…and at least half of the identifier checks don't",
+     lambda s: s["gshare"] >= 0 and s["gshare"] < 0.5,
+     lambda s: s["ungrounded"][:3]),
+    ("untraceable-concept",
+     "a code_contains check whose tokens appear nowhere in the source",
+     lambda s: bool(s["untraceable"]),
+     lambda s: s["untraceable"][:3]),
+    ("titles-repeat", "two milestones share a title",
+     lambda s: s["tdup"] > 0, lambda s: s["repeated_titles"][:3]),
+    ("no-chain", "milestones never refer to anything an earlier milestone built",
+     lambda s: s["ms"] >= 3 and s["chain"] < 0.25, lambda s: [f"chain={s['chain']}"]),
+    ("speech-copy", "a stored learner-facing field still reads as raw transcript",
+     lambda s: s["speech"] > 0, lambda s: s["speech_fields"][:4]),
+]
+
+
+@dataclass
+class Record:
+    """One corpus member and whatever the pipeline made of it."""
+
+    key: str
+    label: str
+    provenance: str
+    route: str
+    project: ProjectCourse | None
+    reason: str
+    blob: str
+    doc: SourceDocument | None = None
+    signals: dict = field(default_factory=dict)
+
+
+def source_blob(doc: SourceDocument) -> str:
+    """Everything the learner's source actually said, chapters included."""
+    return (doc.plain_text or "") + "\n" + "\n".join(
+        f"{seg.title}\n{seg.transcript}\n{seg.description_snippet}\n" + "\n".join(seg.chapters)
+        for seg in doc.segments
+    )
+
+
+def chapter_yield(records: list[Record]) -> None:
+    """What a chapter list becomes: how many headings survive, and which are dropped.
+
+    ``_plan_from_chapters`` keeps a chapter only when ``_chapter_check`` can name a
+    verification for it, which means the heading must match the curated
+    ``CONCEPT_TOKENS`` tables or yield a code-looking identifier. This is where the
+    chapter path loses content — measured rather than assumed.
+    """
+    print("\nchapter yield (headings in -> checkable headings -> milestones planned):")
+    print("  `checkable` counts headings `_chapter_check` can derive a verification from;")
+    print("  `ms` is the interior milestone count of the course that actually exists, so a")
+    print("  0 there with checkable > 0 means the source was refused earlier, not that the")
+    print("  chapter matcher failed.")
+    width = max(len(r.key) for r in records) + 1
+    print(f"  {'source':<{width}} {'in':>3} {'chk':>4} {'ms':>4}  dropped headings")
+    for record in records:
+        if record.doc is None:
+            continue
+        chapters = project_planner._collect_chapters(record.doc)
+        if len(chapters) < 2:
+            continue
+        dropped: list[str] = []
+        checkable = 0
+        for chapter in chapters:
+            if project_planner._looks_meta_heading(chapter):
+                dropped.append(f"{chapter[:34]} [meta]")
+            elif project_planner._chapter_check(chapter) is None:
+                dropped.append(f"{chapter[:34]} [no check derivable]")
+            else:
+                checkable += 1
+        made = f"{len(interior(record.project))}" if record.project else "-"
+        print(f"  {record.key:<{width}} {len(chapters):>3} {checkable:>4} {made:>4}  "
+              + (f"{len(dropped)} dropped: " + "; ".join(dropped[:4]) if dropped else "none"))
+        for extra in dropped[4:]:
+            print(f"  {'':<{width}} {'':>3} {'':>4}  and: {extra}")
+
+    chapter_records = [
+        r for r in records
+        if r.doc is not None and len(project_planner._collect_chapters(r.doc)) >= 2
+    ]
+    dead = [r for r in chapter_records
+            if not any(project_planner._chapter_check(c) for c in project_planner._collect_chapters(r.doc))]
+    alive = [r for r in chapter_records if r.project is not None]
+    print(f"  → {len(chapter_records)} chaptered sources; {len(dead)} yield no derivable check at all;"
+          f" {len(alive)} become a course.")
+
+
 def main() -> int:
-    corpus = {**stored_projects(), **planned_projects()}
-    if not corpus:
-        print("no projects to measure (no stored files, planner produced none)")
-        return 1
+    corpus = build_corpus()
+    rows: list[tuple[Source, ProjectCourse | None, str, str]] = []
+    for source in corpus:
+        ingest = evaluate_ingestion(source.doc)
+        if ingest.decision != "accept":
+            rows.append((source, None, "ingestion", f"{ingest.decision} @ ingestion: {ingest.source_type}"))
+            continue
+        gate = evaluate_source(source.doc, source.doc.title)
+        if gate.decision != "accept":
+            rows.append((source, None, "analysis", f"{gate.decision} @ source gate: {gate.source_type}"))
+            continue
+        project, route, error = plan_with_route(source)
+        if project is None:
+            rows.append((source, None, route, f"refused @ planning: {error}"))
+            continue
+        rows.append((source, project, route, usability_problem(project) or ""))
 
-    accepted = {n: p for n, p in corpus.items() if usability_problem(p) is None}
-    refused = {n: p for n, p in corpus.items() if usability_problem(p) is not None}
+    # Courses already on disk, measured as they are served to a learner. The talk's
+    # transcript no longer survives the source gate, so this is the only place its
+    # milestone shape can still be measured.
+    stored = [
+        (key, course, label, source_blob(SourceDocument(
+            source_type=course.source_type, source_url=course.source_url,
+            source_hash=course.source_hash, title=course.title,
+            plain_text=course.source_excerpt or "", access_level="full",
+        )))
+        for key, course, label in stored_courses()
+    ]
 
-    print(f"corpus: {len(corpus)} projects  ({len(accepted)} accepted, {len(refused)} refused)\n")
-    width = max(46, max(len(n) for n in corpus) + 2)
-    header = f"{'project':<{width}} {'ms':>3} {'sub':>4} {'dist':>5} {'gen':>4} {'share':>6} {'dups':>5}  verdict"
+    print(f"corpus: {len(corpus)} real-material sources "
+          f"({sum(1 for s, p, *_ in rows if p is not None)} planned, "
+          f"{sum(1 for s, p, *_ in rows if p is None)} refused upstream) + "
+          f"{len(stored)} courses as-stored\n")
+
+    records = [
+        Record(key=source.key, label=source.label, provenance=source.provenance,
+               route=route, project=project, reason=reason, blob=source_blob(source.doc),
+               doc=source.doc)
+        for source, project, route, reason in rows
+    ] + [
+        Record(key=key, label=label, provenance="stored", route="stored",
+               project=course, reason=usability_problem(course) or "", blob=blob)
+        for key, course, label, blob in stored
+    ]
+
+    width = max(len(r.key) for r in records) + 2
+    print(f"{'label':<8} {'provenance':<11} {'outcome':<18} {'where':<11} source")
+    print("-" * (width + 52))
+    for record in records:
+        if record.project is None:
+            outcome = "NOT PLANNED"
+        elif record.reason:
+            outcome = "refused at load"
+        else:
+            outcome = "offered to learner"
+        print(f"{record.label:<8} {record.provenance:<11} {outcome:<18} "
+              f"{record.route:<11} {record.key}")
+        if record.reason:
+            print(" " * 40 + "└─ " + record.reason)
+
+    # --- per-project signal table -------------------------------------------
+    print("\nsignals over interior milestones (the setup/run sentinels are excluded by"
+          "\nkind and position, not by title):")
+    header = (f"{'source':<{width}} {'label':<6} {'route':<10} {'ms':>3} {'tdiv':>5} {'dup':>4} "
+              f"{'near':>5} {'chain':>6} {'kinds':>6} {'build':>6} {'ground':>8} {'trace':>6} "
+              f"{'spch':>5} {'close':>8}  gate")
     print(header)
     print("-" * len(header))
-    for label, project in sorted(corpus.items()):
-        s = signals(project)
-        problem = usability_problem(project)
-        print(f"{label:<{width}} {s['milestones']:>3} {s['substantive']:>4} {s['distinct_steps']:>5} "
-              f"{s['generic']:>4} {s['generic_share']:>6} {s['repeated_titles']:>5}  "
-              f"{'refused' if problem else 'accepted'}")
+    measured: list[Record] = []
+    for record in records:
+        if record.project is None:
+            continue
+        record.signals = signals(record.project, record.blob)  # type: ignore[assignment]
+        s = record.signals
+        measured.append(record)
+        print(f"{record.key:<{width}} {record.label:<6} {record.route:<10} {s['ms']:>3} {s['tdiv']:>5} "
+              f"{s['dup']:>4} {s['near']:>5} {s['chain']:>6} {s['kinds']:>6} {s['build']:>6} "
+              f"{s['grounded']:>8} {s['trc']:>6} {s['speech']:>5} {str(s['closer']):>8}  "
+              f"{'refuse' if record.reason else 'accept'}")
+    closers = Counter(str(r.signals["closer"]) for r in measured)  # type: ignore[index]
+    print(f"  close: {dict(closers)} — the final milestone's check kind is decided by the")
+    print("  planner's shape, not by the source, so 'does the ending depend on the earlier")
+    print("  steps' cannot discriminate between good and poor content.")
 
-    def span(group: dict[str, ProjectCourse], key: str) -> str:
-        if not group:
+    # --- distribution by label ---------------------------------------------
+    def bucket(group: list[Record], key: str) -> str:
+        vals = sorted(
+            r.signals[key] for r in group  # type: ignore[index]
+            if isinstance(r.signals[key], (int, float)) and r.signals[key] != -1.0  # type: ignore[index]
+        )
+        if not vals:
             return "n/a"
-        values = [signals(p)[key] for p in group.values()]
-        return f"{min(values)}-{max(values)}"
+        return f"n={len(vals)} {min(vals)}-{max(vals)} mid {vals[len(vals) // 2]}"
 
-    print("\nseparation check (a signal is only usable if accepted and refused ranges do not overlap):")
-    for key, note in (
-        ("substantive", "depth: the poor talk scores 5, most accepted projects score fewer -> NOT a signal"),
-        ("generic", "accepted is pinned at 2 because the planner always adds setup + run -> artifact, not signal"),
-        ("generic_share", "one refused example only -> a threshold fitted here is fitted to n=1"),
-        ("repeated_titles", "no accepted project repeats a title -> false-positive rate unmeasurable"),
-    ):
-        print(f"  {key:<14} accepted {span(accepted, key):<7} refused {span(refused, key):<7}  {note}")
-    print("\nsee this module's docstring for what corpus would make a rule justified.")
+    print("\ndistribution of each signal, by label (planned + stored projects):")
+    print(f"{'signal':<10} " + "".join(f"{lab:>26}" for lab in LABELS))
+    for key in ("ms", "tdiv", "dup", "near", "chain", "kinds", "build", "gshare", "speech"):
+        print(f"{key:<10} " + "".join(f"{bucket([r for r in measured if r.label == lab], key):>26}"
+                                     for lab in LABELS))
+
+    # --- route coverage -----------------------------------------------------
+    print("\ncoverage by route (the chapter path is the one this corpus was built for):")
+    by_route: dict[str, Counter] = defaultdict(Counter)
+    for record in records:
+        stage = record.route if record.project is None else "planned:" + record.route
+        by_route[stage][record.label] += 1
+    for stage, counts in sorted(by_route.items()):
+        print(f"  {stage:<24} " + "  ".join(f"{lab}={counts[lab]}" for lab in LABELS if counts[lab]))
+
+    # --- price each candidate rule -----------------------------------------
+    print("\ncandidate rules, priced on the corpus (NEW refusals only, by label):")
+    for name, gloss, predicate, evidence in CANDIDATES:
+        hits: dict[str, list[str]] = defaultdict(list)
+        shown: list[str] = []
+        for record in measured:
+            if usability_problem(record.project) is not None:
+                continue  # already refused; not this rule's doing
+            if predicate(record.signals):
+                hits[record.label].append(record.key)
+                if len(shown) < 3:
+                    shown.append(f"{record.key} [{', '.join(evidence(record.signals))}]")
+        total = sum(len(v) for v in hits.values())
+        print(f"  {name:<21} refuses {total:<3} "
+              + "  ".join(f"{lab}={len(hits[lab])}" for lab in LABELS))
+        print(f"  {'':<21} {gloss}")
+        for line in shown:
+            print(f"  {'':<21} ↳ {line}")
+
+    print("\nseparation check — a signal is only usable if the accepted range and the")
+    print("refused range do not overlap:")
+    accepted = [r for r in measured if not r.reason]
+    refused = [r for r in measured if r.reason]
+    for key in ("ms", "tdiv", "dup", "near", "chain", "kinds", "build", "gshare", "speech"):
+        def rng(group: list[Record]) -> str:
+            vals = sorted(r.signals[key] for r in group
+                          if isinstance(r.signals[key], (int, float)) and r.signals[key] != -1.0)
+            return f"{min(vals)}-{max(vals)}" if vals else "n/a"
+        a, b = rng(accepted), rng(refused)
+        verdict = "overlaps -> useless" if a != "n/a" and b != "n/a" and a == b else ""
+        print(f"  {key:<14} accepted {a:<10} refused {b:<10} {verdict}")
+
+    chapter_yield(records)
+
+    # --- corpus composition -------------------------------------------------
+    print("\ncorpus composition:")
+    make: dict[str, Counter] = defaultdict(Counter)
+    for record in records:
+        make[record.provenance][record.label] += 1
+    for provenance, counts in sorted(make.items()):
+        print(f"  {provenance:<11} " + "  ".join(f"{lab}={counts[lab]}" for lab in LABELS if counts[lab])
+              + f"   ({sum(counts.values())} sources)")
+    print("\nsee project_corpus.LABEL_RUBRIC for how labels were fixed, and this file's")
+    print("docstring for which of these measurements justified a rule (none did).")
     return 0
 
 

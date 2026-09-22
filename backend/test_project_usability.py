@@ -406,15 +406,27 @@ def test_copy_presence_is_not_a_usable_gate():
     assert usability_problem(no_copy) is None
 
 
-def test_the_measurement_harness_sees_the_whole_corpus():
+def test_the_measurement_harness_sees_the_whole_corpus(capsys):
     """The script is the evidence behind every decision above; if it silently loses
-    projects — same-titled files, a planner exception — the evidence is wrong."""
-    from backend import measure_project_quality as measure
+    projects — same-titled files, a planner exception — the evidence is wrong.
 
-    stored = measure.stored_projects()
-    planned = measure.planned_projects()
-    assert len(stored) == len(list((Path(__file__).resolve().parents[1]
-                                    / "curriculum/generated/projects").glob("*.json")))
-    assert len({*stored, *planned}) == len(stored) + len(planned), "labels must not collide"
-    assert len(planned) >= 5, f"only {len(planned)} transcripts planned into projects"
-    assert any(measure.usability_problem(p) for p in stored.values()), "the bad course should still be caught"
+    Every corpus member is expected to appear exactly once in the report, whether or
+    not it became a course: a source that vanished from the measurement is a
+    measurement that no longer describes the pipeline.
+    """
+    from backend import measure_project_quality as measure
+    from backend.project_corpus import build_corpus, stored_courses
+
+    corpus = build_corpus()
+    assert len({source.key for source in corpus}) == len(corpus)
+    assert len(corpus) >= 40, f"the measured corpus shrank to {len(corpus)}"
+    # The stored files are gitignored runtime state: measured when present, never
+    # assumed. A course read from disk must never collide with a planned key.
+    stored = {key for key, _course, _label in stored_courses()}
+    assert stored.isdisjoint({source.key for source in corpus})
+
+    assert measure.main() == 0
+    report = capsys.readouterr().out
+    for key in (source.key for source in corpus):
+        assert key in report, f"{key} is missing from the measurement"
+    assert "candidate rules" in report and "chapter yield" in report
