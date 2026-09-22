@@ -1570,19 +1570,62 @@ def validate_project(project: ProjectCourse) -> None:
         )
 
 
-def is_hollow_guided_project(project: ProjectCourse) -> bool:
-    """True when a saved course has too little real implementation structure."""
+#: Check kinds that name a thing the learner must produce. They carry the
+#: definition of a step, which means two of them can be the same step — unlike a
+#: `run_ok` checkpoint, which has no target, so "the same check twice" says nothing
+#: about it. A tutorial that says "run it and see" after each function is a normal
+#: build-along; refusing two `run_ok` milestones was the first draft of this rule,
+#: and it rejected a good project.
+SUBSTANTIVE_CHECK_KINDS = frozenset({"import", "symbol", "function_call", "code_contains"})
+
+
+def usability_problem(project: ProjectCourse) -> str | None:
+    """Why this saved course cannot be a guided project, or None when it can.
+
+    The signals are structural — what the NEXT gate would verify — rather than
+    strings matched against titles, because the titles come from the same transcript
+    as the content and a talk reads perfectly well while describing nothing to
+    build. Duplicate verification is the sharpest one: an `import collections` check
+    *is* the definition of that step, so two milestones naming the same thing are
+    one step counted twice. The learner does one piece of work, the gate cascades
+    through both, and the progress bar reports six steps for three.
+    """
+    keys: dict[tuple[str, str], str] = {}
+    for m in project.milestones:
+        if not m.checks:
+            continue
+        check = m.checks[0]
+        target = (check.target or "").strip().lower()
+        if check.kind not in SUBSTANTIVE_CHECK_KINDS or not target:
+            continue
+        key = (check.kind, target)
+        if key in keys:
+            return (
+                f"`{m.title}` verifies the same thing as `{keys[key]}` "
+                f"({check.kind}: {target}), so the two steps are one step."
+            )
+        keys[key] = m.title
+
     titles = [m.title.strip().lower() for m in project.milestones]
     if any(titles.count(t) >= 2 for t in titles if t in {"run and verify", "print output", "print the result"}):
-        return True
+        return "Several milestones only ask you to run the program and print output, with nothing new to write between them."
+
     run_ok = sum(1 for m in project.milestones if m.checks and m.checks[0].kind == "run_ok")
     if run_ok >= 3:
-        return True
+        return "Most of this course's milestones are run-and-verify checkpoints rather than code to write."
+
     coding = [
         m for m in project.milestones
-        if m.checks and m.checks[0].kind in ("import", "symbol", "function_call", "code_contains")
+        if m.checks and m.checks[0].kind in SUBSTANTIVE_CHECK_KINDS
     ]
-    return len(coding) < 2
+    if len(coding) < 2:
+        return "This source does not describe enough concrete implementation steps to build along."
+    return None
+
+
+def is_hollow_guided_project(project: ProjectCourse) -> bool:
+    """True when a saved course has too little real implementation structure."""
+    return usability_problem(project) is not None
 
 
 def _hint_for(kind: str, target: str) -> str:

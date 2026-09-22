@@ -246,4 +246,34 @@ describe('CreatePage Component', () => {
     await waitFor(() => expect(projectApi.remove).toHaveBeenCalledWith('project-bad'))
     await waitFor(() => expect(screen.queryByText('Intro to Large Language Models')).toBeNull())
   })
+
+  it('refuses to offer a saved project that cannot be opened, and says why', async () => {
+    // The row used to be a normal resume button whose click answered 422. The
+    // server already knew this course fails the usability rule when it built the
+    // list, so the screen has no business pretending otherwise.
+    vi.mocked(projectApi.list).mockResolvedValue([
+      {
+        course_id: 'project-talk',
+        title: 'Intro to Large Language Models',
+        language: 'python',
+        completion_percent: 0,
+        completed: false,
+        milestone_count: 14,
+        updated_at: 1,
+        usable: false,
+        unusable_reason: 'Most of this course\'s milestones are run-and-verify checkpoints rather than code to write.',
+      },
+    ])
+
+    render(<CreatePage />)
+    // Anchored: "Delete Intro to …" also contains the title, so an unanchored
+    // regex matches two buttons.
+    const open = await screen.findByRole('button', { name: /^Intro to Large Language Models/ })
+    expect(open).toBeDisabled()
+    expect(open).toHaveTextContent('Can’t be opened')
+    expect(screen.getByText(/run-and-verify checkpoints rather than code to write/)).toBeInTheDocument()
+    // Delete stays available: it is the only thing a learner can do with this file,
+    // and hiding the row would strand it on disk.
+    expect(screen.getByRole('button', { name: 'Delete Intro to Large Language Models' })).toBeEnabled()
+  })
 })

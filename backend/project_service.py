@@ -13,8 +13,8 @@ from .project_models import (
     WorkspaceFile,
 )
 from .project_enrich import enrich_project
+from . import project_planner
 from .project_planner import (
-    is_hollow_guided_project,
     plan_project,
     scrub_project_learner_copy,
     validate_project,
@@ -235,12 +235,32 @@ def _first_failure_feedback(results: list[ProjectCheckResult]) -> str:
     return "Keep going."
 
 
+def list_learner_projects(store: ProjectStore) -> list[dict]:
+    """The resume list, marked with whether each entry can actually be opened.
+
+    Listing and opening must use the same predicate. They did not: a course saved
+    before the usability rules existed was offered as resumable, and clicking it
+    answered 422. Filtering the row out instead would hide data the learner can
+    only delete from this screen, so the row stays and carries its reason.
+    """
+    rows: list[dict] = []
+    for summary in store.list_summaries():
+        row = dict(summary)
+        project = store.get(summary["course_id"])
+        problem = project_planner.usability_problem(project) if project else None
+        row["usable"] = problem is None
+        row["unusable_reason"] = problem or ""
+        rows.append(row)
+    return rows
+
+
 def require_usable_project(project: ProjectCourse) -> None:
     """Block saved courses that lack enough implementation structure to be a real project."""
-    if is_hollow_guided_project(project):
+    problem = project_planner.usability_problem(project)
+    if problem:
         raise ProjectGroundingError(
-            "This saved course does not have enough real coding material to be a guided project. "
-            "Delete it from Create and try a build-along tutorial that actually implements a program."
+            f"This saved course is not a guided project: {problem} "
+            "Try a build-along tutorial that actually implements a program."
         )
 
 

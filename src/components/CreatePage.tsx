@@ -231,30 +231,38 @@ export const CreatePage: React.FC<CreatePageProps> = () => {
           </h3>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
             {projects.map((p) => (
-              <div
-                key={p.course_id}
-                style={{ display: 'flex', gap: '8px', alignItems: 'stretch' }}
-              >
-                <button
-                  className="duo-button duo-button-secondary"
-                  onClick={() => openProject(p.course_id)}
-                  style={{ flex: 1, display: 'flex', justifyContent: 'space-between', alignItems: 'center', textAlign: 'left' }}
-                >
-                  <span>{p.title}</span>
-                  <span style={{ fontSize: '12px', fontWeight: 800, color: 'var(--ink-soft)' }}>
-                    {p.completed ? 'Completed' : `${p.completion_percent}%`}
-                  </span>
-                </button>
-                <button
-                  type="button"
-                  className="duo-button duo-button-secondary"
-                  onClick={(e) => handleDeleteProject(p.course_id, p.title, e)}
-                  disabled={deletingId === p.course_id}
-                  aria-label={`Delete ${p.title}`}
-                  style={{ padding: '10px 14px', color: '#991b1b', flexShrink: 0 }}
-                >
-                  {deletingId === p.course_id ? '…' : 'Delete'}
-                </button>
+              <div key={p.course_id} style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
+                <div style={{ display: 'flex', gap: '8px', alignItems: 'stretch' }}>
+                  <button
+                    className="duo-button duo-button-secondary"
+                    onClick={() => openProject(p.course_id)}
+                    disabled={p.usable === false}
+                    style={{ flex: 1, display: 'flex', justifyContent: 'space-between', alignItems: 'center', textAlign: 'left' }}
+                  >
+                    <span>{p.title}</span>
+                    <span style={{ fontSize: '12px', fontWeight: 800, color: 'var(--ink-soft)' }}>
+                      {p.usable === false ? 'Can’t be opened' : p.completed ? 'Completed' : `${p.completion_percent}%`}
+                    </span>
+                  </button>
+                  <button
+                    type="button"
+                    className="duo-button duo-button-secondary"
+                    onClick={(e) => handleDeleteProject(p.course_id, p.title, e)}
+                    disabled={deletingId === p.course_id}
+                    aria-label={`Delete ${p.title}`}
+                    style={{ padding: '10px 14px', color: '#991b1b', flexShrink: 0 }}
+                  >
+                    {deletingId === p.course_id ? '…' : 'Delete'}
+                  </button>
+                </div>
+                {/* The reason the server gave, not a generic "invalid". A learner who
+                    spent twenty minutes building this deserves to know which part of
+                    the source failed, and Delete is the only action left to them. */}
+                {p.usable === false && p.unusable_reason && (
+                  <p style={{ fontSize: '12px', fontWeight: 700, color: 'var(--ink-soft)', margin: 0 }}>
+                    {p.unusable_reason}
+                  </p>
+                )}
               </div>
             ))}
           </div>

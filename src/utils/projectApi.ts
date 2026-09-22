@@ -131,6 +131,13 @@ export type ProjectSummary = {
   completed: boolean
   milestone_count: number
   updated_at: number
+  /**
+   * False when the saved course fails the same usability check that gates opening
+   * it. The row stays listed on purpose: Delete is the only thing a learner can
+   * usefully do with it, and hiding it would leave the file on disk unreachable.
+   */
+  usable?: boolean
+  unusable_reason?: string
 }
 
 const BASE = '/api/create-course/projects'

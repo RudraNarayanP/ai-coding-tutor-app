@@ -892,7 +892,7 @@ async def create_project(req: ProjectCreateRequest):
 
 @app.get("/api/create-course/projects")
 async def list_projects():
-    return project_store.list_summaries()
+    return project_service.list_learner_projects(project_store)
 
 
 @app.get("/api/create-course/projects/{course_id}")
