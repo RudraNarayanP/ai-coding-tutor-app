@@ -191,6 +191,93 @@ _NARRATIVE_PRINT = re.compile(
 )
 
 
+#: A `def` with its signature, and the test framework's own assertion calls.
+_DEF_SIGNATURE = re.compile(r"\bdef\s+([A-Za-z_]\w*)\s*\(([^)]*)\)")
+_UNITTEST_ASSERTION = re.compile(r"\bself\s*\.\s*(?:assert\w*|fail)\s*\(")
+#: A construction verb and the words that follow it inside the same clause.
+_DEMANDED_WINDOW = re.compile(
+    r"\b(?:implement|define|write|create|build|add|declare|code|develop)\b([^.?\n]{0,40})",
+    re.IGNORECASE,
+)
+#: Words naming a kind of thing, which is never the thing itself.
+_DEMANDED_FILLER = {
+    "function", "functions", "method", "methods", "class", "classes", "variable",
+    "variables", "module", "modules", "object", "objects", "helper", "helpers",
+    "name", "names", "following", "simple", "small", "own", "same", "other",
+    "that", "this", "with", "which", "using", "used", "returns", "return",
+    "called", "named", "your", "their", "what", "when", "then", "into", "them",
+    "raise", "raises", "check", "checks", "test", "tests", "coding", "where",
+}
+
+
+def _demanded_names(text: str) -> set[str]:
+    """Names an instruction in this document asks the learner to produce.
+
+    Deliberately broad, because it only ever *protects* a candidate from being
+    classified as harness: too wide costs a missed filter, too narrow destroys real
+    content. Taking the first word after the verb was wrong — "define a test_login
+    function" asks for `test_login`, not `a`.
+    """
+    out: set[str] = set()
+    for window in _DEMANDED_WINDOW.findall(text or ""):
+        for word in re.findall(r"[A-Za-z_][A-Za-z0-9_]{3,}", window):
+            if word.lower() not in _DEMANDED_FILLER:
+                out.add(word)
+    return out
+
+
+def scaffolding_names(text: str) -> set[str]:
+    """Names the document presents as test infrastructure rather than as a deliverable.
+
+    A guided project must not ask the learner to build the harness that checks it, and
+    a tutorial's `def test_x(self): self.assertEqual(...)` is that harness. The test is
+    structural, not nominal: the definition takes nothing but its bound instance, and
+    the code following it calls the test framework's assertions.
+
+    Three things keep it honest, each one a real shape in this repository's material:
+
+    * a name any instruction asks for is never classified — "Implement `assert_equal`
+      that raises AssertionError" is the deliverable of the app's own testing unit, and
+      a tutorial that says "write a test_login function" means it;
+    * a name defined anywhere with real parameters is a deliverable, so a class method
+      (`def deposit(self, amount)`) and a test of the same shape cannot be confused;
+    * pytest-style module functions (`def test_login():`, no `self`) are *not* caught
+      here, because nothing distinguishes them from a learner's own function except the
+      name — which is the blacklist this function exists to avoid.
+    """
+    if not text:
+        return set()
+    demanded = _demanded_names(text)
+    has_real_signature = {
+        name for name, params in _DEF_SIGNATURE.findall(text)
+        if _bound_instance_only(params) is False
+    }
+    scaffolding: set[str] = set()
+    for match in _DEF_SIGNATURE.finditer(text):
+        name, params = match.group(1), match.group(2)
+        if name in demanded or name in has_real_signature:
+            continue
+        if _bound_instance_only(params) is not True:
+            continue
+        following = text[match.end(): match.end() + 400]
+        if _UNITTEST_ASSERTION.search(following):
+            scaffolding.add(name)
+    return scaffolding - has_real_signature
+
+
+def _bound_instance_only(params: str) -> bool | None:
+    """True for `(self)`/`(cls)` (optionally + *args/**kwargs), False for real
+    parameters, None when the signature is not decidable (e.g. a class)."""
+    args = [a.strip() for a in (params or "").split(",") if a.strip()]
+    if not args:
+        return None
+    first = args[0].split(":")[0].strip()
+    if first not in {"self", "cls"}:
+        return False
+    rest = [a for a in args[1:] if not a.startswith(("*", "**"))]
+    return not rest
+
+
 def _cap_field(text: str, max_len: int = _FIELD_MAX) -> str:
     """Clamp milestone text fields to the Pydantic model limit."""
     cleaned = (text or "").strip()
@@ -1121,6 +1208,7 @@ _CELEBRATIONS = [
 def _count_sentence_targets(text: str) -> int:
     n = 0
     seen: set[tuple[str, str]] = set()
+    scaffolding = scaffolding_names(text)
     for sentence in _split_steps(text):
         for window in _windows_for_extraction(sentence):
             if not _is_step(window):
@@ -1129,6 +1217,8 @@ def _count_sentence_targets(text: str) -> int:
             if target is None:
                 continue
             kind, tgt = target
+            if tgt in scaffolding:
+                continue      # a test of someone else's code is not a step to build
             key = (kind, tgt)
             if kind in ("import", "symbol", "function_call"):
                 if key in seen:
@@ -1197,6 +1287,7 @@ def plan_project(doc: SourceDocument, title: str, course_id: str) -> ProjectCour
     tech_stack = _detect_tech(text)
 
     sentences = _split_steps(text)
+    scaffolding = scaffolding_names(text)
     milestones: list[Milestone] = []
     seen_targets: set[tuple[str, str]] = set()
     order = 1
@@ -1239,6 +1330,11 @@ def plan_project(doc: SourceDocument, title: str, course_id: str) -> ProjectCour
             if target is None:
                 continue
             kind, tgt = target
+            if tgt in scaffolding:
+                # The document shows this name checking somebody else's work. Making
+                # it a milestone asks the learner to build the harness that grades
+                # them, and it steals a step from the artifact the tutorial named.
+                continue
             # De-duplicate identical concrete checks (e.g. transcript repeats "import X").
             key = (kind, tgt)
             if kind in ("import", "symbol", "function_call"):

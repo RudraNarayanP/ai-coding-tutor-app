@@ -82,7 +82,9 @@ What the numbers showed, and what stopped a rule from being written:
   ``backward|grad`` vs ``backward|grad|parameters``, both legitimate. A deliverable's
   test harness genuinely is a different artifact from the deliverable; deciding which
   one the learner owes needs to know what the source was *about*, which no
-  token-overlap predicate can supply. Recorded as a gap, not a rule.
+  token-overlap predicate can supply. Recorded as a gap, not a rule. *(Right about the
+  signal, wrong to stop there: round 6 solved it structurally, by what a definition
+  does rather than what two names share — see below.)*
 * **The final milestone cannot express dependence.** 19 of the 20 measured courses
   close with a bare ``run_ok``; the closer is the planner's shape, not the source's,
   so "does the ending depend on the earlier work" has no variance to measure. What no
@@ -192,10 +194,13 @@ count either, which is what makes the four controls in
   their *titles*, which is exactly what must not be used as evidence.
 * **0 argument-passing edges across the 31 accepted projects.** Where real source
   material does show a later artifact using an earlier one — 13 body edges, all in the
-  two curriculum dumps — every single edge is `test_emb_dot → emb_dot` (a test harness
+  the two curriculum dumps — every single edge is `test_emb_dot → emb_dot` (a test harness
   consuming the deliverable) or `softmax → math` (a function using an imported module).
-  The only composition this corpus demonstrates is scaffolding-shaped, which is the
-  same content the harvest gap already records.
+  The only composition this corpus demonstrates is scaffolding-shaped — and that
+  scaffolding was itself the harvest defect below, since `test_emb_dot` was being
+  demanded of the learner. Both facts are now about the same content seen from two
+  sides: the harness was the only thing that composed, and it was the only thing
+  wrongly kept.
 * **28 of 31 projects — 197 of 203 checks — pass against a program of unrelated
   stubs**, one definition per artifact, none referring to another. The three
   exceptions are all the same `code_contains nn.Module` check, which needs an
@@ -222,11 +227,37 @@ repository's own code, and a relationship-forcing requirement cannot be expresse
 grader that has to enforce it. What ships is the measurement, its controls, and the
 documentation of the gap.
 
-Verdict: no production *validation* rule is justified by this corpus. The one defect the
-corpus newly *shows* (test scaffolding harvested as deliverables; step counts that mean
-"this file mentions these names" rather than "the program was assembled") is a planner
-capability gap. Fixing it means giving the planner more information about the source,
-not refusing more sources.
+Verdict on validation: no production *validation* rule is justified by this corpus —
+and step counts still mean "this file mentions these names" rather than "the program
+was assembled", which is a planner capability gap, not a threshold.
+
+Round 6 — the harvest was fixable, and was: scaffolding is now identified by role
+-----------------------------------------------------------------------------------
+What round 2 recorded as an unfixable gap (the planner harvesting `test_emb_dot`
+alongside `emb_dot`, and no token-overlap rule able to separate it from the
+legitimate `app`/`create_app`) was fixable all along — it needed the *code's role*,
+not the name. `scaffolding_names` in `project_planner` classifies a definition as test
+infrastructure when it takes nothing but its bound instance and the code following it
+calls the test framework's assertions, and never when an instruction asks for the name
+or the definition has real parameters.
+
+Why this generalises where a prefix rule would not — measured against ground truth
+taken from the curriculum JSON keys, which are independent of naming: of 303 learner
+deliverables and 298 test-only names, the structural signal classifies 291 correctly
+and **flags zero deliverables**. `self`-alone flags 21 real ones (every class method
+in the OOP units). The `test_` prefix happens to score perfectly on this repository
+too, but only because nothing here asks a learner to *define* a `test_*` function —
+evidence about one product's content, not a principle. The structural rule keeps the
+repo's own testing curriculum (`assert_equal`, `run_cases`, `raises`) and a tutorial
+that genuinely says "write a test_login function", and it deliberately misses
+pytest-style `def test_login():` with no bound instance, which nothing but the name
+could catch.
+
+Effect on the corpus: projects 31 → 31, milestones 234 → 234, checks decidable by the
+grader 145/145 before and after. The three curriculum dumps each swapped six harness
+artifacts for six real ones (`test_emb_dot` out, `chunk_text`/`build_index`/`two_sum`/
+`group_anagrams`/`join_url`/`query_string` in) — the same step count, better content,
+and harness artifacts 18 → 0.
 
 Reading the tables
 ------------------
@@ -788,6 +819,34 @@ def composition_report(sources: list[Source]) -> None:
     print("  nothing more of the program than 'it runs'.")
 
 
+def artifact_role_report(sources: list[Source]) -> None:
+    """Learner deliverables vs test infrastructure, across every course that exists.
+
+    The count that matters is not how many steps a project has but what kind of thing
+    it asks the learner to write: a check on the harness that marks their work is a
+    milestone spent on nothing.
+    """
+    deliverables = harness = projects = 0
+    offenders: list[str] = []
+    for source in sources:
+        try:
+            project = plan_project(source.doc, title=source.doc.title, course_id="roles")
+        except Exception:  # noqa: BLE001
+            continue
+        projects += 1
+        named = [m.checks[0].target for m in project.milestones
+                 if m.checks and m.checks[0].kind in {"symbol", "function_call"} and m.checks[0].target]
+        flagged = [n for n in named if n in project_planner.scaffolding_names(source.doc.plain_text or "")]
+        deliverables += len(named) - len(flagged)
+        harness += len(flagged)
+        if flagged:
+            offenders.append(f"{source.key} {flagged[:3]}")
+    print("\nartifact roles across planned courses:")
+    print(f"  {projects} projects  {deliverables} learner deliverables  {harness} test-infrastructure")
+    for line in offenders[:5]:
+        print(f"    still harvested -> {line}")
+
+
 def main() -> int:
     corpus = build_corpus()
     rows: list[tuple[Source, ProjectCourse | None, str, str]] = []
@@ -934,6 +993,7 @@ def main() -> int:
     derivation_report(records)
     gate_report(corpus)
     composition_report(corpus)
+    artifact_role_report(corpus)
 
     # --- corpus composition -------------------------------------------------
     print("\ncorpus composition:")
@@ -943,8 +1003,9 @@ def main() -> int:
     for provenance, counts in sorted(make.items()):
         print(f"  {provenance:<11} " + "  ".join(f"{lab}={counts[lab]}" for lab in LABELS if counts[lab])
               + f"   ({sum(counts.values())} sources)")
-    print("\nsee project_corpus.LABEL_RUBRIC for how labels were fixed, and this file's")
-    print("docstring for which of these measurements justified a rule (none did).")
+    print("\nsee project_corpus.LABEL_RUBRIC for how labels were fixed. Every rule this")
+    print("file justified is named in the docstring with its before/after numbers; every")
+    print("rule it rejected is named too, with the example that killed it.")
     return 0
 
 

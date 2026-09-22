@@ -244,12 +244,36 @@ def test_the_closer_is_shape_not_content(corpus: list[Source]) -> None:
 
 # ─── the harness ─────────────────────────────────────────────────────────────
 
+def test_no_planned_course_asks_the_learner_to_build_the_harness(corpus: list[Source]) -> None:
+    """Nothing a course demands of a learner may be the code that marks their work.
+
+    Pinned across the whole corpus rather than on one fixture, because the harvest
+    only ever appeared in material that inlines a curriculum lesson's `unittest_code`
+    — and a future source shape should fail here, not silently re-add the step.
+    """
+    from backend.project_planner import scaffolding_names
+
+    checked = 0
+    for source in corpus:
+        try:
+            project = plan_project(source.doc, title=source.doc.title, course_id="corpus-roles")
+        except Exception:  # noqa: BLE001 - a refusal is a result
+            continue
+        flagged = scaffolding_names(source.doc.plain_text or "")
+        named = {m.checks[0].target for m in project.milestones
+                 if m.checks and m.checks[0].kind in {"symbol", "function_call"} and m.checks[0].target}
+        assert not (named & flagged), f"{source.key}: {sorted(named & flagged)}"
+        checked += 1
+    assert checked >= 25, f"only {checked} corpus sources plan a course; the check lost its base"
+
+
 def test_measure_runs_and_reports_the_whole_corpus(capsys) -> None:
     """The script is the evidence behind the decision not to add a rule; if it
     silently loses sources, the evidence is wrong."""
     assert measure.main() == 0
     out = capsys.readouterr().out
-    for section in ("corpus composition", "chapter yield", "candidate rules", "separation check"):
+    for section in ("corpus composition", "chapter yield", "candidate rules",
+                      "separation check", "artifact roles", "source gate: which clause"):
         assert section in out, f"the report lost its {section!r} section"
     assert "speech-copy" in out and "untraceable-concept" in out
 
