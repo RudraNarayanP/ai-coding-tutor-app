@@ -170,6 +170,58 @@ alternative was the prose pattern's answer — ``symbol wrapped`` — a step inv
 function the lesson never asked for. The prose pattern is now suppressed whenever the
 sentence has already shown its artifact in code form.
 
+Round 5 — composition: do the milestones make a program, or a list of names?
+-----------------------------------------------------------------------------
+A guided project is one persistent file, so every artifact demanded by every
+milestone has to coexist in it. Whether they have to *fit together* is a different
+question, and this time the answer came from code rather than inference:
+`backend/composition_measurement.py` parses the AST of the repository's own lesson
+code — 92 curriculum modules, 334 lessons, 597 top-level definitions — and defines a
+dependency the only way that means anything: a later lesson *calls*, *imports* or
+*names* an artifact an earlier lesson defined. Shared words, similar names and
+substring overlap do not count, and a name rebound locally (`predict = 3`) does not
+count either, which is what makes the four controls in
+`test_composition_measurement.py` part of the result rather than decoration.
+
+* **0 of 59 multi-lesson curriculum units compose.** Not one lesson in this app's own
+  curriculum consumes an artifact from an earlier lesson of the same unit — including
+  linear regression, whose five lessons (predict, mse, gd_step, fit_slope, r2) read
+  like a training loop and are in fact five independent exercises. Any rule demanding
+  a dependency chain would reject this product's shipped content, and the earlier
+  guess that those units are "one model fitted by gradient descent" was a reading of
+  their *titles*, which is exactly what must not be used as evidence.
+* **0 argument-passing edges across the 31 accepted projects.** Where real source
+  material does show a later artifact using an earlier one — 13 body edges, all in the
+  two curriculum dumps — every single edge is `test_emb_dot → emb_dot` (a test harness
+  consuming the deliverable) or `softmax → math` (a function using an imported module).
+  The only composition this corpus demonstrates is scaffolding-shaped, which is the
+  same content the harvest gap already records.
+* **28 of 31 projects — 197 of 203 checks — pass against a program of unrelated
+  stubs**, one definition per artifact, none referring to another. The three
+  exceptions are all the same `code_contains nn.Module` check, which needs an
+  attribute chain a stub cannot fake. So milestones are independently satisfiable
+  almost everywhere, by construction, not by oversight.
+* **The check vocabulary cannot express a relationship, measured rather than
+  assumed.** `code_contains "mse"` passes on code that calls it and on code that
+  merely defines an unrelated `report()`; `code_contains "mse(t, p)"` also passes on
+  the uncomposed code, because a needle containing a space is reduced to "is the last
+  identifier referenced"; and `code_contains "mse(t,p)"` matches *nothing*, because the
+  identifier branch anchors `\b` after an escaped `(`. Forcing composition needs a new
+  check kind in the verifier — a planner rule cannot manufacture one.
+
+Two measurement bugs surfaced here and are worth knowing before editing this section:
+`evaluate_milestone` returns a 4-tuple, so `if await evaluate_milestone(...)` is true
+for every milestone and reported a tidy 203/203; and a stub built from the first token
+of `"def forward"` is `def = None`, which does not parse, and an unparseable file is
+graded by the verifier's lenient substring fallback instead of its AST rules. Both made
+composition look enforced when it was not, and both were invisible until the per-
+milestone detail contradicted the aggregate.
+
+Conclusion: **no composition rule is justified.** A chain requirement is refuted by the
+repository's own code, and a relationship-forcing requirement cannot be expressed by the
+grader that has to enforce it. What ships is the measurement, its controls, and the
+documentation of the gap.
+
 Verdict: no production *validation* rule is justified by this corpus. The one defect the
 corpus newly *shows* (test scaffolding harvested as deliverables; step counts that mean
 "this file mentions these names" rather than "the program was assembled") is a planner
@@ -199,7 +251,9 @@ milestone's check kind.
 
 from __future__ import annotations
 
+import ast
 import atexit
+import keyword
 import os
 import re
 import shutil
@@ -610,6 +664,130 @@ def gate_report(sources: list[Source]) -> None:
             print(f"    REGRESSION {key} [{label}] {was} -> {now}")
 
 
+def composition_report(sources: list[Source]) -> None:
+    """Do the milestones in a planned project actually compose?
+
+    Three separate questions, measured separately so a zero means one thing and not
+    three: does the *source's code* show a later artifact consuming an earlier one;
+    does the *plan* express that relationship; and can the whole plan be satisfied by
+    unrelated stubs. The stub test is the decisive one — a guided project is one
+    persistent file, so if a program of stubs passes every check, the plan never
+    asked for composition. See `backend/composition_measurement.py`.
+    """
+    import asyncio
+
+    from backend import composition_measurement as cm
+    from backend.project_models import ProjectCourse, WorkspaceFile
+    from backend.project_verifier import evaluate_milestone
+
+    def stub_project(project: ProjectCourse) -> tuple[str, bool]:
+        """Unrelated stubs, one per artifact — and whether the result is valid Python.
+
+        The token extracted from a `code_contains` target can be a Python keyword
+        ("def forward" → "def"), and a stub file that does not parse is graded by the
+        verifier's lenient fallback rather than by its AST rules. That silently turned
+        28/31 into 31/31 when this function was first written, so the parse is checked
+        and an invalid stub is reported instead of scored.
+        """
+        lines = ["# each milestone satisfied by an unrelated stub"]
+        for m in project.milestones:
+            check = m.checks[0] if m.checks else None
+            if not check:
+                continue
+            if check.kind == "symbol" and check.target:
+                lines.append(f"def {check.target}(*args, **kwargs):\n    return None")
+            elif check.kind == "function_call" and check.target:
+                lines.append(f"def {check.target}(*args, **kwargs):\n    return None")
+                lines.append(f"{check.target}()")
+            elif check.kind == "import" and check.target:
+                lines.append(f"import {check.target}")
+            elif check.kind == "code_contains" and check.target:
+                token = re.split(r"[|(.\s]", check.target)[0]
+                token = re.sub(r"^(def|class)\s+", "", token)
+                if token and token.isidentifier() and not keyword.iskeyword(token):
+                    lines.append(f"{token} = None")
+        code = "\n".join(lines) + "\n"
+        return code, _try_parse(code)
+
+    def _try_parse(code: str) -> bool:
+        import ast as _ast
+
+        try:
+            _ast.parse(code)
+            return True
+        except SyntaxError:
+            return False
+
+    async def stub_satisfies(project: ProjectCourse) -> tuple[int, int, bool]:
+        code, valid = stub_project(project)
+        files = [WorkspaceFile(path=project.entry_file, content=code)]
+        passed = total = 0
+        for milestone in project.milestones:
+            kinds = {c.kind for c in milestone.checks or []}
+            # `run_ok` needs the sandbox, which this harness never starts; it is the
+            # one check that could force composition, and it is reported as untested.
+            if not kinds & {"import", "symbol", "function_call", "code_contains", "file_exists"}:
+                continue
+            total += 1
+            # `evaluate_milestone` answers a 4-tuple. Unpacking it is not optional:
+            # `if await evaluate_milestone(...)` is true for every milestone because a
+            # non-empty tuple is always truthy, which inflated this count to 203/203
+            # until it was checked against the per-milestone detail.
+            all_passed, _results, _stdout, _stderr = await evaluate_milestone(
+                None, project, milestone, files
+            )
+            if all_passed:
+                passed += 1
+        return passed, total, valid
+
+    print("\ncomposition: does a later milestone consume an earlier one?")
+    counts: Counter = Counter()
+    edge_examples: list[str] = []
+    for source in sources:
+        try:
+            project = plan_project(source.doc, title=source.doc.title, course_id="measure")
+        except Exception:  # noqa: BLE001
+            continue
+        if usability_problem(project):
+            continue
+        blocks, unparsable = cm.code_blocks(source.doc.plain_text or "")
+        for seg in source.doc.segments:
+            extra, bad = cm.code_blocks(seg.transcript or "")
+            blocks += extra
+            unparsable += bad
+        finding = cm.project_composition(source.key, source.label, project.milestones, blocks, unparsable)
+        passed, total, stub_valid = asyncio.run(stub_satisfies(project))
+        counts["projects"] += 1
+        counts["arg_edges"] += len(finding.arg_edges)
+        counts["body_edges"] += len(finding.body_edges)
+        counts["expressing"] += len(finding.expressing_checks)
+        counts["stub_passed"] += passed
+        counts["stub_total"] += total
+        counts["fully_stub"] += int(total > 0 and passed == total)
+        counts["unparsable"] += unparsable
+        counts["blocks"] += len(blocks)
+        if finding.edges:
+            edge_examples.append(f"{source.key}: {finding.body_edges[:4]}")
+    print(f"  {counts['projects']} accepted projects; source code fragments read: "
+          f"{counts['blocks']} ({counts['unparsable']} would not parse)")
+    print(f"  dependencies where a later artifact is PASSED INTO an earlier call: "
+          f"{counts['arg_edges']}")
+    print(f"  dependencies where a later artifact's BODY uses an earlier one:      "
+          f"{counts['body_edges']}")
+    print(f"  checks that name a relationship rather than a thing:                 "
+          f"{counts['expressing']}")
+    print(f"  projects whose every check passes against unrelated stubs:           "
+          f"{counts['fully_stub']}/{counts['projects']}  "
+          f"({counts['stub_passed']}/{counts['stub_total']} checks)")
+    print(f"  projects whose stub program would not parse (excluded from that claim): "
+          f"{counts['invalid_stub']}")
+    for line in edge_examples[:4]:
+        print(f"    where the source really composes -> {line}")
+    print("  note: `run_ok` is excluded above because it needs the sandbox. It is the")
+    print("  only existing check that can fail an uncomposed program, and it asks")
+    print("  nothing more of the program than 'it runs'.")
+
+
 def main() -> int:
     corpus = build_corpus()
     rows: list[tuple[Source, ProjectCourse | None, str, str]] = []
@@ -755,6 +933,7 @@ def main() -> int:
     chapter_yield(records)
     derivation_report(records)
     gate_report(corpus)
+    composition_report(corpus)
 
     # --- corpus composition -------------------------------------------------
     print("\ncorpus composition:")

@@ -430,3 +430,8 @@ def test_the_measurement_harness_sees_the_whole_corpus(capsys):
     for key in (source.key for source in corpus):
         assert key in report, f"{key} is missing from the measurement"
     assert "candidate rules" in report and "chapter yield" in report
+    # The later rounds' sections are part of the evidence base now; losing one would
+    # silently delete a concluded investigation.
+    for section in ("derivation attribution", "source gate: which clause decides",
+                    "counterfactual pricing", "composition: does a later milestone"):
+        assert section in report, f"the report lost its {section!r} section"
