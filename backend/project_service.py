@@ -66,9 +66,16 @@ async def build_project(
     require_accept(evaluate_ingestion(doc))
 
     # Stage 2 — source analysis (optional AI refine on borderline cases only).
+    #
+    # A repository skips it. `evaluate_source` looks for prose that teaches — a build
+    # verb, a step list, an instructional heading — and a finished program has no
+    # reason to contain any of that, so the prose gate would refuse every repository on
+    # absence of a tutorial. `plan_repository` judges the same four questions about the
+    # object it has instead (licensed, readable, ordered, gradable) and cannot be
+    # bypassed, because it runs on every path that has a `doc.repo`.
     analyzer = LlmSourceAnalyzer(provider) if provider is not None else None
-    analysis = await evaluate_source_with_analyzer(doc, title=title, analyzer=analyzer)
-    require_accept(analysis)
+    if doc.repo is None:
+        require_accept(await evaluate_source_with_analyzer(doc, title=title, analyzer=analyzer))
 
     # Stage 3 — curriculum planning (also re-checks source + milestone quality).
     project = plan_project(doc, title=title, course_id=course_id)

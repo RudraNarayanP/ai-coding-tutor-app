@@ -9,6 +9,8 @@ from urllib.parse import parse_qs, urlparse
 
 import httpx
 
+from .github_fetch import RepoFetchError, RepoSnapshot, fetch_repo
+
 class IngestionError(ValueError):
     """User-facing ingestion error."""
     pass
@@ -29,7 +31,7 @@ class VideoSegment:
 
 @dataclass
 class SourceDocument:
-    source_type: str                     # "youtube_url" | "youtube_playlist" | "transcript" | "file_upload"
+    source_type: str                     # "youtube_url" | "youtube_playlist" | "transcript" | "file_upload" | "github_repo"
     source_url: str
     source_hash: str                     # sha256 of normalised URL or content fingerprint
     title: str                           # playlist/video title or user-provided title
@@ -38,6 +40,7 @@ class SourceDocument:
     total_duration_seconds: int = 0
     access_level: str = "full"           # "full" | "titles_only" | "text_only"
     access_notes: list[str] = field(default_factory=list)
+    repo: "RepoSnapshot | None" = None   # set only for a GitHub source; see backend/github_fetch
 
 
 class SourceIngestionService:
@@ -117,6 +120,8 @@ class SourceIngestionService:
             if not playlist_id:
                 raise IngestionError(f"Invalid YouTube playlist URL provided: {content}")
             return await self._ingest_youtube_playlist(content, playlist_id)
+        elif material_type in ("github_repo", "github_url"):
+            return await self._ingest_github_repo(content, title)
         elif material_type == "transcript":
             return await self._ingest_transcript(content, title)
         elif material_type == "file_upload":
@@ -193,6 +198,42 @@ class SourceIngestionService:
             total_duration_seconds=sum(s.duration_seconds for s in segments),
             access_level=access_level,
             access_notes=access_notes,
+        )
+
+    async def _ingest_github_repo(self, content: str, title: str) -> SourceDocument:
+        """Fetch a public repository as a course source.
+
+        What is handed on is the snapshot (`doc.repo`), because a repository is planned
+        from its modules, not from its text. `plain_text` carries the README and the file
+        listing for anything that reads prose — and deliberately never the source files,
+        which stay out of the course so a learner writes them.
+        """
+        try:
+            snapshot = await fetch_repo(content)
+        except RepoFetchError as exc:
+            raise IngestionError(str(exc)) from exc
+        if len(snapshot.files) < 2:
+            raise IngestionError(
+                f"{snapshot.full_name} has {len(snapshot.files)} Python module(s) a course "
+                "could be built from. Try a repository that is itself a program — a package "
+                "whose files import one another — rather than a single script or a docs-only repo."
+            )
+        name = f"https://github.com/{snapshot.owner}/{snapshot.repo}"
+        listing = "\n".join(f.path for f in snapshot.files)
+        return SourceDocument(
+            source_type="github_repo",
+            source_url=name,
+            source_hash=self.compute_source_hash("github_repo", name),
+            title=(title or "").strip() or snapshot.full_name,
+            segments=[],
+            plain_text=f"{snapshot.readme}\n\nModules in this repository:\n{listing}"[:4000],
+            total_duration_seconds=0,
+            access_level="full",
+            access_notes=[
+                f"{snapshot.license} license; {len(snapshot.files)} modules read, "
+                "none of their code copied into the course."
+            ],
+            repo=snapshot,
         )
 
     async def _fetch_playlist_video_ids(self, playlist_id: str) -> list[str]:

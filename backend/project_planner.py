@@ -33,6 +33,7 @@ from .project_models import (
     VerificationCheck,
     WorkspaceFile,
 )
+from . import repo_planner
 from .source_ingestion import SourceDocument
 from .source_quality import (
     ProjectGroundingError,
@@ -1269,6 +1270,16 @@ def plan_project(doc: SourceDocument, title: str, course_id: str) -> ProjectCour
     emitting a generic curriculum. Conceptual lecture chapters never become a
     fake coding course.
     """
+    if getattr(doc, "repo", None) is not None:
+        # A repository is not a tutorial that failed to be one. `evaluate_source` reads
+        # prose for teaching signals — "in this video we build", a step list, an
+        # instructional heading — and a finished program has no reason to contain any of
+        # them. The repo route asks the equivalent questions about the object it has
+        # instead: is it licensed, is it readable, does it have an order, can each step be
+        # graded. `plan_repository` enforces those itself, so dispatching here cannot
+        # smuggle a source past a gate.
+        return plan_repository(doc, title, course_id)
+
     text = _gather_source_text(doc)
     outline = _collect_outline(doc)
     chapters = _collect_chapters(doc)
@@ -1573,6 +1584,226 @@ def _plan_from_chapters(doc: SourceDocument, chapters: list[str], title: str, co
         updated_at=now,
     )
     return _finalize_planned_project(project)
+
+
+def plan_repository(doc: SourceDocument, title: str, course_id: str) -> ProjectCourse:
+    """Build a course that has the learner re-create a repository, module by module.
+
+    A repository has no narration to plan from, so the outline comes from its import
+    graph: a file becomes a milestone once every file it imports is already behind it,
+    the check is a name that file really defines (read out of its syntax tree), and the
+    learner is asked to write the body themselves. Not one line of the project's source
+    is stored in the course — `backend/github_fetch.py` explains the licensing reason,
+    and the license gate there is what enforces it. Only the *declaration* is quoted
+    (`class Value:`), because that is the contract the learner has to satisfy, not the
+    lesson.
+
+    The final milestone runs the tip of the graph, which is the one check in this app
+    that cannot be satisfied without the earlier files existing and importing cleanly:
+    rebuilding a repository is the composition the chapter route never could express.
+    """
+    from .github_fetch import license_problem  # here, not at import time: no httpx in the planner
+
+    snapshot = doc.repo
+    problem = license_problem(snapshot.license)
+    if problem:
+        raise ProjectGroundingError(
+            f"Can't build a course from {snapshot.full_name}: {problem}."
+        )
+    facts = repo_planner.analyze([(f.path, f.content) for f in snapshot.files])
+    ordered = repo_planner.dependency_order(
+        [f for f in facts if not f.unparsable and f.public_names]
+    )
+    chosen = repo_planner.build_chain(ordered, limit=REPO_MILESTONE_MAX)
+    if len(chosen) < 2:
+        raise ProjectGroundingError(
+            f"{snapshot.full_name} has {len(ordered)} modules a learner could build in "
+            "order, and no chain among them worth following. This usually means the "
+            "repository is a collection of independent scripts, or one very large file."
+        )
+
+    entry = repo_planner.entry_point(chosen)
+    project_title = (title or "").strip() or f"{snapshot.full_name}: how it is built"
+    milestones: list[Milestone] = []
+    claimed: set[str] = set()
+    built: set[str] = set()
+    order = 1
+    for facts in chosen:
+        picks = [d for d in facts.ranked_defines() if d[1].lower() not in claimed][:2]
+        if not picks:
+            continue
+        claimed.update(name.lower() for _kind, name, _lines in picks)
+        names = [name for _kind, name, _lines in picks]
+        already = sorted(m for m in facts.depends if m in built)
+        above = repo_planner.consumers_of(chosen, facts.module)
+        # Four different true things, and which one applies is decided by where the file
+        # sits in the graph. The fourth is the cycle case: flask's `app.py` and `ctx.py`
+        # import each other, so an order has to be invented inside that pair, and a
+        # milestone that claimed "nothing is underneath this file" about a file that
+        # imports three others would be teaching something the repository contradicts.
+        if above:
+            reason = (
+                f"{_brief([f'`{p}`' for p in above])} "
+                f"{'import' if len(above) > 1 else 'imports'} `{facts.path}`, so this has "
+                "to stand on its own before they can be built."
+            )
+        elif already:
+            reason = (
+                f"`{facts.path}` needs "
+                f"{_brief([f'`{m}`' for m in already])}, which you have already written."
+            )
+        elif facts.depends:
+            reason = (
+                f"`{facts.path}` and "
+                f"{_brief([f'`{m}`' for m in sorted(facts.depends)])} import each other, "
+                "so this order is a judgement about where to start, not a dependency."
+            )
+        else:
+            reason = "Nothing in the project is underneath this file: it is where the build starts."
+        checks = [
+            VerificationCheck(
+                kind="symbol", target=name,
+                description=f"`{name}` is defined somewhere in the code you write.",
+            )
+            for name in names
+        ] + [
+            VerificationCheck(kind="file_exists", target=facts.path,
+                              description=f"`{facts.path}` exists in your workspace.")
+        ]
+        milestones.append(Milestone(
+            id=f"m{order}",
+            order=order,
+            title=_clip(f"Build {facts.path}", 160),
+            source_grounded_description=_clip(
+                f"{snapshot.full_name} puts {_and_list([f'`{n}`' for n in names])} in "
+                f"`{facts.path}`.",
+                2000,
+            ),
+            source_quote=_clip(" · ".join(
+                [snapshot.full_name, facts.path]
+                + [facts.signatures.get(n, "") for n in names]
+            ), 2000),
+            microstep=Microstep(
+                observation=_clip(
+                    f"You are writing `{facts.path}`." if not already else
+                    f"{_brief([f'`{m}`' for m in already])} already exist, so this file "
+                    "can import them.",
+                    400,
+                ),
+                action=_clip(
+                    f"Create `{facts.path}` and define "
+                    f"{_and_list([f'`{n}`' for n in names])} in it.",
+                    400,
+                ),
+                hint=_clip(
+                    f"`{facts.path}` uses "
+                    f"{', '.join(f'`{e}`' for e in sorted(facts.external)[:3]) or 'only the standard library'}"
+                    " in the real project — you do not have to use the same things, but "
+                    "you do have to define the names above.",
+                    400,
+                ),
+            ),
+            why=_clip(reason, 2000),
+            checks=checks,
+            xp_reward=25,
+        ))
+        order += 1
+        built.add(facts.module)
+
+    milestones.append(Milestone(
+        id=f"m{order}",
+        order=order,
+        title=_clip(f"Run {entry.path}", 160),
+        source_grounded_description=(
+            "Run the file that ties the project together. It only works if every module "
+            "you built above imports cleanly, which is the test that the pieces are a "
+            "program and not a list of files."
+        ),
+        source_quote=_clip(f"{snapshot.full_name}@{snapshot.ref} · {entry.path}", 2000),
+        microstep=Microstep(
+            observation=f"{len(chosen)} modules, built in the order the project needs them.",
+            action=f"Run `{entry.path}` and read what it does.",
+            hint="An ImportError or NameError here means one of the files above is missing "
+                 "a name the next one asks for.",
+        ),
+        why="This is the only milestone the earlier work cannot be skipped for: running the "
+            "top of the import graph executes everything beneath it.",
+        checks=[VerificationCheck(kind="run_ok", target="",
+                                  description="Your project runs without errors.")],
+        xp_reward=40,
+    ))
+
+    workspace = [WorkspaceFile(
+        path=entry.path,
+        content=f"# {entry.path}\n# Rebuilding {snapshot.full_name}. Write this yourself.\n",
+    )]
+    now = time.time()
+    project = ProjectCourse(
+        course_id=course_id,
+        title=project_title,
+        language="python",
+        source_type="github_repo",
+        source_url=doc.source_url,
+        source_hash=doc.source_hash,
+        source_summary=_clip(_repo_manifest(snapshot, chosen), 4000),
+        source_excerpt=_clip(_repo_manifest(snapshot, chosen), 20_000),
+        project_goal=_clip(
+            f"Rebuild {snapshot.full_name} module by module, in the order its own imports "
+            f"require. Start at {chosen[0].path} and finish by running {entry.path}.",
+            2000,
+        ),
+        tech_stack=_detect_tech(_repo_manifest(snapshot, chosen)),
+        entry_file=entry.path,
+        milestones=milestones,
+        workspace_files=workspace,
+        created_at=now,
+        updated_at=now,
+    )
+    return _finalize_planned_project(project)
+
+
+REPO_MILESTONE_MAX = 8
+
+
+def _and_list(items: list[str]) -> str:
+    """`x`, `x and y`, `x, y and z` — a milestone names two or three things per step."""
+    if len(items) <= 1:
+        return "".join(items)
+    return ", ".join(items[:-1]) + " and " + items[-1]
+
+
+def _brief(items: list[str], limit: int = 2) -> str:
+    """Name the first two and count the rest.
+
+    `validate_project` refuses learner-facing lines longer than ~28 words, which is a
+    rule worth keeping: a milestone is a card, not a paragraph. A file that imports
+    nine others is real (measure_project_quality.py does), so the list has to be
+    counted rather than spelled out — and dropping the count would be a lie of the
+    other kind.
+    """
+    if len(items) <= limit:
+        return _and_list(items)
+    return f"{_and_list(items[:limit])} and {len(items) - limit} more"
+
+
+def _repo_manifest(snapshot, chosen: list) -> str:
+    """The course's only view of the repository: paths, names, edges. Never the code.
+
+    `source_excerpt` feeds `enrich_project` and any later LLM call, so what is in it
+    bounds what the model can say. A manifest keeps that inside the same rule the rest
+    of this module follows: the API is quotable, the implementation is not.
+    """
+    lines = [
+        f"Repository {snapshot.full_name} ({snapshot.ref}), license {snapshot.license}.",
+        snapshot.description,
+    ]
+    for facts in chosen:
+        lines.append(
+            f"{facts.path}: defines {', '.join(facts.public_names[:6])}"
+            + (f"; imports {', '.join(sorted(facts.depends))}" if facts.depends else "")
+            + (f"; uses {', '.join(sorted(facts.external)[:6])}" if facts.external else "")
+        )
+    return "\n".join(line for line in lines if line)
 
 
 def _dedupe_milestones(milestones: list) -> list:
