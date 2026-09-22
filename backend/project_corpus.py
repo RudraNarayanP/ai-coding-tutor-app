@@ -331,6 +331,12 @@ CHAPTER_FIXTURES: list[tuple[str, str, str, str]] = [
      "chapters of the GPT-2 (124M) reproduction video"),
     ("backend.test_project_planner", "MICROGRAD_CHAPTERS", "good",
      "chapters of the micrograd lecture"),
+    ("backend.test_project_planner", "BUILD_GPT_CHAPTERS", "good",
+     "32 chapters of the two-hour build-along that defines a transformer from scratch"),
+    ("backend.test_project_planner", "PODCAST_CHAPTERS", "poor",
+     "16 chapters of a two-hour podcast about building LLMs. First labelled `unknown` "
+     "from a sample, because one chapter mentions a live demo; reading all sixteen "
+     "settled it — ten are questions about the field and none is a step"),
     ("backend.test_source_quality", "CONCEPTUAL_CHAPTERS", "poor",
      "chapters of a maths-intuition video that implements nothing"),
     ("backend.test_source_quality", "ASSISTANT_TIPS_CHAPTERS", "poor",

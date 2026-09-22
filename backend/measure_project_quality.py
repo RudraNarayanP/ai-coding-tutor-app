@@ -231,6 +231,58 @@ Verdict on validation: no production *validation* rule is justified by this corp
 and step counts still mean "this file mentions these names" rather than "the program
 was assembled", which is a planner capability gap, not a threshold.
 
+Round 7 — a chapter heading is a label, and six real videos showed what minting on
+shape alone cost
+------------------------------------------------------------------------------------
+Rudra supplied six *real* YouTube URLs whose semantic roles differ — a build-along, a
+conceptual explainer, a slide lecture, a two-hour podcast and two interview clips — and
+asked whether the pipeline could tell them apart without pattern-matching on words like
+"tutorial" or "AI". Fetched through the production ingestion path, both ways it can go
+(the transcript API works from a residential IP and yields the spoken text with no
+chapters; a datacenter IP is blocked and yields the creator's chapter markers instead),
+the answer came out inverted from the expected one. Nothing was fooled by technical
+vocabulary: four of the six died in the source gate. What the benchmark exposed was the
+chapter route minting a course out of a *podcast*.
+
+`_chapter_check` sees one heading and nothing else, and one of its branches accepted any
+code-*shaped* token in it. Measured over all 202 chapters here plus the six fetched
+videos, every token that branch produced from a heading that did not instruct was a
+proper noun: ``OpenAI``, ``ChatGPT``, ``LoRA``, ``StackOverflow``. None names something a
+learner defines. The podcast's sixteen question-shaped headings therefore minted three
+checks and became a five-milestone project whose prompts read "Your code implements
+**LoRA, QLoRa, DPO, and other techniques on the cutting edge** (references `LoRA`)".
+
+The rule now: an identifier earns a check when the heading *instructs* — the same
+condition the word-list fallback already required. Priced as three variants over the 43
+chaptered corpus sources plus the six videos (projects 36 → 36, milestones 137 → 131 for
+both of the first two):
+
+  drop `_CAMEL` from the branch     same corpus result, but "Build the LayerNorm module"
+                                    degraded to ``LayerNorm|module`` — a check passable
+                                    by typing the word `module`, i.e. the fix would have
+                                    bought a refusal with a false pass
+  gate the branch on instruction    keeps ``LayerNorm`` exact; the podcast's 16 chapters
+                                    now mint one check (`scratch`), below the route's
+                                    floor of two, so it fails with a clear reason
+  drop the word-list fallback       rejected: it cost the *build-along* a milestone,
+                                    left the podcast at four, and pushed a real
+                                    curriculum unit (`decorators:objectives`) off the
+                                    chapter route entirely
+
+The two real 2-hour sources are pinned in `test_project_planner` as
+`BUILD_GPT_CHAPTERS` (5 milestones, unchanged by this fix, `DataLoader|dataloader` /
+`attention` / `feedforward|layers|transformer`) and `PODCAST_CHAPTERS` (refused).
+
+What this did *not* touch, both found by the same benchmark and both still open: the
+source gate still classifies the podcast as `coding_tutorial` — the refusal happens
+downstream in the planner, not at the gate; and `assess_transcript_quality`'s
+`unique_ratio < 0.12` test is a *length* statistic wearing a repetition name, so on a
+machine where captions work, Let's build GPT itself is refused before any content test
+with "Extracted captions are almost entirely repeated text". One document, growing
+prefixes: 0.446 at 500 words, 0.137 at 8,000, 0.108 at 12,000 — and 10-gram repeat
+coverage flat at 0.000 the whole way. It crosses the threshold at roughly 11,000 words,
+about 50 minutes of speech.
+
 Round 6 — the harvest was fixable, and was: scaffolding is now identified by role
 -----------------------------------------------------------------------------------
 What round 2 recorded as an unfixable gap (the planner harvesting `test_emb_dot`
@@ -651,6 +703,52 @@ def derivation_report(records: list[Record]) -> None:
     print("  the AST; `code_contains` needs a curated token; `run_ok` needs the sandbox.")
 
 
+def _chapter_branch(heading: str, check) -> str:
+    """Which of `_chapter_check`'s grounds minted `check`, decided by identity.
+
+    The branches are tried in a fixed order, so comparing the minted target against
+    each branch's own source — in that order — attributes without reimplementing.
+    Anything landing in ``other`` means this function has drifted from production.
+    """
+    pp = project_planner
+    title = heading[:157] + "…" if len(heading) > 160 else heading
+    direct = pp._extract_target(title)
+    if direct and direct[0] in ("import", "symbol", "function_call") and check.kind == direct[0]:
+        return "names-code"
+    token = pp._match_concept_tokens(title)
+    if token and check.target == token:
+        return "concept-map"
+    for rx in (pp._DOTTED, pp._CAMEL, pp._DIGITAL_ACRONYM):
+        found = rx.search(title)
+        if found and found.group(1) == check.target:
+            return "identifier"
+    if check.target == pp._tokens_from_heading(title):
+        return "word-list"
+    return "other"
+
+
+def chapter_route_report(sources: list[Source]) -> None:
+    """Per heading, which ground of `_chapter_check` earned the check — and what for.
+
+    Round 7 found its bug here. The `identifier` row used to fill with proper nouns
+    (`OpenAI`, `ChatGPT`, `LoRA`, `StackOverflow`) taken from headings that ask for
+    nothing, which is what turned a podcast about building LLMs into a course.
+    """
+    by_branch: dict[str, list[tuple[str, str]]] = defaultdict(list)
+    for source in sources:
+        for heading in project_planner._collect_chapters(source.doc):
+            check = project_planner._chapter_check(heading)
+            if check is not None:
+                by_branch[_chapter_branch(heading, check)].append((check.target, source.key))
+    print("\nchapter route: the ground behind each minted check, and its targets:")
+    for branch in ("names-code", "concept-map", "identifier", "word-list", "other"):
+        rows = by_branch.get(branch) or []
+        targets = sorted({t for t, _key in rows})
+        print(f"  {branch:<12} {len(rows):>3} checks  {targets[:6]}")
+    if by_branch.get("other"):
+        print(f"  !! {len(by_branch['other'])} checks unattributed — report drifted from production")
+
+
 def gate_report(sources: list[Source]) -> None:
     """Where the source gate stops real material, and what a candidate would cost.
 
@@ -991,6 +1089,7 @@ def main() -> int:
 
     chapter_yield(records)
     derivation_report(records)
+    chapter_route_report(corpus)
     gate_report(corpus)
     composition_report(corpus)
     artifact_role_report(corpus)

@@ -1162,21 +1162,34 @@ def _chapter_check(title: str) -> VerificationCheck | None:
             target=token,
             description=_check_description(title, token),
         )
-    # 3) Distinctive code identifiers — inner CamelCase or dotted (nn.Module),
-    #    not Title-Case English.
-    for rx in (_DOTTED, _CAMEL, _DIGITAL_ACRONYM):
-        m = rx.search(title)
-        if m:
-            tok = m.group(1)
-            if tok.lower() not in _STOPWORDS and tok.lower() not in _JUNK_HEAD_WORDS:
-                return VerificationCheck(
-                    kind="code_contains",
-                    target=tok,
-                    description=_check_description(title, tok),
-                )
-    # 4) Instructional heading with extractable content words (Karpathy-style
-    #    "derivative of a simple function") — still source-grounded, not GPT-2-only.
+    # 3+4) A heading earns a verification check only when it *instructs*.
+    #
+    #    Shape alone is not evidence. Every identifier this branch used to mint from a
+    #    bare topic heading — over all 202 chapters in the corpus plus six real videos —
+    #    was a proper noun: `OpenAI`, `ChatGPT`, `LoRA`, `StackOverflow`. None names a
+    #    thing the learner defines; each names a vendor, a product or a technique being
+    #    discussed, and a `code_contains` check on it asks for a typed word instead of a
+    #    program. "Build the LayerNorm module" is different in kind, not in degree: the
+    #    verb says the class is the deliverable, so `LayerNorm` is the right target and
+    #    stays exact rather than degrading to the heading's word list.
+    #
+    #    Measured: refusing to mint from a heading that does not instruct is what
+    #    separates a two-hour podcast about LLMs (16 chapters, 1 surviving check, below
+    #    the route's floor of two, so it now fails with a clear reason) from a real
+    #    build-along (32 chapters, all five milestones kept).
     if _is_instructional_heading(title):
+        for rx in (_DOTTED, _CAMEL, _DIGITAL_ACRONYM):
+            m = rx.search(title)
+            if m:
+                tok = m.group(1)
+                if tok.lower() not in _STOPWORDS and tok.lower() not in _JUNK_HEAD_WORDS:
+                    return VerificationCheck(
+                        kind="code_contains",
+                        target=tok,
+                        description=_check_description(title, tok),
+                    )
+        # 4) Instructional heading with extractable content words (Karpathy-style
+        #    "derivative of a simple function") — still source-grounded, not GPT-2-only.
         generic = _tokens_from_heading(title)
         if generic:
             return VerificationCheck(

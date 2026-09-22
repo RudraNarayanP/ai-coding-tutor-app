@@ -18,7 +18,11 @@ from backend import measure_project_quality as measure
 from backend.project_corpus import LABELS, Source, build_corpus
 from backend.project_planner import (
     SUBSTANTIVE_CHECK_KINDS,
+    _IMPLEMENTATION_HINT,
     _chapter_check,
+    _extract_target,
+    _is_instructional_heading,
+    _match_concept_tokens,
     plan_project,
     usability_problem,
 )
@@ -103,6 +107,55 @@ def test_a_chapter_heading_alone_still_names_no_artifact(heading: str) -> None:
     neighbouring lessons' compound names ("1. Linear Prediction" → `logistic_predict`).
     """
     assert _chapter_check(heading) is None
+
+
+def test_every_chapter_check_has_a_ground_from_its_own_heading(corpus: list[Source]) -> None:
+    """No chapter check may be minted from a heading that gives no reason for one.
+
+    `_chapter_check` has four grounds, and this asserts each minted check across the
+    whole tracked corpus traces to one of them: the heading names an import/symbol/call,
+    a curated concept phrase matches under an implementation hint, or the heading
+    instructs. The fourth row is the one that used to be missing — a code-shaped token
+    in a *topic* heading minted on shape alone, which is how a two-hour podcast became
+    a course about writing `LoRA` and `StackOverflow`.
+    """
+    checked = 0
+    for source in corpus:
+        for heading in (source.doc.segments[0].chapters if source.doc.segments else []):
+            check = _chapter_check(heading)
+            if check is None:
+                continue
+            checked += 1
+            direct = _extract_target(heading)
+            grounded = (
+                bool(direct and direct[0] in ("import", "symbol", "function_call"))
+                or bool(_IMPLEMENTATION_HINT.search(heading) and _match_concept_tokens(heading))
+                or _is_instructional_heading(heading)
+            )
+            assert grounded, f"{source.key}: {heading!r} minted {check.target!r} with no ground"
+    assert checked > 20, f"only {checked} chapter checks minted corpus-wide; nothing to assert"
+
+
+def test_a_build_along_and_a_podcast_do_not_mint_the_same_amount(corpus: list[Source]) -> None:
+    """The two real 2-hour sources, counted by what their chapters earn.
+
+    Both arrive as a chapter list, both pass `evaluate_source`, both are about building
+    LLMs. The difference is only in what their headings are: 32 steps of an actual
+    implementation against 16 questions about a field. Measured: 5 distinct targets
+    against 1, and one is below the chapter route's floor of two, so only one of them
+    becomes a course.
+    """
+    mints = {}
+    for key in ("chapters:test_project_planner:BUILD_GPT_CHAPTERS",
+                "chapters:test_project_planner:PODCAST_CHAPTERS"):
+        source = next(s for s in corpus if s.key == key)
+        chapters = source.doc.segments[0].chapters
+        mints[key] = {c.target for c in map(_chapter_check, chapters) if c}
+        assert len(chapters) >= 16, key
+    build = mints["chapters:test_project_planner:BUILD_GPT_CHAPTERS"]
+    talk = mints["chapters:test_project_planner:PODCAST_CHAPTERS"]
+    assert {"DataLoader|dataloader", "attention"} <= build, build
+    assert talk == {"scratch"}, f"a topic heading minted {talk - {'scratch'}!r}"
 
 
 def test_real_curriculum_units_now_plan_as_build_sequences(corpus: list[Source]) -> None:

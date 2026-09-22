@@ -1,13 +1,18 @@
 """Tests for source-grounded guided-project planning (Create Course only)."""
+import asyncio
+
 import pytest
 
+from backend.project_models import Milestone, ProjectCourse, WorkspaceFile
 from backend.project_planner import (
     ProjectGroundingError,
+    _chapter_check,
     _extract_target,
     looks_like_raw_transcript,
     plan_project,
     validate_project,
 )
+from backend.project_verifier import evaluate_milestone
 from backend.source_ingestion import SourceDocument
 
 
@@ -230,6 +235,70 @@ MICROGRAD_CHAPTERS = [
 ]
 
 
+# ─── Two real chapter lists, fetched and parsed rather than typed from memory ──
+#
+# Captured from the watch pages through `youtube_fetch.extract_chapters` (the last
+# entry of each carries the description trailer the page glues onto it, because
+# that is what the parser really hands the planner). One is a two-hour build-along
+# that defines a transformer from scratch; the other is a two-hour podcast *about*
+# building one. They are the pair this rule exists to tell apart.
+
+BUILD_GPT_CHAPTERS = [
+    "intro: ChatGPT, Transformers, nanoGPT, Shakespeare baseline language modeling, code setup",
+    "reading and exploring the data",
+    "tokenization, train/val split",
+    "data loader: batches of chunks of data",
+    "simplest baseline: bigram language model, loss, generation",
+    "training the bigram model",
+    'port our code to a script Building the "self-attention"',
+    "version 1: averaging past context with for loops, the weakest form of aggregation",
+    "the trick in self-attention: matrix multiply as weighted aggregation",
+    "version 2: using matrix multiply",
+    "version 3: adding softmax",
+    "minor code cleanup",
+    "positional encoding",
+    "THE CRUX OF THE VIDEO: version 4: self-attention",
+    "note 1: attention as communication",
+    "note 2: attention has no notion of space, operates over sets",
+    "note 3: there is no communication across batch dimension",
+    "note 4: encoder blocks vs. decoder blocks",
+    "note 5: attention vs. self-attention vs. cross-attention",
+    'note 6: "scaled" self-attention. why divide by sqrt(head_size) Building the Transformer',
+    "inserting a single self-attention block to our network",
+    "multi-headed self-attention",
+    "feedforward layers of transformer block",
+    "residual connections",
+    "layernorm (and its relationship to our previous batchnorm)",
+    "scaling up the model! creating a few variables. adding dropout Notes on Transformer",
+    "encoder vs. decoder vs. both (?) Transformers",
+    "super quick walkthrough of nanoGPT, batched multi-headed self-attention",
+    "back to ChatGPT, GPT-3, pretraining vs. finetuning, RLHF",
+    "conclusions Corrections",
+    'Oops "tokens from the future cannot communicate", not "past". Sorry! :)',
+    "Oops I should be using the head_size for the normalization, not C…...more",
+]
+
+
+PODCAST_CHAPTERS = [
+    "Welcome and introducing Sebatian Raschka!",
+    "Why are LLMs so important?",
+    "One big GenAI model or lots of smaller ones?",
+    "Using LLMs to learn new programming languages",
+    "What is the full LLM lifecycle?",
+    "Reinforcement Learning from Human Feedback (RLHF)",
+    "Replacing fine-tuning with continued pre-training?",
+    "What skills do you need to work with LLMs?",
+    "How much deep learning do you really need to know to work with LLMs?",
+    "What type of hardware and resources do you need to work with LLMs?",
+    "How to build an LLM from scratch",
+    "RAG vs Fine-tuning vs prompt engineering and how to decide",
+    "LoRA, QLoRa, DPO, and other techniques on the cutting edge",
+    "Live demo of fine-tuning GPT-2 to create a spam classifier!",
+    "Where to find more of Sebastian's work",
+    "StackOverflow meets OpenAI and implications for Web 2.0…...more",
+]
+
+
 def test_livecoding_theory_chapters_are_kept_and_not_mapped_to_adamw():
     """Expert whiteboard / from-scratch lessons must not be declined or GPT-2-tokenized."""
     project = plan_project(
@@ -256,6 +325,106 @@ def test_podcast_style_source_is_rejected():
     )
     with pytest.raises(ProjectGroundingError, match="podcast|interview|conversation"):
         plan_project(podcast, title="Tesla AI, Aliens, and AGI | Some Technical Podcast #333", course_id="pod")
+
+
+# ─── the chapter route mints a check only from a heading that instructs ───────
+#
+# `_chapter_check` reads one chapter title and nothing else. It used to accept any
+# code-*shaped* token in it, which turned a two-hour podcast into a five-milestone
+# guided project whose checks asked the learner to write code containing `LoRA`,
+# `StackOverflow` and `scratch` — three proper nouns from topic headings, none a
+# thing anyone defines. A class name and a company name look identical in a heading
+# (`LayerNorm` / `OpenAI`), so shape cannot be the test; what separates them is
+# whether the heading tells the learner to build the thing.
+
+TOPIC_HEADINGS_THAT_NAME_NOTHING_TO_BUILD = (
+    "LoRA, QLoRa, DPO, and other techniques on the cutting edge",
+    "StackOverflow meets OpenAI and implications for Web 2.0…...more",
+    "exploring the GPT-2 (124M) OpenAI checkpoint",
+    "intro: ChatGPT, Transformers, nanoGPT, Shakespeare baseline language modeling, code setup",
+    "TF32 mixed precision",
+)
+
+
+@pytest.mark.parametrize("heading", TOPIC_HEADINGS_THAT_NAME_NOTHING_TO_BUILD)
+def test_a_topic_heading_that_names_nothing_to_build_mints_no_check(heading: str) -> None:
+    """Every one of these was measured minting a check before the rule was gated.
+
+    `intro: ChatGPT, …` is from the *good* video, and refusing it costs nothing:
+    the build-along keeps all five of its milestones without it (below).
+    """
+    assert _chapter_check(heading) is None
+
+
+@pytest.mark.parametrize(
+    ("heading", "target"),
+    [
+        ("Build the LayerNorm module", "LayerNorm"),
+        ("Create the CausalSelfAttention class", "CausalSelfAttention"),
+    ],
+)
+def test_an_instructional_heading_keeps_its_exact_identifier(heading: str, target: str) -> None:
+    """Gating the branch must not trade an exact name for the heading's word list.
+
+    `code_contains` accepts `|` alternatives, and the fallback below it returns up to
+    three of the heading's longest words — so a fix that merely deleted this branch
+    would have turned `LayerNorm` into `LayerNorm|module`: passable by typing the word
+    `module` anywhere. This asserts the single exact identifier survives.
+    """
+    check = _chapter_check(heading)
+    assert check is not None and check.target == target
+
+
+def test_a_real_podcast_about_building_still_grounds_no_course() -> None:
+    """The regression this rule was written for, at the public entry point.
+
+    Title and description both make it look like a build-along (a repo link, "from
+    scratch", a live-demo chapter), and `evaluate_source` does accept it — the planner
+    is what refuses. One heading out of sixteen survives as a check (`scratch`, from
+    "How to build an LLM from scratch"), which is below the route's floor of two.
+    """
+    title = "Developing and Training LLMs From Scratch with Sebastian Raschka"
+    with pytest.raises(ProjectGroundingError):
+        plan_project(_chaptered_doc(PODCAST_CHAPTERS, title=title), title=title, course_id="pod2h")
+
+
+def test_the_real_build_along_keeps_every_artifact_its_chapters_name() -> None:
+    """The other half: the fix must not be a way of throwing milestones away.
+
+    Same route, same rule, opposite material — 32 chapters of a two-hour build-along
+    that defines a transformer from scratch. Pinned exactly as measured, so a future
+    widening of the gate has to move this assertion on purpose.
+    """
+    title = "Let's build GPT: from scratch, in code, spelled out."
+    project = plan_project(
+        _chaptered_doc(BUILD_GPT_CHAPTERS, title=title), title=title, course_id="buildgpt"
+    )
+    targets = [m.checks[0].target for m in project.milestones if m.checks[0].kind != "file_exists"]
+    assert "DataLoader|dataloader" in targets
+    assert "attention" in targets
+    assert "feedforward|layers|transformer" in targets
+    assert len(project.milestones) == 5
+
+
+def test_a_minted_chapter_check_is_verifiable_by_the_existing_grader() -> None:
+    """A kept check must decide something: pass for the code asked for, fail for the starter."""
+    check = _chapter_check("Build the LayerNorm module")
+    assert check.kind == "code_contains"
+    course = ProjectCourse(
+        course_id="graded", title="T", source_hash="h", project_goal="g", entry_file="main.py",
+        milestones=[Milestone(id="m1", order=1, title="Build the LayerNorm module",
+                              checks=[check])],
+    )
+    milestone = course.milestones[0]
+
+    def verdict(code: str) -> bool:
+        passed, *_rest = asyncio.run(
+            evaluate_milestone(None, course, milestone, [WorkspaceFile(path="main.py", content=code)])
+        )
+        return passed
+
+    assert verdict("class LayerNorm:\n    pass\n")
+    assert not verdict("# Build the LayerNorm module\n")
 
 
 def test_follow_along_description_grounds_milestones_without_url_allowlist():
