@@ -32,5 +32,11 @@ export default defineConfig({
     environment: 'jsdom',
     globals: true,
     setupFiles: ['./src/test-setup.ts'],
+    // Eight places stub the `fetch` global and only some of them undo it, so a
+    // file that runs after a leaky one inherits its fake backend — which is how
+    // `ProjectWorkspace.test.tsx` started answering `/session` with another
+    // test's teaching ladder. Vitest resets globals after every test instead, so
+    // each file sees exactly the stub it installed itself.
+    unstubGlobals: true,
   },
 })

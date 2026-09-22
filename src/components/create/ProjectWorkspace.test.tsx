@@ -1,5 +1,5 @@
 import { render, screen, fireEvent, waitFor } from '@testing-library/react'
-import { describe, it, expect, vi, beforeEach } from 'vitest'
+import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest'
 import { ProjectWorkspace } from './ProjectWorkspace'
 import { projectApi, type ProjectView, type NextResult } from '../../utils/projectApi'
 
@@ -64,6 +64,17 @@ describe('ProjectWorkspace', () => {
     vi.clearAllMocks()
     ;(projectApi.get as any).mockResolvedValue(baseProject)
     ;(projectApi.saveWorkspace as any).mockResolvedValue(baseProject)
+    // This file is the *no-ladder* surface: the milestone map, the persistent
+    // editor and NEXT. `useStepSession` reads /session over raw `fetch` rather
+    // than through projectApi, so without a stub of its own this suite measured
+    // whichever fetch global the previous test file left behind — and failed
+    // intermittently when that one answered with a session. 404 means the ladder
+    // degrades to the plain task card, which is the behaviour asserted below.
+    vi.stubGlobal('fetch', vi.fn(async () => ({ ok: false, status: 404, json: async () => ({}) })))
+  })
+
+  afterEach(() => {
+    vi.unstubAllGlobals()
   })
 
   it('renders the persistent workspace with milestones, editor and NEXT', async () => {
