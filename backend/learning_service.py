@@ -18,7 +18,12 @@ import time
 from typing import Any
 
 from backend import step_pool
-from backend.learning_models import Stage, Stakes
+from backend.learning_models import (
+    EVIDENCE_FOR_STAGE,
+    STAGE_XP,
+    Stage,
+    Stakes,
+)
 from backend.session_generator import (
     BASE_INTERVAL_SECONDS,
     ConceptState,
@@ -27,26 +32,9 @@ from backend.session_generator import (
     next_interval,
 )
 
-#: XP for clearing a rung by production rather than by being shown. Steps may
-#: override with ``xp_reward``; teaching rungs award nothing, because reading a
-#: worked example is not an accomplishment to buy.
-STAGE_XP = {
-    Stage.INDEPENDENT: 10,
-    Stage.TRANSFER: 15,
-    Stage.MASTERY: 20,
-    Stage.EXPLAIN: 5,
-    Stage.REVIEW: 5,
-}
-
-#: The evidence a passing step of each rung contributes, if any. Guided and
-#: scaffolded success contribute nothing: supported solving is not a claim.
-EVIDENCE_FOR_STAGE: dict[Stage, str | None] = {
-    Stage.INDEPENDENT: "independent",
-    Stage.TRANSFER: "transferred",
-    Stage.EXPLAIN: "debugged",
-    Stage.MASTERY: "applied",
-    Stage.REVIEW: "delayed_recall",
-}
+# EVIDENCE_FOR_STAGE and STAGE_XP are re-exported from ``learning_models`` so the
+# guided-project ladder and the curriculum ladder share one definition of what a
+# rung is worth and what it proves. Importing them from here still works.
 
 
 def _now() -> float:
@@ -169,8 +157,12 @@ def session_for(lesson_engine, lesson_id: str, language: str) -> dict[str, Any] 
                 "question": raw.get("question", ""),
                 "options": raw.get("options", []),
                 "pairs": raw.get("pairs", []),
-                "blanks": raw.get("blanks", []),
-                "correct_order": raw.get("correct_order", []),
+                # `blanks` and `correct_order` are deliberately NOT sent. For a
+                # fill rung `blanks` *is* the answer key, and for an ordering rung
+                # `correct_order` is the answer — the learner's own editor renders
+                # the task, so the payload needs neither. The exercise path has
+                # stripped `blanks` for the same reason all along
+                # (see ExerciseWorkspace.test.tsx); the ladder was violating it.
                 "starter_code": raw.get("starter_code", "") or raw.get("code", ""),
                 "content": raw.get("content", {}),
                 "action": raw.get("action", ""),

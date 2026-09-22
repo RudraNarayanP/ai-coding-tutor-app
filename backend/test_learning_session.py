@@ -465,3 +465,39 @@ def test_a_wrong_fill_says_why_that_fill_is_wrong(client):
     body = _clear(client, "me-fill", {"answers": ["d"]}, lesson=MSE_LESSON)
     assert body["passed"] is False
     assert "cancel" in body["feedback"].lower(), body["feedback"]
+
+
+# ─── the payload is not an answer sheet ──────────────────────────────────────
+
+def test_the_session_ships_no_field_that_is_also_the_answer():
+    """`blanks` and `correct_order` are the key for their widgets, so they stay home.
+
+    The exercise path has stripped `blanks` from the public payload for this reason
+    all along (ExerciseWorkspace.test.tsx asserts it); the ladder reintroduced the
+    same leak through a different endpoint, which is how a second render path
+    defeats a rule like this one.
+    """
+    banned = {"correct_answer", "solution_code", "blanks", "correct_order", "answer"}
+    from fastapi.testclient import TestClient
+    from backend.main import app
+
+    http = TestClient(app)
+    body = http.get(f"/api/lessons/{LESSON}/session").json()
+    for step in body["steps"]:
+        assert banned.isdisjoint(step.keys()), (step["id"], sorted(set(step) & banned))
+    # The learner still gets everything needed to answer.
+    fill = next(s for s in body["steps"] if s["id"] == "lp-fill")
+    assert fill["starter_code"] and "___" in fill["starter_code"]
+
+
+def test_the_answer_key_still_reaches_the_grader():
+    """Stripping the payload must not break grading — the key lives server-side."""
+    from fastapi.testclient import TestClient
+    from backend.main import app
+
+    http = TestClient(app)
+    body = http.post(
+        f"/api/lessons/{LESSON}/steps/lp-fill/attempt",
+        json={"payload": {"answers": ["x"], "code": "def predict(x, w, b):\n    return w * x + b\n"}},
+    ).json()
+    assert body["passed"] is True

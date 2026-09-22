@@ -107,6 +107,12 @@ class ProjectCourse(BaseModel):
     current_milestone_index: int = Field(default=0, ge=0)
     completed_milestone_ids: list[str] = Field(default_factory=list)
     milestone_progress: dict[str, MilestoneProgress] = Field(default_factory=dict)
+    # Teaching-ladder state per milestone concept, in the exact shape
+    # `session_generator.ConceptState` persists: what was cleared, what evidence
+    # the learner produced, misses, hint use and the retrieval clock. Kept on the
+    # project document so deleting a project deletes its learning history, and so
+    # a project cannot drift into a second definition of "demonstrated".
+    concept_state: dict[str, dict] = Field(default_factory=dict)
     xp: int = Field(default=0, ge=0)
     completed: bool = False
 
@@ -147,6 +153,16 @@ class ProjectMilestoneView(BaseModel):
     example: str = ""
     celebrate: str = ""
     xp_reward: int
+    # True when the step is finished and older than its recall gap. A guided
+    # project cannot quiz an old step fairly (the milestone list is on screen and
+    # shows the answer), so spacing is shown instead of tested.
+    review_due: bool = False
+    # True when the learner produced this step's code without help. Named for what
+    # it can actually claim: `demonstrated` needs a second, different kind of
+    # evidence (a recall, a transfer), and a project step has no gradable review
+    # rung to supply one — so no project step is ever demonstrated, and calling it
+    # that here would be a lie the UI told about the model.
+    built_unaided: bool = False
 
 
 class ProjectCheckResult(BaseModel):
@@ -178,11 +194,17 @@ class ProjectView(BaseModel):
     files_changed: int
 
     @classmethod
-    def from_project(cls, project: ProjectCourse) -> "ProjectView":
+    def from_project(cls, project: ProjectCourse, review_due: set[str] | None = None) -> "ProjectView":
+        """Project a stored course into the learner view.
+
+        ``review_due`` is computed by the caller (``project_service``) because it
+        needs a clock and the ladder's spacing rule; models stay dumb.
+        """
         # Sanitize learner-facing strings at the API boundary so already-persisted
         # courses with caption dumps still render as concise tutorial copy.
         from .project_copy import learner_facing_fields
 
+        due = review_due or set()
         views: list[ProjectMilestoneView] = []
         for m in project.milestones:
             prog = project.milestone_progress.get(m.id)
@@ -212,6 +234,10 @@ class ProjectView(BaseModel):
                     example=fields["example"],
                     celebrate=fields["celebrate"],
                     xp_reward=m.xp_reward,
+                    review_due=m.id in due,
+                    built_unaided="independent" in (
+                        (project.concept_state.get(f"{project.course_id}:{m.id}") or {}).get("evidence") or []
+                    ),
                 )
             )
         return cls(

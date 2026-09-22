@@ -82,6 +82,31 @@ EDITOR_STAGES = frozenset({Stage.GUIDED, Stage.SCAFFOLDED, Stage.INDEPENDENT, St
 #: solving alone (research doc §2.5, Part 29).
 DEMONSTRATION_EVIDENCE = ("independent", "debugged", "transferred", "delayed_recall")
 
+#: The evidence a passing step of each rung contributes, if any. Guided and
+#: scaffolded success contribute nothing: supported solving is not a claim.
+#: Lives here rather than in ``learning_service`` because the guided-project
+#: ladder needs the same mapping and must not import the curriculum engine to get
+#: it — two definitions of "what counts as demonstrated" is how the two surfaces
+#: would drift.
+EVIDENCE_FOR_STAGE: dict[Stage, str | None] = {
+    Stage.INDEPENDENT: "independent",
+    Stage.TRANSFER: "transferred",
+    Stage.EXPLAIN: "debugged",
+    Stage.MASTERY: "applied",
+    Stage.REVIEW: "delayed_recall",
+}
+
+#: XP for clearing a rung by production rather than by being shown. Steps may
+#: override with ``xp_reward``; teaching rungs award nothing, because reading a
+#: worked example is not an accomplishment to buy.
+STAGE_XP: dict[Stage, int] = {
+    Stage.INDEPENDENT: 10,
+    Stage.TRANSFER: 15,
+    Stage.MASTERY: 20,
+    Stage.EXPLAIN: 5,
+    Stage.REVIEW: 5,
+}
+
 
 class Stakes(str, Enum):
     FREE = "free"

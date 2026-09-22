@@ -55,7 +55,7 @@ from .project_models import ProjectView, WorkspaceFile
 from .project_planner import ProjectGroundingError
 from .source_quality import SourceQualityError
 from .project_store import ProjectStore
-from . import project_service
+from . import project_service, project_session
 
 logger = logging.getLogger("patchwork-tutor")
 
@@ -833,6 +833,13 @@ class ProjectTerminalRequest(BaseModel):
 
 class ProjectNextRequest(BaseModel):
     files: list[WorkspaceFilePayload] | None = None
+    # The client's own account of whether it applied an AI suggestion to this
+    # milestone. Completing and demonstrating are separate claims: a milestone
+    # built from a pasted suggestion still counts as built (and still pays XP),
+    # but it is not evidence the learner can produce it, so the ladder keeps its
+    # retrieval rung. Absent means unaided, which is what every existing caller
+    # already sends.
+    helped: bool = False
 
 
 class ProjectGuidanceRequest(BaseModel):
@@ -954,7 +961,7 @@ async def project_next(course_id: str, req: ProjectNextRequest):
     if files is not None:
         project = project_store.save_workspace(course_id, files) or project
     try:
-        result = await project_service.evaluate_next(project_store, sandbox, project)
+        result = await project_service.evaluate_next(project_store, sandbox, project, helped=req.helped)
     except SandboxError as exc:
         raise HTTPException(status_code=exc.status_code, detail={"error": "sandbox_error", "message": str(exc)})
     result["project"] = project_service.to_learner_view(project).model_dump()
@@ -970,6 +977,59 @@ async def project_guidance(course_id: str, req: ProjectGuidanceRequest):
     if files is not None:
         project = project_store.save_workspace(course_id, files) or project
     return await project_service.guidance(sandbox, get_current_provider(), project, question=req.question)
+
+
+# ─── Guided-project sessions: the same ladder, derived ───────────────────────
+# A guided project used to open on a task: an editor, a NEXT button, and the
+# teaching copy folded away behind three toggles. These routes serve the same
+# milestone as rungs the generator orders, so the learner meets the idea before
+# they are asked for the code -- and so a milestone satisfied by a pasted answer,
+# or by an applied AI suggestion, completes without counting as demonstrated.
+
+def _project_or_404(course_id: str):
+    project = project_store.get(course_id)
+    if not project:
+        raise HTTPException(status_code=404, detail={"error": "project_not_found"})
+    try:
+        project_service.require_usable_project(project)
+    except ProjectGroundingError as exc:
+        raise HTTPException(
+            status_code=422,
+            detail={"error": "ungroundable_source", "message": str(exc)},
+        ) from exc
+    return project
+
+
+@app.get("/api/create-course/projects/{course_id}/session")
+async def get_project_session(course_id: str):
+    """The current milestone as an ordered ladder of rungs.
+
+    There is no attempt route here on purpose. Nothing a derived project rung could
+    ask is graded fairly -- see ``project_ladder.recall_rung`` -- so the only
+    production gate stays the one that runs the learner's actual program.
+    """
+    project = _project_or_404(course_id)
+    session = project_session.session_for_project(project)
+    if session is None:
+        raise HTTPException(status_code=404, detail={"error": "no_milestones", "course_id": course_id})
+    return session
+
+
+@app.post("/api/create-course/projects/{course_id}/session/{step_id}/seen")
+async def mark_project_rung_seen(course_id: str, step_id: str):
+    """Acknowledge a teaching card. Awards nothing: reading is not evidence."""
+    project = _project_or_404(course_id)
+    try:
+        result = project_session.mark_rung_seen(project, step_id)
+    except KeyError as exc:
+        raise HTTPException(status_code=404, detail={"error": "rung_not_found", "step_id": step_id}) from exc
+    except ValueError as exc:
+        raise HTTPException(
+            status_code=400,
+            detail={"error": "not_a_teaching_rung", "step_id": step_id, "message": str(exc)},
+        ) from exc
+    project_store.persist(project)
+    return result
 
 
 @app.post("/api/tutor", response_model=TutorResponse)

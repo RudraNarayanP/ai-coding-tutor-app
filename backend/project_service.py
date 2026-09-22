@@ -20,6 +20,7 @@ from .project_planner import (
     validate_project,
 )
 from .project_sandbox import project_terminal_sandbox
+from . import project_session
 from .project_store import ProjectStore
 from .project_verifier import evaluate_milestone, run_workspace
 from .source_ingestion import IngestionError, SourceIngestionService
@@ -129,13 +130,21 @@ async def destroy_terminal(course_id: str) -> None:
     await project_terminal_sandbox.destroy(course_id)
 
 
-async def evaluate_next(store: ProjectStore, executor, project: ProjectCourse) -> dict:
+async def evaluate_next(store: ProjectStore, executor, project: ProjectCourse, *, helped: bool = False) -> dict:
     """The NEXT progression gate.
 
     Inspects the *current* workspace, verifies the current source-defined
     milestone, auto-skips any already-satisfied milestones (so a learner who
     worked ahead is credited), and stops at the first incomplete milestone with
     concise guidance. Idempotent: re-running never double-awards XP.
+
+    Completion and evidence are separate claims. A milestone the workspace already
+    satisfied, or one finished after applying an AI suggestion, still completes and
+    still pays its XP — the learner does have the code — but it earns no evidence,
+    so the ladder keeps its retrieval rung and the summary says it was helped.
+    ``helped`` is the client's own account of applying a suggestion; being carried
+    by an already-complete workspace needs no report, because no teaching rung was
+    ever acknowledged.
     """
     advanced: list[dict] = []
     last_checks: list[ProjectCheckResult] = []
@@ -162,12 +171,20 @@ async def evaluate_next(store: ProjectStore, executor, project: ProjectCourse) -
                 feedback="Milestone verified.",
                 passed_check_descriptions=[r.description for r in results if r.passed],
             )
+            record = project_session.record_production(
+                project, milestone, passed=True, helped=helped
+            )
             advanced.append(
                 {
                     "milestone_id": milestone.id,
                     "title": milestone.title,
                     "xp_awarded": xp,
                     "already_completed": xp == 0,
+                    # `unaided`, not `demonstrated`: a project step earns one kind
+                    # of evidence, and the ladder's bar for demonstrated is two.
+                    # Shipping the stricter word would invite a UI to light up a
+                    # badge that can never light.
+                    "unaided": not record["helped"],
                 }
             )
             store.set_current(project, idx + 1)
@@ -176,6 +193,7 @@ async def evaluate_next(store: ProjectStore, executor, project: ProjectCourse) -
         # First incomplete milestone — stop and guide.
         feedback = _first_failure_feedback(results)
         store.record_attempt(project, milestone, feedback)
+        project_session.record_production(project, milestone, passed=False, helped=helped)
         store.persist(project)
         return {
             "status": "incomplete",
@@ -188,6 +206,7 @@ async def evaluate_next(store: ProjectStore, executor, project: ProjectCourse) -
             "xp": project.xp,
             "completion_percent": project.completion_percent(),
             "completed": project.completed,
+            "summary": None,
         }
 
     # All milestones complete.
@@ -205,6 +224,7 @@ async def evaluate_next(store: ProjectStore, executor, project: ProjectCourse) -
         "xp": project.xp,
         "completion_percent": 100,
         "completed": True,
+        "summary": project_session.project_summary(project),
     }
 
 
@@ -229,7 +249,13 @@ def to_learner_view(project: ProjectCourse) -> ProjectView:
     cleaned = project.model_copy(deep=True)
     scrub_project_learner_copy(cleaned)
     cleaned.source_summary = ""
-    return ProjectView.from_project(cleaned)
+    # `set(dict)` would yield every milestone id, not the due ones — the flags are
+    # a mapping, so the values have to be filtered. Found in the browser: every
+    # step, including untouched ones, wore the ↻ badge.
+    flags = project_session.milestone_review_flags(project)
+    return ProjectView.from_project(
+        cleaned, review_due={mid for mid, due in flags.items() if due}
+    )
 
 
 def _milestone_payload(project: ProjectCourse, idx: int) -> dict:
