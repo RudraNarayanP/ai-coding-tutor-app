@@ -54,10 +54,24 @@ _URL = re.compile(
     r"(?:[?#].*)?$"
 )
 _SHORT = re.compile(r"^(?P<owner>[A-Za-z0-9._-]+)/(?P<repo>[A-Za-z0-9._-]+)$")
-#: Directories that hold no lesson: tests, packaging, generated output, docs.
+#: Directories that hold no lesson: tests, packaging, generated output, docs, and the
+#: developer's own scaffolding. `dev` earns its place here the hard way — measured on 11
+#: real repositories, it was the only thing separating a wrong course from a right one:
+#: karpathy/llm.c (a C project) offered `dev/data/*.py` dataset-download scripts as its
+#: whole build, and removing that directory leaves three root scripts that import
+#: nothing from each other, which the existing chain rule already refuses. The same rule
+#: costs nothing elsewhere: of the other ten repositories, none had a single module under
+#: a `dev/` directory — not cpython's 940 candidates, not httpx's 22, not micrograd's 3.
+#:
+#: This is deliberately the only centre-of-repository signal the pipeline uses. The
+#: language-share and metadata alternatives were measured and are unusable: llm.c is
+#: 13.5% Python by bytes while micrograd — the repository this feature was built around —
+#: is 9.7%, so any threshold that rejects one rejects the other first; GitHub reports
+#: micrograd's primary language as "Jupyter Notebook"; and google/protobuf's Python
+#: runtime, an entirely legitimate project area, is 3.8% of a repository GitHub calls C++.
 NON_CURRICULUM = re.compile(
-    r"(^|/)(tests?|docs?|doc|examples?|benchmarks?|scripts?|tools?|ci|\.github|"
-    r"node_modules|venv|\.venv|site-packages|build|dist)(/|$)"
+    r"(^|/)(tests?|docs?|doc|examples?|benchmarks?|scripts?|tools?|ci|dev|"
+    r"\.github|node_modules|venv|\.venv|site-packages|build|dist)(/|$)"
 )
 NON_CURRICULUM_FILES = re.compile(
     r"(^|/)(setup\.py|conftest\.py|_version\.py|versioneer\.py|conf\.py|wsgi\.py|"

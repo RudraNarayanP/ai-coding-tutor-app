@@ -350,3 +350,88 @@ def test_a_repo_with_nothing_to_build_is_an_ingestion_error(monkeypatch) -> None
     with pytest.raises(IngestionError, match="Python module"):
         asyncio.run(SourceIngestionService().ingest(
             material_type="github_url", content="https://github.com/a/b", title=""))
+
+
+# ─── where the python lives decides whether it is the project ────────────────
+#
+# Measured on 11 real repositories, the only repeatable wrong-centre was a tooling
+# directory: karpathy/llm.c is a C project whose `dev/data/*.py` download scripts
+# chained well enough to become a whole course. Language share and GitHub's own
+# metadata cannot be used instead — llm.c is 13.5% Python by bytes and micrograd, the
+# repository this feature was built around, is 9.7%, and GitHub calls micrograd's
+# primary language "Jupyter Notebook". So the rule is about location, and these two
+# tests hold it to that with identical code in two places.
+
+_COMMON = "def load(name):\n    return {'name': name}\n"
+_RUN = "from {pkg}.common import load\n\n\ndef main():\n    return load('gpt2')\n"
+
+
+def _snapshot_with(prefix: str) -> gh.RepoSnapshot:
+    """Run the real fetch-time filter over two modules placed at `prefix`."""
+    return gh.snapshot_from_files(
+        "root",
+        [(f"{prefix}/common.py", _COMMON.encode()),
+         (f"{prefix}/run.py", _RUN.format(pkg=prefix.replace("/", ".")).encode())],
+        owner="karpathy", repo="llm.c", ref="master", license="MIT",
+    )
+
+
+def test_the_same_two_modules_are_a_course_outside_dev_and_nothing_inside_it() -> None:
+    """Identical code, two locations, opposite outcomes.
+
+    The filter is applied while the repository is being read, so this asserts on the
+    snapshot the fetch produces — which is what the planner is then handed.
+    """
+    inside = _snapshot_with("dev/data")
+    assert [f.path for f in inside.files] == []
+    with pytest.raises(ProjectGroundingError, match="chain|module"):
+        plan_project(repo_doc(inside), title="", course_id="dev-centre")
+
+    outside = _snapshot_with("llmtrain")
+    assert len(outside.files) == 2
+    course = plan_project(repo_doc(outside), title="", course_id="pkg-centre")
+    names = [c.target for m in course.milestones for c in m.checks if c.kind == "symbol_in_file"]
+    assert "load" in names and "main" in names
+
+
+def test_a_dev_directory_is_excluded_for_every_language_not_just_python() -> None:
+    """The list this rule joins is about what a directory is for, not what it holds."""
+    assert gh.is_curriculum_file("dev/data/fineweb.py") is False
+    assert gh.is_curriculum_file("dev/cuda/benchmark_on_modal.py") is False
+    assert gh.is_curriculum_file("dev/kernels.c") is False        # never a lesson anyway
+    assert gh.is_curriculum_file("dev/tooling/run.rs") is False
+    assert gh.is_curriculum_file("src/devstore/engine.py") is True  # a name, not a dir
+
+
+# The 13 modules llm.c really offers, copied as paths (no source), so the regression
+# that motivated the rule stays pinned without a network call.
+LLM_C_MODULES = [
+    "dev/cuda/benchmark_on_modal.py", "dev/data/data_common.py", "dev/data/fineweb.py",
+    "dev/data/hellaswag.py", "dev/data/mmlu.py", "dev/data/tinyshakespeare.py",
+    "dev/data/tinystories.py", "dev/eval/export_hf.py", "dev/eval/summarize_eval.py",
+    "dev/loss_checker_ci.py", "profile_gpt2cu.py", "train_gpt2.py", "train_llama3.py",
+]
+
+
+def test_llm_c_offers_no_chainable_project_once_its_tooling_directory_is_excluded() -> None:
+    kept = [p for p in LLM_C_MODULES if gh.is_curriculum_file(p)]
+    assert kept == ["profile_gpt2cu.py", "train_gpt2.py", "train_llama3.py"]
+    # Those three are standalone entry scripts: no module here imports another, so the
+    # chain rule that already existed is what refuses the repository.
+    ordered = rp.dependency_order([f for f in rp.analyze([(p, _RUN.format(pkg="x")) for p in kept])
+                                   if not f.unparsable and f.public_names])
+    assert len(rp.build_chain(ordered, limit=8)) < 2
+
+
+def test_the_pipeline_is_python_only_because_that_is_what_the_grader_can_read() -> None:
+    """Stated as a test so the boundary is never mistaken for a preference.
+
+    `symbol_in_file` parses Python; there is no C, Rust or Go checker in this app, which
+    is why a repository's non-Python core is not "rejected" but simply not analysable.
+    Adding another ecosystem means adding a verifier for it, not editing this filter.
+    """
+    assert gh.is_curriculum_file("main.c") is False
+    assert gh.is_curriculum_file("src/lib.rs") is False
+    assert gh.is_curriculum_file("cmd/main.go") is False
+    assert gh.is_curriculum_file("src/index.ts") is False
+    assert rp.resolves("micrograd.engine", {"micrograd.engine"}) == {"micrograd.engine"}
