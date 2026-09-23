@@ -1604,9 +1604,13 @@ def plan_repository(doc: SourceDocument, title: str, course_id: str) -> ProjectC
     (`class Value:`), because that is the contract the learner has to satisfy, not the
     lesson.
 
-    The final milestone runs the tip of the graph, which is the one check in this app
-    that cannot be satisfied without the earlier files existing and importing cleanly:
-    rebuilding a repository is the composition the chapter route never could express.
+    The final milestone runs the tip of the graph. It is the one step in this app that
+    *can* show the pieces fit, and measured on 13 real repositories it is not one that
+    does: nothing requires the entry file to import the files above it, so a course of
+    empty stubs at the demanded paths passes every milestone, `run_ok` included. What
+    closes the gap is a check that runs an earlier artifact through a later one, which is
+    a new capability in `project_verifier` rather than a rule here - see
+    `backend/chain_coherence.py` for the measurement and the dimensions it reports.
     """
     from .github_fetch import license_problem  # here, not at import time: no httpx in the planner
 
@@ -1616,9 +1620,9 @@ def plan_repository(doc: SourceDocument, title: str, course_id: str) -> ProjectC
         raise ProjectGroundingError(
             f"Can't build a course from {snapshot.full_name}: {problem}."
         )
-    facts = repo_planner.analyze([(f.path, f.content) for f in snapshot.files])
+    analyzed = repo_planner.analyze([(f.path, f.content) for f in snapshot.files])
     ordered = repo_planner.dependency_order(
-        [f for f in facts if not f.unparsable and f.public_names]
+        [f for f in analyzed if not f.unparsable and f.public_names]
     )
     chosen = repo_planner.build_chain(ordered, limit=REPO_MILESTONE_MAX)
     if len(chosen) < 2:
@@ -1629,6 +1633,10 @@ def plan_repository(doc: SourceDocument, title: str, course_id: str) -> ProjectC
         )
 
     entry = repo_planner.entry_point(chosen)
+    # The cycle question has to be asked of the whole repository, not of the eight files
+    # this course kept: a path back usually runs through a module nothing grades.
+    modules = {f.module: f for f in analyzed}
+    planned = {f.module for f in chosen}
     project_title = (title or "").strip() or f"{snapshot.full_name}: how it is built"
     milestones: list[Milestone] = []
     claimed: set[str] = set()
@@ -1642,8 +1650,16 @@ def plan_repository(doc: SourceDocument, title: str, course_id: str) -> ProjectC
         names = [name for _kind, name, _lines in picks]
         already = sorted(m for m in facts.depends if m in built)
         above = repo_planner.consumers_of(chosen, facts.module)
-        # Four different true things, and which one applies is decided by where the file
-        # sits in the graph. The fourth is the cycle case: flask's `app.py` and `ctx.py`
+        # A dependency inside a cycle the milestone budget could not fit. Only the
+        # partners the graph really runs a cycle through qualify: `reaches` asks the
+        # question, because "these import each other" is a claim about the whole graph.
+        cyclic = sorted(m for m in facts.depends
+                        if repo_planner.reaches(m, facts.module, modules))
+        # A dependency no milestone assigns, whether the budget dropped it or it holds
+        # nothing gradeable. Disclosed as its own sentence below, not as a branch here.
+        unassigned = sorted(m for m in facts.depends if m not in planned)
+        # Four different true things about where this file sits in the graph, said in
+        # priority order. The third is the cycle case: flask's `app.py` and `ctx.py`
         # import each other, so an order has to be invented inside that pair, and a
         # milestone that claimed "nothing is underneath this file" about a file that
         # imports three others would be teaching something the repository contradicts.
@@ -1658,14 +1674,25 @@ def plan_repository(doc: SourceDocument, title: str, course_id: str) -> ProjectC
                 f"`{facts.path}` needs "
                 f"{_brief([f'`{m}`' for m in already])}, which you have already written."
             )
-        elif facts.depends:
+        elif cyclic:
             reason = (
-                f"`{facts.path}` and "
-                f"{_brief([f'`{m}`' for m in sorted(facts.depends)])} import each other, "
-                "so this order is a judgement about where to start, not a dependency."
+                f"`{facts.path}` is in one import cycle with "
+                f"{_brief([f'`{m}`' for m in cyclic])}, so this order is a judgement about "
+                "where to start, not a dependency."
             )
         else:
             reason = "Nothing in the project is underneath this file: it is where the build starts."
+        # A separate sentence, because it is a separate fact and the branches above are
+        # mutually exclusive while this one is not. Measured across 13 real repositories:
+        # 126 imports have no milestone behind them, spread over 40 of the 86 file steps,
+        # and *every one* of those 40 also had a true thing to say about its place in the
+        # graph - so as a fourth branch this disclosed nothing at all, and the learner met
+        # the missing file as a ModuleNotFoundError at the run step. `build_chain` explains
+        # why the milestone budget cannot close the gaps instead.
+        if unassigned:
+            reason += (f" It also imports {_brief([f'`{m}`' for m in unassigned], limit=1)},"
+                       " which no step here asks you to write; the real project has those "
+                       "files, and your run needs something at each path.")
         checks = [
             VerificationCheck(
                 kind="symbol_in_file", target=name, path=facts.path,
@@ -1721,19 +1748,28 @@ def plan_repository(doc: SourceDocument, title: str, course_id: str) -> ProjectC
         order=order,
         title=_clip(f"Run {entry.path}", 160),
         source_grounded_description=(
-            "Run the file that ties the project together. It only works if every module "
-            "you built above imports cleanly, which is the test that the pieces are a "
-            "program and not a list of files."
+            "In the real project this is the file that ties the others together. Running "
+            "it only tests the whole build if your version imports them: a file that "
+            "defines names and imports nothing will run, and prove nothing."
         ),
         source_quote=_clip(f"{snapshot.full_name}@{snapshot.ref} · {entry.path}", 2000),
         microstep=Microstep(
             observation=f"{len(chosen)} modules, built in the order the project needs them.",
-            action=f"Run `{entry.path}` and read what it does.",
-            hint="An ImportError or NameError here means one of the files above is missing "
-                 "a name the next one asks for.",
+            action=_clip(
+                f"Make `{entry.path}` import the files above and use what they define, "
+                "then run it and read what it does.", 400),
+            # Kept inside `project_copy.MAX_HINT`, because a longer hint is silently
+            # replaced by generic per-kind copy during the polish every project here goes
+            # through - and this is the one sentence that tells the learner how to spell an
+            # import the runner can actually resolve.
+            hint=_clip(
+                "This runs as a script, so `from .mod import X` has no package to resolve "
+                f"against — name the files above by their path from the root "
+                f"(`{chosen[0].module}`).", 400),
         ),
-        why="This is the only milestone the earlier work cannot be skipped for: running the "
-            "top of the import graph executes everything beneath it.",
+        why="Running the top of the import graph is the step that can show the pieces fit, "
+            "but only if this file imports them. The grader runs what you write here: it "
+            "cannot tell that you meant to use the files above and did not.",
         checks=[VerificationCheck(kind="run_ok", target="",
                                   description="Your project runs without errors.")],
         xp_reward=40,

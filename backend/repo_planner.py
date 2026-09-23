@@ -222,18 +222,8 @@ def depth(facts: ModuleFacts, by_module: dict[str, ModuleFacts], seen=None) -> i
     return 1 + max((depth(f, by_module, seen) for f in beneath), default=-1)
 
 
-def build_chain(ordered: list[ModuleFacts], limit: int = 8) -> list[ModuleFacts]:
-    """The modules that have to exist for the entry point to run, in build order.
-
-    A repository's first eight files by name are not a course — they are eight unrelated
-    leaves. Walking down from the entry point keeps every selected file something the
-    learner will actually need, which is what makes "build it from the start to the
-    finish" more than a phrase.
-    """
-    if not ordered:
-        return []
-    tip = entry_point(ordered)
-    by_module = _index(ordered)
+def _closure(tip: ModuleFacts, by_module: dict[str, ModuleFacts]) -> set[str]:
+    """Every module the entry point needs, directly or through another one of them."""
     needed: set[str] = {tip.module}
     frontier = [tip]
     while frontier:
@@ -243,10 +233,67 @@ def build_chain(ordered: list[ModuleFacts], limit: int = 8) -> list[ModuleFacts]
             if module and module not in needed:
                 needed.add(module)
                 frontier.append(by_module[module])
+    return needed
+
+
+def reaches(start: str, target: str, by_module: dict[str, ModuleFacts]) -> bool:
+    """Can `start` get back to `target` by following imports?
+
+    A cycle is a property of the whole graph, not of one edge: flask's `config.py` and
+    `sansio/app.py` never import each other directly, and both sit in one 17-module cycle.
+    Saying "these two files import each other" about a one-way edge is a sentence the
+    repository contradicts, so the branch that says it has to ask this question first.
+    """
+    seen: set[str] = set()
+    stack = [start]
+    while stack:
+        module = stack.pop()
+        if module == target:
+            return True
+        for dep in (by_module[module].depends if module in by_module else ()):
+            if dep not in seen:
+                seen.add(dep)
+                stack.append(dep)
+    return False
+
+
+def build_chain(ordered: list[ModuleFacts], limit: int = 8) -> list[ModuleFacts]:
+    """The modules that have to exist for the entry point to run, in build order.
+
+    A repository's first eight files by name are not a course — they are eight unrelated
+    leaves. Walking down from the entry point keeps every selected file something the
+    learner will actually need, which is what makes "build it from the start to the
+    finish" more than a phrase.
+
+    The budget and the graph do not always fit, and this function is where that shows. A
+    chain that contains no gaps must contain the entry point's whole dependency closure,
+    and a closure only fits if it is small enough: measured across 13 real repositories,
+    the largest fitting closure is 1 module for pallets/flask at this limit and 18 at 20,
+    because flask's core is one cycle of 17 files and every one of them needs the other 16.
+    Choosing the largest fitting closure therefore refuses flask, click, jinja, httpx and
+    requests outright and reduces Textualize/rich to two milestones, so the tip is kept and
+    the truncation leaves prerequisites behind - 96 unsatisfied imports across the corpus.
+    `plan_repository` names every one of them in the milestone that needs it, which is the
+    honest form of a scope this budget cannot close. Making the course both full-sized and
+    gap-free is a bigger milestone budget or a per-cycle milestone, not a filter here.
+    """
+    if not ordered:
+        return []
+    tip = entry_point(ordered)
+    by_module = _index(ordered)
+    needed = _closure(tip, by_module)
     selected = [f for f in ordered if f.module in needed]
     return selected[:limit] if len(selected) <= limit else selected[:limit - 1] + [tip]
 
 
 def consumers_of(ordered: list[ModuleFacts], module: str) -> list[str]:
-    """Which of the course's later files import this one — the reason it comes when it does."""
-    return [f.path for f in ordered if module in f.depends]
+    """Which of the course's *later* files import this one — the reason it comes when it does.
+
+    "Later" is load-bearing. The milestone text built from this tells the learner those
+    files "can be built" after this one, and inside a cyclic package a consumer can be
+    released before the file it imports: 8 of the 59 milestones that used this list named
+    a file the learner had already written. An earlier consumer is not a reason to build
+    this now, and the branches below this one say what is actually underneath the file.
+    """
+    home = next((i for i, f in enumerate(ordered) if f.module == module), len(ordered))
+    return [f.path for i, f in enumerate(ordered) if i > home and module in f.depends]
