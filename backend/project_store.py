@@ -121,9 +121,16 @@ class ProjectStore:
         milestone: Milestone,
         feedback: str,
         passed_check_descriptions: list[str],
+        evidence: str = "",
     ) -> int:
         """Idempotently mark a milestone complete. Returns XP awarded (0 if it was
-        already complete)."""
+        already complete).
+
+        `evidence` records what the checks proved (see
+        :func:`backend.project_verifier.evidence_of`). Only a step the gate still has to
+        decide can carry one: `evaluate_next` moves forward and never re-reads a finished
+        milestone, so a step met on shape alone stays on the record as shape alone.
+        """
         prog = project.milestone_progress.setdefault(
             milestone.id, MilestoneProgress(milestone_id=milestone.id)
         )
@@ -134,6 +141,7 @@ class ProjectStore:
             return 0
         project.completed_milestone_ids.append(milestone.id)
         prog.status = "completed"
+        prog.evidence = evidence
         project.xp += milestone.xp_reward
         return milestone.xp_reward
 

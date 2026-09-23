@@ -31,6 +31,7 @@ from backend import project_ladder
 from backend.learning_models import Stage
 from backend.learning_service import _persist, concept_view
 from backend.project_copy import learner_facing_fields
+from backend.project_models import MilestoneProgress
 from backend.session_generator import ConceptState, generate_session
 
 
@@ -243,7 +244,15 @@ def project_summary(project: Any) -> dict[str, Any]:
         elif milestone.id in (project.completed_milestone_ids or []):
             helped.append(milestone.title or milestone.id)
     due = sum(1 for is_due in milestone_review_flags(project).values() if is_due)
+    # What the checks proved, kept beside what the learner did. A step can be finished,
+    # built unaided, and still say nothing about whether the program works - which is
+    # exactly the state a directory of empty classes leaves a project in.
+    kinds = [(project.milestone_progress.get(m.id) or MilestoneProgress(milestone_id=m.id)).evidence
+             for m in project.milestones]
     return {
+        "evidence_executed": sum(1 for k in kinds if k == "executed"),
+        "evidence_structural": sum(1 for k in kinds if k == "structural"),
+        "evidence_unverified": sum(1 for k in kinds if k == "unverified"),
         "title": project.title,
         "milestones_built": built,
         "built_unaided": unaided,

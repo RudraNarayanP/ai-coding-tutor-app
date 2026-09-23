@@ -40,12 +40,18 @@ psf/requests, pypa/packaging, Textualize/rich and this app's own `backend/`, 13 
               entry file's `file_exists`, on the penultimate step. No first step is free.
   artifact    31 of 86 dependency edges demand a name the consumer never references,
               because a step asks for `ranked_defines()[:2]` and the file has more.
-  stubs       86 of 86 structural milestones pass against empty stubs, in all 13
-              repositories, and with `--sandbox` the closing `run_ok` passes in 13 of 13.
-              That is the finding this script exists to keep honest: the repository route's
-              composition check is not one yet. Forcing it needs a check that runs an
-              earlier artifact through a later one - a new capability in
-              `project_verifier`, not a rule in the planner.
+  stubs       what a workspace of empty definitions gets: **86 of 86** structural
+              milestones passed, in all 13 repositories, and the closing `run_ok` passed
+              with them in 13 of 13 - which is the finding that put the wiring checks in
+              `plan_repository`. Measured again after them: 48 of 86, and
+              `project_complete` 0 of 13 where it had been 13 of 13, while each
+              repository's own source still finishes. The 48 that still pass are the
+              steps that import nothing this course assigned, and for those a name in a
+              file is genuinely all the milestone claims. See
+              `audit/grading_audit.py` and `audit/corpus_integrity.py` for the
+              adversarial suite and the before/after table; forcing a step to prove
+              behaviour rather than wiring needs the repository's own tests, which
+              `github_fetch` correctly keeps out of a course.
 """
 from __future__ import annotations
 
@@ -347,11 +353,12 @@ def main(argv: list[str] | None = None) -> int:
     ran = sum(r.stubs["run_ok passed on stubs"] for r in results)
     blocked = sum(r.stubs["run_ok rejected stubs"] for r in results)
     untested = sum(r.stubs["run_ok untested (needs --sandbox)"] for r in results)
-    print("\nnot an invariant, and the reason this file exists: a course of empty stubs")
-    print("passes every structural step in every repository measured, and its closing")
-    print(f"`run_ok` passed on {ran}, rejected {blocked}, left untested {untested}")
-    print("(rerun with --sandbox to include the grader). See the module docstring for what")
-    print("would close that gap and what it would cost.")
+    print("\nnot an invariant, and the reason this file exists: the closing `run_ok` is")
+    print(f"evaluated here on its own, so it accepted the stub workspace {ran} times")
+    print(f"(rejected {blocked}, untested {untested} - rerun with --sandbox to include the")
+    print("grader). That step still proves only that the entry file ran; what a stub no")
+    print("longer gets past is the wiring each earlier step now demands, which is the")
+    print("column above it. See `audit/corpus_integrity.py` for the completion verdict.")
     shutil.rmtree(_RUN, ignore_errors=True)
     return 1 if broken else 0
 

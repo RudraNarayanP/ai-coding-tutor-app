@@ -14,6 +14,7 @@ its dependency graph is.
 from __future__ import annotations
 
 import asyncio
+import re
 from pathlib import Path
 
 import pytest
@@ -353,8 +354,40 @@ def test_the_real_package_plans_and_survives_load(real_course) -> None:
     require_usable_project(real_course)                  # the same rule the Resume list applies
     validate_project(real_course)                        # the rule only creation applies
     kinds = {check.kind for m in real_course.milestones for check in m.checks}
-    assert kinds <= {"symbol_in_file", "file_exists", "run_ok"}, kinds
+    assert kinds <= {"symbol_in_file", "file_exists", "import", "run_ok"}, kinds
     assert real_course.milestones[-1].checks[0].kind == "run_ok"
+
+
+def test_a_step_that_says_what_it_imports_also_checks_it(real_course) -> None:
+    """The sentence and the check have to be the same claim.
+
+    Every repository milestone already told the learner "these files exist, so this one
+    can import them" while nothing verified that it did - so a course of `class Value:
+    pass` files satisfied all 86 structural steps across 13 real repositories, ran
+    cleanly, and paid full XP. Any step whose own `why` names an already-built
+    dependency now demands it as an import in that file.
+    """
+    wired = [m for m in real_course.milestones
+             if "which you have already written" in m.why and m.checks]
+    assert wired, "the real package has no step that imports an earlier one"
+    for milestone in wired:
+        demanded = {c.target for c in milestone.checks
+                    if c.kind == "import" and c.path == milestone.checks[0].path}
+        sentence = next(s for s in re.split(r"(?<=\.)\s+", milestone.why)
+                        if "which you have already written" in s)
+        named = {t for t in re.findall(r"`([^`]+)`", sentence)
+                 if t != milestone.checks[0].path}
+        assert demanded and named <= demanded, (milestone.title, named, demanded)
+    first = wired[0]
+    path = first.checks[0].path
+    body = next(f.content for f in local_snapshot().files if f.path == path)
+    bare = [WorkspaceFile(path=path, content="\n".join(
+        f"class {c.target}:\n    pass" if c.target[:1].isupper()
+        else f"def {c.target}(*a, **k):\n    return None"
+        for c in first.checks if c.kind == "symbol_in_file") + "\n")]
+    assert asyncio.run(evaluate_milestone(None, real_course, first, bare))[0] is False
+    assert asyncio.run(evaluate_milestone(
+        None, real_course, first, [WorkspaceFile(path=path, content=body)]))[0] is True
 
 
 def test_a_repository_check_names_the_file_it_scopes_to(real_course) -> None:
@@ -599,3 +632,135 @@ def test_the_pipeline_is_python_only_because_that_is_what_the_grader_can_read() 
     assert gh.is_curriculum_file("cmd/main.go") is False
     assert gh.is_curriculum_file("src/index.ts") is False
     assert rp.resolves("micrograd.engine", {"micrograd.engine"}) == {"micrograd.engine"}
+
+
+# ─── what finishing a repository course is evidence of ───────────────────────
+#
+# The chain was ordered, every name was real, and none of it asked whether the files
+# worked together or did anything. Measured over 13 real repositories: a workspace of
+# `class Value: pass` files satisfied all 86 structural milestones, ran cleanly, and was
+# awarded `project_complete` at full XP - and a micrograd re-implementation whose `__add__`
+# subtracts instead of adds was indistinguishable from the correct one.
+
+_VALUE = """class Value:
+    def __init__(self, data):
+        self.data = data
+
+    def __add__(self, other):
+        return Value(self.data + (other.data if isinstance(other, Value) else other))
+"""
+
+_NET = """from app.value import Value
+
+
+class Doubler:
+    def __call__(self, v):
+        return v + v
+
+
+print(Doubler()(Value(3)).data)
+"""
+
+
+def _mini_package() -> gh.RepoSnapshot:
+    return gh.RepoSnapshot(owner="a", repo="b", ref="main", license="MIT", files=[
+        gh.RepoFile(path="app/value.py", content=_VALUE),
+        gh.RepoFile(path="app/net.py", content=_NET),
+    ])
+
+
+def _stubs(course) -> list[WorkspaceFile]:
+    """Every demanded name declared at the demanded path; nothing wired together."""
+    out: list[WorkspaceFile] = []
+    for milestone in course.milestones:
+        path = next((c.target for c in milestone.checks if c.kind == "file_exists"), "")
+        if not path:
+            continue
+        lines = [f"# {path}"]
+        for check in milestone.checks:
+            if check.kind != "symbol_in_file":
+                continue
+            lines.append(f"class {check.target}:\n    pass" if check.target[:1].isupper()
+                         else f"def {check.target}(*args, **kwargs):\n    return None")
+        out.append(WorkspaceFile(path=path, content="\n".join(lines) + "\n"))
+    return out
+
+
+def _finish(course, files, tmp: Path):
+    from backend.project_service import evaluate_next
+    from backend.project_store import ProjectStore
+    from backend.sandbox import DockerSandbox
+
+    store = ProjectStore(storage_dir=tmp)
+    project = store.create(course.model_copy(deep=True))
+    project = store.save_workspace(project.course_id, files) or project
+    return project, asyncio.run(
+        evaluate_next(store, DockerSandbox(), project, helped=False))
+
+
+def test_empty_classes_alone_cannot_finish_a_repository(tmp_path) -> None:
+    """The headline false positive, pinned end to end through the real gate."""
+    course = course_of(_mini_package())
+    assert [c.kind for c in course.milestones[-1].checks] == ["run_ok"]
+    project, result = _finish(course, _stubs(course), tmp_path / "stubs")
+    assert result["status"] == "incomplete"
+    assert not project.completed
+    assert 0 < project.xp < sum(m.xp_reward for m in course.milestones)
+    assert "doesn't import" in result["feedback"]   # the wiring step is the wall
+
+
+def test_the_wired_and_working_version_of_the_same_course_does_finish(tmp_path) -> None:
+    """The control a stricter grader needs, or the change only moves the goalposts.
+
+    `runpy.run_path` gives the entry file no package to resolve a leading dot against,
+    so the spelling that works is the one from the project root - which is what the
+    milestone's hint now tells the learner.
+    """
+    course = course_of(_mini_package())
+    files = [WorkspaceFile(path="app/value.py", content=_VALUE),
+             WorkspaceFile(path="app/net.py", content=_NET)]
+    project, result = _finish(course, files, tmp_path / "real")
+    assert result["status"] == "project_complete", result["feedback"]
+    assert project.completed and project.xp == sum(m.xp_reward for m in course.milestones)
+    assert {a["evidence"] for a in result["advanced"]} == {"structural", "executed"}
+    assert "the program ran" in result["feedback"]
+    assert result["summary"]["evidence_executed"] == 1
+
+
+def test_a_wrong_but_wired_program_finishes_and_says_only_that_it_ran(tmp_path) -> None:
+    """The boundary this change stops at, recorded rather than papered over.
+
+    Right file, right names, wired together, `__add__` subtracting. Nothing in this app
+    decides what a function returns - the only behavioural evidence a repository could
+    supply is its own test suite, and `github_fetch` excludes it, correctly, because a
+    course may not carry somebody else's code. So the completion sentence names what was
+    seen, which is that the program ran.
+    """
+    wrong = _NET.replace("print(Doubler()(Value(3)).data)",
+                         "print('built')")
+    wrong_value = _VALUE.replace("self.data + (other.data", "self.data - (other.data")
+    course = course_of(gh.RepoSnapshot(owner="a", repo="b", ref="main", license="MIT", files=[
+        gh.RepoFile(path="app/value.py", content=wrong_value),
+        gh.RepoFile(path="app/net.py", content=wrong),
+    ]))
+    files = [WorkspaceFile(path="app/value.py", content=wrong_value),
+             WorkspaceFile(path="app/net.py", content=wrong)]
+    project, result = _finish(course, files, tmp_path / "wrong")
+    assert result["status"] == "project_complete"
+    assert "the program ran" in result["feedback"]
+    assert "works" not in result["feedback"]
+
+
+def test_a_repository_courses_wiring_checks_survive_the_single_file_guard() -> None:
+    """`_drops_unimportable_local_modules` was quietly deleting every one of them.
+
+    That rule exists because a transcript route is one persistent `main.py`, so an
+    `import ratelimit` check can never pass there. It decided what the project *had* from
+    `workspace_files`, which for a repository course is the one seeded entry file - so
+    each of the 75 wiring checks the corpus now carries was stripped before the course was
+    ever saved. The files the course asks the learner to write are part of the project.
+    """
+    course = course_of(_mini_package())
+    wired = [c for m in course.milestones for c in m.checks
+             if c.kind == "import" and c.path == "app/net.py"]
+    assert [c.target for c in wired] == ["app.value"]

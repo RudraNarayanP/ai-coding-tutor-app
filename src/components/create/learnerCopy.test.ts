@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest'
-import { compactText, isTranscriptDump, milestoneDescription, whyExplanation, sourceExcerpt } from './learnerCopy'
+import { compactText, completionClaim, isTranscriptDump, milestoneDescription, whyExplanation, sourceExcerpt } from './learnerCopy'
 
 const DUMP =
   "hello everybody welcome back going from tensor flow to pytorch Friendly and so it's much easier " +
@@ -34,5 +34,33 @@ describe('Create Course learnerCopy', () => {
     expect(why).toMatch(/Import Transformers/)
     expect(sourceExcerpt(DUMP)).toBe('')
     expect(sourceExcerpt('import transformers')).toBe('import transformers')
+  })
+})
+
+describe('completionClaim', () => {
+  // The dialog used to assert "verified against the source" for every completion, and a
+  // workspace of `class Value: pass` files earned that sentence. The grader now records
+  // whether a step watched the program run, read only its shape, or could not run it.
+  it('claims only that the program ran when a step executed', () => {
+    expect(completionClaim({ evidence_executed: 1, evidence_structural: 3 }, 'Micrograd'))
+      .toMatch(/built .Micrograd. end-to-end, and the program ran/)
+  })
+
+  it('says so when nothing was ever executed', () => {
+    const claim = completionClaim({ evidence_executed: 0, evidence_structural: 4 }, 'Flask')
+    expect(claim).toMatch(/code's shape/)
+    expect(claim).toMatch(/nothing here ran the program/)
+  })
+
+  it('says so when the sandbox could not run the project at all', () => {
+    const claim = completionClaim({ evidence_executed: 0, evidence_unverified: 1 }, 'Httpx')
+    expect(claim).toMatch(/never ran here/)
+    expect(claim).toMatch(/nothing has checked that it works/i)
+  })
+
+  it('claims nothing about verification for a project stored before the distinction', () => {
+    expect(completionClaim({}, 'Old')).toMatch(/finished every step/)
+    expect(completionClaim(null, 'Old')).toMatch(/finished every step/)
+    expect(completionClaim(undefined)).toMatch(/You finished every step of The project/)
   })
 })

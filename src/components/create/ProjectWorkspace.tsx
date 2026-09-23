@@ -7,7 +7,7 @@ import {
   type ProjectView,
   type WorkspaceFile,
 } from '../../utils/projectApi'
-import { compactText, milestoneDescription, sourceExcerpt, whyExplanation } from './learnerCopy'
+import { compactText, completionClaim, milestoneDescription, sourceExcerpt, whyExplanation } from './learnerCopy'
 import { ProjectTerminal, makeTerminalLine, shellPrompt, type TerminalLine } from './ProjectTerminal'
 import { CodeEditor } from '../CodeEditor'
 import { PROJECT_ENDPOINTS, useStepSession } from '../../learning/useStepSession'
@@ -716,7 +716,7 @@ export const ProjectWorkspace: React.FC<ProjectWorkspaceProps> = ({ courseId, on
         <div className="pw-celebrate" role="dialog" aria-label="Project complete">
           <div className="pw-celebrate-card">
             <h2>🎉 You shipped it!</h2>
-            <p>You built “{project.title}” end-to-end, verified against the source.</p>
+            <p>{completionClaim(nextResult?.summary, project.title)}</p>
             <p className="pw-celebrate-xp">⚡ {project.xp} XP earned</p>
             {/* What was learned, not that a bar filled. A percentage says the
                 checklist ran out; this says which steps the learner wrote

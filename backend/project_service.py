@@ -7,6 +7,7 @@ by the Create Course project endpoints and does not touch any other subsystem.
 from __future__ import annotations
 
 from .project_models import (
+    MilestoneProgress,
     ProjectCheckResult,
     ProjectCourse,
     ProjectView,
@@ -22,7 +23,7 @@ from .project_planner import (
 from .project_sandbox import project_terminal_sandbox
 from . import project_session
 from .project_store import ProjectStore
-from .project_verifier import evaluate_milestone, run_workspace
+from .project_verifier import evaluate_milestone, evidence_of, run_workspace
 from .source_ingestion import IngestionError, SourceIngestionService
 from .source_quality import (
     LlmSourceAnalyzer,
@@ -172,11 +173,13 @@ async def evaluate_next(store: ProjectStore, executor, project: ProjectCourse, *
         last_stderr = stderr
 
         if passed:
+            evidence = evidence_of(milestone, results)
             xp = store.complete_milestone(
                 project,
                 milestone,
-                feedback="Milestone verified.",
+                feedback=step_feedback(evidence),
                 passed_check_descriptions=[r.description for r in results if r.passed],
+                evidence=evidence,
             )
             record = project_session.record_production(
                 project, milestone, passed=True, helped=helped
@@ -187,6 +190,11 @@ async def evaluate_next(store: ProjectStore, executor, project: ProjectCourse, *
                     "title": milestone.title,
                     "xp_awarded": xp,
                     "already_completed": xp == 0,
+                    # What this step's checks proved: a name in a file, or the program
+                    # running. Kept separate from `unaided`, which answers who produced
+                    # it - the two are independent, and merging them is how "the learner
+                    # typed `class Value: pass`" comes to read as an accomplishment.
+                    "evidence": evidence,
                     # `unaided`, not `demonstrated`: a project step earns one kind
                     # of evidence, and the ladder's bar for demonstrated is two.
                     # Shipping the stricter word would invite a UI to light up a
@@ -225,7 +233,7 @@ async def evaluate_next(store: ProjectStore, executor, project: ProjectCourse, *
         "advanced": advanced,
         "current_milestone": None,
         "checks": [r.model_dump() for r in last_checks],
-        "feedback": "Project complete — you built the whole thing from the source!",
+        "feedback": completion_feedback(project),
         "stdout": last_stdout,
         "stderr": last_stderr,
         "xp": project.xp,
@@ -233,6 +241,38 @@ async def evaluate_next(store: ProjectStore, executor, project: ProjectCourse, *
         "completed": True,
         "summary": project_session.project_summary(project),
     }
+
+
+def completion_feedback(project: ProjectCourse) -> str:
+    """What finishing this project is evidence *of*, stated honestly.
+
+    "You built the whole thing" was once the only answer, and a workspace of
+    `class Value: pass` files earned it: passing every check the grader can run is not
+    the same claim as the program working, and the two come apart completely when the
+    offline sandbox cannot install the dependency the program needs. So the sentence is
+    derived from the evidence each step recorded rather than asserted.
+    """
+    kinds = [(project.milestone_progress.get(m.id) or MilestoneProgress(milestone_id=m.id)).evidence
+             for m in project.milestones]
+    ran = sum(1 for k in kinds if k == "executed")
+    unproven = sum(1 for k in kinds if k == "unverified")
+    if unproven:
+        return ("Steps finished - but the program was never seen to run, because the "
+                "practice sandbox is missing a dependency it needs. Nothing here has "
+                "checked that your project works.")
+    if ran:
+        return ("Project complete, and the program ran: the last step executed the files "
+                "you wrote.")
+    return ("Project complete. Every step was checked against your code's shape - that "
+            "the files, names and imports are there. Nothing here ran the program, so "
+            "that it works is not something this app has verified.")
+
+
+def step_feedback(evidence: str) -> str:
+    """The line recorded against a completed step, worded to what it proved."""
+    if evidence == "executed":
+        return "Verified: your program ran."
+    return "Step met: the checks on your code passed."
 
 
 def _first_failure_feedback(results: list[ProjectCheckResult]) -> str:

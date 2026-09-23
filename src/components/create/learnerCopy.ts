@@ -17,6 +17,38 @@ export function isTranscriptDump(text: string | null | undefined, maxLen = MAX_B
   return t.length > 160 && stops <= 1 && fillers >= 2
 }
 
+/** What finishing the checklist is evidence *of*.
+ *
+ *  The dialog used to say "verified against the source" unconditionally, and a workspace
+ *  of `class Value: pass` files earned that sentence: the grader records whether a step
+ *  watched the program run or only read the code's shape, and those are different claims
+ *  about different things. The counts are optional because projects saved before the
+ *  grader distinguished them have no evidence to report.
+ */
+export function completionClaim(
+  summary: { evidence_executed?: number; evidence_structural?: number; evidence_unverified?: number } | null | undefined,
+  title = ''
+): string {
+  const name = title.trim() ? `“${title.trim()}”` : 'The project'
+  const executed = summary?.evidence_executed
+  const structural = summary?.evidence_structural
+  const unverified = summary?.evidence_unverified
+  // A project stored before the grader recorded any of this has no evidence either way,
+  // and both remaining sentences would be wrong for it: "nothing here ran the program" is
+  // false for a transcript route that ended in a real run, and "the program ran" is
+  // unfounded for one that never did. So an absent record gets the one claim it can make.
+  if (executed === undefined && structural === undefined && unverified === undefined) {
+    return `You finished every step of ${name}.`
+  }
+  if ((unverified ?? 0) > 0) {
+    return `You finished every step of ${name}, but it never ran here — the practice sandbox is missing a dependency it needs, so nothing has checked that it works.`
+  }
+  if ((executed ?? 0) > 0) {
+    return `You built ${name} end-to-end, and the program ran.`
+  }
+  return `You wrote every file ${name} asks for. Every step was checked against your code's shape — that the files, names and imports are there — and nothing here ran the program.`
+}
+
 export function compactText(text: string | null | undefined, maxLen = MAX_BODY): string {
   if (!text) return ''
   const t = text.replace(/\s+/g, ' ').trim()

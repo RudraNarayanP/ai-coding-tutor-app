@@ -766,7 +766,7 @@ def _check_for(kind: str, target: str) -> VerificationCheck:
     if kind == "function_call":
         return VerificationCheck(kind="function_call", target=target, description=f"Your code calls `{target}`.")
     if kind == "stdout_contains":
-        return VerificationCheck(kind="run_ok", target="", description="Your project runs and prints output.")
+        return VerificationCheck(kind="run_ok", target="", description="Your project runs.")
     return VerificationCheck(kind="run_ok", target="", description="Your project runs without errors.")
 
 
@@ -1604,13 +1604,23 @@ def plan_repository(doc: SourceDocument, title: str, course_id: str) -> ProjectC
     (`class Value:`), because that is the contract the learner has to satisfy, not the
     lesson.
 
-    The final milestone runs the tip of the graph. It is the one step in this app that
-    *can* show the pieces fit, and measured on 13 real repositories it is not one that
-    does: nothing requires the entry file to import the files above it, so a course of
-    empty stubs at the demanded paths passes every milestone, `run_ok` included. What
-    closes the gap is a check that runs an earlier artifact through a later one, which is
-    a new capability in `project_verifier` rather than a rule here - see
-    `backend/chain_coherence.py` for the measurement and the dimensions it reports.
+    Two claims this route used to make that its checks did not back. The first was that a
+    step's file merely declares a name: `Value = None` satisfied a milestone about a
+    class, and a directory of such lines passed all 86 structural milestones across 13
+    real repositories. A step now demands a declaration where it names one, and demands
+    the import its own sentence already asserts - 75 wiring checks across the corpus,
+    which takes a stub workspace from completing 13 of 13 repositories to 0 of 13 while
+    each repository's own source still finishes.
+
+    The second was the closing `run_ok`, offered as the proof that the pieces fit. It is
+    the only check that observes the program at all, and it observes only that the entry
+    file ran: a wired-up micrograd whose `__add__` subtracts finishes the course at full
+    XP, because nothing here decides what a function returns. The evidence a milestone
+    produced is now recorded beside its completion (`project_verifier.evidence_of`)
+    rather than folded into it, and the sentence a project ends with is derived from
+    that. Closing the remaining gap needs the repository's own tests as the answer key,
+    which `github_fetch` keeps out of a course for licensing reasons, so it is a
+    capability decision and not a rule to write here.
     """
     from .github_fetch import license_problem  # here, not at import time: no httpx in the planner
 
@@ -1699,6 +1709,20 @@ def plan_repository(doc: SourceDocument, title: str, course_id: str) -> ProjectC
                 description=f"`{name}` is defined in `{facts.path}`.",
             )
             for name in names
+        ] + [
+            # Each dependency this step's own sentence already claims is behind the
+            # learner is also demanded as an import, because that is the only part of
+            # "rebuild it module by module" that can be decided without executing it.
+            # Measured without these: a directory of `class X: pass` files passed every
+            # structural milestone of all 13 repositories, ran cleanly, and paid full
+            # XP. Measured with them: the same stubs fail, and each repository's own
+            # source still passes, because the real file does import them - relative,
+            # dotted, or bare, all three of which the checker accepts by leaf name.
+            VerificationCheck(
+                kind="import", target=dep, path=facts.path,
+                description=f"`{facts.path}` imports `{dep}`, which you built above.",
+            )
+            for dep in already
         ] + [
             VerificationCheck(kind="file_exists", target=facts.path,
                               description=f"`{facts.path}` exists in your workspace.")
@@ -1894,8 +1918,22 @@ def _drops_unimportable_local_modules(milestones: list, project: ProjectCourse) 
     `import ratelimit` check can never pass, and the learner stalls on it with no
     way forward. Third-party names (requests, tiktoken) are untouched — they are
     installed, not authored, so they remain legitimate checks.
+
+    "What this project has" is the workspace *and* every file a step asks the learner
+    to write, which for a transcript route is nothing extra and for a repository route
+    is most of the course. Reading only `workspace_files` meant that a repository course
+    silently lost every import check minted against a file it never seeded - which is how
+    the rule that guards single-file projects against the unreachable check quietly
+    guarded multi-file projects against having one at all.
     """
-    available = _local_module_names(project)
+    available = _local_module_names(project) | {
+        (check.path or "").split("/")[-1].rsplit(".", 1)[0].strip().lower()
+        for milestone in milestones for check in (milestone.checks or []) if check.path
+    } | {
+        (check.target or "").split("/")[-1].rsplit(".", 1)[0].strip().lower()
+        for milestone in milestones for check in (milestone.checks or [])
+        if check.kind == "file_exists"
+    }
     authored = {
         m.group(1).lower()
         for m in re.finditer(r"([A-Za-z_][A-Za-z0-9_]*)\.py", project.source_excerpt or "")

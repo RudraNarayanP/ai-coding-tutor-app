@@ -3,11 +3,17 @@
 Verification is outcome-based so a learner's valid alternative implementation is
 accepted:
 
-* Structural checks (`import`, `symbol`, `function_call`, `file_exists`) use
-  Python's `ast` module — they inspect what the code *achieves*, not its exact
-  text, and never execute learner code.
+* Structural checks (`import`, `symbol`, `symbol_in_file`, `function_call`,
+  `code_contains`, `file_exists`) use Python's `ast` module — they inspect what
+  the code says, not its exact text, and never execute learner code. They can
+  prove a file, a name or a wiring line exists. They cannot prove any behaviour,
+  and `evidence_of` is what keeps that claim in the record instead of letting a
+  green tick imply more than it says.
 * Runtime checks (`run_ok`, `stdout_contains`) execute the whole persistent
-  workspace inside the existing Docker sandbox and inspect real behaviour.
+  workspace inside the existing Docker sandbox and inspect real behaviour. A run
+  that stopped at a package the offline sandbox does not have is reported as
+  *unverified* rather than passed: the learner may continue, because the gap is
+  the environment's, but nothing was observed.
 
 Nothing here mutates the learner's workspace; the learner owns the code.
 """
@@ -27,8 +33,30 @@ from .project_models import (
     VerificationCheck,
     WorkspaceFile,
 )
+# The exception type only, for the one branch that has to tell "the learner's program
+# failed" apart from "this app could not run their program at all".
+from .sandbox import SandboxError
 
 _STDLIB = set(getattr(sys, "stdlib_module_names", set())) | {"__future__"}
+
+#: The only checks that observe the learner's program doing anything.
+RUNTIME_CHECK_KINDS = frozenset({"run_ok", "stdout_contains"})
+
+
+def evidence_of(milestone: Milestone, results: list[ProjectCheckResult]) -> str:
+    """What a set of passed checks actually established, for the completion record.
+
+    Everything the grader can decide without running the code - a path exists, a name is
+    declared in it, an import line is there - is *structural*: true, cheap, and silent
+    about whether the thing works. Only a run says the program executed, and a run the
+    sandbox could not carry out says nothing at all, so it gets its own state rather than
+    borrowing the word "passed".
+    """
+    runtime = [result for check, result in zip(milestone.checks, results)
+               if check.kind in RUNTIME_CHECK_KINDS]
+    if runtime:
+        return "executed" if all(r.verified for r in runtime) else "unverified"
+    return "structural"
 
 
 def _python_sources(files: list[WorkspaceFile]) -> list[tuple[str, str]]:
@@ -84,8 +112,16 @@ def _defined_symbols(trees: list[ast.AST]) -> set[str]:
     return {name for tree in trees for name in _names_in_tree(tree)}
 
 
-def _defined_in_file(files: list[WorkspaceFile], path: str) -> tuple[set[str], str | None]:
-    """The names one file defines, or the reason it has none that can be trusted."""
+def _declared_in_file(files: list[WorkspaceFile], path: str) -> tuple[set[str], str | None]:
+    """Names this file declares at module level, as a class or a def.
+
+    `symbol_in_file` used to accept *any* binding, so `Value = None` satisfied the step
+    about a class - and a course of such one-liners passed every structural milestone in
+    all 13 repositories measured. This asks for the kind of thing the source file
+    actually contains: `repo_planner` only ever demands a name it read off the module's
+    top-level `class`/`def` list, so requiring one is exactly congruent with what the
+    milestone names, and it is still decided from syntax rather than from text.
+    """
     for file in files:
         if file.path != path:
             continue
@@ -93,7 +129,41 @@ def _defined_in_file(files: list[WorkspaceFile], path: str) -> tuple[set[str], s
             tree = ast.parse(file.content, filename=path)
         except SyntaxError as exc:
             return set(), f"SyntaxError in {path}: {exc.msg} (line {exc.lineno})"
-        return _names_in_tree(tree), None
+        return {
+            node.name for node in tree.body
+            if isinstance(node, (ast.ClassDef, ast.FunctionDef, ast.AsyncFunctionDef))
+        }, None
+    return set(), None
+
+
+def _imported_in_file(files: list[WorkspaceFile], path: str) -> tuple[set[str], str | None]:
+    """Every dotted part of every import in one file, plus the reason there are none.
+
+    A path-scoped `import` check has to accept the three spellings of the same module,
+    because which one is right depends on where the file sits: `import micrograd.engine`,
+    `from micrograd.engine import Value`, and — inside the package, which is what the real
+    project writes — `from .engine import Value`. The one thing all three contain is the
+    leaf, so the leaf is what is matched. Matching the whole dotted name would reject the
+    relative spelling, and the milestone would demand a line the repository itself does
+    not write.
+    """
+    for file in files:
+        if file.path != path:
+            continue
+        try:
+            tree = ast.parse(file.content, filename=path)
+        except SyntaxError as exc:
+            return set(), f"SyntaxError in {path}: {exc.msg} (line {exc.lineno})"
+        parts: set[str] = set()
+        for node in ast.walk(tree):
+            if isinstance(node, ast.Import):
+                for alias in node.names:
+                    parts.update(alias.name.split("."))
+            elif isinstance(node, ast.ImportFrom):
+                if node.module:
+                    parts.update(node.module.split("."))
+                parts.update(alias.name for alias in node.names)
+        return {p.lower() for p in parts if p}, None
     return set(), None
 
 
@@ -306,10 +376,12 @@ async def evaluate_milestone(
         return run_cache
 
     for check in milestone.checks:
-        passed, detail = await _evaluate_check(
+        passed, detail, verified = await _evaluate_check(
             executor, project, check, files, imported, defined, called, syntax_error, code_index, _get_run
         )
-        results.append(ProjectCheckResult(description=check.description or check.kind, passed=passed, detail=detail))
+        results.append(ProjectCheckResult(
+            description=check.description or check.kind, passed=passed, detail=detail,
+            verified=verified))
 
     all_passed = all(r.passed for r in results) and bool(results)
     return all_passed, results, stdout_out, stderr_out
@@ -326,12 +398,20 @@ async def _evaluate_check(
     syntax_error: str | None,
     code_index: dict,
     get_run,
-) -> tuple[bool, str]:
+) -> tuple[bool, str, bool]:
+    """(may the learner continue, what to tell them, was the claim actually tested).
+
+    The third answer is the one that was missing. A run that stopped at a package the
+    offline sandbox does not have let the learner through, and the record said the
+    program had been shown to work. Advancing is still right - that gap is the
+    environment's, not theirs - but advancing and demonstrating are different claims,
+    and this is the only place that knows which one just happened.
+    """
     kind = check.kind
 
     if kind == "file_exists":
         exists = any(f.path == check.target for f in files)
-        return exists, ("" if exists else f"Add a file named `{check.target}`.")
+        return exists, ("" if exists else f"Add a file named `{check.target}`."), exists
 
     if kind == "symbol_in_file":
         # Path-scoped on purpose. `symbol` asks "did the learner write this anywhere",
@@ -340,30 +420,43 @@ async def _evaluate_check(
         # this, dropping `Value` into the entry file passes the `nn.py` milestone.
         path = check.path or ""
         if not path:
-            return False, "This milestone names no file to check — that is a bug, not a step."
+            return False, "This milestone names no file to check — that is a bug, not a step.", False
         if not any(f.path == path for f in files):
-            return False, f"Add a file named `{path}`."
-        names, error = _defined_in_file(files, path)
+            return False, f"Add a file named `{path}`.", False
+        names, error = _declared_in_file(files, path)
         if error:
-            return False, error
+            return False, error, False
         ok = check.target in names
-        return ok, ("" if ok else f"`{check.target}` isn't defined in `{path}` yet.")
+        return ok, ("" if ok else f"`{check.target}` isn't declared in `{path}` yet - the "
+                                  f"project has it as a class or a function there."), ok
 
     # Structural checks require parseable code.
     if kind in ("import", "symbol", "function_call") and syntax_error:
-        return False, syntax_error
+        return False, syntax_error, False
 
     if kind == "import":
+        if check.path:
+            # Scoped to one file the way `symbol_in_file` is. The claim is that *this*
+            # file is wired into the one above it - which is the only part of
+            # "rebuild it module by module" that can be decided without running it.
+            parts, error = _imported_in_file(files, check.path)
+            if error:
+                return False, error, False
+            leaf = (check.target or "").rstrip(".").split(".")[-1].lower()
+            ok = bool(leaf) and leaf in parts
+            return ok, ("" if ok else
+                        f"`{check.path}` doesn't import `{check.target}` yet, and that is "
+                        f"the file above it that this one stands on."), ok
         ok = check.target.lower() in {name.lower() for name in imported}
-        return ok, ("" if ok else f"No import of `{check.target}` found yet.")
+        return ok, ("" if ok else f"No import of `{check.target}` found yet."), ok
 
     if kind == "symbol":
         ok = check.target in defined
-        return ok, ("" if ok else f"`{check.target}` isn't defined in your workspace yet.")
+        return ok, ("" if ok else f"`{check.target}` isn't defined in your workspace yet."), ok
 
     if kind == "function_call":
         ok = check.target in called
-        return ok, ("" if ok else f"`{check.target}` isn't called anywhere yet.")
+        return ok, ("" if ok else f"`{check.target}` isn't called anywhere yet."), ok
 
     if kind == "code_contains":
         # Concept-level, grounded check. Semantic (AST-aware): a token counts
@@ -382,27 +475,46 @@ async def _evaluate_check(
             for t in tokens
         )
         if ok:
-            return True, ""
+            return True, "", True
         pretty = " or ".join(f"`{t}`" for t in tokens)
-        return False, f"Your code doesn't reference {pretty} yet."
+        return False, f"Your code doesn't reference {pretty} yet.", False
 
     if kind in ("run_ok", "stdout_contains"):
         if syntax_error:
-            return False, syntax_error
-        run = await get_run()
+            return False, syntax_error, False
+        try:
+            run = await get_run()
+        except SandboxError as exc:
+            # The grader could not carry the run out at all: the workspace does not fit
+            # the sandbox payload ceiling, or Docker is not answering. That is this app's
+            # limitation rather than the learner's error, and it used to surface as an
+            # HTTP 503 on the very step that advances them - seven files re-implementing
+            # part of a real framework is over the 64 KiB bootstrap ceiling on its own.
+            # Same rule as an absent dependency: let them through, and say plainly that
+            # nothing was observed.
+            return True, (
+                f"Unverified: this app could not run your project here ({exc}). Nothing "
+                f"has been checked about whether it works."
+            ), False
         if run["ran_ok"]:
             if kind == "stdout_contains" and check.target:
                 ok = check.target in (run.get("stdout") or "")
-                return ok, ("" if ok else f"Expected output to contain `{check.target}`.")
-            return True, ""
+                return ok, ("" if ok else f"Expected output to contain `{check.target}`."), ok
+            return True, "", True
         # Real run failure — but tolerate (honestly) a missing external dependency
         # that the offline sandbox can't provide.
         missing = _external_module_missing(run.get("error"), project.tech_stack)
         if missing:
+            # passed=True keeps the learner moving; verified=False says what did not
+            # happen. The program was not seen to finish, so nothing about whether it
+            # works was observed - and the old wording ("Your code's syntax and
+            # structure are verified") claimed the opposite in the same breath as
+            # admitting the run stopped early.
             return True, (
-                f"Ran up to `{missing}`, an external dependency not installed in the offline "
-                f"practice sandbox. Your code's syntax and structure are verified."
-            )
-        return False, (run.get("error") or "Your project raised an error when run.")
+                f"Unverified: your code reached `{missing}`, a dependency the offline "
+                f"practice sandbox does not have, so the program was never seen to "
+                f"finish. Nothing about whether it works has been checked."
+            ), False
+        return False, (run.get("error") or "Your project raised an error when run."), False
 
-    return False, "Unknown check."
+    return False, "Unknown check.", False

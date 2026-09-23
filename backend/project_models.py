@@ -23,9 +23,13 @@ from pydantic import BaseModel, Field
 # defined, a module is imported, the program runs, expected output appears) so
 # that a learner's valid alternative implementation is still accepted.
 VERIFICATION_KINDS = (
-    "import",           # source imports a module (AST)
+    "import",           # source imports a module (AST) - and with `path`, that *that*
+                        # file imports it, which is what lets a step ask for the wiring
+                        # between two files rather than for a line somewhere
     "symbol",           # a top-level function/class/variable is defined (AST)
-    "symbol_in_file",   # ... and it is defined in `path`, not merely somewhere (AST)
+    "symbol_in_file",   # ... and `path` declares it as a class or a function (AST). A
+                        # bare binding is not a definition: `Value = None` used to pass a
+                        # step about a class, and the course was completable that way.
     "function_call",    # a given function/method is called anywhere (AST)
     "code_contains",    # the workspace code references a token/pattern (grounded, concept-level)
     "run_ok",           # the entry file runs without raising (sandbox)
@@ -42,8 +46,8 @@ class VerificationCheck(BaseModel):
     # For code_contains, target may be a "|"-separated list of acceptable tokens.
     target: str = Field(default="", max_length=400)
     description: str = Field(default="", max_length=280)
-    # The file a `symbol_in_file` check is scoped to. Empty for every other kind,
-    # and the verifier refuses to treat a scoped check with no path as satisfied —
+    # The file a `symbol_in_file` or `import` check is scoped to. Empty for the other
+    # kinds, and the verifier refuses to treat a scoped check with no path as satisfied —
     # silently falling back to "defined somewhere" is exactly the looseness the
     # field exists to remove.
     path: str = Field(default="", max_length=200)
@@ -87,6 +91,13 @@ class MilestoneProgress(BaseModel):
     attempts: int = 0
     passed_check_descriptions: list[str] = Field(default_factory=list)
     last_feedback: str = Field(default="", max_length=2000)
+    # What the checks that passed actually established, kept apart from `status`
+    # because finishing a step and proving something about the code are two claims:
+    # "structural" is a name in a file, "executed" is the program observed running,
+    # and "unverified" is a run the environment could not carry out. A learner who
+    # types `class Value: pass` has genuinely completed a step, and the record should
+    # still be able to say that nothing about behaviour was checked.
+    evidence: str = Field(default="", pattern=r"^(|structural|executed|unverified)$")
 
 
 class ProjectCourse(BaseModel):
@@ -178,6 +189,11 @@ class ProjectCheckResult(BaseModel):
     description: str
     passed: bool
     detail: str = ""
+    # False when the check let the learner through because the environment could not
+    # test the claim, not because the claim held. "Passed" answers *may I continue*;
+    # this answers *was it demonstrated*, and conflating them is how a program that
+    # never ran became evidence that it worked.
+    verified: bool = True
 
 
 class ProjectView(BaseModel):

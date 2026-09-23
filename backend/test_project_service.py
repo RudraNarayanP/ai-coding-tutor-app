@@ -117,3 +117,86 @@ def test_progress_persists_across_store_reload():
     assert reloaded.xp == 30
     assert set(reloaded.completed_milestone_ids) == {"m1", "m2"}
     assert reloaded.current_milestone_index == 2
+
+
+# ─── what a completion is evidence of ────────────────────────────────────────
+#
+# One sentence closes a project, and until now there was one sentence for all three
+# things it can mean: the program was watched running, only the shape of the code was
+# read, or the run never happened. Measured, the second of those was being sold as the
+# first - a repository course was completable by `class Value: pass` files at full XP.
+
+class _MissingDependencyExecutor:
+    """The offline sandbox refusing to have a package, which is not the learner's bug."""
+
+    async def run(self, payload):
+        return {"passed": False, "tests": [{
+            "name": "run", "passed": False, "stdout": "", "stderr": "",
+            "error": "ModuleNotFoundError: No module named 'numpy'"}]}
+
+
+def _run_project(course_id: str) -> ProjectCourse:
+    return ProjectCourse(
+        course_id=course_id, title="Run Project", source_hash="h", project_goal="goal",
+        entry_file="main.py",
+        milestones=[Milestone(
+            id="m1", order=1, title="Run it", microstep=Microstep(),
+            checks=[VerificationCheck(kind="run_ok", target="",
+                                       description="Your project runs without errors.")],
+            xp_reward=40)],
+        workspace_files=[WorkspaceFile(path="main.py", content="print('ok')\n")],
+    )
+
+
+def test_a_project_checked_only_against_code_shape_says_so():
+    store = _store()
+    project = store.create(_structural_project("project-shape-only"))
+    project.workspace_files = [
+        WorkspaceFile(path="main.py",
+                      content="import collections\ndef count_words(t):\n    return len(t)\n")]
+    result = asyncio.run(evaluate_next(store, FakeExecutor(), project))
+    assert result["status"] == "project_complete"
+    assert {a["evidence"] for a in result["advanced"]} == {"structural"}
+    assert "never ran" not in result["feedback"]
+    assert "shape" in result["feedback"]
+    # The claim reaches the end-of-project screen, not just the log.
+    assert result["summary"]["evidence_executed"] == 0
+    assert result["summary"]["evidence_structural"] == 3
+
+
+def test_a_program_observed_running_is_reported_as_executed():
+    store = _store()
+    project = store.create(_run_project("project-ran"))
+    result = asyncio.run(evaluate_next(store, FakeExecutor(), project))
+    assert result["advanced"][0]["evidence"] == "executed"
+    assert "the program ran" in result["feedback"]
+
+
+def test_a_run_the_sandbox_could_not_carry_out_is_never_called_a_pass():
+    store = _store()
+    project = store.create(_run_project("project-unverified"))
+    result = asyncio.run(evaluate_next(store, _MissingDependencyExecutor(), project))
+    # The learner still finishes the checklist - the gap is the environment's -
+    assert result["status"] == "project_complete"
+    assert result["advanced"][0]["evidence"] == "unverified"
+    # ... but the sentence now refuses to claim the program was shown to work.
+    assert "never seen to run" in result["feedback"]
+    assert result["summary"]["evidence_unverified"] == 1
+
+
+def test_the_record_keeps_what_a_step_proved_across_a_reload():
+    """The weaker claim has to survive, because the gate never revisits a finished step.
+
+    `evaluate_next` moves the pointer forward and does not re-read a completed milestone,
+    so whatever a step proved when it passed is what the project will report forever -
+    including after a restart. That is the honest consequence of not re-testing steps
+    nobody asked to re-test, and it is why the label has to be right the first time.
+    """
+    tmp = tempfile.mkdtemp(prefix="pwproj_ev_")
+    store = ProjectStore(storage_dir=Path(tmp))
+    project = store.create(_run_project("project-evidence-reload"))
+    asyncio.run(evaluate_next(store, _MissingDependencyExecutor(), project))
+    assert project.milestone_progress["m1"].evidence == "unverified"
+    reloaded = ProjectStore(storage_dir=Path(tmp)).get("project-evidence-reload")
+    assert reloaded.milestone_progress["m1"].evidence == "unverified"
+    assert reloaded.completed is True

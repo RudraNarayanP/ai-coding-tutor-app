@@ -58,6 +58,9 @@ export type CheckResult = {
   description: string
   passed: boolean
   detail: string
+  /** False when the check let the learner through because the sandbox could not test
+   *  the claim - a missing dependency - rather than because the claim held. */
+  verified?: boolean
 }
 
 /** What the learner actually did, returned when the last milestone passes. */
@@ -70,6 +73,12 @@ export type ProjectLearningSummary = {
   files_changed: number
   tech_stack: string[]
   steps_overdue_for_review: number
+  /** How many finished steps had their program actually run, how many were checked
+   *  against the code's shape only, and how many the sandbox could not run at all.
+   *  Absent on projects stored before the grader distinguished the three. */
+  evidence_executed?: number
+  evidence_structural?: number
+  evidence_unverified?: number
 }
 
 export type NextResult = {
