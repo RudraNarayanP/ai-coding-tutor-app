@@ -187,3 +187,90 @@ def test_missing_external_dependency_is_tolerated_honestly():
     passed, results, _, _ = _eval(project, ms)
     assert passed is True
     assert "langchain" in results[0].detail
+
+
+# ─── symbol_in_file: the same name, in the file the step asked for ───────────
+#
+# A repository course is organised by *where a name lives*, which is the lesson:
+# micrograd's `Value` belongs in `engine.py` and its `Neuron` in `nn.py`. The plain
+# `symbol` check asks "did you write this anywhere", so defining `Value` in the entry
+# file satisfied the milestone about a different file. These tests pin the scoped
+# behaviour in both directions, because a check that only ever fails tells nothing.
+
+def _scoped(target: str, path: str) -> Milestone:
+    return Milestone(
+        id="m", order=1, title=f"Define {target}",
+        checks=[VerificationCheck(kind="symbol_in_file", target=target, path=path)],
+    )
+
+
+def test_a_symbol_in_the_wrong_file_does_not_satisfy_the_check():
+    project = _project([
+        WorkspaceFile(path="engine.py", content="class Value:\n    pass\n"),
+        WorkspaceFile(path="nn.py", content="x = 1\n"),
+    ])
+    passed, results, _, _ = _eval(project, _scoped("Value", "nn.py"))
+    assert passed is False
+    assert "nn.py" in results[0].detail
+
+
+def test_the_same_symbol_in_the_named_file_does_satisfy_it():
+    project = _project([
+        WorkspaceFile(path="engine.py", content="class Value:\n    pass\n"),
+        WorkspaceFile(path="nn.py", content="class Value:\n    pass\n"),
+    ])
+    passed, *_ = _eval(project, _scoped("Value", "nn.py"))
+    assert passed is True
+
+
+def test_a_missing_file_is_named_as_the_missing_thing():
+    project = _project([WorkspaceFile(path="main.py", content="class Value:\n    pass\n")])
+    passed, results, _, _ = _eval(project, _scoped("Value", "nn.py"))
+    assert passed is False
+    assert "nn.py" in results[0].detail
+
+
+def test_mentioning_the_name_in_a_comment_or_string_is_not_defining_it():
+    """AST, not text search — the difference between a check and a grep."""
+    project = _project([
+        WorkspaceFile(path="nn.py", content="# TODO: class Value goes here\n"
+                                           "note = 'define Value in engine.py'\n"),
+    ])
+    passed, *_ = _eval(project, _scoped("Value", "nn.py"))
+    assert passed is False
+
+
+def test_a_broken_other_file_does_not_mask_this_one():
+    """Scoping means the check answers its own question and no one else's.
+
+    The workspace-wide `symbol` check fails outright when any file has a syntax error.
+    That is right for a single-file project and wrong here: the step asks about
+    `engine.py`, which is fine, and the milestone that *runs* the project is where a
+    broken `nn.py` has to be caught.
+    """
+    project = _project([
+        WorkspaceFile(path="engine.py", content="class Value:\n    pass\n"),
+        WorkspaceFile(path="nn.py", content="def broken(:\n"),
+    ])
+    assert _eval(project, _scoped("Value", "engine.py"))[0] is True
+    assert _eval(project, _scoped("Value", "nn.py"))[0] is False
+
+
+def test_a_scoped_check_with_no_path_fails_rather_than_loosening():
+    """Silently degrading to "defined anywhere" is the bug the kind exists to remove."""
+    project = _project([WorkspaceFile(path="main.py", content="class Value:\n    pass\n")])
+    milestone = Milestone(
+        id="m", order=1, title="Define Value",
+        checks=[VerificationCheck(kind="symbol_in_file", target="Value", path="")],
+    )
+    assert _eval(project, milestone)[0] is False
+
+
+def test_an_unscoped_symbol_check_still_accepts_any_file():
+    """Non-GitHub projects keep their old behaviour — the scoping is opt-in per check."""
+    project = _project([WorkspaceFile(path="elsewhere.py", content="def count_words():\n    return 1\n")])
+    milestone = Milestone(
+        id="m", order=1, title="Define count_words",
+        checks=[VerificationCheck(kind="symbol", target="count_words")],
+    )
+    assert _eval(project, milestone)[0] is True

@@ -1171,7 +1171,7 @@ def filter_invalid_milestones(milestones: list[Milestone]) -> list[Milestone]:
             continue
         if is_dangling_or_document_task(m.title) or is_generic_bare_task(m.title):
             continue
-        if kind in {"import", "symbol", "function_call"} and target and len(target) >= 2:
+        if kind in {"import", "symbol", "symbol_in_file", "function_call"} and target and len(target) >= 2:
             kept.append(m)
             continue
         blob = f"{m.title} {m.microstep.action} {m.source_quote}"

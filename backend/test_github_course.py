@@ -20,7 +20,7 @@ import pytest
 
 from backend import github_fetch as gh, repo_planner as rp
 from backend.project_models import WorkspaceFile
-from backend.project_planner import ProjectGroundingError, plan_project
+from backend.project_planner import ProjectGroundingError, plan_project, validate_project
 from backend.project_service import require_usable_project
 from backend.project_verifier import evaluate_milestone
 from backend.source_ingestion import IngestionError, SourceDocument, SourceIngestionService
@@ -187,9 +187,40 @@ def test_the_real_package_plans_and_survives_load(real_course) -> None:
     assert 2 < len(real_course.milestones) <= 9
     assert real_course.source_type == "github_repo"
     require_usable_project(real_course)                  # the same rule the Resume list applies
+    validate_project(real_course)                        # the rule only creation applies
     kinds = {check.kind for m in real_course.milestones for check in m.checks}
-    assert kinds <= {"symbol", "file_exists", "run_ok"}, kinds
+    assert kinds <= {"symbol_in_file", "file_exists", "run_ok"}, kinds
     assert real_course.milestones[-1].checks[0].kind == "run_ok"
+
+
+def test_a_repository_check_names_the_file_it_scopes_to(real_course) -> None:
+    """Every scoped check must carry its path, or it silently stops being scoped."""
+    for milestone in real_course.milestones:
+        path = next((c.target for c in milestone.checks if c.kind == "file_exists"), "")
+        for check in milestone.checks:
+            if check.kind == "symbol_in_file":
+                assert check.path == path, f"{milestone.title}: {check.path} != {path}"
+
+
+def test_the_wrong_file_does_not_earn_a_milestone(real_course) -> None:
+    """The whole point of scoping, on real code: `Value` in the wrong file is a miss.
+
+    The wrong-file workspace still contains the *required file* (empty), so the only
+    thing failing is the scoping itself — otherwise `file_exists` would fail alongside
+    and the test would pass for the wrong reason. Asserted in both directions because
+    a check that can only fail proves nothing.
+    """
+    milestone = next(m for m in real_course.milestones
+                     if m.checks[0].kind == "symbol_in_file"
+                     and m.checks[0].path != real_course.entry_file)
+    scoped = [c for c in milestone.checks if c.kind == "symbol_in_file"]
+    home = scoped[0].path
+    body = "".join(f"class {c.target}:\n    pass\n" for c in scoped)
+    elsewhere = [WorkspaceFile(path=home, content="# not written yet\n"),
+                 WorkspaceFile(path=real_course.entry_file, content=body)]
+    in_place = [WorkspaceFile(path=home, content=body)]
+    assert asyncio.run(evaluate_milestone(None, real_course, milestone, elsewhere))[0] is False
+    assert asyncio.run(evaluate_milestone(None, real_course, milestone, in_place))[0] is True
 
 
 def test_every_milestone_is_decidable_on_the_real_file_and_not_on_the_starter(

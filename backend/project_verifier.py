@@ -59,26 +59,42 @@ def _imported_modules(trees: list[ast.AST]) -> set[str]:
     return modules
 
 
-def _defined_symbols(trees: list[ast.AST]) -> set[str]:
+def _names_in_tree(tree: ast.AST) -> set[str]:
     names: set[str] = set()
-    for tree in trees:
-        for node in ast.walk(tree):
-            if isinstance(node, (ast.FunctionDef, ast.AsyncFunctionDef, ast.ClassDef)):
-                names.add(node.name)
-            elif isinstance(node, ast.Assign):
-                for tgt in node.targets:
-                    if isinstance(tgt, ast.Name):
-                        names.add(tgt.id)
-                    elif isinstance(tgt, (ast.Tuple, ast.List)):
-                        for elt in tgt.elts:
-                            if isinstance(elt, ast.Name):
-                                names.add(elt.id)
-            elif isinstance(node, ast.AnnAssign) and isinstance(node.target, ast.Name):
-                names.add(node.target.id)
-            elif isinstance(node, (ast.Import, ast.ImportFrom)):
-                for alias in node.names:
-                    names.add(alias.asname or alias.name.split(".")[0])
+    for node in ast.walk(tree):
+        if isinstance(node, (ast.FunctionDef, ast.AsyncFunctionDef, ast.ClassDef)):
+            names.add(node.name)
+        elif isinstance(node, ast.Assign):
+            for tgt in node.targets:
+                if isinstance(tgt, ast.Name):
+                    names.add(tgt.id)
+                elif isinstance(tgt, (ast.Tuple, ast.List)):
+                    for elt in tgt.elts:
+                        if isinstance(elt, ast.Name):
+                            names.add(elt.id)
+        elif isinstance(node, ast.AnnAssign) and isinstance(node.target, ast.Name):
+            names.add(node.target.id)
+        elif isinstance(node, (ast.Import, ast.ImportFrom)):
+            for alias in node.names:
+                names.add(alias.asname or alias.name.split(".")[0])
     return names
+
+
+def _defined_symbols(trees: list[ast.AST]) -> set[str]:
+    return {name for tree in trees for name in _names_in_tree(tree)}
+
+
+def _defined_in_file(files: list[WorkspaceFile], path: str) -> tuple[set[str], str | None]:
+    """The names one file defines, or the reason it has none that can be trusted."""
+    for file in files:
+        if file.path != path:
+            continue
+        try:
+            tree = ast.parse(file.content, filename=path)
+        except SyntaxError as exc:
+            return set(), f"SyntaxError in {path}: {exc.msg} (line {exc.lineno})"
+        return _names_in_tree(tree), None
+    return set(), None
 
 
 def _called_names(trees: list[ast.AST]) -> set[str]:
@@ -316,6 +332,22 @@ async def _evaluate_check(
     if kind == "file_exists":
         exists = any(f.path == check.target for f in files)
         return exists, ("" if exists else f"Add a file named `{check.target}`.")
+
+    if kind == "symbol_in_file":
+        # Path-scoped on purpose. `symbol` asks "did the learner write this anywhere",
+        # which is right for a transcript that says "define count_words" and wrong for a
+        # repository, where the whole lesson is *which file* a name belongs in: without
+        # this, dropping `Value` into the entry file passes the `nn.py` milestone.
+        path = check.path or ""
+        if not path:
+            return False, "This milestone names no file to check — that is a bug, not a step."
+        if not any(f.path == path for f in files):
+            return False, f"Add a file named `{path}`."
+        names, error = _defined_in_file(files, path)
+        if error:
+            return False, error
+        ok = check.target in names
+        return ok, ("" if ok else f"`{check.target}` isn't defined in `{path}` yet.")
 
     # Structural checks require parseable code.
     if kind in ("import", "symbol", "function_call") and syntax_error:

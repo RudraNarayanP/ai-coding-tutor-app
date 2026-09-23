@@ -322,8 +322,9 @@ def scrub_learner_fields(milestone: Milestone) -> Milestone:
     stored courses cannot keep dumping YouTube speech into the lesson pane.
     """
     kind, tgt = _kind_target_from_milestone(milestone)
-    safe_action = _action_for(kind, tgt, milestone.title)
-    safe_obs = _observation_for(kind, tgt, milestone.title)
+    path = milestone.checks[0].path if milestone.checks else ""
+    safe_action = _action_for(kind, tgt, milestone.title, path)
+    safe_obs = _observation_for(kind, tgt, milestone.title, path)
     if looks_like_raw_transcript(milestone.microstep.action) or len(milestone.microstep.action.split()) > 28:
         milestone.microstep.action = safe_action
     if looks_like_raw_transcript(milestone.microstep.observation) or len(milestone.microstep.observation.split()) > 28:
@@ -356,12 +357,14 @@ def _synthesize_project_goal(title: str, tech_stack: list[str]) -> str:
     return f"Build “{name}” step by step, following the source tutorial."
 
 
-def _action_for(kind: str, target: str, title: str = "") -> str:
+def _action_for(kind: str, target: str, title: str = "", path: str = "") -> str:
     """Concise, imperative learner task — never raw source dialogue."""
     if kind == "import":
         return f"Add `import {target}` (or `from {target} import ...`) to your code."
     if kind == "symbol":
         return f"Define `{target}` in your workspace."
+    if kind == "symbol_in_file":
+        return f"Define `{target}` in `{path}`." if path else f"Define `{target}`."
     if kind == "function_call":
         return f"Call `{target}(...)` in your code."
     if kind == "stdout_contains":
@@ -374,12 +377,15 @@ def _action_for(kind: str, target: str, title: str = "") -> str:
     return title or "Complete this step in your code."
 
 
-def _observation_for(kind: str, target: str, title: str) -> str:
+def _observation_for(kind: str, target: str, title: str, path: str = "") -> str:
     """One short sentence — what this milestone is about."""
     if kind == "import":
         return f"This step brings in `{target}` from the tutorial."
     if kind == "symbol":
         return f"Here you define `{target}` — a core piece of the project."
+    if kind == "symbol_in_file":
+        return (f"`{path}` is where `{target}` belongs." if path
+                else f"Here you define `{target}`.")
     if kind == "function_call":
         return f"Wire up `{target}` so the project actually runs this logic."
     if kind == "stdout_contains":
@@ -1662,8 +1668,8 @@ def plan_repository(doc: SourceDocument, title: str, course_id: str) -> ProjectC
             reason = "Nothing in the project is underneath this file: it is where the build starts."
         checks = [
             VerificationCheck(
-                kind="symbol", target=name,
-                description=f"`{name}` is defined somewhere in the code you write.",
+                kind="symbol_in_file", target=name, path=facts.path,
+                description=f"`{name}` is defined in `{facts.path}`.",
             )
             for name in names
         ] + [
@@ -1901,7 +1907,8 @@ def validate_project(project: ProjectCourse) -> None:
     """Reject courses with transcript leaks, duplicate titles, or hollow milestones."""
     coding = [
         m for m in project.milestones
-        if m.checks and m.checks[0].kind in ("import", "symbol", "function_call", "code_contains")
+        if m.checks and m.checks[0].kind
+        in ("import", "symbol", "symbol_in_file", "function_call", "code_contains")
     ]
     if len(coding) < 2:
         raise ProjectGroundingError(
@@ -1947,7 +1954,9 @@ def validate_project(project: ProjectCourse) -> None:
 #: about it. A tutorial that says "run it and see" after each function is a normal
 #: build-along; refusing two `run_ok` milestones was the first draft of this rule,
 #: and it rejected a good project.
-SUBSTANTIVE_CHECK_KINDS = frozenset({"import", "symbol", "function_call", "code_contains"})
+SUBSTANTIVE_CHECK_KINDS = frozenset(
+    {"import", "symbol", "symbol_in_file", "function_call", "code_contains"}
+)
 
 
 def usability_problem(project: ProjectCourse) -> str | None:
@@ -1969,7 +1978,7 @@ def usability_problem(project: ProjectCourse) -> str | None:
         target = (check.target or "").strip().lower()
         if check.kind not in SUBSTANTIVE_CHECK_KINDS or not target:
             continue
-        key = (check.kind, target)
+        key = (check.kind, target, check.path.strip().lower())
         if key in keys:
             return (
                 f"`{m.title}` verifies the same thing as `{keys[key]}` "

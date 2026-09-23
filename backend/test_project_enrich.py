@@ -159,3 +159,55 @@ def test_llm_fails_closed_when_provider_errors():
 def test_llm_can_reject_a_planned_course_outline():
     with pytest.raises(ProjectGroundingError):
         asyncio.run(assess_planned_course(RejectProvider(), _project()))
+
+
+def test_a_teach_that_fits_the_character_limit_is_still_refused():
+    """Two rules share the name `looks_like_raw_transcript` and they do not agree.
+
+    `project_copy`'s measures characters; the one `validate_project` applies counts words
+    and flags anything over 28. So a 202-character teaching block of 31 words passed the
+    enrichment guard, landed on the milestone, and then rejected the *whole course* at
+    creation with "still contains raw transcript speech" — a message that blames the
+    learner's source for a fault in the app's own copy. Measured on karpathy/micrograd
+    before the fix: 2 of 8 real builds failed this way, on any source type.
+
+    The refusal drops the whole item, which is the contract this function already had
+    for the character rule; the deterministic copy stays.
+    """
+    from backend.project_enrich import _apply_items
+    from backend.project_planner import validate_project
+
+    long_teach = (
+        "Value wraps a scalar with its gradient and a backward function, forming the "
+        "building block of automatic differentiation. Every operation on it records a "
+        "computation graph so gradients can flow backward."
+    )
+    assert len(long_teach.split()) > 28, "the point of this case is a short-but-wordy block"
+    assert len(long_teach) < 280
+
+    project = _project()
+    applied = _apply_items(project, {2: {
+        "hook": "How the module gets built",
+        "observation": "You define the module class.",
+        "action": "Define nn.Module in main.py.",
+        "teach": long_teach,
+    }})
+
+    milestone = project.milestones[1]
+    assert applied == 0
+    assert milestone.teach == "" and milestone.hook == ""
+    assert milestone.microstep.action == "Build this part"   # deterministic copy survives
+    validate_project(project)                                # the build still goes through
+
+
+def test_a_teach_within_both_rules_is_still_applied():
+    """The guard must not simply turn enrichment off."""
+    from backend.project_enrich import _apply_items
+
+    project = _project()
+    applied = _apply_items(project, {2: {
+        "hook": "How the module gets built",
+        "teach": "Value holds a number and its gradient, so every operation can be undone later.",
+    }})
+    assert applied == 1
+    assert project.milestones[1].teach.startswith("Value holds")

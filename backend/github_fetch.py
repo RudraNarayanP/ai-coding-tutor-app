@@ -50,7 +50,8 @@ UNKNOWN_LICENSES = {"", "NOASSERTION", "OTHER", "NONE"}
 _URL = re.compile(
     r"^(?:https?://(?:www\.)?github\.com/|git@github\.com:)"
     r"(?P<owner>[A-Za-z0-9._-]+)/(?P<repo>[A-Za-z0-9._-]+)"
-    r"(?:\.git)?(?:/(?P<kind>tree|blob|releases)/(?P<ref>[^/?#]+))?(?:[?#].*)?$"
+    r"(?:\.git)?(?:/(?P<kind>tree|blob|releases)/(?P<ref>[^/?#]+)(?P<tail>[^?#]*))?"
+    r"(?:[?#].*)?$"
 )
 _SHORT = re.compile(r"^(?P<owner>[A-Za-z0-9._-]+)/(?P<repo>[A-Za-z0-9._-]+)$")
 #: Directories that hold no lesson: tests, packaging, generated output, docs.

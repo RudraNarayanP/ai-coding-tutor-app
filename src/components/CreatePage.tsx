@@ -46,7 +46,7 @@ function gateFromError(err: unknown): GateFeedback {
 
 export const CreatePage: React.FC<CreatePageProps> = () => {
   const [step, setStep] = useState<CreateStep>('input')
-  const [materialType, setMaterialType] = useState<'youtube_url' | 'youtube_playlist' | 'transcript' | 'file_upload'>('youtube_url')
+  const [materialType, setMaterialType] = useState<'youtube_url' | 'youtube_playlist' | 'transcript' | 'file_upload' | 'github_repo'>('youtube_url')
   const [inputContent, setInputContent] = useState('')
   const [courseTitle, setCourseTitle] = useState('')
 
@@ -273,6 +273,7 @@ export const CreatePage: React.FC<CreatePageProps> = () => {
         <div style={{ display: 'flex', gap: '8px', marginBottom: '20px' }}>
           {[
             { type: 'youtube_url', label: 'YouTube URL / Playlist' },
+            { type: 'github_repo', label: 'GitHub Repository' },
             { type: 'transcript', label: 'Paste Transcript / Notes' },
             { type: 'file_upload', label: 'Upload File' },
           ].map(({ type, label }) => (
@@ -303,12 +304,18 @@ export const CreatePage: React.FC<CreatePageProps> = () => {
 
           <div>
             <label style={{ display: 'block', fontWeight: 800, fontSize: '13px', marginBottom: '6px' }}>
-              {materialType === 'youtube_url' ? 'YouTube Video or Playlist URL:' : 'Source Content / Transcript:'}
+              {materialType === 'youtube_url'
+                ? 'YouTube Video or Playlist URL:'
+                : materialType === 'github_repo'
+                  ? 'GitHub Repository URL:'
+                  : 'Source Content / Transcript:'}
             </label>
-            {materialType === 'youtube_url' ? (
+            {materialType === 'youtube_url' || materialType === 'github_repo' ? (
               <input
                 type="text"
-                placeholder="https://www.youtube.com/watch?v=... or playlist URL"
+                placeholder={materialType === 'github_repo'
+                  ? 'https://github.com/owner/repo'
+                  : 'https://www.youtube.com/watch?v=... or playlist URL'}
                 value={inputContent}
                 onChange={(e) => setInputContent(e.target.value)}
                 style={{ width: '100%', padding: '12px', borderRadius: '10px', border: '2px solid var(--line)', fontWeight: 700 }}
@@ -321,6 +328,13 @@ export const CreatePage: React.FC<CreatePageProps> = () => {
                 onChange={(e) => setInputContent(e.target.value)}
                 style={{ width: '100%', padding: '12px', borderRadius: '10px', border: '2px solid var(--line)', fontWeight: 700, fontFamily: 'inherit' }}
               />
+            )}
+            {materialType === 'github_repo' && (
+              <p style={{ fontSize: '12px', fontWeight: 700, color: 'var(--ink-soft)', margin: '8px 0 0' }}>
+                You rebuild the project yourself, file by file, in the order its own imports
+                require. Public repositories with a license only — no code is copied into your
+                workspace.
+              </p>
             )}
           </div>
         </div>

@@ -277,3 +277,78 @@ describe('CreatePage Component', () => {
     expect(screen.getByRole('button', { name: 'Delete Intro to Large Language Models' })).toBeEnabled()
   })
 })
+
+// ─── GitHub repositories as a guided-project source ──────────────────────────
+//
+// The contract worth pinning at the UI layer is the *request*: the tab must send
+// material_type "github_repo" with the URL as content, because every quality
+// decision (license, size, whether a build order exists) is made on the server from
+// that pair. A silently-wrong material_type would look identical in the browser.
+
+describe('CreatePage with a GitHub repository source', () => {
+  beforeEach(() => {
+    vi.clearAllMocks()
+    vi.mocked(projectApi.list).mockResolvedValue([])
+  })
+
+  it('offers GitHub and swaps the field to a repository URL', () => {
+    render(<CreatePage />)
+    fireEvent.click(screen.getByText('GitHub Repository'))
+
+    expect(screen.getByPlaceholderText('https://github.com/owner/repo')).toBeInTheDocument()
+    expect(screen.queryByPlaceholderText(/Paste raw transcript/)).toBeNull()
+    expect(screen.getByText(/Public repositories with a license only/)).toBeInTheDocument()
+  })
+
+  it('sends the repository URL as material_type github_repo', async () => {
+    vi.mocked(projectApi.create).mockResolvedValue({
+      course_id: 'project-repo', title: 'karpathy/micrograd', language: 'python',
+      source_type: 'github_repo', source_url: 'https://github.com/karpathy/micrograd',
+      project_goal: 'Rebuild karpathy/micrograd module by module', entry_file: 'micrograd/nn.py',
+      milestones: [], workspace_files: [{ path: 'micrograd/nn.py', content: '#' }],
+      current_milestone_index: 0, completed_milestone_ids: [], xp: 0, completed: false,
+      completion_percent: 0, files_changed: 0,
+    } as unknown as Awaited<ReturnType<typeof projectApi.create>>)
+    vi.mocked(projectApi.get).mockResolvedValue({
+      course_id: 'project-repo', title: 'karpathy/micrograd', language: 'python',
+      source_type: 'github_repo', project_goal: 'Rebuild it', entry_file: 'micrograd/nn.py',
+      milestones: [], workspace_files: [{ path: 'micrograd/nn.py', content: '#' }],
+      current_milestone_index: 0, completed_milestone_ids: [], xp: 0, completed: false,
+      completion_percent: 0, files_changed: 0,
+    } as unknown as Awaited<ReturnType<typeof projectApi.get>>)
+
+    render(<CreatePage />)
+    fireEvent.click(screen.getByText('GitHub Repository'))
+    fireEvent.change(screen.getByPlaceholderText('https://github.com/owner/repo'), {
+      target: { value: 'https://github.com/karpathy/micrograd' },
+    })
+    fireEvent.click(screen.getByText('Build Guided Project 🛠️'))
+
+    await waitFor(() => expect(projectApi.create).toHaveBeenCalled())
+    expect(projectApi.create).toHaveBeenCalledWith(
+      { material_type: 'github_repo', content: 'https://github.com/karpathy/micrograd', title: '' },
+      expect.objectContaining({ signal: expect.any(AbortSignal) }),
+    )
+  })
+
+  it('reports a repository the license gate refused, without inventing a course', async () => {
+    vi.mocked(projectApi.create).mockRejectedValue(
+      new CreateCourseError(
+        "Can't build a course from a/b: it publishes no license, so nothing about its "
+        + 'source is granted to us — not even having the app read its structure and describe it.',
+        { errorCode: 'ingestion_failed', decision: 'insufficient' },
+      ),
+    )
+
+    render(<CreatePage />)
+    fireEvent.click(screen.getByText('GitHub Repository'))
+    fireEvent.change(screen.getByPlaceholderText('https://github.com/owner/repo'), {
+      target: { value: 'https://github.com/a/b' },
+    })
+    fireEvent.click(screen.getByText('Build Guided Project 🛠️'))
+
+    const gate = await screen.findByTestId('create-source-gate')
+    expect(gate).toHaveTextContent(/no license/i)
+    expect(screen.queryByLabelText('Guided project workspace')).toBeNull()
+  })
+})

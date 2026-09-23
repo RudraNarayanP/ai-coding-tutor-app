@@ -25,6 +25,7 @@ from pydantic import BaseModel, Field
 VERIFICATION_KINDS = (
     "import",           # source imports a module (AST)
     "symbol",           # a top-level function/class/variable is defined (AST)
+    "symbol_in_file",   # ... and it is defined in `path`, not merely somewhere (AST)
     "function_call",    # a given function/method is called anywhere (AST)
     "code_contains",    # the workspace code references a token/pattern (grounded, concept-level)
     "run_ok",           # the entry file runs without raising (sandbox)
@@ -34,10 +35,18 @@ VERIFICATION_KINDS = (
 
 
 class VerificationCheck(BaseModel):
-    kind: str = Field(pattern=r"^(import|symbol|function_call|code_contains|run_ok|stdout_contains|file_exists)$")
+    kind: str = Field(
+        pattern=r"^(import|symbol|symbol_in_file|function_call|code_contains|run_ok|"
+                r"stdout_contains|file_exists)$"
+    )
     # For code_contains, target may be a "|"-separated list of acceptable tokens.
     target: str = Field(default="", max_length=400)
     description: str = Field(default="", max_length=280)
+    # The file a `symbol_in_file` check is scoped to. Empty for every other kind,
+    # and the verifier refuses to treat a scoped check with no path as satisfied —
+    # silently falling back to "defined somewhere" is exactly the looseness the
+    # field exists to remove.
+    path: str = Field(default="", max_length=200)
 
 
 class Microstep(BaseModel):

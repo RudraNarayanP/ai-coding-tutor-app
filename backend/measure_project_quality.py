@@ -371,7 +371,7 @@ from backend.project_planner import (  # noqa: E402
 from backend.source_ingestion import SourceDocument  # noqa: E402
 from backend.source_quality import evaluate_ingestion, evaluate_source  # noqa: E402
 
-IDENT_KINDS = frozenset({"import", "symbol", "function_call"})
+IDENT_KINDS = frozenset({"import", "symbol", "symbol_in_file", "function_call"})
 LABELS = ("good", "poor", "unknown")
 
 
@@ -823,7 +823,7 @@ def composition_report(sources: list[Source]) -> None:
             check = m.checks[0] if m.checks else None
             if not check:
                 continue
-            if check.kind == "symbol" and check.target:
+            if check.kind in ("symbol", "symbol_in_file") and check.target:
                 lines.append(f"def {check.target}(*args, **kwargs):\n    return None")
             elif check.kind == "function_call" and check.target:
                 lines.append(f"def {check.target}(*args, **kwargs):\n    return None")
@@ -855,7 +855,8 @@ def composition_report(sources: list[Source]) -> None:
             kinds = {c.kind for c in milestone.checks or []}
             # `run_ok` needs the sandbox, which this harness never starts; it is the
             # one check that could force composition, and it is reported as untested.
-            if not kinds & {"import", "symbol", "function_call", "code_contains", "file_exists"}:
+            if not kinds & {"import", "symbol", "symbol_in_file", "function_call",
+                              "code_contains", "file_exists"}:
                 continue
             total += 1
             # `evaluate_milestone` answers a 4-tuple. Unpacking it is not optional:
@@ -933,7 +934,8 @@ def artifact_role_report(sources: list[Source]) -> None:
             continue
         projects += 1
         named = [m.checks[0].target for m in project.milestones
-                 if m.checks and m.checks[0].kind in {"symbol", "function_call"} and m.checks[0].target]
+                 if m.checks and m.checks[0].kind in {"symbol", "symbol_in_file", "function_call"}
+                 and m.checks[0].target]
         flagged = [n for n in named if n in project_planner.scaffolding_names(source.doc.plain_text or "")]
         deliverables += len(named) - len(flagged)
         harness += len(flagged)

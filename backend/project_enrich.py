@@ -14,7 +14,15 @@ import re
 
 from .project_copy import looks_like_raw_transcript, polish_project_copy
 from .project_models import ProjectCourse
-from .project_planner import ProjectGroundingError
+from .project_planner import (
+    ProjectGroundingError,
+    # The same name means two different tests in this package: `project_copy`'s
+    # measures characters, while the one `validate_project` applies counts words (>28)
+    # and commas. Copy that satisfies only the first is written here and then rejects
+    # the whole course at creation — measured at 2 of 8 real builds of karpathy/micrograd,
+    # on every source type. Under this alias so the call sites say which rule they mean.
+    looks_like_raw_transcript as validator_rejects,
+)
 from .source_ingestion import SourceDocument
 
 logger = logging.getLogger("patchwork.project_enrich")
@@ -258,8 +266,10 @@ def _apply_items(project: ProjectCourse, data: dict[int, dict]) -> int:
         teach = _sanitize(str(val.get("teach", "")), 1200)
         example = _sanitize(str(val.get("example", "")), 1200)
         celebrate = _sanitize(str(val.get("celebrate", "")), 200)
-        # Refuse caption dumps the model echoed from source text.
-        if looks_like_raw_transcript(teach) or looks_like_raw_transcript(hook):
+        # Refuse caption dumps the model echoed from source text — and anything the
+        # validator would reject later, which is a wider net (see the import above).
+        if (looks_like_raw_transcript(teach) or looks_like_raw_transcript(hook)
+                or validator_rejects(teach) or validator_rejects(hook)):
             continue
         if not (hook or observation or action or teach):
             continue
@@ -271,7 +281,7 @@ def _apply_items(project: ProjectCourse, data: dict[int, dict]) -> int:
             m.example = example
         if celebrate:
             m.celebrate = celebrate
-        if observation and not looks_like_raw_transcript(observation) and len(observation.split()) <= 28:
+        if observation and not validator_rejects(observation) and len(observation.split()) <= 28:
             m.microstep.observation = observation
         elif hook and not looks_like_raw_transcript(hook):
             m.microstep.observation = hook
@@ -279,7 +289,7 @@ def _apply_items(project: ProjectCourse, data: dict[int, dict]) -> int:
             action
             and len(action) >= 8
             and len(action.split()) <= 25
-            and not looks_like_raw_transcript(action)
+            and not validator_rejects(action)
         ):
             m.microstep.action = action
         applied += 1

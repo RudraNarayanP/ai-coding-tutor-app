@@ -310,7 +310,8 @@ def project_composition(
     artifacts: list[str] = []
     for milestone in milestones:
         check = milestone.checks[0] if milestone.checks else None
-        if check and check.kind in {"import", "symbol", "function_call"} and check.target:
+        if check and check.kind in {"import", "symbol", "symbol_in_file", "function_call"} \
+                and check.target:
             artifacts.append(check.target)
     position = {name: i for i, name in enumerate(artifacts)}
     bodies = definition_bodies(blocks)
