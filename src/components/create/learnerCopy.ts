@@ -44,7 +44,7 @@ export function completionClaim(
     return `You finished every step of ${name}, but it never ran here — the practice sandbox is missing a dependency it needs, so nothing has checked that it works.`
   }
   if ((executed ?? 0) > 0) {
-    return `You built ${name} end-to-end, and the program ran.`
+    return `You built ${name} end-to-end, and the program ran — which is what the checks could reach. No test of the real project ran against your code, so that it behaves the same way is unverified.`
   }
   return `You wrote every file ${name} asks for. Every step was checked against your code's shape — that the files, names and imports are there — and nothing here ran the program.`
 }

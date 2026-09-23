@@ -42,8 +42,12 @@ describe('completionClaim', () => {
   // workspace of `class Value: pass` files earned that sentence. The grader now records
   // whether a step watched the program run, read only its shape, or could not run it.
   it('claims only that the program ran when a step executed', () => {
-    expect(completionClaim({ evidence_executed: 1, evidence_structural: 3 }, 'Micrograd'))
-      .toMatch(/built .Micrograd. end-to-end, and the program ran/)
+    const claim = completionClaim({ evidence_executed: 1, evidence_structural: 3 }, 'Micrograd')
+    expect(claim).toMatch(/built .Micrograd. end-to-end, and the program ran/)
+    // EXECUTED must never be worded as correctness: no upstream test of the real project
+    // can run in the grading image, so a program that runs and computes the wrong thing
+    // earns exactly this sentence.
+    expect(claim).toMatch(/behaves the same way is unverified/)
   })
 
   it('says so when nothing was ever executed', () => {

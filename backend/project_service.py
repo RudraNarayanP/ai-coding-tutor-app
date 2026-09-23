@@ -251,6 +251,16 @@ def completion_feedback(project: ProjectCourse) -> str:
     the same claim as the program working, and the two come apart completely when the
     offline sandbox cannot install the dependency the program needs. So the sentence is
     derived from the evidence each step recorded rather than asserted.
+
+    The closing clause is the boundary the corpus measured, and it is here because
+    "it ran" invites the learner to infer the rest. A guided project has no behavioural
+    oracle at all: across 13 checkouts, 418 upstream test files - 6,455 test functions,
+    272 of them naming a module a course selects - cannot execute in the grading image,
+    which is `python:3.12-slim` with no network, so `pytest`, `torch`, `anyio` and
+    `markupsafe` are simply absent, and 10 of the 12 oracle payloads that could be
+    assembled at all also exceed the sandbox's 64 KiB ceiling. A program that runs and
+    computes the wrong thing therefore passes. See
+    `backend/oracle_feasibility.py`.
     """
     kinds = [(project.milestone_progress.get(m.id) or MilestoneProgress(milestone_id=m.id)).evidence
              for m in project.milestones]
@@ -261,8 +271,9 @@ def completion_feedback(project: ProjectCourse) -> str:
                 "practice sandbox is missing a dependency it needs. Nothing here has "
                 "checked that your project works.")
     if ran:
-        return ("Project complete, and the program ran: the last step executed the files "
-                "you wrote.")
+        return ("Project complete, and the program ran - which is all this app checked. No "
+                "test of the real project ran against your code, so whether it behaves the "
+                "same way has not been verified.")
     return ("Project complete. Every step was checked against your code's shape - that "
             "the files, names and imports are there. Nothing here ran the program, so "
             "that it works is not something this app has verified.")

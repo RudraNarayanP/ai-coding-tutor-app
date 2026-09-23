@@ -46,11 +46,33 @@ RUNTIME_CHECK_KINDS = frozenset({"run_ok", "stdout_contains"})
 def evidence_of(milestone: Milestone, results: list[ProjectCheckResult]) -> str:
     """What a set of passed checks actually established, for the completion record.
 
-    Everything the grader can decide without running the code - a path exists, a name is
-    declared in it, an import line is there - is *structural*: true, cheap, and silent
-    about whether the thing works. Only a run says the program executed, and a run the
-    sandbox could not carry out says nothing at all, so it gets its own state rather than
-    borrowing the word "passed".
+    The states are deliberately not collapsed into the boolean. `passed` answers "may this
+    learner continue"; this answers "what did we just learn", and a project's ending is
+    derived from the answer rather than asserted. Six are meaningful for a graded program;
+    what this function produces today is marked, and `FAILED` belongs to the caller:
+
+      STRUCTURAL (produced)   a name exists where it was required to exist - a file, a
+                              declaration in that file, an import line between two of
+                              them. Decided from syntax; learner code never runs.
+      WIRED      (produced as STRUCTURAL) an `import` scoped to a named file can only pass
+                              if that file asks for the module the course assigned it.
+                              Wiring, not use: importing a name and ignoring it passes.
+      EXECUTED   (produced)   the whole persistent workspace was run in the sandbox and
+                              completed the execution contract: started, did not raise,
+                              exited 0. This says the program runs. It says nothing about
+                              what it computes.
+      UNVERIFIED (produced)   the claim could not be tested here at all - a dependency the
+                              offline image lacks, a payload over the transport ceiling.
+                              The learner advances, because the gap is the environment's,
+                              and the record refuses to say anything about behaviour.
+      BEHAVIOURALLY_VERIFIED  not produced, and nothing may claim it. It would mean an
+                              authoritative test of the real project passed against the
+                              learner's code. No such test is available offline: across 13
+                              checkouts, 418 upstream test files and 6,455 test functions
+                              yield 0 behavioural verdicts in this image - see
+                              `backend/oracle_feasibility.py`. Until that changes,
+                              EXECUTED must never be worded as correctness, here or in
+                              `project_service.completion_feedback`.
     """
     runtime = [result for check, result in zip(milestone.checks, results)
                if check.kind in RUNTIME_CHECK_KINDS]

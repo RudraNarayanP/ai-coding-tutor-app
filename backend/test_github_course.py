@@ -14,13 +14,19 @@ its dependency graph is.
 from __future__ import annotations
 
 import asyncio
+import json
 import re
 from pathlib import Path
 
 import pytest
 
 from backend import github_fetch as gh, repo_planner as rp
-from backend.project_models import WorkspaceFile
+from backend.project_models import (
+    Milestone,
+    MilestoneProgress,
+    ProjectCourse,
+    WorkspaceFile,
+)
 from backend.project_planner import ProjectGroundingError, plan_project, validate_project
 from backend.project_service import require_usable_project
 from backend.project_verifier import evaluate_milestone
@@ -474,6 +480,23 @@ def test_the_prose_gate_is_never_asked_about_a_repository(monkeypatch) -> None:
     course_of(local_snapshot())
 
 
+@pytest.fixture(autouse=True)
+def _no_llm_in_the_http_tests(monkeypatch, request) -> None:
+    """The create endpoint enriches through whatever provider `.env` names.
+
+    A test suite that spends paid requests on every run is neither deterministic nor
+    free, and enrichment is not what these tests are about - it is best-effort copy
+    layered on a course whose checks are already decided. So the provider is removed for
+    every test here, which is also the honest way to assert a payload contains nothing:
+    no model has been handed the repository to paraphrase.
+    """
+    if "monkeypatch" not in request.fixturenames:
+        return
+    import backend.main as main_module
+
+    monkeypatch.setattr(main_module, "get_current_provider", lambda: None)
+
+
 def test_the_endpoint_builds_a_course_from_a_repo_url(monkeypatch) -> None:
     """POST the way the Create page will, and get a course back.
 
@@ -764,3 +787,145 @@ def test_a_repository_courses_wiring_checks_survive_the_single_file_guard() -> N
     wired = [c for m in course.milestones for c in m.checks
              if c.kind == "import" and c.path == "app/net.py"]
     assert [c.target for c in wired] == ["app.value"]
+
+
+# ─── the private-evidence boundary ───────────────────────────────────────────
+#
+# Behavioural grading was investigated and rejected on the corpus: across 13 checkouts,
+# 418 upstream test files (6,455 test functions, 272 naming a module a course selects)
+# cannot execute in the grading image, which is python:3.12-slim with no network -
+# `pytest`, `torch`, `anyio` and `markupsafe` are simply absent, and 10 of the 12 oracle
+# payloads that could be assembled at all also blow the 64 KiB transport ceiling. So there
+# is no private oracle to leak. These tests pin the boundary that makes it *structurally*
+# impossible rather than a policy somebody has to remember: what the fetch keeps, what the
+# course stores, and what the learner's own requests can retrieve.
+#
+# Only the last test below is new behaviour, and it fails at b695713. The three boundary
+# tests pass before and after by design - they are controls, and their job is to fail the
+# day somebody starts storing the snapshot, which is the precondition for any oracle.
+
+def test_nothing_about_the_repository_survives_into_the_saved_course(tmp_path) -> None:
+    """Tests are dropped while the repository is being read, and never come back.
+
+    The boundary is not a policy about what the planner is allowed to quote: the test
+    suite is gone before the planner runs, so there is no oracle to leak and no answer
+    key to stumble into. Then, separately, the saved document is checked - because
+    `ProjectCourse` has no repository field at all, the file bodies are dropped with the
+    snapshot and grading never sees them.
+    """
+    from backend.project_store import ProjectStore
+
+    on_disk = sorted(str(p.relative_to(BACKEND)).replace("\\", "/")
+                     for p in BACKEND.rglob("*.py") if "test_" in p.name)
+    assert len(on_disk) > 5, on_disk          # this repository really does ship tests
+    snapshot = local_snapshot()
+    assert not [f.path for f in snapshot.files if "test" in f.path.split("/")[-1]]
+
+    course = course_of(snapshot)
+    store = ProjectStore(storage_dir=tmp_path)
+    store.create(course)
+    persisted = (tmp_path / f"{course.course_id}.json").read_text(encoding="utf-8")
+    for path in on_disk:
+        assert path not in persisted, path
+    for milestone in course.milestones:
+        for text in (milestone.source_quote, milestone.source_grounded_description,
+                     milestone.teach, milestone.example, milestone.why):
+            assert not any(p in text for p in on_disk), (milestone.title, text[:80])
+
+
+def test_a_saved_course_holds_no_implementation_line_of_the_repository() -> None:
+    """The licensing rule, checked against the document rather than the workspace.
+
+    Declaration headers are allowed and are quoted on purpose - `class Value:` is the
+    contract, not the lesson. Everything below a `:` is the project's own code, and none
+    of it may appear in what a learner is served or what the enricher is prompted with.
+    """
+    snapshot = local_snapshot()
+    course = course_of(snapshot)
+    blob = json.dumps(course.model_dump(), default=str)
+    bodies = {
+        line.strip() for f in snapshot.files for line in f.content.splitlines()
+        if len(line.strip()) > 40 and not line.strip().endswith(":")
+        and not line.strip().startswith(("#", '"', "'", ">>>"))
+    }
+    assert bodies, "nothing substantial was collected - the test is vacuous"
+    leaked = sorted(bodies & {line.strip() for line in blob.splitlines()} |
+                    b for b in bodies if b in blob)
+    assert not leaked, f"{len(leaked)} repository implementation lines in the course: {leaked[:2]}"
+
+
+def test_the_completion_sentence_never_calls_a_run_a_behavioural_result() -> None:
+    """EXECUTED must not be described as BEHAVIORALLY_VERIFIED, in either language.
+
+    There is no behavioural state to reach today, which is the point: the sentence that
+    fires when a program was observed running says that is all that was checked, because
+    a wrong-but-running implementation earns exactly this feedback.
+    """
+    from backend.project_service import completion_feedback
+
+    project = ProjectCourse(course_id="c", title="t", source_type="github_repo",
+                            milestones=[Milestone(id="m1", order=1, title="Run")])
+    project.milestone_progress["m1"] = MilestoneProgress(
+        milestone_id="m1", status="completed", evidence="executed")
+    said = completion_feedback(project)
+    assert "the program ran" in said
+    assert "behaves the same way has not been verified" in said
+    assert not re.search(r"\b(correct|works|proven|verified against)\b", said.lower()
+                         .replace("has not been verified", ""))
+
+
+def test_no_http_response_can_carry_repository_test_source(monkeypatch) -> None:
+    """The learner's own requests are the leak that matters, so they are checked here.
+
+    Every route a project exposes - create, read, save, next, guidance - is answered with
+    the persisted document, and the document holds no repository body. A test file's own
+    text is used as the needle: if the snapshot ever starts being stored, or a milestone
+    starts quoting an upstream test as an oracle, this fails on the wire rather than in a
+    planner unit test.
+    """
+    from fastapi.testclient import TestClient
+
+    import backend.main as main_module
+
+    bodies = [
+        f.content for f in gh.open_local_repo(BACKEND).files
+    ]
+    assert bodies
+    needle_lines = {line.strip() for b in bodies for line in b.splitlines()
+                    if len(line.strip()) > 60 and not line.strip().startswith(("#", '"', "'"))}
+
+    async def refuse(url: str) -> gh.RepoSnapshot:      # no network, no LLM
+        snapshot = local_snapshot()
+        snapshot.license = "MIT"
+        return snapshot
+
+    monkeypatch.setattr("backend.source_ingestion.fetch_repo", refuse)
+    seen = []
+    real_enrich = main_module.__dict__.get("enrich_project")
+
+    async def spy(provider, project):
+        seen.append(provider)
+        return await real_enrich(provider, project)
+
+    import backend.project_service as project_service
+    monkeypatch.setattr(project_service, "enrich_project", spy)
+    client = TestClient(main_module.app)
+    created = client.post(
+        "/api/create-course/projects",
+        json={"material_type": "github_url", "content": "https://github.com/a/b", "title": ""})
+    assert created.status_code == 200, created.text
+    course_id = created.json()["course_id"]
+    responses = [created,
+                 client.get(f"/api/create-course/projects/{course_id}"),
+                 client.put(f"/api/create-course/projects/{course_id}/workspace",
+                            json={"files": [{"path": "main.py", "content": "x = 1\n"}]}),
+                 client.post(f"/api/create-course/projects/{course_id}/next",
+                             json={"files": [{"path": "main.py", "content": "x = 1\n"}]}),
+                 client.get("/api/create-course/projects")]
+    client.delete(f"/api/create-course/projects/{course_id}")
+    for response in responses:
+        assert response.status_code in (200, 400, 422), response.status_code
+        text = response.text
+        leaked = [line for line in needle_lines if line in text]
+        assert not leaked, f"{response.request.method} {response.url} leaked {leaked[:1]}"
+    assert seen == [None], seen          # the guard holds: no paid provider in a test run
