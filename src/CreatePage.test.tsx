@@ -28,12 +28,12 @@ describe('CreatePage Component', () => {
     const handleCourseReady = vi.fn()
     render(<CreatePage onCourseReady={handleCourseReady} />)
 
-    expect(screen.getByText('✨ AI Course Builder')).toBeInTheDocument()
+    expect(screen.getByText('Build a guided project from any tutorial')).toBeInTheDocument()
     expect(screen.getByText('YouTube URL / Playlist')).toBeInTheDocument()
     expect(screen.getByText('Paste Transcript / Notes')).toBeInTheDocument()
     expect(screen.getByText('Upload File')).toBeInTheDocument()
     // Guided Project is the only build mode now (broken Interactive Course removed).
-    expect(screen.getByText('Build Guided Project 🛠️')).toBeInTheDocument()
+    expect(screen.getByRole('button', { name: /build guided project/i })).toBeInTheDocument()
     expect(screen.queryByText(/Interactive Course/)).toBeNull()
   })
 
@@ -67,7 +67,7 @@ describe('CreatePage Component', () => {
     fireEvent.change(screen.getByPlaceholderText(/Paste raw transcript/), {
       target: { value: 'write him a draft then create our memo' },
     })
-    fireEvent.click(screen.getByText('Build Guided Project 🛠️'))
+    fireEvent.click(screen.getByRole('button', { name: /build guided project/i }))
 
     const gate = await screen.findByTestId('create-source-gate')
     expect(gate).toHaveClass('create-gate-reject')
@@ -92,7 +92,7 @@ describe('CreatePage Component', () => {
     fireEvent.change(screen.getByPlaceholderText(/Paste raw transcript/), {
       target: { value: '36 ChatGPT tips. Assign roles to ChatGPT. Write a birthday letter.' },
     })
-    fireEvent.click(screen.getByText('Build Guided Project 🛠️'))
+    fireEvent.click(screen.getByRole('button', { name: /build guided project/i }))
 
     const gate = await screen.findByTestId('create-source-gate')
     expect(gate).toHaveClass('create-gate-reject')
@@ -118,7 +118,7 @@ describe('CreatePage Component', () => {
     fireEvent.change(screen.getByPlaceholderText(/Paste raw transcript/), {
       target: { value: 'Python is great. Algorithms are important.' },
     })
-    fireEvent.click(screen.getByText('Build Guided Project 🛠️'))
+    fireEvent.click(screen.getByRole('button', { name: /build guided project/i }))
 
     const gate = await screen.findByTestId('create-source-gate')
     expect(gate).toHaveClass('create-gate-insufficient')
@@ -188,7 +188,7 @@ describe('CreatePage Component', () => {
     fireEvent.change(screen.getByPlaceholderText(/Paste raw transcript/), {
       target: { value: 'In this tutorial we build a word frequency counter.' },
     })
-    fireEvent.click(screen.getByText('Build Guided Project 🛠️'))
+    fireEvent.click(screen.getByRole('button', { name: /build guided project/i }))
 
     await waitFor(() => {
       expect(projectApi.create).toHaveBeenCalled()
@@ -213,7 +213,7 @@ describe('CreatePage Component', () => {
     fireEvent.change(screen.getByPlaceholderText('e.g., Reproduce GPT-2 (124M)'), {
       target: { value: 'My Project' },
     })
-    fireEvent.click(screen.getByText('Build Guided Project 🛠️'))
+    fireEvent.click(screen.getByRole('button', { name: /build guided project/i }))
 
     await waitFor(() => expect(screen.getByRole('status')).toBeInTheDocument())
     expect(screen.getByRole('button', { name: 'Cancel build' })).toBeInTheDocument()
@@ -223,6 +223,43 @@ describe('CreatePage Component', () => {
 
     await waitFor(() => expect(screen.getByText('Build cancelled.')).toBeInTheDocument())
     expect(screen.queryByRole('status')).toBeNull()
+  })
+
+  it('deletes all selected projects from the resume list', async () => {
+    vi.mocked(projectApi.list).mockResolvedValue([
+      {
+        course_id: 'project-a',
+        title: 'Project Alpha',
+        language: 'python',
+        completion_percent: 10,
+        completed: false,
+        milestone_count: 4,
+        updated_at: 1,
+      },
+      {
+        course_id: 'project-b',
+        title: 'Project Beta',
+        language: 'python',
+        completion_percent: 20,
+        completed: false,
+        milestone_count: 4,
+        updated_at: 2,
+      },
+    ])
+    vi.mocked(projectApi.remove).mockResolvedValue({ status: 'deleted' })
+    vi.spyOn(window, 'confirm').mockReturnValue(true)
+
+    render(<CreatePage />)
+    await waitFor(() => screen.getByText('Project Alpha'))
+
+    fireEvent.click(screen.getByRole('checkbox', { name: 'Select Project Alpha for deletion' }))
+    fireEvent.click(screen.getByRole('checkbox', { name: 'Select Project Beta for deletion' }))
+    fireEvent.click(screen.getByRole('button', { name: 'Delete selected projects' }))
+
+    await waitFor(() => expect(projectApi.remove).toHaveBeenCalledWith('project-a'))
+    await waitFor(() => expect(projectApi.remove).toHaveBeenCalledWith('project-b'))
+    await waitFor(() => expect(screen.queryByText('Project Alpha')).toBeNull())
+    await waitFor(() => expect(screen.queryByText('Project Beta')).toBeNull())
   })
 
   it('deletes a saved project from the resume list', async () => {

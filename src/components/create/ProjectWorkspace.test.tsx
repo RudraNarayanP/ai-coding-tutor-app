@@ -132,6 +132,31 @@ describe('ProjectWorkspace', () => {
     expect(projectApi.exec).toHaveBeenCalledWith('project-abc', expect.any(Array), 'pip install requests')
   })
 
+  it('recalls submitted commands from history with the arrow keys', async () => {
+    ;(projectApi.exec as any).mockResolvedValue({
+      command: 'ls',
+      ran_ok: true,
+      stdout: 'main.py',
+      stderr: '',
+      error: null,
+      exit_code: 0,
+      cwd: '/workspace',
+    })
+    render(<ProjectWorkspace courseId="project-abc" onExit={() => {}} />)
+    await waitFor(() => screen.getByText('Word Frequency Counter'))
+
+    const input = screen.getByLabelText('Terminal command') as HTMLInputElement
+    fireEvent.change(input, { target: { value: 'ls' } })
+    fireEvent.keyDown(input, { key: 'Enter' })
+    await waitFor(() => expect(projectApi.exec).toHaveBeenCalled())
+    expect(input.value).toBe('')
+
+    fireEvent.keyDown(input, { key: 'ArrowUp' })
+    expect(input.value).toBe('ls')
+    fireEvent.keyDown(input, { key: 'ArrowDown' })
+    expect(input.value).toBe('')
+  })
+
   it('verifies via NEXT and shows failing checks with guidance', async () => {
     const nextResult: NextResult = {
       status: 'incomplete',

@@ -118,6 +118,54 @@ export const CreatePage: React.FC<CreatePageProps> = () => {
   }
 
   const [deletingId, setDeletingId] = useState<string | null>(null)
+  const [selectedProjectIds, setSelectedProjectIds] = useState<Set<string>>(() => new Set())
+  const [bulkDeleting, setBulkDeleting] = useState(false)
+
+  const toggleProjectSelected = (courseId: string, selected: boolean) => {
+    setSelectedProjectIds((prev) => {
+      const next = new Set(prev)
+      if (selected) next.add(courseId)
+      else next.delete(courseId)
+      return next
+    })
+  }
+
+  const allProjectsSelected =
+    projects.length > 0 && projects.every((p) => selectedProjectIds.has(p.course_id))
+
+  const toggleSelectAllProjects = () => {
+    if (allProjectsSelected) {
+      setSelectedProjectIds(new Set())
+      return
+    }
+    setSelectedProjectIds(new Set(projects.map((p) => p.course_id)))
+  }
+
+  const handleDeleteSelectedProjects = async () => {
+    const ids = projects.filter((p) => selectedProjectIds.has(p.course_id)).map((p) => p.course_id)
+    if (ids.length === 0) return
+    const ok = window.confirm(
+      `Delete ${ids.length} selected project${ids.length === 1 ? '' : 's'}? This cannot be undone.`
+    )
+    if (!ok) return
+    setBulkDeleting(true)
+    setErrorMessage(null)
+    const failed: string[] = []
+    for (const courseId of ids) {
+      try {
+        await projectApi.remove(courseId)
+      } catch {
+        failed.push(courseId)
+      }
+    }
+    const removed = new Set(ids.filter((id) => !failed.includes(id)))
+    setProjects((prev) => prev.filter((p) => !removed.has(p.course_id)))
+    setSelectedProjectIds(new Set(failed))
+    if (failed.length > 0) {
+      setErrorMessage(`Could not delete ${failed.length} project${failed.length === 1 ? '' : 's'}.`)
+    }
+    setBulkDeleting(false)
+  }
 
   const handleDeleteProject = async (courseId: string, title: string, e?: React.MouseEvent) => {
     e?.preventDefault()
@@ -129,6 +177,12 @@ export const CreatePage: React.FC<CreatePageProps> = () => {
     try {
       await projectApi.remove(courseId)
       setProjects((prev) => prev.filter((p) => p.course_id !== courseId))
+      setSelectedProjectIds((prev) => {
+        if (!prev.has(courseId)) return prev
+        const next = new Set(prev)
+        next.delete(courseId)
+        return next
+      })
     } catch (err) {
       setErrorMessage((err as Error).message || 'Could not delete this project.')
     } finally {
@@ -155,11 +209,13 @@ export const CreatePage: React.FC<CreatePageProps> = () => {
   }
 
   return (
-    <div className="create-page-container" style={{ padding: '32px', maxWidth: '800px', margin: '0 auto' }}>
-      <div style={{ marginBottom: '24px', textAlign: 'center' }}>
-        <h1 style={{ fontSize: '28px', fontWeight: 900, color: 'var(--ink)' }}>✨ AI Course Builder</h1>
-        <p style={{ fontSize: '15px', fontWeight: 700, color: 'var(--ink-soft)' }}>
-          Bring a tutorial — a YouTube video, playlist, transcript, or notes. Patchwork turns it into a guided project you actually build, step by step.
+    <div className="cw-page">
+      <div className="cw-hero">
+        <span className="ew-section-label">Create</span>
+        <h1 className="cw-title">Build a guided project from any tutorial</h1>
+        <p className="cw-sub">
+          Bring a YouTube video, playlist, transcript, or notes. Patchwork turns it into a guided project
+          you actually build, step by step.
         </p>
       </div>
 
@@ -185,39 +241,20 @@ export const CreatePage: React.FC<CreatePageProps> = () => {
       )}
 
       {errorMessage && (
-        <div
-          style={{ padding: '12px 16px', borderRadius: '12px', background: '#fef2f2', color: '#991b1b', fontWeight: 700, marginBottom: '20px' }}
-          role="alert"
-        >
+        <div className="cw-alert cw-alert-error" role="alert">
           {errorMessage}
         </div>
       )}
 
-      {cancelMessage && (
-        <div style={{ padding: '12px 16px', borderRadius: '12px', background: '#f3f4f6', color: 'var(--ink-soft)', fontWeight: 700, marginBottom: '20px' }}>
-          {cancelMessage}
-        </div>
-      )}
+      {cancelMessage && <div className="cw-alert">{cancelMessage}</div>}
 
       {creatingProject && (
-        <div
-          className="duo-card"
-          style={{ padding: '20px', marginBottom: '20px', textAlign: 'center' }}
-          role="status"
-          aria-live="polite"
-        >
-          <p style={{ fontSize: '15px', fontWeight: 800, color: 'var(--ink)', marginBottom: '6px' }}>
-            Building your guided project…
-          </p>
-          <p style={{ fontSize: '13px', fontWeight: 700, color: 'var(--ink-soft)', marginBottom: '16px' }}>
+        <div className="ew-task-card cw-building" role="status" aria-live="polite">
+          <p className="cw-building-title">Building your guided project…</p>
+          <p className="cw-building-note">
             Fetching the source, planning milestones, and preparing your workspace.
           </p>
-          <button
-            type="button"
-            className="duo-button duo-button-secondary"
-            onClick={handleCancelBuild}
-            aria-label="Cancel build"
-          >
+          <button type="button" className="ew-btn ew-btn-back" onClick={handleCancelBuild} aria-label="Cancel build">
             Cancel
           </button>
         </div>
@@ -225,44 +262,66 @@ export const CreatePage: React.FC<CreatePageProps> = () => {
 
       {/* Resume in-progress guided projects */}
       {projects.length > 0 && (
-        <div className="duo-card" style={{ padding: '16px', marginBottom: '20px' }}>
-          <h3 style={{ fontSize: '14px', fontWeight: 900, marginBottom: '10px', color: 'var(--ink)' }}>
-            Resume a project
-          </h3>
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-            {projects.map((p) => (
-              <div
-                key={p.course_id}
-                style={{ display: 'flex', gap: '8px', alignItems: 'stretch' }}
+        <section className="ew-task-card">
+          <div className="cw-row-between">
+            <span className="ew-section-label">Resume a project</span>
+            <div className="cw-row-actions">
+              <label className="cw-checkbox">
+                <input
+                  type="checkbox"
+                  checked={allProjectsSelected}
+                  onChange={toggleSelectAllProjects}
+                  aria-label="Select all projects"
+                />
+                Select all
+              </label>
+              <button
+                type="button"
+                className="ew-btn ew-btn-back cw-btn-danger"
+                onClick={handleDeleteSelectedProjects}
+                disabled={selectedProjectIds.size === 0 || bulkDeleting || deletingId !== null}
+                aria-label="Delete selected projects"
               >
-                <button
-                  className="duo-button duo-button-secondary"
-                  onClick={() => openProject(p.course_id)}
-                  style={{ flex: 1, display: 'flex', justifyContent: 'space-between', alignItems: 'center', textAlign: 'left' }}
-                >
-                  <span>{p.title}</span>
-                  <span style={{ fontSize: '12px', fontWeight: 800, color: 'var(--ink-soft)' }}>
+                {bulkDeleting
+                  ? 'Deleting…'
+                  : `Delete selected${selectedProjectIds.size > 0 ? ` (${selectedProjectIds.size})` : ''}`}
+              </button>
+            </div>
+          </div>
+          <div className="cw-project-list">
+            {projects.map((p) => (
+              <div key={p.course_id} className="cw-project-row">
+                <label className="cw-checkbox">
+                  <input
+                    type="checkbox"
+                    checked={selectedProjectIds.has(p.course_id)}
+                    onChange={(e) => toggleProjectSelected(p.course_id, e.target.checked)}
+                    aria-label={`Select ${p.title} for deletion`}
+                  />
+                </label>
+                <button className="cw-project-open" onClick={() => openProject(p.course_id)}>
+                  <span className="cw-project-title">{p.title}</span>
+                  <span className="cw-project-progress">
                     {p.completed ? 'Completed' : `${p.completion_percent}%`}
                   </span>
                 </button>
                 <button
                   type="button"
-                  className="duo-button duo-button-secondary"
+                  className="ew-btn ew-btn-back cw-btn-danger"
                   onClick={(e) => handleDeleteProject(p.course_id, p.title, e)}
                   disabled={deletingId === p.course_id}
                   aria-label={`Delete ${p.title}`}
-                  style={{ padding: '10px 14px', color: '#991b1b', flexShrink: 0 }}
                 >
                   {deletingId === p.course_id ? '…' : 'Delete'}
                 </button>
               </div>
             ))}
           </div>
-        </div>
+        </section>
       )}
 
-      <div className="duo-card" style={{ padding: '24px', opacity: creatingProject ? 0.55 : 1, pointerEvents: creatingProject ? 'none' : 'auto' }}>
-        <div style={{ display: 'flex', gap: '8px', marginBottom: '20px' }}>
+      <section className={`ew-task-card${creatingProject ? ' cw-disabled' : ''}`}>
+        <div className="cw-tabs">
           {[
             { type: 'youtube_url', label: 'YouTube URL / Playlist' },
             { type: 'transcript', label: 'Paste Transcript / Notes' },
@@ -270,65 +329,68 @@ export const CreatePage: React.FC<CreatePageProps> = () => {
           ].map(({ type, label }) => (
             <button
               key={type}
-              className={`duo-button ${materialType === type ? 'duo-button-primary' : 'duo-button-secondary'}`}
+              type="button"
+              className={`cw-tab${materialType === type ? ' active' : ''}`}
+              aria-pressed={materialType === type}
               onClick={() => setMaterialType(type as any)}
-              style={{ flex: 1, padding: '10px' }}
             >
               {label}
             </button>
           ))}
         </div>
 
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '16px', marginBottom: '24px' }}>
-          <div>
-            <label style={{ display: 'block', fontWeight: 800, fontSize: '13px', marginBottom: '6px' }}>
-              Project Title (Optional):
+        <div className="cw-fields">
+          <div className="cw-field">
+            <label className="cw-label" htmlFor="cw-project-title">
+              Project title (optional)
             </label>
             <input
+              id="cw-project-title"
+              className="cw-input"
               type="text"
               placeholder="e.g., Reproduce GPT-2 (124M)"
               value={courseTitle}
               onChange={(e) => setCourseTitle(e.target.value)}
-              style={{ width: '100%', padding: '12px', borderRadius: '10px', border: '2px solid var(--line)', fontWeight: 700 }}
             />
           </div>
 
-          <div>
-            <label style={{ display: 'block', fontWeight: 800, fontSize: '13px', marginBottom: '6px' }}>
-              {materialType === 'youtube_url' ? 'YouTube Video or Playlist URL:' : 'Source Content / Transcript:'}
+          <div className="cw-field">
+            <label className="cw-label" htmlFor="cw-source-content">
+              {materialType === 'youtube_url' ? 'YouTube video or playlist URL' : 'Source content / transcript'}
             </label>
             {materialType === 'youtube_url' ? (
               <input
+                id="cw-source-content"
+                className="cw-input"
                 type="text"
                 placeholder="https://www.youtube.com/watch?v=... or playlist URL"
                 value={inputContent}
                 onChange={(e) => setInputContent(e.target.value)}
-                style={{ width: '100%', padding: '12px', borderRadius: '10px', border: '2px solid var(--line)', fontWeight: 700 }}
               />
             ) : (
               <textarea
+                id="cw-source-content"
+                className="cw-input cw-textarea"
                 rows={8}
                 placeholder="Paste raw transcript, study guide, or Markdown notes here..."
                 value={inputContent}
                 onChange={(e) => setInputContent(e.target.value)}
-                style={{ width: '100%', padding: '12px', borderRadius: '10px', border: '2px solid var(--line)', fontWeight: 700, fontFamily: 'inherit' }}
               />
             )}
           </div>
         </div>
 
         <button
-          className="duo-button duo-button-primary"
+          className="ew-btn ew-btn-submit cw-build"
           onClick={handleStartProject}
           disabled={(!inputContent.trim() && !courseTitle.trim()) || creatingProject}
-          style={{ width: '100%', padding: '14px', fontSize: '16px' }}
         >
-          Build Guided Project 🛠️
+          BUILD GUIDED PROJECT
         </button>
-        <p style={{ fontSize: '12px', fontWeight: 700, color: 'var(--ink-soft)', marginTop: '10px', textAlign: 'center' }}>
+        <p className="cw-footnote">
           You'll get one persistent workspace and build the source's project milestone by milestone.
         </p>
-      </div>
+      </section>
     </div>
   )
 }

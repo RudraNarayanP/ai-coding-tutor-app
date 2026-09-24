@@ -23,9 +23,14 @@ export interface ProjectWorkspaceProps {
 }
 
 const AUTOSAVE_MS = 1200
-const DEFAULT_TERMINAL_HEIGHT = 280
-const MIN_TERMINAL_HEIGHT = 140
-const MAX_TERMINAL_HEIGHT = 520
+const DEFAULT_TERMINAL_HEIGHT = 260
+const MIN_TERMINAL_HEIGHT = 120
+const MAX_TERMINAL_HEIGHT = 620
+
+const SANDBOX_BANNER = [
+  'Patchwork sandbox · bash · your files live in /workspace',
+  'Try: ls · cat main.py · python main.py · pip install requests',
+]
 
 const TRANSCRIPT_FILLER =
   /\b(uh+|u+m+|er+|ah+|you know|kind of|sort of|i mean|gonna|we call it)\b/i
@@ -82,7 +87,7 @@ export const ProjectWorkspace: React.FC<ProjectWorkspaceProps> = ({ courseId, on
   const resizeRef = useRef<{ startY: number; startHeight: number } | null>(null)
   const verificationLogStart = useRef<number | null>(null)
   const historyRef = useRef<string[]>([])
-  const historyIndexRef = useRef(-1)
+  const historyIndexRef = useRef(0)
 
   const appendTerminal = useCallback((...lines: TerminalLine[]) => {
     setTerminalLines((prev) => [...prev, ...lines])
@@ -98,6 +103,7 @@ export const ProjectWorkspace: React.FC<ProjectWorkspaceProps> = ({ courseId, on
         setProject(p)
         setFiles(p.workspace_files.length ? p.workspace_files : [{ path: p.entry_file, content: '' }])
         setActivePath(p.entry_file || p.workspace_files[0]?.path || 'main.py')
+        setTerminalLines(SANDBOX_BANNER.map((line) => makeTerminalLine('info', line)))
       })
       .catch((err) => mounted && setLoadError(err.message || 'Failed to load project'))
     return () => {
@@ -158,6 +164,20 @@ export const ProjectWorkspace: React.FC<ProjectWorkspaceProps> = ({ courseId, on
     setActivePath(clean)
   }
 
+  const clearTerminal = () => {
+    setTerminalLines([])
+    setCommand('')
+  }
+
+  const handleInterrupt = () => {
+    setCommand('')
+    appendTerminal(makeTerminalLine('info', '^C'))
+  }
+
+  const handleCandidates = (matches: string[]) => {
+    appendTerminal(makeTerminalLine('stdout', matches.join('  ')))
+  }
+
   const handleTerminalResizeStart = (event: React.MouseEvent) => {
     event.preventDefault()
     resizeRef.current = { startY: event.clientY, startHeight: terminalHeight }
@@ -182,22 +202,16 @@ export const ProjectWorkspace: React.FC<ProjectWorkspaceProps> = ({ courseId, on
     window.addEventListener('mouseup', onUp)
   }
 
-  const clearTerminal = () => {
-    setTerminalLines([])
-    setCommand('')
-  }
-
   const handleHistory = (direction: -1 | 1) => {
     const hist = historyRef.current
     if (!hist.length) return
-    const next = historyIndexRef.current + direction
-    if (next < 0) {
-      historyIndexRef.current = -1
-      setCommand('')
-      return
-    }
-    historyIndexRef.current = Math.min(next, hist.length - 1)
-    setCommand(hist[hist.length - 1 - historyIndexRef.current])
+    // 0 = the learner's own live line; 1..n walk back through the log.
+    const steps =
+      direction === -1
+        ? Math.min(historyIndexRef.current + 1, hist.length)
+        : Math.max(historyIndexRef.current - 1, 0)
+    historyIndexRef.current = steps
+    setCommand(steps === 0 ? '' : hist[hist.length - steps])
   }
 
   const applyTerminalResult = (
@@ -218,7 +232,7 @@ export const ProjectWorkspace: React.FC<ProjectWorkspaceProps> = ({ courseId, on
     const typed = `${shellPrompt(cwd)} ${trimmed}`
     setRunning(true)
     historyRef.current = [...historyRef.current, trimmed]
-    historyIndexRef.current = -1
+    historyIndexRef.current = 0
     setCommand('')
     appendTerminal(makeTerminalLine('command', typed))
     try {
@@ -309,21 +323,20 @@ export const ProjectWorkspace: React.FC<ProjectWorkspaceProps> = ({ courseId, on
   // ── Render helpers ──────────────────────────────────────────────────────────
   if (loadError) {
     return (
-      <div className="pw-root">
+      <div className="ew-root pw-root">
         <div className="pw-error-state">
           <h2>Couldn't open this project</h2>
           <p>{loadError}</p>
-          <div style={{ display: 'flex', gap: '8px', justifyContent: 'center', flexWrap: 'wrap' }}>
-            <button className="duo-button duo-button-secondary" onClick={onExit}>
+          <div style={{ display: 'flex', gap: '10px', justifyContent: 'center', flexWrap: 'wrap' }}>
+            <button className="ew-btn ew-btn-back" onClick={onExit}>
               Back to Create
             </button>
             <button
               type="button"
-              className="duo-button duo-button-secondary"
+              className="ew-btn ew-btn-back pw-delete"
               onClick={handleDeleteProject}
               disabled={deleting}
               aria-label="Delete this project"
-              style={{ color: '#991b1b' }}
             >
               {deleting ? 'Deleting…' : 'Delete'}
             </button>
@@ -335,7 +348,7 @@ export const ProjectWorkspace: React.FC<ProjectWorkspaceProps> = ({ courseId, on
 
   if (!project) {
     return (
-      <div className="pw-root">
+      <div className="ew-root pw-root">
         <div className="pw-loading">Loading your project workspace…</div>
       </div>
     )
@@ -351,150 +364,59 @@ export const ProjectWorkspace: React.FC<ProjectWorkspaceProps> = ({ courseId, on
   const lesson = currentMilestone ? lessonCopy(currentMilestone) : null
 
   return (
-    <div className="pw-root" aria-label="Guided project workspace">
-      {/* Header */}
-      <header className="pw-header">
-        <div className="pw-header-main">
-          <button className="pw-exit" onClick={onExit} aria-label="Back to Create">
-            ← Create
-          </button>
-          <div>
-            <h1 className="pw-title">{project.title}</h1>
-            <p className="pw-goal">{project.course_intro || project.project_goal}</p>
-          </div>
+    <div className="ew-root pw-root" aria-label="Guided project workspace">
+      <header className="ew-topbar">
+        <button type="button" className="ew-close" onClick={onExit} aria-label="Back to Create">
+          ✕
+        </button>
+        <div
+          className="ew-progress"
+          role="progressbar"
+          aria-label="Project progress"
+          aria-valuenow={project.completion_percent}
+          aria-valuemin={0}
+          aria-valuemax={100}
+        >
+          <div className="ew-progress-fill" style={{ width: `${project.completion_percent}%` }} />
         </div>
-        <div className="pw-header-stats">
-          <div className="pw-progress">
-            <div className="pw-progress-bar">
-              <div className="pw-progress-fill" style={{ width: `${project.completion_percent}%` }} />
-            </div>
-            <span className="pw-progress-label">{project.completion_percent}% complete</span>
-          </div>
-          <div className="pw-stat">⚡ {project.xp} XP</div>
-          <div className="pw-stat">📄 {project.files_changed} files</div>
-          <div className="pw-stat">✓ {passedTests} tests passed</div>
+        <div className="ew-topbar-actions">
+          <span className="pw-chip">⚡ {project.xp} XP</span>
+          <span className="pw-chip">📄 {project.files_changed} files</span>
+          <span className="pw-chip">✓ {passedTests} tests passed</span>
+          <span className="pw-chip pw-chip-muted">{project.completion_percent}% complete</span>
           <button
             type="button"
-            className="duo-button duo-button-secondary"
+            className="ew-topbar-link pw-delete"
             onClick={handleDeleteProject}
             disabled={deleting}
             aria-label="Delete this project"
-            style={{ padding: '8px 12px', fontSize: '12px', color: '#991b1b' }}
           >
-            {deleting ? 'Deleting…' : 'Delete'}
+            {deleting ? 'Deleting…' : '🗑 Delete'}
           </button>
         </div>
       </header>
 
-      <div className="pw-body">
-        {/* Left: milestone map */}
-        <aside className="pw-milestones" aria-label="Project milestones">
-          <h3 className="pw-panel-title">Project Milestones</h3>
-          <ol className="pw-milestone-list">
-            {project.milestones.map((m) => (
-              <li
-                key={m.id}
-                className={`pw-milestone pw-milestone-${m.status}`}
-                aria-current={m.status === 'current' ? 'step' : undefined}
-              >
-                <span className="pw-milestone-icon">
-                  {m.status === 'completed' ? '✓' : m.status === 'current' ? '▶' : '○'}
-                </span>
-                <div className="pw-milestone-body">
-                  <span className="pw-milestone-title">{m.title}</span>
-                  {m.status === 'current' && milestoneDescription(m) && (
-                    <span className="pw-milestone-source">{milestoneDescription(m)}</span>
-                  )}
-                </div>
-                {m.status !== 'pending' && <span className="pw-milestone-xp">+{m.xp_reward}</span>}
-              </li>
-            ))}
-          </ol>
-          {project.tech_stack.length > 0 && (
-            <div className="pw-techstack">
-              <span className="pw-techstack-label">From the source:</span>
-              {project.tech_stack.map((t) => (
-                <span key={t} className="pw-tech-pill">
-                  {t}
-                </span>
-              ))}
+      <div className="ew-body ew-body--create">
+        {/* Left: project + current step + milestone map */}
+        <aside className="ew-task-col" aria-label="Project guidance">
+          <span className="ew-section-label">Create</span>
+
+          <div className="ew-task-card">
+            <div className="ew-task-badge">
+              <span className="ew-task-badge-icon" aria-hidden="true">🛠️</span> YOUR PROJECT
             </div>
-          )}
-        </aside>
-
-        {/* Center: editor + terminal */}
-        <main className="pw-editor-col">
-          <div className="pw-editor-stack">
-            <div className="pw-editor-pane">
-              <div className="pw-file-tabs" role="tablist" aria-label="Workspace files">
-                {files.map((f) => (
-                  <button
-                    key={f.path}
-                    role="tab"
-                    aria-selected={f.path === activePath}
-                    className={`pw-file-tab ${f.path === activePath ? 'active' : ''}`}
-                    onClick={() => setActivePath(f.path)}
-                  >
-                    {f.path}
-                  </button>
-                ))}
-                <button className="pw-file-add" onClick={addFile} aria-label="Add file">
-                  +
-                </button>
-              </div>
-
-              <CodeEditor
-                value={activeFile?.content ?? ''}
-                onChange={updateActiveFile}
-                filename={activePath || 'main.py'}
-                variant="workspace"
-                showHeader={false}
-                ariaLabel={`Editor for ${activePath}`}
-                onKeyDown={(e) => {
-                  if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') {
-                    e.preventDefault()
-                    handleRun()
-                  }
-                }}
-              />
-
-              <div className="pw-editor-toolbar">
-                <button className="duo-button duo-button-secondary" onClick={handleRun} disabled={running}>
-                  {running ? 'Running…' : '▶ Run'}
-                </button>
-                <span className="pw-toolbar-hint">Ctrl+Enter to run · type in the terminal like VS Code</span>
-              </div>
-            </div>
-
-            <ProjectTerminal
-              cwd={cwd}
-              lines={terminalLines}
-              command={command}
-              running={running}
-              height={terminalHeight}
-              onCommandChange={setCommand}
-              onSubmit={handleSubmitCommand}
-              onRunProject={handleRun}
-              onClear={clearTerminal}
-              onHistory={handleHistory}
-              onResizeStart={handleTerminalResizeStart}
-            />
+            <h2 className="ew-task-title">{project.title}</h2>
+            <p className="ew-task-desc">{project.course_intro || project.project_goal}</p>
           </div>
-        </main>
 
-        {/* Right: AI guidance + NEXT */}
-        <aside className="pw-guide" aria-label="AI guidance">
           {currentMilestone ? (
-            <div className="pw-microstep">
-              <span className="pw-microstep-label">
+            <div className="ew-task-card pw-microstep">
+              <div className="ew-task-badge">
+                <span className="ew-task-badge-icon" aria-hidden="true">📋</span>
                 Step {currentMilestone.order} · +{currentMilestone.xp_reward} XP
-              </span>
-              <h3 className="pw-microstep-title">
-                {lesson?.hook || currentMilestone.title}
-              </h3>
-              {lesson?.observation && (
-                <p className="pw-observation">{lesson.observation}</p>
-              )}
+              </div>
+              <h3 className="ew-task-title">{lesson?.hook || currentMilestone.title}</h3>
+              {lesson?.observation && <p className="ew-task-desc">{lesson.observation}</p>}
               {lesson?.action && (
                 <p className="pw-action">
                   <strong>Do this:</strong> {lesson.action}
@@ -546,9 +468,11 @@ export const ProjectWorkspace: React.FC<ProjectWorkspaceProps> = ({ courseId, on
               )}
             </div>
           ) : (
-            <div className="pw-microstep">
-              <h3 className="pw-microstep-title">🎉 Project complete!</h3>
-              <p className="pw-observation">You built the whole project from the source.</p>
+            <div className="ew-task-card pw-microstep">
+              <div className="ew-task-badge">
+                <span className="ew-task-badge-icon" aria-hidden="true">🎉</span> Project complete
+              </div>
+              <h3 className="ew-task-title">You built the whole project from the source.</h3>
             </div>
           )}
 
@@ -584,15 +508,16 @@ export const ProjectWorkspace: React.FC<ProjectWorkspaceProps> = ({ courseId, on
 
           {/* AI help (read-only) */}
           <div className="pw-ai">
+            <span className="ew-section-label">Ask the AI</span>
             <div className="pw-ai-row">
               <input
                 className="pw-ai-input"
-                placeholder="Ask the AI about this step…"
+                placeholder="Ask about this step…"
                 value={question}
                 onChange={(e) => setQuestion(e.target.value)}
                 aria-label="Ask the AI"
               />
-              <button className="duo-button duo-button-secondary" onClick={handleAskAi} disabled={askingAi}>
+              <button className="ew-btn ew-btn-submit" onClick={handleAskAi} disabled={askingAi}>
                 {askingAi ? '…' : 'Ask'}
               </button>
             </div>
@@ -602,7 +527,7 @@ export const ProjectWorkspace: React.FC<ProjectWorkspaceProps> = ({ courseId, on
                 {guidance.suggestion && (
                   <>
                     <pre className="pw-suggestion-code">{guidance.suggestion}</pre>
-                    <button className="duo-button duo-button-secondary pw-apply" onClick={applySuggestion}>
+                    <button className="ew-btn ew-btn-back pw-apply" onClick={applySuggestion}>
                       Apply suggestion
                     </button>
                   </>
@@ -614,17 +539,131 @@ export const ProjectWorkspace: React.FC<ProjectWorkspaceProps> = ({ courseId, on
             )}
           </div>
 
-          <button
-            className="duo-button duo-button-primary pw-next"
-            onClick={handleNext}
-            disabled={verifying || project.completed}
-          >
-            {verifying ? 'Verifying…' : project.completed ? 'Completed 🎉' : 'NEXT →'}
-          </button>
-          <p className="pw-next-hint">
-            NEXT inspects your actual workspace and verifies real progress — implement it your own way.
-          </p>
+          <div className="pw-milestones">
+            <span className="ew-section-label">Project milestones</span>
+            <ol className="pw-milestone-list">
+              {project.milestones.map((m) => (
+                <li
+                  key={m.id}
+                  className={`pw-milestone pw-milestone-${m.status}`}
+                  aria-current={m.status === 'current' ? 'step' : undefined}
+                >
+                  <span className="pw-milestone-icon">
+                    {m.status === 'completed' ? '✓' : m.status === 'current' ? '▶' : '○'}
+                  </span>
+                  <div className="pw-milestone-body">
+                    <span className="pw-milestone-title">{m.title}</span>
+                    {m.status === 'current' && milestoneDescription(m) && (
+                      <span className="pw-milestone-source">{milestoneDescription(m)}</span>
+                    )}
+                  </div>
+                  {m.status !== 'pending' && <span className="pw-milestone-xp">+{m.xp_reward}</span>}
+                </li>
+              ))}
+            </ol>
+            {project.tech_stack.length > 0 && (
+              <div className="pw-techstack">
+                <span className="pw-techstack-label">From the source:</span>
+                {project.tech_stack.map((t) => (
+                  <span key={t} className="pw-tech-pill">
+                    {t}
+                  </span>
+                ))}
+              </div>
+            )}
+          </div>
         </aside>
+
+        {/* Right: editor + terminal, with the action bar below */}
+        <div className="ew-workspace-pane">
+          <div className="ew-workspace-columns ew-workspace-columns--single">
+            <main className="ew-editor-col" aria-label="Code editor">
+              <div className="pw-file-bar">
+                <div className="pw-file-tabs" role="tablist" aria-label="Workspace files">
+                  {files.map((f) => (
+                    <button
+                      key={f.path}
+                      role="tab"
+                      aria-selected={f.path === activePath}
+                      className={`pw-file-tab ${f.path === activePath ? 'active' : ''}`}
+                      onClick={() => setActivePath(f.path)}
+                    >
+                      {f.path}
+                    </button>
+                  ))}
+                  <button className="pw-file-add" onClick={addFile} aria-label="Add file">
+                    +
+                  </button>
+                </div>
+                <span className="pw-toolbar-hint">Ctrl+Enter to run · type in the terminal</span>
+              </div>
+
+              <div className="ew-editor-shell">
+                <CodeEditor
+                  value={activeFile?.content ?? ''}
+                  onChange={updateActiveFile}
+                  filename={activePath || 'main.py'}
+                  variant="workspace"
+                  showHeader={false}
+                  ariaLabel={`Editor for ${activePath}`}
+                  onKeyDown={(e) => {
+                    if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') {
+                      e.preventDefault()
+                      handleRun()
+                    }
+                  }}
+                />
+              </div>
+
+              <ProjectTerminal
+                cwd={cwd}
+                lines={terminalLines}
+                command={command}
+                running={running}
+                height={terminalHeight}
+                completions={files.map((f) => f.path)}
+                onCommandChange={setCommand}
+                onSubmit={handleSubmitCommand}
+                onInterrupt={handleInterrupt}
+                onRunProject={handleRun}
+                onClear={clearTerminal}
+                onHistory={handleHistory}
+                onResizeStart={handleTerminalResizeStart}
+                onCandidates={handleCandidates}
+              />
+            </main>
+          </div>
+
+          <footer className="ew-footer">
+            <div className="ew-footer-left">
+              <button type="button" className="ew-btn ew-btn-back" onClick={onExit}>
+                <span aria-hidden="true">←</span> BACK TO CREATE
+              </button>
+              <span className="pw-next-hint">
+                NEXT inspects your actual workspace and verifies real progress.
+              </span>
+            </div>
+            <div className="ew-footer-right">
+              <button
+                type="button"
+                className="ew-btn ew-btn-run"
+                onClick={handleRun}
+                disabled={running}
+                aria-label="Run code"
+              >
+                <span aria-hidden="true">▷</span> {running ? 'Running…' : 'RUN'}
+              </button>
+              <button
+                type="button"
+                className="ew-btn ew-btn-submit"
+                onClick={handleNext}
+                disabled={verifying || project.completed}
+              >
+                {verifying ? 'VERIFYING…' : project.completed ? 'COMPLETED 🎉' : 'NEXT →'}
+              </button>
+            </div>
+          </footer>
+        </div>
       </div>
 
       {celebrate && (
@@ -634,10 +673,10 @@ export const ProjectWorkspace: React.FC<ProjectWorkspaceProps> = ({ courseId, on
             <p>You built “{project.title}” end-to-end, verified against the source.</p>
             <p className="pw-celebrate-xp">⚡ {project.xp} XP earned</p>
             <div className="pw-celebrate-actions">
-              <button className="duo-button duo-button-secondary" onClick={() => setCelebrate(false)}>
+              <button className="ew-btn ew-btn-back" onClick={() => setCelebrate(false)}>
                 Keep exploring
               </button>
-              <button className="duo-button duo-button-primary" onClick={onExit}>
+              <button className="ew-btn ew-btn-submit" onClick={onExit}>
                 Back to Create
               </button>
             </div>
