@@ -504,3 +504,17 @@ def test_validate_project_still_rejects_caption_dump_goal():
     p.project_goal = "so um basically we we are gonna like build the the thing you know"
     with _pytest.raises(Exception):
         validate_project(p)
+
+
+def test_scrub_keeps_comma_list_teach():
+    """Regression (sweep ultra 02:45): a teach listing dunder methods was wiped by the
+    >=3-comma instruction heuristic and replaced with a canned template."""
+    from backend.project_planner import scrub_learner_fields
+
+    teach = ("Each new operation needs a forward formula and a local derivative for backward. "
+             "Implement __pow__, __neg__, __sub__, __truediv__, relu(), and tanh() as methods "
+             "returning new Value nodes with correct _op labels.")
+    p = _project(["Python"], teach, "tanh")
+    m = scrub_learner_fields(p.milestones[0])
+    assert m.teach == teach
+    assert "later milestones can call and extend" not in m.teach

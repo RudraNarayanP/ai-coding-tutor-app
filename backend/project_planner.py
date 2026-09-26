@@ -274,13 +274,15 @@ def scrub_learner_fields(milestone: Milestone, entry_file: str = "main.py") -> M
         from .project_copy import learner_hint
         milestone.microstep.hint = learner_hint(kind, tgt)
     if (
-        looks_like_raw_transcript(milestone.hook)
+        _looks_like_raw_prose(milestone.hook)
         or contains_banned_video_phrase(milestone.hook)
         or len((milestone.hook or "").split()) > 24
     ):
         milestone.hook = (milestone.title or "")[:80]
     teach = milestone.teach or ""
-    if looks_like_raw_transcript(teach) or contains_banned_video_phrase(teach):
+    # Prose fields use the prose detector: a teach listing `__pow__, __neg__, __sub__`
+    # is not a caption dump (the >=3-comma instruction rule wiped ultra's m2, 02:45 IST).
+    if _looks_like_raw_prose(teach) or contains_banned_video_phrase(teach):
         milestone.teach = ""
     elif len(teach.split()) > 110:
         from .project_copy import _first_sentences
@@ -294,7 +296,7 @@ def scrub_learner_fields(milestone: Milestone, entry_file: str = "main.py") -> M
     }:
         milestone.teach = beginner_teach(kind, tgt, title=milestone.title)
     why = milestone.why or ""
-    if not why.strip() or contains_banned_video_phrase(why) or looks_like_raw_transcript(why):
+    if not why.strip() or contains_banned_video_phrase(why) or _looks_like_raw_prose(why):
         title = (milestone.title or "the project")[:80]
         milestone.why = (
             f"This step unlocks the next part of “{title}” in the source tutorial."
@@ -302,7 +304,7 @@ def scrub_learner_fields(milestone: Milestone, entry_file: str = "main.py") -> M
     if looks_like_raw_transcript(milestone.example) or contains_banned_video_phrase(milestone.example):
         milestone.example = ""
     desc = milestone.source_grounded_description or ""
-    if contains_banned_video_phrase(desc) or looks_like_raw_transcript(desc):
+    if contains_banned_video_phrase(desc) or _looks_like_raw_prose(desc):
         from .project_copy import learner_description
         milestone.source_grounded_description = learner_description(
             kind, tgt, title=milestone.title or "", entry_file=entry_file, project_title=""
