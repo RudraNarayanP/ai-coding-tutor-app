@@ -51,7 +51,8 @@ function looksLikeTranscript(text: string): boolean {
   const structured =
     /^\s*\d+[.)]\s/m.test(t) ||
     t.includes('`') ||
-    /\b(import|from .+ import|def |class |print\()/i.test(t)
+    // Real code shapes only — the bare word "import" inside spoken prose is not code.
+    /\bfrom\s+[\w.]+\s+import\s+\w+|^\s*import\s+[\w.]+|\bdef\s+\w+\s*\(|\bclass\s+\w+\s*[:(]|\bprint\(|\w\([^()\s]*\)/m.test(t)
   const words = t.split(/\s+/).filter(Boolean)
   // Beginner multi-step instructions are often 30–50 words — keep them.
   if (words.length > 70 && !structured) return true

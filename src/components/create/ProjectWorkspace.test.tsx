@@ -225,7 +225,8 @@ describe('ProjectWorkspace', () => {
     await waitFor(() => screen.getByText('Word Frequency Counter'))
     expect(screen.queryByText(/about this fish/i)).toBeNull()
     expect(screen.queryByText(/lossy compression/i)).toBeNull()
-    expect(screen.getByText(/Complete this step: Import collections/)).toBeInTheDocument()
+    expect(screen.getByText(/write the code for .Import collections./)).toBeInTheDocument()
+    expect(screen.queryByText(/video section|instructor/i)).toBeNull()
   })
 
   it('offers a read-only AI suggestion that the learner explicitly applies', async () => {
