@@ -111,3 +111,26 @@ def test_create_course_system_prompt_bans_video_phrases():
     assert "NEVER watched the video" in _SYSTEM or "never watched" in _SYSTEM.lower()
     assert "as in the video" in _SYSTEM
     assert "keyword-only" in _SYSTEM.lower() or "keyword-only" in _SYSTEM or "FORBID keyword" in _SYSTEM
+
+
+
+def test_settings_writes_are_isolated_from_real_env_and_key_store():
+    """Regression: saving a model/key in tests must not touch the project .env or
+    ~/.config/patchwork-tutor (conftest redirects both per test)."""
+    from pathlib import Path
+
+    from backend import api_key_manager as akm
+    from backend import env as env_mod
+    from backend.api_settings import update_provider_key, update_provider_model
+
+    real_env = Path(env_mod.__file__).resolve().parents[1] / ".env"
+    real_key_dir = Path.home() / ".config" / "patchwork-tutor"
+    assert env_mod._env_path() != real_env
+    assert akm._CONFIG_DIR != real_key_dir
+
+    before = real_env.read_bytes() if real_env.exists() else None
+    update_provider_model("openrouter", "test/isolation-model:free")
+    update_provider_key("openai", "sk-" + "x" * 45, model="gpt-4o-mini")
+    after = real_env.read_bytes() if real_env.exists() else None
+    assert before == after
+    assert "test/isolation-model:free" in env_mod._env_path().read_text(encoding="utf-8")
