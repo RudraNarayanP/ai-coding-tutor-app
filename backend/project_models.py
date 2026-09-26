@@ -66,7 +66,7 @@ class Milestone(BaseModel):
     # to concise deterministic copy).
     hook: str = Field(default="", max_length=200)
     teach: str = Field(default="", max_length=1200)
-    example: str = Field(default="", max_length=1200)
+    example: str = Field(default="", max_length=2400)
     celebrate: str = Field(default="", max_length=200)
     checks: list[VerificationCheck] = Field(default_factory=list)
     xp_reward: int = Field(default=20, ge=0, le=200)

@@ -518,7 +518,9 @@ def _sanitize_code(text: str, max_len: int) -> str:
     t = re.sub(r"\b(uh|um|you know|i mean)\b(?=[ ,.])", "", t, flags=re.I)
     lines = [ln.rstrip() for ln in t.split("\n")]
     t = re.sub(r"\n{3,}", "\n\n", "\n".join(lines)).strip()
-    return t[:max_len]
+    from .project_copy import cap_code
+
+    return cap_code(t, max_len)
 
 
 def _entry_for_language(language: str, entry_file: str) -> str:
@@ -1003,7 +1005,7 @@ def course_dict_to_project(
                 why=_sanitize(str(item.get("why") or ""), 2000),
                 hook=_sanitize(str(item.get("hook") or m_title), 200),
                 teach=_sanitize(str(item.get("teach") or ""), 1200),
-                example=_sanitize_code(str(item.get("example") or ""), 1200),
+                example=_sanitize_code(str(item.get("example") or ""), 2400),
                 celebrate=_sanitize(str(item.get("celebrate") or "Nice work — keep going!"), 200),
                 checks=checks,
                 xp_reward=max(10, min(200, int(item.get("xp_reward") or 20))),

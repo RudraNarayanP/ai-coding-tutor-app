@@ -518,3 +518,18 @@ def test_scrub_keeps_comma_list_teach():
     m = scrub_learner_fields(p.milestones[0])
     assert m.teach == teach
     assert "later milestones can call and extend" not in m.teach
+
+
+def test_long_example_is_capped_at_a_line_boundary():
+    """Regression (sweep ultra 03:41): a 1200-char cap cut m4 mid-token (`build_topo(chi`)."""
+    from backend.ai_course_generator import _sanitize_code
+    from backend.project_copy import MAX_EXAMPLE, cap_code
+    from backend.project_enrich import _sanitize_example
+
+    code = "\n".join(f"def f{i}(x):\n    return build_topo(child_{i})" for i in range(60))
+    assert len(code) > MAX_EXAMPLE
+    out = _sanitize_code(code, MAX_EXAMPLE)
+    assert len(out) <= MAX_EXAMPLE and out.endswith(")")
+    short = "def backward(self):\n    topo = []\n    build_topo(self)"
+    assert _sanitize_code(short, MAX_EXAMPLE) == short and cap_code(short) == short
+    assert "\n    topo = []" in _sanitize_example(short)

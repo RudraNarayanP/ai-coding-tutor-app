@@ -154,6 +154,17 @@ def _sanitize(text: str, max_len: int) -> str:
     return cleaned[:max_len]
 
 
+def _sanitize_example(value) -> str:
+    """Examples are code: keep line breaks/indentation (``_sanitize`` flattens them)."""
+    from .project_copy import MAX_EXAMPLE, cap_code
+
+    t = str(value or "").replace("\r\n", "\n").strip()
+    t = re.sub(r"\\n", "\n", t)
+    if contains_banned_video_phrase(t):
+        return ""
+    return cap_code(t, MAX_EXAMPLE)
+
+
 def _build_intro_prompt(project: ProjectCourse) -> str:
     milestones = [
         m.title for m in project.milestones
@@ -271,7 +282,7 @@ def _apply_items(project: ProjectCourse, data: dict[int, dict], *, fill_only: bo
             for attr, key, cap in (("hook", "hook", 200), ("celebrate", "celebrate", 200),
                                    ("teach", "teach", 1200), ("example", "example", 1200)):
                 if not (getattr(m, attr) or "").strip():
-                    v = _sanitize(str(val.get(key, "")), cap)
+                    v = _sanitize_example(val.get(key)) if attr == "example" else _sanitize(str(val.get(key, "")), cap)
                     if v and not looks_like_raw_transcript(v):
                         setattr(m, attr, v); touched = True
             if not (m.microstep.observation or "").strip():
@@ -293,7 +304,7 @@ def _apply_items(project: ProjectCourse, data: dict[int, dict], *, fill_only: bo
         observation = _sanitize(str(val.get("observation", "")), 400)
         action = _sanitize(str(val.get("action", "")), 400)
         teach = _sanitize(str(val.get("teach", "")), 1200)
-        example = _sanitize(str(val.get("example", "")), 1200)
+        example = _sanitize_example(val.get("example"))
         celebrate = _sanitize(str(val.get("celebrate", "")), 200)
         # Refuse caption dumps the model echoed from source text.
         if looks_like_raw_transcript(teach) or looks_like_raw_transcript(hook):

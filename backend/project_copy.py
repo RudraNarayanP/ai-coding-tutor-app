@@ -24,6 +24,18 @@ MAX_ACTION = 1000  # AI actions often carry short code steps; 400 cut them mid-t
 MAX_HINT = 280
 MAX_TEACH = 900
 MAX_HOOK = 160
+# Worked examples carry whole functions/classes (ultra micrograd m4 was cut mid-token
+# at 1200 chars, 03:41 IST). Cap generously and only ever at a line boundary.
+MAX_EXAMPLE = 2400
+
+
+def cap_code(text: str | None, max_len: int = MAX_EXAMPLE) -> str:
+    t = text or ""
+    if len(t) <= max_len:
+        return t
+    cut = t[:max_len]
+    nl = cut.rfind("\n")
+    return (cut[:nl] if nl > max_len // 2 else cut).rstrip()
 
 _FILLERS = re.compile(
     r"\b(um+|uh+|you know|" + HEDGE_SORT_KIND + r"|and so(?: it's)?|going to|gonna|"
@@ -713,7 +725,7 @@ def learner_facing_fields(
         "why": why[:MAX_WHY],
         "teach": teach[:MAX_TEACH],
         "hook": hook[:MAX_HOOK],
-        "example": example[:1200],
+        "example": cap_code(example),
         "celebrate": milestone.celebrate or "",
         "observation": (observation or "")[:400],
         "action": action[:MAX_ACTION],
