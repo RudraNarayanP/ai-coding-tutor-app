@@ -39,3 +39,17 @@ def test_post_with_deadline_stops_a_stalled_request(monkeypatch):
     with pytest.raises(TimeoutError):
         asyncio.run(ap._post_with_deadline(StallClient(), "http://x", timeout=0.1))
     assert time.monotonic() - t0 < 5
+
+
+def test_rate_limit_during_review_stops_instead_of_burning_tries():
+    import pytest
+    from backend.ai_course_generator import _raise_if_fatal_provider_error
+    from backend.ai_provider import AIProviderError
+    from backend.project_planner import ProjectGroundingError
+
+    err = AIProviderError("OpenRouter rate limit or quota exceeded (x is temporarily rate-limited upstream).", provider="openrouter", code="rate_limit")
+    with pytest.raises(ProjectGroundingError) as ei:
+        _raise_if_fatal_provider_error(err, "quality review")
+    assert "rate limit" in str(ei.value) and "quality review" in str(ei.value)
+    _raise_if_fatal_provider_error(ValueError("bad json"), "quality review")  # not fatal: no raise
+    _raise_if_fatal_provider_error(AIProviderError("x", provider="openrouter", code="network_error"), "revision")

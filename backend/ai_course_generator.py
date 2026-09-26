@@ -510,6 +510,21 @@ def _sanitize(text: str, max_len: int) -> str:
     return cleaned[:max_len]
 
 
+_FATAL_PROVIDER_CODES = {"rate_limit", "invalid_api_key", "model_unavailable"}
+
+
+def _raise_if_fatal_provider_error(exc: Exception, stage: str) -> None:
+    """Rate limits / bad keys are not quality failures. Stop instead of burning every
+    review try (sweep 03:47 IST: qwen spent 12 tries on 429s in 83s, then reported
+    "quality review did not PASS")."""
+    if getattr(exc, "code", None) in _FATAL_PROVIDER_CODES:
+        detail = getattr(exc, "message", None) or str(exc)
+        raise ProjectGroundingError(
+            f"The AI provider stopped responding during {stage}: {detail}. "
+            "Wait a minute and retry, or pick another model in Settings."
+        ) from exc
+
+
 def _sanitize_code(text: str, max_len: int) -> str:
     """Like _sanitize but keeps line breaks and indentation (action/example carry code).
     Models often double-escape newlines, so literal "\\n" becomes a real newline."""
@@ -1693,6 +1708,7 @@ async def generate_course_with_ai(
                 last_fail_reason = f"Reviser discarded an already-created course: {exc}"
                 logger.warning("reviser discard tolerated once (create stage accepted source): %s", exc)
             except Exception as exc:  # noqa: BLE001
+                _raise_if_fatal_provider_error(exc, "revision")
                 logger.exception("AI course revise after local precheck failed")
                 last_fail_reason = str(exc)
             continue
@@ -1702,6 +1718,7 @@ async def generate_course_with_ai(
                 provider, project, doc, title=title, local_hints=None
             )
         except Exception as exc:  # noqa: BLE001
+            _raise_if_fatal_provider_error(exc, "quality review")
             logger.exception("AI course quality review failed")
             last_fail_reason = f"Review call failed: {exc}"
             if attempt >= max_tries:
@@ -1741,6 +1758,7 @@ async def generate_course_with_ai(
             last_fail_reason = f"Reviser discarded an already-created course: {exc}"
             logger.warning("reviser discard tolerated once (create stage accepted source): %s", exc)
         except Exception as exc:  # noqa: BLE001
+            _raise_if_fatal_provider_error(exc, "revision")
             logger.exception("AI course revise after FAIL review failed")
             last_fail_reason = str(exc)
 
