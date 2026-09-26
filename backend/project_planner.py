@@ -2165,22 +2165,26 @@ def validate_project(project: ProjectCourse) -> None:
         )
 
     for m in project.milestones:
-        for field in (m.microstep.action, m.microstep.observation, m.hook, m.teach):
-            if looks_like_raw_transcript(field):
-                raise ProjectGroundingError(
-                    "Generated lesson content still contains raw transcript speech. "
-                    "Try a cleaner transcript or a video with chapter markers."
-                )
-        # Beginner multi-step actions are intentionally ~3 short lines. Cap them
+        # Instruction field: instruction detector (handles numbered steps / code).
+        # Prose fields: prose detector — a sentence with a list is not a caption dump
+        # (the instruction heuristic rejected whole AI-reviewed courses for it).
+        if looks_like_raw_transcript(m.microstep.action) or any(
+            _looks_like_raw_prose(f) for f in (m.microstep.observation, m.hook, m.teach)
+        ):
+            raise ProjectGroundingError(
+                "Generated lesson content still contains raw transcript speech. "
+                "Try a cleaner transcript or a video with chapter markers."
+            )
+        # Actions may carry short code steps (Microstep.action allows 1200). Cap
         # instead of rejecting a whole valid tutorial for a few extra characters.
-        if m.microstep.action and len(m.microstep.action) > 400:
-            m.microstep.action = _cap_field(m.microstep.action, 400)
+        if m.microstep.action and len(m.microstep.action) > 1000:
+            m.microstep.action = _cap_field(m.microstep.action, 1000)
 
     run_ok_titles = [m.title.strip().lower() for m in project.milestones if "run and verify" in m.title.strip().lower()]
     if len(run_ok_titles) > 1:
         raise ProjectGroundingError(_NOT_ENOUGH_MATERIAL)
 
-    if looks_like_raw_transcript(project.project_goal):
+    if _looks_like_raw_prose(project.project_goal):
         raise ProjectGroundingError(
             "Could not produce a clean project overview from this source."
         )

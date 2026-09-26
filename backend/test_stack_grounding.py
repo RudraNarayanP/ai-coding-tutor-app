@@ -474,3 +474,30 @@ def test_precheck_flags_filename_as_code_contains():
     assert any("is a file name" in d for d in local_precheck_course(p))
     p2 = _project(["Mojo"], "Structs group data and methods together.", "struct Point")
     assert not any("is a file name" in d for d in local_precheck_course(p2))
+
+
+def test_validate_project_accepts_list_goal_comma_teach_and_long_action():
+    """Regression (makemore 02:15): review PASSed, then validate_project rejected the
+    course because the goal listed topics (>=3 commas) and re-capped actions at 400."""
+    from backend.project_planner import validate_project
+
+    p = _project(["PyTorch"], "Bigrams count, normalize, sample, and score character pairs, so we learn the basics.",
+                 "torch.multinomial")
+    p.project_goal = ("Build a character-level bigram language model in PyTorch: count pairs, normalize rows, "
+                      "sample names, compute the negative log likelihood, and train a one-layer network.")
+    long_action = "1. In `main.py`, add:\n" + "\n".join(f"W{i} = torch.randn((27, 27))" for i in range(35))
+    assert 800 < len(long_action) <= 1000
+    p.milestones[0].microstep.action = long_action
+    validate_project(p)
+    assert p.milestones[0].microstep.action == long_action
+
+
+def test_validate_project_still_rejects_caption_dump_goal():
+    import pytest as _pytest
+
+    from backend.project_planner import validate_project
+
+    p = _project(["PyTorch"], "Bigrams model pairs of characters.", "torch.multinomial")
+    p.project_goal = "so um basically we we are gonna like build the the thing you know"
+    with _pytest.raises(Exception):
+        validate_project(p)
