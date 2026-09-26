@@ -11,6 +11,7 @@ import asyncio
 import json
 import logging
 import re
+from .speech_fillers import HEDGE_SORT_KIND
 
 from .project_copy import (
     contains_banned_video_phrase,
@@ -30,7 +31,7 @@ _RETRIES = 1
 
 _FILLER_RE = re.compile(
     # (?<!-) keeps compounds like "Python-like" / "C-like" intact.
-    r"(?<!-)\b(uh|um|er|ah|like|you know|sort of|kind of|i mean|basically)\b",
+    r"(?<!-)\b(uh|um|er|ah|like|you know|" + HEDGE_SORT_KIND + r"|i mean|basically)\b",
     re.IGNORECASE,
 )
 

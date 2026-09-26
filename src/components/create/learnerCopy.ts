@@ -5,7 +5,7 @@
 const MAX_BODY = 280
 const MAX_QUOTE = 160
 
-const FILLERS = /\b(um+|uh+|you know|kind of|sort of|and so(?: it's)?|going to|gonna|right so|basically|yeah|welcome back)\b/gi
+const FILLERS = /\b(um+|uh+|you know|(?<!\b(?:a|an|the|this|that|what|which|any|some|same|one|each|every|another|different|merge|quick|bubble|stable|heap|radix|insertion|selection|topo)\s)(?<!ical\s)(?:sort|kind) of|and so(?: it's)?|going to|gonna|right so|basically|yeah|welcome back)\b/gi
 
 export function isTranscriptDump(text: string | null | undefined, maxLen = MAX_BODY): boolean {
   if (!text) return false

@@ -8,6 +8,14 @@ const DUMP =
   'and then implement the forward method so that it returns the logits'
 
 describe('Create Course learnerCopy', () => {
+  it('treats noun "sort of"/"kind of" as English, not filler', () => {
+    const topo = 'A topological sort of the graph and a different kind of node, what kind of op, a merge sort of the list, ' +
+      'each kind of value and the sort of order we need is here and there without any stops at all in this long line'
+    expect(isTranscriptDump(topo)).toBe(false)
+    const hedge = "so it's sort of like a list and we kind of add them up and then it's sort of done and we kind of move on to the next part okay and then we look at the output and it all just works out in the end"
+    expect(isTranscriptDump(hedge)).toBe(true)
+  })
+
   it('detects giant raw transcripts and keeps concise copy', () => {
     expect(isTranscriptDump(DUMP)).toBe(true)
     expect(isTranscriptDump('Load the transformers library so you can use the model.')).toBe(false)

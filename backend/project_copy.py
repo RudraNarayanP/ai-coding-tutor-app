@@ -10,6 +10,7 @@ Used only by Create Course (planner, enrichment, ProjectView, guidance).
 from __future__ import annotations
 
 import re
+from .speech_fillers import HEDGE_SORT_KIND
 from typing import Any
 
 from .project_models import Microstep, Milestone
@@ -25,7 +26,7 @@ MAX_TEACH = 900
 MAX_HOOK = 160
 
 _FILLERS = re.compile(
-    r"\b(um+|uh+|you know|kind of|sort of|and so(?: it's)?|going to|gonna|"
+    r"\b(um+|uh+|you know|" + HEDGE_SORT_KIND + r"|and so(?: it's)?|going to|gonna|"
     r"right so|basically|yeah|welcome back)\b",
     re.IGNORECASE,
 )

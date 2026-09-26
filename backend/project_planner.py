@@ -18,6 +18,7 @@ provider is configured, but the deterministic backbone is always source-grounded
 from __future__ import annotations
 
 import re
+from .speech_fillers import HEDGE_SORT_KIND
 import sys
 import time
 
@@ -177,7 +178,7 @@ _STEP_CHUNK_MAX = 800
 
 # Speech-to-text / filler patterns that must never appear in learner-facing copy.
 _TRANSCRIPT_FILLER = re.compile(
-    r"\b(uh+|u+m+|er+|ah+|huh|yeah|y'know|you know|sort of|kind of|kinda|sorta|"
+    r"\b(uh+|u+m+|er+|ah+|huh|yeah|y'know|you know|" + HEDGE_SORT_KIND + r"|kinda|sorta|"
     r"i mean|basically|literally|right\?|gonna|wanna|gotta|okay so|alright so)\b",
     re.IGNORECASE,
 )

@@ -33,7 +33,7 @@ const SANDBOX_BANNER = [
 ]
 
 const TRANSCRIPT_FILLER =
-  /\b(uh+|u+m+|er+|ah+|you know|kind of|sort of|i mean|gonna|we call it)\b/i
+  /\b(uh+|u+m+|er+|ah+|you know|(?<!\b(?:a|an|the|this|that|what|which|any|some|same|one|each|every|another|different|merge|quick|bubble|stable|heap|radix|insertion|selection|topo)\s)(?<!ical\s)(?:sort|kind) of|i mean|gonna|we call it)\b/i
 
 function isMultilineCode(t: string): boolean {
   const lines = t.split('\n').filter((ln) => ln.trim())
