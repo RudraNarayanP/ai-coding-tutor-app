@@ -426,7 +426,7 @@ def test_literal_backslash_n_in_action_becomes_real_newline():
     proj = course_dict_to_project(data["course"], doc=_doc(), title="T", course_id="c-nl")
     act = proj.milestones[0].microstep.action
     assert "\\n" not in act
-    assert act.split("\n") == ["1. Edit `main.py`.", "2. Add `x = 1`.", "3. Run it."]
+    assert [ln.strip() for ln in act.split("\n")] == ["1. Edit `main.py`.", "2. Add `x = 1`.", "3. Run it."]
 
 
 def test_precheck_flags_more_than_12_milestones_as_merge():
@@ -441,3 +441,36 @@ def test_precheck_flags_more_than_12_milestones_as_merge():
     assert any("Too many milestones (14)" in d and "MERGE" in d for d in defects)
     p.milestones = p.milestones[:12]
     assert not any("Too many milestones" in d for d in local_precheck_course(p))
+
+
+# --- multi-line code in action/example survives; filename-as-code flagged -------
+_MOJO_BLOCK = "struct Point:\n    var x: Int\n    var y: Int\n\n    fn __init__(inout self, x: Int, y: Int):\n        self.x = x\n        self.y = y"
+
+
+def test_example_and_action_keep_multiline_code():
+    from backend.ai_course_generator import course_dict_to_project
+
+    data = _good_course_json()
+    data["course"]["milestones"][0]["example"] = _MOJO_BLOCK.replace("\n", "\\n")
+    data["course"]["milestones"][0]["action"] = "1. In `main.py`, add:\\nx = 1\\nif x:\\n    print(x)"
+    proj = course_dict_to_project(data["course"], doc=_doc(), title="T", course_id="c-ml")
+    assert proj.milestones[0].example == _MOJO_BLOCK
+    assert "\n    print(x)" in proj.milestones[0].microstep.action
+
+
+def test_raw_detectors_do_not_wipe_multiline_code():
+    from backend.project_copy import looks_like_raw_transcript as copy_raw
+    from backend.project_planner import looks_like_raw_transcript as plan_raw
+
+    assert not copy_raw(_MOJO_BLOCK, max_len=1200)
+    assert not plan_raw(_MOJO_BLOCK)
+    assert plan_raw("so um basically we we go\nand uh like yeah")
+
+
+def test_precheck_flags_filename_as_code_contains():
+    from backend.ai_course_generator import local_precheck_course
+
+    p = _project(["Mojo"], "Structs group data and methods together.", "main.mojo")
+    assert any("is a file name" in d for d in local_precheck_course(p))
+    p2 = _project(["Mojo"], "Structs group data and methods together.", "struct Point")
+    assert not any("is a file name" in d for d in local_precheck_course(p2))

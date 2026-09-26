@@ -95,14 +95,16 @@ LEARNER GUIDE QUALITY (Duolingo-style — structured, not essays):
 - Clear project_goal + short course_intro (why it matters) — each ≤2 sentences
 - 5–12 milestones in source order (prefer 6–8 for long videos; merge tiny steps)
 - Every milestone MUST stand alone without opening YouTube: concrete do-this steps, not "follow along".
-- Each milestone (keep EVERY string single-line; teach/action ≤40 words):
+- Each milestone (prose fields single-line; teach ≤40 words). Code inside action/example may span
+  lines: write "\n" between code lines with real indentation. NEVER join block statements
+  (if/while/for/fn/def/struct/class bodies) with ';' — that is invalid code in most languages:
   - title: short chapter-style name
   - hook: ≤12 words, curiosity spark
   - teach: 1–2 plain sentences that TEACH the concept (what it is / why it exists) — never empty meta
   - observation: what they will see/have after this step
   - action: numbered EXACT typing steps. Name the file. Quote the key token/snippet. Concrete do-this only.
   - hint: a REAL nudge (what to type / common mistake) — NEVER "follow the source/transcript/video"
-  - example: ONE short single-line code snippet in the correct language (no fences, no newlines)
+  - example: ONE short, VALID code snippet in the correct language (no fences; "\n" between lines)
   - celebrate: short praise
   - why: one concrete motivation sentence that teaches what this unlocks — never empty
   - source_quote: short phrase copied from transcript/chapters
@@ -508,6 +510,17 @@ def _sanitize(text: str, max_len: int) -> str:
     return cleaned[:max_len]
 
 
+def _sanitize_code(text: str, max_len: int) -> str:
+    """Like _sanitize but keeps line breaks and indentation (action/example carry code).
+    Models often double-escape newlines, so literal "\\n" becomes a real newline."""
+    t = (text or "").replace("\r\n", "\n").strip()
+    t = re.sub(r"\\n", "\n", t)
+    t = re.sub(r"\b(uh|um|you know|i mean)\b(?=[ ,.])", "", t, flags=re.I)
+    lines = [ln.rstrip() for ln in t.split("\n")]
+    t = re.sub(r"\n{3,}", "\n\n", "\n".join(lines)).strip()
+    return t[:max_len]
+
+
 def _entry_for_language(language: str, entry_file: str) -> str:
     ef = (entry_file or "").strip()
     if ef:
@@ -761,8 +774,7 @@ def _polish_milestone_dict(item: dict[str, Any], *, language: str, entry_file: s
         if re.search(r"\bdef\b", example) and not re.search(r"\bfn\b", example):
             if not re.search(r"(?i)python\s*vs|vs\s*mojo|compar", title):
                 example = re.sub(r"\bdef\b", "fn", example)
-        example = re.sub(r"\s+", " ", example).strip()
-        item["example"] = example
+        item["example"] = example.strip()
 
     # Strengthen hollow checks using example/action tokens BEFORE rewriting action.
     checks = item.get("checks") if isinstance(item.get("checks"), list) else []
@@ -985,13 +997,13 @@ def course_dict_to_project(
                     observation=_sanitize(str(item.get("observation") or m_title), 400),
                     # Models often double-escape newlines in numbered steps; the learner UI
                     # renders .pw-action with white-space: pre-line, so use real newlines.
-                    action=re.sub(r"\\n\s*", "\n", _sanitize(str(item.get("action") or f"Implement: {m_title}"), 1000)),
+                    action=_sanitize_code(str(item.get("action") or f"Implement: {m_title}"), 1000),
                     hint=_sanitize(str(item.get("hint") or "").strip(), 400),
                 ),
                 why=_sanitize(str(item.get("why") or ""), 2000),
                 hook=_sanitize(str(item.get("hook") or m_title), 200),
                 teach=_sanitize(str(item.get("teach") or ""), 1200),
-                example=_sanitize(str(item.get("example") or ""), 1200),
+                example=_sanitize_code(str(item.get("example") or ""), 1200),
                 celebrate=_sanitize(str(item.get("celebrate") or "Nice work — keep going!"), 200),
                 checks=checks,
                 xp_reward=max(10, min(200, int(item.get("xp_reward") or 20))),
@@ -1175,7 +1187,7 @@ line is a deterministic scan of the FULL transcript — trust it over the short 
 Stack/library, check, copy and structure defects are ALWAYS fixable in place: never
 return discard for them. Discard only when the source has no step-by-step code
 implementation at all (talk, lecture, motivational video).
-Keep examples single-line. Include 5–12 solid milestones.
+Examples must be short VALID code ("\n" between lines, never ';'-joined blocks). Include 5–12 solid milestones.
 
 Return STRICT JSON only:
 {"decision":"discard","reason":"..."}
@@ -1264,6 +1276,14 @@ def local_precheck_course(
         project.course_intro or "",
         " ".join(project.tech_stack or []),
     ]
+    _file_like = re.compile(r"^[\w./-]+\.(py|mojo|🔥|js|jsx|ts|tsx|rs|go|java|cpp|cc|c|h|rb|toml|json|txt)$", re.I)
+    for m in project.milestones:
+        for c in m.checks or []:
+            if c.kind == "code_contains" and _file_like.match((c.target or "").strip()):
+                defects.append(
+                    f"{m.id}: code_contains target `{c.target}` is a file name, not code — "
+                    "use a file_exists check or a distinctive code token instead."
+                )
     if len(project.milestones) > 12:
         defects.append(
             f"Too many milestones ({len(project.milestones)}): MERGE adjacent small steps into at most 12 "
@@ -1525,7 +1545,7 @@ async def _create_course_draft(
                     user
                     + "\n\nRETRY: Previous JSON was invalid/incomplete or not grounded. "
                     "Return compact STRICT JSON. Prefer discard over inventing a project. "
-                    "Keep examples single-line. Include 6-8 milestones with code_contains/import/symbol checks. Name the entry_file in every action."
+                    "Keep examples short, valid code. Include 6-8 milestones with code_contains/import/symbol checks. Name the entry_file in every action."
                 )
             raw = await provider.generate_structured(_SYSTEM, prompt, max_tokens=_CREATE_MAX_TOKENS)
             _debug_dump("create", raw)

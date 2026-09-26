@@ -144,6 +144,15 @@ def is_follow_source_template(text: str | None) -> bool:
     return bool(_FOLLOW_SOURCE_HINT.search(text))
 
 
+def _is_multiline_code(text: str) -> bool:
+    """Multi-line code (e.g. a Mojo/Python block in action/example) is not a caption dump."""
+    lines = [ln for ln in (text or "").split("\n") if ln.strip()]
+    if len(lines) < 2:
+        return False
+    codey = sum(1 for ln in lines if re.search(r"[(){}\[\]=:]|^\s{2,}\S", ln))
+    return codey >= max(2, len(lines) // 2)
+
+
 def looks_like_raw_transcript(text: str | None, *, max_len: int = MAX_DESCRIPTION) -> bool:
     """True when text is a caption dump rather than learner-facing tutorial copy.
 
@@ -157,6 +166,8 @@ def looks_like_raw_transcript(text: str | None, *, max_len: int = MAX_DESCRIPTIO
         return False
     stripped = re.sub(r"\s+", " ", raw)
     fillers = len(_FILLERS.findall(stripped))
+    if _is_multiline_code(raw):
+        return fillers >= 2
     if fillers >= 2:
         return True
     if fillers >= 1 and len(stripped.split()) > 40:

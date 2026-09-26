@@ -200,6 +200,15 @@ def _cap_field(text: str, max_len: int = _FIELD_MAX) -> str:
     return cleaned[: max_len - 1] + "…"
 
 
+def _is_multiline_code(text: str) -> bool:
+    """Multi-line code (e.g. a Mojo/Python block in action/example) is not a caption dump."""
+    lines = [ln for ln in (text or "").split("\n") if ln.strip()]
+    if len(lines) < 2:
+        return False
+    codey = sum(1 for ln in lines if re.search(r"[(){}\[\]=:]|^\s{2,}\S", ln))
+    return codey >= max(2, len(lines) // 2)
+
+
 def looks_like_raw_transcript(text: str) -> bool:
     """True when text looks like unprocessed speech-to-text, not learner copy.
 
@@ -211,6 +220,8 @@ def looks_like_raw_transcript(text: str) -> bool:
         return False
     if _TRANSCRIPT_FILLER.search(cleaned) or _SPOKEN_FILLER_CHUNKS.search(cleaned):
         return True
+    if _is_multiline_code(cleaned):
+        return False
     structured = bool(
         re.search(r"(?m)^\s*\d+[.)]\s", cleaned)
         or "`" in cleaned

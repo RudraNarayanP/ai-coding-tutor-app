@@ -35,10 +35,19 @@ const SANDBOX_BANNER = [
 const TRANSCRIPT_FILLER =
   /\b(uh+|u+m+|er+|ah+|you know|kind of|sort of|i mean|gonna|we call it)\b/i
 
+function isMultilineCode(t: string): boolean {
+  const lines = t.split('\n').filter((ln) => ln.trim())
+  if (lines.length < 2) return false
+  const codey = lines.filter((ln) => /[(){}[\]=:]|^\s{2,}\S/.test(ln)).length
+  return codey >= Math.max(2, Math.floor(lines.length / 2))
+}
+
 function looksLikeTranscript(text: string): boolean {
   const t = (text || '').trim()
   if (!t) return false
   if (TRANSCRIPT_FILLER.test(t)) return true
+  // Multi-line code steps (e.g. a Mojo block) are not caption dumps.
+  if (isMultilineCode(t)) return false
   const structured =
     /^\s*\d+[.)]\s/m.test(t) ||
     t.includes('`') ||
