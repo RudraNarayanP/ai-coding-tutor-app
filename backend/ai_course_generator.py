@@ -1276,7 +1276,9 @@ def local_precheck_course(
         project.course_intro or "",
         " ".join(project.tech_stack or []),
     ]
-    _file_like = re.compile(r"^[\w./-]+\.(py|mojo|🔥|js|jsx|ts|tsx|rs|go|java|cpp|cc|c|h|rb|toml|json|txt)$", re.I)
+    _file_like = re.compile(r"^[\w./-]+\.(py|mojo|🔥|js|jsx|ts|tsx|rs|go|java|cpp|cc|c|h|rb)$", re.I)
+    # Data files (names.txt, config.json, ...) are legitimately open()-ed in code, so
+    # only source/workspace file names are flagged as filename-as-code checks.
     for m in project.milestones:
         for c in m.checks or []:
             if c.kind == "code_contains" and _file_like.match((c.target or "").strip()):

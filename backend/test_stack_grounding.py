@@ -474,6 +474,9 @@ def test_precheck_flags_filename_as_code_contains():
     assert any("is a file name" in d for d in local_precheck_course(p))
     p2 = _project(["Mojo"], "Structs group data and methods together.", "struct Point")
     assert not any("is a file name" in d for d in local_precheck_course(p2))
+    # Regression (makemore 02:18): open('names.txt') makes a data-file name a legit target.
+    p3 = _project(["PyTorch"], "Read the dataset of names.", "names.txt")
+    assert not any("is a file name" in d for d in local_precheck_course(p3))
 
 
 def test_validate_project_accepts_list_goal_comma_teach_and_long_action():
