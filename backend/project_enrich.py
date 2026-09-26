@@ -12,7 +12,11 @@ import json
 import logging
 import re
 
-from .project_copy import looks_like_raw_transcript, polish_project_copy
+from .project_copy import (
+    contains_banned_video_phrase,
+    looks_like_raw_transcript,
+    polish_project_copy,
+)
 from .project_models import ProjectCourse
 from .project_planner import ProjectGroundingError
 from .source_ingestion import SourceDocument
@@ -25,7 +29,8 @@ _TOTAL_BUDGET = 90.0
 _RETRIES = 1
 
 _FILLER_RE = re.compile(
-    r"\b(uh|um|er|ah|like|you know|sort of|kind of|i mean|basically)\b",
+    # (?<!-) keeps compounds like "Python-like" / "C-like" intact.
+    r"(?<!-)\b(uh|um|er|ah|like|you know|sort of|kind of|i mean|basically)\b",
     re.IGNORECASE,
 )
 
@@ -133,6 +138,9 @@ _SYSTEM = (
     "NEVER paste or paraphrase raw YouTube transcript dialogue. "
     "NEVER use speech fillers (uh, um, like, you know). "
     "NEVER invent features not in the source. "
+    "The learner NEVER watched a video — teach from the transcript/workspace only. "
+    "NEVER say: as in the video, in the video, follow the instructor, watch the video, "
+    "as shown, from the video, like the tutorial, type the instructor, or similar. "
     "Return STRICT JSON only (no markdown, no prose outside JSON)."
 )
 
@@ -140,7 +148,7 @@ _SYSTEM = (
 def _sanitize(text: str, max_len: int) -> str:
     cleaned = _FILLER_RE.sub("", (text or "").strip())
     cleaned = re.sub(r"\s{2,}", " ", cleaned).strip()
-    if looks_like_raw_transcript(cleaned):
+    if looks_like_raw_transcript(cleaned) or contains_banned_video_phrase(cleaned):
         return ""
     return cleaned[:max_len]
 
@@ -181,7 +189,8 @@ def _build_user_prompt(project: ProjectCourse, items: list[tuple[int, str, str]]
         '"teach": 2 sentences max (what it is + why it matters — no filler), '
         '"example": ONE tiny code line, '
         '"celebrate": short hype line with one emoji}\n'
-        "Never paste or paraphrase a raw video transcript.\n\n"
+        "Never paste or paraphrase a raw video transcript.\n"
+        "Never tell the learner to watch/follow a video or instructor — workspace-only teaching.\n\n"
         f"Milestones:\n{listing}"
     )
 
@@ -245,8 +254,35 @@ def _parse_items(text: str) -> dict[int, dict]:
     return out
 
 
-def _apply_items(project: ProjectCourse, data: dict[int, dict]) -> int:
+def _apply_items(project: ProjectCourse, data: dict[int, dict], *, fill_only: bool = False) -> int:
+    """Apply enrichment. fill_only=True (AI create path): the course already PASSED the
+    AI quality review, so only EMPTY fields are filled — reviewed teach/action/example
+    are never overwritten (enrich only sees titles, not the checks, and used to write
+    copy that contradicted them, e.g. print "Hello, Mojo!" vs check "Hello, World!")."""
     by_order = {m.order: m for m in project.milestones}
+    if fill_only:
+        applied = 0
+        for order, val in data.items():
+            m = by_order.get(order)
+            if not m or not isinstance(val, dict):
+                continue
+            touched = False
+            for attr, key, cap in (("hook", "hook", 200), ("celebrate", "celebrate", 200),
+                                   ("teach", "teach", 1200), ("example", "example", 1200)):
+                if not (getattr(m, attr) or "").strip():
+                    v = _sanitize(str(val.get(key, "")), cap)
+                    if v and not looks_like_raw_transcript(v):
+                        setattr(m, attr, v); touched = True
+            if not (m.microstep.observation or "").strip():
+                v = _sanitize(str(val.get("observation", "")), 400)
+                if v and len(v.split()) <= 28:
+                    m.microstep.observation = v; touched = True
+            if not (m.microstep.action or "").strip():
+                v = _sanitize(str(val.get("action", "")), 400)
+                if v and len(v) >= 8 and not contains_banned_video_phrase(v):
+                    m.microstep.action = v; touched = True
+            applied += int(touched)
+        return applied
     applied = 0
     for order, val in data.items():
         m = by_order.get(order)
@@ -265,8 +301,11 @@ def _apply_items(project: ProjectCourse, data: dict[int, dict]) -> int:
             continue
         if hook:
             m.hook = hook
-        if teach and len(teach) > 20:
-            m.teach = teach
+        if teach and len(teach) > 20 and not contains_banned_video_phrase(teach):
+            # Keep existing solid AI teach if new one is weaker
+            existing = (m.teach or "").strip()
+            if not existing or contains_banned_video_phrase(existing) or len(teach) >= len(existing):
+                m.teach = teach
         if example:
             m.example = example
         if celebrate:
@@ -280,7 +319,9 @@ def _apply_items(project: ProjectCourse, data: dict[int, dict]) -> int:
             and len(action) >= 8
             and len(action.split()) <= 25
             and not looks_like_raw_transcript(action)
+            and not contains_banned_video_phrase(action)
         ):
+            # Prefer solid AI action; never replace with banned/empty templates here.
             m.microstep.action = action
         applied += 1
     return applied
@@ -308,7 +349,9 @@ async def _enrich_intro(provider, project: ProjectCourse) -> None:
         logger.info(f"Course intro enrichment skipped ({exc.__class__.__name__}).")
 
 
-async def _enrich_chunk(provider, project: ProjectCourse, items: list[tuple[int, str, str]]) -> int:
+async def _enrich_chunk(
+    provider, project: ProjectCourse, items: list[tuple[int, str, str]], *, fill_only: bool = False
+) -> int:
     pending = list(items)
     total_applied = 0
     for attempt in range(_RETRIES + 1):
@@ -319,7 +362,7 @@ async def _enrich_chunk(provider, project: ProjectCourse, items: list[tuple[int,
             provider.generate_structured(_SYSTEM, user, max_tokens=1200), timeout=_CALL_TIMEOUT
         )
         data = _parse_items(raw)
-        total_applied += _apply_items(project, data)
+        total_applied += _apply_items(project, data, fill_only=fill_only)
         by_order = {m.order: m for m in project.milestones}
         pending = [
             (o, t, c) for (o, t, c) in pending
@@ -328,18 +371,29 @@ async def _enrich_chunk(provider, project: ProjectCourse, items: list[tuple[int,
     return total_applied
 
 
-async def enrich_project(provider, project: ProjectCourse) -> ProjectCourse:
-    """Best-effort enrich milestones and course intro. Never raises."""
+def _has_empty_field(m) -> bool:
+    return any(
+        not (v or "").strip()
+        for v in (m.hook, m.celebrate, m.teach, m.example, m.microstep.observation, m.microstep.action)
+    )
+
+
+async def enrich_project(provider, project: ProjectCourse, *, fill_only: bool = False) -> ProjectCourse:
+    """Best-effort enrich milestones and course intro. Never raises.
+
+    fill_only=True is used for AI-reviewed courses: only empty fields are filled."""
     if provider is None:
         polish_project_copy(project)
         return project
 
-    await _enrich_intro(provider, project)
+    if not (fill_only and (project.course_intro or "").strip()):
+        await _enrich_intro(provider, project)
 
     targets = [
         (m.order, m.title, m.checks[0].description if m.checks else "")
         for m in project.milestones
         if m.checks and m.checks[0].kind not in ("file_exists", "run_ok")
+        and (not fill_only or _has_empty_field(m))
     ]
     if not targets:
         polish_project_copy(project)
@@ -353,7 +407,7 @@ async def enrich_project(provider, project: ProjectCourse) -> ProjectCourse:
             break
         chunk = targets[i : i + _CHUNK]
         try:
-            await _enrich_chunk(provider, project, chunk)
+            await _enrich_chunk(provider, project, chunk, fill_only=fill_only)
         except Exception as exc:  # noqa: BLE001 — enrichment is best-effort.
             logger.info(f"Milestone enrichment chunk failed ({exc.__class__.__name__}); using deterministic copy.")
     polish_project_copy(project)

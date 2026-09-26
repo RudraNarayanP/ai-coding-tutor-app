@@ -50,9 +50,13 @@ class ProjectStore:
 
     def _persist(self, project: ProjectCourse) -> None:
         try:
-            self._path(project.course_id).write_text(
-                json.dumps(project.model_dump(), indent=2), encoding="utf-8"
-            )
+            # Compact JSON + atomic replace keeps large workspace saves off the
+            # critical path of a half-written file if the process dies mid-write.
+            raw = json.dumps(project.model_dump(), separators=(",", ":"), ensure_ascii=False)
+            target = self._path(project.course_id)
+            tmp = target.with_suffix(target.suffix + ".tmp")
+            tmp.write_text(raw, encoding="utf-8")
+            tmp.replace(target)
         except Exception as exc:  # noqa: BLE001
             logger.warning(f"Failed to persist project {project.course_id}: {exc}")
 
@@ -110,6 +114,12 @@ class ProjectStore:
             project = self._cache.get(course_id)
             if not project:
                 return None
+            # Skip no-op autosaves (same paths+contents) to avoid disk churn.
+            if len(project.workspace_files) == len(files) and all(
+                a.path == b.path and a.content == b.content
+                for a, b in zip(project.workspace_files, files)
+            ):
+                return project
             project.workspace_files = files
             project.updated_at = time.time()
             self._persist(project)

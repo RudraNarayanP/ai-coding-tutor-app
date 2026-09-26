@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useEffect, useMemo, useRef, useState } from 'react'
 
 export type TerminalRunOutput = {
   stdout?: string
@@ -18,7 +18,7 @@ interface CodeEditorProps {
 }
 
 // Shared full-pane editor used by Learn, Practice, Create, and lesson workspaces.
-export const CodeEditor: React.FC<CodeEditorProps> = ({
+export const CodeEditor: React.FC<CodeEditorProps> = React.memo(({
   value,
   onChange,
   onKeyDown,
@@ -32,6 +32,11 @@ export const CodeEditor: React.FC<CodeEditorProps> = ({
   const [fittedLines, setFittedLines] = useState(24)
   const contentLines = Math.max(1, value.split('\n').length)
   const lineCount = Math.max(contentLines, fittedLines)
+  // Avoid rebuilding the gutter DOM nodes on every unrelated parent render.
+  const lineNumbers = useMemo(
+    () => Array.from({ length: lineCount }, (_, i) => i + 1),
+    [lineCount]
+  )
 
   useEffect(() => {
     const el = bodyRef.current
@@ -84,9 +89,9 @@ export const CodeEditor: React.FC<CodeEditorProps> = ({
       )}
       <div ref={bodyRef} className="code-editor-body">
         <div className="line-numbers" aria-hidden="true">
-          {Array.from({ length: lineCount }, (_, i) => (
-            <div key={i} className="line-number">
-              {i + 1}
+          {lineNumbers.map((n) => (
+            <div key={n} className="line-number">
+              {n}
             </div>
           ))}
         </div>
@@ -106,4 +111,6 @@ export const CodeEditor: React.FC<CodeEditorProps> = ({
       </div>
     </div>
   )
-}
+})
+
+CodeEditor.displayName = 'CodeEditor'

@@ -144,6 +144,10 @@ def _code_without_comments_strings(source: str) -> str:
         return re.sub(r"#.*", "", source)
 
 
+_EXPR_CHARS = re.compile(r"[()\[\]=+\-*/@,:<>]")
+_PY_CONSTS = {"true", "false", "none"}
+
+
 def _code_contains_match(
     token: str, identifiers: set[str], stripped_lower: str, raw_lower: str, syntax_ok: bool
 ) -> bool:
@@ -158,6 +162,24 @@ def _code_contains_match(
     if not low:
         return False
     idents_in_token = re.findall(r"[a-zA-Z_][a-zA-Z0-9_]*", low)
+
+    # Expression-style targets (calls with args, operators, subscripts), e.g.
+    # "optimizer.zero_grad(set_to_none=True)" or "x+self.sa(self.ln1(x))".
+    # stripped_lower is space-joined tokens, so compare whitespace-insensitively;
+    # otherwise require EVERY salient identifier (not just the last one, which
+    # made "x+..." pass on any code using `x`).
+    if _EXPR_CHARS.search(token):
+        squeezed = re.sub(r"\s+", "", low)
+        if squeezed and squeezed in re.sub(r"\s+", "", stripped_lower):
+            return True
+        if not syntax_ok:
+            return squeezed in re.sub(r"\s+", "", raw_lower)
+        kwarg_names = set(re.findall(r"([a-z_][a-z0-9_]*)\s*=(?!=)", low))
+        salient = [
+            i for i in idents_in_token
+            if i not in _PY_CONSTS and i not in kwarg_names
+        ]
+        return bool(salient) and all(i in identifiers for i in salient)
 
     if "." in token:
         if low in stripped_lower:
@@ -352,7 +374,7 @@ async def _evaluate_check(
         if ok:
             return True, ""
         pretty = " or ".join(f"`{t}`" for t in tokens)
-        return False, f"Your code doesn't reference {pretty} yet."
+        return False, f"Add {pretty} in your code for this step, then click NEXT."
 
     if kind in ("run_ok", "stdout_contains"):
         if syntax_error:

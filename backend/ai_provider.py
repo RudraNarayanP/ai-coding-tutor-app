@@ -53,6 +53,10 @@ def _extract_openai_compatible_message(data: dict[str, Any]) -> str | None:
     exactly what broke the learner flow, so it is never returned here; an
     empty `content` is treated as a provider failure and the tutor service
     repairs or falls back instead.
+
+    Exception for structured generation: if `content` is empty but the message
+    includes a content-parts array, join text parts. Still never return
+    `reasoning` for tutor hints.
     """
     try:
         message_obj = data["choices"][0]["message"]
@@ -63,7 +67,54 @@ def _extract_openai_compatible_message(data: dict[str, Any]) -> str | None:
     candidate = message_obj.get("content")
     if isinstance(candidate, str) and candidate.strip():
         return candidate.strip()
+    # Some OpenAI-compatible servers return content as a list of parts.
+    if isinstance(candidate, list):
+        parts = []
+        for part in candidate:
+            if isinstance(part, str) and part.strip():
+                parts.append(part.strip())
+            elif isinstance(part, dict):
+                txt = part.get("text") or part.get("content")
+                if isinstance(txt, str) and txt.strip():
+                    parts.append(txt.strip())
+        if parts:
+            return "\n".join(parts)
     return None
+
+
+def _upstream_error_in_body(data: Any) -> tuple[int | None, str] | None:
+    """OpenRouter sometimes answers HTTP 200 with {"error": {...}} (upstream 429/503)."""
+    if not isinstance(data, dict):
+        return None
+    err = data.get("error")
+    if not err:
+        try:
+            err = (data.get("choices") or [{}])[0].get("error")
+        except Exception:  # noqa: BLE001
+            err = None
+    if not err:
+        return None
+    if isinstance(err, dict):
+        code = err.get("code")
+        try:
+            code_num = int(code) if code is not None else None
+        except (TypeError, ValueError):
+            code_num = None
+        msg = str(err.get("message") or err)[:240]
+        if code_num is None and "rate" in msg.lower() and "limit" in msg.lower():
+            code_num = 429
+        return code_num, msg
+    return None, str(err)[:240]
+
+
+def _finish_and_reasoning(data: Any) -> tuple[str | None, int]:
+    try:
+        choice = data["choices"][0]
+        msg = choice.get("message") or {}
+        reasoning = msg.get("reasoning") or ""
+        return choice.get("finish_reason"), len(reasoning) if isinstance(reasoning, str) else 0
+    except Exception:  # noqa: BLE001
+        return None, 0
 
 
 def build_user_prompt(request: TutorRequest) -> str:
@@ -389,14 +440,45 @@ class OpenAICompatibleProvider:
                 {"role": "user", "content": user},
             ],
         }
+        if self.supports_reasoning_param:
+            # Prefer speaking JSON over private chain-of-thought that can exhaust the budget.
+            payload["reasoning"] = {"effort": "none"}
 
         try:
             client = get_shared_client()
-            res = await client.post(f"{self.base_url}/chat/completions", headers=headers, json=payload, timeout=60.0)
+            timeout = 180.0 if max_tokens and max_tokens >= 2000 else 60.0
+            res = await client.post(f"{self.base_url}/chat/completions", headers=headers, json=payload, timeout=timeout)
+            if res.status_code == 400 and "reasoning" in payload:
+                payload.pop("reasoning", None)
+                res = await client.post(
+                    f"{self.base_url}/chat/completions", headers=headers, json=payload, timeout=timeout
+                )
             if res.status_code == 401:
                 raise AIProviderError(f"{self.name} API key is invalid or unauthorized.", provider=self.provider_id, code="invalid_api_key")
             elif res.status_code == 429:
                 raise AIProviderError(f"{self.name} rate limit or quota exceeded.", provider=self.provider_id, code="rate_limit")
+            elif res.status_code == 404:
+                detail = ""
+                try:
+                    detail = (res.json().get("error") or {}).get("message") or res.text[:240]
+                except Exception:
+                    detail = res.text[:240]
+                raise AIProviderError(
+                    f"{self.name} model unavailable ({self.model}): {detail}",
+                    provider=self.provider_id,
+                    code="model_unavailable",
+                )
+            elif res.status_code >= 400:
+                detail = ""
+                try:
+                    detail = (res.json().get("error") or {}).get("message") or res.text[:240]
+                except Exception:
+                    detail = res.text[:240]
+                raise AIProviderError(
+                    f"{self.name} HTTP {res.status_code}: {detail}",
+                    provider=self.provider_id,
+                    code="http_error",
+                )
             res.raise_for_status()
             data = res.json()
         except AIProviderError:
@@ -407,7 +489,61 @@ class OpenAICompatibleProvider:
         message = _extract_openai_compatible_message(data)
         if message:
             return message
-        raise AIProviderError(f"{self.name} returned an unexpected response format.", provider=self.provider_id, code="malformed_response")
+        # Diagnose instead of a bare "unexpected format": OpenRouter can return HTTP 200
+        # with an upstream error body, or empty content when a reasoning model burns the
+        # whole budget (finish_reason=length). Retry the empty-content case once with a
+        # larger budget and reasoning excluded from the output.
+        upstream = _upstream_error_in_body(data)
+        if upstream is not None:
+            code_num, msg = upstream
+            code = "rate_limit" if code_num == 429 else "upstream_error"
+            raise AIProviderError(
+                f"{self.name} upstream error{f' {code_num}' if code_num else ''}: {msg}",
+                provider=self.provider_id,
+                code=code,
+            )
+        finish, reasoning_len = _finish_and_reasoning(data)
+        if not getattr(self, "_structured_retrying", False):
+            retry_payload = dict(payload)
+            retry_payload["max_tokens"] = min(int((max_tokens or 4000) * 1.6), 16000)
+            retry_payload["reasoning"] = {"exclude": True, "effort": "low"}
+            logger.warning(
+                "%s empty structured content (finish_reason=%s reasoning_len=%s); retrying once with max_tokens=%s",
+                self.name, finish, reasoning_len, retry_payload["max_tokens"],
+            )
+            try:
+                self._structured_retrying = True
+                res2 = await client.post(
+                    f"{self.base_url}/chat/completions", headers=headers, json=retry_payload, timeout=timeout
+                )
+                if res2.status_code == 400:
+                    retry_payload.pop("reasoning", None)
+                    res2 = await client.post(
+                        f"{self.base_url}/chat/completions", headers=headers, json=retry_payload, timeout=timeout
+                    )
+                if res2.status_code == 429:
+                    raise AIProviderError(f"{self.name} rate limit or quota exceeded.", provider=self.provider_id, code="rate_limit")
+                if res2.status_code < 400:
+                    data2 = res2.json()
+                    message2 = _extract_openai_compatible_message(data2)
+                    if message2:
+                        return message2
+                    up2 = _upstream_error_in_body(data2)
+                    if up2 is not None and up2[0] == 429:
+                        raise AIProviderError(f"{self.name} upstream error 429: {up2[1]}", provider=self.provider_id, code="rate_limit")
+                    finish, reasoning_len = _finish_and_reasoning(data2)
+            except AIProviderError:
+                raise
+            except Exception:  # noqa: BLE001
+                logger.exception("%s structured retry failed", self.name)
+            finally:
+                self._structured_retrying = False
+        raise AIProviderError(
+            f"{self.name} returned an unexpected response format "
+            f"(empty content; finish_reason={finish}, reasoning_len={reasoning_len}).",
+            provider=self.provider_id,
+            code="malformed_response",
+        )
 
     async def health(self) -> ProviderStatus:
         if not self.api_key:
@@ -740,7 +876,7 @@ def create_openrouter_provider() -> OpenAICompatibleProvider:
         name="OpenRouter",
         api_key_env="OPENROUTER_API_KEY",
         model_env="OPENROUTER_MODEL",
-        default_model="meta-llama/llama-3.1-8b-instruct",
+        default_model="nvidia/nemotron-3-super-120b-a12b:free",
         base_url_env="OPENROUTER_BASE_URL",
         default_base_url="https://openrouter.ai/api/v1",
         headers_extra={"HTTP-Referer": "https://github.com/patchwork", "X-Title": "Patchwork AI Tutor"},

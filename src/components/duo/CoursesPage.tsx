@@ -12,7 +12,12 @@ export function CoursesPage({ courses, selectedLanguage, onSelectCourse }: Cours
     <div className="duo-courses-page">
       <h1 className="duo-courses-heading">Courses</h1>
       {courses.length === 0 ? (
-        <p className="duo-empty-note">No courses were returned by the server.</p>
+        <div className="duo-empty-card">
+          <p className="duo-empty-title">No courses yet</p>
+          <p className="duo-empty-note">
+            Courses appear here once the backend finishes loading language tracks.
+          </p>
+        </div>
       ) : (
         <div className="duo-courses-grid" role="tablist" aria-label="Course language selector">
           {courses.map((c) => {

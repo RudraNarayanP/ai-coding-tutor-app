@@ -9,9 +9,19 @@ E) persisted dump payloads are sanitized at the API projection (existing courses
 """
 from backend.project_copy import (
     apply_learner_facing_copy,
+    beginner_action,
+    beginner_observation,
+    beginner_teach,
     code_ident_for_import,
+    contains_banned_learner_phrase,
+    is_follow_source_template,
+    needs_learner_fallback,
+    learner_description,
     learner_facing_fields,
+    learner_hint,
+    learner_why,
     looks_like_raw_transcript,
+    polish_project_copy,
 )
 from backend.project_models import (
     Microstep,
@@ -20,7 +30,7 @@ from backend.project_models import (
     ProjectView,
     VerificationCheck,
 )
-from backend.project_planner import plan_project
+from backend.project_planner import plan_project, scrub_project_learner_copy
 from backend.source_ingestion import SourceDocument
 
 
@@ -211,3 +221,154 @@ def test_apply_copy_is_generic_not_hardcoded_to_gpt2():
     fields = learner_facing_fields(m, entry_file="app.py", project_title="HTTP client")
     assert fields["why"]
     assert "requests" in fields["why"].lower()
+
+
+def _learner_blob(project: ProjectCourse) -> str:
+    parts: list[str] = [project.project_goal or "", project.course_intro or ""]
+    for m in project.milestones:
+        parts.extend(
+            [
+                m.source_grounded_description or "",
+                m.why or "",
+                m.teach or "",
+                m.hook or "",
+                m.example or "",
+                m.celebrate or "",
+                (m.microstep.action if m.microstep else "") or "",
+                (m.microstep.hint if m.microstep else "") or "",
+                (m.microstep.observation if m.microstep else "") or "",
+            ]
+        )
+    return "\n".join(parts)
+
+
+def test_templates_have_zero_video_or_instructor_words():
+    """Deterministic fallbacks must never mention video/instructor/watch-the-video."""
+    kinds = [
+        ("import", "collections"),
+        ("symbol", "Value"),
+        ("function_call", "backward"),
+        ("code_contains", "tanh|grad"),
+        ("file_exists", "main.py"),
+        ("stdout_contains", ""),
+        ("run_ok", ""),
+    ]
+    blobs = []
+    for kind, target in kinds:
+        blobs.append(learner_description(kind, target, title="Build Value", entry_file="main.py", project_title="Micrograd"))
+        blobs.append(learner_why(kind, target, title="Build Value", project_title="Micrograd"))
+        blobs.append(beginner_action(kind, target, entry_file="main.py", title="Build Value"))
+        blobs.append(beginner_observation(kind, target, title="Build Value"))
+        blobs.append(beginner_teach(kind, target, title="Build Value"))
+        blobs.append(learner_hint(kind, target))
+    joined = "\n".join(blobs)
+    assert not contains_banned_learner_phrase(joined), joined
+    assert "video" not in joined.lower()
+    assert "instructor" not in joined.lower()
+
+
+def test_scrub_enrich_preserve_good_ai_actions_strip_video_phrases():
+    """Good AI action/teach/why/hint survive polish; banned video templates do not reappear."""
+    good_action = (
+        "1. In `main.py`, define class `Value` with `__init__` storing data and grad.\n"
+        "2. Implement `__add__` and `__mul__` so expressions build a graph.\n"
+        "3. Save, then click NEXT."
+    )
+    good_teach = (
+        "Value is the scalar wrapper that tracks data and grad for backprop. "
+        "Defining it first lets later ops attach to the same graph."
+    )
+    good_why = "Micrograd needs Value before you can build expression graphs."
+    dirty_obs = "Build this the way the video does — copy the instructor."
+
+    milestones = [
+        Milestone(
+            id="m1",
+            order=1,
+            title="Set up the project",
+            source_grounded_description="Create main.py for the micrograd build.",
+            why="One persistent workspace for the whole project.",
+            teach="",
+            microstep=Microstep(
+                observation="Workspace ready.",
+                action="Create `main.py` and add a project goal comment.",
+                hint="Files persist across milestones.",
+            ),
+            checks=[VerificationCheck(kind="file_exists", target="main.py")],
+            xp_reward=10,
+        ),
+        Milestone(
+            id="m2",
+            order=2,
+            title="Define Value",
+            source_grounded_description="Define the Value class for autograd scalars.",
+            why=good_why,
+            teach=good_teach,
+            microstep=Microstep(
+                observation=dirty_obs,
+                action=good_action,
+                hint="Keep the class name exactly Value.",
+            ),
+            checks=[VerificationCheck(kind="symbol", target="Value", description="Defines Value")],
+            xp_reward=25,
+        ),
+        Milestone(
+            id="m3",
+            order=3,
+            title="Implement tanh",
+            source_grounded_description="Add tanh on Value for neuron activations.",
+            why="Follow the video for this section in main.py",
+            teach="Type the instructor snippet for tanh.",
+            microstep=Microstep(
+                observation="Next up from the video:",
+                action="Write the code the instructor builds for tanh.",
+                hint="Follow the video for this section in main.py",
+            ),
+            checks=[VerificationCheck(kind="code_contains", target="tanh")],
+            xp_reward=25,
+        ),
+    ]
+    project = ProjectCourse(
+        course_id="project-ai-keep",
+        title="Micrograd",
+        project_goal="Build a tiny autograd engine",
+        entry_file="main.py",
+        milestones=milestones,
+        workspace_files=[],
+        tech_stack=["Python"],
+    )
+
+    # Simulate post-AI polish path
+    polish_project_copy(project)
+    scrub_project_learner_copy(project)
+
+    # Good AI fields preserved
+    m2 = project.milestones[1]
+    assert m2.microstep.action == good_action
+    assert m2.teach == good_teach
+    assert m2.why == good_why
+
+    blob = _learner_blob(project)
+    assert not contains_banned_learner_phrase(blob), blob
+    assert "video" not in blob.lower(), blob
+    assert "instructor" not in blob.lower(), blob
+
+    # Dirty milestone was rewritten to concrete, non-video copy
+    m3 = project.milestones[2]
+    assert "video" not in (m3.microstep.action or "").lower()
+    assert "instructor" not in (m3.microstep.action or "").lower()
+    assert m3.microstep.action
+    assert "tanh" in (m3.microstep.action + m3.microstep.hint + m3.teach).lower()
+
+
+def test_follow_source_phrases_are_banned_and_need_fallback():
+    samples = [
+        "Follow the source for this step, then click NEXT.",
+        "Please follow the transcript carefully.",
+        "Do it as in the source.",
+        "According to the instructor, write Value.",
+    ]
+    for s in samples:
+        assert contains_banned_learner_phrase(s) or is_follow_source_template(s), s
+        assert needs_learner_fallback(s), s
+

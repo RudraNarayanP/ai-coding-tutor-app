@@ -196,6 +196,67 @@ describe('CreatePage Component', () => {
     expect(await screen.findByLabelText('Guided project workspace')).toBeInTheDocument()
   })
 
+  it('shows verifying course quality while create is in flight', async () => {
+    let resolveCreate: (value: Awaited<ReturnType<typeof projectApi.create>>) => void = () => {}
+    vi.mocked(projectApi.create).mockImplementation(
+      () =>
+        new Promise<Awaited<ReturnType<typeof projectApi.create>>>((resolve) => {
+          resolveCreate = resolve
+        })
+    )
+    vi.mocked(projectApi.get).mockResolvedValue({
+      course_id: 'project-ok',
+      title: 'Word Frequency Counter',
+      language: 'python',
+      source_type: 'transcript',
+      source_url: '',
+      source_summary: '',
+      project_goal: 'Build a word frequency counter',
+      tech_stack: ['collections'],
+      entry_file: 'main.py',
+      milestones: [],
+      workspace_files: [{ path: 'main.py', content: '#' }],
+      current_milestone_index: 0,
+      completed_milestone_ids: [],
+      xp: 0,
+      completed: false,
+      completion_percent: 0,
+      files_changed: 0,
+    } as unknown as Awaited<ReturnType<typeof projectApi.get>>)
+
+    render(<CreatePage />)
+    fireEvent.change(screen.getByPlaceholderText('e.g., Reproduce GPT-2 (124M)'), {
+      target: { value: 'My Project' },
+    })
+    fireEvent.click(screen.getByRole('button', { name: /build guided project/i }))
+
+    await waitFor(() => expect(screen.getByTestId('create-building-status')).toBeInTheDocument())
+    expect(screen.getByText(/Verifying course quality/i)).toBeInTheDocument()
+    expect(screen.queryByText(/Building your guided project/i)).toBeNull()
+
+    resolveCreate({
+      course_id: 'project-ok',
+      title: 'Word Frequency Counter',
+      language: 'python',
+      source_type: 'transcript',
+      source_url: '',
+      source_summary: '',
+      project_goal: 'Build a word frequency counter',
+      tech_stack: ['collections'],
+      entry_file: 'main.py',
+      milestones: [],
+      workspace_files: [{ path: 'main.py', content: '#' }],
+      current_milestone_index: 0,
+      completed_milestone_ids: [],
+      xp: 0,
+      completed: false,
+      completion_percent: 0,
+      files_changed: 0,
+    } as unknown as Awaited<ReturnType<typeof projectApi.create>>)
+
+    expect(await screen.findByLabelText('Guided project workspace')).toBeInTheDocument()
+  })
+
   it('shows a cancel button while building and aborts the request', async () => {
     let rejectCreate: (reason?: unknown) => void = () => {}
     vi.mocked(projectApi.create).mockImplementation(

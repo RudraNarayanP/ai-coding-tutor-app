@@ -71,6 +71,30 @@ def test_extract_chapters_ordered_and_filtered():
     assert not any("views •" in t for t in titles)
 
 
+# A creator who types "⌨️ (0:00) Course Introduction" arrives with the timestamp
+# link wrapped in a second pair of parens, so the capture ran past the chapter
+# name into the next marker. Those titles became milestone headings.
+WRAPPED_MARKERS_MD = """Title: Python Machine Learning & AI Mega Course - YouTube
+
+## Description
+
+⭐ TIMESTAMPS ⭐ 🎥 Course 1: Machine Learning 🎥
+⌨️ ([0:00](https://www.youtube.com/watch?v=WFr2WgN9_xE)) Course Introduction ⌨️ ([00:02:30](https://www.youtube.com/watch?v=WFr2WgN9_xE)) Introduction to Machine Learning & Environment Setup ⌨️ ([00:12:24](https://www.youtube.com/watch?v=WFr2WgN9_xE)) Linear Regression Part 1 – Data Loading and Analysis ⌨️ ([02:15:11](https://www.youtube.com/watch?v=WFr2WgN9_xE)) K-Means Clustering - Implementation 🎥 Course 2: Neural Networks 🎥 ⌨️ ([02:27:07](https://www.youtube.com/watch?v=WFr2WgN9_xE)) Introduction to Neural Networks ◾◾◾◾ 💻 Enroll now
+"""
+
+
+def test_extract_chapters_strips_the_proxy_own_markers():
+    titles = [t for _ts, t in extract_chapters(WRAPPED_MARKERS_MD)]
+    assert titles == [
+        "Course Introduction",
+        "Introduction to Machine Learning & Environment Setup",
+        "Linear Regression Part 1 – Data Loading and Analysis",
+        "K-Means Clustering - Implementation",
+        "Introduction to Neural Networks",
+    ]
+    assert not any("⌨" in t or "(" in t or "🎥" in t for t in titles)
+
+
 def test_build_source_text_includes_chapters():
     chapters = extract_chapters(SAMPLE_MD)
     text = build_source_text("Let's reproduce GPT-2 (124M)", "desc", chapters)

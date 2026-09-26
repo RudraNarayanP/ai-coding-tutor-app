@@ -24,13 +24,16 @@ from pydantic import BaseModel, Field
 from .ai_models import OllamaHealth, ProvidersOverview, ProviderStatus, TutorRequest, TutorResponse
 from .ai_provider import AIProvider, ALL_PROVIDERS, OllamaProvider, get_ai_provider, close_shared_client
 from .api_settings import (
-    ApiKeyValidationResult,
     ProviderInfo,
+    ApiKeyValidationResult,
+    OPENROUTER_MODEL_HELPER,
+    OPENROUTER_MODEL_PRESETS,
     get_all_providers_info,
     get_provider_info,
-    remove_provider_key,
-    update_provider_key,
     validate_provider_key,
+    update_provider_key,
+    update_provider_model,
+    remove_provider_key,
 )
 from .curriculum_loader import CurriculumLoader, load_all_curriculums
 from .lesson_engine import LessonEngine, ProgressionStore
@@ -351,7 +354,7 @@ async def list_materials(language: str | None = None, stage: str | None = None, 
 
 
 @app.post("/api/materials/{material_id}/complete", response_model=MaterialCompletionResponse)
-async def complete_material(material_id: str, payload: MaterialCompletionRequest):
+async def complete_material(material_id: str, payload: MaterialCompletionRequest, user_id: str = "default_user"):
     mat = next((m for m in MATERIALS if m.id == material_id), None)
     if not mat:
         raise HTTPException(status_code=404, detail={"error": "material_not_found"})
@@ -373,6 +376,8 @@ async def complete_material(material_id: str, payload: MaterialCompletionRequest
         store.mark_material_completed(material_id)
         if not already_done:
             xp_awarded = store.add_xp(mat.xp_reward)
+            if xp_awarded > 0:
+                user_store.update_user_xp(user_id, xp_awarded)
 
     return MaterialCompletionResponse(
         material_id=material_id,
@@ -642,21 +647,16 @@ async def test_out_lesson(lesson_id: str, request: TestOutRequest, user_id: str 
 
 
 @app.get("/api/leaderboard", response_model=list[LeaderboardEntry])
-async def get_leaderboard(user_id: str = "default_user"):
-    active_xp = lesson_engine.store.state().xp
-    user = user_store.get_or_create_user(user_id)
-    if active_xp > user.xp:
-        user_store.set_user_xp(user_id, active_xp)
+async def get_leaderboard(user_id: str = "default_user", username: str | None = None):
+    """Live ranks from the shared user store. Ensures the caller appears as a real entry."""
+    user_store.get_or_create_user(user_id, username=username)
     return user_store.get_leaderboard(current_user_id=user_id)
 
 
 @app.get("/api/user/profile", response_model=UserProfile)
-async def get_user_profile(user_id: str = "default_user"):
-    active_xp = lesson_engine.store.state().xp
-    user = user_store.get_or_create_user(user_id)
-    if active_xp > user.xp:
-        user = user_store.set_user_xp(user_id, active_xp)
-    return user
+async def get_user_profile(user_id: str = "default_user", username: str | None = None):
+    """Return (and create if needed) this learner's shared leaderboard profile."""
+    return user_store.get_or_create_user(user_id, username=username)
 
 
 @app.post("/api/user/profile", response_model=UserProfile)
@@ -882,6 +882,8 @@ class SettingsSaveRequest(BaseModel):
 class SettingsResponse(BaseModel):
     providers: list[ProviderInfo]
     current_provider: str
+    openrouter_model_presets: list[dict] = []
+    openrouter_model_helper: str = ""
 
 
 @app.get("/api/settings", response_model=SettingsResponse)
@@ -895,6 +897,8 @@ async def get_settings():
             return SettingsResponse(
                 providers=providers,
                 current_provider=curr_id,
+                openrouter_model_presets=list(OPENROUTER_MODEL_PRESETS),
+                openrouter_model_helper=OPENROUTER_MODEL_HELPER,
             )
     except asyncio.TimeoutError as exc:
         raise HTTPException(status_code=504, detail={"error": "settings_timeout"}) from exc
@@ -984,6 +988,45 @@ async def save_provider_settings(provider: str, request: SettingsSaveRequest):
     except Exception as exc:
         logger.exception(f"save_provider_settings error for {provider}")
         raise HTTPException(status_code=500, detail={"error": "save_error", "message": type(exc).__name__}) from exc
+
+
+class ModelUpdateRequest(BaseModel):
+    model: str = Field(..., min_length=1, max_length=200)
+
+
+@app.post("/api/settings/providers/{provider}/model")
+async def save_provider_model(provider: str, request: ModelUpdateRequest):
+    """Update only the model id for a provider (persists OPENROUTER_MODEL etc.)."""
+    normalized = provider.strip().lower()
+    if normalized not in ALL_PROVIDERS:
+        raise HTTPException(
+            status_code=400,
+            detail={"error": "invalid_provider", "message": f"Unknown provider: {provider}"}
+        )
+    try:
+        model_id = update_provider_model(normalized, request.model)
+        async with provider_lock:
+            tutor_service.provider = get_current_provider()
+        paid = not model_id.endswith(":free") and normalized == "openrouter"
+        return {
+            "success": True,
+            "provider": normalized,
+            "model": model_id,
+            "paid": paid,
+            "message": (
+                f"{normalized.title()} model set to {model_id}"
+                + (". This model may require OpenRouter credits." if paid else "")
+            ),
+            "helper": OPENROUTER_MODEL_HELPER if normalized == "openrouter" else "",
+        }
+    except ValueError as exc:
+        raise HTTPException(
+            status_code=400,
+            detail={"error": "invalid_model", "message": str(exc)},
+        ) from exc
+    except Exception as exc:
+        logger.exception(f"save_provider_model error for {provider}")
+        raise HTTPException(status_code=500, detail={"error": "save_model_error", "message": type(exc).__name__}) from exc
 
 
 @app.delete("/api/settings/providers/{provider}/key")

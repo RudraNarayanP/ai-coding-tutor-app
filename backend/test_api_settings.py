@@ -64,3 +64,50 @@ async def test_save_and_delete_key():
             settings_after = await client.get("/api/settings/providers/openai")
             assert settings_after.status_code == 200
             assert settings_after.json()["has_key"] is False
+
+
+@pytest.mark.asyncio
+async def test_save_provider_model_persists(tmp_path, monkeypatch):
+    """Model-only save updates os.environ and is returned by settings."""
+    import os
+    from backend import env as env_mod
+    from backend.api_settings import update_provider_model
+
+    fake_env = tmp_path / ".env"
+    fake_env.write_text("OPENROUTER_MODEL=cohere/north-mini-code:free\n", encoding="utf-8")
+    monkeypatch.setattr(env_mod, "_env_path", lambda: fake_env)
+
+    model_id = update_provider_model("openrouter", "nvidia/nemotron-3-super-120b-a12b:free")
+    assert model_id == "nvidia/nemotron-3-super-120b-a12b:free"
+    assert os.environ.get("OPENROUTER_MODEL") == "nvidia/nemotron-3-super-120b-a12b:free"
+    assert "nvidia/nemotron-3-super-120b-a12b:free" in fake_env.read_text(encoding="utf-8")
+
+
+@pytest.mark.asyncio
+async def test_save_provider_model_endpoint():
+    async with AsyncClient(transport=ASGITransport(app=app), base_url="http://test") as client:
+        res = await client.post(
+            "/api/settings/providers/openrouter/model",
+            json={"model": "nvidia/nemotron-3-super-120b-a12b:free"},
+        )
+        assert res.status_code == 200
+        data = res.json()
+        assert data["success"] is True
+        assert data["model"] == "nvidia/nemotron-3-super-120b-a12b:free"
+        assert data["paid"] is False
+
+        settings = await client.get("/api/settings")
+        assert settings.status_code == 200
+        body = settings.json()
+        assert body.get("openrouter_model_presets")
+        assert any(p["id"].startswith("nvidia/nemotron") for p in body["openrouter_model_presets"])
+        openrouter = next(p for p in body["providers"] if p["id"] == "openrouter")
+        assert openrouter["model"] == "nvidia/nemotron-3-super-120b-a12b:free"
+
+
+def test_create_course_system_prompt_bans_video_phrases():
+    from backend.ai_course_generator import _SYSTEM
+
+    assert "NEVER watched the video" in _SYSTEM or "never watched" in _SYSTEM.lower()
+    assert "as in the video" in _SYSTEM
+    assert "keyword-only" in _SYSTEM.lower() or "keyword-only" in _SYSTEM or "FORBID keyword" in _SYSTEM

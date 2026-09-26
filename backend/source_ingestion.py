@@ -238,27 +238,27 @@ class SourceIngestionService:
 
         transcript, t_source = self._try_transcript_api(video_id)
 
-        # Fallback: datacenter IPs are bot-blocked by YouTube, so the transcript
-        # API/yt-dlp often fail server-side. Fetch the public watch page via a
-        # keyless reader proxy (from ITS ip) and use the creator's chapter
-        # markers + description as grounded, ordered source content.
-        if not transcript:
-            try:
-                from . import youtube_fetch
+        # Always try the reader proxy for chapters/title/description. Captions
+        # alone hide the creator's outline; chapter markers alone hide the spoken
+        # code. Merge both when possible. If captions are missing, the reader
+        # text becomes the grounded transcript (description + chapters).
+        try:
+            from . import youtube_fetch
 
-                fetched = await youtube_fetch.fetch_video(video_id)
-                if fetched.get("title"):
-                    title = fetched["title"]
-                if fetched.get("chapters"):
-                    chapters = [ct for _ts, ct in fetched["chapters"]]
-                if fetched.get("description"):
-                    description_snippet = fetched["description"][:500]
+            fetched = await youtube_fetch.fetch_video(video_id)
+            if fetched.get("title"):
+                title = fetched["title"]
+            if fetched.get("chapters"):
+                chapters = [ct for _ts, ct in fetched["chapters"]]
+            if fetched.get("description"):
+                description_snippet = fetched["description"][:500]
+            if not transcript:
                 grounded_text = fetched.get("text", "")
-                if grounded_text and len(grounded_text.strip()) >= 60:
+                if grounded_text and len(grounded_text.strip()) >= youtube_fetch.MIN_GROUNDED_TEXT:
                     transcript = grounded_text
                     t_source = "reader_chapters"
-            except Exception as exc:  # noqa: BLE001
-                logger.warning(f"Reader-proxy fallback failed for {video_id}: {exc}")
+        except Exception as exc:  # noqa: BLE001
+            logger.warning(f"Reader-proxy enrichment failed for {video_id}: {exc}")
 
         return VideoSegment(
             video_id=video_id,
@@ -274,21 +274,20 @@ class SourceIngestionService:
 
     def _try_transcript_api(self, video_id: str) -> tuple[str, str]:
         try:
-            import youtube_transcript_api
             from youtube_transcript_api import YouTubeTranscriptApi
-            fetched = None
 
-            if hasattr(YouTubeTranscriptApi, "get_transcript") and callable(getattr(YouTubeTranscriptApi, "get_transcript")):
-                fetched = YouTubeTranscriptApi.get_transcript(video_id)
-            elif hasattr(YouTubeTranscriptApi, "fetch"):
-                api = YouTubeTranscriptApi()
+            fetched = None
+            # youtube-transcript-api >=1.2 exposes instance fetch(); older builds
+            # used the classmethod get_transcript(). Prefer fetch first.
+            api = YouTubeTranscriptApi()
+            if hasattr(api, "fetch") and callable(getattr(api, "fetch")):
                 fetched = api.fetch(video_id)
-            elif hasattr(youtube_transcript_api, "YouTubeTranscriptApi"):
-                api = YouTubeTranscriptApi()
-                if hasattr(api, "fetch"):
-                    fetched = api.fetch(video_id)
-                elif hasattr(api, "get_transcript"):
-                    fetched = api.get_transcript(video_id)
+            elif hasattr(YouTubeTranscriptApi, "get_transcript") and callable(
+                getattr(YouTubeTranscriptApi, "get_transcript")
+            ):
+                fetched = YouTubeTranscriptApi.get_transcript(video_id)
+            elif hasattr(api, "get_transcript") and callable(getattr(api, "get_transcript")):
+                fetched = api.get_transcript(video_id)
 
             if fetched is not None:
                 text_lines = []

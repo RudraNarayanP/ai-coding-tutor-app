@@ -44,7 +44,7 @@ class Microstep(BaseModel):
     """A concise, Duolingo-style instruction: one observation, one action, one hint."""
 
     observation: str = Field(default="", max_length=400)
-    action: str = Field(default="", max_length=400)
+    action: str = Field(default="", max_length=1200)  # AI actions carry short code steps (was 400 -> truncation)
     hint: str = Field(default="", max_length=400)
 
 

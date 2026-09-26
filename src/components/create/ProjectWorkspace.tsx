@@ -39,22 +39,48 @@ function looksLikeTranscript(text: string): boolean {
   const t = (text || '').trim()
   if (!t) return false
   if (TRANSCRIPT_FILLER.test(t)) return true
-  if (t.split(/\s+/).length > 28) return true
-  if (t.length > 90 && !t.includes('`') && (t.match(/\./g) || []).length === 0) return true
+  const structured =
+    /^\s*\d+[.)]\s/m.test(t) ||
+    t.includes('`') ||
+    /\b(import|from .+ import|def |class |print\()/i.test(t)
+  const words = t.split(/\s+/).filter(Boolean)
+  // Beginner multi-step instructions are often 30–50 words — keep them.
+  if (words.length > 70 && !structured) return true
+  if (words.length > 55 && !structured && !t.includes('.')) return true
+  if (t.length > 90 && !t.includes('`') && (t.match(/\./g) || []).length === 0 && !structured) {
+    return true
+  }
   return /\b(\w+(?:\s+\w+){0,3})\s+\1\b/i.test(t)
 }
 
-function lessonCopy(milestone: {
-  title: string
-  hook: string
-  teach: string
-  microstep: { observation: string; action: string; hint: string }
-}) {
-  const action = looksLikeTranscript(milestone.microstep.action)
-    ? `Complete this step: ${milestone.title}.`
-    : milestone.microstep.action
-  const observation = looksLikeTranscript(milestone.microstep.observation) ? '' : milestone.microstep.observation
-  const hook = looksLikeTranscript(milestone.hook) || milestone.hook.split(/\s+/).length > 12 ? '' : milestone.hook
+function isWeakAction(text: string): boolean {
+  const t = (text || '').trim()
+  if (!t) return true
+  return /references?\s*`[^`]+`|Implement this step so your code references|Complete this step:/i.test(t)
+}
+
+function lessonCopy(
+  milestone: {
+    title: string
+    hook: string
+    teach: string
+    microstep: { observation: string; action: string; hint: string }
+  },
+  entryFile = 'main.py',
+) {
+  const rawAction = milestone.microstep.action || ''
+  const action =
+    looksLikeTranscript(rawAction) || isWeakAction(rawAction)
+      ? `1. Open ${entryFile} and write the code for “${milestone.title}”.\n2. Use the hint and example below if you get stuck.\n3. Run your code, then click NEXT.`
+      : rawAction
+  const observation = looksLikeTranscript(milestone.microstep.observation)
+    ? ''
+    : milestone.microstep.observation
+  const hook =
+    looksLikeTranscript(milestone.hook) ||
+    milestone.hook.split(/\s+/).filter(Boolean).length > 24
+      ? ''
+      : milestone.hook
   const teach = looksLikeTranscript(milestone.teach) ? '' : milestone.teach
   return { action, observation, hook, teach }
 }
@@ -84,6 +110,7 @@ export const ProjectWorkspace: React.FC<ProjectWorkspaceProps> = ({ courseId, on
   const [deleting, setDeleting] = useState(false)
 
   const saveTimer = useRef<ReturnType<typeof setTimeout> | null>(null)
+  const lastSavedSigRef = useRef<string>('')
   const resizeRef = useRef<{ startY: number; startHeight: number } | null>(null)
   const verificationLogStart = useRef<number | null>(null)
   const historyRef = useRef<string[]>([])
@@ -101,7 +128,9 @@ export const ProjectWorkspace: React.FC<ProjectWorkspaceProps> = ({ courseId, on
       .then((p) => {
         if (!mounted) return
         setProject(p)
-        setFiles(p.workspace_files.length ? p.workspace_files : [{ path: p.entry_file, content: '' }])
+        const initialFiles = p.workspace_files.length ? p.workspace_files : [{ path: p.entry_file, content: '' }]
+        setFiles(initialFiles)
+        lastSavedSigRef.current = JSON.stringify(initialFiles)
         setActivePath(p.entry_file || p.workspace_files[0]?.path || 'main.py')
         setTerminalLines(SANDBOX_BANNER.map((line) => makeTerminalLine('info', line)))
       })
@@ -123,6 +152,9 @@ export const ProjectWorkspace: React.FC<ProjectWorkspaceProps> = ({ courseId, on
     (nextFiles: WorkspaceFile[]) => {
       if (saveTimer.current) clearTimeout(saveTimer.current)
       saveTimer.current = setTimeout(() => {
+        const sig = JSON.stringify(nextFiles)
+        if (sig === lastSavedSigRef.current) return
+        lastSavedSigRef.current = sig
         projectApi.saveWorkspace(courseId, nextFiles).catch(() => {})
       }, AUTOSAVE_MS)
     },
@@ -361,7 +393,7 @@ export const ProjectWorkspace: React.FC<ProjectWorkspaceProps> = ({ courseId, on
     null
   const currentMilestoneId = currentMilestone?.id ?? null
   const passedTests = checks.filter((c) => c.passed).length
-  const lesson = currentMilestone ? lessonCopy(currentMilestone) : null
+  const lesson = currentMilestone ? lessonCopy(currentMilestone, project?.entry_file || 'main.py') : null
 
   return (
     <div className="ew-root pw-root" aria-label="Guided project workspace">

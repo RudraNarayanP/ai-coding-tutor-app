@@ -52,6 +52,7 @@ export const CreatePage: React.FC<CreatePageProps> = () => {
 
   const [projectCourseId, setProjectCourseId] = useState<string | null>(null)
   const [creatingProject, setCreatingProject] = useState(false)
+  const [verifyingQuality, setVerifyingQuality] = useState(false)
   const [projects, setProjects] = useState<ProjectSummary[]>([])
   const [gateFeedback, setGateFeedback] = useState<GateFeedback | null>(null)
   const [errorMessage, setErrorMessage] = useState<string | null>(null)
@@ -71,11 +72,13 @@ export const CreatePage: React.FC<CreatePageProps> = () => {
   }, [step])
 
   // Build a guided project (persistent workspace) from the source.
+  // Keep the status visible while the backend generates and self-reviews.
   const handleStartProject = async () => {
     setGateFeedback(null)
     setErrorMessage(null)
     setCancelMessage(null)
     setCreatingProject(true)
+    setVerifyingQuality(true)
 
     const controller = new AbortController()
     createAbortRef.current = controller
@@ -97,6 +100,9 @@ export const CreatePage: React.FC<CreatePageProps> = () => {
       setProjectCourseId(project.course_id)
       setStep('workspace')
     } catch (err) {
+      // The request has settled; do not keep the quality status visible while refreshing the list.
+      setVerifyingQuality(false)
+      setCreatingProject(false)
       if ((err as Error).name === 'AbortError') {
         setCancelMessage('Build cancelled.')
         return
@@ -110,6 +116,7 @@ export const CreatePage: React.FC<CreatePageProps> = () => {
     } finally {
       createAbortRef.current = null
       setCreatingProject(false)
+      setVerifyingQuality(false)
     }
   }
 
@@ -249,10 +256,14 @@ export const CreatePage: React.FC<CreatePageProps> = () => {
       {cancelMessage && <div className="cw-alert">{cancelMessage}</div>}
 
       {creatingProject && (
-        <div className="ew-task-card cw-building" role="status" aria-live="polite">
-          <p className="cw-building-title">Building your guided project…</p>
+        <div className="ew-task-card cw-building" role="status" aria-live="polite" data-testid="create-building-status">
+          <p className="cw-building-title">
+            {verifyingQuality ? 'Verifying course quality…' : 'Building your guided project…'}
+          </p>
           <p className="cw-building-note">
-            Fetching the source, planning milestones, and preparing your workspace.
+            {verifyingQuality
+              ? 'Running a full model self-review and revising until the course is top-class.'
+              : 'Fetching the source, planning milestones, and preparing your workspace.'}
           </p>
           <button type="button" className="ew-btn ew-btn-back" onClick={handleCancelBuild} aria-label="Cancel build">
             Cancel
@@ -261,6 +272,14 @@ export const CreatePage: React.FC<CreatePageProps> = () => {
       )}
 
       {/* Resume in-progress guided projects */}
+      {projects.length === 0 && !creatingProject && (
+        <div className="duo-empty-card" style={{ marginBottom: 16 }}>
+          <p className="duo-empty-title">No saved projects yet</p>
+          <p className="duo-empty-note">
+            Build one below to get a persistent workspace with milestones you can resume anytime.
+          </p>
+        </div>
+      )}
       {projects.length > 0 && (
         <section className="ew-task-card">
           <div className="cw-row-between">

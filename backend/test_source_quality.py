@@ -9,6 +9,8 @@ from __future__ import annotations
 
 import asyncio
 import json
+import random
+import string
 import tempfile
 from pathlib import Path
 
@@ -24,12 +26,17 @@ from backend.source_ingestion import IngestionError, SourceDocument, SourceInges
 from backend.source_quality import (
     LlmSourceAnalyzer,
     SourceQualityError,
+    assess_transcript_quality,
+    build_analyzer_view,
     evaluate_ingestion,
     evaluate_milestones,
     evaluate_source,
     evaluate_source_with_analyzer,
     filter_invalid_milestones,
+    has_implementation_cluster,
     is_implementable_step,
+    _repeated_ngram_share,
+    _words,
 )
 
 client = TestClient(main_module.app)
@@ -162,6 +169,36 @@ def test_nonsense_is_generalized_not_hardcoded_phrases():
     assert decision.decision in {"reject", "insufficient"}
     with pytest.raises(ProjectGroundingError):
         plan_project(_doc(GENERALIZED_NONSENSE, "Productivity chat"), title="Productivity chat", course_id="gen")
+
+
+
+
+def test_coding_syllabus_chapter_outline_is_accepted():
+    """freeCodeCamp-style intros often ship a dense coding TOC with little prose."""
+    chapters = [
+        "Intro",
+        "What is Mojo",
+        "Setting Up",
+        "Hello World",
+        "Variables, Declarations, and Datatypes",
+        "Getting User Input",
+        "IF/ELSE Statements",
+        "Loops & Functions",
+        "OOP",
+        "Importing Libraries",
+        "Raises, Error handling, Exceptions",
+        "Decorators & Metaprogramming",
+    ]
+    doc = _chaptered(
+        chapters,
+        title="Mojo Programming Language – Full Course for Beginners",
+        transcript=(
+            "Learn Mojo in this full tutorial. Starter code on github.com/Infatoshi/intro-to-mojo."
+        ),
+    )
+    decision = evaluate_source(doc, title=doc.title)
+    assert decision.decision == "accept", decision.to_public_dict()
+    assert decision.source_type == "coding_tutorial"
 
 
 def test_nonsense_chapters_are_not_accepted_as_a_course():
@@ -671,3 +708,196 @@ def test_conceptual_explainer_without_extracted_chapters_is_still_blocked():
     assert decision.decision == "accept"
     project = plan_project(_doc(PASSING_ASSISTANT_MENTION), title="Word Frequency Counter", course_id="ask-aside")
     assert any(m.checks and m.checks[0].target == "count_words" for m in project.milestones)
+
+
+
+# ─── Shape classification: interviews vs tips vs intuition lectures ───────────
+
+PODCAST_BOOK_CHAT = """
+Welcome back to the podcast Vanishing Gradients.
+Today's guest is Sebastian Raschka, sitting down with us to discuss his book
+Developing and Training LLMs From Scratch. Thanks for coming on the show.
+We talk about pytorch and transformers and gradient descent at a high level,
+but nobody opens an editor. My guest today walks through what is on a slide.
+"""
+
+LLM_INTRO_TALK = """
+[1hr Talk] Intro to Large Language Models.
+Today I'll explain how large language models work at a high level.
+You can talk to ChatGPT and ChatGPT will respond. Custom instructions let
+you personalize the assistant. We discuss neural networks and the forward pass,
+but we will not write any code or open a repository in this talk.
+"""
+
+INTUITION_LECTURE = """
+Backpropagation, intuitively | Deep Learning Chapter 3
+What is the intuition behind backpropagation? We visualize gradient descent
+and the math underlying neural networks. No code is written in this lesson.
+"""
+
+
+def test_podcast_book_chat_is_conversation_not_assistant_tips():
+    decision = evaluate_source(_doc(PODCAST_BOOK_CHAT, "Developing LLMs — podcast chat"), title="Developing LLMs — podcast chat")
+    assert decision.decision in {"reject", "insufficient"}
+    assert decision.source_type == "conversation"
+    assert decision.decision != "accept"
+
+
+def test_llm_intro_talk_is_not_assistant_tips():
+    """Naming ChatGPT in a conceptual talk must not flip the shape to tips."""
+    decision = evaluate_source(_doc(LLM_INTRO_TALK, "[1hr Talk] Intro to Large Language Models"), title="[1hr Talk] Intro to Large Language Models")
+    assert decision.decision in {"reject", "insufficient"}
+    assert decision.source_type != "assistant_usage"
+    assert decision.decision != "accept"
+
+
+def test_intuition_lecture_title_is_conceptual():
+    decision = evaluate_source(_doc(INTUITION_LECTURE, "Backpropagation, intuitively | Deep Learning Chapter 3"), title="Backpropagation, intuitively | Deep Learning Chapter 3")
+    assert decision.decision in {"reject", "insufficient"}
+    assert decision.source_type == "conceptual_explainer"
+
+
+# ─── 12. Length must not be the reason a source is refused ────────────────────
+# Every one of these was a live false reject: the gate read a real multi-hour
+# course as garbage because the statistics it checks fall as a source gets longer.
+
+def _long_low_diversity_text(n: int = 40000, seed: int = 7) -> str:
+    """A word sequence with real language's vocabulary distribution.
+
+    Uniformly random text would not reproduce the failure: what the old check
+    keyed on was type-token ratio, and that falls with length for any natural
+    vocabulary. Function words carry the repetition, content words the variety.
+    Tokens are letters only because the gate's tokenizer drops digits, which would
+    silently collapse a synthetic vocabulary to a couple of words.
+    """
+    rng = random.Random(seed)
+
+    def token(i: int) -> str:
+        return (
+            "".join(
+                string.ascii_lowercase[d]
+                for d in (i // 676 % 26, i // 26 % 26, i % 26)
+            )
+            + "x"
+        )
+
+    function = [token(i) for i in range(40)]
+    content = [token(i + 500) for i in range(3000)]
+    return " ".join(
+        rng.choice(function) if rng.random() < 0.55 else rng.choice(content)
+        for _ in range(n)
+    )
+
+
+def test_long_genuine_transcript_is_not_called_repetitive():
+    long_text = _long_low_diversity_text()
+    words = _words(long_text)
+    assert len(set(words)) / len(words) < 0.12, "fixture must reproduce the statistic the old check keyed on"
+    status, notes = assess_transcript_quality(long_text)
+    assert status == "ok", notes
+
+
+def test_stuck_captions_are_still_caught():
+    stuck = " ".join(["thank you very much for watching this video"] * 400)
+    assert assess_transcript_quality(stuck)[0] == "repetitive"
+    assert _repeated_ngram_share(_words(stuck)) > 0.9
+
+
+def test_repetition_measure_does_not_depend_on_length():
+    phrase = "so today we are going to build a thing"
+    short = _repeated_ngram_share(_words(" ".join([phrase] * 20)))
+    long = _repeated_ngram_share(_words(" ".join([phrase] * 900)))
+    assert short > 0.9 and long > 0.9
+
+
+def test_one_spoken_function_phrase_in_a_long_conversation_is_not_a_build():
+    """'a function called back' in two hours of chatter is a figure of speech."""
+    chatter = " ".join(
+        f"and then we talked about topic number {i} which people find really interesting"
+        for i in range(900)
+    )
+    blob = f"A long conversation about software {chatter} there was a function called back to the app"
+    assert not has_implementation_cluster(blob, [])
+    # The same phrase in a short transcript is the tutorial itself.
+    assert has_implementation_cluster(WORD_COUNT_TRANSCRIPT, [])
+
+
+def test_a_title_listed_twice_is_not_two_implementation_steps():
+    blob = "Implement the parser\nImplement the parser\n" + "chat " * 50
+    assert not has_implementation_cluster(blob, [])
+
+
+# ─── 13. The model reviews refusals, not acceptances ──────────────────────────
+
+def _analyzer(payload: str) -> LlmSourceAnalyzer:
+    return LlmSourceAnalyzer(_FakeProvider(payload))
+
+
+COMMITTED = json.dumps(
+    {
+        "decision": "accept",
+        "project_goal": "Build a token-by-token text generator in PyTorch",
+        "first_artifacts": ["Tokenizer.encode", "Attention head", "train_loop()"],
+        "source_type": "coding_tutorial",
+        "technical_evidence": ["names torch", "names a training loop"],
+        "rejection_reasons": [],
+        "missing_information": [],
+        "confidence": "high",
+    }
+)
+
+
+def test_model_can_overturn_a_material_refusal_by_naming_a_plan():
+    """The pre-gate refused real long courses; the model is allowed to disagree."""
+    doc = _doc(AMBIGUOUS_TECH, "A lecture that the patterns refused")
+    assert evaluate_source(doc, title="A lecture that the patterns refused").decision != "accept"
+    merged = asyncio.run(evaluate_source_with_analyzer(doc, "", _analyzer(COMMITTED)))
+    assert merged.decision == "accept"
+    assert merged.project_goal == "Build a token-by-token text generator in PyTorch"
+
+
+def test_an_accept_the_model_only_opines_about_does_not_happen():
+    thin = json.dumps(
+        {
+            "decision": "accept",
+            "project_goal": "",
+            "first_artifacts": ["one"],
+            "technical_evidence": ["python"],
+            "confidence": "high",
+        }
+    )
+    doc = _doc(AMBIGUOUS_TECH, "Why Python is Great")
+    merged = asyncio.run(evaluate_source_with_analyzer(doc, "", _analyzer(thin)))
+    assert merged.decision != "accept"
+
+
+def test_a_shape_refusal_is_never_argued_into_a_course():
+    """No transcript makes a news broadcast a tutorial — so it is not even asked."""
+    calls = []
+
+    class _Spy:
+        async def analyze(self, doc, title, prior):  # noqa: ANN001, ARG002
+            calls.append(title)
+            return json.loads(COMMITTED)
+
+    doc = _doc(UNRELATED_NEWS, "Nightly News")
+    merged = asyncio.run(evaluate_source_with_analyzer(doc, "Nightly News", _Spy()))
+    assert merged.decision == "reject"
+    assert calls == []
+
+
+def test_analyzer_view_reaches_past_the_introduction():
+    """The head of a seven-hour transcript is someone saying hello."""
+    body = " ".join(["the quick brown fox jumps over a lazy dog"] * 4000)
+    doc = _doc(f"HEAD_SENTINEL {body} TAIL_SENTINEL", "Seven hour course")
+    view = build_analyzer_view(doc, "Seven hour course")
+    assert "HEAD_SENTINEL" in view
+    assert "TAIL_SENTINEL" in view, "must sample the tail, not just the head"
+    assert len(view) <= 9000
+
+
+def test_analyzer_view_carries_the_creators_outline():
+    doc = _chaptered(GPT2_STYLE_CHAPTERS, "Let's reproduce GPT-2 (124M)", "a transcript")
+    view = build_analyzer_view(doc, "Let's reproduce GPT-2 (124M)")
+    assert "Creator's outline" in view
+    assert "sampling loop" in view

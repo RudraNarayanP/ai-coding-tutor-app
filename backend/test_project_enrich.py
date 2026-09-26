@@ -91,17 +91,27 @@ def test_enrichment_skips_setup_and_run_milestones():
 
 def test_enrichment_failure_keeps_deterministic_copy():
     project = _project()
-    # Must not raise, and must preserve original deterministic microstep.
+    # Must not raise. Polish may fill empty teach with video-free templates;
+    # short observation stubs from the skeleton are preserved when not banned.
     asyncio.run(enrich_project(BrokenProvider(), project))
     m2 = project.milestone_by_id("m2")
-    assert m2.teach == ""
+    from backend.project_copy import contains_banned_learner_phrase
+    assert m2.teach  # deterministic beginner_teach after polish
+    assert not contains_banned_learner_phrase(m2.teach)
+    assert "video" not in (m2.teach or "").lower()
     assert m2.microstep.observation == "orig"
 
 
 def test_enrichment_with_no_provider_is_noop():
     project = _project()
     asyncio.run(enrich_project(None, project))
-    assert project.milestone_by_id("m2").teach == ""
+    from backend.project_copy import contains_banned_learner_phrase
+    m2 = project.milestone_by_id("m2")
+    # No provider → polish only; fill empty teach without video phrases.
+    assert m2.teach
+    assert not contains_banned_learner_phrase(m2.teach)
+    assert "video" not in m2.teach.lower()
+    assert "instructor" not in m2.teach.lower()
 
 
 def _source(text: str, title: str = "Source") -> SourceDocument:

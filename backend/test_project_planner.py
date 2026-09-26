@@ -1,4 +1,5 @@
 """Tests for source-grounded guided-project planning (Create Course only)."""
+import re
 import pytest
 
 from backend.project_planner import (
@@ -581,3 +582,246 @@ def test_no_milestone_requires_importing_a_local_module_the_project_lacks():
             assert not authored_in_source or root in importable, (
                 f"{milestone.id}: requires `import {root}`, a file this project has none of"
             )
+
+
+# ─── Learner-facing step quality (measured against real YouTube courses) ───────
+# Every case here is a string a real tutorial produced before these rules existed.
+
+def test_chapter_label_becomes_an_action_not_a_table_of_contents_entry():
+    from backend.project_planner import _chapter_title
+
+    assert _chapter_title("K-Nearest Neighbors Part 2 – Algorithm Explanation") == (
+        "Implement k-nearest neighbors"
+    )
+    assert _chapter_title("Support Vector Machines Part 1 - SkLearn Datasets and Analysis") == (
+        "Implement a support vector machine"
+    )
+    # A gerund chapter reads as a task when the learner meets it.
+    assert _chapter_title("Creating the Bird") == "Build the Bird"
+
+
+def test_chapter_title_never_cuts_mid_word():
+    from backend.project_planner import _chapter_title
+
+    long_chapter = "implement a small self attention mechanism for a single individual head layer norm"
+    title = _chapter_title(long_chapter)
+    assert not title.endswith("…")
+    assert title == title.strip()
+    assert len(title) <= 60
+    assert " he" != title[-3:]
+
+
+def test_speech_debris_is_stripped_from_step_titles():
+    from backend.project_planner import _strip_speech_debris
+
+    assert _strip_speech_debris("train these Transformers um") == "train these Transformers"
+    assert _strip_speech_debris("create a new a new endpoint") == "create a new endpoint"
+    assert _strip_speech_debris(
+        "train Transformers but this is a very simple implementation"
+    ) == "train Transformers"
+    assert _strip_speech_debris("build GPT from scratch so I covered that") == "build GPT from scratch"
+
+
+@pytest.mark.parametrize(
+    "sentence",
+    [
+        "import believe it or not a method called",
+        "I'm going to import the entire react Library",
+        "import whatever because I'm doing an export default",
+        "install additional packages that we need",
+        "import or any npm options it talks about",
+    ],
+)
+def test_the_word_after_import_is_not_automatically_a_package(sentence):
+    assert _extract_target(sentence) is None
+
+
+@pytest.mark.parametrize(
+    "sentence,expected",
+    [
+        ("import react", ("import", "react")),
+        ("import time", ("import", "time")),
+        ("from flask import jsonify", ("import", "flask")),
+        # Unknown, but the source says it twice: corroborated.
+        ("import neat and then import neat again", ("import", "neat")),
+    ],
+)
+def test_real_and_corroborated_imports_still_extract(sentence, expected):
+    assert _extract_target(sentence) == expected
+
+
+def test_a_symbol_spoken_as_two_words_is_not_guessed_at():
+    """`handleSubmit` arrives as "handle submit"; a check for `handle` never passes."""
+    assert _extract_target("create a function called handle submit and up here") is None
+    assert _extract_target("call the Dot Upper function or you") is None
+    # A single-word name, and a name followed by a description, both survive.
+    assert _extract_target("define a function called count_words that takes text") == (
+        "symbol",
+        "count_words",
+    )
+    assert _extract_target("create a new function called subtract of course") == ("symbol", "subtract")
+
+
+def test_the_same_step_said_three_ways_is_one_milestone():
+    from backend.project_planner import Milestone, VerificationCheck, _dedupe_milestones
+
+    def ms(i, title, target):
+        return Milestone(
+            id=f"m{i}", order=i, title=title,
+            checks=[VerificationCheck(kind="code_contains", target=target)],
+        )
+
+    kept = _dedupe_milestones([
+        ms(1, "Train the Transformer", "train|Transformer"),
+        ms(2, "Train these Transformers", "train|Transformers"),
+        ms(3, "Train Transformers", "Transformers|simple"),
+    ])
+    assert [m.title for m in kept] == ["Train the Transformer"]
+
+
+def test_defining_and_calling_one_symbol_are_two_milestones():
+    from backend.project_planner import Milestone, VerificationCheck, _dedupe_milestones
+
+    kept = _dedupe_milestones([
+        Milestone(id="m1", order=1, title="Define count_words",
+                  checks=[VerificationCheck(kind="symbol", target="count_words")]),
+        Milestone(id="m2", order=2, title="Call count_words",
+                  checks=[VerificationCheck(kind="function_call", target="count_words")]),
+    ])
+    assert len(kept) == 2
+
+
+def test_goal_names_the_steps_this_course_actually_builds():
+    """A four-series mega course plans one series; the goal must not promise four."""
+    chapters = [
+        "intro", "Linear Regression Part 1 – Data Loading and Analysis",
+        "K-Nearest Neighbors Part 3 – Implementation",
+        "Support Vector Machines Part 3 – Implementation",
+        "K-Means Clustering - Implementation",
+    ]
+    doc = _chaptered_doc(chapters, title="Python Machine Learning & AI Mega Course - Learn 4 Areas")
+    project = plan_project(doc, title="Python Machine Learning & AI Mega Course - Learn 4 Areas", course_id="goal")
+    assert "linear regression" in project.project_goal.lower()
+    assert "4 Areas" in project.project_goal
+    assert len(project.project_goal) <= 280, "polish replaces an over-long goal with boilerplate"
+
+
+# ─── Beginner milestone copy quality ──────────────────────────────────────────
+
+def test_code_contains_action_is_beginner_not_references_jargon():
+    """code_contains fallbacks must tell beginners what to type — not 'reference X'."""
+    from backend.project_models import Microstep, Milestone, VerificationCheck
+    from backend.project_planner import _action_for, scrub_learner_fields
+
+    action = _action_for(
+        "code_contains",
+        "LinearRegression|sklearn",
+        "Load and analyze data for linear regression",
+        source_label="Linear Regression Part 1 – Data Loading and Analysis",
+    )
+    low = action.lower()
+    assert "references" not in low
+    assert "reference `" not in low
+    assert "import" in low or "load" in low or "pandas" in low or "sklearn" in low
+    assert "linearregression" in low.replace("`", "")
+
+    m = Milestone(
+        id="m2",
+        order=2,
+        title="Load and analyze data for linear regression",
+        microstep=Microstep(
+            observation="um so what we want is we want to load the data uh",
+            action="Implement this step so your code references `LinearRegression`.",
+            hint="hint",
+        ),
+        teach="okay so um we are going to look at the data kind of",
+        checks=[VerificationCheck(kind="code_contains", target="LinearRegression|sklearn")],
+        xp_reward=25,
+    )
+    scrub_learner_fields(m)
+    assert "references" not in m.microstep.action.lower()
+    assert "uh" not in m.microstep.action.lower()
+    assert not re.search(r"\bum\b", (m.teach or "").lower())
+    assert m.microstep.action
+    assert m.teach
+
+
+def test_scrub_keeps_beginner_multistep_strips_stt_filler():
+    from backend.project_models import Microstep, Milestone, VerificationCheck
+    from backend.project_planner import looks_like_raw_transcript, scrub_learner_fields
+
+    good = (
+        "1. In `main.py`, import pandas and sklearn.\n"
+        "2. Load the dataset with `pd.read_csv(...)` and inspect it with `.head()`.\n"
+        "3. Keep `LinearRegression` in mind for the next model step after the data looks right."
+    )
+    assert not looks_like_raw_transcript(good)
+    assert len(good.split()) >= 28
+
+    m = Milestone(
+        id="m2",
+        order=2,
+        title="Load and analyze data for linear regression",
+        microstep=Microstep(observation="Build this section.", action=good, hint="hint"),
+        teach=(
+            "Before fitting a model, load and inspect the data so you know its shape "
+            "and columns. LinearRegression comes after you trust the dataset."
+        ),
+        checks=[VerificationCheck(kind="code_contains", target="LinearRegression|sklearn")],
+        xp_reward=25,
+    )
+    scrub_learner_fields(m)
+    assert m.microstep.action == good
+    assert "LinearRegression" in m.teach
+
+    stt = Milestone(
+        id="m3",
+        order=3,
+        title="Implement linear regression",
+        microstep=Microstep(
+            observation="next",
+            action="um so uh we kind of want to like load the data you know and stuff",
+            hint="h",
+        ),
+        checks=[VerificationCheck(kind="code_contains", target="LinearRegression|sklearn")],
+        xp_reward=25,
+    )
+    scrub_learner_fields(stt)
+    assert not re.search(r"\bum\b", stt.microstep.action.lower())
+    assert not re.search(r"\buh\b", stt.microstep.action.lower())
+    assert "references" not in stt.microstep.action.lower()
+
+
+def test_ml_mega_course_chapter_plan_has_actionable_microsteps():
+    chapters = [
+        "intro",
+        "Linear Regression Part 1 – Data Loading and Analysis",
+        "Linear Regression Part 2 – Model Fitting",
+        "K-Nearest Neighbors Part 3 – Implementation",
+        "Support Vector Machines Part 3 – Implementation",
+        "K-Means Clustering - Implementation",
+    ]
+    doc = _chaptered_doc(
+        chapters,
+        title="Python Machine Learning & AI Mega Course - Learn 4 Areas",
+    )
+    project = plan_project(
+        doc,
+        title="Python Machine Learning & AI Mega Course - Learn 4 Areas",
+        course_id="ml-mega-quality",
+    )
+    coding = [
+        m for m in project.milestones
+        if m.checks and m.checks[0].kind == "code_contains"
+    ]
+    assert len(coding) >= 2
+    for m in coding:
+        low = m.microstep.action.lower()
+        assert "references" not in low
+        assert "reference `" not in low
+        assert any(
+            verb in low
+            for verb in ("import", "load", "create", "fit", "implement", "open", "write", "add")
+        ), m.microstep.action
+        assert m.teach, f"missing teach for {m.title}"
+        assert not looks_like_raw_transcript(m.microstep.action)

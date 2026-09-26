@@ -18,11 +18,18 @@ provider is configured, but the deterministic backbone is always source-grounded
 from __future__ import annotations
 
 import re
+import sys
 import time
 
 from .project_copy import (
+    beginner_action,
+    beginner_observation,
+    beginner_teach,
     code_ident_for_import,
+    contains_banned_video_phrase,
     display_ident,
+    is_weak_learner_action,
+    needs_learner_fallback,
     polish_project_copy,
     short_source_excerpt,
 )
@@ -89,6 +96,18 @@ KNOWN_TECH = {
     "pathlib": "pathlib",
     "asyncio": "asyncio",
     "dataclasses": "dataclasses",
+    # Web / JS stacks — the app's own JavaScript path is built from these tutorials,
+    # and without them a spoken "import react" is indistinguishable from noise.
+    "react": "react",
+    "reactdom": "react-dom",
+    "vue": "vue",
+    "svelte": "svelte",
+    "express": "express",
+    "axios": "axios",
+    "tailwind": "tailwindcss",
+    "npm": "npm",
+    "flask_sqlalchemy": "flask-sqlalchemy",
+    "bootstrap": "bootstrap",
 }
 
 # Common English/filler words that must never be treated as code identifiers.
@@ -182,22 +201,35 @@ def _cap_field(text: str, max_len: int = _FIELD_MAX) -> str:
 
 
 def looks_like_raw_transcript(text: str) -> bool:
-    """True when text looks like unprocessed speech-to-text, not learner copy."""
+    """True when text looks like unprocessed speech-to-text, not learner copy.
+
+    Beginner multi-step instructions (30–50 words, backticks, numbered lists) must
+    survive. Only wipe clear STT/filler dumps.
+    """
     cleaned = (text or "").strip()
     if not cleaned:
         return False
     if _TRANSCRIPT_FILLER.search(cleaned) or _SPOKEN_FILLER_CHUNKS.search(cleaned):
         return True
+    structured = bool(
+        re.search(r"(?m)^\s*\d+[.)]\s", cleaned)
+        or "`" in cleaned
+        or re.search(r"(?i)\b(import|from .+ import|def |class |print\()", cleaned)
+    )
     words = cleaned.split()
-    # Learner-facing lines must stay short. Spoken monologue is long and breathless.
-    if len(words) > 28:
+    if len(words) > 70 and not structured:
         return True
-    if len(cleaned) > 160 and cleaned.count(",") >= 3:
+    if len(words) > 55 and not structured and cleaned.count(".") == 0:
         return True
-    if len(cleaned) > 90 and cleaned.count(".") == 0 and cleaned.count("`") == 0:
+    if len(cleaned) > 160 and cleaned.count(",") >= 3 and not structured:
         return True
-    # Repeated short phrases ("we want we want") are common STT artifacts.
-    if re.search(r"\b(\w+(?:\s+\w+){0,3})\s+\1\b", cleaned, re.IGNORECASE):
+    if len(cleaned) > 90 and cleaned.count(".") == 0 and cleaned.count("`") == 0 and not structured:
+        return True
+    # Multi-word STT doubles (case-insensitive): "create a new create a new".
+    if re.search(r"\b((?:\w+\s+){1,3}\w+)\s+\1\b", cleaned, re.IGNORECASE):
+        return True
+    # Single-word doubles only when same-case — avoids "up Up" from title glitches.
+    if re.search(r"\b(\w+)\s+\1\b", cleaned):
         return True
     return False
 
@@ -209,36 +241,192 @@ def _kind_target_from_milestone(milestone: Milestone) -> tuple[str, str]:
     return (c.kind, c.target)
 
 
-def scrub_learner_fields(milestone: Milestone) -> Milestone:
-    """Replace transcript-like learner copy with a short synthesized instruction.
+def scrub_learner_fields(milestone: Milestone, entry_file: str = "main.py") -> Milestone:
+    """Replace transcript-like / weak / banned-video learner copy with beginner instructions.
 
-    Used both at generation time and when projecting a saved project, so already
-    stored courses cannot keep dumping YouTube speech into the lesson pane.
+    Used at generation time and when projecting a saved project, so already-stored
+    courses improve on load when they still have jargon, STT dumps, or video refs.
+    Non-empty clean AI action/teach/why/hint is preserved.
     """
     kind, tgt = _kind_target_from_milestone(milestone)
-    safe_action = _action_for(kind, tgt, milestone.title)
+    safe_action = _action_for(kind, tgt, milestone.title, entry_file=entry_file)
     safe_obs = _observation_for(kind, tgt, milestone.title)
-    if looks_like_raw_transcript(milestone.microstep.action) or len(milestone.microstep.action.split()) > 28:
+    action = milestone.microstep.action or ""
+    if needs_learner_fallback(action):
         milestone.microstep.action = safe_action
-    if looks_like_raw_transcript(milestone.microstep.observation) or len(milestone.microstep.observation.split()) > 28:
+    observation = milestone.microstep.observation or ""
+    if needs_learner_fallback(observation, max_len=400):
         milestone.microstep.observation = safe_obs
-    if looks_like_raw_transcript(milestone.hook) or len(milestone.hook.split()) > 12:
-        milestone.hook = ""
-    if looks_like_raw_transcript(milestone.teach) or len(milestone.teach.split()) > 60:
+    hint = milestone.microstep.hint or ""
+    if needs_learner_fallback(hint, max_len=280):
+        from .project_copy import learner_hint
+        milestone.microstep.hint = learner_hint(kind, tgt)
+    if (
+        looks_like_raw_transcript(milestone.hook)
+        or contains_banned_video_phrase(milestone.hook)
+        or len((milestone.hook or "").split()) > 24
+    ):
+        milestone.hook = (milestone.title or "")[:80]
+    teach = milestone.teach or ""
+    if looks_like_raw_transcript(teach) or contains_banned_video_phrase(teach):
         milestone.teach = ""
-    if looks_like_raw_transcript(milestone.example):
+    elif len(teach.split()) > 110:
+        from .project_copy import _first_sentences
+        trimmed = _first_sentences(teach, 3, 900)
+        milestone.teach = trimmed if len(trimmed.split()) <= 110 else " ".join(teach.split()[:100]) + "…"
+    if not (milestone.teach or "").strip():
+        from .project_copy import _ai_teach_fallback
+        milestone.teach = _ai_teach_fallback(milestone)
+    if not (milestone.teach or "").strip() and kind in {
+        "import", "symbol", "function_call", "code_contains",
+    }:
+        milestone.teach = beginner_teach(kind, tgt, title=milestone.title)
+    why = milestone.why or ""
+    if not why.strip() or contains_banned_video_phrase(why) or looks_like_raw_transcript(why):
+        title = (milestone.title or "the project")[:80]
+        milestone.why = (
+            f"This step unlocks the next part of “{title}” in the source tutorial."
+        )[:2000]
+    if looks_like_raw_transcript(milestone.example) or contains_banned_video_phrase(milestone.example):
         milestone.example = ""
+    desc = milestone.source_grounded_description or ""
+    if contains_banned_video_phrase(desc) or looks_like_raw_transcript(desc):
+        from .project_copy import learner_description
+        milestone.source_grounded_description = learner_description(
+            kind, tgt, title=milestone.title or "", entry_file=entry_file, project_title=""
+        )
     return milestone
 
 
-def scrub_project_learner_copy(project: ProjectCourse) -> ProjectCourse:
+
+
+_WEAK_CHECK_WORDS = {
+    "setup", "basic", "user", "import", "loops", "functions", "variables", "implement",
+    "create", "build", "write", "add", "the", "and", "for", "with", "this", "that",
+    "from", "your", "step", "work", "next", "code", "mojo", "python", "cli", "package",
+    "error", "handling", "basics", "statements", "hello", "world", "full", "course",
+    "train", "final", "define", "test",
+    "class", "def", "return", "true", "false", "none", "pass", "self", "print",
+    "var", "let", "fn", "if", "else", "elif", "while", "try", "except", "raise",
+    "new", "const", "null", "void", "int", "str", "bool", "type", "main",
+}
+
+
+def _repair_weak_checks(project: ProjectCourse) -> None:
+    """Replace hollow title-word check targets with tokens from action/example."""
     for m in project.milestones:
-        scrub_learner_fields(m)
-    if looks_like_raw_transcript(project.course_intro) or len(project.course_intro.split()) > 80:
+        action = (m.microstep.action or "")
+        example = (m.example or "")
+        title = (m.title or "")
+        src = f"{example} {action}"
+        new_checks = []
+        for c in (m.checks or []):
+            kind = (c.kind or "").lower()
+            target = (c.target or "").strip()
+            tgt_l = target.lower().rstrip(",:.")
+            title_word = (
+                bool(target)
+                and target[:1].isupper()
+                and " " not in target
+                and len(target) <= 16
+                and tgt_l in title.lower()
+            )
+            weak = (
+                kind in {"code_contains", "symbol", "import", "function_call"}
+                and (not tgt_l or tgt_l in _WEAK_CHECK_WORDS or title_word or target.endswith(":"))
+            )
+            if not weak:
+                new_checks.append(c)
+                continue
+            token = ""
+            m2 = re.search(
+                r"\b(__init__|backward|_backward|Value|tanh|SIMD|struct|"
+                r"loss|grad|parameters|forward|assert|Neuron|Embedding|attention|MLP|Layer)\b",
+                src,
+            )
+            if m2:
+                token = m2.group(1)
+            if not token:
+                m3 = re.search(r"`([^`]+)`", src)
+                if m3:
+                    frag = m3.group(1)
+                    m4 = re.search(r"\b([A-Za-z_][A-Za-z0-9_]{1,})\b", frag)
+                    token = (m4.group(1) if m4 else frag.split("(")[0].strip())[:40]
+            if not token and example:
+                m5 = re.search(r"\b([A-Za-z_][A-Za-z0-9_]{2,})\b", example)
+                token = m5.group(1) if m5 else ""
+            if token and token.lower().rstrip(",:.") not in _WEAK_CHECK_WORDS:
+                try:
+                    new_checks.append(
+                        c.model_copy(update={"kind": "code_contains", "target": token})
+                    )
+                except Exception:
+                    c.target = token
+                    c.kind = "code_contains"
+                    new_checks.append(c)
+            elif re.search(r"(?i)\b(cli|build|run|package|verify|smoke|final|train)\b", title):
+                from .project_models import VerificationCheck
+                new_checks.append(
+                    VerificationCheck(
+                        kind="run_ok",
+                        target="",
+                        description="Project runs without errors.",
+                    )
+                )
+            else:
+                new_checks.append(c)
+        if new_checks:
+            m.checks = new_checks
+
+
+def _ensure_actions_name_entry(project: ProjectCourse) -> None:
+    """After enrich/scrub, guarantee every action names the workspace entry file."""
+    entry = (project.entry_file or "").strip() or "main.py"
+    for m in project.milestones:
+        action = (m.microstep.action or "").strip()
+        if not action:
+            continue
+        if entry in action:
+            continue
+        rest = action[0].lower() + action[1:] if action[0].isupper() else action
+        if re.match(r"(?i)in\s+`", rest):
+            continue
+        m.microstep.action = f"In `{entry}`, {rest}"[:400]
+
+
+def scrub_project_learner_copy(project: ProjectCourse) -> ProjectCourse:
+    entry = (project.entry_file or "").strip() or "main.py"
+    for m in project.milestones:
+        scrub_learner_fields(m, entry_file=entry)
+    # Goal/intro are short prose sentences, not microstep instructions: a topic list
+    # ("variables, control flow, functions, ...") is normal English, so judge them with
+    # _looks_like_raw_prose. The instruction heuristic (>=3 commas => raw) wiped good
+    # AI goals/intros and swapped in a template.
+    if _looks_like_raw_prose(project.course_intro) or len(project.course_intro.split()) > 80:
         project.course_intro = ""
-    if looks_like_raw_transcript(project.project_goal):
+    if _looks_like_raw_prose(project.project_goal):
         project.project_goal = _synthesize_project_goal(project.title, project.tech_stack)
+    _repair_weak_checks(project)
+    _ensure_actions_name_entry(project)
     return project
+
+
+def _looks_like_raw_prose(text: str | None) -> bool:
+    """Caption dump detector for goal/intro prose (sentences with lists are fine)."""
+    cleaned = re.sub(r"\s+", " ", (text or "").strip())
+    if not cleaned:
+        return False
+    if _TRANSCRIPT_FILLER.search(cleaned) or _SPOKEN_FILLER_CHUNKS.search(cleaned):
+        return True
+    words = cleaned.split()
+    stops = cleaned.count(".") + cleaned.count("!") + cleaned.count("?")
+    if len(words) > 55 and stops == 0:
+        return True
+    if re.search(r"\b((?:\w+\s+){1,3}\w+)\s+\1\b", cleaned, re.IGNORECASE):
+        return True
+    if re.search(r"\b(\w+)\s+\1\b", cleaned):
+        return True
+    return False
 
 
 def _synthesize_project_goal(title: str, tech_stack: list[str]) -> str:
@@ -246,43 +434,30 @@ def _synthesize_project_goal(title: str, tech_stack: list[str]) -> str:
     name = title.strip() or "this project"
     stack = ", ".join(tech_stack[:4])
     if stack:
-        return f"Build “{name}” step by step, using {stack} as in the source tutorial."
-    return f"Build “{name}” step by step, following the source tutorial."
+        return f"Build “{name}” step by step with {stack}."
+    return f"Build “{name}” step by step."
 
 
-def _action_for(kind: str, target: str, title: str = "") -> str:
-    """Concise, imperative learner task — never raw source dialogue."""
-    if kind == "import":
-        return f"Add `import {target}` (or `from {target} import ...`) to your code."
-    if kind == "symbol":
-        return f"Define `{target}` in your workspace."
-    if kind == "function_call":
-        return f"Call `{target}(...)` in your code."
-    if kind == "stdout_contains":
-        return "Add a `print(...)` statement that shows your result."
-    if kind == "run_ok":
-        return "Run your code and confirm it executes without errors."
-    if kind == "code_contains":
-        token = target.split("|")[0]
-        return f"Implement this step so your code references `{token}`."
-    return title or "Complete this step in your code."
+def _action_for(
+    kind: str,
+    target: str,
+    title: str = "",
+    source_label: str = "",
+    entry_file: str = "main.py",
+) -> str:
+    """Beginner step-by-step task — what to type/import/check, never pass/fail jargon."""
+    return beginner_action(
+        kind,
+        target,
+        entry_file=entry_file or "main.py",
+        title=title,
+        source_label=source_label,
+    )
 
 
 def _observation_for(kind: str, target: str, title: str) -> str:
     """One short sentence — what this milestone is about."""
-    if kind == "import":
-        return f"This step brings in `{target}` from the tutorial."
-    if kind == "symbol":
-        return f"Here you define `{target}` — a core piece of the project."
-    if kind == "function_call":
-        return f"Wire up `{target}` so the project actually runs this logic."
-    if kind == "stdout_contains":
-        return "Time to see output — printing confirms your code works."
-    if kind == "run_ok":
-        return "Run the project to verify everything works together."
-    if kind == "code_contains":
-        return f"Build the “{title}” section from the source."
-    return f"Next milestone: {title}."
+    return beginner_observation(kind, target, title=title)
 
 
 def _chunk_long_step(text: str, max_len: int = _STEP_CHUNK_MAX) -> list[str]:
@@ -412,7 +587,69 @@ def _reject(name: str | None) -> bool:
     if not name or len(name) < 2:
         return True
     low = name.lower()
-    return low in _ACTION_VERBS or low in _STOPWORDS
+    return low in _ACTION_VERBS or low in _STOPWORDS or low in _CLOSED_CLASS
+
+
+#: Closed-class words: determiners, quantifiers, ordinals, pronouns, conjunctions
+#: and verbs of speech. Nobody names a package or a function one of these, so a
+#: capture that lands here grabbed the word after the verb rather than the thing
+#: being written — "create the function first", "import or any npm options".
+_CLOSED_CLASS_RAW = {
+    "let", "lets", "this", "that", "these", "those", "there", "here", "then",
+    "than", "too", "very", "just", "also", "still", "even", "only", "own",
+    "same", "other", "others", "another", "such", "each", "every", "both",
+    "either", "neither", "few", "many", "much", "more", "most", "less",
+    "least", "enough", "several", "couple", "stuff", "things", "something",
+    "anything", "nothing", "everything", "whatever", "whoever", "however",
+    "because", "since", "unless", "although", "though", "while", "whereas",
+    "nor", "or", "so", "yet", "instead", "indeed", "actually", "literally",
+    "simply", "exactly", "roughly", "maybe", "perhaps", "mostly", "usually",
+    "first", "second", "third", "fourth", "fifth", "next", "last", "final",
+    "whole", "entire", "full", "complete", "remaining", "rest", "additional",
+    "used", "use", "using", "called", "named", "say", "says", "said", "see",
+    "go", "goes", "going", "get", "gets", "got", "makes", "want",
+    "wants", "need", "needs", "have", "has", "had", "does", "did", "done",
+    "object", "variable", "instance", "value", "name", "type", "number",
+    "string", "list", "item", "items", "result", "results", "way", "case",
+    "time", "times", "day", "part", "bit", "lot", "bunch", "kind", "sort",
+}
+
+#: Anything a learner could legitimately `import` is a name, not filler: "import
+#: time" is a milestone, and "time" only landed above because it is also an noun.
+_REAL_MODULES = frozenset(getattr(sys, "stdlib_module_names", ())) | frozenset(KNOWN_TECH)
+
+_CLOSED_CLASS = {w for w in _CLOSED_CLASS_RAW if w not in _REAL_MODULES}
+
+
+def _is_corroborated_package(name: str, corpus: str) -> bool:
+    """A package the source really imports — not merely the word after "import".
+
+    Spoken captions put ordinary English where a tutorial puts a module name:
+    "import believe it or not a method called", "I'm going to import the entire
+    react library", "install additional packages that". A wrong import check is
+    worse than a missing one — the learner can never pass it, and the milestone
+    stalls the course — so an unfamiliar name must be corroborated first. A real
+    statement on its own line, a stdlib or known package, or the same import named
+    repeatedly all corroborate; one stray adjective does not.
+    """
+    if not name:
+        return False
+    if name.split(".")[0].lower() in _REAL_MODULES or name in KNOWN_TECH.values():
+        return True
+    if re.search(r"[_.\d]", name):                       # flask_sqlalchemy, gpt2
+        return True
+    if re.search(r"[a-z][A-Z]|[A-Z]{2,}", name):         # camelCase / ALLCAPS
+        return True
+    esc = re.escape(name)
+    # A code statement, not a sentence that happens to open with the verb: real
+    # imports end there or continue with `as`, `(` or a comma.
+    if re.search(
+        rf"^\s*(?:>>> )?(?:import|from)\s+{esc}\b\s*(?:$|\bas\b|[(,])",
+        corpus,
+        re.IGNORECASE | re.MULTILINE,
+    ):
+        return True
+    return len(re.findall(rf"\b(?:import|from)\s+{esc}\b", corpus, re.IGNORECASE)) >= 2
 
 
 def _canonical_import_name(name: str) -> str:
@@ -433,7 +670,40 @@ def _canonical_import_name(name: str) -> str:
     return code_ident_for_import(root)
 
 
-def _extract_target(sentence: str) -> tuple[str, str] | None:
+#: Words that legitimately follow a named symbol in speech. Anything else after
+#: "called X" means the caption split a longer identifier into two words.
+_NAME_TAIL = {
+    "function", "functions", "class", "classes", "method", "methods", "variable",
+    "module", "modules", "object", "dataclass", "that", "which", "what", "to",
+    "and", "or", "but", "in", "on", "for", "with", "so", "then", "now", "here",
+    "there", "will", "would", "can", "does", "did", "is", "are", "it", "this",
+    "we", "you", "they", "he", "she", "of", "as", "at", "by", "from", "returns",
+    "return", "takes", "take", "called", "named", "like", "just", "also", "again",
+    "out", "up", "down", "over", "about", "we'll", "i'll", "you", "lets",
+}
+
+
+def _name_is_split(sentence: str, end: int) -> bool:
+    """True when the captured identifier is only half of the name spoken.
+
+    Captions have no camelCase: "a function called handle submit" is
+    `handleSubmit`, and "call the Dot Upper function" is `.upper()`. A check for
+    `handle` alone can never pass, and a milestone the learner cannot clear stops
+    the whole course, so a split name is dropped rather than guessed at.
+    """
+    rest = sentence[end:].lstrip()
+    m = re.match(r"([A-Za-z_][A-Za-z0-9_]*)", rest)
+    if not m:
+        return False
+    nxt = m.group(1).lower()
+    if len(nxt) < 2 or nxt in _NAME_TAIL:
+        return False
+    # A participle describes the symbol ("sample containing some text"), it is
+    # not the second half of its name.
+    return not (nxt.endswith("ing") or nxt.endswith("ed"))
+
+
+def _extract_target(sentence: str, corpus: str = "") -> tuple[str, str] | None:
     """Derive a verification (kind, target) from a step sentence.
 
     Identifier case is preserved for symbols (captured from the original
@@ -441,12 +711,14 @@ def _extract_target(sentence: str) -> tuple[str, str] | None:
     matches the learner's real class name — not a lowercased `gpt`.
 
     Import names are canonicalized (Transformers → transformers) so instructions
-    and AST checks match the real package.
+    and AST checks match the real package, and are only accepted when the source
+    corroborates them as a package (`corpus` defaults to the sentence itself).
 
     Returns None when the sentence has no concrete, verifiable coding action.
     """
     IC = re.IGNORECASE
     s = sentence.lower()
+    ground = corpus or sentence
 
     # `from pkg import Name` must win over the inner `import Name` so we don't
     # treat GPT2LMHeadModel as a module — but the from-import must be LOCAL to
@@ -464,14 +736,22 @@ def _extract_target(sentence: str) -> tuple[str, str] | None:
         if mf:
             module = mf.group(1)
         canonical = _canonical_import_name(module)
-        if not _reject(canonical) and not _is_generic_import_name(canonical):
+        if (
+            not _reject(canonical)
+            and not _is_generic_import_name(canonical)
+            and _is_corroborated_package(canonical, ground)
+        ):
             return ("import", canonical)
         return None
 
     m = re.search(rf"\bfrom\s+({_IDENT})\s+import\b", sentence, IC)
     if m:
         canonical = _canonical_import_name(m.group(1))
-        if not _reject(canonical) and not _is_generic_import_name(canonical):
+        if (
+            not _reject(canonical)
+            and not _is_generic_import_name(canonical)
+            and _is_corroborated_package(canonical, ground)
+        ):
             return ("import", canonical)
         return None
 
@@ -489,7 +769,7 @@ def _extract_target(sentence: str) -> tuple[str, str] | None:
     )
     if m:
         name = m.group(1) or m.group(2)
-        if not _reject(name):
+        if not _reject(name) and not _name_is_split(sentence, m.end()):
             return ("symbol", name)
 
     # High-precision: an explicitly named *code* symbol — "a class called GPT",
@@ -501,7 +781,7 @@ def _extract_target(sentence: str) -> tuple[str, str] | None:
         sentence,
         IC,
     )
-    if m and not _reject(m.group(1)):
+    if m and not _reject(m.group(1)) and not _name_is_split(sentence, m.end()):
         return ("symbol", m.group(1))
     m = re.search(
         rf"\b(?:define|write|create|implement|add)\s+(?:a\s+|an\s+|the\s+)?"
@@ -509,7 +789,7 @@ def _extract_target(sentence: str) -> tuple[str, str] | None:
         sentence,
         IC,
     )
-    if m and not _reject(m.group(1)):
+    if m and not _reject(m.group(1)) and not _name_is_split(sentence, m.end()):
         return ("symbol", m.group(1))
 
     # "create/build/configure a <type-noun>" → the object itself is the symbol,
@@ -527,7 +807,7 @@ def _extract_target(sentence: str) -> tuple[str, str] | None:
         sentence,
         IC,
     )
-    if m:
+    if m and not _reject(m.group(1)):
         return ("symbol", m.group(1).lower())
 
     # "store ... in a variable X"
@@ -537,7 +817,7 @@ def _extract_target(sentence: str) -> tuple[str, str] | None:
 
     # call a specific function — not spoken "we call it X" / "we call this Y".
     m = re.search(rf"\bcall\s+(?:the\s+)?(?:function\s+)?({_IDENT})", sentence, IC)
-    if m and _is_callable_target(m.group(1), sentence):
+    if m and _is_callable_target(m.group(1), sentence) and not _name_is_split(sentence, m.end()):
         return ("function_call", m.group(1))
 
     # print / output → explicit coding instructions only, not narrative lecture.
@@ -628,9 +908,10 @@ def _short_title(sentence: str, target: tuple[str, str]) -> str:
         return "Print output"
     if kind == "run_ok":
         return "Run and verify"
-    # Fallback: first few words of the sentence.
+    # Fallback: the step's own words, with the narrator's trailing clauses cut.
     words = re.sub(r"^\s*(?:step\s*)?\d+[.):]\s*", "", sentence).split()
-    return " ".join(words[:6]).strip(" .") or "Implement step"
+    title = _strip_speech_debris(" ".join(words[:8]))
+    return title or "Implement step"
 
 
 def _check_for(kind: str, target: str) -> VerificationCheck:
@@ -668,6 +949,26 @@ def _detect_language(text: str) -> str:
 # Prefer long, specific phrases. Short needles like "optim"/"test"/"loss" are
 # dangerous because they false-match English ("optimization", "test data").
 CONCEPT_TOKENS: list[tuple[str, str]] = [
+    ("hello world", "print|hello"),
+    ("getting user input", "input"),
+    ("user input", "input"),
+    ("if/else statements", "if|else"),
+    ("if/else", "if|else"),
+    ("loops & functions", "for|while|fn|def"),
+    ("loops and functions", "for|while|fn|def"),
+    ("python vs mojo functions", "fn|def"),
+    ("importing libraries", "import"),
+    ("error handling", "raises|except|Error"),
+    ("variable scope", "var|let|scope"),
+    ("decorators & metaprogramming", "decorator"),
+    ("metaprogramming", "decorator|param"),
+    ("local jupyter notebook", "jupyter|notebook"),
+    ("jupyter notebook", "jupyter|notebook"),
+    ("setting up", "modular|mojo"),
+    ("mojo cli", "cli|main"),
+    ("variables, declarations, and datatypes", "var|let|Int|String"),
+    ("declarations, and datatypes", "var|let|Int|String"),
+    ("oop", "struct|class"),
     ("flash attention", "scaled_dot_product_attention|flash"),
     ("self-attention", "attention"),
     ("nn.module", "nn.Module"),
@@ -743,6 +1044,104 @@ _CONCEPT_WORDS: list[tuple[str, str]] = [
     ("sklearn", "sklearn"),
 ]
 
+# Chapter heading → the action the learner performs. A chapter is a line in the
+# creator's table of contents — "K-Nearest Neighbors Part 2 – Algorithm
+# Explanation" — and a milestone has to read as something to do. These needles are
+# deliberately specific; short ones ("model", "train", "hook") match too much
+# English and are handled by the fallback instead.
+CONCEPT_LABELS: list[tuple[str, str]] = [
+    (r"setting\s+up|^setup$", "Set up the environment"),
+    (r"hello\s+world", "Write Hello World"),
+    (r"if/?else", "Implement IF/ELSE"),
+    (r"^oop$|\boop\b", "Implement OOP"),
+    (r"variables?(?:\s*,\s*declarations?)?(?:\s*,?\s*and\s+datatypes?)?", "Declare variables and datatypes"),
+    (r"getting\s+user\s+input|user\s+input", "Read user input"),
+    (r"loops?\s*&\s*functions?|loops?\s+and\s+functions?", "Write loops and functions"),
+    (r"\bsimd\b", "Use SIMD"),
+    (r"micrograd", "Build the micrograd engine"),
+    (r"backpropagat", "Implement backpropagation"),
+    (r"value object", "Build the Value object"),
+    (r"multi-?layer perceptron|\bmlp\b", "Build a multi-layer perceptron"),
+    (r"neural nets?|neural network", "Build a neural network"),
+    (r"linear regression.*(?:data|load|analy|inspect|explor)", "Load and analyze data for linear regression"),
+    (r"linear regression.*(?:model|fit|train|implement)", "Fit a linear regression model"),
+    (r"linear regression", "Implement linear regression"),
+    (r"logistic regression", "Implement logistic regression"),
+    (r"k-?nearest|\bknn\b", "Implement k-nearest neighbors"),
+    (r"support vector|\bsvm\b", "Implement a support vector machine"),
+    (r"k-?means|clustering", "Implement k-means clustering"),
+    (r"gradient descent", "Train with gradient descent"),
+    (r"forward pass", "Implement the forward pass"),
+    (r"self-?attention|attention head|attention layer", "Implement self-attention"),
+    (r"embedding", "Add the embedding layers"),
+    (r"text classification", "Classify text with a neural network"),
+    (r"tokeni[sz]|tokenizer|tiktoken", "Build the tokenizer"),
+    (r"data ?loader|dataloader|loading & looking at data", "Build the data loader"),
+    (r"sampling loop|generate text|text generation", "Write the sampling loop"),
+    (r"loss function|cross entropy", "Compute the cross entropy loss"),
+    (r"optimizer", "Wire up the optimizer"),
+    (r"saving and loading|save and load|loading models|saving models|parameters saved", "Save and reload the model"),
+    (r"chat ?bot|chatbot", "Build the chat bot"),
+    (r"collision", "Detect collisions precisely"),
+    (r"\bneat\b|neuroevolution|fitness function", "Evolve the network with NEAT"),
+    (r"flappy|pygame|game loop", "Build the game loop"),
+    (r"graphics|drawing|render(ing|s) the", "Draw the graphics"),
+    (r"flask", "Build the Flask app"),
+    (r"rest api|api endpoint|\broutes?\b", "Add the API routes"),
+    (r"database|sqlite|sqlalchemy", "Create the database model"),
+    (r"deprecat|error handling|validat", "Handle bad input"),
+    (r"deploy|deployment", "Deploy the app"),
+    (r"component", "Build the component"),
+    (r"usestate|\bstate\b", "Manage component state"),
+    (r"\bprops\b", "Pass data down with props"),
+    (r"styling|\bcss\b|tailwind|bootstrap", "Style the interface"),
+    (r"\bforms?\b|\bsubmit\b|input field", "Handle the form input"),
+    (r"event handler|onclick|handle ?click", "Wire up the click handler"),
+    (r"parameters of the neural", "Collect the parameters of the neural net"),
+    (r"map over|list rendering|render the list", "Render a list"),
+]
+
+#: Most specific needle first, so a chapter naming several concepts is titled by
+#: the one it actually teaches. Specificity is the longest *alternative* in the
+#: needle, not its raw length: "neural nets?|neural network" is a longer string
+#: than "parameters of the neural" but a weaker match, and ranking by string
+#: length titled that chapter "Build a neural network" while its check graded
+#: `parameters` — the learner reading one thing and being graded for another.
+def _specificity(needle: str) -> int:
+    return max(len(part) for part in needle.split("|"))
+
+
+_CONCEPT_LABELS_BY_SPECIFICITY = sorted(CONCEPT_LABELS, key=lambda kv: -_specificity(kv[0]))
+
+#: Longest a milestone title reads as a label rather than a sentence.
+_TITLE_MAX = 56
+
+#: Gerunds that open a chapter heading, mapped to the imperative the learner reads.
+_GERUND_VERB = {
+    "creating": "Build", "building": "Build", "making": "Make", "coding": "Code",
+    "implementing": "Implement", "writing": "Write", "defining": "Define",
+    "adding": "Add", "training": "Train", "loading": "Load", "saving": "Save",
+    "testing": "Test", "using": "Use", "running": "Run", "moving": "Move",
+    "drawing": "Draw", "finishing": "Finish", "setting": "Set up",
+    "installing": "Install", "importing": "Import", "configuring": "Configure",
+    "deploying": "Deploy", "designing": "Design", "handling": "Handle",
+    "connecting": "Connect", "preparing": "Prepare", "exploring": "Explore",
+    "checking": "Check", "fixing": "Fix", "debugging": "Debug", "viewing": "View",
+    "showing": "Show", "updating": "Update", "deleting": "Delete",
+    "removing": "Remove", "starting": "Start", "trying": "Try",
+    "classifying": "Classify", "generating": "Generate", "sampling": "Sample",
+    "plotting": "Plot", "visualizing": "Visualize", "analysing": "Analyze",
+    "analyzing": "Analyze", "scaling": "Scale", "shaping": "Shape",
+}
+
+_IMPERATIVE_LEAD = re.compile(
+    r"^\s*(?:implement|build|create|write|define|add|train|load|save|test|use|run|"
+    r"configure|deploy|make|set up|install|import|handle|connect|draw|move|fix|"
+    r"debug|plot|visualize|classify|generate|sample|wire|manage|pass|render|style|"
+    r"detect|evolve|compute|finish|check|explore|prepare|start)\b",
+    re.IGNORECASE,
+)
+
 _IMPLEMENTATION_HINT = re.compile(
     r"implement|nn\.module|forward pass|data loader|dataloader|flash attention|"
     r"adamw|gradient clip|from_pretrained|torch\.compile|cross entropy|"
@@ -800,7 +1199,9 @@ _JUNK_HEAD_WORDS = {
 _STRONG_CONCEPT = re.compile(
     r"\b(regression|knn|svm|means|implement|neural|backprop|micrograd|"
     r"attention|tokenizer|dataloader|gradient|derivative|perceptron|"
-    r"saving|plotting|sklearn|pytorch|forward|backward|value object)\b",
+    r"saving|plotting|sklearn|pytorch|forward|backward|value object|"
+    r"hello\s+world|variables?|datatypes?|functions?|loops?|oop|"
+    r"classes?|structs?|decorators?|exceptions?|simd|jupyter)\b",
     re.IGNORECASE,
 )
 _INSTRUCTIONAL_HEADING = re.compile(
@@ -810,9 +1211,27 @@ _INSTRUCTIONAL_HEADING = re.compile(
     r"token|parser|api|regression|knn|svm|means|perceptron|tanh|"
     r"micrograd|pytorch|numpy|sklearn|tutorial|algorithm|optim|"
     r"value object|neuron|mlp|dataloader|saving|plotting|linear|"
-    r"transformer|logits|loss function|expression graph|expression)\b",
+    r"transformer|logits|loss function|expression graph|expression|"
+    r"hello\s+world|variables?|declarations?|datatypes?|data\s+types?|"
+    r"user\s+input|if/?else|conditionals?|loops?|functions?|methods?|"
+    r"oop|object[- ]oriented|classes?|structs?|libraries?|exceptions?|"
+    r"error\s+handling|decorators?|metaprogramming|jupyter|notebook|"
+    r"setting\s+up|setup|cli|simd|ownership|borrow(?:ed|ing)?)\b",
     re.IGNORECASE,
 )
+
+#: Language-intro / freeCodeCamp-style syllabus chapters. These rarely contain
+#: ML jargon, but they ARE the ordered implementation sequence for the course.
+_SYLLABUS_CHAPTER = re.compile(
+    r"\b(?:hello\s+world|variables?|declarations?|datatypes?|data\s+types?|"
+    r"user\s+input|if/?else|conditionals?|loops?|functions?|methods?|"
+    r"classes?|objects?|oop|object[- ]oriented|imports?|libraries?|"
+    r"exceptions?|error\s+handling|decorators?|metaprogramming|"
+    r"jupyter|notebook|setting\s+up|setup|cli|compilers?|interpreters?|"
+    r"structs?|ownership|borrow(?:ed|ing)?|simd|print)\b",
+    re.IGNORECASE,
+)
+
 
 
 def _clean_chapter(title: str) -> str:
@@ -822,6 +1241,114 @@ def _clean_chapter(title: str) -> str:
     t = re.sub(r"\s*\([^)]*\)\s*$", "", t)                 # drop trailing "(...)"
     t = t.strip(" -–—:•\t")
     return t
+
+
+def _clip_words(text: str, max_len: int = _TITLE_MAX) -> str:
+    """Shorten a label at a word boundary.
+
+    `_clip` cut mid-token, which put "…Shakespear", "previou" and "implemen" in
+    front of learners — a truncated identifier reads as a typo in the task.
+    """
+    text = re.sub(r"\s+", " ", (text or "")).strip()
+    if len(text) <= max_len:
+        return text
+    head = text[:max_len]
+    if " " in head:
+        head = head.rsplit(" ", 1)[0]
+    else:
+        head = text[:max_len]
+    return head.strip(" ,;:-–—")
+
+
+def _strip_speech_debris(text: str) -> str:
+    """Reduce a spoken phrase to the step it names.
+
+    Captions run on: "train these Transformers um", "create the loss function uh
+    so they will give us the correct". The step is the first clause; the rest is
+    the narrator thinking out loud.
+    """
+    t = re.sub(r"^\s*(?:step\s*)?\d+[.):]\s*", "", (text or "").strip())
+    t = _SPOKEN_FILLER_CHUNKS.sub(" ", t)
+    t = _TRANSCRIPT_FILLER.sub(" ", t)
+    t = re.sub(r"\b(?:uh+|um+|er+|ah+)\b", " ", t, flags=re.IGNORECASE)
+    # Captions double words, sometimes in pairs: "create a new a new endpoint".
+    t = re.sub(r"\b((?:\w+\s+){1,2}\w+)(?:\s+\1\b)+", r"\1", t, flags=re.IGNORECASE)
+    t = re.sub(r"\s+", " ", t).strip(" ,;:-–—")
+    # Preserve "if/else" so the speech-clause split does not eat a leading "IF".
+    _ifelse_mark = "\x00IFELSE\x00"
+    t = re.sub(r"(?i)\bif\s*/\s*else\b", _ifelse_mark, t)
+    # A trailing conjunction or copula is the narrator continuing, not the step.
+    t = re.split(
+        r"\b(?:but|because|which|since|while|although|so that|and so|so we|then we|"
+        r"we|you|i|they|it's|this is|that's|is|am|are|here|there|how|what|if)\b",
+        t,
+        maxsplit=1,
+        flags=re.IGNORECASE,
+    )[0].strip(" ,;:-–—")
+    t = t.replace(_ifelse_mark, "IF/ELSE")
+    # Captions get cut mid-phrase, leaving a dangling function word on the end.
+    while True:
+        words = t.split()
+        if len(words) > 2 and words[-1].lower().rstrip(".,") in _DANGLING_TAIL:
+            t = " ".join(words[:-1])
+            continue
+        return _clip_words(t)
+
+
+_DANGLING_TAIL = {
+    "a", "an", "the", "and", "or", "to", "of", "in", "on", "for", "with", "as",
+    "at", "by", "from", "that", "this", "it", "its", "so", "then", "than",
+}
+
+
+def _dedupe_verb_rest(verb: str, rest: str) -> str:
+    """Drop rest words that duplicate the verb's trailing words (Set up + Up)."""
+    vw = (verb or "").split()
+    rw = (rest or "").split()
+    if not vw or not rw:
+        return rest or ""
+    for n in range(min(len(vw), len(rw)), 0, -1):
+        if [w.lower() for w in vw[-n:]] == [w.lower() for w in rw[:n]]:
+            return " ".join(rw[n:])
+    return rest or ""
+
+
+def _chapter_title(chapter: str) -> str:
+    """A learner-facing action for a chapter, not its table-of-contents label.
+
+    "K-Nearest Neighbors Part 2 – Algorithm Explanation" is what the creator
+    titled the segment; what the learner does is implement k-nearest neighbors.
+    """
+    cleaned = _clean_chapter(chapter)
+    low = cleaned.lower()
+    for needle, label in _CONCEPT_LABELS_BY_SPECIFICITY:
+        if re.search(needle, low):
+            return label
+    phrase = _strip_speech_debris(cleaned)
+    phrase = re.sub(r"\bpart\s*\d+\b", "", phrase, flags=re.IGNORECASE).strip(" -–—:•,")
+    if not phrase:
+        return ""
+    # Short syllabus acronyms (OOP, SIMD, CLI) are real chapters even when len < 4.
+    if len(phrase) < 4 and not _SYLLABUS_CHAPTER.search(phrase):
+        return ""
+    lead = phrase.split()[0].lower().rstrip(",")
+    if lead in _GERUND_VERB:
+        verb = _GERUND_VERB[lead]
+        rest = phrase.split(None, 1)[1] if " " in phrase else ""
+        rest = _dedupe_verb_rest(verb, rest)
+        if rest:
+            return _clip_words(f"{verb} {rest}")
+        # Bare "Setting Up" (verb already ate "Up") → concrete learner task.
+        if lead == "setting":
+            return "Set up the environment"
+        return verb
+    if _IMPERATIVE_LEAD.match(phrase):
+        return phrase[:1].upper() + phrase[1:]
+    # Keep ALLCAPS syllabus tokens readable: OOP / SIMD, not oOP / sIMD.
+    words = phrase.split()
+    if len(words) == 1 and phrase.isupper() and 2 <= len(phrase) <= 6:
+        return f"Implement {phrase}"
+    return _clip_words(f"Implement {phrase[0].lower() + phrase[1:]}")
 
 
 def _looks_meta_heading(title: str) -> bool:
@@ -840,6 +1367,8 @@ def _looks_meta_heading(title: str) -> bool:
 def _is_instructional_heading(title: str) -> bool:
     if _looks_meta_heading(title):
         return False
+    if _SYLLABUS_CHAPTER.search(title or ""):
+        return True
     if not _INSTRUCTIONAL_HEADING.search(title):
         return False
     # Action verbs like "write" / "build" are not enough — the heading must name
@@ -906,6 +1435,8 @@ def _tokens_from_heading(title: str) -> str | None:
         low = word.lower()
         if low in _STOPWORDS or low in _ACTION_VERBS or low in _JUNK_HEAD_WORDS:
             continue
+        if low in _CLOSED_CLASS:
+            continue
         if low in seen:
             continue
         seen.add(low)
@@ -924,11 +1455,17 @@ def _concept_stem(label: str) -> set[str]:
     drop = {
         "build", "implement", "implementing", "create", "write", "train", "training",
         "the", "a", "an", "how", "to", "engine", "library", "object", "in", "this",
-        "video", "follow", "lecture", "with",
+        "video", "follow", "lecture", "with", "these", "those", "that", "some",
+        "based", "using", "make", "makes", "add", "does", "have", "let", "lets",
+        "directly", "simple", "first", "own", "get", "got", "will", "can",
     }
     out: set[str] = set()
     for tok in s.split():
         tok = alias.get(tok, tok)
+        # Fold plurals: "Train Transformers" and "Train the Transformer" are one
+        # step, and a caption switches between the two mid-sentence.
+        if len(tok) > 4 and tok.endswith("s") and not tok.endswith("ss"):
+            tok = tok[:-1]
         if tok in drop or len(tok) < 3:
             continue
         out.add(tok)
@@ -985,6 +1522,7 @@ def _concepts_from_prose(text: str, title: str) -> list[str]:
         (r"micrograd", "Build the micrograd engine"),
         (r"backpropagat", "Implement backpropagation"),
         (r"neural nets?", "Build a neural net"),
+        (r"linear regression.*(?:data|load|analy)", "Load and analyze data for linear regression"),
         (r"linear regression", "Implement linear regression"),
         (r"k-?nearest|knn\b", "Implement k-nearest neighbors"),
         (r"support vector|\bsvm\b", "Implement a support vector machine"),
@@ -1030,7 +1568,12 @@ def _chapter_check(title: str) -> VerificationCheck | None:
     low = title.lower()
     if re.search(r"\b(what is|intro to|introduction|history|why |overview)\b", low):
         return None
-    if not is_implementable_step(title) and not _match_concept_tokens(title):
+    syllabus = bool(_SYLLABUS_CHAPTER.search(title))
+    if (
+        not is_implementable_step(title)
+        and not _match_concept_tokens(title)
+        and not syllabus
+    ):
         return None
     # 1) A concrete import/symbol/call if the chapter names one.
     direct = _extract_target(title)
@@ -1058,8 +1601,8 @@ def _chapter_check(title: str) -> VerificationCheck | None:
                 )
     # 4) Instructional heading with extractable content words (Karpathy-style
     #    "derivative of a simple function") — still source-grounded, not GPT-2-only.
-    if _is_instructional_heading(title):
-        generic = _tokens_from_heading(title)
+    if _is_instructional_heading(title) or syllabus:
+        generic = _match_concept_tokens(title) or _tokens_from_heading(title)
         if generic:
             return VerificationCheck(
                 kind="code_contains",
@@ -1070,7 +1613,7 @@ def _chapter_check(title: str) -> VerificationCheck | None:
 
 
 _MICRO_OBSERVATIONS = [
-    "Next up from the video:",
+    "Next up from the tutorial:",
     "Here's the next piece to build:",
     "Keep the momentum — next section:",
     "Now for the next milestone:",
@@ -1094,7 +1637,7 @@ def _count_sentence_targets(text: str) -> int:
         for window in _windows_for_extraction(sentence):
             if not _is_step(window):
                 continue
-            target = _extract_target(window)
+            target = _extract_target(window, text)
             if target is None:
                 continue
             kind, tgt = target
@@ -1141,9 +1684,10 @@ def plan_project(doc: SourceDocument, title: str, course_id: str) -> ProjectCour
     _assert_source_acceptable(doc, text, outline, title)
 
     instructional_outline = [h for h in outline if _is_instructional_heading(h) or _chapter_check(h)]
-    if len(instructional_outline) >= 2:
+    syllabus_outline = [h for h in (outline or chapters) if _SYLLABUS_CHAPTER.search(h or "")]
+    if len(instructional_outline) >= 2 or len(syllabus_outline) >= 5:
         try:
-            return _plan_from_chapters(doc, outline, title, course_id)
+            return _plan_from_chapters(doc, outline or chapters, title, course_id)
         except ProjectGroundingError:
             pass
 
@@ -1151,9 +1695,11 @@ def plan_project(doc: SourceDocument, title: str, course_id: str) -> ProjectCour
         return _plan_from_chapters(doc, chapters, title, course_id)
 
     # Prefer explicit coding steps in a transcript over coarse description phrases
-    # ("build a word frequency counter") so we don't skip import/def milestones.
+    # ("build a word frequency counter") so we don't skip import/def milestones —
+    # but a lecture that narrates its code in prose has more real steps in the
+    # concepts than in the extractable sentences, and takes the outline path.
     prose_concepts = _concepts_from_prose(text, title or doc.title)
-    if len(prose_concepts) >= 2 and _count_sentence_targets(text) < 2:
+    if len(prose_concepts) >= 2 and _count_sentence_targets(text) <= max(1, len(prose_concepts) // 2):
         try:
             return _plan_from_chapters(doc, prose_concepts, title, course_id)
         except ProjectGroundingError:
@@ -1204,7 +1750,7 @@ def plan_project(doc: SourceDocument, title: str, course_id: str) -> ProjectCour
                 continue
             if is_dangling_or_document_task(window):
                 continue
-            target = _extract_target(window)
+            target = _extract_target(window, text)
             if target is None:
                 continue
             kind, tgt = target
@@ -1319,7 +1865,7 @@ def _plan_from_chapters(doc: SourceDocument, chapters: list[str], title: str, co
             order=order,
             title="Set up the project",
             source_grounded_description=_clip(
-                f"Create the entry file and start building the project from the video: {project_title}.",
+                f"Create the entry file and start building the project from the tutorial: {project_title}.",
                 2000,
             ),
             source_quote=_clip(project_title, 2000),
@@ -1328,7 +1874,7 @@ def _plan_from_chapters(doc: SourceDocument, chapters: list[str], title: str, co
                 action="Create `main.py` and add a comment with the project goal.",
                 hint="Everything you write here persists across the whole course.",
             ),
-            why="One persistent workspace — you grow this project across every chapter of the video.",
+            why="One persistent workspace — you grow this project across every chapter of the tutorial.",
             checks=[VerificationCheck(kind="file_exists", target="main.py", description="`main.py` exists in your workspace.")],
             xp_reward=10,
         )
@@ -1336,7 +1882,7 @@ def _plan_from_chapters(doc: SourceDocument, chapters: list[str], title: str, co
     order += 1
 
     kept = 0
-    seen_checks: set[tuple[str, str]] = set()
+    seen_titles: set[str] = set()
     for idx, ch in enumerate(chapters):
         if len(milestones) >= 16:
             break
@@ -1345,29 +1891,45 @@ def _plan_from_chapters(doc: SourceDocument, chapters: list[str], title: str, co
         check = _chapter_check(ch)
         if check is None:
             continue
-        check_key = (check.kind, check.target.lower())
-        if check_key in seen_checks:
+        # Dedupe on what the learner reads, not on the token the check looks for.
+        # Keying on the check collapsed a whole series together, because "Creating
+        # a Model" and "Text Classification – Model Architecture" both check for
+        # `Model` while teaching two different things.
+        label = _chapter_title(ch)
+        if not label or label.lower() in seen_titles:
             continue
-        seen_checks.add(check_key)
-        ch_title = ch if len(ch) <= 60 else ch[:57] + "…"
+        seen_titles.add(label.lower())
+        ch_title = _clip_words(label)
         obs = _MICRO_OBSERVATIONS[idx % len(_MICRO_OBSERVATIONS)]
         milestones.append(
             Milestone(
                 id=f"m{order}",
                 order=order,
-                title=_clip(ch, 60),
+                title=_clip(ch_title, 60),
                 source_grounded_description=_clip(
-                    f"The video covers this section: “{ch}”. Implement it in your project.",
+                    f"{ch_title} — the source covers this as “{ch}”.",
                     2000,
                 ),
                 source_quote=_clip(ch, 2000),
                 microstep=Microstep(
-                    observation=_clip(obs, 400),
-                    action=_clip(_action_for(check.kind, check.target, ch_title), 400),
+                    observation=_clip(
+                        _observation_for(check.kind, check.target, ch_title) or obs,
+                        400,
+                    ),
+                    action=_clip(
+                        _action_for(check.kind, check.target, ch_title, source_label=ch),
+                        400,
+                    ),
                     hint=_clip(_chapter_hint(check), 400),
                 ),
+                teach=_clip(
+                    beginner_teach(
+                        check.kind, check.target, title=ch_title, source_label=ch,
+                    ),
+                    1200,
+                ),
                 why=_clip(
-                    "This is a real chapter of the video — building it moves your project toward the source's final result.",
+                    "Building this chapter adds the next working piece of the project.",
                     2000,
                 ),
                 celebrate=_CELEBRATIONS[idx % len(_CELEBRATIONS)],
@@ -1395,7 +1957,7 @@ def _plan_from_chapters(doc: SourceDocument, chapters: list[str], title: str, co
             source_grounded_description="Run your complete project and confirm it works end-to-end.",
             source_quote="",
             microstep=Microstep(
-                observation="You've built the video's sections.",
+                observation="You've built the tutorial's sections.",
                 action="Run your project and make sure it executes without errors.",
                 hint="Use Run, then click NEXT to verify.",
             ),
@@ -1406,7 +1968,22 @@ def _plan_from_chapters(doc: SourceDocument, chapters: list[str], title: str, co
     )
 
     now = time.time()
-    goal = f"Reproduce the project built in “{project_title}”, one chapter at a time."
+    # Name what this course actually builds. A four-series mega course plans one
+    # series into a single file, and a goal that recites the whole title promises
+    # the learner three things they will never be asked to write.
+    steps = [
+        m.title for m in milestones
+        if m.checks and m.checks[0].kind not in {"file_exists", "run_ok"}
+    ]
+    if steps:
+        named = [s[:1].lower() + s[1:] for s in steps[:3]]
+        listed = named[0] if len(named) == 1 else " and ".join([", ".join(named[:-1]), named[-1]])
+        goal = _clip_words(
+            f"Work through “{_clip_words(project_title, 70)}”: {listed}, one milestone at a time.",
+            240,
+        )
+    else:
+        goal = _synthesize_project_goal(project_title, tech_stack)
     project = ProjectCourse(
         course_id=course_id,
         title=project_title,
@@ -1425,7 +2002,8 @@ def _plan_from_chapters(doc: SourceDocument, chapters: list[str], title: str, co
                 path="main.py",
                 content=(
                     f"# {project_title}\n"
-                    f"# Built from the video, chapter by chapter. Click NEXT after each milestone.\n\n"
+                    f"# Built from the tutorial, chapter by chapter. Click NEXT after each milestone.\n"
+                    f"# Tip: follow the Do this card — start with imports, then build each section.\n\n"
                 ),
             )
         ],
@@ -1443,20 +2021,39 @@ def _dedupe_milestones(milestones: list) -> list:
     "Print output" appearing twice, which `is_hollow_guided_project` reads as a
     hollow course — so a perfectly good project becomes permanently unopenable
     after it has already been saved.
+
+    Exact signatures are not enough for transcripts: a narrator says "train the
+    Transformer", "train these Transformers", "train Transformers but..." and the
+    extractor turns one step into five, each checking a slightly different token.
+    A concept stem comparison collapses them; the setup and run milestones are
+    structural and never compared.
     """
     seen = set()
     kept = []
+    stems: list[tuple[set[str], str]] = []
     for milestone in milestones:
         check = milestone.checks[0] if milestone.checks else None
+        if check is None or check.kind in {"file_exists", "run_ok"}:
+            kept.append(milestone)
+            continue
         signature = (
             milestone.title.strip().lower(),
-            check.kind if check else "",
-            (check.target if check else "").strip().lower(),
+            check.kind,
+            (check.target or "").strip().lower(),
             (milestone.source_quote or "").strip().lower()[:120],
         )
         if signature in seen:
             continue
+        stem = _concept_stem(milestone.title)
+        # Only steps graded the same way can be the same step said twice: defining
+        # `count_words` and calling it share a concept and are two real milestones.
+        if stem and any(
+            k == check.kind and _stems_overlap(stem, prev) for prev, k in stems
+        ):
+            continue
         seen.add(signature)
+        if stem:
+            stems.append((stem, check.kind))
         kept.append(milestone)
     for index, milestone in enumerate(kept, start=1):
         milestone.order = index
@@ -1485,7 +2082,12 @@ def _drops_unimportable_local_modules(milestones: list, project: ProjectCourse) 
     available = _local_module_names(project)
     authored = {
         m.group(1).lower()
-        for m in re.finditer(r"([A-Za-z_][A-Za-z0-9_]*)\.py", project.source_excerpt or "")
+        for m in re.finditer(
+            r"(?:([A-Za-z_][A-Za-z0-9_]*)\.(?:py|jsx?|tsx?|css))|(?:from\s+['\"]\./([A-Za-z_][A-Za-z0-9_-]*)['\"])",
+            project.source_excerpt or "",
+        )
+        for name in m.groups()
+        if name
     }
     kept = []
     for milestone in milestones:
@@ -1522,7 +2124,10 @@ def _chapter_hint(check: VerificationCheck) -> str:
         return f"Call `{check.target}(...)` in your code."
     if check.kind == "code_contains":
         first = check.target.split("|")[0]
-        return f"Your implementation should use `{first}`."
+        return (
+            f"Implement this section in `main.py`. "
+            f"When you're done, `{first}` should appear in your code."
+        )
     return "Implement this section, then click NEXT."
 
 
@@ -1555,10 +2160,10 @@ def validate_project(project: ProjectCourse) -> None:
                     "Generated lesson content still contains raw transcript speech. "
                     "Try a cleaner transcript or a video with chapter markers."
                 )
-        if m.microstep.action and len(m.microstep.action) > 220:
-            raise ProjectGroundingError(
-                "Generated lesson instructions are too long. The source may be too conversational."
-            )
+        # Beginner multi-step actions are intentionally ~3 short lines. Cap them
+        # instead of rejecting a whole valid tutorial for a few extra characters.
+        if m.microstep.action and len(m.microstep.action) > 400:
+            m.microstep.action = _cap_field(m.microstep.action, 400)
 
     run_ok_titles = [m.title.strip().lower() for m in project.milestones if "run and verify" in m.title.strip().lower()]
     if len(run_ok_titles) > 1:

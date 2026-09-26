@@ -21,9 +21,18 @@ interface ProviderInfo {
   error: string | null
 }
 
+interface ModelPreset {
+  id: string
+  label: string
+  tier: string
+  recommended?: boolean
+}
+
 interface SettingsResponse {
   providers: ProviderInfo[]
   current_provider: string
+  openrouter_model_presets?: ModelPreset[]
+  openrouter_model_helper?: string
 }
 
 interface ValidationResult {
@@ -105,6 +114,8 @@ export default function Settings({
   const [validationResult, setValidationResult] = useState<ValidationResult | null>(null)
   const [saving, setSaving] = useState(false)
   const [saveMessage, setSaveMessage] = useState<string | null>(null)
+  const [modelSaveMessage, setModelSaveMessage] = useState<string | null>(null)
+  const [savingModel, setSavingModel] = useState(false)
 
   // Fetch settings on mount
   const fetchSettings = useCallback(async () => {
@@ -194,6 +205,31 @@ export default function Settings({
       setSaveMessage(`Error: ${err instanceof Error ? err.message : 'Unknown error'}`)
     } finally {
       setSaving(false)
+    }
+  }
+
+  const handleSaveModel = async () => {
+    if (!activeProvider || !model.trim()) return
+    setSavingModel(true)
+    setModelSaveMessage(null)
+    try {
+      const response = await fetch(`${backendUrl}/api/settings/providers/${activeProvider}/model`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ model: model.trim() }),
+      })
+      if (!response.ok) {
+        const err = await response.json()
+        throw new Error(err.detail?.message || 'Model save failed')
+      }
+      const result = await response.json()
+      setModelSaveMessage(result.message)
+      await fetchSettings()
+      onProviderChange?.()
+    } catch (err) {
+      setModelSaveMessage(`Error: ${err instanceof Error ? err.message : 'Unknown error'}`)
+    } finally {
+      setSavingModel(false)
     }
   }
 
@@ -394,16 +430,60 @@ export default function Settings({
                     </div>
                   </div>
 
-                  <div className="setting-row">
-                    <label htmlFor="model">Model:</label>
-                    <input
-                      id="model"
-                      type="text"
-                      value={model}
-                      onChange={e => setModel(e.target.value)}
-                      placeholder="Leave empty for default"
-                      style={{ flex: 1, padding: '8px', borderRadius: '6px', border: '1px solid #ccc' }}
-                    />
+                  <div className="setting-row" style={{ flexDirection: 'column', alignItems: 'stretch', gap: '8px' }}>
+                    <label htmlFor="model">Create Course model (OPENROUTER_MODEL):</label>
+                    {activeProvider === 'openrouter' && (settings.openrouter_model_helper || true) && (
+                      <p style={{ margin: 0, fontSize: '12px', color: '#555', lineHeight: 1.4 }}>
+                        {settings.openrouter_model_helper ||
+                          "Weak free models often invent vague steps like 'as in the video'. Prefer NVIDIA Nemotron. Paid presets need OpenRouter credits — stay on :free if you have none."}
+                      </p>
+                    )}
+                    {activeProvider === 'openrouter' && (settings.openrouter_model_presets?.length ?? 0) > 0 && (
+                      <select
+                        aria-label="OpenRouter model preset"
+                        value={(settings.openrouter_model_presets || []).some(pr => pr.id === model) ? model : '__custom__'}
+                        onChange={e => {
+                          if (e.target.value !== '__custom__') setModel(e.target.value)
+                        }}
+                        style={{ padding: '8px', borderRadius: '6px', border: '1px solid #ccc' }}
+                      >
+                        {(settings.openrouter_model_presets || []).map(pr => (
+                          <option key={pr.id} value={pr.id}>
+                            {pr.label}{pr.tier === 'paid' ? ' ⚠ credits' : ''}
+                          </option>
+                        ))}
+                        <option value="__custom__">Custom model id…</option>
+                      </select>
+                    )}
+                    <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
+                      <input
+                        id="model"
+                        type="text"
+                        value={model}
+                        onChange={e => setModel(e.target.value)}
+                        placeholder="org/model or org/model:free"
+                        style={{ flex: 1, padding: '8px', borderRadius: '6px', border: '1px solid #ccc' }}
+                      />
+                      <button
+                        type="button"
+                        className="btn-primary"
+                        onClick={handleSaveModel}
+                        disabled={!model.trim() || savingModel}
+                        style={{ whiteSpace: 'nowrap' }}
+                      >
+                        {savingModel ? 'Saving…' : 'Save model'}
+                      </button>
+                    </div>
+                    {activeProvider === 'openrouter' && model && !model.endsWith(':free') && (
+                      <p style={{ margin: 0, fontSize: '12px', color: '#b45309' }}>
+                        ⚠ This looks like a paid OpenRouter model. It needs credits; if create fails for billing, switch to a :free preset (e.g. Nemotron Super free).
+                      </p>
+                    )}
+                    {modelSaveMessage && (
+                      <div className={`save-message ${modelSaveMessage.startsWith('Error') ? 'error' : 'success'}`}>
+                        {modelSaveMessage}
+                      </div>
+                    )}
                   </div>
 
                   {/* Validation Result */}

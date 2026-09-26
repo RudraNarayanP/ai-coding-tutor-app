@@ -18,6 +18,7 @@ from __future__ import annotations
 
 import json
 import re
+from collections import Counter
 from dataclasses import dataclass, field, asdict
 from typing import Any, Literal, Protocol
 
@@ -152,14 +153,19 @@ _ASSISTANT_TIPS_TITLE = re.compile(
     re.IGNORECASE,
 )
 _ASSISTANT_HABIT = re.compile(
-    r"\b(?:assign roles to|speak with|talk to|chat logs|custom instructions|"
+    # Tip/productivity habits only. Bare "talk to" matches every LLM intro lecture
+    # that says you can talk to ChatGPT — those are talks, not assistant-tips videos.
+    r"\b(?:assign roles to|speak with|chat logs|custom instructions|"
     r"prompt sequences?|prompt follow-up|act as a|archive (?:your )?chats)\b",
     re.IGNORECASE,
 )
 
 _CONVERSATION = re.compile(
     r"\b(podcast|interview|today'?s guest|welcome to the (?:show|podcast)|"
-    r"sit(?:ting)? down with|fireside chat|q\s*&\s*a episode)\b",
+    r"sit(?:ting)? down with|fireside chat|q\s*&\s*a episode|"
+    r"thanks for (?:coming|joining|being) on|"
+    r"my (?:guest|co-?host) (?:today|is|this)|"
+    r"welcome back to)\b",
     re.IGNORECASE,
 )
 
@@ -210,7 +216,7 @@ _NEGATED_TEACH = re.compile(
 _CONCEPTUAL_TITLE = re.compile(
     r"\bbut what is\b|"
     r"\bwhat is(?: a| an)?\b.{0,60}\?|"
-    r"\b(?:explained(?: visually)?|the intuition|visuali[sz]ed|"
+    r"\b(?:explained(?: visually)?|the intuition|intuitively|visuali[sz]ed|"
     r"the math (?:behind|of|underlying)|essence of|intuition behind)\b",
     re.IGNORECASE,
 )
@@ -239,6 +245,16 @@ _BUILD_INTENT = re.compile(
     r"\bstarter code\b|"
     r"\bdefine (?:a |the )?(?:class|function|method)\b|"
     r"\breproduce\b",
+    re.IGNORECASE,
+)
+
+# A narrator announcing the next thing they are about to write. Rare in a talk,
+# dense in a build-along, and the only implementation cue a captioned lecture
+# leaves behind when the page exposes no chapters, repo link or file names.
+_SPOKEN_BUILD = re.compile(
+    r"\b(?:we(?:'ll| will| are going to|'re going to)?|i(?:'ll| will| am going to)"
+    r"|let'?s|you(?:'ll| will))\s+(?:now\s+|then\s+)?"
+    r"(?:build|implement|write|create|code|define|train|reproduce)\b",
     re.IGNORECASE,
 )
 
@@ -693,6 +709,28 @@ def extract_project_goal(text: str, title: str) -> str:
 
 # ─── Transcript quality ───────────────────────────────────────────────────────
 
+#: Words of recovered text a diversity statistic is meaningful over. Longer than
+#: this and the statistic measures the source's length, not its quality.
+_DIVERSITY_SAMPLE_WORDS = 3000
+
+
+def _repeated_ngram_share(words: list[str], n: int = 5, min_repeats: int = 3) -> float:
+    """Share of words sitting inside an n-word run that repeats ``min_repeats``+ times.
+
+    A type-token ratio cannot be used to detect a stuck caption track: word
+    diversity falls with length under Zipf's law, so a single ratio flags every
+    genuine transcript past ~15k words as garbage — which is precisely the
+    multi-hour courses this feature exists for. Measured on the real-source
+    corpus in ``create_gate_lab``: 9 genuine build-alongs (12k-118k words) sit at
+    0.000-0.068, while repeated-caption garbage sits at 1.0.
+    """
+    if len(words) < n + 1:
+        return 0.0
+    counts = Counter(tuple(words[i : i + n]) for i in range(len(words) - n + 1))
+    total = sum(counts.values())
+    stuck = sum(c for c in counts.values() if c >= min_repeats)
+    return stuck / max(total, 1)
+
 
 def assess_transcript_quality(text: str, chapter_count: int = 0) -> tuple[str, list[str]]:
     """Return (status, notes). status: ok | empty | garbage | repetitive | fragmented.
@@ -710,8 +748,13 @@ def assess_transcript_quality(text: str, chapter_count: int = 0) -> tuple[str, l
     if not words:
         return "empty", ["No words could be recovered from the source."]
 
-    unique_ratio = len(set(words)) / max(len(words), 1)
-    if len(words) > 40 and unique_ratio < 0.12:
+    if len(words) > 40 and _repeated_ngram_share(words) > 0.35:
+        return "repetitive", ["Extracted captions repeat the same phrases over and over."]
+
+    # Low vocabulary diversity, measured on a bounded sample so the statistic does
+    # not depend on how long the source is.
+    sample = words[:_DIVERSITY_SAMPLE_WORDS]
+    if len(sample) > 40 and len(set(sample)) / len(sample) < 0.05:
         return "repetitive", ["Extracted captions are almost entirely repeated text."]
 
     alpha = sum(ch.isalpha() or ch.isspace() for ch in stripped)
@@ -726,6 +769,15 @@ def assess_transcript_quality(text: str, chapter_count: int = 0) -> tuple[str, l
     return "ok", []
 
 
+_ASSISTANT_HABIT_NEAR_PRODUCT = re.compile(
+    r"(?:" + _ASSISTANT_PRODUCT + r").{0,48}(?:assign roles|speak with|chat logs|custom instructions|"
+    r"prompt sequences?|prompt follow-up|act as a|archive)|"
+    r"(?:assign roles|speak with|chat logs|custom instructions|prompt sequences?|"
+    r"prompt follow-up|act as a|archive).{0,48}(?:" + _ASSISTANT_PRODUCT + r")",
+    re.IGNORECASE,
+)
+
+
 def _assistant_signal_count(blob: str, title: str) -> int:
     """Clustered assistant-usage evidence — not a single product-name hit."""
     heading = title or ""
@@ -733,9 +785,15 @@ def _assistant_signal_count(blob: str, title: str) -> int:
     hits = 0
     tips = bool(_ASSISTANT_TIPS_TITLE.search(heading) or _ASSISTANT_TIPS_TITLE.search(haystack))
     usage = bool(_ASSISTANT_USAGE.search(haystack))
-    if tips or usage:
+    if tips:
+        hits += 2  # a tips-shaped title is decisive on its own
+    elif usage:
         hits += 1
-    if _ASSISTANT_HABIT.search(haystack) and re.search(_ASSISTANT_PRODUCT, haystack, re.I):
+    # Habit only counts when it sits next to a product name — otherwise an LLM
+    # intro that says "talk to the model" and later names ChatGPT looks like tips.
+    if _ASSISTANT_HABIT_NEAR_PRODUCT.search(haystack) or (
+        _ASSISTANT_HABIT.search(haystack) and tips
+    ):
         hits += 1
     if len(_WRITE_DOCUMENT.findall(haystack)) >= 1 and re.search(_ASSISTANT_PRODUCT, haystack, re.I):
         hits += 1
@@ -764,6 +822,33 @@ def _conceptual_signal_count(blob: str, title: str, chapters: list[str]) -> int:
     return hits
 
 
+
+#: Chapter titles that read like a coding syllabus rather than a talk outline.
+#: freeCodeCamp-style intros often ship a dense TOC (Hello World, Variables,
+#: Functions, OOP…) with little prose in the description. Those chapters ARE
+#: the implementation sequence — treat a cluster of them as build evidence.
+_CURRICULUM_CHAPTER = re.compile(
+    r"\b(?:hello\s+world|variables?|declarations?|datatypes?|data\s+types?|"
+    r"user\s+input|if/?else|conditionals?|loops?|functions?|methods?|"
+    r"classes?|objects?|oop|object[- ]oriented|imports?|libraries?|"
+    r"exceptions?|error\s+handling|decorators?|metaprogramming|"
+    r"jupyter|setting\s+up|setup|cli|compilers?|interpreters?|"
+    r"structs?|ownership|borrow(?:ed|ing)?|simd)\b",
+    re.IGNORECASE,
+)
+
+
+def _curriculum_chapters(chapters: list[str]) -> list[str]:
+    out: list[str] = []
+    for chapter in chapters:
+        cleaned = (chapter or "").strip()
+        if len(cleaned) < 3 or is_conceptual_heading(cleaned):
+            continue
+        if _CURRICULUM_CHAPTER.search(cleaned) or is_implementable_step(cleaned):
+            out.append(cleaned)
+    return out
+
+
 def _action_chapters(chapters: list[str]) -> list[str]:
     out: list[str] = []
     for chapter in chapters:
@@ -774,6 +859,59 @@ def _action_chapters(chapters: list[str]) -> list[str]:
         ):
             out.append(chapter)
     return out
+
+
+def _implementation_density(blob: str) -> bool:
+    """True when a long spoken source keeps naming the code it is writing.
+
+    Every other route in ``has_implementation_cluster`` reads structure the video
+    *page* exposes — chapters, a repo link, file names. A captioned lecture
+    exposes none of that, so its evidence is spread over tens of thousands of
+    spoken words and only a count over a long span can see it.
+
+    Topic vocabulary does not count: a two-hour conversation about LLMs names
+    PyTorch and transformers constantly. What separates a build-along is someone
+    saying the identifiers out the way you say them while typing them —
+    ``nn.Module``, ``main.py``, ``import flask``. Measured on the real-source
+    corpus (``create_gate_lab``): 9 build-alongs run 9-196 such mentions, and a
+    talk, a slide lecture and two interviews all run exactly 0.
+    """
+    words = _words(blob)
+    if len(words) < 2000:
+        return False
+    if len(_SPOKEN_BUILD.findall(blob)) < 4:
+        return False
+    named_code = (
+        len(_real_dotted_tokens(blob))
+        + len(_CODE_FILE.findall(blob))
+        + len(_CODE_IMPORT.findall(blob))
+    )
+    return named_code >= 5
+
+
+#: How often a long source must name code for one mention to mean anything:
+#: roughly one code-naming per this many words.
+_CODE_MENTION_FLOOR = 4000
+
+#: Longest a line can still read as a step heading rather than a paragraph.
+_STEP_HEADING_MAX = 160
+
+
+def _names_code_persistently(blob: str) -> bool:
+    """True when code is named often enough for its length to be the point.
+
+    A single "function called back" in a two-hour conversation about a machine
+    learning book is a figure of speech; the same phrase in a ninety-second
+    transcript is the tutorial. Counting mentions once, as this used to, accepted
+    the former and planned it into eleven milestones of transcript noise.
+    """
+    mentions = (
+        len(_CODE_DEF.findall(blob))
+        + len(_CODE_IMPORT.findall(blob))
+        + len(_CODE_FILE.findall(blob))
+        + len(_real_dotted_tokens(blob))
+    )
+    return mentions >= max(2, 1 + len(_words(blob)) // _CODE_MENTION_FLOOR)
 
 
 def has_implementation_cluster(blob: str, chapters: list[str] | None = None) -> bool:
@@ -793,24 +931,35 @@ def has_implementation_cluster(blob: str, chapters: list[str] | None = None) -> 
 
     if len(action) >= 2:
         return True
-    impl_lines = []
+    # Dense coding syllabus TOC (language intro / freeCodeCamp-style course).
+    if len(_curriculum_chapters(chapters)) >= 5:
+        return True
+    impl_lines: set[str] = set()
     for line in blob.splitlines():
         stripped = line.strip(" -•\t")
         if len(stripped) < 8:
+            continue
+        # This route reads a chapter list. Without a ceiling it also reads an
+        # entire transcript as one implementable step, because a 20k-word blob
+        # contains the words "build" and "implement" somewhere.
+        if len(stripped) > _STEP_HEADING_MAX:
             continue
         if is_conceptual_heading(stripped):
             continue
         if not is_implementable_step(stripped):
             continue
         if _BUILD_ACTION_HEADING.search(stripped) or re.search(r"\bimplementation\b", stripped, re.I):
-            impl_lines.append(stripped)
+            # The blob repeats the title as its own heading; one line is one cue.
+            impl_lines.add(stripped.lower())
     if len(impl_lines) >= 2:
         return True
-    if defs or files:
+    if (defs or files) and _names_code_persistently(blob):
         return True
     if github and (build_intent or strong_teach or libs or action):
         return True
     if (strong_teach or build_intent) and libs and action:
+        return True
+    if _implementation_density(blob):
         return True
     return False
 
@@ -836,11 +985,19 @@ def _classify_source_type(
     strong_tech = bool(_library_hits(blob) or _specific_phrase_hits(blob) or _ACRONYM_PASCAL.search(blob))
     buildable = real_code or strong_tech
 
-    if _CONVERSATION.search(heading) or (_CONVERSATION.search(blob) and not _has_strong_teach(blob)):
+    # Interviews/podcasts often name "from scratch" when discussing a book title.
+    # Without an implementation cluster that teach cue must not outrank conversation.
+    if (_CONVERSATION.search(heading) or _CONVERSATION.search(blob)) and not implementation:
         return "conversation"
     # Assistant-usage wins over marketing "follow along" / product names like OpenAI
     # unless the source actually shows code, files, a repo, or build-along chapters.
-    if _assistant_signal_count(blob, heading) >= 2 and not implementation:
+    # A tips-shaped title is enough; otherwise demand a denser cluster so an LLM
+    # intro that names ChatGPT once is not labeled as a prompting tips video.
+    assistant_hits = _assistant_signal_count(blob, heading)
+    tips_shaped = bool(
+        _ASSISTANT_TIPS_TITLE.search(heading) or _ASSISTANT_TIPS_TITLE.search(blob)
+    )
+    if not implementation and (tips_shaped or assistant_hits >= 3):
         return "assistant_usage"
     if dangling + doc_tasks >= 2 and not real_code and not implementation:
         return "unrelated"
@@ -1003,6 +1160,7 @@ def evaluate_source(doc: SourceDocument, title: str = "") -> SourceQualityDecisi
     has_enough_structure = implementation and (
         len(evidence) >= 2
         or (len(_action_chapters(chapters)) >= 2 and has_technical_substance(blob))
+        or (len(_curriculum_chapters(chapters)) >= 5)
         or (bool(goal) and has_code_artifact(blob) and teach)
         or bool(_CODE_IMPORT.search(blob) or _CODE_DEF.search(blob))
     )
@@ -1105,7 +1263,19 @@ def evaluate_milestones(
     good = 0
     for m in substantive:
         blob = f"{m.title} {m.microstep.action} {m.source_quote} {m.source_grounded_description}"
-        if not is_implementable_step(m.title) and not is_implementable_step(blob):
+        # Concrete verification targets already prove the step is implementable ?
+        # important for novel languages (Mojo/Zig/?) whose titles the English
+        # heuristic does not recognize.
+        has_concrete = any(
+            c.kind in {"import", "symbol", "function_call", "code_contains"}
+            and (c.target or "").strip()
+            for c in (m.checks or [])
+        )
+        if (
+            not has_concrete
+            and not is_implementable_step(m.title)
+            and not is_implementable_step(blob)
+        ):
             bad.append(m.title)
             continue
         good += 1
@@ -1216,17 +1386,54 @@ class SourceAnalyzer(Protocol):
     ) -> dict[str, Any]: ...
 
 
-_ANALYZER_SYSTEM = (
-    "You evaluate whether a learning source can become a source-grounded coding project. "
-    "Return STRICT JSON with keys: decision (accept|reject|insufficient), project_goal, "
-    "source_type, technical_evidence (array of strings), rejection_reasons (array), "
-    "missing_information (array), confidence (high|medium|low). "
-    "Do not invent a project. Do not accept productivity chats, news, interviews, "
-    "motivational talks, or conceptual explainers that never implement anything. "
-    "Accept only when the source teaches building a specific "
-    "software, ML, or technical system. Mentions of Python, AI, ChatGPT, code, "
-    "neural networks, or backpropagation alone are not enough."
-)
+#: Refusals about *what kind* of source this is. No amount of transcript turns a
+#: news broadcast into a tutorial, so these never go to the model.
+_SHAPE_REJECTS = {"conversation", "news_commentary", "assistant_usage", "motivational"}
+
+#: A refusal about how much material survived extraction does go to the model —
+#: that is the class the pattern language has been proven wrong about.
+_UPGRADE_MIN_ARTIFACTS = 3
+
+_ANALYZER_SYSTEM = """You decide whether a learning source can become a source-grounded coding project. In the product, a learner builds one file milestone by milestone and each milestone is checked by running their code.
+
+Judge what the source does, not how long it is. Ninety seconds of "import flask, define create_app" is buildable. Nine hours is buildable if it walks through writing something, and is not buildable if it only discusses the field.
+
+ACCEPT when the source shows software or an ML system being made: it names the libraries, files, functions, classes, APIs or architecture it writes, and its steps could be carried out in an editor. A long course or playlist that covers one build across several parts counts. So does a video whose creator published an outline of what they implement.
+
+REJECT a talk, interview, podcast, news or commentary, motivational content, a lecture read off slides, or an explanation of a concept or of mathematics that never reaches code. REJECT a video about *using* an AI assistant to write things rather than about implementing software.
+
+INSUFFICIENT when it looks like it could be a tutorial but the recovered text is too thin to plan from: a title, a marketing blurb, or captions that never name what is being written.
+
+Never invent a project the source does not describe. To accept, you must name the goal and at least three concrete artifacts the learner will implement, taken from this source — a file, a function, a class, a model, an endpoint. If you cannot list three, do not accept.
+
+Return STRICT JSON only:
+{"decision": "accept|reject|insufficient", "project_goal": string, "first_artifacts": [string], "source_type": "coding_tutorial|conceptual_explainer|conversation|news_commentary|assistant_usage|motivational|unrelated|ambiguous_technical", "technical_evidence": [string], "rejection_reasons": [string], "missing_information": [string], "confidence": "high|medium|low"}"""
+
+
+def build_analyzer_view(doc: SourceDocument, title: str = "", budget: int = 9000) -> str:
+    """What the model reads: the outline, plus spans from across the whole source.
+
+    The head of a seven-hour transcript is someone saying hello. Reading only the
+    first few thousand characters judged every long course on its introduction.
+    """
+    text = gather_source_text(doc)
+    chapters = _collect_chapters(doc)
+    parts = [f"Title: {(title or doc.title).strip()}"]
+    if chapters:
+        outline = "\n".join(f"  - {c}" for c in chapters[:80])
+        parts.append(f"Creator's outline, in order:\n{outline}")
+    if len(text) <= budget // 2:
+        parts.append(f"Source text:\n{text}")
+    else:
+        window = budget // 8
+        step = max(1, (len(text) - window) // 3)
+        spans = [text[i : i + window] for i in range(0, len(text) - window + 1, step)][:4]
+        joined = "\n … \n".join(spans)
+        parts.append(
+            f"Spans sampled from across {len(text)} characters of source "
+            f"(head, two middles, tail):\n{joined}"
+        )
+    return "\n\n".join(parts)[:budget]
 
 
 class LlmSourceAnalyzer:
@@ -1238,13 +1445,13 @@ class LlmSourceAnalyzer:
     async def analyze(
         self, doc: SourceDocument, title: str, prior: SourceQualityDecision
     ) -> dict[str, Any]:
-        text = gather_source_text(doc)[:6000]
         user = (
-            f"Title: {title or doc.title}\n"
-            f"Deterministic prior decision: {json.dumps(prior.to_public_dict())}\n"
-            f"Source excerpt:\n{text}\n"
+            f"{build_analyzer_view(doc, title)}\n\n"
+            f"A pattern-matching pre-gate already decided: {json.dumps(prior.to_public_dict())}\n"
+            "Decide from the source itself. The pre-gate is often wrong about long "
+            "sources and right about what kind of source this is.\n"
         )
-        raw = await self.provider.generate_structured(_ANALYZER_SYSTEM, user, max_tokens=400)
+        raw = await self.provider.generate_structured(_ANALYZER_SYSTEM, user, max_tokens=700)
         raw = (raw or "").strip()
         m = re.search(r"\{.*\}", raw, re.DOTALL)
         if not m:
@@ -1253,29 +1460,42 @@ class LlmSourceAnalyzer:
         return data if isinstance(data, dict) else {}
 
 
+def _committed_to_a_plan(extra: dict[str, Any]) -> bool:
+    """True when the model put its agreement where its verdict is: a real plan."""
+    if str(extra.get("confidence") or "").lower() == "low":
+        return False
+    if not str(extra.get("project_goal") or "").strip():
+        return False
+    artifacts = [a for a in (extra.get("first_artifacts") or []) if str(a).strip()]
+    if len(artifacts) < _UPGRADE_MIN_ARTIFACTS:
+        return False
+    evidence = [e for e in (extra.get("technical_evidence") or []) if str(e).strip()]
+    return len(evidence) >= 2
+
+
 def _merge_analyzer(prior: SourceQualityDecision, extra: dict[str, Any]) -> SourceQualityDecision:
-    """Analyzer may only add rationale. It cannot override high-confidence decisions."""
+    """The model always adds rationale, and may overturn a refusal it can plan around."""
     if not extra:
         return prior
-    if prior.confidence == "high":
-        # Allow extra evidence/reasons to be appended, never a decision flip.
-        extra_ev = extra.get("technical_evidence") or []
-        extra_rs = extra.get("rejection_reasons") or []
-        if isinstance(extra_ev, list):
-            prior.technical_evidence = list(dict.fromkeys(prior.technical_evidence + [str(x) for x in extra_ev]))
-        if isinstance(extra_rs, list):
-            prior.rejection_reasons = list(dict.fromkeys(prior.rejection_reasons + [str(x) for x in extra_rs]))
-        return prior
+    extra_ev = extra.get("technical_evidence") or []
+    extra_rs = extra.get("rejection_reasons") or []
+    if isinstance(extra_ev, list):
+        prior.technical_evidence = list(dict.fromkeys(prior.technical_evidence + [str(x) for x in extra_ev]))
+    if isinstance(extra_rs, list):
+        prior.rejection_reasons = list(dict.fromkeys(prior.rejection_reasons + [str(x) for x in extra_rs]))
 
     proposed = str(extra.get("decision") or prior.decision).lower()
     if proposed not in {"accept", "reject", "insufficient"}:
         proposed = prior.decision
-    # Never loosen a deterministic reject/insufficient to accept without evidence.
-    if prior.decision != "accept" and proposed == "accept" and len(prior.technical_evidence) < 2:
+
+    if prior.decision != "accept":
+        shape_refusal = prior.source_type in _SHAPE_REJECTS or prior.source_type == "empty_or_failed"
+        if proposed == "accept" and (shape_refusal or not _committed_to_a_plan(extra)):
+            proposed = prior.decision
+    elif prior.quality_score >= 0.65 and proposed == "reject":
+        # Never talk down a source the patterns read as strongly buildable.
         proposed = prior.decision
-    # Never reject a reasonably strong deterministic accept.
-    if prior.decision == "accept" and prior.quality_score >= 0.65 and proposed == "reject":
-        proposed = prior.decision
+
     prior.decision = proposed  # type: ignore[assignment]
     if extra.get("project_goal") and not prior.project_goal:
         prior.project_goal = str(extra["project_goal"])[:200]
@@ -1287,9 +1507,21 @@ async def evaluate_source_with_analyzer(
     title: str = "",
     analyzer: SourceAnalyzer | None = None,
 ) -> SourceQualityDecision:
-    """Deterministic evaluation, optionally refined by the existing AI provider."""
+    """Deterministic evaluation, with the model reviewing refusals it can be wrong about.
+
+    An accept from the pattern language is cheap to keep and expensive to re-argue,
+    so accepts are not re-litigated. A refusal is where patterns have been proven
+    wrong — every long transcript in the real-source corpus was refused — so a
+    refusal about how much material survived goes to the model. A refusal about the
+    *kind* of source does not.
+    """
     prior = evaluate_source(doc, title)
-    if analyzer is None or prior.confidence == "high":
+    if analyzer is None:
+        return prior
+    reviews = prior.confidence != "high" or (
+        prior.decision != "accept" and prior.source_type not in _SHAPE_REJECTS
+    )
+    if not reviews:
         return prior
     try:
         extra = await analyzer.analyze(doc, title, prior)

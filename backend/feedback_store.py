@@ -48,13 +48,17 @@ class FeedbackStore:
                 logger.warning("FeedbackStore load error: %s", exc)
 
     def _save(self) -> None:
-        if self.storage_path:
-            try:
-                with self._lock:
-                    payload = {user_id: records[-200:] for user_id, records in self._records.items()}
-                self.storage_path.write_text(json.dumps(payload, indent=2), encoding="utf-8")
-            except Exception as exc:
-                logger.warning("FeedbackStore save error: %s", exc)
+        if not self.storage_path:
+            return
+        try:
+            with self._lock:
+                payload = {user_id: records[-200:] for user_id, records in self._records.items()}
+            raw = json.dumps(payload, separators=(",", ":"), ensure_ascii=False)
+            tmp = self.storage_path.with_suffix(self.storage_path.suffix + ".tmp")
+            tmp.write_text(raw, encoding="utf-8")
+            tmp.replace(self.storage_path)
+        except Exception as exc:
+            logger.warning("FeedbackStore save error: %s", exc)
 
     # ─── Recording ────────────────────────────────────────────────────────
 

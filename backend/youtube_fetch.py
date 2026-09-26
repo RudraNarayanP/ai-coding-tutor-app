@@ -120,6 +120,30 @@ def _extract_description(md: str) -> str:
     return joined[:4000]
 
 
+def _clean_chapter_title(raw: str) -> str:
+    """Trim the reader proxy's own markers off a captured chapter title.
+
+    A creator who writes their timestamps as ``⌨️ (0:00) Course Introduction``
+    arrives as ``⌨️ ([0:00](url)) Course Introduction ⌨️ ([00:02:30](url))``, so
+    capturing "up to the next link" swallows the ``)`` closing this marker, the
+    emoji section labels between chapters, and the ``(`` opening the next one.
+    Those artifacts used to reach learners as milestone titles.
+    """
+    title = raw.strip()
+    if title.startswith(")"):
+        title = title[1:]
+    title = _CHAPTER_DECORATION.split(title, maxsplit=1)[0]
+    title = re.sub(r"\s*\(\s*$", "", title)
+    return title.strip(" \t-–—:•")
+
+
+#: Emoji and geometric shapes the reader proxy interleaves between chapters.
+#: Deliberately not ``\W``: chapter names keep their ``&``, ``:`` and brackets.
+_CHAPTER_DECORATION = re.compile(
+    "[\U0001F000-\U0001FAFF\u2300-\u27BF\u2B00-\u2BFF\u25A0-\u25FF\uFE0F\u200D]"
+)
+
+
 def extract_chapters(md: str) -> list[tuple[str, str]]:
     """Return ordered (timestamp, title) chapters from the description block.
 
@@ -137,17 +161,16 @@ def extract_chapters(md: str) -> list[tuple[str, str]]:
     seen: set[str] = set()
     chapters: list[tuple[str, str]] = []
     for ts, raw_title in _CHAPTER_RE.findall(haystack):
-        title = raw_title.strip(" -–—:•\t")
+        title = _clean_chapter_title(raw_title)
         # Drop recommendation rows and empties.
         if not title or "views •" in title or "Live Playlist" in title or "Mix (" in title:
             continue
         if len(title) < 3:
             continue
         key = title.lower()
-        if key in seen:
-            continue
-        seen.add(key)
-        chapters.append((ts, title))
+        if key not in seen:
+            seen.add(key)
+            chapters.append((ts, title))
     return chapters
 
 
@@ -166,6 +189,11 @@ def build_source_text(title: str, description: str, chapters: list[tuple[str, st
 
 _CHALLENGE_MARKERS = ("just a moment", "security verification", "performing security", "verifying you are")
 _FETCH_ATTEMPTS = int(os.getenv("YOUTUBE_FETCH_ATTEMPTS", "3"))
+
+#: Less recovered than this and the page was a stub, not the video's description.
+#: A watch page that loaded gives thousands of characters; one that did not gives
+#: the title and the first sentence before "…more".
+MIN_GROUNDED_TEXT = 400
 
 
 def _looks_incomplete(md: str, chapters: list) -> bool:
@@ -197,15 +225,12 @@ async def fetch_video(video_id: str, client: httpx.AsyncClient | None = None) ->
             "chapters": chapters,
             "text": build_source_text(title, description, chapters),
         }
-        if best is None or len(chapters) > len(best["chapters"]) or (
-            len(chapters) == len(best.get("chapters") or [])
-            and len(description) > len(best.get("description") or "")
-        ):
+        if best is None or len(result["text"]) > len(best["text"]):
             best = result
         # Good enough — stop early. Description-only videos (no chapters) still count.
-        if (chapters or len(description) >= 120) and not _looks_incomplete(md, chapters):
+        if (chapters or len(result["text"]) >= MIN_GROUNDED_TEXT) and not _looks_incomplete(md, chapters):
             return result
-    if best is not None:
+    if best is not None and (best["chapters"] or len(best["text"]) >= MIN_GROUNDED_TEXT):
         return best
     raise YouTubeFetchError("Reader proxy did not return usable content.")
 

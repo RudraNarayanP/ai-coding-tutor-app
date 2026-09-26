@@ -1,11 +1,15 @@
 """Orchestration for the Create Course guided-project experience.
 
-This ties together ingestion → source-grounded planning → persistent workspace →
-milestone verification (the NEXT gate) → read-only AI guidance. It is used only
-by the Create Course project endpoints and does not touch any other subsystem.
+This ties together ingestion → OpenRouter-owned AI create/discard → persistent
+workspace → milestone verification (the NEXT gate) → read-only AI guidance.
+Heuristic ``plan_project`` is fallback-only when CREATE_COURSE_HEURISTIC_FALLBACK=1.
 """
 from __future__ import annotations
 
+from .ai_course_generator import (
+    generate_course_with_ai,
+    heuristic_fallback_enabled,
+)
 from .project_models import (
     ProjectCheckResult,
     ProjectCourse,
@@ -28,6 +32,7 @@ from .source_quality import (
     ProjectGroundingError,
     evaluate_ingestion,
     evaluate_project,
+    evaluate_source,
     evaluate_source_with_analyzer,
     require_accept,
 )
@@ -47,10 +52,15 @@ async def build_project(
     """Ingest a source and build a persistent, source-grounded guided project.
 
     Quality gate stages (all run before ``store.create``):
-      1. ingestion — extraction produced usable material
-      2. analysis — source can support a coherent coding project
-      3. planning — ``plan_project`` (goal + milestone sequence)
-      4. pre-workspace — final check; rejected sources are never persisted
+      1. ingestion — extraction produced usable material (empty transcript blocks)
+      2. ai_create — configured OpenRouter/provider owns discard vs create + structure
+      3. ai_quality_review — same provider self-reviews full course; revise until PASS
+         (CREATE_COURSE_QUALITY_MAX_TRIES); store.create runs only after PASS
+      4. schema validation — post-model checks; hollow/leak rejection
+      5. optional enrich polish (best-effort)
+
+    Heuristic ``plan_project`` runs only if AI is unavailable AND
+    CREATE_COURSE_HEURISTIC_FALLBACK=1.
 
     Raises IngestionError (bad/unavailable source) or ProjectGroundingError /
     SourceQualityError (source can't be turned into a real project).
@@ -61,31 +71,68 @@ async def build_project(
         title=title,
         filename=filename,
     )
-    # Stage 1 — ingestion quality (empty / failed extraction → insufficient).
+    # Stage 1 — thin preflight: empty / failed extraction must not reach the model.
     require_accept(evaluate_ingestion(doc))
 
-    # Stage 2 — source analysis (optional AI refine on borderline cases only).
-    analyzer = LlmSourceAnalyzer(provider) if provider is not None else None
-    analysis = await evaluate_source_with_analyzer(doc, title=title, analyzer=analyzer)
-    require_accept(analysis)
+    # Advisory heuristic only — must NOT replace AI ownership of accept/reject.
+    # Kept for logging / future telemetry; never raises here.
+    try:
+        _advisory = evaluate_source(doc, title=title)
+        if _advisory.decision != "accept":
+            import logging
 
-    # Stage 3 — curriculum planning (also re-checks source + milestone quality).
-    project = plan_project(doc, title=title, course_id=course_id)
+            logging.getLogger("patchwork.project_service").info(
+                "Heuristic advisory=%s source_type=%s (AI still owns create/discard)",
+                _advisory.decision,
+                _advisory.source_type,
+            )
+    except Exception:  # noqa: BLE001
+        pass
 
-    # Stage 4 — final quality check; never persist a rejected/insufficient course.
+    # Stage 2 — OpenRouter / configured provider owns discard vs create + course.
+    project: ProjectCourse | None = None
+    if provider is not None:
+        project = await generate_course_with_ai(
+            provider, doc, title=title, course_id=course_id
+        )
+    elif heuristic_fallback_enabled():
+        # Explicit opt-in safety net — never the default creator.
+        analyzer = LlmSourceAnalyzer(provider) if provider is not None else None
+        analysis = await evaluate_source_with_analyzer(doc, title=title, analyzer=analyzer)
+        require_accept(analysis)
+        project = plan_project(doc, title=title, course_id=course_id)
+    else:
+        raise ProjectGroundingError(
+            "Create Course requires a configured AI provider (OpenRouter recommended). "
+            "Set AI_PROVIDER and its API key in Settings, or set "
+            "CREATE_COURSE_HEURISTIC_FALLBACK=1 to use local planning as a last resort."
+        )
+
+    # Stage 3 — schema / hollow / transcript-leak validation after model JSON.
     require_accept(evaluate_project(project, stage="pre_workspace"))
-    require_accept(evaluate_project(project, stage="pre_display"))
-    # Loading applies this same gate in require_usable_project(). Without it a
-    # project could be saved, listed under "Resume", and then refuse to open.
     require_usable_project(project)
 
-    # Best-effort: make the course rich/engaging via the LLM. Never blocks creation.
+    # Best-effort polish only — never the structure owner.
     try:
-        await enrich_project(provider, project)
+        # AI-created courses already PASSED the quality review: enrichment may only
+        # fill empty fields, never rewrite reviewed teach/action/example.
+        await enrich_project(provider, project, fill_only=True)
     except Exception:  # noqa: BLE001 — copy enrichment must not block a valid course
         pass
+    scrub_project_learner_copy(project)
+    # If banned video/instructor phrases remain after enrich+scrub, re-polish+re-scrub.
+    try:
+        from .ai_course_generator import local_precheck_course
+        from .project_copy import polish_project_copy
+
+        defects = local_precheck_course(project)
+        banned_left = [d for d in defects if "Banned learner-facing phrase" in d]
+        if banned_left:
+            polish_project_copy(project)
+            scrub_project_learner_copy(project)
+    except Exception:  # noqa: BLE001 — never block create on precheck polish
+        pass
     validate_project(project)
-    # Re-check after enrichment so LLM copy cannot smuggle a rejected course through.
     require_accept(evaluate_project(project, stage="pre_display"))
     return store.create(project)
 

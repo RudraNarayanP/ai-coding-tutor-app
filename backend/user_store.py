@@ -1,9 +1,13 @@
 import logging
 import json
+import os
+import threading
 import time
 from pathlib import Path
 from pydantic import BaseModel, Field
 from .xp_curve import level_from_xp
+
+logger = logging.getLogger("patchwork.user_store")
 
 
 class UserProfile(BaseModel):
@@ -24,14 +28,22 @@ class LeaderboardEntry(BaseModel):
     xp: int
     level: int
     streak: int
-    is_demo: bool
+    is_demo: bool = False
     is_current_user: bool = False
 
 
 class UserStore:
+    """Persistent shared store of real learner profiles for the live leaderboard.
+
+    Empty is intentional: ranks appear only when real learners earn XP or set a
+    display name. Demo / seeded fake names are never created and are purged if
+    found in an older state file.
+    """
+
     def __init__(self, storage_path: Path | None = None) -> None:
         self.storage_path = storage_path
         self._users: dict[str, UserProfile] = {}
+        self._lock = threading.Lock()
         self._load()
 
     def _load(self) -> None:
@@ -42,46 +54,29 @@ class UserStore:
                     u = UserProfile(**item)
                     self._users[u.user_id] = u
             except Exception as exc:
-                logger.warning(f"UserStore error: {exc}")
+                logger.warning("UserStore error: %s", exc)
 
-        if not self._users:
-            self._seed_default_users()
-
-    def _seed_default_users(self) -> None:
-        default_user = UserProfile(
-            user_id="default_user",
-            username="Patchwork Learner",
-            xp=0,
-            level=1,
-            streak=1,
-            is_demo=False,
-        )
-        self._users[default_user.user_id] = default_user
-
-        seed_demos = [
-            ("demo_alex", "[Demo] Alex", 180, 2),
-            ("demo_sam", "[Demo] Sam", 120, 2),
-            ("demo_jordan", "[Demo] Jordan", 60, 1),
-            ("demo_taylor", "[Demo] Taylor", 30, 1),
-        ]
-        for uid, name, xp, level in seed_demos:
-            self._users[uid] = UserProfile(
-                user_id=uid,
-                username=name,
-                xp=xp,
-                level=level,
-                streak=1,
-                is_demo=True,
-            )
-        self._save()
+        # Drop any leftover demo / fake seed rows from older builds.
+        demos = [uid for uid, u in self._users.items() if u.is_demo or uid.startswith("demo_")]
+        if demos:
+            for uid in demos:
+                del self._users[uid]
+            self._save()
 
     def _save(self) -> None:
-        if self.storage_path:
-            try:
-                payload = [u.model_dump() for u in self._users.values()]
-                self.storage_path.write_text(json.dumps(payload, indent=2), encoding="utf-8")
-            except Exception as exc:
-                logger.warning(f"UserStore error: {exc}")
+        if not self.storage_path:
+            return
+        with self._lock:
+            payload = [u.model_dump() for u in self._users.values()]
+        try:
+            self.storage_path.parent.mkdir(parents=True, exist_ok=True)
+            # Compact JSON + atomic replace: smaller/faster than indent=2 rewrite.
+            raw = json.dumps(payload, separators=(",", ":"), ensure_ascii=False)
+            tmp = self.storage_path.with_suffix(".tmp_" + str(os.getpid()) + "_" + str(id(self)))
+            tmp.write_text(raw, encoding="utf-8")
+            tmp.replace(self.storage_path)
+        except Exception as exc:
+            logger.warning("UserStore error: %s", exc)
 
     def get_or_create_user(self, user_id: str, username: str | None = None) -> UserProfile:
         if user_id in self._users:
@@ -94,7 +89,7 @@ class UserStore:
 
         new_user = UserProfile(
             user_id=user_id,
-            username=username or f"Learner_{user_id[:6]}",
+            username=username or f"Learner_{user_id[:8]}",
             xp=0,
             level=1,
             streak=1,
@@ -124,7 +119,7 @@ class UserStore:
     def update_profile(self, user_id: str, username: str | None = None, streak: int | None = None) -> UserProfile:
         user = self.get_or_create_user(user_id)
         if username:
-            user.username = username
+            user.username = username.strip() or user.username
         if streak is not None:
             user.streak = max(1, streak)
         user.last_active = time.time()
@@ -132,11 +127,13 @@ class UserStore:
         return user
 
     def get_leaderboard(self, current_user_id: str = "default_user") -> list[LeaderboardEntry]:
+        """Rank real learners only (highest XP first). Empty list when nobody has joined."""
+        real_users = [u for u in self._users.values() if not u.is_demo and not u.user_id.startswith("demo_")]
         sorted_users = sorted(
-            self._users.values(),
-            key=lambda u: (-u.xp, u.username.lower())
+            real_users,
+            key=lambda u: (-u.xp, u.username.lower(), u.user_id),
         )
-        entries = []
+        entries: list[LeaderboardEntry] = []
         for idx, u in enumerate(sorted_users, start=1):
             entries.append(
                 LeaderboardEntry(
@@ -146,10 +143,8 @@ class UserStore:
                     xp=u.xp,
                     level=u.level,
                     streak=u.streak,
-                    is_demo=u.is_demo,
+                    is_demo=False,
                     is_current_user=(u.user_id == current_user_id),
                 )
             )
         return entries
-
-logger = logging.getLogger("patchwork.user_store")

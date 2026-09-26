@@ -1035,6 +1035,33 @@ select option { background: var(--card); color: var(--ink); }
 .duo-stack-row-title { font-weight: 900; font-size: 16px; }
 .duo-stack-row-detail { font-weight: 700; font-size: 13px; color: var(--ink-soft); margin-top: 4px; }
 .duo-empty-note { font-size: 13px; font-weight: 700; color: var(--ink-soft); line-height: 1.4; }
+.duo-empty-card {
+  border: 2px dashed var(--line);
+  border-radius: var(--r-lg);
+  background: var(--card);
+  padding: 28px 22px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  align-items: center;
+}
+.duo-empty-title {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 900;
+  color: var(--ink);
+}
+.duo-empty-card .duo-empty-note {
+  margin: 0;
+  max-width: 420px;
+}
+.duo-live-meta {
+  font-size: 12px;
+  font-weight: 700;
+  opacity: 0.75;
+  margin-top: 4px;
+}
 .duo-empty-note-on-cyan { color: #083344; margin: 8px 0 16px; }
 .duo-quest-meta { font-size: 12px; font-weight: 800; color: var(--ink-soft); }
 .duo-quest-item.is-disabled { opacity: 0.7; }
@@ -1540,7 +1567,7 @@ select option { background: var(--card); color: var(--ink); }
 }
 
 .pw-microstep { margin-top: 16px; }
-.pw-action { font-size: 14px; font-weight: 600; color: #e2e8f0; margin: 12px 0 0; line-height: 1.5; }
+.pw-action { font-size: 14px; font-weight: 600; color: #e2e8f0; margin: 12px 0 0; line-height: 1.5; white-space: pre-line; }
 .pw-action strong { color: #6ea8fe; }
 .pw-hint { font-size: 13px; font-weight: 500; color: #fbbf24; margin-top: 10px; line-height: 1.5; }
 .pw-microstep-controls { display: flex; gap: 14px; align-items: center; flex-wrap: wrap; margin-top: 14px; }

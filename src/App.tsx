@@ -1,6 +1,7 @@
 import { safeGetItem, safeSetItem, codeDraftKey, readCodeDraft, writeCodeDraft } from './utils/storage'
+import { debounce } from './utils/debounce'
 import { widgetFor } from './utils/exerciseTypes'
- import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { GuidebookPanel } from './components/GuidebookPanel'
 import { CreatePage } from './components/CreatePage'
 import Settings from './components/Settings'
@@ -25,6 +26,7 @@ import {
   levelFromXp,
 } from './utils/gamification'
 import { playPatchworkSound } from './utils/audio'
+import { getLearnerIdentity, setDisplayName } from './utils/learnerIdentity'
 import {
   allBlanksFilled,
   assembleFillBlankCode,
@@ -204,6 +206,10 @@ function App() {
   const [level, setLevel] = useState(1)
   const [leaderboardEntries, setLeaderboardEntries] = useState<LeaderboardEntry[]>([])
   const [userProfile, setUserProfile] = useState<UserProfile | null>(null)
+  const [learnerId, setLearnerId] = useState(() => getLearnerIdentity().userId)
+  const [displayName, setDisplayNameState] = useState(() => getLearnerIdentity().displayName)
+  const [nameDraft, setNameDraft] = useState(() => getLearnerIdentity().displayName)
+  const [leaderboardStatus, setLeaderboardStatus] = useState<'idle' | 'loading' | 'live' | 'error'>('idle')
   const [xpGainPopup, setXpGainPopup] = useState<number | null>(null)
   const [exerciseInput, setExerciseInput] = useState<any>({})
   const [showTestOutModal, setShowTestOutModal] = useState(false)
@@ -275,6 +281,10 @@ function App() {
     () => getGamificationState().unlimitedHearts
   )
   const [showSettings, setShowSettings] = useState(false)
+  const [homeModel, setHomeModel] = useState('')
+  const [homeModelPresets, setHomeModelPresets] = useState<Array<{ id: string; label: string; tier: string }>>([])
+  const [homeModelHelper, setHomeModelHelper] = useState('')
+  const [homeModelMsg, setHomeModelMsg] = useState<string | null>(null)
 
   const applyHearts = useCallback((status?: HeartStatus | null) => {
     if (!status) return
@@ -282,9 +292,8 @@ function App() {
     setMaxHearts(status.max_hearts)
     setUnlimitedHearts(status.unlimited)
     setSecondsToNextHeart(status.seconds_to_next_heart)
-    // Keep the localStorage mirror so a cold start still shows the right count
-    // before the first response arrives.
-    saveGameState({ hearts: status.hearts, unlimitedHearts: status.unlimited })
+    // localStorage mirror is written by the hearts/unlimitedHearts effect below
+    // so we do not double-write on every hearts response.
   }, [])
 
   useEffect(() => {
@@ -397,7 +406,7 @@ function App() {
   }, [refreshMistakes, lesson?.id, activeTab])
 
   const handleCompleteMaterial = async (id: string, user_answer?: string): Promise<MaterialCompletionResult | null> => {
-    const res = await api.completeMaterial(id, user_answer)
+    const res = await api.completeMaterial(id, user_answer, learnerId)
     if (res && res.passed) {
       if (res.xp_awarded > 0) {
         setXp((prev) => prev + res.xp_awarded)
@@ -414,23 +423,55 @@ function App() {
     setExerciseFeedback(null)
   }, [currentExercise?.id])
 
-  // ─── Fetch Leaderboard ──────────────────────────────────────────────────────
+  // ─── Fetch Leaderboard (live poll while the tab is open) ───────────────────
+  // 12s keeps a live feel without hammering disk/CPU; XP changes refresh once.
+  const LEADERBOARD_POLL_MS = 12_000
+  const leaderboardSigRef = useRef<string>('')
   const fetchLeaderboard = useCallback(async () => {
     try {
-      const data = await api.leaderboard()
+      setLeaderboardStatus((prev) => (prev === 'live' ? prev : 'loading'))
+      const data = await api.leaderboard(learnerId, displayName)
       if (Array.isArray(data)) {
-        setLeaderboardEntries(data)
+        const sig = JSON.stringify(data)
+        if (sig !== leaderboardSigRef.current) {
+          leaderboardSigRef.current = sig
+          setLeaderboardEntries(data)
+        }
+        setLeaderboardStatus('live')
+      } else {
+        setLeaderboardStatus('error')
       }
     } catch (err) {
       console.error('API request failed:', err)
+      setLeaderboardStatus('error')
     }
-  }, [])
+  }, [learnerId, displayName])
 
   useEffect(() => {
-    if (activeTab === 'leaderboards') {
-      fetchLeaderboard()
+    if (activeTab !== 'leaderboards') return
+    void fetchLeaderboard()
+    const timer = window.setInterval(() => {
+      void fetchLeaderboard()
+    }, LEADERBOARD_POLL_MS)
+    return () => window.clearInterval(timer)
+  }, [activeTab, fetchLeaderboard])
+
+  // Refresh once when XP changes while viewing the board (no interval restart).
+  const prevXpForLbRef = useRef(xp)
+  useEffect(() => {
+    if (activeTab !== 'leaderboards') {
+      prevXpForLbRef.current = xp
+      return
     }
-  }, [activeTab, xp, fetchLeaderboard])
+    if (prevXpForLbRef.current === xp) return
+    prevXpForLbRef.current = xp
+    void fetchLeaderboard()
+  }, [xp, activeTab, fetchLeaderboard])
+
+  const myLeaderboardEntry = useMemo(
+    () => leaderboardEntries.find((e) => e.is_current_user) ?? null,
+    [leaderboardEntries]
+  )
 
   // ─── Fetch Courses ──────────────────────────────────────────────────────────
   const fetchCourses = useCallback(async () => {
@@ -455,8 +496,46 @@ function App() {
         body: JSON.stringify({ provider: prov }),
       })
       fetchProviders()
+      void fetchHomeModelSettings()
     } catch (err) {
       console.error('API request failed:', err)
+    }
+  }
+
+  const fetchHomeModelSettings = useCallback(async () => {
+    try {
+      const res = await fetch('/api/settings')
+      if (!res.ok) return
+      const data = await res.json()
+      const openrouter = (data.providers || []).find((pr: { id: string }) => pr.id === 'openrouter')
+      if (openrouter?.model) setHomeModel(openrouter.model)
+      setHomeModelPresets(data.openrouter_model_presets || [])
+      setHomeModelHelper(data.openrouter_model_helper || '')
+    } catch (err) {
+      console.error('Failed to load model settings:', err)
+    }
+  }, [])
+
+  const handleHomeModelSave = async (nextModel?: string) => {
+    const modelId = (nextModel ?? homeModel).trim()
+    if (!modelId) return
+    setHomeModel(modelId)
+    setHomeModelMsg(null)
+    try {
+      const res = await fetch('/api/settings/providers/openrouter/model', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ model: modelId }),
+      })
+      if (!res.ok) {
+        const err = await res.json()
+        throw new Error(err.detail?.message || 'Model save failed')
+      }
+      const result = await res.json()
+      setHomeModelMsg(result.message)
+      fetchProviders()
+    } catch (err) {
+      setHomeModelMsg(err instanceof Error ? err.message : 'Model save failed')
     }
   }
 
@@ -488,12 +567,38 @@ function App() {
   // ─── Fetch Progression State for Active Language ──────────────────────────────
   const fetchUserProfile = useCallback(async () => {
     try {
-      const data = await api.userProfile()
-      if (data) setUserProfile(data)
+      const data = await api.userProfile(learnerId, displayName)
+      if (data) {
+        setUserProfile(data)
+        if (data.username && data.username !== displayName) {
+          setDisplayNameState(data.username)
+          setNameDraft(data.username)
+        }
+      }
     } catch (err) {
       console.error('API request failed:', err)
     }
-  }, [])
+  }, [learnerId, displayName])
+
+  const saveDisplayName = useCallback(async () => {
+    const next = setDisplayName(nameDraft)
+    setLearnerId(next.userId)
+    setDisplayNameState(next.displayName)
+    setNameDraft(next.displayName)
+    try {
+      const res = await api.updateUserProfile({
+        user_id: next.userId,
+        username: next.displayName,
+      })
+      if (res.ok) {
+        const data = await res.json()
+        setUserProfile(data)
+      }
+      void fetchLeaderboard()
+    } catch (err) {
+      console.error('API request failed:', err)
+    }
+  }, [nameDraft, fetchLeaderboard])
 
   const fetchProgression = useCallback(async () => {
     try {
@@ -644,17 +749,41 @@ setIsLessonActive(true)
     fetchUserProfile()
   }, [fetchCourses, fetchProviders, fetchLessons, fetchProgression, fetchUserProfile])
 
+  useEffect(() => {
+    void fetchHomeModelSettings()
+  }, [fetchHomeModelSettings])
+
   // Persist hearts/unlimited setting whenever they change
   useEffect(() => {
     saveGameState({ hearts, unlimitedHearts })
   }, [hearts, unlimitedHearts])
 
-  // Save code drafts, tagged with the starter they were based on so a revised
-  // curriculum starter supersedes the stale draft instead of resurfacing it.
+  // Debounced code drafts — typing must not hit localStorage every keystroke.
+  // Envelope still tags the starter so a revised curriculum supersedes stale drafts.
+  // Lesson switches write immediately so load/reset paths stay durable for tests + UX.
+  const draftWriteRef = useRef(
+    debounce((lessonId: string, starter: string, nextCode: string) => {
+      writeCodeDraft(codeDraftKey(lessonId), starter, nextCode)
+    }, 500)
+  )
+  const draftLessonIdRef = useRef<string | null>(null)
   useEffect(() => {
-    if (lesson?.id) {
-      writeCodeDraft(codeDraftKey(lesson.id), lesson.starter_code || '', code)
+    const writer = draftWriteRef.current
+    return () => {
+      writer.flush()
+      writer.cancel()
     }
+  }, [])
+  useEffect(() => {
+    if (!lesson?.id) return
+    const starter = lesson.starter_code || ''
+    if (draftLessonIdRef.current !== lesson.id) {
+      draftLessonIdRef.current = lesson.id
+      draftWriteRef.current.cancel()
+      writeCodeDraft(codeDraftKey(lesson.id), starter, code)
+      return
+    }
+    draftWriteRef.current(lesson.id, starter, code)
   }, [code, lesson])
 
   const getRunnableCode = useCallback(() => {
@@ -918,7 +1047,7 @@ setIsLessonActive(true)
           previous_hints: previousHints,
           hint_level: hintLevel,
           session_id: 'default',
-          user_id: 'default_user',
+          user_id: learnerId,
         }),
       })
 
@@ -1097,7 +1226,7 @@ setIsLessonActive(true)
 
     setExercisePhase('checking')
     try {
-      const res = await api.submitExercise(lesson.id, ex.id, ex.sublessonId, payload)
+      const res = await api.submitExercise(lesson.id, ex.id, ex.sublessonId, payload, learnerId)
       if (res.status === 403) {
         const detail = (await res.json().catch(() => ({})))?.detail
         if (detail?.error === 'out_of_hearts') {
@@ -1238,7 +1367,7 @@ setExercisePhase('incorrect')
   const handleRunTestOut = async () => {
     if (!lesson) return
     try {
-      const res = await api.testOut(lesson.id, testOutSubmissions)
+      const res = await api.testOut(lesson.id, testOutSubmissions, learnerId)
       if (res.ok) {
         const data: TestOutResult = await res.json()
         setTestOutResult(data)
@@ -1545,6 +1674,52 @@ setExercisePhase('incorrect')
               )) ?? <option value="ollama">Ollama</option>}
             </select>
           </div>
+
+          {(selectedProvider === 'openrouter' || currentProviderStatus?.provider === 'openrouter') && (
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
+              <label style={{ fontSize: '11px', fontWeight: 700, color: 'var(--muted)' }}>
+                Create Course model
+              </label>
+              <select
+                aria-label="OpenRouter Create Course model"
+                value={homeModelPresets.some((pr) => pr.id === homeModel) ? homeModel : '__custom__'}
+                onChange={(e) => {
+                  if (e.target.value === '__custom__') return
+                  void handleHomeModelSave(e.target.value)
+                }}
+                style={{
+                  width: '100%',
+                  padding: '4px 8px',
+                  borderRadius: '8px',
+                  border: '2px solid var(--line)',
+                  fontSize: '11px',
+                  fontWeight: 700,
+                  background: 'var(--input-bg)',
+                  color: 'var(--ink)',
+                }}
+              >
+                {homeModelPresets.map((pr) => (
+                  <option key={pr.id} value={pr.id}>
+                    {pr.label}
+                  </option>
+                ))}
+                <option value="__custom__">Custom (edit in Settings)…</option>
+              </select>
+              <div style={{ fontSize: '10px', color: 'var(--muted)', lineHeight: 1.35 }}>
+                {homeModelHelper
+                  ? 'Prefer Nemotron for quality. Paid models need credits.'
+                  : 'Prefer Nemotron. Weak free models → vague “as in the video” steps.'}
+              </div>
+              {homeModel && !homeModel.endsWith(':free') && (
+                <div style={{ fontSize: '10px', color: '#b45309' }}>
+                  ⚠ Paid model — needs OpenRouter credits
+                </div>
+              )}
+              {homeModelMsg && (
+                <div style={{ fontSize: '10px', color: 'var(--muted)' }}>{homeModelMsg}</div>
+              )}
+            </div>
+          )}
 
           <div style={{ display: 'flex', gap: '8px' }}>
             <button
@@ -1946,9 +2121,18 @@ setExercisePhase('incorrect')
                 <div className="duo-league-details">
                   <h2>Leaderboard</h2>
                   <p>
-                    {leaderboardEntries.find((e) => e.is_current_user)
-                      ? `Your rank: #${leaderboardEntries.find((e) => e.is_current_user)!.rank} · ${xp} XP · Level ${level}`
-                      : `Level ${level} · ${xp} XP from course progression`}
+                    {myLeaderboardEntry
+                      ? `Your rank: #${myLeaderboardEntry.rank} · ${myLeaderboardEntry.xp} XP · Level ${myLeaderboardEntry.level}`
+                      : `Playing as ${displayName} · ranks update live as learners earn XP`}
+                  </p>
+                  <p className="duo-live-meta">
+                    {leaderboardStatus === 'live'
+                      ? 'Live · updates about every 12s'
+                      : leaderboardStatus === 'loading'
+                        ? 'Connecting…'
+                        : leaderboardStatus === 'error'
+                          ? 'Could not reach the leaderboard — retrying…'
+                          : ''}
                   </p>
                 </div>
               </div>
@@ -1963,18 +2147,27 @@ setExercisePhase('incorrect')
                         {entry.rank}
                       </div>
                       <div className="duo-user-avatar-circle">
-                        {entry.username ? entry.username.replace('[Demo] ', '').charAt(0).toUpperCase() : 'U'}
+                        {entry.username ? entry.username.charAt(0).toUpperCase() : 'U'}
                       </div>
                       <div className="duo-rank-name" style={{ flex: 1, fontWeight: entry.is_current_user ? 800 : 600 }}>
-                        {entry.username}{entry.is_current_user ? ' (You)' : ''}{entry.is_demo ? ' · demo' : ''}
+                        {entry.username}{entry.is_current_user ? ' (You)' : ''}
                       </div>
                       <div className="duo-rank-xp" style={{ fontWeight: 800 }}>
                         {entry.xp} XP
                       </div>
                     </div>
                   ))
+                ) : leaderboardStatus === 'loading' ? (
+                  <div className="duo-empty-card" role="status">
+                    <p className="duo-empty-title">Loading ranks…</p>
+                  </div>
                 ) : (
-                  <p className="duo-empty-note">No leaderboard entries were returned by the server.</p>
+                  <div className="duo-empty-card">
+                    <p className="duo-empty-title">Board is empty</p>
+                    <p className="duo-empty-note">
+                      Complete a lesson to earn XP and take 1st place. When others join, ranks rearrange here in real time — no fake names.
+                    </p>
+                  </div>
                 )}
               </div>
               <div className="duo-widget-card" style={{ marginTop: '16px' }}>
@@ -2027,10 +2220,35 @@ setExercisePhase('incorrect')
                   {(userProfile?.username || 'P').charAt(0).toUpperCase()}
                 </div>
                 <div className="duo-profile-meta">
-                  <h1>{userProfile?.username || 'Profile unavailable'}</h1>
+                  <h1>{userProfile?.username || displayName}</h1>
                   <p className="duo-profile-handle">
-                    {userProfile ? userProfile.user_id : 'Server profile has not loaded'}
+                    {learnerId}
                   </p>
+                </div>
+              </div>
+
+              <div className="duo-widget-card" style={{ marginTop: '16px', marginBottom: '16px' }}>
+                <div className="duo-widget-title">
+                  <span>Display name</span>
+                  <span className="duo-widget-link">SHOWN ON LEADERBOARD</span>
+                </div>
+                <div style={{ display: 'flex', gap: '10px', marginTop: '12px' }}>
+                  <input
+                    type="text"
+                    value={nameDraft}
+                    maxLength={32}
+                    onChange={(e) => setNameDraft(e.target.value)}
+                    placeholder="Your name"
+                    aria-label="Display name"
+                    style={{ flex: 1 }}
+                  />
+                  <button
+                    className="duo-button duo-button-primary"
+                    type="button"
+                    onClick={() => { void saveDisplayName() }}
+                  >
+                    Save
+                  </button>
                 </div>
               </div>
 

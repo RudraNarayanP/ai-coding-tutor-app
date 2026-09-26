@@ -347,16 +347,21 @@ export const api = {
     id: string,
     exerciseId: string,
     sublessonId: string | undefined,
-    payload: Record<string, unknown>
+    payload: Record<string, unknown>,
+    userId: string = 'default_user'
   ) =>
-    post(`/api/lessons/${id}/submit-exercise`, {
+    post(`/api/lessons/${id}/submit-exercise?user_id=${encodeURIComponent(userId)}`, {
       exercise_id: exerciseId,
       sublesson_id: sublessonId ?? null,
       payload,
     }),
 
-  testOut: (id: string, submissions: Record<string, Record<string, unknown>>) =>
-    post(`/api/lessons/${id}/test-out`, { submissions }),
+  testOut: (
+    id: string,
+    submissions: Record<string, Record<string, unknown>>,
+    userId: string = 'default_user'
+  ) =>
+    post(`/api/lessons/${id}/test-out?user_id=${encodeURIComponent(userId)}`, { submissions }),
 
   providers: () => request<ProvidersOverview>('/api/ai/providers'),
 
@@ -381,11 +386,17 @@ export const api = {
   progression: (language: string) =>
     request<ProgressionState>(`/api/progression?language=${encodeURIComponent(language)}`),
 
-  leaderboard: (userId: string = 'default_user') =>
-    request<LeaderboardEntry[]>(`/api/leaderboard?user_id=${encodeURIComponent(userId)}`),
+  leaderboard: (userId: string = 'default_user', username?: string) => {
+    const params = new URLSearchParams({ user_id: userId })
+    if (username) params.set('username', username)
+    return request<LeaderboardEntry[]>(`/api/leaderboard?${params.toString()}`)
+  },
 
-  userProfile: (userId: string = 'default_user') =>
-    request<UserProfile>(`/api/user/profile?user_id=${encodeURIComponent(userId)}`),
+  userProfile: (userId: string = 'default_user', username?: string) => {
+    const params = new URLSearchParams({ user_id: userId })
+    if (username) params.set('username', username)
+    return request<UserProfile>(`/api/user/profile?${params.toString()}`)
+  },
 
   updateUserProfile: (payload: { user_id?: string; username?: string; streak?: number; xp?: number }) =>
     post('/api/user/profile', payload),
@@ -419,10 +430,13 @@ export const api = {
     return request<Material[]>(`/api/materials${query ? `?${query}` : ''}`)
   },
 
-  completeMaterial: (id: string, user_answer?: string) =>
-    request<MaterialCompletionResult>(`/api/materials/${encodeURIComponent(id)}/complete`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ user_answer }),
-    }),
+  completeMaterial: (id: string, user_answer?: string, userId: string = 'default_user') =>
+    request<MaterialCompletionResult>(
+      `/api/materials/${encodeURIComponent(id)}/complete?user_id=${encodeURIComponent(userId)}`,
+      {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ user_answer }),
+      }
+    ),
 }

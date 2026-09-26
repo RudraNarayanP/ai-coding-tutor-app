@@ -49,6 +49,53 @@ PROVIDER_SETUP_INSTRUCTIONS: dict[str, str] = {
     "gemini": "Get your API key from aistudio.google.com/app/apikey",
 }
 
+# OpenRouter model presets for Create Course (verified against OpenRouter catalog 2026).
+# Prefer Nemotron for quality; keep free-tier options visible. Paid models need credits.
+OPENROUTER_MODEL_PRESETS: list[dict[str, str | bool]] = [
+    {
+        "id": "nvidia/nemotron-3-super-120b-a12b:free",
+        "label": "Nemotron 3 Super (free) — recommended",
+        "tier": "free",
+        "recommended": True,
+    },
+    {
+        "id": "nvidia/nemotron-3-super-120b-a12b",
+        "label": "Nemotron 3 Super (paid) — best quality",
+        "tier": "paid",
+        "recommended": True,
+    },
+    {
+        "id": "nvidia/nemotron-3.5-lightning:free",
+        "label": "Nemotron 3.5 Lightning (free) — fast",
+        "tier": "free",
+        "recommended": False,
+    },
+    {
+        "id": "nvidia/nemotron-3-nano-30b-a3b",
+        "label": "Nemotron 3 Nano 30B (paid) — cheaper quality",
+        "tier": "paid",
+        "recommended": False,
+    },
+    {
+        "id": "cohere/north-mini-code:free",
+        "label": "Cohere North Mini Code (free) — weak / last resort",
+        "tier": "free",
+        "recommended": False,
+    },
+    {
+        "id": "meta-llama/llama-3.1-8b-instruct",
+        "label": "Llama 3.1 8B Instruct",
+        "tier": "paid",
+        "recommended": False,
+    },
+]
+
+OPENROUTER_MODEL_HELPER = (
+    "Create Course quality depends on this model. Weak free models often produce vague "
+    "steps like 'as in the video'. Recommended: NVIDIA Nemotron 3 Super (free or paid). "
+    "Paid models need OpenRouter credits — if you have none, stay on a :free preset."
+)
+
 
 class ProviderInfo(BaseModel):
     """Full provider information for the frontend."""
@@ -292,13 +339,35 @@ def update_provider_key(provider: str, api_key: str, model: str | None = None) -
     os.environ[key_env] = api_key
 
     if model:
-        model_env = f"{provider.upper()}_MODEL"
-        os.environ[model_env] = model
+        update_provider_model(provider, model)
 
     # Cached provider info (has_key, key_masked) and the overview list are
     # now stale.
     _provider_cache.delete(provider, "info")
     _provider_cache.delete("providers_overview")
+
+
+def update_provider_model(provider: str, model: str) -> str:
+    """Set provider MODEL in os.environ and persist to project .env.
+
+    Returns the normalized model id. Does not require re-entering the API key.
+    """
+    from .env import upsert_env_var
+
+    normalized = (provider or "").strip().lower()
+    model_id = (model or "").strip()
+    if not model_id:
+        raise ValueError("model is required")
+    if len(model_id) > 200:
+        raise ValueError("model id too long")
+    if any(ch.isspace() for ch in model_id):
+        raise ValueError("model id must not contain spaces")
+
+    model_env = f"{normalized.upper()}_MODEL"
+    upsert_env_var(model_env, model_id)
+    _provider_cache.delete(normalized, "info")
+    _provider_cache.delete("providers_overview")
+    return model_id
 
 
 def remove_provider_key(provider: str) -> bool:
