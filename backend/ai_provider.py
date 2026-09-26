@@ -107,6 +107,26 @@ def _upstream_error_in_body(data: Any) -> tuple[int | None, str] | None:
     return None, str(err)[:240]
 
 
+def _rate_limit_detail(res: Any) -> str:
+    """Short provider reason for a 429, so users (and audits) can tell an upstream
+    per-model throttle from the account's daily free-model quota."""
+    try:
+        body = res.json()
+    except Exception:
+        return ""
+    err = body.get("error") if isinstance(body, dict) else None
+    if not isinstance(err, dict):
+        return ""
+    msg = str(err.get("message") or "").strip()
+    meta = err.get("metadata") if isinstance(err.get("metadata"), dict) else {}
+    raw = str(meta.get("raw") or "").strip()
+    text = f"{msg} {raw}".lower()
+    if "per-day" in text or "per day" in text:
+        return " (daily free-model quota reached: free-models-per-day; it resets daily, or add OpenRouter credits)"
+    reason = (raw or msg)[:160]
+    return f" ({reason})" if reason else ""
+
+
 def _finish_and_reasoning(data: Any) -> tuple[str | None, int]:
     try:
         choice = data["choices"][0]
@@ -408,7 +428,7 @@ class OpenAICompatibleProvider:
             if res.status_code == 401:
                 raise AIProviderError(f"{self.name} API key is invalid or unauthorized.", provider=self.provider_id, code="invalid_api_key")
             elif res.status_code == 429:
-                raise AIProviderError(f"{self.name} rate limit or quota exceeded.", provider=self.provider_id, code="rate_limit")
+                raise AIProviderError(f"{self.name} rate limit or quota exceeded{_rate_limit_detail(res)}.", provider=self.provider_id, code="rate_limit")
             res.raise_for_status()
             data = res.json()
         except AIProviderError:
@@ -456,7 +476,7 @@ class OpenAICompatibleProvider:
             if res.status_code == 401:
                 raise AIProviderError(f"{self.name} API key is invalid or unauthorized.", provider=self.provider_id, code="invalid_api_key")
             elif res.status_code == 429:
-                raise AIProviderError(f"{self.name} rate limit or quota exceeded.", provider=self.provider_id, code="rate_limit")
+                raise AIProviderError(f"{self.name} rate limit or quota exceeded{_rate_limit_detail(res)}.", provider=self.provider_id, code="rate_limit")
             elif res.status_code == 404:
                 detail = ""
                 try:
@@ -522,7 +542,7 @@ class OpenAICompatibleProvider:
                         f"{self.base_url}/chat/completions", headers=headers, json=retry_payload, timeout=timeout
                     )
                 if res2.status_code == 429:
-                    raise AIProviderError(f"{self.name} rate limit or quota exceeded.", provider=self.provider_id, code="rate_limit")
+                    raise AIProviderError(f"{self.name} rate limit or quota exceeded{_rate_limit_detail(res2)}.", provider=self.provider_id, code="rate_limit")
                 if res2.status_code < 400:
                     data2 = res2.json()
                     message2 = _extract_openai_compatible_message(data2)
