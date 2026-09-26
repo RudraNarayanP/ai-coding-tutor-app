@@ -34,6 +34,7 @@ import {
   extractAnswersFromEdited,
   isFillBlankCodeComplete,
 } from './utils/assembleFillBlankCode'
+import { ModelPresetOptions, ModelQualityNote, defaultModelId, type ModelPreset, type QualityGroup } from './utils/modelTiers'
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 type TestResult = {
@@ -282,7 +283,8 @@ function App() {
   )
   const [showSettings, setShowSettings] = useState(false)
   const [homeModel, setHomeModel] = useState('')
-  const [homeModelPresets, setHomeModelPresets] = useState<Array<{ id: string; label: string; tier: string }>>([])
+  const [homeModelPresets, setHomeModelPresets] = useState<ModelPreset[]>([])
+  const [homeQualityGroups, setHomeQualityGroups] = useState<QualityGroup[]>([])
   const [homeModelHelper, setHomeModelHelper] = useState('')
   const [homeModelMsg, setHomeModelMsg] = useState<string | null>(null)
 
@@ -508,8 +510,10 @@ function App() {
       if (!res.ok) return
       const data = await res.json()
       const openrouter = (data.providers || []).find((pr: { id: string }) => pr.id === 'openrouter')
-      if (openrouter?.model) setHomeModel(openrouter.model)
-      setHomeModelPresets(data.openrouter_model_presets || [])
+      const presets: ModelPreset[] = data.openrouter_model_presets || []
+      setHomeModel(openrouter?.model || defaultModelId(presets, data.openrouter_default_model))
+      setHomeModelPresets(presets)
+      setHomeQualityGroups(data.openrouter_quality_groups || [])
       setHomeModelHelper(data.openrouter_model_helper || '')
     } catch (err) {
       console.error('Failed to load model settings:', err)
@@ -1698,18 +1702,20 @@ setExercisePhase('incorrect')
                   color: 'var(--ink)',
                 }}
               >
-                {homeModelPresets.map((pr) => (
-                  <option key={pr.id} value={pr.id}>
-                    {pr.label}
-                  </option>
-                ))}
+                <ModelPresetOptions presets={homeModelPresets} groups={homeQualityGroups} />
                 <option value="__custom__">Custom (edit in Settings)…</option>
               </select>
-              <div style={{ fontSize: '10px', color: 'var(--muted)', lineHeight: 1.35 }}>
-                {homeModelHelper
-                  ? 'Prefer Nemotron for quality. Paid models need credits.'
-                  : 'Prefer Nemotron. Weak free models → vague “as in the video” steps.'}
-              </div>
+              <ModelQualityNote
+                presets={homeModelPresets}
+                groups={homeQualityGroups}
+                modelId={homeModel}
+                style={{ fontSize: '10px', color: 'var(--muted)', lineHeight: 1.35 }}
+              />
+              {homeModelHelper && (
+                <div style={{ fontSize: '10px', color: 'var(--muted)', lineHeight: 1.35 }}>
+                  Grouped by tested quality. Paid models need credits.
+                </div>
+              )}
               {homeModel && !homeModel.endsWith(':free') && (
                 <div style={{ fontSize: '10px', color: '#b45309' }}>
                   ⚠ Paid model — needs OpenRouter credits

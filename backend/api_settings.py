@@ -49,51 +49,63 @@ PROVIDER_SETUP_INSTRUCTIONS: dict[str, str] = {
     "gemini": "Get your API key from aistudio.google.com/app/apikey",
 }
 
-# OpenRouter model presets for Create Course (verified against OpenRouter catalog 2026).
-# Prefer Nemotron for quality; keep free-tier options visible. Paid models need credits.
-OPENROUTER_MODEL_PRESETS: list[dict[str, str | bool]] = [
-    {
-        "id": "nvidia/nemotron-3-super-120b-a12b:free",
-        "label": "Nemotron 3 Super (free) — recommended",
-        "tier": "free",
-        "recommended": True,
-    },
-    {
-        "id": "nvidia/nemotron-3-super-120b-a12b",
-        "label": "Nemotron 3 Super (paid) — best quality",
-        "tier": "paid",
-        "recommended": True,
-    },
-    {
-        "id": "nvidia/nemotron-3.5-lightning:free",
-        "label": "Nemotron 3.5 Lightning (free) — fast",
-        "tier": "free",
-        "recommended": False,
-    },
-    {
-        "id": "nvidia/nemotron-3-nano-30b-a3b",
-        "label": "Nemotron 3 Nano 30B (paid) — cheaper quality",
-        "tier": "paid",
-        "recommended": False,
-    },
-    {
-        "id": "cohere/north-mini-code:free",
-        "label": "Cohere North Mini Code (free) — weak / last resort",
-        "tier": "free",
-        "recommended": False,
-    },
-    {
-        "id": "meta-llama/llama-3.1-8b-instruct",
-        "label": "Llama 3.1 8B Instruct",
-        "tier": "paid",
-        "recommended": False,
-    },
+# ─── OpenRouter Create Course model tiers — SINGLE SOURCE OF TRUTH ─────────────
+# Served by /api/settings to BOTH the Home picker and the Settings picker.
+# Evidence: audit/free_model_sweep.md (one real Create per model on the micrograd
+# tutorial VMj-3S1tku0 through the app API, milestone walk, gate counts).
+# "tier" is billing (free/paid); "quality" is the evidence tier below.
+OPENROUTER_QUALITY_GROUPS: list[dict[str, str]] = [
+    {"id": "recommended", "label": "Recommended"},
+    {"id": "mediocre", "label": "Mediocre"},
+    {"id": "not_ideal", "label": "Not ideal"},
+    {"id": "untested", "label": "Untested"},
+]
+_QUALITY_ORDER = {g["id"]: i for i, g in enumerate(OPENROUTER_QUALITY_GROUPS)}
+
+OPENROUTER_MODEL_TIERS: list[dict[str, str]] = [
+    # PROVISIONAL — replaced from the free-model sweep results.
+    {"id": "nvidia/nemotron-3-ultra-550b-a55b:free", "label": "Nemotron 3 Ultra 550B (free)", "tier": "free",
+     "quality": "recommended", "reason": "Shippable micrograd, GPT and Mojo courses; review PASS on attempt 1."},
+    {"id": "nvidia/nemotron-3-super-120b-a12b:free", "label": "Nemotron 3 Super 120B (free)", "tier": "free",
+     "quality": "mediocre", "reason": "Produces courses but with weaker, keyword-style checks."},
+    {"id": "nvidia/nemotron-3.5-lightning:free", "label": "Nemotron 3.5 Lightning (free)", "tier": "free",
+     "quality": "mediocre", "reason": "Fast, but wrongly discarded the Mojo course once."},
+    {"id": "nvidia/nemotron-3-super-120b-a12b", "label": "Nemotron 3 Super 120B (paid)", "tier": "paid",
+     "quality": "untested", "reason": "Paid; needs OpenRouter credits, not covered by the free sweep."},
 ]
 
+
+def _build_presets() -> list[dict[str, str | bool]]:
+    ordered = sorted(
+        enumerate(OPENROUTER_MODEL_TIERS),
+        key=lambda iv: (_QUALITY_ORDER.get(iv[1]["quality"], 99), iv[0]),
+    )
+    out: list[dict[str, str | bool]] = []
+    for _i, m in ordered:
+        preset: dict[str, str | bool] = dict(m)
+        preset["recommended"] = m["quality"] == "recommended"
+        out.append(preset)
+    return out
+
+
+OPENROUTER_MODEL_PRESETS: list[dict[str, str | bool]] = _build_presets()
+DEFAULT_OPENROUTER_MODEL: str = next(
+    str(p["id"]) for p in OPENROUTER_MODEL_PRESETS if p["quality"] == "recommended"
+)
+
+
+def openrouter_model_quality(model_id: str) -> dict[str, str] | None:
+    """Tier + reason for a model id, or None when it is not in the tier list."""
+    for p in OPENROUTER_MODEL_PRESETS:
+        if p["id"] == (model_id or "").strip():
+            return {"quality": str(p["quality"]), "reason": str(p["reason"])}
+    return None
+
+
 OPENROUTER_MODEL_HELPER = (
-    "Create Course quality depends on this model. Weak free models often produce vague "
-    "steps like 'as in the video'. Recommended: NVIDIA Nemotron 3 Super (free or paid). "
-    "Paid models need OpenRouter credits — if you have none, stay on a :free preset."
+    "Create Course quality depends on this model. Models are grouped by tested quality "
+    "(Recommended / Mediocre / Not ideal / Untested) from real course-creation runs. "
+    "Paid models need OpenRouter credits; if you have none, stay on a :free model."
 )
 
 

@@ -26,8 +26,11 @@ from .ai_provider import AIProvider, ALL_PROVIDERS, OllamaProvider, get_ai_provi
 from .api_settings import (
     ProviderInfo,
     ApiKeyValidationResult,
+    DEFAULT_OPENROUTER_MODEL,
     OPENROUTER_MODEL_HELPER,
     OPENROUTER_MODEL_PRESETS,
+    OPENROUTER_QUALITY_GROUPS,
+    openrouter_model_quality,
     get_all_providers_info,
     get_provider_info,
     validate_provider_key,
@@ -884,6 +887,8 @@ class SettingsResponse(BaseModel):
     current_provider: str
     openrouter_model_presets: list[dict] = []
     openrouter_model_helper: str = ""
+    openrouter_quality_groups: list[dict] = []
+    openrouter_default_model: str = ""
 
 
 @app.get("/api/settings", response_model=SettingsResponse)
@@ -899,6 +904,8 @@ async def get_settings():
                 current_provider=curr_id,
                 openrouter_model_presets=list(OPENROUTER_MODEL_PRESETS),
                 openrouter_model_helper=OPENROUTER_MODEL_HELPER,
+        openrouter_quality_groups=list(OPENROUTER_QUALITY_GROUPS),
+        openrouter_default_model=DEFAULT_OPENROUTER_MODEL,
             )
     except asyncio.TimeoutError as exc:
         raise HTTPException(status_code=504, detail={"error": "settings_timeout"}) from exc
@@ -1018,6 +1025,7 @@ async def save_provider_model(provider: str, request: ModelUpdateRequest):
                 + (". This model may require OpenRouter credits." if paid else "")
             ),
             "helper": OPENROUTER_MODEL_HELPER if normalized == "openrouter" else "",
+            "quality": openrouter_model_quality(model_id) if normalized == "openrouter" else None,
         }
     except ValueError as exc:
         raise HTTPException(

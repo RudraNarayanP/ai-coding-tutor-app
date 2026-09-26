@@ -1,4 +1,5 @@
 import { useState, useEffect, useCallback } from 'react'
+import { ModelPresetOptions, ModelQualityNote, type ModelPreset, type QualityGroup } from '../utils/modelTiers'
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
@@ -21,18 +22,14 @@ interface ProviderInfo {
   error: string | null
 }
 
-interface ModelPreset {
-  id: string
-  label: string
-  tier: string
-  recommended?: boolean
-}
 
 interface SettingsResponse {
   providers: ProviderInfo[]
   current_provider: string
   openrouter_model_presets?: ModelPreset[]
   openrouter_model_helper?: string
+  openrouter_quality_groups?: QualityGroup[]
+  openrouter_default_model?: string
 }
 
 interface ValidationResult {
@@ -435,7 +432,7 @@ export default function Settings({
                     {activeProvider === 'openrouter' && (settings.openrouter_model_helper || true) && (
                       <p style={{ margin: 0, fontSize: '12px', color: '#555', lineHeight: 1.4 }}>
                         {settings.openrouter_model_helper ||
-                          "Weak free models often invent vague steps like 'as in the video'. Prefer NVIDIA Nemotron. Paid presets need OpenRouter credits — stay on :free if you have none."}
+                          "Models are grouped by tested quality. Paid presets need OpenRouter credits — stay on :free if you have none."}
                       </p>
                     )}
                     {activeProvider === 'openrouter' && (settings.openrouter_model_presets?.length ?? 0) > 0 && (
@@ -447,13 +444,21 @@ export default function Settings({
                         }}
                         style={{ padding: '8px', borderRadius: '6px', border: '1px solid #ccc' }}
                       >
-                        {(settings.openrouter_model_presets || []).map(pr => (
-                          <option key={pr.id} value={pr.id}>
-                            {pr.label}{pr.tier === 'paid' ? ' ⚠ credits' : ''}
-                          </option>
-                        ))}
+                        <ModelPresetOptions
+                          presets={settings.openrouter_model_presets || []}
+                          groups={settings.openrouter_quality_groups}
+                          markPaid
+                        />
                         <option value="__custom__">Custom model id…</option>
                       </select>
+                    )}
+                    {activeProvider === 'openrouter' && (
+                      <ModelQualityNote
+                        presets={settings.openrouter_model_presets || []}
+                        groups={settings.openrouter_quality_groups}
+                        modelId={model}
+                        style={{ fontSize: '12px', color: '#555', lineHeight: 1.4 }}
+                      />
                     )}
                     <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
                       <input
@@ -476,7 +481,7 @@ export default function Settings({
                     </div>
                     {activeProvider === 'openrouter' && model && !model.endsWith(':free') && (
                       <p style={{ margin: 0, fontSize: '12px', color: '#b45309' }}>
-                        ⚠ This looks like a paid OpenRouter model. It needs credits; if create fails for billing, switch to a :free preset (e.g. Nemotron Super free).
+                        ⚠ This looks like a paid OpenRouter model. It needs credits; if create fails for billing, switch to a :free model from the Recommended group.
                       </p>
                     )}
                     {modelSaveMessage && (

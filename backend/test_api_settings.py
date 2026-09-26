@@ -134,3 +134,41 @@ def test_settings_writes_are_isolated_from_real_env_and_key_store():
     after = real_env.read_bytes() if real_env.exists() else None
     assert before == after
     assert "test/isolation-model:free" in env_mod._env_path().read_text(encoding="utf-8")
+
+
+# --- OpenRouter quality tiers (single shared source in api_settings) ------------
+def test_openrouter_tiers_are_grouped_and_default_is_top_recommended():
+    from backend.ai_provider import create_openrouter_provider
+    from backend.api_settings import (
+        DEFAULT_OPENROUTER_MODEL,
+        OPENROUTER_MODEL_PRESETS,
+        OPENROUTER_QUALITY_GROUPS,
+        openrouter_model_quality,
+    )
+
+    group_ids = [g["id"] for g in OPENROUTER_QUALITY_GROUPS]
+    assert group_ids == ["recommended", "mediocre", "not_ideal", "untested"]
+    order = [group_ids.index(p["quality"]) for p in OPENROUTER_MODEL_PRESETS]
+    assert order == sorted(order), "presets must be ordered Recommended -> Untested"
+    ids = [p["id"] for p in OPENROUTER_MODEL_PRESETS]
+    assert len(ids) == len(set(ids))
+    for p in OPENROUTER_MODEL_PRESETS:
+        assert p["reason"] and "\n" not in p["reason"] and len(p["reason"]) <= 160
+        assert p["tier"] in {"free", "paid"}
+        assert p["recommended"] == (p["quality"] == "recommended")
+    assert DEFAULT_OPENROUTER_MODEL == next(p["id"] for p in OPENROUTER_MODEL_PRESETS if p["recommended"])
+    assert openrouter_model_quality(DEFAULT_OPENROUTER_MODEL)["quality"] == "recommended"
+    assert openrouter_model_quality("unknown/model") is None
+    assert create_openrouter_provider().default_model == DEFAULT_OPENROUTER_MODEL
+
+
+@pytest.mark.asyncio
+async def test_settings_serves_tier_groups_and_default_to_both_pickers():
+    from backend.api_settings import DEFAULT_OPENROUTER_MODEL
+
+    async with AsyncClient(transport=ASGITransport(app=app), base_url="http://test") as client:
+        body = (await client.get("/api/settings")).json()
+    assert [g["id"] for g in body["openrouter_quality_groups"]] == ["recommended", "mediocre", "not_ideal", "untested"]
+    assert body["openrouter_default_model"] == DEFAULT_OPENROUTER_MODEL
+    first = body["openrouter_model_presets"][0]
+    assert first["quality"] == "recommended" and first["reason"]

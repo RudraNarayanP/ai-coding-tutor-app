@@ -871,12 +871,15 @@ def create_openai_provider() -> OpenAICompatibleProvider:
 
 
 def create_openrouter_provider() -> OpenAICompatibleProvider:
+    # Default = top Recommended model from the shared tier list (api_settings).
+    from .api_settings import DEFAULT_OPENROUTER_MODEL
+
     return OpenAICompatibleProvider(
         provider_id="openrouter",
         name="OpenRouter",
         api_key_env="OPENROUTER_API_KEY",
         model_env="OPENROUTER_MODEL",
-        default_model="nvidia/nemotron-3-super-120b-a12b:free",
+        default_model=DEFAULT_OPENROUTER_MODEL,
         base_url_env="OPENROUTER_BASE_URL",
         default_base_url="https://openrouter.ai/api/v1",
         headers_extra={"HTTP-Referer": "https://github.com/patchwork", "X-Title": "Patchwork AI Tutor"},
