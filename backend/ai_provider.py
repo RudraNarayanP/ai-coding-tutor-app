@@ -1,5 +1,6 @@
 from . import env as _env  # noqa: F401 — load .env before reading provider config
 
+import asyncio
 import os
 import json
 import logging
@@ -125,6 +126,20 @@ def _rate_limit_detail(res: Any) -> str:
         return " (daily free-model quota reached: free-models-per-day; it resets daily, or add OpenRouter credits)"
     reason = (raw or msg)[:160]
     return f" ({reason})" if reason else ""
+
+
+# httpx `timeout` bounds each phase (connect/read/...), not the whole request: a
+# stalled OpenRouter body read held a sweep Create for 12+ min (03:18 IST). Add a
+# wall-clock deadline on top so a Create fails cleanly instead of hanging.
+_TOTAL_DEADLINE_EXTRA = 120.0
+
+
+async def _post_with_deadline(client: Any, url: str, *, timeout: float, **kwargs: Any) -> Any:
+    deadline = float(timeout) + _TOTAL_DEADLINE_EXTRA
+    try:
+        return await asyncio.wait_for(client.post(url, timeout=timeout, **kwargs), timeout=deadline)
+    except asyncio.TimeoutError as exc:
+        raise TimeoutError(f"request exceeded {deadline:.0f}s total deadline") from exc
 
 
 def _finish_and_reasoning(data: Any) -> tuple[str | None, int]:
@@ -467,10 +482,10 @@ class OpenAICompatibleProvider:
         try:
             client = get_shared_client()
             timeout = 180.0 if max_tokens and max_tokens >= 2000 else 60.0
-            res = await client.post(f"{self.base_url}/chat/completions", headers=headers, json=payload, timeout=timeout)
+            res = await _post_with_deadline(client, f"{self.base_url}/chat/completions", headers=headers, json=payload, timeout=timeout)
             if res.status_code == 400 and "reasoning" in payload:
                 payload.pop("reasoning", None)
-                res = await client.post(
+                res = await _post_with_deadline(client, 
                     f"{self.base_url}/chat/completions", headers=headers, json=payload, timeout=timeout
                 )
             if res.status_code == 401:
@@ -533,12 +548,12 @@ class OpenAICompatibleProvider:
             )
             try:
                 self._structured_retrying = True
-                res2 = await client.post(
+                res2 = await _post_with_deadline(client, 
                     f"{self.base_url}/chat/completions", headers=headers, json=retry_payload, timeout=timeout
                 )
                 if res2.status_code == 400:
                     retry_payload.pop("reasoning", None)
-                    res2 = await client.post(
+                    res2 = await _post_with_deadline(client, 
                         f"{self.base_url}/chat/completions", headers=headers, json=retry_payload, timeout=timeout
                     )
                 if res2.status_code == 429:
