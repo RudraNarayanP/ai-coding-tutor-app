@@ -49,7 +49,7 @@ function looksLikeTranscript(text: string): boolean {
   // Multi-line code steps (e.g. a Mojo block) are not caption dumps.
   if (isMultilineCode(t)) return false
   const structured =
-    /^\s*\d+[.)]\s/m.test(t) ||
+    /^\s*\d+[.)]\s/m.test(t) || /(?:^|[\s,:;])1[.)]\s[\s\S]*?[\s,:;]2[.)]\s/.test(t) ||
     t.includes('`') ||
     // Real code shapes only — the bare word "import" inside spoken prose is not code.
     /\bfrom\s+[\w.]+\s+import\s+\w+|^\s*import\s+[\w.]+|\bdef\s+\w+\s*\(|\bclass\s+\w+\s*[:(]|\bprint\(|\w\([^()\s]*\)/m.test(t)

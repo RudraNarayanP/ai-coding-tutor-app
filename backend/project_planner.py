@@ -224,7 +224,7 @@ def looks_like_raw_transcript(text: str) -> bool:
     if _is_multiline_code(cleaned):
         return False
     structured = bool(
-        re.search(r"(?m)^\s*\d+[.)]\s", cleaned)
+        re.search(r"(?m)^\s*\d+[.)]\s", cleaned) or re.search(r"(?:^|[\s,:;])1[.)]\s[\s\S]*?[\s,:;]2[.)]\s", cleaned)  # inline "1. ... 2. ..." steps
         or "`" in cleaned
         or re.search(r"(?i)\b(import|from .+ import|def |class |print\()", cleaned)
     )

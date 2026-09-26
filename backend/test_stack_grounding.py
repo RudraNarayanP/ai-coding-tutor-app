@@ -533,3 +533,19 @@ def test_long_example_is_capped_at_a_line_boundary():
     short = "def backward(self):\n    topo = []\n    build_topo(self)"
     assert _sanitize_code(short, MAX_EXAMPLE) == short and cap_code(short) == short
     assert "\n    topo = []" in _sanitize_example(short)
+
+
+def test_inline_numbered_steps_are_instructions_not_transcript():
+    """Regression (sweep nano-omni 03:45): review PASSed, then validate_project rejected an
+    action with inline "1. ... 2. ..." steps via the >=3-comma rule."""
+    from backend.project_copy import looks_like_raw_transcript as copy_raw
+    from backend.project_planner import looks_like_raw_transcript as plan_raw
+
+    act = ("In main.py, 1. Collect all parameters of the neural net (weights and biases). "
+           "2. Define a loss function (e.g., MSE). 3. Perform gradient descent: set learning rate, "
+           "compute gradients via backward(), and update parameters. 4. Repeat for multiple epochs.")
+    assert not plan_raw(act)
+    assert not copy_raw(act, max_len=1200)
+    dump = ("so we take the weights, the biases, the inputs, and then we just kind of loop over them "
+            "and add them up, and version 1. of this is slow, you know, but it works")
+    assert plan_raw(dump)
