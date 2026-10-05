@@ -123,6 +123,6 @@ describe('ExercisePanel fullscreen delegation', () => {
 
     expect(screen.getByRole('button', { name: 'Exit exercise' })).toBeInTheDocument()
     expect(screen.getByRole('button', { name: 'let' })).toBeInTheDocument()
-    expect(screen.getByRole('button', { name: 'SUBMIT' })).toBeInTheDocument()
+    expect(screen.getByRole('button', { name: 'CHECK' })).toBeInTheDocument()
   })
 })

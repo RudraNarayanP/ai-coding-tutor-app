@@ -20,6 +20,22 @@ async def test_fill_blank_exercise_preview_run():
     assert result.error is None
 
 
+@pytest.mark.asyncio
+async def test_cinema_fill_blank_accepts_complete_code_submission():
+    from backend.sandbox import sandbox
+
+    curr = load_default_curriculum()
+    engine = LessonEngine(sandbox, ProgressionStore(curr), curr)
+    lesson = next(item for item in curr.lessons if item.id == "variables-practice-1")
+    exercise = lesson.sublessons[0].exercises[0]
+    assert exercise.id == "cinema-ex-1a"
+    code = "ticket_price = 12\nnum_tickets = 3\nticket_total = ticket_price * num_tickets\n"
+
+    passed, feedback = await engine.grade_exercise(exercise, {"code": code}, "python")
+    assert passed is True
+    assert feedback == "Correct!"
+
+
 def test_public_exercise_view_includes_task_copy():
     from backend.curriculum_loader import load_default_curriculum
     from backend.lesson_models import PublicLessonView

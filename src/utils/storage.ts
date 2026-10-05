@@ -92,3 +92,31 @@ function isCodeDraftEnvelope(value: unknown): value is CodeDraftEnvelope {
   const candidate = value as Partial<CodeDraftEnvelope>
   return typeof candidate.base === 'string' && typeof candidate.code === 'string'
 }
+
+export function exerciseInputDraftKey(lessonId: string): string {
+  return `patchwork_exercise_input_${lessonId}`
+}
+
+/** Per-lesson in-progress exercise buffers (code, blanks, run output). */
+export function readExerciseInputDraft(lessonId: string): Record<string, Record<string, unknown>> | null {
+  const raw = safeGetItem(exerciseInputDraftKey(lessonId))
+  if (!raw) return null
+  try {
+    const parsed = JSON.parse(raw) as unknown
+    if (typeof parsed !== 'object' || parsed === null || Array.isArray(parsed)) {
+      safeRemoveItem(exerciseInputDraftKey(lessonId))
+      return null
+    }
+    return parsed as Record<string, Record<string, unknown>>
+  } catch {
+    safeRemoveItem(exerciseInputDraftKey(lessonId))
+    return null
+  }
+}
+
+export function writeExerciseInputDraft(
+  lessonId: string,
+  input: Record<string, Record<string, unknown>>
+): void {
+  safeSetItem(exerciseInputDraftKey(lessonId), JSON.stringify(input))
+}

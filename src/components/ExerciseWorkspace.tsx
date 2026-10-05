@@ -317,14 +317,17 @@ export const ExerciseWorkspace: React.FC<ExerciseWorkspaceProps> = ({
     return null
   }
 
+  const resultSheetOpen =
+    (exercisePhase === 'correct' || exercisePhase === 'incorrect') && Boolean(exerciseFeedback)
+
   const renderPrimaryAction = () => {
-    if (!onSubmit) {
+    if (!onSubmit || resultSheetOpen) {
       return null
     }
     if (exercisePhase === 'correct' && exerciseFeedback) {
       return (
         <button type="button" className="ew-btn ew-btn-submit" onClick={onContinue}>
-          CONTINUE
+          NEXT
         </button>
       )
     }
@@ -342,7 +345,7 @@ export const ExerciseWorkspace: React.FC<ExerciseWorkspaceProps> = ({
         onClick={onSubmit}
         disabled={exercisePhase === 'checking'}
       >
-        {exercisePhase === 'checking' ? 'CHECKING…' : 'SUBMIT'}
+        {exercisePhase === 'checking' ? 'CHECKING…' : 'CHECK'}
       </button>
     )
   }
@@ -512,17 +515,6 @@ export const ExerciseWorkspace: React.FC<ExerciseWorkspaceProps> = ({
           </div>
 
           {banner}
-          {(exercisePhase === 'correct' || exercisePhase === 'incorrect') && exerciseFeedback && (
-            <div className={`ew-grade-banner ${exercisePhase}`} role="status">
-              <span className="ew-grade-title">
-                {exercisePhase === 'correct' ? 'Correct!' : 'Not quite'}
-              </span>
-              <span className="ew-grade-text">{exerciseFeedback.feedback}</span>
-              {exercisePhase === 'correct' && exerciseFeedback.xpAwarded > 0 && (
-                <span className="ew-grade-xp">+{exerciseFeedback.xpAwarded} XP</span>
-              )}
-            </div>
-          )}
 
           <footer className="ew-footer">
             <div className="ew-footer-left">
@@ -560,6 +552,24 @@ export const ExerciseWorkspace: React.FC<ExerciseWorkspaceProps> = ({
           </footer>
         </div>
       </div>
+      {(exercisePhase === 'correct' || exercisePhase === 'incorrect') && exerciseFeedback && (
+        <div className={`ew-result-sheet ${exercisePhase}`} role="status">
+          <div className="ew-result-sheet-title">
+            {exercisePhase === 'correct' ? 'Correct!' : 'Not quite'}
+          </div>
+          <p className="ew-result-sheet-text">{exerciseFeedback.feedback}</p>
+          {exercisePhase === 'correct' && exerciseFeedback.xpAwarded > 0 && (
+            <p className="ew-result-sheet-xp">+{exerciseFeedback.xpAwarded} XP</p>
+          )}
+          <button
+            type="button"
+            className="ew-result-sheet-next"
+            onClick={exercisePhase === 'correct' ? onContinue : onRetry}
+          >
+            {exercisePhase === 'correct' ? 'NEXT' : 'TRY AGAIN'}
+          </button>
+        </div>
+      )}
     </div>
   )
 }

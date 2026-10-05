@@ -186,7 +186,7 @@ def looks_like_raw_transcript(text: str | None, *, max_len: int = MAX_DESCRIPTIO
     if fillers >= 1 and len(stripped.split()) > 40:
         return True
     structured = bool(
-        re.search(r"(?m)^\s*\d+[.)]\s", raw) or re.search(r"(?:^|[\s,:;])1[.)]\s[\s\S]*?[\s,:;]2[.)]\s", raw)  # inline "1. ... 2. ..." steps
+        re.search(r"(?m)^\s*\d+[.)]\s", raw) or re.search(r"(?:^|[\s,:;])1[.)]\s[\s\S]*?[\s,:;]2[.)]\s", raw) or re.search(r"\b[A-Za-z_]\w*(?:\.\w+)*\([^()\n]{0,40}\)", raw)  # inline "1. ... 2. ..." steps / code calls like Value(2.0)
         or "`" in raw
         or re.search(r"(?i)\b(import|from .+ import|def |class |print\()", raw)
     )

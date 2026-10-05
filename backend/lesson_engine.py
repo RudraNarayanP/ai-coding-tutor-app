@@ -22,6 +22,7 @@ import threading
 import time
 from pathlib import Path
 
+from .blank_template import build_blank_template
 from .sandbox import SandboxError
 from .xp_curve import level_from_xp
 
@@ -897,12 +898,27 @@ class LessonEngine:
                     passed = bool(res.get("passed", False))
                     feedback = "All tests passed!" if passed else "Some tests failed."
                     return passed, feedback
-                if exercise.starter_code and "___" in exercise.starter_code:
+                template = (exercise.starter_code or "").strip()
+                if "___" not in template and getattr(exercise, "blanks", None):
+                    template = build_blank_template(
+                        template,
+                        list(exercise.blanks or []),
+                        getattr(exercise, "question", "") or "",
+                    )
+                if template and "___" in template:
+                    raw_ans = self._extract_blanks_from_code(template, submitted_code)
+                elif exercise.starter_code and "___" in exercise.starter_code:
                     raw_ans = self._extract_blanks_from_code(
                         exercise.starter_code, submitted_code
                     )
                 else:
-                    raw_ans = [submitted_code]
+                    payload_answers = user_input.get("answers", user_input.get("answer", []))
+                    if isinstance(payload_answers, str) and payload_answers.strip():
+                        raw_ans = [payload_answers]
+                    elif isinstance(payload_answers, list) and payload_answers:
+                        raw_ans = payload_answers
+                    else:
+                        raw_ans = [submitted_code]
             else:
                 raw_ans = user_input.get("answers", user_input.get("answer", []))
 

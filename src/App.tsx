@@ -1,4 +1,12 @@
-import { safeGetItem, safeSetItem, codeDraftKey, readCodeDraft, writeCodeDraft } from './utils/storage'
+import {
+  safeGetItem,
+  safeSetItem,
+  codeDraftKey,
+  readCodeDraft,
+  readExerciseInputDraft,
+  writeCodeDraft,
+  writeExerciseInputDraft,
+} from './utils/storage'
 import { debounce } from './utils/debounce'
 import { widgetFor } from './utils/exerciseTypes'
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
@@ -270,6 +278,10 @@ function App() {
   } | null>(null)
   // Flow-state tracking for the current lesson visit (combo/perfect detection).
   const visitMistakesRef = useRef(0)
+  /** Latest submit handler so async run completion can grade like Duolingo "Check". */
+  const submitExerciseRef = useRef<(ex: Exercise & { sublessonId?: string }) => Promise<void>>(
+    async () => {}
+  )
 
   // Hearts. The server owns the pool (see backend/hearts.py); these are a
   // mirror for rendering, so editing localStorage can no longer buy infinite
@@ -420,10 +432,16 @@ function App() {
     return res
   }
 
+  // While a result sheet is up, the derived "current" step can move (a review
+  // item leaves the queue). Keep the sheet on the step they just answered
+  // until they tap Next or Try again.
+  const [feedbackExerciseId, setFeedbackExerciseId] = useState<string | null>(null)
+
   useEffect(() => {
+    if (feedbackExerciseId) return
     setExercisePhase('answering')
     setExerciseFeedback(null)
-  }, [currentExercise?.id])
+  }, [currentExercise?.id, feedbackExerciseId])
 
   // ─── Fetch Leaderboard (live poll while the tab is open) ───────────────────
   // 12s keeps a live feel without hammering disk/CPU; XP changes refresh once.
@@ -620,20 +638,20 @@ function App() {
   // ─── Load Lessons for Language ──────────────────────────────────────────────
   // Landing on the HOME page is intentional: lessons are only opened when the
   // learner clicks a node, never implicitly on load or course switch.
-  const fetchLessons = useCallback(async (lang?: string) => {
+  const fetchLessons = useCallback(async (lang?: string): Promise<LessonSummary[]> => {
     try {
       const res = await fetch(`/api/lessons?language=${encodeURIComponent(lang || selectedLanguage)}`)
       if (!res.ok) {
         setBackendError(true)
-        return
+        return []
       }
       const data: LessonSummary[] = await res.json()
       setLessons(data)
       setBackendError(false)
-// Note: DO NOT auto-open a lesson here. The course map (home) is shown
-      // so the learner can choose Unit 1, Unit 2, etc. themselves.
+      return data
     } catch {
       setBackendError(true)
+      return []
     }
   }, [selectedLanguage])
 
@@ -643,6 +661,7 @@ function App() {
     safeSetItem('patchwork_active_language', lang)
     setLesson(null)
     setIsLessonActive(false)
+    saveGameState({ lessonWorkspaceOpen: false })
     setCelebration(null)
     setActiveTab('learn')
     try {
@@ -715,12 +734,13 @@ function App() {
       const data: Lesson = await res.json()
       setLesson(data)
       if (prog) setLessonProgress(prog)
+      setExerciseInput(readExerciseInputDraft(data.id) || {})
 
       const starter = data.starter_code || ''
       const savedDraft = readCodeDraft(codeDraftKey(data.id), starter)
       setCode(savedDraft !== null ? savedDraft : starter)
-setIsLessonActive(true)
-      saveGameState({ currentLessonId: data.id })
+      setIsLessonActive(true)
+      saveGameState({ currentLessonId: data.id, lessonWorkspaceOpen: true })
     } catch {
       setLesson({
         id: summary.id,
@@ -732,26 +752,50 @@ setIsLessonActive(true)
         starter_code: '# Write your solution here\n',
       })
       setCode('# Write your solution here\n')
-setIsLessonActive(true)
-      saveGameState({ currentLessonId: summary.id })
+      setIsLessonActive(true)
+      saveGameState({ currentLessonId: summary.id, lessonWorkspaceOpen: true })
     } finally {
       setIsLoadingLesson(false)
     }
   }
 
+  const sessionBootRef = useRef(false)
+
   useEffect(() => {
-    // Restore persisted game state (XP, level, hearts) from previous sessions
+    if (sessionBootRef.current) return
+    sessionBootRef.current = true
+
     const saved = restoreGameState()
     if (saved) {
       if (typeof saved.hearts === 'number') setHearts(saved.hearts)
       if (typeof saved.unlimitedHearts === 'boolean') setUnlimitedHearts(saved.unlimitedHearts)
     }
-    fetchCourses()
-    fetchProviders()
-    fetchLessons()
-    fetchProgression()
-    fetchUserProfile()
-  }, [fetchCourses, fetchProviders, fetchLessons, fetchProgression, fetchUserProfile])
+
+    void (async () => {
+      const lang = safeGetItem('patchwork_active_language') || selectedLanguage
+      try {
+        await fetch('/api/courses/select', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ language: lang }),
+        })
+      } catch (err) {
+        console.error('Course select failed:', err)
+      }
+      await fetchCourses()
+      fetchProviders()
+      const lessonList = await fetchLessons(lang)
+      await fetchProgression()
+      await fetchUserProfile()
+
+      if (saved?.lessonWorkspaceOpen && saved.currentLessonId && lessonList.length > 0) {
+        const summary = lessonList.find((item) => item.id === saved.currentLessonId)
+        if (summary) {
+          await loadLesson(summary)
+        }
+      }
+    })()
+  }, [fetchCourses, fetchProviders, fetchLessons, fetchProgression, fetchUserProfile, selectedLanguage])
 
   useEffect(() => {
     void fetchHomeModelSettings()
@@ -789,6 +833,23 @@ setIsLessonActive(true)
     }
     draftWriteRef.current(lesson.id, starter, code)
   }, [code, lesson])
+
+  const exerciseDraftWriteRef = useRef(
+    debounce((lessonId: string, input: Record<string, Record<string, unknown>>) => {
+      writeExerciseInputDraft(lessonId, input)
+    }, 500)
+  )
+  useEffect(() => {
+    if (!lesson?.id || !isLessonActive) return
+    exerciseDraftWriteRef.current(lesson.id, exerciseInput)
+  }, [exerciseInput, isLessonActive, lesson?.id])
+  useEffect(() => {
+    const writer = exerciseDraftWriteRef.current
+    return () => {
+      writer.flush()
+      writer.cancel()
+    }
+  }, [])
 
   const getRunnableCode = useCallback(() => {
     if (currentExercise && (currentExerciseIsCode || currentExerciseIsFill)) {
@@ -920,10 +981,28 @@ setIsLessonActive(true)
         } else {
           playPatchworkSound('success', soundEnabled)
           setCharState('happy')
-          setCharSpeech('Code ran! Check the output, then tap Check Answer to continue.')
-          setFeedback('Code ran — tap Check Answer to save progress and continue.')
+          setCharSpeech('Nice — checking your answer…')
+          setFeedback('Code ran — checking your answer…')
+          void submitExerciseRef.current({
+            ...currentExercise,
+            sublessonId: (currentExercise as Exercise & { sublessonId?: string }).sublessonId,
+          })
         }
         return
+      }
+
+      if (currentExerciseIsCode && currentExercise) {
+        setExerciseInput((prev: any) => ({
+          ...prev,
+          [currentExercise.id]: {
+            ...prev[currentExercise.id],
+            runOutput: {
+              stdout: data.stdout || '',
+              stderr: data.stderr || '',
+              error: data.error || null,
+            },
+          },
+        }))
       }
 
       setResults(data.tests || [])
@@ -935,8 +1014,12 @@ setIsLessonActive(true)
         if (lessonHasExercises && currentExerciseIsCode && currentExercise) {
           playPatchworkSound('success', soundEnabled)
           setCharState('happy')
-          setCharSpeech('All tests passed! Tap Check Answer to save progress and continue.')
-          setFeedback('All tests passed — tap Check Answer to continue.')
+          setCharSpeech('All tests passed — checking your answer…')
+          setFeedback('All tests passed — checking your answer…')
+          void submitExerciseRef.current({
+            ...currentExercise,
+            sublessonId: (currentExercise as Exercise & { sublessonId?: string }).sublessonId,
+          })
           return
         }
 
@@ -1185,7 +1268,8 @@ setIsLessonActive(true)
     // Hard guard: submissions are only valid from the 'answering' phase.
     // This makes double-clicks and stale submissions impossible.
     if (exercisePhase !== 'answering') return
-    if (completedExerciseIds.has(ex.id)) return // already graded — never re-award XP
+    // A step can be completed and still due for review. Grade it again so the
+    // learner gets the result sheet. The server awards XP only the first time.
 
     const inputState = exerciseInput[ex.id] || {}
     const exType = (ex.type || 'code').toLowerCase().trim()
@@ -1265,6 +1349,7 @@ setIsLessonActive(true)
         )
       }
 
+      setFeedbackExerciseId(ex.id)
       if (data.passed) {
         playPatchworkSound('correct_chime', soundEnabled)
         setConsecutiveCorrect((prev) => {
@@ -1320,6 +1405,8 @@ setExercisePhase('incorrect')
     }
   }
 
+  submitExerciseRef.current = submitSubLessonExercise
+
   // ─── Primary CTA: CONTINUE (after a correct answer) ─────────────────────────
   // The backend has already persisted completion; the derived progression now
   // points at the next exercise automatically. We only clear ephemeral state.
@@ -1332,6 +1419,7 @@ setExercisePhase('incorrect')
       delete next[currentExercise.id]
       return next
     })
+    setFeedbackExerciseId(null)
     setExercisePhase('answering')
     setExerciseFeedback(null)
 
@@ -1361,6 +1449,7 @@ setExercisePhase('incorrect')
       delete next[currentExercise.id]
       return next
     })
+    setFeedbackExerciseId(null)
     setExercisePhase('answering')
     setExerciseFeedback(null)
     setCharState('encouraging')
@@ -1474,7 +1563,14 @@ setExercisePhase('incorrect')
     exerciseFeedback !== null &&
     lastCompletedCodingExercise !== null
 
-  const workspaceExercise = currentExercise ?? (codingFeedbackActive ? lastCompletedCodingExercise : null)
+  const feedbackExercise = feedbackExerciseId
+    ? allExercises.find((ex) => ex.id === feedbackExerciseId) ?? null
+    : null
+  const workspaceExercise =
+    feedbackExercise ?? currentExercise ?? (codingFeedbackActive ? lastCompletedCodingExercise : null)
+  const shownExerciseIndex = feedbackExercise
+    ? allExercises.findIndex((ex) => ex.id === feedbackExercise.id)
+    : currentExerciseIndex
 
   // Every lesson — with or without exercises — opens the fullscreen workspace.
   const isExerciseWorkspace = isLessonActive && lesson !== null
@@ -1491,7 +1587,10 @@ setExercisePhase('incorrect')
       }
     : null
 
-  const handleExerciseBack = () => setIsLessonActive(false)
+  const handleExerciseBack = () => {
+    setIsLessonActive(false)
+    saveGameState({ lessonWorkspaceOpen: false })
+  }
 
   // ─── One tutor affordance, shared by every workspace surface ───────────────
   // Exercise steps and lesson-level code used to render different chrome, which
@@ -1545,6 +1644,44 @@ setExercisePhase('incorrect')
         </div>
       </div>
     </aside>
+  ) : null
+
+  const lessonCelebration = celebration ? (
+    <div className={`duo-feedback-panel success ew-lesson-celebration${celebration.mistakeFree ? ' ew-celebration--perfect' : ''}${celebration.boss ? ' ew-celebration--boss' : ''}`} role="status">
+      <div className="duo-feedback-title">
+        <span>{celebration.boss ? '👑 BOSS CLEARED!' : '🎉 Lesson Complete!'}</span>
+        {celebration.mistakeFree && (
+          <span className="ew-perfect-badge">⚡ PERFECT — no mistakes!</span>
+        )}
+      </div>
+      <p style={{ fontWeight: 700, marginBottom: '8px' }}>
+        {celebration.boss
+          ? 'You just mastered a checkpoint — the hardest lesson in the unit!'
+          : 'Awesome work! You completed every exercise in this lesson.'}
+      </p>
+      {celebration.xpEarned > 0 && (
+        <p style={{ fontWeight: 700, color: '#16a34a', marginBottom: '16px' }}>
+          +{celebration.xpEarned} XP earned
+        </p>
+      )}
+      <div style={{ display: 'flex', gap: '12px' }}>
+        {celebration.nextLessonId ? (
+          <button className="duo-button duo-button-primary" onClick={goToNextLesson}>
+            Next Lesson →
+          </button>
+        ) : null}
+        <button
+          className="duo-button duo-button-secondary"
+          onClick={() => {
+            setCelebration(null)
+            setIsLessonActive(false)
+            setLesson(null)
+          }}
+        >
+          Back to Course
+        </button>
+      </div>
+    </div>
   ) : null
 
   return (
@@ -1826,7 +1963,7 @@ setExercisePhase('incorrect')
                   exerciseInput={exerciseInput}
                   exercisePhase={exercisePhase}
                   exerciseFeedback={exerciseFeedback}
-                  exercisePosition={exercisePosition}
+                  exercisePosition={shownExerciseIndex >= 0 ? shownExerciseIndex + 1 : exercisePosition}
                   exerciseTotal={exerciseTotal}
                   completedExerciseCount={completedExerciseCount}
                   onInputChange={setExerciseInput}
@@ -1881,6 +2018,7 @@ setExercisePhase('incorrect')
                   language={selectedLanguage}
                   editorFilename={`exercise.${LANGUAGE_FILE_EXT[selectedLanguage] || 'py'}`}
                   onOpenGuidebook={() => setIsGuidebookOpen(true)}
+                  banner={lessonCelebration}
                   footerExtra={tutorActionsRow}
                   taskExtra={
                     <div className="ew-lesson-notes">
@@ -1946,45 +2084,7 @@ setExercisePhase('incorrect')
                       {tutorPanel}
                     </>
                   }
-                  banner={
-                    celebration && (
-                      <div className={`duo-feedback-panel success ew-lesson-celebration${celebration.mistakeFree ? ' ew-celebration--perfect' : ''}${celebration.boss ? ' ew-celebration--boss' : ''}`} role="status">
-                        <div className="duo-feedback-title">
-                          <span>{celebration.boss ? '👑 BOSS CLEARED!' : '🎉 Lesson Complete!'}</span>
-                          {celebration.mistakeFree && (
-                            <span className="ew-perfect-badge">⚡ PERFECT — no mistakes!</span>
-                          )}
-                        </div>
-                        <p style={{ fontWeight: 700, marginBottom: '8px' }}>
-                          {celebration.boss
-                            ? 'You just mastered a checkpoint — the hardest lesson in the unit!'
-                            : 'Awesome work! You completed every exercise in this lesson.'}
-                        </p>
-                        {celebration.xpEarned > 0 && (
-                          <p style={{ fontWeight: 700, color: '#16a34a', marginBottom: '16px' }}>
-                            +{celebration.xpEarned} XP earned
-                          </p>
-                        )}
-                        <div style={{ display: 'flex', gap: '12px' }}>
-                          {celebration.nextLessonId ? (
-                            <button className="duo-button duo-button-primary" onClick={goToNextLesson}>
-                              Next Lesson →
-                            </button>
-                          ) : null}
-                          <button
-                            className="duo-button duo-button-secondary"
-                            onClick={() => {
-                              setCelebration(null)
-                              setIsLessonActive(false)
-                              setLesson(null)
-                            }}
-                          >
-                            Back to Course
-                          </button>
-                        </div>
-                      </div>
-                    )
-                  }
+                  banner={lessonCelebration}
                 />
               ) : null
             ) : (

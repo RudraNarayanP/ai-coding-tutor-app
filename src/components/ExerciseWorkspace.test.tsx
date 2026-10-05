@@ -36,6 +36,23 @@ const workspaceProps = {
   onToggleSound: vi.fn(),
 }
 
+describe('result sheet', () => {
+  it('pops a confirmation with a next button after a correct answer', () => {
+    const onContinue = vi.fn()
+    render(
+      <ExerciseWorkspace
+        {...workspaceProps}
+        exercisePhase="correct"
+        exerciseFeedback={{ passed: true, feedback: 'Correct!', xpAwarded: 10, attempts: 1 }}
+        onContinue={onContinue}
+      />
+    )
+    expect(screen.getByRole('status')).toHaveTextContent('Correct!')
+    fireEvent.click(screen.getByRole('button', { name: 'NEXT' }))
+    expect(onContinue).toHaveBeenCalled()
+  })
+})
+
 describe('exercise workspace copy', () => {
   it('uses the sublesson title instead of dumping the full question', () => {
     expect(formatTaskTitle(cinemaExercise, 1)).toBe('Step 1: Calculate Ticket Total')
@@ -90,7 +107,7 @@ describe('ExerciseWorkspace', () => {
     expect(screen.queryByText('___')).not.toBeInTheDocument()
     expect(screen.getByRole('button', { name: 'BACK' })).toBeInTheDocument()
     expect(screen.getByRole('button', { name: 'RUN' })).toBeInTheDocument()
-    expect(screen.getByRole('button', { name: 'SUBMIT' })).toBeInTheDocument()
+    expect(screen.getByRole('button', { name: 'CHECK' })).toBeInTheDocument()
   })
 
   it('lets the learner type anywhere in the fill-blank editor', () => {
@@ -135,7 +152,7 @@ describe('ExerciseWorkspace non-code exercises', () => {
     expect(screen.getByRole('button', { name: 'let' })).toBeInTheDocument()
     expect(screen.queryByRole('textbox', { name: 'Code editor' })).not.toBeInTheDocument()
     expect(screen.queryByRole('button', { name: /RUN/ })).not.toBeInTheDocument()
-    expect(screen.getByRole('button', { name: 'SUBMIT' })).toBeInTheDocument()
+    expect(screen.getByRole('button', { name: 'CHECK' })).toBeInTheDocument()
   })
 
   it('records the picked option through onInputChange', () => {
@@ -202,7 +219,7 @@ describe('ExerciseWorkspace lesson mode', () => {
     expect(screen.getByRole('button', { name: 'Request a hint' })).toBeInTheDocument()
     expect(screen.getByRole('button', { name: 'Run code' })).toBeInTheDocument()
     expect(screen.getByRole('button', { name: /Guidebook/ })).toBeInTheDocument()
-    expect(screen.queryByRole('button', { name: 'SUBMIT' })).not.toBeInTheDocument()
+    expect(screen.queryByRole('button', { name: 'CHECK' })).not.toBeInTheDocument()
     expect(screen.getByRole('textbox', { name: 'Code editor' })).toHaveValue(lessonExercise.starter_code)
     expect(screen.getByText('Session notes')).toBeInTheDocument()
     expect(screen.getByRole('region', { name: 'Test results' })).toBeInTheDocument()
@@ -273,7 +290,7 @@ describe('ordering exercise wiring', () => {
         onSubmit={onSubmit}
       />
     )
-    fireEvent.click(screen.getByRole('button', { name: 'SUBMIT' }))
+    fireEvent.click(screen.getByRole('button', { name: 'CHECK' }))
     expect(onSubmit).toHaveBeenCalled()
   })
 })

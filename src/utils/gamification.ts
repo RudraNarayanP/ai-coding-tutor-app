@@ -70,6 +70,8 @@ export interface GameSaveData {
   dailyXp: number
   dailyGoal: number
   currentLessonId: string | null
+  /** True while the learner is inside a lesson workspace (not the course map). */
+  lessonWorkspaceOpen?: boolean
 }
 
 export function loadFullGameState(): Partial<GamificationState> | null {

@@ -549,3 +549,16 @@ def test_inline_numbered_steps_are_instructions_not_transcript():
     dump = ("so we take the weights, the biases, the inputs, and then we just kind of loop over them "
             "and add them up, and version 1. of this is slow, you know, but it works")
     assert plan_raw(dump)
+
+
+def test_inline_code_calls_are_instructions_not_transcript():
+    """Regression (sweep ling-flash-sante 03:56): review PASSed, then an action with
+    `w=Value(2.0)` / `y.backward()` was rejected as raw speech via the >=3-comma rule."""
+    from backend.project_copy import looks_like_raw_transcript as copy_raw
+    from backend.project_planner import looks_like_raw_transcript as plan_raw
+
+    act = ("In main.py create w=Value(2.0), x=Value(-3.0), b=Value(1.0). Compute y=w*x+b then "
+           "y.backward(). Print w.grad, x.grad, b.grad. Then nudge w.data by 0.001, recompute y, "
+           "and compare (y_new-y_old)/0.001 to w.grad.")
+    assert not plan_raw(act)
+    assert not copy_raw(act, max_len=1200)
