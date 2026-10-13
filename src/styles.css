@@ -2593,3 +2593,133 @@ input.cw-input:focus, textarea.cw-input:focus { outline: none; border-color: #5b
 #restore-code-button {
   border-style: dashed;
 }
+
+
+/* Duolingo Redesign Enhancements */
+.formatted-text-wrapper {
+  line-height: 1.6;
+}
+
+.code-block-rendered {
+  background: var(--surface-sunken, #0f172a);
+  border: 2px solid var(--line, #334155);
+  border-radius: 12px;
+  padding: 14px 18px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 14px;
+  color: #38bdf8;
+  overflow-x: auto;
+  margin: 12px 0;
+}
+
+.inline-code-chip {
+  background: rgba(56, 189, 248, 0.15);
+  color: #38bdf8;
+  border: 1px solid rgba(56, 189, 248, 0.3);
+  border-radius: 6px;
+  padding: 2px 6px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.9em;
+  font-weight: 700;
+}
+
+.bottom-sheet-overlay {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+  display: flex;
+  justify-content: center;
+  animation: slideUp 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.bottom-sheet-card {
+  width: 100%;
+  max-width: 720px;
+  padding: 20px 24px;
+  border-top-left-radius: 20px;
+  border-top-right-radius: 20px;
+  box-shadow: 0 -10px 25px rgba(0, 0, 0, 0.3);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.bottom-sheet-card.correct {
+  background: #14532d;
+  border-top: 4px solid #22c55e;
+  color: #f0fdf4;
+}
+
+.bottom-sheet-card.incorrect {
+  background: #7f1d1d;
+  border-top: 4px solid #ef4444;
+  color: #fef2f2;
+}
+
+.bottom-sheet-header {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.bottom-sheet-title {
+  font-size: 20px;
+  font-weight: 900;
+  margin: 0;
+}
+
+.bottom-sheet-badge {
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  opacity: 0.9;
+}
+
+.xp-pop-badge {
+  margin-left: auto;
+  background: #eab308;
+  color: #000;
+  font-weight: 900;
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 14px;
+  animation: pop 0.3s ease;
+}
+
+.correct-answer-callout {
+  background: rgba(0, 0, 0, 0.25);
+  border-radius: 8px;
+  padding: 10px 14px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.callout-code {
+  font-family: monospace;
+  font-weight: 700;
+  color: #fca5a5;
+}
+
+.bottom-sheet-continue-btn {
+  width: 100%;
+  padding: 14px;
+  font-size: 16px;
+  font-weight: 900;
+  border-radius: 12px;
+  text-transform: uppercase;
+}
+
+@keyframes slideUp {
+  from { transform: translateY(100%); }
+  to { transform: translateY(0); }
+}
+
+@keyframes pop {
+  0% { transform: scale(0.8); }
+  50% { transform: scale(1.15); }
+  100% { transform: scale(1); }
+}

@@ -2018,7 +2018,6 @@ setExercisePhase('incorrect')
                   language={selectedLanguage}
                   editorFilename={`exercise.${LANGUAGE_FILE_EXT[selectedLanguage] || 'py'}`}
                   onOpenGuidebook={() => setIsGuidebookOpen(true)}
-                  banner={lessonCelebration}
                   footerExtra={tutorActionsRow}
                   taskExtra={
                     <div className="ew-lesson-notes">
