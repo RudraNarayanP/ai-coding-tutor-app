@@ -15,7 +15,7 @@
     {
       "id": "wrangle-filter",
       "title": "1. Filter Rows",
-      "description": "Implement `filter_rows(rows, key, value)` keeping dict rows where row[key]==value.",
+      "description": "Implement `filter_rows(rows, key, value)` keeping dict rows where row[key]==value. The test checks that `filter_rows(rows, 'a', 1)` equals `[{'a': 1}, {'a': 1}]`.",
       "order": 16,
       "difficulty": "intermediate",
       "duration_minutes": 5,
@@ -53,7 +53,7 @@
     {
       "id": "wrangle-select",
       "title": "2. Select Columns",
-      "description": "Implement `select(rows, cols)` returning new dicts with only cols.",
+      "description": "Implement `select(rows, cols)` returning new dicts with only cols. The test checks that `select(rows, ['x', 'z'])` equals `[{'x': 1, 'z': 3}]`.",
       "order": 17,
       "difficulty": "intermediate",
       "duration_minutes": 5,
@@ -91,7 +91,7 @@
     {
       "id": "wrangle-groupby",
       "title": "3. Group-By Count",
-      "description": "Implement `group_count(rows, key)` returning {value: count}.",
+      "description": "Implement `group_count(rows, key)` returning {value: count}. The test checks that `group_count(rows, 'c')` equals `{'a': 2, 'b': 1}`.",
       "order": 18,
       "difficulty": "intermediate",
       "duration_minutes": 8,
@@ -129,7 +129,7 @@
     {
       "id": "wrangle-join",
       "title": "4. Inner Join (Practice)",
-      "description": "Implement `inner_join(left, right, key)` joining lists of dicts on key.",
+      "description": "Implement `inner_join(left, right, key)` joining lists of dicts on key. The test checks that `len(res)` equals `1`; `inner_join(left, right, 'id')[0]['n']` equals `'a'`; `inner_join(left, right, 'id')[0]['s']` equals `10`.",
       "order": 19,
       "difficulty": "intermediate",
       "duration_minutes": 6,
@@ -167,7 +167,7 @@
     {
       "id": "wrangle-checkpoint",
       "title": "5. Checkpoint: Fill Missing",
-      "description": "Implement `fill_na(rows, key, default)` replacing missing/None key with default.",
+      "description": "Implement `fill_na(rows, key, default)` replacing missing/None key with default. The test checks that `fill_na(rows, 'a', 0)` equals `[{'a': 1}, {'a': 0}, {'a': 0}]`.",
       "order": 20,
       "difficulty": "intermediate",
       "duration_minutes": 10,

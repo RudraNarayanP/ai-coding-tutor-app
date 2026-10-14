@@ -6,14 +6,16 @@
     {
       "id": "booleans",
       "title": "Boolean Values & Logic Operators",
-      "prerequisites": ["variables"]
+      "prerequisites": [
+        "variables"
+      ]
     }
   ],
   "lessons": [
     {
       "id": "booleans",
       "title": "1. True, False & Boolean Basics",
-      "description": "Learn how Python uses True and False to represent truth values.",
+      "description": "It is sunny, and it is not raining. Create `is_sunny` and `is_raining`. Set `is_sunny` to Python's boolean for yes, and `is_raining` to the boolean for no. Those literals are `True` and `False`: a capital letter, and no quotes. The test passes when `is_sunny` is true and `is_raining` is false.",
       "order": 6,
       "difficulty": "beginner",
       "duration_minutes": 5,
@@ -21,10 +23,16 @@
       "section_id": "section-2",
       "section_title": "Section 2: Control Flow",
       "test_out_eligible": false,
-      "concepts": ["booleans"],
-      "prerequisites": ["variables"],
-      "learning_objectives": ["Understand True and False boolean literals in Python"],
-      "starter_code": "is_sunny = True\nis_raining = False\n",
+      "concepts": [
+        "booleans"
+      ],
+      "prerequisites": [
+        "variables"
+      ],
+      "learning_objectives": [
+        "Store yes and no in variables using True and False"
+      ],
+      "starter_code": "# It is sunny, and it is not raining.\n# These two values are backwards. Set each name to the matching boolean literal.\nis_sunny = False\nis_raining = True\n",
       "solution_code": "is_sunny = True\nis_raining = False\n",
       "tests": [
         {
@@ -34,12 +42,14 @@
         }
       ],
       "completion_requirements": {
-        "required_test_names": ["test_boolean_literals"]
+        "required_test_names": [
+          "test_boolean_literals"
+        ]
       },
       "hints": [
-        "Think about boolean values: Python uses capitalized 'True' and 'False'.",
-        "Assign `is_sunny = True` and `is_raining = False`.",
-        "Solution: `is_sunny = True\\nis_raining = False`"
+        "Python's yes and no values are the words True and False. Capitalize them, and do not put quotes around them.",
+        "`is_sunny` is the yes value. `is_raining` is the no value.",
+        "is_sunny = True and is_raining = False."
       ],
       "xp_reward": 10,
       "sublessons": [
@@ -52,7 +62,12 @@
               "id": "bool-literal-mcq",
               "type": "mcq",
               "question": "Which of the following is a valid boolean value in Python?",
-              "options": ["True", "true", "TRUE", "\"True\""],
+              "options": [
+                "True",
+                "true",
+                "TRUE",
+                "\"True\""
+              ],
               "correct_answer": "True",
               "explanation": "Python boolean keywords `True` and `False` MUST start with a capital letter and have no quotes.",
               "hints": [
@@ -61,6 +76,19 @@
                 "Select 'True'."
               ],
               "xp_reward": 10
+            },
+            {
+              "id": "player-preview",
+              "type": "code",
+              "question": "Preview learner code.",
+              "starter_code": "",
+              "correct_answer": "",
+              "hints": [
+                "Run the snippet.",
+                "Read the output.",
+                "Compare it to the example."
+              ],
+              "xp_reward": 0
             }
           ]
         }
@@ -69,7 +97,7 @@
     {
       "id": "booleans-step-1",
       "title": "2. Meet the `and` Operator",
-      "description": "The `and` operator returns True ONLY when BOTH left and right operands are True.",
+      "description": "A door opens only when you have both the key and the passcode. `has_key` and `has_passcode` are already `True`. Set `can_unlock` by combining them with `and`. `and` is true only when both sides are true. The test passes when `can_unlock` is true.",
       "order": 7,
       "difficulty": "beginner",
       "duration_minutes": 5,
@@ -77,10 +105,16 @@
       "section_id": "section-2",
       "section_title": "Section 2: Control Flow",
       "test_out_eligible": false,
-      "concepts": ["booleans"],
-      "prerequisites": ["variables"],
-      "learning_objectives": ["Combine conditions using the and operator"],
-      "starter_code": "has_key = True\nhas_passcode = True\ncan_unlock = has_key and has_passcode\n",
+      "concepts": [
+        "booleans"
+      ],
+      "prerequisites": [
+        "variables"
+      ],
+      "learning_objectives": [
+        "Set a variable with and when both conditions must be true"
+      ],
+      "starter_code": "has_key = True\nhas_passcode = True\n# Combine both conditions with and.\ncan_unlock = False\n",
       "solution_code": "has_key = True\nhas_passcode = True\ncan_unlock = has_key and has_passcode\n",
       "tests": [
         {
@@ -90,12 +124,14 @@
         }
       ],
       "completion_requirements": {
-        "required_test_names": ["test_and_operator"]
+        "required_test_names": [
+          "test_and_operator"
+        ]
       },
       "hints": [
-        "Recall that `and` evaluates to True only when BOTH sides are True.",
-        "Set `can_unlock = has_key and has_passcode`.",
-        "Solution: `can_unlock = has_key and has_passcode`"
+        "`and` stays false if either side is false.",
+        "Both given variables are already true. Combine those two names with and.",
+        "can_unlock = has_key and has_passcode"
       ],
       "xp_reward": 10,
       "sublessons": [
@@ -108,7 +144,11 @@
               "id": "bool-and-out",
               "type": "output_prediction",
               "question": "What does this code print?\n\n```python\nprint(True and False)\n```",
-              "options": ["False", "True", "None"],
+              "options": [
+                "False",
+                "None",
+                "True"
+              ],
               "correct_answer": "False",
               "explanation": "`and` requires BOTH operands to be True. Since one is False, the result is False.",
               "hints": [
@@ -125,7 +165,7 @@
     {
       "id": "booleans-step-2",
       "title": "3. Meet the `or` Operator",
-      "description": "The `or` operator returns True if AT LEAST ONE operand is True.",
+      "description": "You can enter the show if you are a VIP or you have a ticket. `is_vip` is `False` and `has_ticket` is `True`. Set `can_enter` with `or`. `or` is true when at least one side is true. The test passes when `can_enter` is true.",
       "order": 8,
       "difficulty": "beginner",
       "duration_minutes": 5,
@@ -133,10 +173,16 @@
       "section_id": "section-2",
       "section_title": "Section 2: Control Flow",
       "test_out_eligible": false,
-      "concepts": ["booleans"],
-      "prerequisites": ["variables"],
-      "learning_objectives": ["Combine conditions using the or operator"],
-      "starter_code": "is_vip = False\nhas_ticket = True\ncan_enter = is_vip or has_ticket\n",
+      "concepts": [
+        "booleans"
+      ],
+      "prerequisites": [
+        "variables"
+      ],
+      "learning_objectives": [
+        "Set a variable with or when either condition can be true"
+      ],
+      "starter_code": "is_vip = False\nhas_ticket = True\n# Combine the two conditions with or.\ncan_enter = False\n",
       "solution_code": "is_vip = False\nhas_ticket = True\ncan_enter = is_vip or has_ticket\n",
       "tests": [
         {
@@ -146,12 +192,14 @@
         }
       ],
       "completion_requirements": {
-        "required_test_names": ["test_or_operator"]
+        "required_test_names": [
+          "test_or_operator"
+        ]
       },
       "hints": [
-        "Recall that `or` needs only ONE side to be True.",
-        "Set `can_enter = is_vip or has_ticket`.",
-        "Solution: `can_enter = is_vip or has_ticket`"
+        "`or` is true when either side is true. A ticket is enough even if the guest is not a VIP.",
+        "Combine `is_vip` and `has_ticket` with or.",
+        "can_enter = is_vip or has_ticket"
       ],
       "xp_reward": 10,
       "sublessons": [
@@ -164,11 +212,15 @@
               "id": "bool-or-out",
               "type": "output_prediction",
               "question": "What does this code print?\n\n```python\nprint(False or True)\n```",
-              "options": ["True", "False", "None"],
+              "options": [
+                "True",
+                "False",
+                "None"
+              ],
               "correct_answer": "True",
               "explanation": "`or` returns True because the right side is True.",
               "hints": [
-                "Check if either side is True.",
+                "or looks at both sides, not only the left one.",
                 "At least one side is True, so `or` returns True.",
                 "Select 'True'."
               ],
@@ -181,7 +233,7 @@
     {
       "id": "booleans-step-3",
       "title": "4. Meet the `not` Operator",
-      "description": "The `not` operator flips True to False, and False to True.",
+      "description": "The match is still going, so play should continue. `is_game_over` is `False`. Set `keep_playing` to the opposite of `is_game_over` using `not`. The test passes when `keep_playing` is true.",
       "order": 9,
       "difficulty": "beginner",
       "duration_minutes": 5,
@@ -189,10 +241,16 @@
       "section_id": "section-2",
       "section_title": "Section 2: Control Flow",
       "test_out_eligible": false,
-      "concepts": ["booleans"],
-      "prerequisites": ["variables"],
-      "learning_objectives": ["Invert boolean expressions using not"],
-      "starter_code": "is_game_over = False\nkeep_playing = not is_game_over\n",
+      "concepts": [
+        "booleans"
+      ],
+      "prerequisites": [
+        "variables"
+      ],
+      "learning_objectives": [
+        "Flip a boolean with not"
+      ],
+      "starter_code": "is_game_over = False\n# Flip is_game_over with not.\nkeep_playing = False\n",
       "solution_code": "is_game_over = False\nkeep_playing = not is_game_over\n",
       "tests": [
         {
@@ -202,12 +260,14 @@
         }
       ],
       "completion_requirements": {
-        "required_test_names": ["test_not_operator"]
+        "required_test_names": [
+          "test_not_operator"
+        ]
       },
       "hints": [
-        "The `not` keyword flips boolean truth values.",
-        "Use `not is_game_over`.",
-        "Solution: `keep_playing = not is_game_over`"
+        "`not` flips true to false and false to true.",
+        "`is_game_over` is false, so the opposite is true. Assign that to `keep_playing`.",
+        "keep_playing = not is_game_over"
       ],
       "xp_reward": 10,
       "sublessons": [
@@ -220,7 +280,11 @@
               "id": "bool-not-out",
               "type": "output_prediction",
               "question": "What does this code print?\n\n```python\nprint(not False)\n```",
-              "options": ["True", "False", "None"],
+              "options": [
+                "False",
+                "True",
+                "None"
+              ],
               "correct_answer": "True",
               "explanation": "`not` flips False to True.",
               "hints": [
@@ -237,7 +301,7 @@
     {
       "id": "booleans-01",
       "title": "5. Ghost Gobble Capstone Game",
-      "description": "Pac-Man may eat a ghost only while the power pellet is active AND he is touching a ghost. Implement eat_ghost(power_pellet_active, touching_ghost) so it returns True exactly when both inputs are True.",
+      "description": "Pac-Man may eat a ghost only while the power pellet is active AND he is touching a ghost. Implement eat_ghost(power_pellet_active, touching_ghost) so it returns True exactly when both inputs are True. The test checks that `eat_ghost(True, True)` equals `True`; `eat_ghost(True, False)` equals `False`; `eat_ghost(False, True)` equals `False`.",
       "order": 10,
       "difficulty": "beginner",
       "duration_minutes": 8,
@@ -245,9 +309,15 @@
       "section_id": "section-2",
       "section_title": "Section 2: Control Flow",
       "test_out_eligible": false,
-      "concepts": ["booleans"],
-      "prerequisites": ["variables"],
-      "learning_objectives": ["Combine boolean operators in a real capstone challenge"],
+      "concepts": [
+        "booleans"
+      ],
+      "prerequisites": [
+        "variables"
+      ],
+      "learning_objectives": [
+        "Combine boolean operators in a real capstone challenge"
+      ],
       "starter_code": "def eat_ghost(power_pellet_active, touching_ghost):\n    # TODO: return True only when power_pellet_active AND touching_ghost are True\n    return False\n",
       "solution_code": "def eat_ghost(power_pellet_active, touching_ghost):\n    return power_pellet_active and touching_ghost\n",
       "tests": [
@@ -258,7 +328,9 @@
         }
       ],
       "completion_requirements": {
-        "required_test_names": ["test_ghost_gets_eaten"]
+        "required_test_names": [
+          "test_ghost_gets_eaten"
+        ]
       },
       "hints": [
         "Use the `and` operator to check if both inputs are True.",

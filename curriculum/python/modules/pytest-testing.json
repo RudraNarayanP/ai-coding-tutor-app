@@ -16,7 +16,7 @@
     {
       "id": "pytest-testing-step-1",
       "title": "1. Assert Helpers",
-      "description": "Write `assert_equal(actual, expected)` that raises AssertionError with a clear message on mismatch.",
+      "description": "Write `assert_equal(actual, expected)` that raises AssertionError with a clear message on mismatch. The test checks that invalid input raises `AssertionError`.",
       "order": 101,
       "difficulty": "intermediate",
       "duration_minutes": 5,
@@ -56,7 +56,7 @@
     {
       "id": "pytest-testing-step-2",
       "title": "2. Parametrized Cases",
-      "description": "Implement `run_cases(fn, cases)` where each case is (args_tuple, expected).",
+      "description": "Implement `run_cases(fn, cases)` where each case is (args_tuple, expected). The test checks that `run_cases(lambda a, b: a + b, [((1, 2), 3), ((0, 0), 0)])` equals `2`.",
       "order": 102,
       "difficulty": "intermediate",
       "duration_minutes": 5,
@@ -96,7 +96,7 @@
     {
       "id": "pytest-testing-01",
       "title": "3. Fixture-like Setup (Concept Challenge)",
-      "description": "Build `with_temp_dict(factory)` that creates a dict via factory, yields it to a callback, then clears it.",
+      "description": "Build `with_temp_dict(factory)` that creates a dict via factory, yields it to a callback, then clears it. The test checks that `with_temp_dict(dict, cb)` equals `{}`.",
       "order": 103,
       "difficulty": "intermediate",
       "duration_minutes": 8,
@@ -164,7 +164,7 @@
     {
       "id": "pytest-testing-practice-1",
       "title": "4. Approximate Float Compare (Practice)",
-      "description": "Implement `approx_equal(a, b, tol=1e-6)` for float comparisons in tests: two numbers count as equal when their distance is within `tol`.",
+      "description": "Implement `approx_equal(a, b, tol=1e-6)` for float comparisons in tests: two numbers count as equal when their distance is within `tol`. The test checks that `approx_equal(0.1 + 0.2, 0.3, tol=1e-9)` is true; `approx_equal(1.0, 1.1, tol=1e-3)` is false.",
       "order": 104,
       "difficulty": "intermediate",
       "duration_minutes": 6,
@@ -204,7 +204,7 @@
     {
       "id": "pytest-testing-checkpoint",
       "title": "5. Unit 21 Checkpoint: Testing Patterns",
-      "description": "Implement `raises(exc_type, fn)` that returns True if fn() raises exc_type, else False.",
+      "description": "Implement `raises(exc_type, fn)` that returns True if fn() raises exc_type, else False. The test checks that `raises(ValueError, lambda: int('x'))` is true; `raises(ValueError, lambda: int('3'))` is false.",
       "order": 105,
       "difficulty": "intermediate",
       "duration_minutes": 10,

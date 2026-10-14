@@ -18,8 +18,8 @@
   "lessons": [
     {
       "id": "loops-step-1",
-      "title": "1. For Loops & `range()`",
-      "description": "`for item in collection:` iterates over items. `range(n)` generates numbers from 0 to n-1. Calculate the sum of squares up to n.",
+      "title": "Loop with range",
+      "description": "Finish `sum_squares(n)`. Add up `1*1 + 2*2 + ... + n*n` using a loop or `range`. `sum_squares(3)` equals `14`. The test checks that `sum_squares(3)` equals `1 + 4 + 9`.",
       "order": 46,
       "difficulty": "intermediate",
       "duration_minutes": 5,
@@ -31,7 +31,7 @@
         "lists"
       ],
       "learning_objectives": [
-        "Iterate using for loops and range()"
+        "range stops before its end, so range(1, 4) visits 1, 2, and 3."
       ],
       "starter_code": "def sum_squares(n):\n    # TODO: Calculate sum of i*i for i in range(1, n+1)\n    pass\n",
       "tests": [
@@ -52,12 +52,177 @@
         "url": "https://docs.python.org/3/tutorial/controlflow.html#for-statements",
         "license": "Python documentation license (PSF)"
       },
-      "xp_reward": 10
+      "xp_reward": 10,
+      "player_mode": "micro",
+      "sublessons": [
+        {
+          "id": "loops-micro",
+          "title": "Loop with range",
+          "description": "",
+          "order": 1,
+          "exercises": [
+            {
+              "id": "loop-teach",
+              "type": "teach",
+              "question": "range stops before its end, so range(1, 4) visits 1, 2, and 3.",
+              "hints": [
+                "The end number is a stop, not a visit.",
+                "Count 1, then 2, then stop before 4.",
+                "1, 2, 3"
+              ],
+              "explanation": "The end value is a stop, not a number the loop visits.",
+              "xp_reward": 0,
+              "worked_example": "for i in range(1, 4):\n    print(i)"
+            },
+            {
+              "id": "loop-mcq",
+              "type": "mcq",
+              "question": "Which numbers does range(1, 4) visit?",
+              "hints": [
+                "The stop value is not visited.",
+                "Start at 1 and stop before 4.",
+                "1, 2, 3"
+              ],
+              "explanation": "range starts at 1 and stops before 4.",
+              "xp_reward": 10,
+              "options": [
+                "1, 2, 3, 4",
+                "0, 1, 2, 3",
+                "1, 2, 3",
+                "4, 3, 2, 1"
+              ],
+              "correct_answer": "1, 2, 3"
+            },
+            {
+              "id": "loop-predict",
+              "type": "output_prediction",
+              "question": "The loop adds each number it visits. What is printed?",
+              "hints": [
+                "Add each number the loop actually visits.",
+                "That is 1, then 2, then 3.",
+                "6"
+              ],
+              "explanation": "The loop visits 1, 2, and 3, and those add up to 6.",
+              "xp_reward": 10,
+              "starter_code": "total = 0\nfor i in range(1, 4):\n    total = total + i\nprint(total)\n",
+              "options": [
+                "10",
+                "4",
+                "6",
+                "0"
+              ],
+              "correct_answer": "6"
+            },
+            {
+              "id": "loop-order",
+              "type": "ordering",
+              "question": "Build a loop that prints 1, then 2, then 3.",
+              "hints": [
+                "The line starts with for.",
+                "in range comes after the name.",
+                "for i in range(1, 4): print(i)"
+              ],
+              "explanation": "for walks the range, and the colon starts the body.",
+              "xp_reward": 10,
+              "options": [
+                "for",
+                "i",
+                "in",
+                "range(1, 4):",
+                "print(i)",
+                "while"
+              ],
+              "correct_answer": [
+                "for",
+                "i",
+                "in",
+                "range(1, 4):",
+                "print(i)"
+              ]
+            },
+            {
+              "id": "loop-fill",
+              "type": "fill_blank",
+              "question": "Fill the stop so the loop prints 1, then 2, then 3.",
+              "hints": [
+                "The stop is one past the last number you want.",
+                "You want 1, 2, and 3.",
+                "4"
+              ],
+              "explanation": "Stop at 4 so the last visit is 3.",
+              "xp_reward": 10,
+              "starter_code": "for i in range(1, ___):\n    print(i)\n",
+              "options": [
+                "3",
+                "4",
+                "5",
+                "1"
+              ],
+              "correct_answer": "4"
+            },
+            {
+              "id": "loop-bug",
+              "type": "debugging",
+              "question": "The loop header is missing the mark that starts its body. Which line?",
+              "hints": [
+                "The body line is a normal print.",
+                "A for header ends with a colon.",
+                "Line 1 needs a colon."
+              ],
+              "explanation": "Line 1 is missing the colon that starts the loop body.",
+              "xp_reward": 10,
+              "starter_code": "for i in range(1, 4)\n    print(i)\n",
+              "correct_answer": "1"
+            },
+            {
+              "id": "loop-mcq-2",
+              "type": "mcq",
+              "question": "How many numbers does range(2, 5) visit?",
+              "hints": [
+                "Subtract the start from the stop.",
+                "5 minus 2 is how many steps you get.",
+                "3"
+              ],
+              "explanation": "2, 3, and 4 are three visits. 5 is the stop.",
+              "xp_reward": 10,
+              "options": [
+                "2",
+                "4",
+                "5",
+                "3"
+              ],
+              "correct_answer": "3"
+            },
+            {
+              "id": "loop-write",
+              "type": "code",
+              "question": "Add the squares from 1 through n. Use range.",
+              "hints": [
+                "The walk starts at 1.",
+                "It must include n and exclude n + 1.",
+                "1, n + 1"
+              ],
+              "explanation": "range(1, n + 1) visits 1 through n, and n is included.",
+              "xp_reward": 10,
+              "starter_code": "def sum_squares(n):\n    total = 0\n    for i in range(___):\n        total += i * i\n    return total\n",
+              "solution_code": "def sum_squares(n):\n    total = 0\n    for i in range(1, n + 1):\n        total += i * i\n    return total\n",
+              "tests": [
+                {
+                  "name": "test_sum_squares",
+                  "description": "sum of squares up to 3 is 14",
+                  "unittest_code": "def test_sum_squares(self):\n    self.assertEqual(sum_squares(3), 1 + 4 + 9)",
+                  "required": true
+                }
+              ]
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "loops-step-2",
       "title": "2. List Comprehensions & `enumerate()`",
-      "description": "List comprehensions offer a concise syntax for transforming lists: `[x * 2 for x in lst if x > 0]`. `enumerate(lst, start=1)` yields index and item pairs.",
+      "description": "Finish `double_evens(numbers)`. Return a new list of each even number multiplied by 2. Skip the odd numbers. A list comprehension fits. `double_evens([1, 2, 3, 4])` equals `[4, 8]`. The test checks that `double_evens([1, 2, 3, 4])` equals `[4, 8]`.",
       "order": 47,
       "difficulty": "intermediate",
       "duration_minutes": 5,
@@ -95,7 +260,7 @@
     {
       "id": "loops-01",
       "title": "3. Making the Grade (Concept Challenge)",
-      "description": "Organize student test scores using loops, range(), enumerate(), zip(), and list comprehensions.",
+      "description": "Finish `round_scores`, `count_failed_students`, `above_threshold`, `letter_grades` and 2 more. Organize student test scores using loops, range(), enumerate(), zip(), and list comprehensions. The test checks that `round_scores([90.33, 40.5, 55.44])` equals `[90, 40, 55]`; `count_failed_students([89, 40, 38, 70])` equals `2`; `above_threshold([88, 45, 75], 70)` equals `[88, 75]`.",
       "order": 48,
       "difficulty": "intermediate",
       "duration_minutes": 8,
@@ -169,7 +334,7 @@
     {
       "id": "loops-practice-1",
       "title": "4. Discount Price Applier (Practice)",
-      "description": "Apply a percentage discount to all prices in a list using a comprehension: each price is reduced by `discount_pct` percent.",
+      "description": "Finish `apply_discounts`. Apply a percentage discount to all prices in a list using a comprehension: each price is reduced by `discount_pct` percent. The test checks that `apply_discounts([100, 50], 10)` equals `[90.0, 45.0]`.",
       "order": 49,
       "difficulty": "intermediate",
       "duration_minutes": 6,
@@ -207,7 +372,7 @@
     {
       "id": "loops-checkpoint",
       "title": "5. Unit 10 Checkpoint: Loops Mastery",
-      "description": "filter_long_words(words, min_len) must return, via a list comprehension, only the words whose length is at least min_len.",
+      "description": "filter_long_words(words, min_len) must return, via a list comprehension, only the words whose length is at least min_len. The test checks that `filter_long_words([\"hi\", \"hello\", \"hey\"], 3)` equals `[\"hello\", \"hey\"]`.",
       "order": 50,
       "difficulty": "intermediate",
       "duration_minutes": 10,

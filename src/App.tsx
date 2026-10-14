@@ -13,9 +13,11 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { GuidebookPanel } from './components/GuidebookPanel'
 import { CreatePage } from './components/CreatePage'
 import Settings from './components/Settings'
-import ExercisePanel from './components/ExercisePanel'
-import ExerciseWorkspace from './components/ExerciseWorkspace'
-import { TutorActions } from './components/TutorActions'
+import { playerLessons } from './lesson-player/lessons'
+import { LessonPlayer } from './lesson-player/LessonPlayer'
+import { decoratePathLessons } from './lesson-player/pathLessons'
+import { resolvePlayerLesson } from './lesson-player/resolveLesson'
+import { seedProgress, usePlayerProgress } from './lesson-player/progressStore'
 import { api, type ExerciseResult, type LeaderboardEntry, type LessonProgress, type Material, type MaterialCompletionResult, type MistakeItem, type HeartStatus, type TestOutResult, type UserProfile } from './api'
 import { LearnPath } from './components/duo/LearnPath'
 import { PracticeHub } from './components/duo/PracticeHub'
@@ -43,6 +45,13 @@ import {
   isFillBlankCodeComplete,
 } from './utils/assembleFillBlankCode'
 import { ModelPresetOptions, ModelQualityNote, defaultModelId, type ModelPreset, type QualityGroup } from './utils/modelTiers'
+import {
+  consumeAppHistoryPop,
+  getAppHistoryStackDepth,
+  readAppLocationFromWindow,
+  writeAppHistory,
+  type AppTab,
+} from './utils/appHistory'
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 type TestResult = {
@@ -128,6 +137,7 @@ type Lesson = {
   concepts?: string[]
   prerequisites?: string[]
   learning_objectives?: string[]
+  player_mode?: string
   source?: { name: string; url: string; license?: string } | null
   sublessons?: SubLesson[]
   mastery_exam?: Exercise[]
@@ -287,6 +297,11 @@ function App() {
   // mirror for rendering, so editing localStorage can no longer buy infinite
   // attempts. `applyHearts` is the only writer, and every grading response
   // carries the authoritative status.
+  const playerStats = usePlayerProgress()
+  useEffect(() => {
+    if (!userProfile) return
+    seedProgress(userProfile.xp || 0, userProfile.streak || 0)
+  }, [userProfile])
   const [hearts, setHearts] = useState<number>(() => getHearts())
   const [maxHearts, setMaxHearts] = useState<number>(5)
   const [secondsToNextHeart, setSecondsToNextHeart] = useState<number>(0)
@@ -330,6 +345,12 @@ function App() {
 
   const editorRef = useRef<HTMLTextAreaElement>(null)
   const resultsRef = useRef<HTMLDivElement>(null)
+  const sessionBootRef = useRef(false)
+  const applyingHistoryRef = useRef(false)
+  const suppressLessonHistoryRef = useRef(false)
+  const loadLessonRef = useRef<(summary: LessonSummary, openWorkspace?: boolean) => Promise<void>>(
+    async () => {}
+  )
 
   // ─── Derived lesson progression (single source of truth: backend) ───────────
   // Canonical exercise order = sublessons flattened in curriculum order.
@@ -664,6 +685,9 @@ function App() {
     saveGameState({ lessonWorkspaceOpen: false })
     setCelebration(null)
     setActiveTab('learn')
+    if (!applyingHistoryRef.current) {
+      writeAppHistory({ tab: 'learn', lessonId: null }, 'replace')
+    }
     try {
       await fetch('/api/courses/select', {
         method: 'POST',
@@ -725,6 +749,27 @@ function App() {
     setCelebration(null)
     visitMistakesRef.current = 0
 
+    const script = playerLessons[summary.id]
+    if (script) {
+      setLesson({
+        id: script.id,
+        title: script.title,
+        description: script.title,
+        order: summary.order,
+        difficulty: summary.difficulty,
+        duration_minutes: summary.duration_minutes,
+        starter_code: '',
+      })
+      setIsLessonActive(true)
+      saveGameState({ currentLessonId: script.id, lessonWorkspaceOpen: true })
+      if (!applyingHistoryRef.current && !suppressLessonHistoryRef.current) {
+        writeAppHistory({ tab: 'learn', lessonId: script.id })
+      }
+      suppressLessonHistoryRef.current = false
+      setIsLoadingLesson(false)
+      return
+    }
+
     try {
       const [res, prog] = await Promise.all([
         fetch(`/api/lessons/${summary.id}`),
@@ -741,6 +786,10 @@ function App() {
       setCode(savedDraft !== null ? savedDraft : starter)
       setIsLessonActive(true)
       saveGameState({ currentLessonId: data.id, lessonWorkspaceOpen: true })
+      if (!applyingHistoryRef.current && !suppressLessonHistoryRef.current) {
+        writeAppHistory({ tab: 'learn', lessonId: data.id })
+      }
+      suppressLessonHistoryRef.current = false
     } catch {
       setLesson({
         id: summary.id,
@@ -754,12 +803,61 @@ function App() {
       setCode('# Write your solution here\n')
       setIsLessonActive(true)
       saveGameState({ currentLessonId: summary.id, lessonWorkspaceOpen: true })
+      if (!applyingHistoryRef.current && !suppressLessonHistoryRef.current) {
+        writeAppHistory({ tab: 'learn', lessonId: summary.id })
+      }
+      suppressLessonHistoryRef.current = false
     } finally {
       setIsLoadingLesson(false)
     }
   }
 
-  const sessionBootRef = useRef(false)
+  const goToTab = useCallback((tab: AppTab) => {
+    setActiveTab(tab)
+    setIsLessonActive(false)
+    saveGameState({ lessonWorkspaceOpen: false })
+    if (!applyingHistoryRef.current) {
+      writeAppHistory({ tab, lessonId: null })
+    }
+  }, [])
+
+  const closeLessonWorkspace = useCallback(() => {
+    applyingHistoryRef.current = true
+    setIsLessonActive(false)
+    saveGameState({ lessonWorkspaceOpen: false })
+    writeAppHistory({ tab: 'learn', lessonId: null }, 'replace')
+    applyingHistoryRef.current = false
+  }, [])
+
+  useEffect(() => {
+    loadLessonRef.current = loadLesson
+  })
+
+  useEffect(() => {
+    const onPopState = () => {
+      consumeAppHistoryPop()
+      const loc = readAppLocationFromWindow()
+      applyingHistoryRef.current = true
+      setActiveTab(loc.tab)
+      if (loc.lessonId) {
+        const summary = lessons.find((item) => item.id === loc.lessonId)
+        if (summary) {
+          suppressLessonHistoryRef.current = true
+          void loadLessonRef.current(summary, true)
+        } else {
+          setIsLessonActive(false)
+          setLesson(null)
+          saveGameState({ lessonWorkspaceOpen: false })
+        }
+      } else {
+        setIsLessonActive(false)
+        saveGameState({ lessonWorkspaceOpen: false })
+      }
+      applyingHistoryRef.current = false
+    }
+    window.addEventListener('popstate', onPopState)
+    return () => window.removeEventListener('popstate', onPopState)
+  }, [lessons])
 
   useEffect(() => {
     if (sessionBootRef.current) return
@@ -772,6 +870,7 @@ function App() {
     }
 
     void (async () => {
+      applyingHistoryRef.current = true
       const lang = safeGetItem('patchwork_active_language') || selectedLanguage
       try {
         await fetch('/api/courses/select', {
@@ -788,12 +887,32 @@ function App() {
       await fetchProgression()
       await fetchUserProfile()
 
-      if (saved?.lessonWorkspaceOpen && saved.currentLessonId && lessonList.length > 0) {
+      const fromHash = readAppLocationFromWindow()
+      const hashDriven = Boolean(window.location.hash.replace(/^#/, '').trim())
+
+      if (hashDriven) {
+        setActiveTab(fromHash.tab)
+        if (fromHash.lessonId && lessonList.length > 0) {
+          const summary = lessonList.find((item) => item.id === fromHash.lessonId)
+          if (summary) {
+            suppressLessonHistoryRef.current = true
+            await loadLesson(summary)
+          }
+        }
+        writeAppHistory(fromHash, 'replace')
+      } else if (saved?.lessonWorkspaceOpen && saved.currentLessonId && lessonList.length > 0) {
         const summary = lessonList.find((item) => item.id === saved.currentLessonId)
         if (summary) {
+          suppressLessonHistoryRef.current = true
           await loadLesson(summary)
+          writeAppHistory({ tab: 'learn', lessonId: summary.id }, 'replace')
+        } else {
+          writeAppHistory({ tab: 'learn', lessonId: null }, 'replace')
         }
+      } else {
+        writeAppHistory({ tab: 'learn', lessonId: null }, 'replace')
       }
+      applyingHistoryRef.current = false
     })()
   }, [fetchCourses, fetchProviders, fetchLessons, fetchProgression, fetchUserProfile, selectedLanguage])
 
@@ -1532,6 +1651,11 @@ setExercisePhase('incorrect')
 
   // Calculate Course Progress
   const safeLessons = Array.isArray(lessons) ? lessons : []
+  const pathLessons = useMemo(
+    () => decoratePathLessons(safeLessons),
+    [safeLessons, playerStats.completed]
+  )
+  const playerLesson = lesson ? resolvePlayerLesson(lesson) : null
   const completedCount = safeLessons.filter((l) => l.status === 'completed').length
   const progressPct = safeLessons.length ? (completedCount / safeLessons.length) * 100 : 0
 
@@ -1588,32 +1712,12 @@ setExercisePhase('incorrect')
     : null
 
   const handleExerciseBack = () => {
-    setIsLessonActive(false)
-    saveGameState({ lessonWorkspaceOpen: false })
+    if (getAppHistoryStackDepth() > 0) {
+      window.history.back()
+      return
+    }
+    closeLessonWorkspace()
   }
-
-  // ─── One tutor affordance, shared by every workspace surface ───────────────
-  // Exercise steps and lesson-level code used to render different chrome, which
-  // meant the hint existed in one place only. Both now get the same row and the
-  // same hint panel.
-  const tutorActionsRow = (
-    <div className="ew-footer-actions">
-      <TutorActions
-        hintDisabled={hintDisabled}
-        isTutorLoading={isTutorLoading}
-        isAiAvailable={isAiAvailable}
-        aiEnabled={aiEnabled}
-        answerArmed={answerArmed}
-        hasCodeToRestore={restoreSnapshot !== null}
-        onHint={askTutor}
-        onAnswer={askSolution}
-        onRestore={restoreAnsweredBuffer}
-        answerDisabled={isRunning}
-        buttonClass="ew-btn ew-btn-back"
-        answerButtonClass="ew-btn ew-btn-back"
-      />
-    </div>
-  )
 
   const showTutorPanel =
     isTutorLoading || Boolean(feedback && feedback !== DEFAULT_FEEDBACK)
@@ -1676,6 +1780,9 @@ setExercisePhase('incorrect')
             setCelebration(null)
             setIsLessonActive(false)
             setLesson(null)
+            if (!applyingHistoryRef.current) {
+              writeAppHistory({ tab: 'learn', lessonId: null })
+            }
           }}
         >
           Back to Course
@@ -1695,10 +1802,7 @@ setExercisePhase('incorrect')
         <nav className="duo-nav-menu" aria-label="App Navigation Tabs">
           <button
             className={`duo-nav-item ${activeTab === 'learn' && !isLessonActive ? 'active' : ''}`}
-            onClick={() => {
-              setActiveTab('learn')
-              setIsLessonActive(false)
-            }}
+            onClick={() => goToTab('learn')}
           >
             <span className="duo-nav-icon">🏠</span>
             <span>LEARN</span>
@@ -1706,10 +1810,7 @@ setExercisePhase('incorrect')
 
           <button
             className={`duo-nav-item ${activeTab === 'practice' ? 'active' : ''}`}
-            onClick={() => {
-              setActiveTab('practice')
-              setIsLessonActive(false)
-            }}
+            onClick={() => goToTab('practice')}
           >
             <span className="duo-nav-icon">💪</span>
             <span>PRACTICE</span>
@@ -1717,10 +1818,7 @@ setExercisePhase('incorrect')
 
           <button
             className={`duo-nav-item ${activeTab === 'quests' ? 'active' : ''}`}
-            onClick={() => {
-              setActiveTab('quests')
-              setIsLessonActive(false)
-            }}
+            onClick={() => goToTab('quests')}
           >
             <span className="duo-nav-icon">🎯</span>
             <span>QUESTS</span>
@@ -1728,10 +1826,7 @@ setExercisePhase('incorrect')
 
           <button
             className={`duo-nav-item ${activeTab === 'courses' ? 'active' : ''}`}
-            onClick={() => {
-              setActiveTab('courses')
-              setIsLessonActive(false)
-            }}
+            onClick={() => goToTab('courses')}
           >
             <span className="duo-nav-icon">📚</span>
             <span>COURSES</span>
@@ -1739,10 +1834,7 @@ setExercisePhase('incorrect')
 
           <button
             className={`duo-nav-item ${activeTab === 'create' ? 'active' : ''}`}
-            onClick={() => {
-              setActiveTab('create')
-              setIsLessonActive(false)
-            }}
+            onClick={() => goToTab('create')}
           >
             <span className="duo-nav-icon">✨</span>
             <span>CREATE</span>
@@ -1750,10 +1842,7 @@ setExercisePhase('incorrect')
 
           <button
             className={`duo-nav-item ${activeTab === 'leaderboards' ? 'active' : ''}`}
-            onClick={() => {
-              setActiveTab('leaderboards')
-              setIsLessonActive(false)
-            }}
+            onClick={() => goToTab('leaderboards')}
           >
             <span className="duo-nav-icon">🛡️</span>
             <span>LEADERBOARDS</span>
@@ -1761,10 +1850,7 @@ setExercisePhase('incorrect')
 
           <button
             className={`duo-nav-item ${activeTab === 'profile' ? 'active' : ''}`}
-            onClick={() => {
-              setActiveTab('profile')
-              setIsLessonActive(false)
-            }}
+            onClick={() => goToTab('profile')}
           >
             <span className="duo-nav-icon">👤</span>
             <span>PROFILE</span>
@@ -1892,10 +1978,7 @@ setExercisePhase('incorrect')
               type="button"
               className="duo-button duo-button-secondary"
               style={{ padding: '6px 12px', fontSize: '12px' }}
-              onClick={() => {
-                setActiveTab('courses')
-                setIsLessonActive(false)
-              }}
+              onClick={() => goToTab('courses')}
               aria-label="Open courses"
             >
               {coursePathTitle}
@@ -1920,11 +2003,22 @@ setExercisePhase('incorrect')
           </div>
 
           <div className="duo-header-stats">
-            <div className="duo-stat-pill streak" title="Streak from your server profile">
-              <span>🔥 {profileStreak == null ? '—' : profileStreak}</span>
+            <div className="duo-stat-pill streak" title="Streak">
+              <span>🔥 {playerStats.streak}</span>
             </div>
-            <div className="duo-stat-pill xp" title="Total XP" aria-label={`XP: ${xp}, Level: ${level}`}>
-              <span>⭐ {xp} XP</span>
+            <div
+              className="lp-goal-ring"
+              style={{ ['--pct' as string]: Math.min(100, Math.round((playerStats.dailyXp / Math.max(1, playerStats.dailyGoal)) * 100)) }}
+              title="Daily XP goal"
+              aria-label={`Daily XP ${playerStats.dailyXp} of ${playerStats.dailyGoal}`}
+            >
+              <span>{playerStats.dailyXp}</span>
+            </div>
+            <div className="duo-stat-pill xp" title="Gems" aria-label={`Gems: ${playerStats.gems}`}>
+              <span>💎 {playerStats.gems}</span>
+            </div>
+            <div className="duo-stat-pill xp" title="Total XP" aria-label={`XP: ${playerStats.xp}`}>
+              <span>⭐ {playerStats.xp} XP</span>
             </div>
             <div
               className="duo-stat-pill hearts"
@@ -1936,7 +2030,7 @@ setExercisePhase('incorrect')
                     : `Next heart in ${Math.ceil(secondsToNextHeart / 60)} min, or clear a missed step`
               }
             >
-              <span>❤️ {unlimitedHearts ? '∞' : `${hearts}/${maxHearts}`}</span>
+              <span>❤️ {unlimitedHearts ? '∞' : `${playerStats.hearts}/${playerStats.maxHearts}`}</span>
             </div>
           </div>
         </header>
@@ -1956,139 +2050,18 @@ setExercisePhase('incorrect')
                 Loading lesson…
               </div>
             )}
-            {isLessonActive && lesson ? (
-              workspaceExercise ? (
-                <ExercisePanel
-                  exercise={workspaceExercise}
-                  exerciseInput={exerciseInput}
-                  exercisePhase={exercisePhase}
-                  exerciseFeedback={exerciseFeedback}
-                  exercisePosition={shownExerciseIndex >= 0 ? shownExerciseIndex + 1 : exercisePosition}
-                  exerciseTotal={exerciseTotal}
-                  completedExerciseCount={completedExerciseCount}
-                  onInputChange={setExerciseInput}
-                  onSubmit={() => submitSubLessonExercise({ ...workspaceExercise, sublessonId: workspaceExercise.sublessonId })}
-                  onContinue={continueToNextExercise}
-                  onRetry={retryCurrentExercise}
-                  onRunCode={runTests}
-                  isRunningCode={isRunning}
-                  lessonId={lesson.id}
-                  lessonSource={lesson.source}
-                  lessonObjectives={lesson.learning_objectives}
-                  combo={consecutiveCorrect}
-                  lessonType={lesson.type}
-                  onBack={handleExerciseBack}
-                  soundEnabled={soundEnabled}
-                  onToggleSound={toggleSound}
-                  runResults={results}
-                  language={selectedLanguage}
-                  footerExtra={tutorActionsRow}
-                  outputExtra={tutorPanel}
-                />
-              ) : lessonWorkspaceExercise ? (
-                /* ─── FOCUSED LESSON WORKSPACE (no active exercise) ─────── */
-                <ExerciseWorkspace
-                  lessonMode
-                  exercise={lessonWorkspaceExercise}
-                  exType="code"
-                  exerciseInput={{ [lessonWorkspaceExercise.id]: { code } }}
-                  exercisePhase="answering"
-                  exerciseFeedback={null}
-                  exercisePosition={1}
-                  exerciseTotal={1}
-                  completedExerciseCount={0}
-                  onInputChange={(updater: any) => {
-                    const snapshot = { [lessonWorkspaceExercise.id]: { code } }
-                    const next = updater(snapshot)
-                    const nextCode = next?.[lessonWorkspaceExercise.id]?.code
-                    if (typeof nextCode === 'string') setCode(nextCode)
-                  }}
-                  onContinue={() => {}}
-                  onRetry={() => {}}
-                  onRun={runTests}
-                  isRunning={isRunning}
-                  onBack={() => setIsLessonActive(false)}
-                  soundEnabled={soundEnabled}
-                  onToggleSound={toggleSound}
-                  lessonId={lesson.id}
-                  lessonSource={lesson.source}
-                  lessonObjectives={lesson.learning_objectives}
-                  combo={consecutiveCorrect}
-                  lessonType={lesson.type}
-                  language={selectedLanguage}
-                  editorFilename={`exercise.${LANGUAGE_FILE_EXT[selectedLanguage] || 'py'}`}
-                  onOpenGuidebook={() => setIsGuidebookOpen(true)}
-                  footerExtra={tutorActionsRow}
-                  taskExtra={
-                    <div className="ew-lesson-notes">
-                      <span className="ew-section-label">Session notes</span>
-                      <div className="ew-lesson-notes-row">
-                        <input
-                          type="text"
-                          placeholder="Add a note…"
-                          value={noteInput}
-                          onChange={(e) => setNoteInput(e.target.value)}
-                          onKeyDown={(e) => {
-                            if (e.key === 'Enter') {
-                              e.preventDefault()
-                              addNote()
-                            }
-                          }}
-                          aria-label="Session note"
-                          className="ew-lesson-notes-input"
-                        />
-                        <button
-                          onClick={addNote}
-                          aria-label="Add note"
-                          className="ew-btn ew-btn-submit"
-                          style={{ padding: '10px 16px' }}
-                        >
-                          +
-                        </button>
-                      </div>
-                      {sessionNotes.length > 0 && (
-                        <ul className="ew-lesson-notes-list">
-                          {(sessionNotes ?? []).map((note, i) => (
-                            <li key={i}>{note}</li>
-                          ))}
-                        </ul>
-                      )}
-                    </div>
-                  }
-                  outputExtra={
-                    <>
-                      {results && (
-                        <div
-                          ref={resultsRef}
-                          className={`duo-feedback-panel ${allPassed ? 'success' : 'error'}`}
-                          role="region"
-                          aria-label="Test results"
-                        >
-                          <div className="duo-feedback-title">
-                            <span>
-                              {allPassed
-                                ? `All ${results.length} tests passed`
-                                : `${failedRequired.length} of ${results.filter((r) => r.required).length} required failed`}
-                            </span>
-                          </div>
-                          {(results ?? []).map((r) => (
-                            <div key={r.name} style={{ display: 'flex', gap: '8px', alignItems: 'center', fontSize: '14px', fontWeight: 700 }}>
-                              <span role="img" aria-label={r.passed ? 'Passed' : 'Failed'}>{r.passed ? '✓' : '×'}</span>
-                              <span>{r.name}</span>
-                              {!r.required && <span style={{ fontSize: '10px', background: 'rgba(0,0,0,0.1)', padding: '2px 6px', borderRadius: '4px' }}>opt</span>}
-                            </div>
-                          ))}
-                        </div>
-                      )}
-                      {tutorPanel}
-                    </>
-                  }
-                  banner={lessonCelebration}
-                />
-              ) : null
+            {isLessonActive && playerLesson ? (
+              <LessonPlayer
+                key={playerLesson.id}
+                lesson={playerLesson}
+                soundEnabled={soundEnabled}
+                onToggleSound={toggleSound}
+                onQuit={closeLessonWorkspace}
+                onOpenGuidebook={() => setIsGuidebookOpen(true)}
+              />
             ) : (
               <LearnPath
-                lessons={safeLessons}
+                lessons={pathLessons}
                 activeLessonId={lesson?.id ?? null}
                 isLoadingLesson={isLoadingLesson}
                 onSelectLesson={(item) => loadLesson(item, true)}
@@ -2108,7 +2081,7 @@ setExercisePhase('incorrect')
                 void loadLesson(item, true)
               }}
               onOpenGuidebook={() => setIsGuidebookOpen(true)}
-              onBack={() => setActiveTab('learn')}
+              onBack={() => goToTab('learn')}
               materials={materials}
               completedMaterialIds={completedMaterialIds}
               onCompleteMaterial={handleCompleteMaterial}
@@ -2392,34 +2365,6 @@ setExercisePhase('incorrect')
         )}
 
         {/* ─── Bottom Footer Action Bar (only when the workspace is not open) ── */}
-        {activeTab === 'learn' && isLessonActive && showLessonRunCode && !isExerciseWorkspace && (
-          <footer className="duo-footer-bar">
-            <div className="duo-footer-left" style={{ display: 'flex', gap: '12px' }}>
-              <TutorActions
-                hintDisabled={hintDisabled}
-                isTutorLoading={isTutorLoading}
-                isAiAvailable={isAiAvailable}
-                aiEnabled={aiEnabled}
-                answerArmed={answerArmed}
-                hasCodeToRestore={restoreSnapshot !== null}
-                onHint={askTutor}
-                onAnswer={askSolution}
-                onRestore={restoreAnsweredBuffer}
-                answerDisabled={!lesson || isRunning}
-              />
-            </div>
-
-            <button
-              id="run-tests-button"
-              className="duo-button duo-button-primary"
-              onClick={runTests}
-              disabled={isRunning || isLoadingLesson}
-              aria-label="Run code"
-            >
-              {isRunning ? 'Running…' : 'Run code'}
-            </button>
-          </footer>
-        )}
       </div>
 
       {showOutofHeartsModal && (

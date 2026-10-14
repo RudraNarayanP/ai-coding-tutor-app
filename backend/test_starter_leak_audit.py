@@ -16,6 +16,7 @@ from backend.starter_leak_audit import (
     LessonView,
     audit,
     audit_lesson,
+    check_mcq_answer_in_stem,
     normalise,
     structure,
 )
@@ -169,6 +170,48 @@ def test_structure_collapses_literals_and_names():
 # ---------------------------------------------------------------------------
 # Whole-curriculum regression gate
 # ---------------------------------------------------------------------------
+
+def test_hint_1_must_not_contain_the_answer_but_hint_2_may():
+    """bool-literal-mcq names True in hint 2. That rung may. Hint 1 may not."""
+    exercise = {
+        "id": "bool-literal-mcq",
+        "type": "mcq",
+        "question": "Which of the following is a valid boolean value in Python?",
+        "options": ["True", "true", "TRUE", '"True"'],
+        "correct_answer": "True",
+        "hints": [
+            "Think about Python syntax capitalization.",
+            "In Python, keywords start with an uppercase letter: `True` or `False`.",
+            "Select 'True'.",
+        ],
+    }
+    assert check_mcq_answer_in_stem({}, exercise, Path("booleans.json")) == []
+    exercise["hints"][0] = "The word is True."
+    leaks = check_mcq_answer_in_stem({}, exercise, Path("booleans.json"))
+    assert [leak.rule for leak in leaks] == ["mcq_answer_in_stem"]
+
+
+def test_hint_1_contains_no_answer_in_any_course():
+    """The rule is curriculum-wide, not a special case for one boolean question."""
+    from backend.curriculum_loader import load_all_curriculums
+    from backend.verify_lessons import hint_gives_answer
+
+    leaks = []
+    for course in load_all_curriculums().values():
+        for lesson in course.lessons:
+            for sub in lesson.sublessons:
+                for exercise in sub.exercises:
+                    if exercise.type == "teach" or not exercise.hints:
+                        continue
+                    if hint_gives_answer(exercise.hints[0], exercise.correct_answer):
+                        leaks.append(f"{lesson.id}/{exercise.id}")
+            for exercise in lesson.mastery_exam:
+                if not exercise.hints:
+                    continue
+                if hint_gives_answer(exercise.hints[0], exercise.correct_answer):
+                    leaks.append(f"{lesson.id}/{exercise.id}")
+    assert leaks == []
+
 
 def test_shipped_curriculum_has_no_starter_leaks():
     leaks = audit(CURRICULUM_ROOT)

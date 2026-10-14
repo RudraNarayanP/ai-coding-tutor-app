@@ -15,7 +15,7 @@
     {
       "id": "ai-rag-chunk",
       "title": "24. Chunk Text",
-      "description": "Implement `chunk_text(text, size, overlap)` splitting on characters with overlap.",
+      "description": "Implement `chunk_text(text, size, overlap)` splitting on characters with overlap. The test checks that `chunk_text('abcdefgh', 4, 2)` equals `['abcd', 'cdef', 'efgh']`.",
       "order": 24,
       "difficulty": "intermediate",
       "duration_minutes": 5,
@@ -53,7 +53,7 @@
     {
       "id": "ai-rag-index",
       "title": "25. Build Lexical Index",
-      "description": "Implement `build_index(chunks)` mapping tokens to chunk id lists.",
+      "description": "Implement `build_index(chunks)` mapping tokens to chunk id lists. The test checks that `build_index(['Hello world', 'Hello AI'])['hello']` equals `[0, 1]`; `build_index(['Hello world', 'Hello AI'])['world']` equals `[0]`.",
       "order": 25,
       "difficulty": "intermediate",
       "duration_minutes": 5,
@@ -91,7 +91,7 @@
     {
       "id": "ai-rag-retrieve",
       "title": "26. Retrieve by Overlap",
-      "description": "Implement `retrieve(query, chunks, k)` scoring by shared lowercase tokens; return top-k chunk strings.",
+      "description": "Implement `retrieve(query, chunks, k)` scoring by shared lowercase tokens; return top-k chunk strings. The test checks that `retrieve('cats', chunks, 2)[0]` equals `'cats are nice'`.",
       "order": 26,
       "difficulty": "intermediate",
       "duration_minutes": 8,
@@ -129,7 +129,7 @@
     {
       "id": "ai-rag-context",
       "title": "27. Pack Context (Practice)",
-      "description": "Implement `pack_context(chunks, budget)` joining with a separator without exceeding budget chars.",
+      "description": "Implement `pack_context(chunks, budget)` joining with a separator without exceeding budget chars. The test checks that `pack_context(['ab', 'cd'], 100)` equals `'ab' + sep + 'cd'`; `pack_context(['abcdef'], 3)` equals `''`.",
       "order": 27,
       "difficulty": "intermediate",
       "duration_minutes": 6,
@@ -167,7 +167,7 @@
     {
       "id": "ai-rag-checkpoint2",
       "title": "28. Checkpoint: Citation Map",
-      "description": "Implement `cite(chunks)` returning list of id/text dicts.",
+      "description": "Implement `cite(chunks)` returning list of id/text dicts. The test checks that `cite(['a', 'b'])` equals `[{'id': 0, 'text': 'a'}, {'id': 1, 'text': 'b'}]`.",
       "order": 28,
       "difficulty": "intermediate",
       "duration_minutes": 10,

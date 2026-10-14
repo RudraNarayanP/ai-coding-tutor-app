@@ -23,6 +23,14 @@ import time
 from pathlib import Path
 
 from .blank_template import build_blank_template
+from .exercise_types import (
+    CHOICE_TYPES,
+    DISPLAY_TYPES,
+    is_known,
+    is_open_ended,
+    requires_answer_key,
+    ungradeable_feedback,
+)
 from .sandbox import SandboxError
 from .xp_curve import level_from_xp
 
@@ -53,13 +61,18 @@ def lesson_task_id(lesson_id: str) -> str:
 def is_lesson_task(exercise_id: str) -> bool:
     return str(exercise_id or "").startswith(LESSON_TASK_PREFIX)
 
-from .exercise_types import (
-    CHOICE_TYPES,
-    is_known,
-    is_open_ended,
-    requires_answer_key,
-    ungradeable_feedback,
-)
+
+def _reveal_answer(exercise) -> str:
+    """Answer line for a wrong sheet. Never included on the lesson payload."""
+    if getattr(exercise, "type", "") == "debugging":
+        return f"Line {exercise.correct_answer}"
+    answer = exercise.correct_answer
+    if isinstance(answer, list):
+        return " ".join(str(part) for part in answer)
+    if answer is None:
+        return ""
+    return str(answer)
+
 
 class ProgressionStore:
     def __init__(self, curriculum: Curriculum, storage_path: Path | None = None) -> None:
@@ -859,6 +872,8 @@ class LessonEngine:
         # exercise the server never actually scored.
         if not is_known(ex_type):
             return False, ungradeable_feedback(ex_type, "unknown exercise type")
+        if ex_type in DISPLAY_TYPES:
+            return True, exercise.explanation or "Continue."
         if requires_answer_key(ex_type) and not _has_answer_key(exercise):
             return False, ungradeable_feedback(ex_type, "no answer key recorded")
 
@@ -1141,12 +1156,16 @@ class LessonEngine:
 
         state = store.state()
         progress = self.lesson_progress(lesson_id)
+        revealed = ""
+        if not passed:
+            revealed = _reveal_answer(target_ex)
         return {
             "exercise_id": exercise_id,
             "passed": passed,
             "state": "correct" if passed else "incorrect",
             "attempt_count": attempt_count,
             "feedback": feedback,
+            "revealed_answer": revealed,
             "xp_awarded": xp_awarded,
             "total_xp": state.xp,
             "level": state.level,

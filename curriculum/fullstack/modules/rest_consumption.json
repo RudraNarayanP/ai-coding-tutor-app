@@ -15,7 +15,7 @@
     {
       "id": "fs-rest-get",
       "title": "1. REST Resource Path",
-      "description": "Implement `resource_path(collection, id=None)` e.g. '/users' or '/users/3'.",
+      "description": "Implement `resource_path(collection, id=None)` e.g. '/users' or '/users/3'. The test checks that `resource_path('users')` equals `'/users'`; `resource_path('/users/', 3)` equals `'/users/3'`.",
       "order": 6,
       "difficulty": "intermediate",
       "duration_minutes": 5,
@@ -53,7 +53,7 @@
     {
       "id": "fs-rest-page",
       "title": "2. Pagination Params",
-      "description": "Implement `page_params(page, page_size)` returning limit/offset.",
+      "description": "Implement `page_params(page, page_size)` returning limit/offset. The test checks that `page_params(3, 10)` equals `{'limit': 10, 'offset': 20}`.",
       "order": 7,
       "difficulty": "intermediate",
       "duration_minutes": 5,
@@ -91,7 +91,7 @@
     {
       "id": "fs-rest-filter",
       "title": "3. Filter Client Collection",
-      "description": "Implement `filter_items(items, **criteria)` keeping dicts matching all criteria.",
+      "description": "Implement `filter_items(items, **criteria)` keeping dicts matching all criteria. The test checks that `filter_items(items, ok=True)` equals `[{'id': 1, 'ok': True}]`.",
       "order": 8,
       "difficulty": "intermediate",
       "duration_minutes": 8,
@@ -129,7 +129,7 @@
     {
       "id": "fs-rest-idempotent",
       "title": "4. Idempotent Key (Practice)",
-      "description": "Implement `idempotency_key(method, path, body)` as method|path|body_or_empty.",
+      "description": "Implement `idempotency_key(method, path, body)` as method|path|body_or_empty. The test checks that `idempotency_key('post', '/x', None)` equals `'POST|/x|'`.",
       "order": 9,
       "difficulty": "intermediate",
       "duration_minutes": 6,
@@ -167,7 +167,7 @@
     {
       "id": "fs-rest-checkpoint",
       "title": "5. Checkpoint: Status Category",
-      "description": "Implement `status_category(code)` returning success/redirect/client_error/server_error/other.",
+      "description": "Implement `status_category(code)` returning success/redirect/client_error/server_error/other. The test checks that `status_category(201)` equals `'success'`; `status_category(404)` equals `'client_error'`; `status_category(503)` equals `'server_error'`.",
       "order": 10,
       "difficulty": "intermediate",
       "duration_minutes": 10,

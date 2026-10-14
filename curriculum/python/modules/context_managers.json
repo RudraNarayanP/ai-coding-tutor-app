@@ -16,7 +16,7 @@
     {
       "id": "context-managers-step-1",
       "title": "1. with and contextlib",
-      "description": "Implement a context manager class `TempValue` that temporarily sets an attribute and restores it.",
+      "description": "Implement a context manager class `TempValue` that temporarily sets an attribute and restores it. The test checks that `Box().x` equals `99`; `Box().x` equals `1`.",
       "order": 91,
       "difficulty": "intermediate",
       "duration_minutes": 5,
@@ -56,7 +56,7 @@
     {
       "id": "context-managers-step-2",
       "title": "2. contextlib.contextmanager",
-      "description": "Use `@contextmanager` to build `opened_list` that yields a list and clears it on exit.",
+      "description": "Finish `opened_list`, a context manager that yields a fresh list and clears that list when the block ends. The test appends `1` inside the block, checks the list equals `[1]` there, and checks it equals `[]` afterwards.",
       "order": 92,
       "difficulty": "intermediate",
       "duration_minutes": 5,
@@ -96,7 +96,7 @@
     {
       "id": "context-managers-01",
       "title": "3. Timing Context (Concept Challenge)",
-      "description": "Record elapsed seconds on a `Timer` object while inside the `with` block.",
+      "description": "Finish `Timer` so `elapsed` is how many seconds passed inside the `with` block. The test checks that `elapsed` is at least `0` after the block.",
       "order": 93,
       "difficulty": "intermediate",
       "duration_minutes": 8,
@@ -136,7 +136,7 @@
     {
       "id": "context-managers-practice-1",
       "title": "4. Suppress Specific Errors (Practice)",
-      "description": "Implement `suppress(exc_type)` that swallows the given exception type.",
+      "description": "Implement `suppress(exc_type)` that swallows the given exception type. The test checks that invalid input raises `TypeError`.",
       "order": 94,
       "difficulty": "intermediate",
       "duration_minutes": 6,
@@ -176,7 +176,7 @@
     {
       "id": "context-managers-checkpoint",
       "title": "5. Unit 19 Checkpoint: Context Managers",
-      "description": "Implement `locked(flag_dict)` that sets flag_dict['locked']=True on enter and False on exit.",
+      "description": "Implement `locked(flag_dict)` that sets flag_dict['locked']=True on enter and False on exit. The test checks that `flags['locked']` is true; `flags['locked']` is false.",
       "order": 95,
       "difficulty": "intermediate",
       "duration_minutes": 10,

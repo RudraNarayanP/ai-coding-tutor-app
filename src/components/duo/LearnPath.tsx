@@ -1,4 +1,5 @@
 import { PatchworkCharacter } from '../PatchworkCharacters'
+import '../../lesson-player/lessonPlayer.css'
 
 export type PathLesson = {
   id: string
@@ -30,12 +31,26 @@ function statusLabel(lesson: PathLesson, isActive: boolean): string {
   return 'Available'
 }
 
+function friendlyTitle(title: string): string {
+  return title.replace(/^\d+\.\s*/, '').replace(/`([^`]+)`/g, '$1')
+}
+
+function isBoss(lesson: PathLesson): boolean {
+  return lesson.type === 'checkpoint' || lesson.type === 'challenge' || /gobble/i.test(lesson.title)
+}
+
 function nodeIcon(lesson: PathLesson): string {
-  if (lesson.status === 'completed') return '✓'
-  if (lesson.type === 'checkpoint') return '👑'
-  if (lesson.type === 'challenge') return '⚡'
-  if (lesson.type === 'practice') return '📖'
-  return '⭐'
+  if (lesson.status === 'completed') return '👑'
+  if (isBoss(lesson)) return '🎁'
+  if (lesson.status === 'locked') return '🔒'
+  return '★'
+}
+
+const UNIT_COLORS = ['#1cb0f6', '#ce82ff', '#ff9600', '#58cc02', '#ff4b4b']
+
+function unitColor(unitId: string, index: number): string {
+  if (unitId === 'booleans') return '#1cb0f6'
+  return UNIT_COLORS[index % UNIT_COLORS.length]
 }
 
 const OFFSETS = [0, 52, 88, 52, 0, -52, -88, -52]
@@ -68,55 +83,60 @@ export function LearnPath({
   return (
     <div className="duo-learn-stage">
       {focusUnit ? (
-        <div className="duo-unit-banner duo-unit-banner-cyan">
-          <div className="duo-unit-info">
-            <span className="duo-unit-subtitle">
-              {focusUnit.sectionTitle ? `${focusUnit.sectionTitle} · ` : ''}UNIT {focusIndex + 1}
-            </span>
-            <span className="duo-unit-title">{focusUnit.title}</span>
-          </div>
-          <button type="button" className="duo-guidebook-btn" onClick={onOpenGuidebook}>
-            GUIDEBOOK
-          </button>
-        </div>
+        <button type="button" className="duo-guidebook-btn" onClick={onOpenGuidebook} aria-label="Guidebook">
+          Guide
+        </button>
       ) : null}
-
       <nav aria-label="Lessons" className="duo-path-tree">
-        {lessons.map((item, idx) => {
-          const isActive = activeLessonId === item.id
-          const offset = OFFSETS[idx % OFFSETS.length]
-          const showMascot = currentLesson?.id === item.id
+        {unitGroups.map((unit, unitIndex) => {
+          const color = unitColor(unit.id, unitIndex)
+          const bannerTitle = unit.id === 'booleans' ? 'Booleans' : unit.title
+          const bannerIndex = unit.id === 'booleans' ? 1 : unitIndex + 1
           return (
-            <div
-              key={item.id}
-              className="duo-path-row duo-path-serpentine"
-              style={{ transform: `translateX(${offset}px)` }}
-            >
-              <button
-                id={`lesson-node-${item.id}`}
-                className={`duo-path-circle-btn ${item.status}${item.type === 'checkpoint' ? ' duo-path-circle-btn--boss' : ''}${item.status === 'current' ? ' duo-path-circle-btn--pulse' : ''}`}
-                onClick={() => onSelectLesson(item)}
-                disabled={item.status === 'locked' || isLoadingLesson}
-                title={item.title}
-                aria-current={isActive ? 'page' : undefined}
-                aria-label={`${item.title} — ${statusLabel(item, isActive)}${item.type === 'checkpoint' ? ' — boss checkpoint' : ''}${item.xp_reward ? `, ${item.xp_reward} XP reward` : ''}`}
-              >
-                {item.status === 'current' && <div className="duo-start-dialog">START</div>}
-                <span>{nodeIcon(item)}</span>
-              </button>
-              {item.status !== 'locked' && item.xp_reward ? (
-                <span
-                  className={`duo-path-xp-badge${item.type === 'checkpoint' ? ' duo-path-xp-badge--boss' : ''}`}
-                >
-                  {item.type === 'checkpoint' ? '👑 ' : ''}+{item.xp_reward} XP
-                </span>
-              ) : null}
-              {showMascot ? (
-                <div className="duo-path-mascot">
-                  <PatchworkCharacter name="patch" state="idle" size={72} />
+            <section key={unit.id}>
+              <div className="duo-unit-banner" style={{ background: color }}>
+                <div className="duo-unit-info">
+                  <span className="duo-unit-subtitle">UNIT {bannerIndex}</span>
+                  <span className="duo-unit-title">{bannerTitle}</span>
                 </div>
-              ) : null}
-            </div>
+              </div>
+              {unit.lessons.map((item) => {
+                const idx = lessons.findIndex((lesson) => lesson.id === item.id)
+                const isActive = activeLessonId === item.id
+                const offset = OFFSETS[(idx < 0 ? 0 : idx) % OFFSETS.length]
+                const showMascot = currentLesson?.id === item.id
+                const boss = isBoss(item)
+                return (
+                  <div
+                    key={item.id}
+                    className="duo-path-row duo-path-serpentine"
+                    style={{ transform: `translateX(${offset}px)` }}
+                  >
+                    <div>
+                      <button
+                        id={`lesson-node-${item.id}`}
+                        className={`duo-path-circle-btn ${item.status}${boss && item.status !== 'completed' ? ' duo-path-circle-btn--boss' : ''}${item.status === 'current' ? ' duo-path-circle-btn--pulse' : ''}`}
+                        style={item.status === 'current' ? { background: color, boxShadow: '0 6px 0 rgba(0,0,0,0.35)' } : undefined}
+                        onClick={() => onSelectLesson(item)}
+                        disabled={item.status === 'locked' || isLoadingLesson}
+                        title={friendlyTitle(item.title)}
+                        aria-current={isActive ? 'page' : undefined}
+                        aria-label={`${friendlyTitle(item.title)} — ${statusLabel(item, isActive)}${boss ? ' — boss checkpoint' : ''}${item.xp_reward ? `, ${item.xp_reward} XP reward` : ''}`}
+                      >
+                        {item.status === 'current' && <div className="duo-start-dialog">START</div>}
+                        <span>{nodeIcon(item)}</span>
+                      </button>
+                      <span className="duo-path-label">{friendlyTitle(item.title)}</span>
+                    </div>
+                    {showMascot ? (
+                      <div className="duo-path-mascot">
+                        <PatchworkCharacter name="patch" state="idle" size={72} />
+                      </div>
+                    ) : null}
+                  </div>
+                )
+              })}
+            </section>
           )
         })}
       </nav>

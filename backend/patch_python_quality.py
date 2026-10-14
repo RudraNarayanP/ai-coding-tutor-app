@@ -199,9 +199,9 @@ REWRITES: dict[str, dict] = {
     },
     "variables-checkpoint": {
         "description": (
-            "For a triangle with base = 10 and height = 5, set area to the "
-            "triangle formula (base * height) / 2. The test checks "
-            "area == 25 — using / (true division) is expected."
+            "For a triangle with base $10$ and height $5$, set `area` to the "
+            "triangle formula. $$\\dfrac{\\text{base} \\times \\text{height}}{2}$$ "
+            "The test checks `area == 25` — using `/` (true division) is expected."
         ),
         "starter_code": (
             "base = 10\nheight = 5\n\n"

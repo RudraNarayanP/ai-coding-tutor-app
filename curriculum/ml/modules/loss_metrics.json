@@ -53,7 +53,7 @@
     {
       "id": "metrics-bce",
       "title": "2. Binary Cross-Entropy",
-      "description": "Implement `bce(y, p)` for single label y in {0,1} and prob p clipped to [1e-9, 1-1e-9].",
+      "description": "Implement `bce(y, p)` for single label y in {0,1} and prob p clipped to [1e-9, 1-1e-9]. The test checks that `bce(1, 0.8)` equals `-__import__('math').log(0.8)`.",
       "order": 12,
       "difficulty": "intermediate",
       "duration_minutes": 5,
@@ -91,7 +91,7 @@
     {
       "id": "metrics-f1",
       "title": "3. F1 Score",
-      "description": "Implement `f1(precision, recall)`. Return 0 if both 0.",
+      "description": "Implement `f1(precision, recall)`. Return 0 if both 0. The test checks that `f1(0, 0)` equals `0.0`; `f1(0.5, 0.5)` equals `0.5`.",
       "order": 13,
       "difficulty": "intermediate",
       "duration_minutes": 8,
@@ -129,7 +129,7 @@
     {
       "id": "metrics-confusion",
       "title": "4. Confusion Counts (Practice)",
-      "description": "Implement `confusion(y_true, y_pred)` returning dict with tp,fp,tn,fn for positive=1.",
+      "description": "Implement `confusion(y_true, y_pred)` returning dict with tp,fp,tn,fn for positive=1. The test checks that `confusion([1, 0, 1, 0], [1, 1, 0, 0])` equals `{'tp': 1, 'fp': 1, 'tn': 1, 'fn': 1}`.",
       "order": 14,
       "difficulty": "intermediate",
       "duration_minutes": 6,
@@ -207,7 +207,7 @@
     {
       "id": "metrics-checkpoint",
       "title": "5. Checkpoint: Threshold Sweep",
-      "description": "Implement `best_threshold(scores, labels)` choosing threshold in scores that maximizes accuracy. Ties → lower threshold.",
+      "description": "Implement `best_threshold(scores, labels)` choosing threshold in scores that maximizes accuracy. Ties → lower threshold. The test checks that `best_threshold([0.1, 0.4, 0.6, 0.9], [0, 0, 1, 1])` equals `0.6`.",
       "order": 15,
       "difficulty": "intermediate",
       "duration_minutes": 10,

@@ -15,7 +15,7 @@
     {
       "id": "exceptions-step-1",
       "title": "1. Raising and Catching Exceptions",
-      "description": "Use `try`/`except` to catch errors and `raise` to signal invalid input. Implement `safe_divide(a, b)` that returns None when dividing by zero.",
+      "description": "Use `try`/`except` to catch errors and `raise` to signal invalid input. Implement `safe_divide(a, b)` that returns None when dividing by zero. The test checks that `safe_divide(10, 2)` equals `5.0`; `safe_divide(1, 0)` is None.",
       "order": 71,
       "difficulty": "intermediate",
       "duration_minutes": 5,
@@ -59,7 +59,7 @@
     {
       "id": "exceptions-step-2",
       "title": "2. Custom Exception Classes",
-      "description": "Subclass `Exception` to create domain-specific errors. Raise `InvalidAgeError` when age is negative.",
+      "description": "Finish `set_age`. Subclass `Exception` to create domain-specific errors. Raise `InvalidAgeError` when age is negative. The test checks that `set_age(21)` equals `21`; invalid input raises `InvalidAgeError`.",
       "order": 72,
       "difficulty": "intermediate",
       "duration_minutes": 5,
@@ -99,7 +99,7 @@
     {
       "id": "exceptions-01",
       "title": "3. Retry with Backoff (Concept Challenge)",
-      "description": "Implement `retry_call(fn, retries)` that calls `fn` up to `retries` times, returning the first success or re-raising the last exception.",
+      "description": "Implement `retry_call(fn, retries)` that calls `fn` up to `retries` times, returning the first success or re-raising the last exception. The test checks that `retry_call(flaky, retries=3)` equals `'ok'`; `calls['n']` equals `3`; invalid input raises `RuntimeError`.",
       "order": 73,
       "difficulty": "intermediate",
       "duration_minutes": 8,
@@ -145,7 +145,7 @@
     {
       "id": "exceptions-practice-1",
       "title": "4. Parse Int Safely (Practice)",
-      "description": "Write `parse_ints(values)` that converts strings to ints, skipping values that raise `ValueError`.",
+      "description": "Write `parse_ints(values)` that converts strings to ints, skipping values that raise `ValueError`. The test checks that `parse_ints(['1', 'x', '3'])` equals `[1, 3]`.",
       "order": 74,
       "difficulty": "intermediate",
       "duration_minutes": 6,
@@ -185,7 +185,7 @@
     {
       "id": "exceptions-checkpoint",
       "title": "5. Unit 15 Checkpoint: Exceptions Mastery",
-      "description": "Implement `read_config(data)` that raises `KeyError` wrapped as `ValueError('missing key')` when 'host' is absent.",
+      "description": "Implement `read_config(data)` that raises `KeyError` wrapped as `ValueError('missing key')` when 'host' is absent. The test checks that `read_config({'host': 'localhost'})` equals `'localhost'`; invalid input raises `ValueError`.",
       "order": 75,
       "difficulty": "intermediate",
       "duration_minutes": 10,

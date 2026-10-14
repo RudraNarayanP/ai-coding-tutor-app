@@ -15,7 +15,7 @@
     {
       "id": "ai-tok-split",
       "title": "4. Whitespace Tokenize",
-      "description": "Implement `tokenize(text)` splitting on whitespace and dropping empties.",
+      "description": "Implement `tokenize(text)` splitting on whitespace and dropping empties. The test checks that `tokenize(' hello world ')` equals `['hello', 'world']`.",
       "order": 4,
       "difficulty": "intermediate",
       "duration_minutes": 5,
@@ -53,7 +53,7 @@
     {
       "id": "ai-tok-lower",
       "title": "5. Normalize Tokens",
-      "description": "Implement `normalize_tokens(tokens)` lowercasing and stripping punctuation from ends.",
+      "description": "Implement `normalize_tokens(tokens)` lowercasing and stripping punctuation from ends. The test checks that `normalize_tokens(['Hello!', 'WORLD.'])` equals `['hello', 'world']`.",
       "order": 5,
       "difficulty": "intermediate",
       "duration_minutes": 5,
@@ -91,7 +91,7 @@
     {
       "id": "ai-tok-vocab",
       "title": "6. Build Vocabulary",
-      "description": "Implement `build_vocab(token_lists)` mapping tokens to sorted alphabetical ids from 0.",
+      "description": "Implement `build_vocab(token_lists)` mapping tokens to sorted alphabetical ids from 0. The test checks that `build_vocab([['b', 'a'], ['a']])` equals `{'a': 0, 'b': 1}`.",
       "order": 6,
       "difficulty": "intermediate",
       "duration_minutes": 8,
@@ -129,7 +129,7 @@
     {
       "id": "ai-tok-encode",
       "title": "7. Encode Sequence (Practice)",
-      "description": "Implement `encode(tokens, vocab, unk_id)` mapping unknown tokens to unk_id.",
+      "description": "Implement `encode(tokens, vocab, unk_id)` mapping unknown tokens to unk_id. The test checks that `encode(['a', 'z'], {'a': 1}, 0)` equals `[1, 0]`.",
       "order": 7,
       "difficulty": "intermediate",
       "duration_minutes": 6,
@@ -167,7 +167,7 @@
     {
       "id": "ai-tok-checkpoint",
       "title": "8. Checkpoint: Sliding Windows",
-      "description": "Implement `ngrams(tokens, n)` returning list of n-length tuples.",
+      "description": "Implement `ngrams(tokens, n)` returning list of n-length tuples. The test checks that `ngrams(['a', 'b', 'c'], 2)` equals `[('a', 'b'), ('b', 'c')]`.",
       "order": 8,
       "difficulty": "intermediate",
       "duration_minutes": 10,

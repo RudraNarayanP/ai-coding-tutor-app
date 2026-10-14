@@ -13,7 +13,7 @@
     {
       "id": "fs-url-join",
       "title": "1. Join URL Paths",
-      "description": "Implement `join_url(base, path)` avoiding double/missing slashes.",
+      "description": "Implement `join_url(base, path)` avoiding double/missing slashes. The test checks that `join_url('https://api.com/', '/v1/users')` equals `'https://api.com/v1/users'`; `join_url('https://api.com', 'v1')` equals `'https://api.com/v1'`.",
       "order": 1,
       "difficulty": "intermediate",
       "duration_minutes": 5,
@@ -51,7 +51,7 @@
     {
       "id": "fs-query-string",
       "title": "2. Encode Query String",
-      "description": "Implement `query_string(params)` as sorted k=v pairs with urllib.parse.quote.",
+      "description": "Implement `query_string(params)` as sorted k=v pairs with urllib.parse.quote. The test checks that `query_string({'b': 2, 'a': 1})` equals `'a=1&b=2'`.",
       "order": 2,
       "difficulty": "intermediate",
       "duration_minutes": 5,
@@ -89,7 +89,7 @@
     {
       "id": "fs-parse-json",
       "title": "3. Parse JSON Response",
-      "description": "Implement `parse_json_response(body, status)` returning dict; raise ValueError if status>=400.",
+      "description": "Implement `parse_json_response(body, status)` returning dict; raise ValueError if status>=400. The test checks that `parse_json_response('{\"ok\": true}', 200)` equals `{'ok': True}`; invalid input raises `ValueError`.",
       "order": 3,
       "difficulty": "intermediate",
       "duration_minutes": 8,
@@ -127,7 +127,7 @@
     {
       "id": "fs-headers",
       "title": "4. Merge Headers (Practice)",
-      "description": "Implement `merge_headers(base, extra)` — extra wins on conflicts.",
+      "description": "Implement `merge_headers(base, extra)` — extra wins on conflicts. The test checks that `merge_headers({'A': '1'}, {'A': '2', 'B': '3'})` equals `{'A': '2', 'B': '3'}`.",
       "order": 4,
       "difficulty": "intermediate",
       "duration_minutes": 6,
@@ -191,7 +191,7 @@
     {
       "id": "fs-http-checkpoint",
       "title": "5. Checkpoint: Build Request",
-      "description": "Implement `build_request(method, url, headers=None, json_body=None)` returning method/url/headers/body.",
+      "description": "Implement `build_request(method, url, headers=None, json_body=None)` returning method/url/headers/body. The test checks that `build_request('post', '/x', json_body={'a': 1})['method']` equals `'POST'`; `build_request('post', '/x', json_body={'a': 1})['headers']['Content-Type']` contains `'application/json'`; `build_request('post', '/x', json_body={'a': 1})['body']` contains `'\"a\"'`.",
       "order": 5,
       "difficulty": "intermediate",
       "duration_minutes": 10,

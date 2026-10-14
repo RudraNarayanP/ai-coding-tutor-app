@@ -18,6 +18,7 @@ from backend.exercise_types import (
     ALL_TYPES,
     CHOICE_TYPES,
     CODE_TYPES,
+    DISPLAY_TYPES,
     FILL_TYPES,
     MATCHING_TYPES,
     MULTI_SELECT_TYPES,
@@ -37,6 +38,7 @@ PAIRS = {
     "MATCHING_TYPES": MATCHING_TYPES,
     "FILL_TYPES": FILL_TYPES,
     "CODE_TYPES": CODE_TYPES,
+    "DISPLAY_TYPES": DISPLAY_TYPES,
 }
 
 
@@ -101,6 +103,16 @@ def test_every_choice_type_requires_an_answer_key():
     for ex_type in CHOICE_TYPES | FILL_TYPES | MULTI_SELECT_TYPES | ORDERING_TYPES | MATCHING_TYPES:
         assert requires_answer_key(ex_type), ex_type
     assert not requires_answer_key("code")
+    assert not requires_answer_key("teach")
+
+
+def test_teach_is_a_display_step_with_no_answer_key():
+    assert "teach" in DISPLAY_TYPES
+    assert widget_for("teach") == "teach"
+    assert is_known("teach")
+    passed, feedback = grade(exercise_of("teach", None, explanation="One equals sign stores a value."), {})
+    assert passed is True
+    assert "equals sign" in feedback
 
 
 # ---------------------------------------------------------------------------

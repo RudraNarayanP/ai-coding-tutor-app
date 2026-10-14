@@ -15,7 +15,7 @@
     {
       "id": "java-conditionals-step-1",
       "title": "1. If-Else Statements",
-      "description": "In Java, decision making uses `if`, `else if`, and `else`. Implement `isEven(int number)` returning `true` if number is divisible by 2.",
+      "description": "Finish `isEven(number)` so it returns true when `number` is divisible by 2, and false otherwise. The test checks that `isEven(4)` is true and `isEven(7)` is false.",
       "order": 6,
       "difficulty": "beginner",
       "duration_minutes": 5,
@@ -53,7 +53,7 @@
     {
       "id": "java-conditionals-step-2",
       "title": "2. Logical Operators (&&, ||, !)",
-      "description": "Java uses `&&` for AND, `||` for OR, and `!` for NOT. Implement `canAccessSystem(boolean hasBadge, boolean knowsPassword)`.",
+      "description": "Finish `canAccessSystem(hasBadge, knowsPassword)` so it returns true only when both values are true. The test checks that `(true, true)` is allowed and `(true, false)` is not.",
       "order": 7,
       "difficulty": "beginner",
       "duration_minutes": 5,
@@ -91,7 +91,7 @@
     {
       "id": "java-conditionals-01",
       "title": "3. Speed Limit Monitor (Concept Challenge)",
-      "description": "Determine fine tier based on driving speed.",
+      "description": "Finish `getTicketCategory`. Determine fine tier based on driving speed. The test checks that `Solution.getTicketCategory(55, 60` equals `\"NONE\"`; `Solution.getTicketCategory(65, 60` equals `\"WARNING\"`; `Solution.getTicketCategory(80, 60` equals `\"FINE\"`.",
       "order": 8,
       "difficulty": "beginner",
       "duration_minutes": 8,
@@ -167,7 +167,7 @@
     {
       "id": "java-conditionals-checkpoint",
       "title": "5. Unit 2 Checkpoint: Conditionals Mastery",
-      "description": "Demonstrate complete understanding of Java control flow.",
+      "description": "Finish `Solution.maxOfThree` so it returns the largest of `a`, `b`, and `c`. The test checks that `Solution.maxOfThree(3, 9, 5)` equals `9`.",
       "order": 10,
       "difficulty": "beginner",
       "duration_minutes": 10,
@@ -179,7 +179,7 @@
         "java-variables"
       ],
       "learning_objectives": [
-        "Pass Java conditionals checkpoint"
+        "Return the largest of three ints from maxOfThree"
       ],
       "starter_code": "public class Solution {\n    public static int maxOfThree(int a, int b, int c) {\n        // TODO: Return highest of a, b, and c\n        return 0;\n    }\n}\n",
       "solution_code": "public class Solution {\n    public static int maxOfThree(int a, int b, int c) {\n        return Math.max(a, Math.max(b, c));\n    }\n}\n",

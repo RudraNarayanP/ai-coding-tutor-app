@@ -228,10 +228,16 @@ def prose_fields(exercise: dict) -> list[tuple[str, str]]:
     for field in EXERCISE_PROSE_FIELDS:
         value = exercise.get(field)
         raw = value if isinstance(value, list) else ([value] if isinstance(value, str) else [])
-        for item in raw:
+        for index, item in enumerate(raw):
             text = str(item).strip()
-            if text:
-                out.append((field, text))
+            if not text:
+                continue
+            # Hint 1 is on screen as a nudge and must not contain the answer.
+            # Hint 2 may name it. Hint 3 is the paid solution. Later rungs are
+            # not stem leaks.
+            if field == "hints" and index >= 1:
+                continue
+            out.append((field, text))
     return out
 
 

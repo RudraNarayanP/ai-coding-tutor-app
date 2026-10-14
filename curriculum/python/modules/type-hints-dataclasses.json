@@ -16,7 +16,7 @@
     {
       "id": "type-hints-dataclasses-step-1",
       "title": "1. Function Type Hints",
-      "description": "Annotate parameters and return types. Implement `add(a: int, b: int) -> int`.",
+      "description": "Annotate parameters and return types. Implement `add(a: int, b: int) -> int`. The test checks that `add(2, 3)` equals `5`.",
       "order": 96,
       "difficulty": "intermediate",
       "duration_minutes": 5,
@@ -56,7 +56,7 @@
     {
       "id": "type-hints-dataclasses-step-2",
       "title": "2. Dataclass Basics",
-      "description": "Use `@dataclass` to define `Point` with x and y floats and a `magnitude` method.",
+      "description": "Use `@dataclass` to define `Point` with x and y floats and a `magnitude` method. The test checks that `Point(3, 4).magnitude()` equals `5.0`.",
       "order": 97,
       "difficulty": "intermediate",
       "duration_minutes": 5,
@@ -96,7 +96,7 @@
     {
       "id": "type-hints-dataclasses-01",
       "title": "3. Frozen Dataclass Config (Concept Challenge)",
-      "description": "Create an immutable `Config` dataclass and a helper that updates via `dataclasses.replace`.",
+      "description": "Finish `with_port`. Create an immutable `Config` dataclass and a helper that updates via `dataclasses.replace`. The test checks that `with_port(c, 8080).port` equals `8080`; `Config('localhost').port` equals `80`.",
       "order": 98,
       "difficulty": "intermediate",
       "duration_minutes": 8,
@@ -136,7 +136,7 @@
     {
       "id": "type-hints-dataclasses-practice-1",
       "title": "4. Typed Optional Defaults (Practice)",
-      "description": "Implement `greet(name: str, title: str | None = None) -> str`.",
+      "description": "Implement `greet(name: str, title: str | None = None) -> str`. The test checks that `greet('Ada')` equals `'Ada'`; `greet('Ada', 'Dr')` equals `'Dr Ada'`.",
       "order": 99,
       "difficulty": "intermediate",
       "duration_minutes": 6,
@@ -176,7 +176,7 @@
     {
       "id": "type-hints-dataclasses-checkpoint",
       "title": "5. Unit 20 Checkpoint: Types & Dataclasses",
-      "description": "Define `@dataclass` `Pair` with a generic-feeling `swap` method returning a new Pair.",
+      "description": "Define `@dataclass` `Pair` with a generic-feeling `swap` method returning a new Pair. The test checks that `(p.left, p.right)` equals `('b', 'a')`.",
       "order": 100,
       "difficulty": "intermediate",
       "duration_minutes": 10,

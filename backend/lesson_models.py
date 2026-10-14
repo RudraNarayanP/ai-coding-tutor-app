@@ -100,6 +100,8 @@ class LessonDefinition(BaseModel):
     mastery_exam: list[ExerciseDefinition] = Field(default_factory=list)
     xp_reward: int = Field(default=25, ge=0)
     source: LessonSource | None = None
+    # "micro" uses the 8-screen player. Anything else keeps the legacy adapter.
+    player_mode: str = Field(default="legacy", max_length=20)
 
     @field_validator("starter_code", "section_id", "section_title", mode="before")
     @classmethod
@@ -224,6 +226,7 @@ class PublicLessonView(BaseModel):
     mastery_exam: list[PublicExerciseView] = []
     xp_reward: int = 25
     source: LessonSource | None = None
+    player_mode: str = "legacy"
 
     @classmethod
     def from_lesson(
@@ -268,6 +271,7 @@ class PublicLessonView(BaseModel):
             mastery_exam=exam_views,
             xp_reward=lesson.xp_reward,
             source=lesson.source,
+            player_mode=getattr(lesson, "player_mode", None) or "legacy",
         )
 
 

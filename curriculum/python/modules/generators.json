@@ -16,7 +16,7 @@
     {
       "id": "generators-step-1",
       "title": "1. yield Basics",
-      "description": "A generator function uses `yield` to produce values lazily. Implement `count_up(n)` yielding 1..n.",
+      "description": "A generator function uses `yield` to produce values lazily. Implement `count_up(n)` yielding 1..n. The test checks that `list(count_up(3))` equals `[1, 2, 3]`.",
       "order": 81,
       "difficulty": "intermediate",
       "duration_minutes": 5,
@@ -56,7 +56,7 @@
     {
       "id": "generators-step-2",
       "title": "2. Infinite Generators with take",
-      "description": "Implement `take(n, iterable)` that yields the first n items from any iterable.",
+      "description": "Implement `take(n, iterable)` that yields the first n items from any iterable. The test checks that `list(take(3, range(10)))` equals `[0, 1, 2]`.",
       "order": 82,
       "difficulty": "intermediate",
       "duration_minutes": 5,
@@ -96,7 +96,7 @@
     {
       "id": "generators-01",
       "title": "3. Running Average Stream (Concept Challenge)",
-      "description": "Yield the running average after each number in a sequence.",
+      "description": "Finish `running_average`. Yield the running average after each number in a sequence. The test checks that `list(running_average([2, 4, 6]))` equals `[2.0, 3.0, 4.0]`.",
       "order": 83,
       "difficulty": "intermediate",
       "duration_minutes": 8,
@@ -136,7 +136,7 @@
     {
       "id": "generators-practice-1",
       "title": "4. Chunked Reader (Practice)",
-      "description": "Yield fixed-size chunks from a list (last chunk may be smaller).",
+      "description": "Yield fixed-size chunks from a list (last chunk may be smaller). The test checks that `list(chunks([1, 2, 3, 4, 5], 2))` equals `[[1, 2], [3, 4], [5]]`.",
       "order": 84,
       "difficulty": "intermediate",
       "duration_minutes": 6,
@@ -176,7 +176,7 @@
     {
       "id": "generators-checkpoint",
       "title": "5. Unit 17 Checkpoint: Generators",
-      "description": "Implement `filter_gen(pred, iterable)` that yields items where pred(item) is true.",
+      "description": "Implement `filter_gen(pred, iterable)` that yields items where pred(item) is true. The test checks that `list(filter_gen(lambda x: x % 2 == 0, [1, 2, 3, 4]))` equals `[2, 4]`.",
       "order": 85,
       "difficulty": "intermediate",
       "duration_minutes": 10,

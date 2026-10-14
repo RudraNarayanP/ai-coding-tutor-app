@@ -15,8 +15,8 @@
   "lessons": [
     {
       "id": "conditionals-step-1",
-      "title": "1. The `if` and `else` Statements",
-      "description": "Conditional statements execute code blocks based on conditions. Use `if` and `else` to return \"Pass\" if grade >= 50, otherwise \"Fail\".",
+      "title": "Take the if branch",
+      "description": "Finish `evaluate_grade`. Conditional statements execute code blocks based on conditions. Use `if` and `else` to return \"Pass\" if grade >= 50, otherwise \"Fail\". The test checks that `evaluate_grade(80)` equals `\"Pass\"`; `evaluate_grade(40)` equals `\"Fail\"`.",
       "order": 16,
       "difficulty": "beginner",
       "duration_minutes": 5,
@@ -29,7 +29,7 @@
         "booleans"
       ],
       "learning_objectives": [
-        "Use basic if-else branching"
+        "The if branch runs only when its comparison succeeds, and else runs otherwise."
       ],
       "starter_code": "def evaluate_grade(score):\n    # TODO: Return \"Pass\" if score >= 50 else \"Fail\"\n    pass\n",
       "tests": [
@@ -50,12 +50,178 @@
         "url": "https://docs.python.org/3/tutorial/controlflow.html#if-statements",
         "license": "Python documentation license (PSF)"
       },
-      "xp_reward": 10
+      "xp_reward": 10,
+      "player_mode": "micro",
+      "sublessons": [
+        {
+          "id": "conditionals-step-1-micro",
+          "title": "Take the if branch",
+          "description": "",
+          "order": 1,
+          "exercises": [
+            {
+              "id": "conditionals-step-1-teach",
+              "type": "teach",
+              "question": "The if branch runs only when its comparison succeeds, and else runs otherwise.",
+              "hints": [
+                "A failed comparison skips the first branch.",
+                "Eight meets a cutoff of five, so the first branch runs.",
+                "score = 8 / if score >= 5: /     print('pass')"
+              ],
+              "explanation": "The if branch runs only when its comparison succeeds, and else runs otherwise.",
+              "xp_reward": 0,
+              "worked_example": "score = 8\nif score >= 5:\n    print('pass')"
+            },
+            {
+              "id": "conditionals-step-1-mcq",
+              "type": "mcq",
+              "question": "A score of eight meets a cutoff of five. Which word comes from the first branch?",
+              "hints": [
+                "The comparison succeeds.",
+                "The first branch says pass.",
+                "pass"
+              ],
+              "explanation": "Eight is at least five, so pass runs.",
+              "xp_reward": 10,
+              "options": [
+                "none",
+                "pass",
+                "fail",
+                "eight"
+              ],
+              "correct_answer": "pass"
+            },
+            {
+              "id": "conditionals-step-1-predict",
+              "type": "output_prediction",
+              "question": "Eight points against a cutoff of five. Which word is displayed?",
+              "hints": [
+                "The cutoff is met.",
+                "The word shown is pass.",
+                "pass"
+              ],
+              "explanation": "The if branch prints pass.",
+              "xp_reward": 10,
+              "starter_code": "score = 8\nif score >= 5:\n    print('pass')\nelse:\n    print('fail')\n",
+              "options": [
+                "fail",
+                "8",
+                "pass",
+                "none"
+              ],
+              "correct_answer": "pass"
+            },
+            {
+              "id": "conditionals-step-1-order",
+              "type": "ordering",
+              "question": "Build the one-line branch that prints pass when score is at least five.",
+              "hints": [
+                "Start with if and the score name.",
+                "Then the cutoff and the print.",
+                "if score >= 5: print('pass')"
+              ],
+              "explanation": "if score >= 5: print('pass') is the branch.",
+              "xp_reward": 10,
+              "options": [
+                "if",
+                "score",
+                ">=",
+                "5:",
+                "print('pass')",
+                "else"
+              ],
+              "correct_answer": [
+                "if",
+                "score",
+                ">=",
+                "5:",
+                "print('pass')"
+              ]
+            },
+            {
+              "id": "conditionals-step-1-fill",
+              "type": "fill_blank",
+              "question": "Fill the comparison that treats five as good enough for the first branch.",
+              "hints": [
+                "The score should meet the cutoff.",
+                "Greater-or-equal belongs in the blank.",
+                ">="
+              ],
+              "explanation": ">= treats five itself as good enough.",
+              "xp_reward": 10,
+              "starter_code": "if score ___ 5:\n    print('pass')\n",
+              "options": [
+                ">",
+                "==",
+                ">=",
+                "<"
+              ],
+              "correct_answer": ">="
+            },
+            {
+              "id": "conditionals-step-1-bug",
+              "type": "debugging",
+              "question": "A score sitting exactly on the cutoff took the fallback. Which line makes the cutoff exclusive?",
+              "hints": [
+                "The stored score is the cutoff itself.",
+                "The header uses a strict greater-than.",
+                "Line 2"
+              ],
+              "explanation": "Line 2 excludes the cutoff, so five takes the else.",
+              "xp_reward": 10,
+              "starter_code": "score = 5\nif score > 5:\n    print('yes')\nelse:\n    print('no')\n",
+              "correct_answer": "2"
+            },
+            {
+              "id": "conditionals-step-1-predict-2",
+              "type": "output_prediction",
+              "question": "Thirty degrees against a freeze point of thirty-two. Which word is displayed?",
+              "hints": [
+                "The temperature is below the freeze point.",
+                "The fallback word is thaw.",
+                "thaw"
+              ],
+              "explanation": "30 is below 32, so thaw is printed.",
+              "xp_reward": 10,
+              "starter_code": "temp = 30\nif temp >= 32:\n    print('freeze')\nelse:\n    print('thaw')\n",
+              "options": [
+                "30",
+                "thaw",
+                "freeze",
+                "32"
+              ],
+              "correct_answer": "thaw"
+            },
+            {
+              "id": "conditionals-step-1-write",
+              "type": "code",
+              "question": "Print high when the number meets ten, otherwise low.",
+              "hints": [
+                "The blank should treat ten itself as high.",
+                "Greater-or-equal ten returns high.",
+                "if n >= 10:"
+              ],
+              "explanation": "label(10) prints high.",
+              "xp_reward": 10,
+              "starter_code": "def label(n):\n    if n ___ 10:\n        return 'high'\n    return 'low'\nprint(label(10))\n",
+              "solution_code": "def label(n):\n    if n >= 10:\n        return 'high'\n    return 'low'\nprint(label(10))\n",
+              "tests": [
+                {
+                  "name": "conditionals-step-1-prints",
+                  "description": "label(10) prints high.",
+                  "expected_stdout": "high\n",
+                  "required": true
+                }
+              ]
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "conditionals-step-2",
-      "title": "2. Multi-way Branching with `elif`",
-      "description": "When you have more than two branches, use `elif`. Implement `temperature_status(temp)` returning \"Cold\" (< 15), \"Warm\" (15..28), or \"Hot\" (> 28).",
+      "title": "Check the next branch",
+      "description": "When you have more than two branches, use `elif`. Implement `temperature_status(temp)` returning \"Cold\" (< 15), \"Warm\" (15..28), or \"Hot\" (> 28). The test checks that `temperature_status(10)` equals `\"Cold\"`; `temperature_status(20)` equals `\"Warm\"`; `temperature_status(35)` equals `\"Hot\"`.",
       "order": 17,
       "difficulty": "beginner",
       "duration_minutes": 5,
@@ -68,7 +234,7 @@
         "booleans"
       ],
       "learning_objectives": [
-        "Chain conditions using elif"
+        "elif tries another comparison only after every earlier branch was skipped."
       ],
       "starter_code": "def temperature_status(temp):\n    # TODO: Return \"Cold\" if temp < 15, \"Warm\" if temp <= 28, else \"Hot\"\n    pass\n",
       "tests": [
@@ -92,32 +258,175 @@
       "xp_reward": 10,
       "sublessons": [
         {
-          "id": "elif-boundary-dbg-sub",
-          "title": "Find the defect",
+          "id": "conditionals-step-2-micro",
+          "title": "Check the next branch",
+          "description": "",
           "order": 1,
           "exercises": [
             {
-              "id": "elif-boundary-dbg-1",
-              "type": "debugging",
-              "question": "The lesson defines Cold below 15, Warm from 15 through 28, and Hot above 28. This program prints `Hot Warm Hot` for `(28, 15, 29)`. What is wrong with it?\n\n```python\ndef temperature_status(temp):\n    if temp < 15:\n        return \"Cold\"\n    elif temp < 28:\n        return \"Warm\"\n    return \"Hot\"\n\n```",
-              "options": [
-                "`if temp < 15` should be `if temp <= 15`, so 15 counts as Cold",
-                "the final `return \"Hot\"` should be `return \"Warm\"`",
-                "`elif temp < 28` should be `elif temp <= 28`, so 28 counts as Warm",
-                "nothing is wrong - `Hot` is correct for 28 because it is the last branch"
+              "id": "conditionals-step-2-teach",
+              "type": "teach",
+              "question": "elif tries another comparison only after every earlier branch was skipped.",
+              "hints": [
+                "A second if would run even when the first branch already did.",
+                "Seventy-five misses one hundred and meets seventy, so warn runs.",
+                "heat = 75 / if heat >= 100: /     print('stop') / elif heat >= 70: /     print('warn')"
               ],
-              "correct_answer": "`elif temp < 28` should be `elif temp <= 28`, so 28 counts as Warm",
-              "explanation": "Only the upper boundary is off: 28 fails both `< 15` and `< 28`, so it falls through to Hot. The lower boundary already treats 15 as Warm, which is what the lesson asks for.",
-              "xp_reward": 10
+              "explanation": "elif tries another comparison only after every earlier branch was skipped.",
+              "xp_reward": 0,
+              "worked_example": "heat = 75\nif heat >= 100:\n    print('stop')\nelif heat >= 70:\n    print('warn')"
+            },
+            {
+              "id": "conditionals-step-2-mcq",
+              "type": "mcq",
+              "question": "Kiln heat is seventy-five. One hundred is the first cutoff and seventy is the next. Which word is chosen?",
+              "hints": [
+                "The first cutoff fails, so the next one is tried.",
+                "The next branch says warn.",
+                "warn"
+              ],
+              "explanation": "75 misses 100 and meets 70, so warn runs.",
+              "xp_reward": 10,
+              "options": [
+                "stop",
+                "calm",
+                "heat",
+                "warn"
+              ],
+              "correct_answer": "warn"
+            },
+            {
+              "id": "conditionals-step-2-predict",
+              "type": "output_prediction",
+              "question": "A kiln sits at seventy-five. What status word is displayed?",
+              "hints": [
+                "One hundred is too high a bar for this reading.",
+                "The displayed word is warn.",
+                "warn"
+              ],
+              "explanation": "The elif branch prints warn.",
+              "xp_reward": 10,
+              "starter_code": "heat = 75\nif heat >= 100:\n    print('stop')\nelif heat >= 70:\n    print('warn')\nelse:\n    print('calm')\n",
+              "options": [
+                "stop",
+                "calm",
+                "75",
+                "warn"
+              ],
+              "correct_answer": "warn"
+            },
+            {
+              "id": "conditionals-step-2-order",
+              "type": "ordering",
+              "question": "Build the opening branch that prints stop once heat reaches one hundred.",
+              "hints": [
+                "Start with if and the heat name.",
+                "The cutoff is one hundred, then the print.",
+                "if heat >= 100: print('stop')"
+              ],
+              "explanation": "if heat >= 100: print('stop') is the first branch.",
+              "xp_reward": 10,
+              "options": [
+                "if",
+                "heat",
+                ">=",
+                "100:",
+                "print('stop')",
+                "else"
+              ],
+              "correct_answer": [
+                "if",
+                "heat",
+                ">=",
+                "100:",
+                "print('stop')"
+              ]
+            },
+            {
+              "id": "conditionals-step-2-fill",
+              "type": "fill_blank",
+              "question": "Fill the keyword that tries the seventy cutoff after the first branch is skipped.",
+              "hints": [
+                "It introduces the next comparison, not the fallback.",
+                "The keyword is elif.",
+                "elif"
+              ],
+              "explanation": "elif checks seventy only when one hundred failed.",
+              "xp_reward": 10,
+              "starter_code": "if heat >= 100:\n    print('stop')\n___ heat >= 70:\n    print('warn')\n",
+              "options": [
+                "else",
+                "if",
+                "case",
+                "elif"
+              ],
+              "correct_answer": "elif"
+            },
+            {
+              "id": "conditionals-step-2-bug",
+              "type": "debugging",
+              "question": "A blazing kiln printed two status words. Which line should have been the follow-up branch?",
+              "hints": [
+                "The opening branch is the right first check.",
+                "The later header is another if, so both can run.",
+                "Line 4"
+              ],
+              "explanation": "Line 4 is a second if, so 110 prints both stop and warn.",
+              "xp_reward": 10,
+              "starter_code": "heat = 110\nif heat >= 100:\n    print('stop')\nif heat >= 70:\n    print('warn')\n",
+              "correct_answer": "4"
+            },
+            {
+              "id": "conditionals-step-2-predict-2",
+              "type": "output_prediction",
+              "question": "A cold kiln sits at forty. Which status word is displayed?",
+              "hints": [
+                "Neither cutoff is reached.",
+                "The fallback word is calm.",
+                "calm"
+              ],
+              "explanation": "40 misses both cutoffs, so calm is printed.",
+              "xp_reward": 10,
+              "starter_code": "heat = 40\nif heat >= 100:\n    print('stop')\nelif heat >= 70:\n    print('warn')\nelse:\n    print('calm')\n",
+              "options": [
+                "stop",
+                "warn",
+                "calm",
+                "40"
+              ],
+              "correct_answer": "calm"
+            },
+            {
+              "id": "conditionals-step-2-write",
+              "type": "code",
+              "question": "Return warn for a reading of seventy-five, using a follow-up branch.",
+              "hints": [
+                "The blank is the follow-up keyword.",
+                "Seventy-five should return warn.",
+                "elif heat >= 70:"
+              ],
+              "explanation": "status(75) prints warn.",
+              "xp_reward": 10,
+              "starter_code": "def status(heat):\n    if heat >= 100:\n        return 'stop'\n    ___ heat >= 70:\n        return 'warn'\n    return 'calm'\nprint(status(75))\n",
+              "solution_code": "def status(heat):\n    if heat >= 100:\n        return 'stop'\n    elif heat >= 70:\n        return 'warn'\n    return 'calm'\nprint(status(75))\n",
+              "tests": [
+                {
+                  "name": "conditionals-step-2-prints",
+                  "description": "status(75) prints warn.",
+                  "expected_stdout": "warn\n",
+                  "required": true
+                }
+              ]
             }
           ]
         }
-      ]
+      ],
+      "player_mode": "micro"
     },
     {
       "id": "conditionals-01",
       "title": "3. Meltdown Mitigation (Concept Challenge)",
-      "description": "Control a nuclear reactor with multi-condition if/elif/else logic.\n\n1. is_criticality_balanced(temperature, neutrons_emitted): return True when the reactor is balanced, i.e. temperature is below 800 AND neutrons_emitted is above 500.\n2. reactor_efficiency(voltage, current, theoretical_max_power): compute the percentage (voltage * current / theoretical_max_power) * 100 and return its band: green for >= 80, orange for >= 60, red for >= 30, and black below 30.\n3. fail_safe(temperature, neutrons_produced_per_second, threshold): compare temperature * neutrons_produced_per_second with the threshold and return LOW below 90% of the threshold, NORMAL from 90% up to and including 110%, and DANGER above 110%.",
+      "description": "Control a nuclear reactor with multi-condition if/elif/else logic. 1. is_criticality_balanced(temperature, neutrons_emitted): return True when the reactor is balanced, i.e. temperature is below 800 AND neutrons_emitted is above 500. 2. reactor_efficiency(voltage, current, theoretical_max_power): compute the percentage (voltage * current / theoretical_max_power) * 100 and return its band: green for >= 80, orange for >= 60, red for >= 30, and black below 30. 3. fail_safe(temperature, neutrons_produced_per_second, threshold): compare temperature * neutrons_produced_per_second with the threshold and return LOW below 90% of the threshold, NORMAL from 90% up to and including 110%, and DANGER above 110%. The test checks that `is_criticality_balanced(750, 600)` equals `True`; `is_criticality_balanced(800, 600)` equals `False`; `reactor_efficiency(200, 50, 10000)` equals `'green'`.",
       "order": 18,
       "difficulty": "beginner",
       "duration_minutes": 8,
@@ -211,7 +520,7 @@
     {
       "id": "conditionals-practice-1",
       "title": "4. Traffic Light System (Practice)",
-      "description": "Implement `traffic_action(color)` returning \"Stop\" for Red, \"Prepare\" for Yellow, \"Go\" for Green.",
+      "description": "Implement `traffic_action(color)` returning \"Stop\" for Red, \"Prepare\" for Yellow, \"Go\" for Green. The test checks that `traffic_action(\"red\")` equals `\"Stop\"`; `traffic_action(\"yellow\")` equals `\"Prepare\"`; `traffic_action(\"green\")` equals `\"Go\"`.",
       "order": 19,
       "difficulty": "beginner",
       "duration_minutes": 6,
@@ -250,7 +559,7 @@
     {
       "id": "conditionals-checkpoint",
       "title": "5. Unit 4 Checkpoint: Conditionals Mastery",
-      "description": "Demonstrate complete conditional flow control.",
+      "description": "Finish `discount_rate(is_member, total_spent)`. A member who has spent at least 100 gets `0.2`. Any other member gets `0.1`. Everyone else gets `0.0`. The test checks `(True, 150) -> 0.2`, `(True, 50) -> 0.1`, and `(False, 200) -> 0.0`.",
       "order": 20,
       "difficulty": "beginner",
       "duration_minutes": 10,

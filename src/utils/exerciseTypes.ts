@@ -22,6 +22,8 @@ export const ORDERING_TYPES: readonly string[] = ['ordering']
 export const MATCHING_TYPES: readonly string[] = ['matching']
 export const FILL_TYPES: readonly string[] = ['fill_blank', 'code_completion']
 export const CODE_TYPES: readonly string[] = ['code', 'tiny_coding', 'identify_mistake']
+/** Shown, not scored. Speech plus one example. No answer key. */
+export const DISPLAY_TYPES: readonly string[] = ['teach']
 
 /** Types the server recognises. Anything else must not be silently accepted. */
 export const ALL_EXERCISE_TYPES: readonly string[] = [
@@ -31,6 +33,7 @@ export const ALL_EXERCISE_TYPES: readonly string[] = [
   ...MATCHING_TYPES,
   ...FILL_TYPES,
   ...CODE_TYPES,
+  ...DISPLAY_TYPES,
 ]
 
 /**
@@ -47,6 +50,7 @@ export type ExerciseWidget =
   | 'matching'
   | 'fill'
   | 'code'
+  | 'teach'
   | 'unknown'
 
 export function normaliseType(exType: unknown): string {
@@ -61,6 +65,7 @@ export function widgetFor(exType: unknown): ExerciseWidget {
   if ((MATCHING_TYPES as readonly string[]).includes(type)) return 'matching'
   if ((FILL_TYPES as readonly string[]).includes(type)) return 'fill'
   if ((CODE_TYPES as readonly string[]).includes(type)) return 'code'
+  if ((DISPLAY_TYPES as readonly string[]).includes(type)) return 'teach'
   return 'unknown'
 }
 

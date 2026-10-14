@@ -12,8 +12,8 @@
   "lessons": [
     {
       "id": "variables-step-1",
-      "title": "1. First Variable & String Value",
-      "description": "Store text in variables using the equals sign (=).",
+      "title": "Store text in a name",
+      "description": "Create a variable named `language` and set it to the text `Python`. The test checks that `language` equals `\"Python\"`.",
       "order": 1,
       "difficulty": "beginner",
       "duration_minutes": 5,
@@ -26,7 +26,7 @@
       ],
       "prerequisites": [],
       "learning_objectives": [
-        "Create a variable and assign a string literal using ="
+        "One equals sign stores a value in a name."
       ],
       "starter_code": "# TODO: assign the string \"Python\" to the variable language\nlanguage = \"\"\n",
       "solution_code": "language = \"Python\"\n",
@@ -44,77 +44,161 @@
       },
       "sublessons": [
         {
-          "id": "py-var-sub-1",
-          "title": "What is a Variable?",
+          "id": "py-var-micro",
+          "title": "Store text",
+          "description": "",
           "order": 1,
           "exercises": [
             {
-              "id": "py-ex-1a",
-              "type": "mcq",
-              "question": "Which symbol is used to assign values to variables in Python?",
-              "micro_explanation": "A variable stores a value that your program can use later.",
-              "worked_example": "language = \"Python\"",
-              "worked_example_takeaway": "An assignment stores the text in a variable named language.",
-              "deep_dive": "In Python, assignment binds a variable name to a value in memory.",
-              "options": [
-                "->",
-                "=",
-                ":=",
-                "=="
+              "id": "var-teach",
+              "type": "teach",
+              "question": "One equals sign stores a value in a name.",
+              "hints": [
+                "A name can hold text for later.",
+                "The store happens between the name and the text.",
+                "language = \"Python\""
               ],
-              "correct_answer": "=",
-              "xp_reward": 10,
-              "explanation": "The equals sign '=' is the assignment operator in Python."
+              "explanation": "One equals sign stores a value in a name.",
+              "xp_reward": 0,
+              "worked_example": "language = \"Python\""
             },
             {
-              "id": "py-ex-1b",
-              "type": "fill_blank",
-              "question": "Assign 'Python' to variable language:",
-              "micro_explanation": "Strings in Python are surrounded by quotes.",
-              "worked_example": "greeting = \"Hello\"",
-              "worked_example_takeaway": "Quotes tell Python that the value is a text string.",
-              "starter_code": "language = ___\n",
-              "blanks": [
-                "\"Python\""
+              "id": "var-mcq",
+              "type": "mcq",
+              "question": "Which symbol stores a value in a name?",
+              "hints": [
+                "It is not the comparison symbol.",
+                "It sits between the name and the text.",
+                "="
+              ],
+              "explanation": "One equals sign stores a value, while two equals signs compare.",
+              "xp_reward": 10,
+              "options": [
+                ":=",
+                "=",
+                "==",
+                "->"
+              ],
+              "correct_answer": "="
+            },
+            {
+              "id": "var-predict",
+              "type": "output_prediction",
+              "question": "language holds text. What does the print line show?",
+              "hints": [
+                "The print line uses the name, not a second copy of the text.",
+                "Whatever was stored is what shows up.",
+                "Python"
+              ],
+              "explanation": "Print shows the text that was stored, without quotes.",
+              "xp_reward": 10,
+              "starter_code": "language = \"Python\"\nprint(language)\n",
+              "options": [
+                "language",
+                "Python",
+                "\"Python\"",
+                "None"
+              ],
+              "correct_answer": "Python"
+            },
+            {
+              "id": "var-order",
+              "type": "ordering",
+              "question": "Build the line that stores the text Python in the name language.",
+              "hints": [
+                "Start with the name.",
+                "Then the store symbol, then the quoted text.",
+                "language = \"Python\""
+              ],
+              "explanation": "The name, one equals sign, then the quoted text.",
+              "xp_reward": 10,
+              "options": [
+                "language",
+                "=",
+                "\"Python\"",
+                "=="
               ],
               "correct_answer": [
+                "language",
+                "=",
                 "\"Python\""
-              ],
-              "tests": [
-                {
-                  "name": "test_language_variable",
-                  "unittest_code": "def test_language_variable(self):\n    self.assertEqual(language, \"Python\", msg=\"Expected variable 'language' to equal 'Python'.\")",
-                  "required": true
-                }
-              ],
-              "xp_reward": 10,
-              "explanation": "Strings in Python are enclosed in quotes, e.g. \"Python\"."
-            }
-          ]
-        },
-        {
-          "id": "py-var-sub-2",
-          "title": "Variable Assignment Practice",
-          "order": 2,
-          "exercises": [
+              ]
+            },
             {
-              "id": "py-ex-2a",
+              "id": "var-fill",
+              "type": "fill_blank",
+              "question": "Fill the symbol that stores the text in the name.",
+              "hints": [
+                "The blank is the store symbol.",
+                "A comparison uses two of that symbol.",
+                "="
+              ],
+              "explanation": "One equals sign stores the text in the name.",
+              "xp_reward": 10,
+              "starter_code": "language ___ \"Python\"\n",
+              "options": [
+                "==",
+                "=",
+                ":=",
+                "->"
+              ],
+              "correct_answer": "="
+            },
+            {
+              "id": "var-bug",
+              "type": "debugging",
+              "question": "The name is never created, so printing it crashes. Which line is wrong?",
+              "hints": [
+                "The print is fine once the name exists.",
+                "The first line compares two values.",
+                "Line 1 should store with one equals sign."
+              ],
+              "explanation": "Line 1 compares instead of storing, so the name is never created.",
+              "xp_reward": 10,
+              "starter_code": "language == \"Python\"\nprint(language)\n",
+              "correct_answer": "1"
+            },
+            {
+              "id": "var-predict-2",
+              "type": "output_prediction",
+              "question": "A snack name was stored. What does print show?",
+              "hints": [
+                "Look at the text that was stored in the name.",
+                "Print shows that text without quote marks.",
+                "taco"
+              ],
+              "explanation": "Print shows taco, the text that was stored.",
+              "xp_reward": 10,
+              "starter_code": "snack = \"taco\"\nprint(snack)\n",
+              "options": [
+                "snack",
+                "taco",
+                "\"taco\"",
+                "None"
+              ],
+              "correct_answer": "taco"
+            },
+            {
+              "id": "var-write",
               "type": "code",
-              "title": "Assign language variable",
-              "question": "Assign the string 'Python' to a variable named language.",
-              "micro_explanation": "Write the variable name, followed by '=', followed by the string value.",
-              "worked_example": "greeting = \"Hello\"",
-              "worked_example_takeaway": "This creates the variable language.",
-              "starter_code": "language = None\n",
-              "solution_code": "language = \"Python\"\n",
+              "question": "Store the text Python in language, then print it.",
+              "hints": [
+                "The blank is the text value.",
+                "Quotes go around the letters.",
+                "language = \"Python\""
+              ],
+              "explanation": "One equals sign stores the text, and print shows it.",
+              "xp_reward": 10,
+              "starter_code": "language = ___\nprint(language)\n",
+              "solution_code": "language = \"Python\"\nprint(language)\n",
               "tests": [
                 {
-                  "name": "test_language_variable",
-                  "unittest_code": "def test_language_variable(self):\n    self.assertEqual(language, \"Python\", msg=\"Expected variable 'language' to equal 'Python'.\")",
+                  "name": "prints_the_stored_text",
+                  "description": "prints Python",
+                  "expected_stdout": "Python\n",
                   "required": true
                 }
-              ],
-              "xp_reward": 15
+              ]
             }
           ]
         }
@@ -156,12 +240,13 @@
         "url": "https://docs.python.org/3/tutorial/introduction.html#strings",
         "license": "Python documentation license (PSF)"
       },
-      "xp_reward": 10
+      "xp_reward": 10,
+      "player_mode": "micro"
     },
     {
       "id": "variables-step-2",
-      "title": "2. Numbers & Reassignment",
-      "description": "Variables can hold numbers and participate in arithmetic. There are 3 more bananas than apples, so `total_fruit` counts the apples plus 3.",
+      "title": "Replace a stored number",
+      "description": "There are 5 apples, and 3 more bananas than apples. `apples` is already 5. Set `total_fruit` to the apples plus the bananas. The test checks that `apples` equals `5` and `total_fruit` equals `8`.",
       "order": 2,
       "difficulty": "beginner",
       "duration_minutes": 5,
@@ -174,7 +259,7 @@
       ],
       "prerequisites": [],
       "learning_objectives": [
-        "Assign integer values to variables and calculate totals with +"
+        "Giving a name a new number replaces whatever that name held before."
       ],
       "starter_code": "apples = 5\n# TODO: set total_fruit to all the fruit\ntotal_fruit = 0\n",
       "solution_code": "apples = 5\ntotal_fruit = apples + 3\n",
@@ -198,38 +283,165 @@
       },
       "sublessons": [
         {
-          "id": "py-num-sub-1",
-          "title": "Numbers in Variables",
+          "id": "variables-step-2-micro",
+          "title": "Replace a stored number",
+          "description": "",
           "order": 1,
           "exercises": [
             {
-              "id": "py-num-ex-1a",
-              "type": "fill_blank",
-              "question": "Store the number of apples in a variable, then total the fruit:",
-              "micro_explanation": "Variables store numbers without quotes, and you can add values using +.",
-              "worked_example": "apples = 5\ntotal = apples + 3",
-              "worked_example_takeaway": "Adding a variable to a number evaluates to their sum.",
-              "starter_code": "apples = ___\ntotal_fruit = apples + 3\n",
-              "blanks": [
-                "5"
+              "id": "variables-step-2-teach",
+              "type": "teach",
+              "question": "Giving a name a new number replaces whatever that name held before.",
+              "hints": [
+                "The later line is the one that sticks.",
+                "Five is wiped out when eight is stored.",
+                "apples = 5 / apples = 8"
+              ],
+              "explanation": "Giving a name a new number replaces whatever that name held before.",
+              "xp_reward": 0,
+              "worked_example": "apples = 5\napples = 8"
+            },
+            {
+              "id": "variables-step-2-mcq",
+              "type": "mcq",
+              "question": "A crate count starts at five and is then stored as eight. What is left in the name?",
+              "hints": [
+                "Only the later assignment is kept.",
+                "The name now holds eight.",
+                "8"
+              ],
+              "explanation": "The second assignment replaces five with eight.",
+              "xp_reward": 10,
+              "options": [
+                "5",
+                "0",
+                "8",
+                "13"
+              ],
+              "correct_answer": "8"
+            },
+            {
+              "id": "variables-step-2-predict",
+              "type": "output_prediction",
+              "question": "Start with five apples, then add three to that same name. What is printed?",
+              "hints": [
+                "Add three to the number already stored.",
+                "Five plus three is eight.",
+                "8"
+              ],
+              "explanation": "The name becomes 8, and print shows 8.",
+              "xp_reward": 10,
+              "starter_code": "apples = 5\napples = apples + 3\nprint(apples)\n",
+              "options": [
+                "5",
+                "3",
+                "8",
+                "53"
+              ],
+              "correct_answer": "8"
+            },
+            {
+              "id": "variables-step-2-order",
+              "type": "ordering",
+              "question": "Build the line that stores apples plus three under the name total.",
+              "hints": [
+                "Begin with the name that receives the sum.",
+                "One equals sign, then apples plus three.",
+                "total = apples + 3"
+              ],
+              "explanation": "total = apples + 3 stores the sum.",
+              "xp_reward": 10,
+              "options": [
+                "total",
+                "=",
+                "apples",
+                "+",
+                "3",
+                "=="
               ],
               "correct_answer": [
-                "5"
+                "total",
+                "=",
+                "apples",
+                "+",
+                "3"
+              ]
+            },
+            {
+              "id": "variables-step-2-fill",
+              "type": "fill_blank",
+              "question": "Fill the operator that adds three onto the apple count.",
+              "hints": [
+                "The blank sits between the name and the three.",
+                "Addition is the plus operator.",
+                "+"
               ],
+              "explanation": "Plus adds three to the apples.",
+              "xp_reward": 10,
+              "starter_code": "total = apples ___ 3\n",
+              "options": [
+                "-",
+                "*",
+                "+",
+                "=="
+              ],
+              "correct_answer": "+"
+            },
+            {
+              "id": "variables-step-2-bug",
+              "type": "debugging",
+              "question": "The print crashes because the apple count was never stored. Which line compares instead?",
+              "hints": [
+                "The display line is fine once the name exists.",
+                "The first line compares two values.",
+                "Line 1"
+              ],
+              "explanation": "Line 1 uses two equals signs, so apples is never created.",
+              "xp_reward": 10,
+              "starter_code": "apples == 5\nprint(apples)\n",
+              "correct_answer": "1"
+            },
+            {
+              "id": "variables-step-2-predict-2",
+              "type": "output_prediction",
+              "question": "Two crates are multiplied by four and then shown. What number appears?",
+              "hints": [
+                "Use the stored count as the starting amount.",
+                "Two times four is eight.",
+                "8"
+              ],
+              "explanation": "The name becomes 8.",
+              "xp_reward": 10,
+              "starter_code": "crates = 2\ncrates = crates * 4\nprint(crates)\n",
+              "options": [
+                "2",
+                "8",
+                "4",
+                "6"
+              ],
+              "correct_answer": "8"
+            },
+            {
+              "id": "variables-step-2-write",
+              "type": "code",
+              "question": "Start from four, add six, and print the new total.",
+              "hints": [
+                "The blank is how many get added.",
+                "Four plus six is what should be printed.",
+                "count = count + 6"
+              ],
+              "explanation": "Adding six to four prints 10.",
+              "xp_reward": 10,
+              "starter_code": "count = 4\ncount = count + ___\nprint(count)\n",
+              "solution_code": "count = 4\ncount = count + 6\nprint(count)\n",
               "tests": [
                 {
-                  "name": "test_apples_variable",
-                  "unittest_code": "def test_apples_variable(self):\n    self.assertEqual(apples, 5, msg=\"Expected apples to equal 5.\")",
-                  "required": true
-                },
-                {
-                  "name": "test_total_fruit_variable",
-                  "unittest_code": "def test_total_fruit_variable(self):\n    self.assertEqual(total_fruit, 8, msg=\"Expected total_fruit to equal 8.\")",
+                  "name": "variables-step-2-prints",
+                  "description": "Adding six to four prints 10.",
+                  "expected_stdout": "10\n",
                   "required": true
                 }
-              ],
-              "xp_reward": 10,
-              "explanation": "Setting apples = 5 makes apples + 3 equal 8."
+              ]
             }
           ]
         }
@@ -243,11 +455,12 @@
         "url": "https://docs.python.org/3/tutorial/introduction.html#numbers",
         "license": "Python documentation license (PSF)"
       },
-      "xp_reward": 10
+      "xp_reward": 10,
+      "player_mode": "micro"
     },
     {
       "id": "variables-01",
-      "title": "3. Recipe Preparation Calculator",
+      "title": "Add two stored times",
       "description": "Italian lasagna takes prep_time = 10 minutes of preparation and bake_time = 40 minutes in the oven. Keeping the given setup lines, compute total_time as the sum of prep_time and bake_time (the tests expect country == \"Italy\" and total_time == 50).",
       "order": 3,
       "difficulty": "beginner",
@@ -261,7 +474,7 @@
       ],
       "prerequisites": [],
       "learning_objectives": [
-        "Calculate total time by adding preparation and baking time variables"
+        "Total minutes is the stored prep time plus the stored bake time."
       ],
       "starter_code": "country = \"Italy\"\nprep_time = 10\nbake_time = 40\n\n# TODO: set total_time to the sum of prep_time and bake_time\ntotal_time = 0\n",
       "solution_code": "country = \"Italy\"\nprep_time = 10\nbake_time = 40\n\ntotal_time = prep_time + bake_time\n",
@@ -285,26 +498,162 @@
       },
       "sublessons": [
         {
-          "id": "py-recipe-sub-1",
-          "title": "Adding Preparation Times",
+          "id": "variables-01-micro",
+          "title": "Add two stored times",
+          "description": "",
           "order": 1,
           "exercises": [
             {
-              "id": "py-recipe-ex-1",
-              "type": "fill_blank",
-              "question": "Calculate total_time by adding the two existing time variables:",
-              "micro_explanation": "Combine existing variables using the addition operator (+).",
-              "worked_example": "prep_time = 10\nbake_time = 40\ntotal_time = prep_time + bake_time",
-              "worked_example_takeaway": "Adding the two preparation times gives the total time.",
-              "starter_code": "prep_time = 10\nbake_time = 40\ntotal_time = prep_time + bake_time",
-              "blanks": [
-                "bake_time"
+              "id": "variables-01-teach",
+              "type": "teach",
+              "question": "Total minutes is the stored prep time plus the stored bake time.",
+              "hints": [
+                "Keep the two times in separate names.",
+                "Ten minutes of prep and forty of baking.",
+                "prep = 10 / bake = 40 / print(prep + bake)"
+              ],
+              "explanation": "Total minutes is the stored prep time plus the stored bake time.",
+              "xp_reward": 0,
+              "worked_example": "prep = 10\nbake = 40\nprint(prep + bake)"
+            },
+            {
+              "id": "variables-01-mcq",
+              "type": "mcq",
+              "question": "Prep holds ten and bake holds forty. Which expression is their combined minutes?",
+              "hints": [
+                "The two names should be combined, not multiplied.",
+                "Adding the names produces the total.",
+                "prep + bake"
+              ],
+              "explanation": "prep + bake is 10 + 40.",
+              "xp_reward": 10,
+              "options": [
+                "prep - bake",
+                "prep + bake",
+                "bake / prep",
+                "prep * bake"
+              ],
+              "correct_answer": "prep + bake"
+            },
+            {
+              "id": "variables-01-predict",
+              "type": "output_prediction",
+              "question": "A lasagna needs ten minutes of prep and forty in the oven. What total is printed?",
+              "hints": [
+                "Add the two stored minute counts.",
+                "Ten plus forty is fifty.",
+                "50"
+              ],
+              "explanation": "10 + 40 prints 50.",
+              "xp_reward": 10,
+              "starter_code": "prep = 10\nbake = 40\nprint(prep + bake)\n",
+              "options": [
+                "30",
+                "50",
+                "400",
+                "14"
+              ],
+              "correct_answer": "50"
+            },
+            {
+              "id": "variables-01-order",
+              "type": "ordering",
+              "question": "Build a print of prep minutes added to bake minutes.",
+              "hints": [
+                "The print starts before the first name.",
+                "Put plus between the two names.",
+                "print(prep + bake)"
+              ],
+              "explanation": "print(prep + bake) shows the sum.",
+              "xp_reward": 10,
+              "options": [
+                "print(prep",
+                "+",
+                "bake)",
+                "*",
+                "prep"
               ],
               "correct_answer": [
-                "bake_time"
+                "print(prep",
+                "+",
+                "bake)"
+              ]
+            },
+            {
+              "id": "variables-01-fill",
+              "type": "fill_blank",
+              "question": "Fill the operator so total_time becomes prep plus bake.",
+              "hints": [
+                "The blank joins the two minute counts.",
+                "Plus is the operator that adds them.",
+                "+"
               ],
+              "explanation": "Plus stores the combined minutes.",
               "xp_reward": 10,
-              "explanation": "Adding prep_time and bake_time calculates the total time."
+              "starter_code": "total_time = prep ___ bake\n",
+              "options": [
+                "-",
+                "+",
+                "*",
+                "/"
+              ],
+              "correct_answer": "+"
+            },
+            {
+              "id": "variables-01-bug",
+              "type": "debugging",
+              "question": "The kitchen total comes out as negative thirty. Which line subtracts the bake time?",
+              "hints": [
+                "The two minute counts are stored correctly.",
+                "The total line uses minus.",
+                "Line 3"
+              ],
+              "explanation": "Line 3 subtracts the bake time instead of adding it.",
+              "xp_reward": 10,
+              "starter_code": "prep = 10\nbake = 40\ntotal = prep - bake\nprint(total)\n",
+              "correct_answer": "3"
+            },
+            {
+              "id": "variables-01-predict-2",
+              "type": "output_prediction",
+              "question": "A shorter recipe uses fifteen minutes of prep and twenty of baking. What is printed?",
+              "hints": [
+                "Add this pair of minute counts.",
+                "Fifteen plus twenty is thirty-five.",
+                "35"
+              ],
+              "explanation": "15 + 20 prints 35.",
+              "xp_reward": 10,
+              "starter_code": "prep = 15\nbake = 20\nprint(prep + bake)\n",
+              "options": [
+                "300",
+                "35",
+                "25",
+                "5"
+              ],
+              "correct_answer": "35"
+            },
+            {
+              "id": "variables-01-write",
+              "type": "code",
+              "question": "Store ten as prep_time and forty as bake_time, then print their sum.",
+              "hints": [
+                "The blank should add the two names.",
+                "The printed number is fifty.",
+                "total_time = prep_time + bake_time"
+              ],
+              "explanation": "Ten plus forty prints 50.",
+              "xp_reward": 10,
+              "starter_code": "prep_time = 10\nbake_time = 40\ntotal_time = ___\nprint(total_time)\n",
+              "solution_code": "prep_time = 10\nbake_time = 40\ntotal_time = prep_time + bake_time\nprint(total_time)\n",
+              "tests": [
+                {
+                  "name": "variables-01-prints",
+                  "description": "Ten plus forty prints 50.",
+                  "expected_stdout": "50\n",
+                  "required": true
+                }
+              ]
             }
           ]
         }
@@ -314,11 +663,12 @@
         "url": "https://docs.python.org/3/tutorial/introduction.html#first-steps-towards-programming",
         "license": "Python documentation license (PSF)"
       },
-      "xp_reward": 25
+      "xp_reward": 25,
+      "player_mode": "micro"
     },
     {
       "id": "variables-practice-1",
-      "title": "4. Cinema Ticket Billing (Practice)",
+      "title": "Price the cinema bill",
       "description": "You are buying 3 movie tickets at ticket_price = 12 each plus one popcorn_price = 8 snack. Compute ticket_total = ticket_price * num_tickets, then grand_total = ticket_total + popcorn_price (the test expects grand_total == 44).",
       "order": 4,
       "difficulty": "beginner",
@@ -332,7 +682,7 @@
       ],
       "prerequisites": [],
       "learning_objectives": [
-        "Calculate ticket total using multiplication, then add popcorn cost"
+        "The bill is the seat count times the ticket price, with the snack cost added after."
       ],
       "starter_code": "ticket_price = 12\npopcorn_price = 8\nnum_tickets = 3\n\n# TODO: work out the ticket subtotal, then the grand total\n",
       "solution_code": "ticket_price = 12\npopcorn_price = 8\nnum_tickets = 3\n\nticket_total = ticket_price * num_tickets\ngrand_total = ticket_total + popcorn_price\n",
@@ -350,51 +700,165 @@
       },
       "sublessons": [
         {
-          "id": "cinema-sub-1",
-          "title": "Step A: Calculate Ticket Total",
+          "id": "variables-practice-1-micro",
+          "title": "Price the cinema bill",
+          "description": "",
           "order": 1,
           "exercises": [
             {
-              "id": "cinema-ex-1a",
-              "type": "fill_blank",
-              "question": "3 tickets cost $12 each. Calculate ticket_total using multiplication:",
-              "micro_explanation": "Multiplication (*) calculates the total cost of multiple identical items.",
-              "worked_example": "ticket_price = 12\nnum_tickets = 3\nticket_total = ticket_price * num_tickets",
-              "worked_example_takeaway": "Multiplication gives us $36 for 3 tickets.",
-              "deep_dive": "The asterisk (*) operator multiplies two numeric variables in Python.",
-              "starter_code": "ticket_price = 12\nnum_tickets = 3\nticket_total = ticket_price * num_tickets",
-              "blanks": [
-                "num_tickets"
+              "id": "variables-practice-1-teach",
+              "type": "teach",
+              "question": "The bill is the seat count times the ticket price, with the snack cost added after.",
+              "hints": [
+                "Multiply the seats before the snack is added.",
+                "Three seats at twelve, then five more.",
+                "seats = 3 / price = 12 / bill = seats * price + 5"
               ],
-              "correct_answer": [
-                "num_tickets"
-              ],
-              "xp_reward": 10,
-              "explanation": "Multiplying ticket_price by num_tickets calculates $36 total for tickets."
-            }
-          ]
-        },
-        {
-          "id": "cinema-sub-2",
-          "title": "Step B: Calculate Grand Total",
-          "order": 2,
-          "exercises": [
+              "explanation": "The bill is the seat count times the ticket price, with the snack cost added after.",
+              "xp_reward": 0,
+              "worked_example": "seats = 3\nprice = 12\nbill = seats * price + 5"
+            },
             {
-              "id": "cinema-ex-2a",
-              "type": "fill_blank",
-              "question": "Now add the $8 popcorn price to ticket_total:",
-              "micro_explanation": "Add additional costs to an existing subtotal using the + operator.",
-              "worked_example": "ticket_total = 36\npopcorn_price = 8\ngrand_total = ticket_total + popcorn_price",
-              "worked_example_takeaway": "Adding popcorn gives $44 grand total.",
-              "starter_code": "ticket_total = 36\npopcorn_price = 8\ngrand_total = ticket_total + popcorn_price",
-              "blanks": [
-                "popcorn_price"
+              "id": "variables-practice-1-mcq",
+              "type": "mcq",
+              "question": "Three cinema seats cost twelve each, then a snack is added. Which expression is that bill?",
+              "hints": [
+                "Seats and price have to be multiplied.",
+                "The snack is added after that product.",
+                "seats * price + snack"
+              ],
+              "explanation": "seats * price + snack is the bill.",
+              "xp_reward": 10,
+              "options": [
+                "seats + price + snack",
+                "seats * price + snack",
+                "seats * snack",
+                "price + snack"
+              ],
+              "correct_answer": "seats * price + snack"
+            },
+            {
+              "id": "variables-practice-1-predict",
+              "type": "output_prediction",
+              "question": "Three seats at twelve dollars, plus a five-dollar snack. Which total is displayed?",
+              "hints": [
+                "Multiply seats by price, then add the snack.",
+                "Thirty-six plus five is forty-one.",
+                "41"
+              ],
+              "explanation": "3 * 12 + 5 prints 41.",
+              "xp_reward": 10,
+              "starter_code": "seats = 3\nprice = 12\nsnack = 5\nprint(seats * price + snack)\n",
+              "options": [
+                "15",
+                "36",
+                "41",
+                "20"
+              ],
+              "correct_answer": "41"
+            },
+            {
+              "id": "variables-practice-1-order",
+              "type": "ordering",
+              "question": "Build the bill from seats, the ticket price, and the snack.",
+              "hints": [
+                "Start from the seat count.",
+                "Multiply by price, then add snack.",
+                "seats * price + snack"
+              ],
+              "explanation": "seats * price + snack is the expression.",
+              "xp_reward": 10,
+              "options": [
+                "seats",
+                "*",
+                "price",
+                "+",
+                "snack",
+                "/"
               ],
               "correct_answer": [
-                "popcorn_price"
+                "seats",
+                "*",
+                "price",
+                "+",
+                "snack"
+              ]
+            },
+            {
+              "id": "variables-practice-1-fill",
+              "type": "fill_blank",
+              "question": "Fill the operator that multiplies seats by the ticket price.",
+              "hints": [
+                "The blank sits between seats and price.",
+                "A star multiplies those two names.",
+                "*"
               ],
+              "explanation": "The star multiplies seats by price.",
               "xp_reward": 10,
-              "explanation": "Adding popcorn_price to ticket_total gives the $44 grand total."
+              "starter_code": "bill = seats ___ price + snack\n",
+              "options": [
+                "+",
+                "*",
+                "-",
+                "/"
+              ],
+              "correct_answer": "*"
+            },
+            {
+              "id": "variables-practice-1-bug",
+              "type": "debugging",
+              "question": "The cinema charged for seats plus price instead of seats times price. Which line builds the bill?",
+              "hints": [
+                "The seat count and the price are stored correctly.",
+                "The bill line adds those names.",
+                "Line 3"
+              ],
+              "explanation": "Line 3 adds seats and price instead of multiplying them.",
+              "xp_reward": 10,
+              "starter_code": "seats = 3\nprice = 12\nbill = seats + price\nprint(bill)\n",
+              "correct_answer": "3"
+            },
+            {
+              "id": "variables-practice-1-predict-2",
+              "type": "output_prediction",
+              "question": "Four balcony seats at ten dollars, plus a two-dollar soda. What number is displayed?",
+              "hints": [
+                "Multiply the balcony seats by ten first.",
+                "Forty plus two is forty-two.",
+                "42"
+              ],
+              "explanation": "4 * 10 + 2 prints 42.",
+              "xp_reward": 10,
+              "starter_code": "seats = 4\nprice = 10\nsoda = 2\nprint(seats * price + soda)\n",
+              "options": [
+                "16",
+                "6",
+                "42",
+                "40"
+              ],
+              "correct_answer": "42"
+            },
+            {
+              "id": "variables-practice-1-write",
+              "type": "code",
+              "question": "Three seats at twelve, plus a five-dollar snack. Print the bill.",
+              "hints": [
+                "The blank is the whole bill expression.",
+                "Multiply, then add the snack.",
+                "bill = seats * price + snack"
+              ],
+              "explanation": "The cinema bill prints 41.",
+              "xp_reward": 10,
+              "starter_code": "seats = 3\nprice = 12\nsnack = 5\nbill = ___\nprint(bill)\n",
+              "solution_code": "seats = 3\nprice = 12\nsnack = 5\nbill = seats * price + snack\nprint(bill)\n",
+              "tests": [
+                {
+                  "name": "variables-practice-1-prints",
+                  "description": "The cinema bill prints 41.",
+                  "expected_stdout": "41\n",
+                  "required": true
+                }
+              ]
             }
           ]
         }
@@ -404,12 +868,13 @@
         "url": "https://docs.python.org/3/tutorial/introduction.html#first-steps-towards-programming",
         "license": "Python documentation license (PSF)"
       },
-      "xp_reward": 15
+      "xp_reward": 15,
+      "player_mode": "micro"
     },
     {
       "id": "variables-checkpoint",
-      "title": "5. Section 1 Checkpoint: Foundations Mastery",
-      "description": "For a triangle with base = 10 and height = 5, set area to the triangle formula (base * height) / 2. The test checks area == 25 — using / (true division) is expected.",
+      "title": "Score the bonus round",
+      "description": "For a triangle with base $10$ and height $5$, set `area` to the triangle formula. $$\\dfrac{\\text{base} \\times \\text{height}}{2}$$ The test checks `area == 25` — using `/` (true division) is expected.",
       "order": 5,
       "difficulty": "beginner",
       "duration_minutes": 10,
@@ -422,7 +887,7 @@
       ],
       "prerequisites": [],
       "learning_objectives": [
-        "Pass Section 1 Foundations Checkpoint"
+        "A doubled base score plus a bonus is the final result to print."
       ],
       "starter_code": "base = 10\nheight = 5\n\n# TODO: set area to the area of this triangle\narea = 0\n",
       "solution_code": "base = 10\nheight = 5\n\narea = (base * height) / 2\n",
@@ -472,7 +937,173 @@
         "url": "https://docs.python.org/3/tutorial/introduction.html#first-steps-towards-programming",
         "license": "Python documentation license (PSF)"
       },
-      "xp_reward": 40
+      "xp_reward": 40,
+      "player_mode": "micro",
+      "sublessons": [
+        {
+          "id": "variables-checkpoint-micro",
+          "title": "Score the bonus round",
+          "description": "",
+          "order": 1,
+          "exercises": [
+            {
+              "id": "variables-checkpoint-teach",
+              "type": "teach",
+              "question": "A doubled base score plus a bonus is the final result to print.",
+              "hints": [
+                "Double the base before the bonus is added.",
+                "Six doubled is twelve, then three more.",
+                "base = 6 / print(base * 2 + 3)"
+              ],
+              "explanation": "A doubled base score plus a bonus is the final result to print.",
+              "xp_reward": 0,
+              "worked_example": "base = 6\nprint(base * 2 + 3)"
+            },
+            {
+              "id": "variables-checkpoint-mcq",
+              "type": "mcq",
+              "question": "A base of six is doubled, then a bonus of three is added. Which expression is the final score?",
+              "hints": [
+                "The base is doubled, not merely increased by two.",
+                "After doubling, add the bonus.",
+                "base * 2 + 3"
+              ],
+              "explanation": "base * 2 + 3 is the final score.",
+              "xp_reward": 10,
+              "options": [
+                "base + 2 + 3",
+                "base + 3",
+                "base * 2 + 3",
+                "base * 3"
+              ],
+              "correct_answer": "base * 2 + 3"
+            },
+            {
+              "id": "variables-checkpoint-predict",
+              "type": "output_prediction",
+              "question": "Double a base of six and then add a bonus of three. What final score appears?",
+              "hints": [
+                "Double six before adding the bonus.",
+                "Twelve plus three is fifteen.",
+                "15"
+              ],
+              "explanation": "6 * 2 + 3 prints 15.",
+              "xp_reward": 10,
+              "starter_code": "base = 6\nbonus = 3\nprint(base * 2 + bonus)\n",
+              "options": [
+                "11",
+                "18",
+                "15",
+                "9"
+              ],
+              "correct_answer": "15"
+            },
+            {
+              "id": "variables-checkpoint-order",
+              "type": "ordering",
+              "question": "Build the final score from a doubled base and a bonus.",
+              "hints": [
+                "Start with the base name.",
+                "Multiply by two, then add bonus.",
+                "base * 2 + bonus"
+              ],
+              "explanation": "base * 2 + bonus is the score.",
+              "xp_reward": 10,
+              "options": [
+                "base",
+                "*",
+                "2",
+                "+",
+                "bonus",
+                "-"
+              ],
+              "correct_answer": [
+                "base",
+                "*",
+                "2",
+                "+",
+                "bonus"
+              ]
+            },
+            {
+              "id": "variables-checkpoint-fill",
+              "type": "fill_blank",
+              "question": "Fill the operator that doubles the base before the bonus.",
+              "hints": [
+                "The blank sits between base and two.",
+                "A star doubles the base.",
+                "*"
+              ],
+              "explanation": "The star multiplies the base by two.",
+              "xp_reward": 10,
+              "starter_code": "final = base ___ 2 + bonus\n",
+              "options": [
+                "+",
+                "-",
+                "*",
+                "/"
+              ],
+              "correct_answer": "*"
+            },
+            {
+              "id": "variables-checkpoint-bug",
+              "type": "debugging",
+              "question": "The bonus round added two instead of doubling. Which line computes the final score?",
+              "hints": [
+                "The base and the bonus are stored correctly.",
+                "The final line adds two instead of multiplying.",
+                "Line 3"
+              ],
+              "explanation": "Line 3 adds 2 instead of multiplying the base by 2.",
+              "xp_reward": 10,
+              "starter_code": "base = 6\nbonus = 3\nfinal = base + 2 + bonus\nprint(final)\n",
+              "correct_answer": "3"
+            },
+            {
+              "id": "variables-checkpoint-predict-2",
+              "type": "output_prediction",
+              "question": "A base of four is doubled and then a bonus of five is added. What is displayed?",
+              "hints": [
+                "Double four before the bonus joins it.",
+                "Eight plus five is thirteen.",
+                "13"
+              ],
+              "explanation": "4 * 2 + 5 prints 13.",
+              "xp_reward": 10,
+              "starter_code": "base = 4\nbonus = 5\nprint(base * 2 + bonus)\n",
+              "options": [
+                "9",
+                "13",
+                "11",
+                "40"
+              ],
+              "correct_answer": "13"
+            },
+            {
+              "id": "variables-checkpoint-write",
+              "type": "code",
+              "question": "Double a base of six, add a bonus of three, and print the final score.",
+              "hints": [
+                "The blank is the doubled base plus the bonus.",
+                "The printed score is fifteen.",
+                "final = base * 2 + bonus"
+              ],
+              "explanation": "The bonus round prints 15.",
+              "xp_reward": 10,
+              "starter_code": "base = 6\nbonus = 3\nfinal = ___\nprint(final)\n",
+              "solution_code": "base = 6\nbonus = 3\nfinal = base * 2 + bonus\nprint(final)\n",
+              "tests": [
+                {
+                  "name": "variables-checkpoint-prints",
+                  "description": "The bonus round prints 15.",
+                  "expected_stdout": "15\n",
+                  "required": true
+                }
+              ]
+            }
+          ]
+        }
+      ]
     }
   ]
 }

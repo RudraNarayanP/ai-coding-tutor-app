@@ -15,7 +15,7 @@
     {
       "id": "ts-04",
       "title": "4. Enterprise Application Architecture",
-      "description": "Checkpoint: export interface ApiResponse<T> { data: T; status: number; } and implement the generic function wrapData<T>(data: T): ApiResponse<T> returning { data, status: 200 }. Tests wrap both a number and an object and check status plus data for each.",
+      "description": "Checkpoint: export interface ApiResponse<T> { data: T; status: number; } and implement the generic function wrapData<T>(data: T): ApiResponse<T> returning { data, status: 200 }. Tests wrap both a number and an object and check status plus data for each. The test checks that `num.status` equals `= 200 || num.data !== 5`; `res.status` equals `= 200 || !res.data.ok`; `num.status` equals `200 || num.data !== 5`.",
       "order": 4,
       "difficulty": "advanced",
       "duration_minutes": 10,
@@ -55,7 +55,7 @@
     {
       "id": "ts-07",
       "title": "7. Readonly Fields in Classes",
-      "description": "Class fields may be prefixed with the readonly modifier, which prevents assignments to the field outside of the constructor. Export a class Server with `readonly port: number` initialized in the constructor and a method portAddress(): string returning `http://localhost:${this.port}`. Tests construct Server(8080) and check both the field and the address.",
+      "description": "Class fields may be prefixed with the readonly modifier, which prevents assignments to the field outside of the constructor. Export a class Server with `readonly port: number` initialized in the constructor and a method portAddress(): string returning `http://localhost:${this.port}`. Tests construct Server(8080) and check both the field and the address. The test checks that `s.port` equals `= 8080`; `s.portAddress()` equals `= 'http://localhost:8080'`; `s.port` equals `8080`.",
       "order": 7,
       "difficulty": "beginner",
       "duration_minutes": 6,

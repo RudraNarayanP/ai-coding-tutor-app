@@ -15,7 +15,7 @@
     {
       "id": "overfit-train-val",
       "title": "1. Train vs Val Error",
-      "description": "Implement `error_gap(train_err, val_err)` = val_err - train_err.",
+      "description": "Implement `error_gap(train_err, val_err)` = val_err - train_err. The test checks that `error_gap(0.1, 0.4)` equals `0.3`.",
       "order": 16,
       "difficulty": "intermediate",
       "duration_minutes": 5,
@@ -53,7 +53,7 @@
     {
       "id": "overfit-l2",
       "title": "2. L2 Penalty",
-      "description": "Implement `l2_loss(mse, weights, lam)` = mse + lam * sum(w^2).",
+      "description": "Implement `l2_loss(mse, weights, lam)` = mse + lam * sum(w^2). The test checks that `l2_loss(1.0, [1, 2], 0.5)` equals `1.0 + 0.5 * 5`.",
       "order": 17,
       "difficulty": "intermediate",
       "duration_minutes": 5,
@@ -91,7 +91,7 @@
     {
       "id": "overfit-early-stop",
       "title": "3. Early Stopping",
-      "description": "Implement `early_stop_epoch(val_losses, patience)` returning first epoch index to stop (0-based) or last index if never.",
+      "description": "Implement `early_stop_epoch(val_losses, patience)` returning first epoch index to stop (0-based) or last index if never. The test checks that `early_stop_epoch([1.0, 0.5, 0.6, 0.7], 2)` equals `3`; `early_stop_epoch([1.0, 0.8, 0.6], 5)` equals `2`.",
       "order": 18,
       "difficulty": "intermediate",
       "duration_minutes": 8,
@@ -129,7 +129,7 @@
     {
       "id": "overfit-poly-features",
       "title": "4. Polynomial Features (Practice)",
-      "description": "Implement `poly_features(x, degree)` returning [x^1, x^2, ..., x^degree].",
+      "description": "Implement `poly_features(x, degree)` returning [x^1, x^2, ..., x^degree]. The test checks that `poly_features(2, 3)` equals `[2, 4, 8]`.",
       "order": 19,
       "difficulty": "intermediate",
       "duration_minutes": 6,
@@ -167,7 +167,7 @@
     {
       "id": "overfit-checkpoint",
       "title": "5. Checkpoint: Choose Complexity",
-      "description": "Implement `choose_degree(val_errors)` returning degree (1-based index) with lowest val error.",
+      "description": "Implement `choose_degree(val_errors)` returning degree (1-based index) with lowest val error. The test checks that `choose_degree([0.5, 0.2, 0.3])` equals `2`.",
       "order": 20,
       "difficulty": "intermediate",
       "duration_minutes": 10,

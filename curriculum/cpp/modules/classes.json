@@ -15,7 +15,7 @@
     {
       "id": "cpp-classes-step-1",
       "title": "1. Defining Classes & Constructors",
-      "description": "C++ classes encapsulate member variables and functions. Member initialization lists are preferred in constructors. Create a `Player` class.",
+      "description": "Finish `name_`, `get_name`, `get_health`. C++ classes encapsulate member variables and functions. Member initialization lists are preferred in constructors. Create a `Player` class. The test checks that `p.get_name()` equals `\"Arthur\" && p.get_health() == 120`.",
       "order": 26,
       "difficulty": "intermediate",
       "duration_minutes": 5,
@@ -53,7 +53,7 @@
     {
       "id": "cpp-classes-step-2",
       "title": "2. Mutator Member Functions",
-      "description": "Add a `take_damage(int damage)` method to modify `health_` safely.",
+      "description": "Add a `take_damage(int damage)` method to modify `health_` safely. The test checks that `p.get_health()` equals `60`.",
       "order": 27,
       "difficulty": "intermediate",
       "duration_minutes": 5,
@@ -91,7 +91,7 @@
     {
       "id": "cpp-classes-01",
       "title": "3. Bank Account Ledger (Concept Challenge)",
-      "description": "Encapsulate account balance and transaction operations in C++.",
+      "description": "Finish `owner_`, `get_balance`, `deposit`, `withdraw`. Encapsulate account balance and transaction operations in C++. The test checks that `acc.get_balance()` equals `150.0`; `acc.withdraw(30.0)` equals `true`; `acc.get_balance()` equals `120.0`.",
       "order": 28,
       "difficulty": "intermediate",
       "duration_minutes": 8,
@@ -129,7 +129,7 @@
     {
       "id": "cpp-classes-practice-1",
       "title": "4. Rectangle Class (Practice)",
-      "description": "Calculate area and perimeter in a Rectangle class.",
+      "description": "Calculate area and perimeter in a Rectangle class. The test checks that `r.area()` equals `20.0`.",
       "order": 29,
       "difficulty": "intermediate",
       "duration_minutes": 6,
@@ -167,7 +167,7 @@
     {
       "id": "cpp-classes-checkpoint",
       "title": "5. Unit 6 Checkpoint: C++ Classes Mastery",
-      "description": "Verify C++ object-oriented encapsulation.",
+      "description": "Finish `Counter::increment` so it adds 1 to the private `count_`. The test starts a counter at 5, calls `increment`, and checks that `get_count()` is 6.",
       "order": 30,
       "difficulty": "intermediate",
       "duration_minutes": 10,
@@ -179,7 +179,7 @@
         "cpp-vectors"
       ],
       "learning_objectives": [
-        "Pass C++ classes checkpoint"
+        "Add 1 to a Counter's private count in increment"
       ],
       "starter_code": "class Counter {\nprivate:\n    int count_;\npublic:\n    Counter(int initial = 0) : count_(initial) {}\n    int get_count() const { return count_; }\n    void increment() {\n        // TODO: Add 1 to count_\n    }\n};\n",
       "solution_code": "class Counter {\nprivate:\n    int count_;\npublic:\n    Counter(int initial = 0) : count_(initial) {}\n    int get_count() const { return count_; }\n    void increment() {\n        count_++;\n    }\n};\n",

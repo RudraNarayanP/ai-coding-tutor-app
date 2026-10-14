@@ -13,7 +13,7 @@
     {
       "id": "linreg-predict",
       "title": "1. Linear Prediction",
-      "description": "Implement `predict(x, w, b)` = w*x + b for scalars.",
+      "description": "Implement `predict(x, w, b)` = w*x + b for scalars. The test checks that `predict(2, 3, 1)` equals `7`.",
       "order": 1,
       "difficulty": "intermediate",
       "duration_minutes": 5,
@@ -89,7 +89,7 @@
     {
       "id": "linreg-gd-step",
       "title": "3. Gradient Descent Step",
-      "description": "Implement `gd_step(xs, ys, w, b, lr)` one step for y≈w*x+b. Return (w_new, b_new).",
+      "description": "Finish `gd_step(xs, ys, w, b, lr)` so it takes one gradient step for `y ≈ w*x + b` and returns `(w_new, b_new)`. The test checks that `gd_step([1.0], [2.0], 0.0, 0.0, 0.1)` is about `(0.4, 0.4)`.",
       "order": 3,
       "difficulty": "intermediate",
       "duration_minutes": 8,
@@ -127,7 +127,7 @@
     {
       "id": "linreg-closed-form",
       "title": "4. Closed-Form Slope (Practice)",
-      "description": "Implement `fit_slope(xs, ys)` for y=w*x (no intercept): w = sum(x*y)/sum(x*x).",
+      "description": "Implement `fit_slope(xs, ys)` for y=w*x (no intercept): w = sum(x*y)/sum(x*x). The test checks that `fit_slope([1, 2, 3], [2, 4, 6])` equals `2.0`.",
       "order": 4,
       "difficulty": "intermediate",
       "duration_minutes": 6,
@@ -165,7 +165,7 @@
     {
       "id": "linreg-checkpoint",
       "title": "5. Checkpoint: R² Score",
-      "description": "Implement `r2(y_true, y_pred)`. Return 0 if total sum of squares is 0.",
+      "description": "Implement `r2(y_true, y_pred)`. Return 0 if total sum of squares is 0. The test checks that `r2([1, 2, 3], [1, 2, 3])` equals `1.0`; `r2([1, 2, 3], [2, 2, 2])` equals `0.0`.",
       "order": 5,
       "difficulty": "intermediate",
       "duration_minutes": 10,

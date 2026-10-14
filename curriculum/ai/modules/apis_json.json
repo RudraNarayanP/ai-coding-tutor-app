@@ -13,7 +13,7 @@
     {
       "id": "ai-01",
       "title": "1. Building Model API Request Payloads",
-      "description": "Chat completion requests send a 'model' and a 'messages' array — 'a list of messages comprising the conversation so far' — where each message is a dict with 'role' and 'content'. Implement build_chat_payload(model, system_prompt, user_prompt) so it returns json.dumps of {\"model\": ..., \"messages\": [system, user]}. Tests parse the JSON and check the model name and that there are 2 messages.",
+      "description": "Chat completion requests send a 'model' and a 'messages' array — 'a list of messages comprising the conversation so far' — where each message is a dict with 'role' and 'content'. Implement build_chat_payload(model, system_prompt, user_prompt) so it returns json.dumps of {\"model\": ..., \"messages\": [system, user]}. Tests parse the JSON and check the model name and that there are 2 messages. The test checks that `json.loads(build_chat_payload('gpt-4o-mini', 'sys', 'usr'))['model']` equals `'gpt-4o-mini'`; `len(res['messages'])` equals `2`.",
       "order": 1,
       "difficulty": "intermediate",
       "duration_minutes": 5,

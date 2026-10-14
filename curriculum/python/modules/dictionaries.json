@@ -17,7 +17,7 @@
     {
       "id": "dictionaries-step-1",
       "title": "1. Key-Value Lookup & Safe Retrieval (`.get()`)",
-      "description": "Dictionaries store key-value pairs: `{\"apple\": 5, \"banana\": 3}`. Use `.get(key, default)` to safely retrieve values without raising KeyError.",
+      "description": "Finish `get_item_count(inventory, item)`. Return how many of `item` are in the dictionary, or `0` when the key is missing. Use `.get` so a missing key does not crash. For `{\"apple\": 10}`, apple is `10` and orange is `0`. The test checks that `get_item_count(inv, \"apple\")` equals `10`; `get_item_count(inv, \"orange\")` equals `0`.",
       "order": 56,
       "difficulty": "intermediate",
       "duration_minutes": 5,
@@ -55,7 +55,7 @@
     {
       "id": "dictionaries-step-2",
       "title": "2. Iterating Over Dictionaries (`.items()`, `del`)",
-      "description": "`dict.items()` yields `(key, value)` pairs during iteration. Use `del dict[key]` to delete a key.",
+      "description": "Finish `total_inventory_count(inventory)` so it returns the sum of every stored count. `total_inventory_count({\"a\": 5, \"b\": 15})` equals `20`. The test checks that `total_inventory_count({\"a\": 5, \"b\": 15})` equals `20`.",
       "order": 57,
       "difficulty": "intermediate",
       "duration_minutes": 5,
@@ -94,7 +94,7 @@
     {
       "id": "dictionaries-01",
       "title": "3. Inventory Management (Concept Challenge)",
-      "description": "Create and mutate store inventory using dictionary methods.",
+      "description": "Finish `create_inventory`, `add_items`, `decrement_items`, `remove_item` and 1 more. Create and mutate store inventory using dictionary methods. The test checks that `create_inventory(['coal', 'wood', 'wood'])` equals `{'coal': 1, 'wood': 2}`; `add_items({'wood': 4, 'iron': 1}, ['wood', 'iron', 'diamond'])` equals `{'wood': 5, 'iron': 2, 'diamond': 1}`; `decrement_items({'wood': 2, 'iron': 1}, ['wood', 'wood', 'wood', 'iron'])` equals `{'wood': 0, 'iron': 0}`.",
       "order": 58,
       "difficulty": "intermediate",
       "duration_minutes": 8,
@@ -161,7 +161,7 @@
     {
       "id": "dictionaries-practice-1",
       "title": "4. Word Frequency Counter (Practice)",
-      "description": "Count word occurrences in a list using a dictionary.",
+      "description": "Finish `count_words`. Count word occurrences in a list using a dictionary. The test checks that `count_words([\"a\", \"b\", \"a\"])` equals `{\"a\": 2, \"b\": 1}`.",
       "order": 59,
       "difficulty": "intermediate",
       "duration_minutes": 6,
@@ -200,7 +200,7 @@
     {
       "id": "dictionaries-checkpoint",
       "title": "5. Unit 12 Checkpoint: Dictionaries Mastery",
-      "description": "Verify dictionary mapping comprehension.",
+      "description": "Finish `merge_inventories(inv1, inv2)`. Return a new dictionary with the counts from both inventories added together. Do not change the originals. `merge_inventories({\"a\": 2}, {\"a\": 3, \"b\": 4})` equals `{\"a\": 5, \"b\": 4}`. The test checks that `merge_inventories({\"a\": 2}, {\"a\": 3, \"b\": 4})` equals `{\"a\": 5, \"b\": 4}`.",
       "order": 60,
       "difficulty": "intermediate",
       "duration_minutes": 10,

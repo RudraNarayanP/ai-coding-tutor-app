@@ -27,6 +27,8 @@ MATCHING_TYPES = frozenset({"matching"})
 FILL_TYPES = frozenset({"fill_blank", "code_completion"})
 # Write code in the editor and run it through the sandbox.
 CODE_TYPES = frozenset({"code", "tiny_coding", "identify_mistake"})
+# Shown, not scored. A teach card has speech and an example, and no answer key.
+DISPLAY_TYPES = frozenset({"teach"})
 
 ALL_TYPES = (
     CHOICE_TYPES
@@ -35,6 +37,7 @@ ALL_TYPES = (
     | MATCHING_TYPES
     | FILL_TYPES
     | CODE_TYPES
+    | DISPLAY_TYPES
 )
 
 # Types where an empty/absent ``correct_answer`` means the item cannot be
@@ -69,6 +72,8 @@ def widget_for(raw: object) -> str:
         return "fill"
     if ex_type in CODE_TYPES:
         return "code"
+    if ex_type in DISPLAY_TYPES:
+        return "teach"
     return "unknown"
 
 

@@ -15,7 +15,7 @@
     {
       "id": "split-train-test",
       "title": "1. Train/Test Split",
-      "description": "Implement `train_test_split(xs, ratio)` returning (train, test); train gets floor(n*ratio).",
+      "description": "Finish `train_test_split(xs, ratio)` so it returns `(train, test)`. The train list is the first `floor(len(xs) * ratio)` items. The test list is the rest. The test checks that `train_test_split([1, 2, 3, 4, 5], 0.6)` equals `([1, 2, 3], [4, 5])`.",
       "order": 21,
       "difficulty": "intermediate",
       "duration_minutes": 5,
@@ -53,7 +53,7 @@
     {
       "id": "split-shuffle",
       "title": "2. Deterministic Shuffle Split",
-      "description": "Implement `shuffle_split(xs, ratio, seed)` using random.Random(seed).shuffle on a copy.",
+      "description": "Implement `shuffle_split(xs, ratio, seed)` using random.Random(seed).shuffle on a copy. The test checks that `len(tr)` equals `2`; `len(te)` equals `2`; `sorted(tr + te)` equals `[1, 2, 3, 4]`.",
       "order": 22,
       "difficulty": "intermediate",
       "duration_minutes": 5,
@@ -91,7 +91,7 @@
     {
       "id": "scale-minmax",
       "title": "3. Min-Max Scaling",
-      "description": "Implement `minmax(xs)` scaling to [0,1]. If max==min, return zeros.",
+      "description": "Implement `minmax(xs)` scaling to [0,1]. If max==min, return zeros. The test checks that `minmax([0, 5, 10])` equals `[0.0, 0.5, 1.0]`; `minmax([3, 3, 3])` equals `[0.0, 0.0, 0.0]`.",
       "order": 23,
       "difficulty": "intermediate",
       "duration_minutes": 8,
@@ -129,7 +129,7 @@
     {
       "id": "scale-standardize",
       "title": "4. Standardize (Practice)",
-      "description": "Implement `standardize(xs)` to zero mean / unit variance (population). All zeros if var==0.",
+      "description": "Implement `standardize(xs)` to zero mean / unit variance (population). All zeros if var==0. The test checks that `sum(out)` equals `0.0`; `sum(x * x for x in out) / len(out)` equals `1.0`.",
       "order": 24,
       "difficulty": "intermediate",
       "duration_minutes": 6,
@@ -195,7 +195,7 @@
     {
       "id": "scale-checkpoint",
       "title": "5. Checkpoint: Fit-Transform Scaler",
-      "description": "Implement `fit_minmax(train)` returning (lo, hi) and `transform_minmax(xs, lo, hi)`.",
+      "description": "Implement `fit_minmax(train)` returning (lo, hi) and `transform_minmax(xs, lo, hi)`. The test checks that `(lo, hi)` equals `(0, 10)`; `transform_minmax([5], lo, hi)` equals `[0.5]`.",
       "order": 25,
       "difficulty": "intermediate",
       "duration_minutes": 10,

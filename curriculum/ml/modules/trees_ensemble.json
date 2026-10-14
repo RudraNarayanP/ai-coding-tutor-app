@@ -15,7 +15,7 @@
     {
       "id": "tree-stump",
       "title": "1. Decision Stump",
-      "description": "Implement `stump_predict(x, threshold)` → 1 if x>=threshold else 0.",
+      "description": "Implement `stump_predict(x, threshold)` → 1 if x>=threshold else 0. The test checks that `stump_predict(3, 2)` equals `1`; `stump_predict(1, 2)` equals `0`.",
       "order": 21,
       "difficulty": "intermediate",
       "duration_minutes": 5,
@@ -53,7 +53,7 @@
     {
       "id": "tree-gini",
       "title": "2. Gini Impurity",
-      "description": "Implement `gini(labels)` for a list of class labels.",
+      "description": "Implement `gini(labels)` for a list of class labels. The test checks that `gini([0, 0, 0])` equals `0.0`; `gini([0, 1])` equals `0.5`.",
       "order": 22,
       "difficulty": "intermediate",
       "duration_minutes": 5,
@@ -91,7 +91,7 @@
     {
       "id": "tree-best-split",
       "title": "3. Best Threshold Split",
-      "description": "Implement `best_split(xs, labels)` minimizing weighted gini of left (x<t) / right (x>=t). Return threshold.",
+      "description": "Implement `best_split(xs, labels)` minimizing weighted gini of left (x<t) / right (x>=t). Return threshold. The test checks that `best_split([1, 2, 3, 10], [0, 0, 0, 1])` equals `10`.",
       "order": 23,
       "difficulty": "intermediate",
       "duration_minutes": 8,
@@ -129,7 +129,7 @@
     {
       "id": "tree-bagging",
       "title": "4. Majority Vote Ensemble (Practice)",
-      "description": "Implement `majority_vote(pred_lists)` — each pred_lists[i] is predictions from one model. Tie → min label.",
+      "description": "Implement `majority_vote(pred_lists)` — each pred_lists[i] is predictions from one model. Tie → min label. The test checks that `majority_vote([[1, 0], [1, 1], [0, 1]])` equals `[1, 1]`.",
       "order": 24,
       "difficulty": "intermediate",
       "duration_minutes": 6,
@@ -167,7 +167,7 @@
     {
       "id": "tree-checkpoint",
       "title": "5. Checkpoint: Tree Depth Limit",
-      "description": "Implement `should_stop(depth, max_depth, labels)` True if depth>=max_depth or all labels equal.",
+      "description": "Implement `should_stop(depth, max_depth, labels)` True if depth>=max_depth or all labels equal. The test checks that `should_stop(3, 3, [0, 1])` is true; `should_stop(0, 5, [1, 1, 1])` is true; `should_stop(1, 5, [0, 1])` is false.",
       "order": 25,
       "difficulty": "intermediate",
       "duration_minutes": 10,

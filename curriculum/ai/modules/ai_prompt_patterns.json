@@ -15,7 +15,7 @@
     {
       "id": "ai-prompt-system",
       "title": "14. Build Chat Messages",
-      "description": "Implement `chat_messages(system, user)` returning list of role/content dicts.",
+      "description": "Implement `chat_messages(system, user)` returning list of role/content dicts. The test checks that `chat_messages('sys', 'hi')[0]['role']` equals `'system'`; `chat_messages('sys', 'hi')[1]['content']` equals `'hi'`.",
       "order": 14,
       "difficulty": "intermediate",
       "duration_minutes": 5,
@@ -53,7 +53,7 @@
     {
       "id": "ai-prompt-template",
       "title": "15. Prompt Template",
-      "description": "Implement `render_prompt(template, **kwargs)` using str.format_map.",
+      "description": "Implement `render_prompt(template, **kwargs)` using str.format_map. The test checks that `render_prompt('Hello {name}', name='Ada')` equals `'Hello Ada'`.",
       "order": 15,
       "difficulty": "intermediate",
       "duration_minutes": 5,
@@ -91,7 +91,7 @@
     {
       "id": "ai-prompt-fewshot",
       "title": "16. Few-Shot Packing",
-      "description": "Implement `few_shot(examples, query)` formatting Input/Output blocks then the query.",
+      "description": "Implement `few_shot(examples, query)` formatting Input/Output blocks then the query. The test checks that `few_shot([('2+2', '4')], '3+3').endswith('Output:')` is true; `few_shot([('2+2', '4')], '3+3')` contains `'Input: 2+2'`.",
       "order": 16,
       "difficulty": "intermediate",
       "duration_minutes": 8,
@@ -155,7 +155,7 @@
     {
       "id": "ai-prompt-json-schema",
       "title": "17. Ask for JSON (Practice)",
-      "description": "Implement `json_instruction(schema_keys)` telling the model to return JSON with those keys.",
+      "description": "Implement `json_instruction(schema_keys)` telling the model to return JSON with those keys. The test checks that `json_instruction(['name', 'age'])` contains `'name'`; `json_instruction(['name', 'age'])` contains `'age'`; `json_instruction(['name', 'age'])` contains `'JSON'`.",
       "order": 17,
       "difficulty": "intermediate",
       "duration_minutes": 6,
@@ -193,7 +193,7 @@
     {
       "id": "ai-prompt-checkpoint",
       "title": "18. Checkpoint: Extract JSON Block",
-      "description": "Implement `extract_json(text)` returning the substring from first '{' to last '}'.",
+      "description": "Finish `extract_json(text)` so it returns the substring from the first `{` through the last `}`. The test puts a small JSON object in the middle of a sentence and checks that you return only that object.",
       "order": 18,
       "difficulty": "intermediate",
       "duration_minutes": 10,

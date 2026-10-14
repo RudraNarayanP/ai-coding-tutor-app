@@ -91,6 +91,8 @@ export type LessonView = {
   concepts?: string[]
   prerequisites?: string[]
   learning_objectives?: string[]
+  player_mode?: string
+  source?: { name: string; url: string; license?: string } | null
   sublessons?: SubLessonView[]
   mastery_exam?: ExerciseView[]
   xp_reward?: number

@@ -1811,7 +1811,55 @@ input.pw-ai-input:focus { outline: none; border-color: #5b6cff; }
   font-weight: 500;
   color: #94a3b8;
   margin: 0 0 16px;
-  line-height: 1.5;
+  line-height: 1.65;
+  overflow: visible;
+}
+
+/* LaTeX + inline code in lesson copy (KaTeX).
+   The global `* { box-sizing: border-box }` reset shrinks KaTeX struts,
+   fraction bars, and scripts, so math must stay on content-box. */
+.lesson-rich-text {
+  color: inherit;
+  line-height: 1.65;
+  overflow: visible;
+}
+
+.lesson-rich-text .katex,
+.lesson-rich-text .katex * {
+  box-sizing: content-box;
+}
+
+.lesson-rich-text .lesson-rich-math--display {
+  display: block;
+  margin: 12px 0 14px;
+  padding: 4px 0;
+  overflow-x: auto;
+  text-align: center;
+  line-height: 1.2;
+}
+
+.lesson-rich-text .lesson-rich-math--inline {
+  display: inline-block;
+  vertical-align: middle;
+  margin: 0 0.15em;
+  line-height: 1;
+  max-width: 100%;
+}
+
+.lesson-rich-text .katex {
+  font-size: 1.12em;
+  color: #e2e8f0;
+  line-height: 1.2;
+}
+
+.lesson-rich-text .katex-display {
+  margin: 0.35em 0;
+  overflow-x: auto;
+  overflow-y: hidden;
+}
+
+.ew-answer-question .lesson-rich-text .katex {
+  font-size: 1.12em;
 }
 
 .ew-task-example {

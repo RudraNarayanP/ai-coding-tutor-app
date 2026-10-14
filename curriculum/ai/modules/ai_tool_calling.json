@@ -15,7 +15,7 @@
     {
       "id": "ai-tool-parse-call",
       "title": "19. Parse Tool Call",
-      "description": "Implement `parse_tool_call(payload)` expecting name/arguments and returning (name, arguments).",
+      "description": "Implement `parse_tool_call(payload)` expecting name/arguments and returning (name, arguments). The test checks that `parse_tool_call({'name': 'sum', 'arguments': {'a': 1}})` equals `('sum', {'a': 1})`.",
       "order": 19,
       "difficulty": "intermediate",
       "duration_minutes": 5,
@@ -53,7 +53,7 @@
     {
       "id": "ai-tool-dispatch",
       "title": "20. Dispatch Tool",
-      "description": "Implement `dispatch(name, args, registry)` calling registry[name](**args).",
+      "description": "Implement `dispatch(name, args, registry)` calling registry[name](**args). The test checks that `dispatch('add', {'x': 2, 'y': 3}, reg)` equals `5`.",
       "order": 20,
       "difficulty": "intermediate",
       "duration_minutes": 5,
@@ -91,7 +91,7 @@
     {
       "id": "ai-tool-validate",
       "title": "21. Validate Arguments",
-      "description": "Implement `validate_args(args, required)` raising ValueError if any required key missing.",
+      "description": "Implement `validate_args(args, required)` raising ValueError if any required key missing. The test checks that `validate_args({'a': 1}, ['a'])` equals `{'a': 1}`; invalid input raises `ValueError`.",
       "order": 21,
       "difficulty": "intermediate",
       "duration_minutes": 8,
@@ -167,7 +167,7 @@
     {
       "id": "ai-tool-checkpoint",
       "title": "23. Checkpoint: Safe Registry",
-      "description": "Implement `safe_dispatch(name, args, registry)` returning error dict if unknown else result dict.",
+      "description": "Implement `safe_dispatch(name, args, registry)` returning error dict if unknown else result dict. The test checks that `safe_dispatch('ping', {}, reg)` equals `{'result': 'pong'}`; `safe_dispatch('nope', {}, reg)` contains `'error'`.",
       "order": 23,
       "difficulty": "intermediate",
       "duration_minutes": 10,

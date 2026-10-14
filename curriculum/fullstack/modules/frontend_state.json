@@ -15,7 +15,7 @@
     {
       "id": "fs-state-update",
       "title": "1. Immutable Set Field",
-      "description": "Implement `set_field(state, key, value)` returning a new dict.",
+      "description": "Implement `set_field(state, key, value)` returning a new dict. The test checks that `set_field(s, 'a', 2)['a']` equals `2`; `s['a']` equals `1`.",
       "order": 11,
       "difficulty": "intermediate",
       "duration_minutes": 5,
@@ -79,7 +79,7 @@
     {
       "id": "fs-state-reducer",
       "title": "2. Simple Reducer",
-      "description": "Implement `reduce(state, action)` handling inc and set actions for {'count': int}.",
+      "description": "Implement `reduce(state, action)` handling inc and set actions for {'count': int}. The test checks that `reduce({'count': 1}, {'type': 'inc'})` equals `{'count': 2}`; `reduce({'count': 1}, {'type': 'set', 'value': 9})` equals `{'count': 9}`.",
       "order": 12,
       "difficulty": "intermediate",
       "duration_minutes": 5,
@@ -152,7 +152,7 @@
     {
       "id": "fs-state-list",
       "title": "3. List CRUD",
-      "description": "Implement `upsert_item(items, item)` by id (replace or append).",
+      "description": "Implement `upsert_item(items, item)` by id (replace or append). The test checks that `upsert_item(items, {'id': 1, 'n': 'b'})` equals `[{'id': 1, 'n': 'b'}]`; `upsert_item(items, {'id': 2, 'n': 'c'})[-1]['id']` equals `2`.",
       "order": 13,
       "difficulty": "intermediate",
       "duration_minutes": 8,
@@ -190,7 +190,7 @@
     {
       "id": "fs-state-select",
       "title": "4. Derived Selector (Practice)",
-      "description": "Implement `select_active(items)` returning those with active True.",
+      "description": "Implement `select_active(items)` returning those with active True. The test checks that `select_active([{'active': True}, {'active': False}])` equals `[{'active': True}]`.",
       "order": 14,
       "difficulty": "intermediate",
       "duration_minutes": 6,
@@ -228,7 +228,7 @@
     {
       "id": "fs-state-checkpoint",
       "title": "5. Checkpoint: Batch Actions",
-      "description": "Implement `apply_actions(state, actions)` folding a reducer over actions.",
+      "description": "Implement `apply_actions(state, actions)` folding a reducer over actions. The test checks that `apply_actions({'count': 0}, [{'type': 'inc'}, {'type': 'inc'}])` equals `{'count': 2}`.",
       "order": 15,
       "difficulty": "intermediate",
       "duration_minutes": 10,

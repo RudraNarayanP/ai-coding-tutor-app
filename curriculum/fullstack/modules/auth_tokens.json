@@ -15,7 +15,7 @@
     {
       "id": "fs-auth-header",
       "title": "1. Bearer Header",
-      "description": "Implement `auth_header(token)` returning an Authorization bearer header dict.",
+      "description": "Implement `auth_header(token)` returning an Authorization bearer header dict. The test checks that `auth_header('abc')` equals `{'Authorization': 'Bearer abc'}`.",
       "order": 16,
       "difficulty": "intermediate",
       "duration_minutes": 5,
@@ -53,7 +53,7 @@
     {
       "id": "fs-auth-store",
       "title": "2. Token Store",
-      "description": "Implement `TokenStore` with set/get/clear methods.",
+      "description": "Implement `TokenStore` with set/get/clear methods. The test checks that `TokenStore().get()` equals `'t'`; `TokenStore().get()` is None.",
       "order": 17,
       "difficulty": "intermediate",
       "duration_minutes": 5,
@@ -91,7 +91,7 @@
     {
       "id": "fs-auth-jwt-payload",
       "title": "3. Decode JWT Payload (no verify)",
-      "description": "Implement `jwt_payload(token)` decoding the middle base64url segment as JSON.",
+      "description": "Implement `jwt_payload(token)` decoding the middle base64url segment as JSON. The test checks that `jwt_payload(token)` equals `{'sub': '1'}`.",
       "order": 18,
       "difficulty": "intermediate",
       "duration_minutes": 8,
@@ -159,7 +159,7 @@
     {
       "id": "fs-auth-expired",
       "title": "4. Expiry Check (Practice)",
-      "description": "Implement `is_expired(payload, now)` True if payload exp <= now.",
+      "description": "Implement `is_expired(payload, now)` True if payload exp <= now. The test checks that `is_expired({'exp': 10}, 10)` is true; `is_expired({'exp': 11}, 10)` is false.",
       "order": 19,
       "difficulty": "intermediate",
       "duration_minutes": 6,
@@ -197,7 +197,7 @@
     {
       "id": "fs-auth-checkpoint",
       "title": "5. Checkpoint: Refresh Decision",
-      "description": "Implement `should_refresh(payload, now, skew=30)` True if exp - now <= skew.",
+      "description": "Implement `should_refresh(payload, now, skew=30)` True if exp - now <= skew. The test checks that `should_refresh({'exp': 100}, 80, skew=30)` is true; `should_refresh({'exp': 200}, 80, skew=30)` is false.",
       "order": 20,
       "difficulty": "intermediate",
       "duration_minutes": 10,

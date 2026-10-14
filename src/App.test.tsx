@@ -186,7 +186,7 @@ afterEach(() => {
 async function openCurrentLesson(user: ReturnType<typeof userEvent.setup>) {
   const currentBtn = await screen.findByRole('button', { name: /Variables — Current lesson/ })
   await user.click(currentBtn)
-  await waitFor(() => screen.getByRole('heading', { level: 2, name: 'Variables' }))
+  await waitFor(() => screen.getByRole('button', { name: 'Quit lesson' }))
 }
 
 describe('Course track switching', () => {
@@ -251,8 +251,8 @@ describe('Lesson navigation', () => {
     // Focused lesson view shows no course navigation (it lives on the Learn home map only)
     expect(screen.queryByRole('navigation', { name: 'Lessons' })).not.toBeInTheDocument()
 
-    // Back on the Learn map, the opened lesson is marked as the current page
-    await user.click(screen.getByRole('button', { name: /Back to Map/ }))
+    await user.click(screen.getByRole('button', { name: 'Quit lesson' }))
+    await user.click(screen.getByRole('button', { name: 'Quit' }))
     const navButton = await screen.findByRole('button', { name: /Variables — Current lesson/ })
     expect(navButton).toHaveAttribute('aria-current', 'page')
   })
@@ -275,9 +275,23 @@ describe('Lesson navigation', () => {
     const helloBtn = screen.getByRole('button', { name: /Hello, World! — Completed/ })
     await user.click(helloBtn)
 
+    await waitFor(() => expect(screen.getByText('Print hello world.')).toBeInTheDocument())
+  })
+
+  it('uses browser history so back returns to the course map instead of leaving the app', async () => {
+    const user = userEvent.setup()
+    setupFetch()
+    render(<App />)
+    await openCurrentLesson(user)
+
+    expect(window.location.hash).toContain('lesson-2')
+
+    await user.click(screen.getByRole('button', { name: 'Quit lesson' }))
+    await user.click(screen.getByRole('button', { name: 'Quit' }))
     await waitFor(() =>
-      expect(screen.getByRole('heading', { level: 2 })).toHaveTextContent('Hello, World!')
+      expect(screen.getByRole('navigation', { name: 'Lessons' })).toBeInTheDocument()
     )
+    expect(window.location.hash).toBe('#/learn')
   })
 
   it('shows a locked feedback message when locked lesson is clicked', async () => {
@@ -300,519 +314,28 @@ describe('Lesson navigation', () => {
   })
 })
 
-describe('Run button and code editor', () => {
-  it('run button is disabled before lesson loads', async () => {
-    const user = userEvent.setup()
-    let resolveLesson!: (v: unknown) => void
-    const fetchMock = setupFetch()
-    fetchMock.mockImplementation((url: string, opts?: RequestInit) => {
-      if (url.match(/\/api\/lessons\/[\w-]+$/) && !opts) {
-        return new Promise((res) => {
-          resolveLesson = () => res({ ok: true, json: () => Promise.resolve(currentLesson) })
-        })
-      }
-      if (url.includes('/api/courses/select')) {
-        return Promise.resolve({ ok: true, json: () => Promise.resolve({ status: 'ok' }) })
-      }
-      if (url.includes('/api/courses')) {
-        return Promise.resolve({ ok: true, json: () => Promise.resolve([]) })
-      }
-      if (url.includes('/api/lessons') && !opts) {
-        return Promise.resolve({ ok: true, json: () => Promise.resolve(mockLessons) })
-      }
-      return Promise.resolve({ ok: true, json: () => Promise.resolve({}) })
-    })
-
-    render(<App />)
-    const currentBtn = await screen.findByRole('button', { name: /Variables — Current lesson/ })
-    await user.click(currentBtn)
-
-    expect(screen.getByRole('status', { name: /Loading lesson/ })).toBeInTheDocument()
-    await waitFor(() => resolveLesson(null))
-  })
-
-  it('run button is enabled after lesson loads', async () => {
-    const user = userEvent.setup()
-    setupFetch()
-    render(<App />)
-    await openCurrentLesson(user)
-
-    const runBtn = screen.getByRole('button', { name: /Run code/ })
-    expect(runBtn).toBeEnabled()
-  })
-
-  it('run button shows "Running" text and is disabled while running', async () => {
-    const user = userEvent.setup()
-    let resolveRun!: (v: unknown) => void
-    const fetchMock = setupFetch()
-    fetchMock.mockImplementation((url: string, opts?: RequestInit) => {
-      if (url.includes('/run')) {
-        return new Promise((res) => {
-          resolveRun = () =>
-            res({ ok: true, json: () => Promise.resolve({ passed: true, completed: false, tests: passingTests }) })
-        })
-      }
-      if (url.includes('/api/courses/select')) {
-        return Promise.resolve({ ok: true, json: () => Promise.resolve({ status: 'ok' }) })
-      }
-      if (url.includes('/api/courses')) {
-        return Promise.resolve({ ok: true, json: () => Promise.resolve([]) })
-      }
-      if (url.match(/\/api\/lessons\/[\w-]+$/) && !opts) {
-        return Promise.resolve({ ok: true, json: () => Promise.resolve(currentLesson) })
-      }
-      if (url.includes('/api/lessons') && !opts) {
-        return Promise.resolve({ ok: true, json: () => Promise.resolve(mockLessons) })
-      }
-      if (url.includes('/api/health/ollama')) {
-        return Promise.resolve({ ok: true, json: () => Promise.resolve({ available: false }) })
-      }
-      return Promise.resolve({ ok: true, json: () => Promise.resolve({}) })
-    })
-
-    render(<App />)
-    await openCurrentLesson(user)
-
-    const runBtn = screen.getByRole('button', { name: /Run code/ })
-    await user.click(runBtn)
-
-    expect(screen.getByRole('button', { name: /Run code/ })).toBeDisabled()
-    expect(screen.getByRole('button', { name: /Run code/ })).toHaveTextContent(/Running/)
-
-    resolveRun(null)
-    await waitFor(() => expect(screen.getByRole('button', { name: /Run code/ })).not.toHaveTextContent(/Running/))
-  })
-
-  it('editor textarea is present and editable', async () => {
-    const user = userEvent.setup()
-    setupFetch()
-    render(<App />)
-    await openCurrentLesson(user)
-
-    const editor = screen.getByRole('textbox', { name: /Code editor/ })
-    expect(editor).toBeInTheDocument()
-    expect(editor).not.toBeDisabled()
-  })
-
-  it('editor line numbers render properly', async () => {
-    const user = userEvent.setup()
-    setupFetch()
-    const { container } = render(<App />)
-    await openCurrentLesson(user)
-    await waitFor(() => expect(screen.getByText('exercise.py')).toBeInTheDocument())
-
-    expect(container.querySelector('.line-numbers')).toBeInTheDocument()
-  })
-
-  it('preserves Tab indentation and Ctrl+Enter test execution in the textarea editor', async () => {
-    const user = userEvent.setup()
-    const fetchMock = setupFetch()
-    render(<App />)
-    await openCurrentLesson(user)
-
-    const editor = screen.getByRole<HTMLTextAreaElement>('textbox', { name: /Code editor/ })
-    editor.focus()
-    editor.setSelectionRange(0, 0)
-    fireEvent.keyDown(editor, { key: 'Tab' })
-    await waitFor(() => expect(editor.value.startsWith('    ')).toBe(true))
-
-    fireEvent.keyDown(editor, { key: 'Enter', ctrlKey: true })
-    await waitFor(
-      () =>
-        expect(
-          (fetchMock as ReturnType<typeof vi.fn>).mock.calls.some(([url]) =>
-            String(url).includes('/run')
-          )
-        ).toBe(true),
-      { timeout: 3000 }
-    )
-  })
-
-  it('triggers test execution when Shift+Enter is pressed in the editor', async () => {
-    const user = userEvent.setup()
-    const fetchMock = setupFetch()
-    render(<App />)
-    await openCurrentLesson(user)
-
-    const editor = screen.getByRole<HTMLTextAreaElement>('textbox', { name: /Code editor/ })
-    editor.focus()
-    fireEvent.keyDown(editor, { key: 'Enter', shiftKey: true })
-    await waitFor(
-      () =>
-        expect(
-          (fetchMock as ReturnType<typeof vi.fn>).mock.calls.some(([url]) =>
-            String(url).includes('/run')
-          )
-        ).toBe(true),
-      { timeout: 3000 }
-    )
-  })
-})
-
-describe('Test results rendering', () => {
-  it('shows all-passed badge when all tests pass', async () => {
-    const user = userEvent.setup()
-    setupFetch({ runResult: { passed: true, completed: false, tests: passingTests } })
-    render(<App />)
-    await openCurrentLesson(user)
-
-    await user.click(screen.getByRole('button', { name: /Run code/ }))
-
-    await waitFor(() => screen.getByRole('region', { name: /Test results/ }))
-    const region = screen.getByRole('region', { name: /Test results/ })
-    expect(within(region).getByText(/All 2 tests passed/)).toBeInTheDocument()
-  })
-
-  it('shows failed badge when required tests fail', async () => {
-    const user = userEvent.setup()
-    setupFetch({ runResult: { passed: false, completed: false, tests: failingTests } })
-    render(<App />)
-    await openCurrentLesson(user)
-
-    await user.click(screen.getByRole('button', { name: /Run code/ }))
-
-    await waitFor(() => screen.getByRole('region', { name: /Test results/ }))
-    const region = screen.getByRole('region', { name: /Test results/ })
-    expect(within(region).getByText(/1 of 2 required failed/)).toBeInTheDocument()
-  })
-
-  it('shows each test row with pass/fail icon', async () => {
-    const user = userEvent.setup()
-    setupFetch({ runResult: { passed: false, completed: false, tests: failingTests } })
-    render(<App />)
-    await openCurrentLesson(user)
-
-    await user.click(screen.getByRole('button', { name: /Run code/ }))
-    await waitFor(() => screen.getByRole('region', { name: /Test results/ }))
-
-    const region = screen.getByRole('region', { name: /Test results/ })
-    expect(within(region).getByText('test_variable_exists')).toBeInTheDocument()
-    expect(within(region).getByText('test_variable_is_string')).toBeInTheDocument()
-    const failed = within(region).getAllByRole('img', { name: 'Failed' })
-    const passed = within(region).getAllByRole('img', { name: 'Passed' })
-    expect(failed).toHaveLength(1)
-    expect(passed).toHaveLength(1)
-  })
-
-  it('marks optional tests with "opt" badge', async () => {
-    const user = userEvent.setup()
-    setupFetch({ runResult: { passed: false, completed: false, tests: mixedTests } })
-    render(<App />)
-    await openCurrentLesson(user)
-
-    await user.click(screen.getByRole('button', { name: /Run code/ }))
-    await waitFor(() => screen.getByRole('region', { name: /Test results/ }))
-
-    const region = screen.getByRole('region', { name: /Test results/ })
-    expect(within(region).getByText('opt')).toBeInTheDocument()
-  })
-})
-
-describe('Hint button behavior', () => {
-  it('hint button is disabled when AI is unavailable', async () => {
+describe('Lesson player', () => {
+  it('opens a lesson without a code editor on the first screen', async () => {
     const user = userEvent.setup()
     setupFetch({ ollamaAvailable: false })
     render(<App />)
     await openCurrentLesson(user)
 
-    const hintBtn = screen.getByRole('button', { name: /AI tutor unavailable/ })
-    expect(hintBtn).toBeDisabled()
+    expect(screen.queryByRole('textbox', { name: 'Code editor' })).not.toBeInTheDocument()
+    expect(screen.queryByRole('button', { name: /AI tutor unavailable/i })).not.toBeInTheDocument()
+    expect(screen.queryByRole('button', { name: /Show full answer/i })).not.toBeInTheDocument()
+    expect(screen.queryByRole('textbox', { name: 'Session notes' })).not.toBeInTheDocument()
+    expect(screen.getByRole('button', { name: 'Continue' })).toBeEnabled()
   })
 
-  it('shows AI unavailable note when Ollama is offline', async () => {
+  it('keeps the hint button working when Ollama is off', async () => {
     const user = userEvent.setup()
     setupFetch({ ollamaAvailable: false })
     render(<App />)
     await openCurrentLesson(user)
 
-    expect(screen.getByText(/Selected provider is unconfigured/)).toBeInTheDocument()
-  })
-
-  it('hint button is disabled when AI toggle is off', async () => {
-    const user = userEvent.setup()
-    setupFetch({ ollamaAvailable: true })
-    render(<App />)
-    await openCurrentLesson(user)
-
-    const toggle = screen.getByRole('button', { name: /AI tutor on/ })
-    await user.click(toggle)
-
-    const hintBtn = screen.getByRole('button', { name: /AI tutor is paused/ })
-    expect(hintBtn).toBeDisabled()
-  })
-
-  it('calls tutor API when hint button is clicked', async () => {
-    const user = userEvent.setup()
-    const fetchMock = setupFetch({ ollamaAvailable: true })
-    render(<App />)
-    await openCurrentLesson(user)
-
-    const hintBtn = screen.getByRole('button', { name: /Request a hint/ })
-    await user.click(hintBtn)
-
-    await waitFor(() =>
-      expect(screen.getByRole('status', { name: /Tutor feedback/ })).toHaveTextContent(
-        'Think about what a variable stores.'
-      )
-    )
-
-    const tutorCall = (fetchMock as ReturnType<typeof vi.fn>).mock.calls.find(
-      (call) => String(call[0]).includes('/api/tutor')
-    )
-    expect(tutorCall).toBeDefined()
-    const payload = JSON.parse(
-      String((tutorCall?.[1] as { body?: string } | undefined)?.body ?? '{}')
-    )
-    // The nudge ladder needs the objective and the learner's own code to work from.
-    expect(payload).toHaveProperty('learning_objective')
-    expect(payload.hint_level).toBeGreaterThanOrEqual(1)
-    expect(payload.hint_level).toBeLessThanOrEqual(4)
-    // A real model answer is credited to the model, not labelled as a fallback.
-    expect(screen.getByRole('status', { name: /Tutor feedback/ })).toHaveTextContent(/AI hint/i)
-    expect(screen.getByRole('status', { name: /Tutor feedback/ })).toHaveTextContent(/nudge 1 of 4/)
-  })
-
-  it('saturates the hint level at 4 so repeated taps never break the tutor', async () => {
-    const user = userEvent.setup()
-    const fetchMock = setupFetch({ ollamaAvailable: true })
-    render(<App />)
-    await openCurrentLesson(user)
-
-    const hintBtn = screen.getByRole('button', { name: /Request a hint/ })
-    for (let i = 0; i < 6; i += 1) {
-      await user.click(hintBtn)
-      await waitFor(() =>
-        expect(screen.getByRole('status', { name: /Tutor feedback/ })).toHaveTextContent(
-          'Think about what a variable stores.'
-        )
-      )
-    }
-    const levels = (fetchMock as ReturnType<typeof vi.fn>).mock.calls
-      .filter((call) => String(call[0]).includes('/api/tutor'))
-      .map(
-        (call) =>
-          JSON.parse(String((call[1] as { body?: string } | undefined)?.body ?? '{}'))
-            .hint_level as number
-      )
-    expect(levels).toEqual([1, 2, 3, 4, 4, 4])
-  })
-
-  it('asks twice before pasting the answer, then lets the learner undo it', async () => {
-    const user = userEvent.setup()
-    const fetchMock = setupFetch({ ollamaAvailable: true })
-    render(<App />)
-    await openCurrentLesson(user)
-
-    const editor = () => screen.getByRole<HTMLTextAreaElement>('textbox', { name: /Code editor/ })
-    const ownCode = editor().value
-
-    // A single tap must never hand over the answer — the lightbulb is for hints.
-    await user.click(screen.getByRole('button', { name: /Show full answer/ }))
-    expect(screen.getByRole('status', { name: /Tutor feedback/ })).toHaveTextContent(/not a hint/i)
-    expect(editor().value).toBe(ownCode)
-    expect(
-      (fetchMock as ReturnType<typeof vi.fn>).mock.calls.some((call) =>
-        String(call[0]).includes('/solution')
-      )
-    ).toBe(false)
-
-    // Confirming pastes it, keeps the learner's code recoverable, and says so.
-    await user.click(screen.getByRole('button', { name: /Confirm: paste the complete answer/ }))
-    await waitFor(() => expect(editor().value).toContain('# Canonical solution'))
-    expect(
-      (fetchMock as ReturnType<typeof vi.fn>).mock.calls.some((call) =>
-        String(call[0]).includes('/solution')
-      )
-    ).toBe(true)
-
-    await user.click(screen.getByRole('button', { name: /Restore my code/ }))
-    await waitFor(() => expect(editor().value).toBe(ownCode))
-    expect(screen.queryByRole('button', { name: /Restore my code/ })).not.toBeInTheDocument()
-  })
-})
-
-describe('Completion / next-lesson flow', () => {
-  it('shows completion banner when lesson is completed', async () => {
-    const user = userEvent.setup()
-    setupFetch({
-      runResult: { passed: true, completed: true, tests: passingTests },
-    })
-    render(<App />)
-    await openCurrentLesson(user)
-
-    await user.click(screen.getByRole('button', { name: /Run code/ }))
-
-    await waitFor(() =>
-      expect(screen.getByText(/Lesson Complete!/)).toBeInTheDocument()
-    )
-    expect(screen.getByRole('button', { name: /Next Lesson/ })).toBeInTheDocument()
-  })
-
-  it('"Next Lesson" button triggers navigation to the next lesson', async () => {
-    const user = userEvent.setup()
-    const lessonsAfterCompletion = [
-      { ...mockLessons[0], status: 'completed' as const },
-      { ...mockLessons[1], status: 'completed' as const },
-      { ...mockLessons[2], status: 'current' as const },
-    ]
-    const fetchMock = setupFetch({
-      runResult: { passed: true, completed: true, tests: passingTests },
-    })
-
-    let runCalled = false
-    fetchMock.mockImplementation((url: string, opts?: RequestInit) => {
-      if (url.includes('/run')) {
-        runCalled = true
-        return Promise.resolve({
-          ok: true,
-          json: () => Promise.resolve({ passed: true, completed: true, tests: passingTests }),
-        })
-      }
-      if (url.includes('/api/courses/select')) {
-        return Promise.resolve({ ok: true, json: () => Promise.resolve({ status: 'ok' }) })
-      }
-      if (url.includes('/api/courses')) {
-        return Promise.resolve({ ok: true, json: () => Promise.resolve([]) })
-      }
-      if (url.match(/\/api\/lessons\/[\w-]+$/) && !opts) {
-        return Promise.resolve({ ok: true, json: () => Promise.resolve(currentLesson) })
-      }
-      if (url.includes('/api/lessons') && !opts) {
-        return Promise.resolve({
-          ok: true,
-          json: () => Promise.resolve(runCalled ? lessonsAfterCompletion : mockLessons),
-        })
-      }
-      if (url.includes('/api/health/ollama')) {
-        return Promise.resolve({ ok: true, json: () => Promise.resolve({ available: false }) })
-      }
-      return Promise.resolve({ ok: true, json: () => Promise.resolve({}) })
-    })
-
-    render(<App />)
-    await openCurrentLesson(user)
-    await user.click(screen.getByRole('button', { name: /Run code/ }))
-    await waitFor(() => screen.getByText(/Lesson Complete!/))
-
-    const nextBtn = screen.getByRole('button', { name: /Next Lesson/ })
-    await user.click(nextBtn)
-
-    await waitFor(() =>
-      expect(screen.queryByText('Lesson Complete!')).not.toBeInTheDocument()
-    )
-  })
-})
-
-describe('AI unavailable state', () => {
-  it('shows "Ollama offline" in the status bar when unavailable', async () => {
-    const user = userEvent.setup()
-    setupFetch({ ollamaAvailable: false })
-    render(<App />)
-    await openCurrentLesson(user)
-
-    expect(screen.getByText(/Ollama unavailable/)).toBeInTheDocument()
-  })
-
-  it('shows "Ollama ready" in the status bar when available', async () => {
-    const user = userEvent.setup()
-    setupFetch({ ollamaAvailable: true })
-    render(<App />)
-    await openCurrentLesson(user)
-
-    expect(screen.getByText(/Ollama ready/)).toBeInTheDocument()
-  })
-
-  it('labels the nudge as an offline coach tip when the AI cannot answer', async () => {
-    const user = userEvent.setup()
-    setupFetch({ ollamaAvailable: true })
-
-    const fetchMock = vi.fn((url: string, opts?: RequestInit) => {
-      if (url.includes('/api/tutor')) {
-        return Promise.resolve({
-          ok: true,
-          json: () =>
-            Promise.resolve({
-              available: true,
-              source: 'offline',
-              message: 'Read the first red check and change only the line that produces it.',
-              hint_level: 1,
-            }),
-        })
-      }
-      if (url.includes('/api/courses/select')) {
-        return Promise.resolve({ ok: true, json: () => Promise.resolve({ status: 'ok' }) })
-      }
-      if (url.includes('/api/courses')) {
-        return Promise.resolve({ ok: true, json: () => Promise.resolve([]) })
-      }
-      if (url.match(/\/api\/lessons\/[\w-]+$/) && !opts) {
-        return Promise.resolve({ ok: true, json: () => Promise.resolve(currentLesson) })
-      }
-      if (url.includes('/api/lessons') && !opts) {
-        return Promise.resolve({ ok: true, json: () => Promise.resolve(mockLessons) })
-      }
-      if (url.includes('/api/ai/providers')) {
-        return Promise.resolve({
-          ok: true,
-          json: () =>
-            Promise.resolve({
-              current_provider: 'ollama',
-                providers: [
-                {
-                  provider: 'ollama',
-                  name: 'Ollama',
-                  available: true,
-                  model: 'llama3.1:8b',
-                  is_current: true,
-                },
-              ],
-            }),
-        })
-      }
-      if (url.includes('/api/health/ollama')) {
-        return Promise.resolve({ ok: true, json: () => Promise.resolve({ available: true }) })
-      }
-      return Promise.resolve({ ok: true, json: () => Promise.resolve({}) })
-    })
-    vi.stubGlobal('fetch', fetchMock)
-
-    render(<App />)
-    await openCurrentLesson(user)
-
-    const hintBtn = screen.getByRole('button', { name: /Request a hint/ })
-    await user.click(hintBtn)
-
-    await waitFor(() =>
-      expect(screen.getByRole('status', { name: /Tutor feedback/ })).toHaveTextContent(
-        /Coach tip/i
-      )
-    )
-    expect(screen.getByRole('status', { name: /Tutor feedback/ })).toHaveTextContent(
-      /offline fallback/i
-    )
-    expect(screen.getByRole('status', { name: /Tutor feedback/ })).toHaveTextContent(
-      /Read the first red check/
-    )
-    // A learner must never be handed a provider error where a hint belongs.
-    expect(screen.getByRole('status', { name: /Tutor feedback/ })).not.toHaveTextContent(
-      /unavailable\.$/i
-    )
-  })
-})
-
-describe('Session notes', () => {
-  it('allows adding a session note', async () => {
-    const user = userEvent.setup()
-    setupFetch()
-    render(<App />)
-    await openCurrentLesson(user)
-
-    const input = screen.getByRole('textbox', { name: /Session note/ })
-    await user.type(input, 'Remember to initialize variables')
-    await user.click(screen.getByRole('button', { name: /Add note/ }))
-
-    expect(screen.getByText('Remember to initialize variables')).toBeInTheDocument()
-    expect(input).toHaveValue('')
+    await user.click(screen.getByRole('button', { name: /Hint/ }))
+    expect(screen.getByText(/Read the one-line idea/)).toBeInTheDocument()
   })
 })
 
@@ -835,7 +358,7 @@ describe('State Persistence & Sound Settings', () => {
     expect(localStorage.getItem('patchwork_sound_enabled')).toBe('true')
   })
 
-  it('restores draft code from localStorage for current lesson', async () => {
+  it('does not open a code editor just because a draft was saved', async () => {
     const user = userEvent.setup()
     localStorage.setItem(
       'patchwork_code_lesson-2',
@@ -844,34 +367,6 @@ describe('State Persistence & Sound Settings', () => {
     setupFetch()
     render(<App />)
     await openCurrentLesson(user)
-
-    const editor = screen.getByRole<HTMLTextAreaElement>('textbox', { name: /Code editor/ })
-    expect(editor.value).toBe('draft_code = 123\n')
-  })
-
-  it('drops a draft whose starter code has since been revised', async () => {
-    const user = userEvent.setup()
-    localStorage.setItem(
-      'patchwork_code_lesson-2',
-      JSON.stringify({ v: 1, base: '// TODO: return the old skeleton\n', code: 'stale\n' }),
-    )
-    setupFetch()
-    render(<App />)
-    await openCurrentLesson(user)
-
-    const editor = screen.getByRole<HTMLTextAreaElement>('textbox', { name: /Code editor/ })
-    expect(editor.value).toBe('# Write your code here\n')
-    expect(localStorage.getItem('patchwork_code_lesson-2')).toContain('Write your code here')
-  })
-
-  it('drops pre-envelope drafts that cannot be attributed to a starter', async () => {
-    const user = userEvent.setup()
-    localStorage.setItem('patchwork_code_lesson-2', 'draft_code = 123\n')
-    setupFetch()
-    render(<App />)
-    await openCurrentLesson(user)
-
-    const editor = screen.getByRole<HTMLTextAreaElement>('textbox', { name: /Code editor/ })
-    expect(editor.value).toBe('# Write your code here\n')
+    expect(screen.queryByRole('textbox', { name: /Code editor/ })).not.toBeInTheDocument()
   })
 })
