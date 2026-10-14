@@ -14,7 +14,7 @@
   "lessons": [
     {
       "id": "sql-15",
-      "title": "15. Business Analytics & Reporting",
+      "title": "Practice Business Analytics Reporting",
       "description": "Join customers, orders, and products, and report the total spending for each customer. The test checks that you return at least 3 rows and the first customer's total is greater than 1000.",
       "order": 15,
       "difficulty": "advanced",
@@ -45,10 +45,179 @@
         "license": "Public domain (SQLite documentation)"
       },
       "learning_objectives": [
-        "Chain join, aggregate, group and sort in one analytical query",
-        "Order report rows by a computed aggregate"
+        "This step sums the order revenue, using ROUND and 2."
       ],
-      "xp_reward": 15
+      "xp_reward": 15,
+      "player_mode": "micro",
+      "sublessons": [
+        {
+          "id": "sql-15-micro",
+          "title": "Practice Business Analytics Reporting",
+          "description": "",
+          "order": 1,
+          "exercises": [
+            {
+              "id": "sql-15-teach",
+              "type": "teach",
+              "question": "This step sums the order revenue, using ROUND and 2.",
+              "hints": [
+                "Follow the job, which sums the order revenue.",
+                "SUM(total_amount) is the revenue.",
+                "SUM(total_amount)"
+              ],
+              "explanation": "This step sums the order revenue, using ROUND and 2.",
+              "xp_reward": 0,
+              "worked_example": "SUM(total_amount)"
+            },
+            {
+              "id": "sql-15-mcq",
+              "type": "mcq",
+              "question": "Select the line that sums the order revenue, the one that belongs with ROUND and 2.",
+              "hints": [
+                "Follow the job, which sums the order revenue.",
+                "SUM(total_amount) is the revenue.",
+                "SELECT ROUND(SUM(total_amount), 2) AS revenue FROM orders"
+              ],
+              "explanation": "SUM(total_amount) is the revenue.",
+              "xp_reward": 10,
+              "options": [
+                "INSERT INTO orders",
+                "SELECT ROUND(SUM(total_amount), 2) AS revenue FROM orders",
+                "DROP TABLE orders",
+                "revenue == revenue"
+              ],
+              "correct_answer": "SELECT ROUND(SUM(total_amount), 2) AS revenue FROM orders"
+            },
+            {
+              "id": "sql-15-predict",
+              "type": "output_prediction",
+              "question": "Follow the code that sums the order revenue for ROUND and 2, then choose the displayed value.",
+              "hints": [
+                "Follow the job, which sums the order revenue.",
+                "SUM(total_amount) is the revenue.",
+                "┌─────────┐\n│ revenue │\n├─────────┤\n│ 1962.44 │\n└─────────┘"
+              ],
+              "explanation": "SUM(total_amount) is the revenue.",
+              "xp_reward": 10,
+              "starter_code": "SELECT ROUND(SUM(total_amount), 2) AS revenue FROM orders;\n",
+              "options": [
+                "┌─────────┐\n│ revenue │\n├─────────┤\n│ 1511.98 │\n└─────────┘",
+                "┌─────────┐\n│ revenue │\n├─────────┤\n│ 1962.44 │\n└─────────┘",
+                "0",
+                "none"
+              ],
+              "correct_answer": "┌─────────┐\n│ revenue │\n├─────────┤\n│ 1962.44 │\n└─────────┘"
+            },
+            {
+              "id": "sql-15-order",
+              "type": "ordering",
+              "question": "Order the pieces so the line sums the order revenue for ROUND and 2.",
+              "hints": [
+                "Follow the job, which sums the order revenue.",
+                "SUM(total_amount) is the revenue.",
+                "SELECT ROUND(SUM(total_amount), 2) AS revenue FROM orders"
+              ],
+              "explanation": "SUM(total_amount) is the revenue.",
+              "xp_reward": 10,
+              "options": [
+                "SELECT",
+                "ROUND(SUM(total_amount),",
+                "2)",
+                "AS",
+                "revenue",
+                "FROM",
+                "orders",
+                "DROP"
+              ],
+              "correct_answer": [
+                "SELECT",
+                "ROUND(SUM(total_amount),",
+                "2)",
+                "AS",
+                "revenue",
+                "FROM",
+                "orders"
+              ]
+            },
+            {
+              "id": "sql-15-fill",
+              "type": "fill_blank",
+              "question": "Supply the missing piece so the line sums the order revenue for ROUND and.",
+              "hints": [
+                "Follow the job, which sums the order revenue.",
+                "SUM(total_amount) is the revenue.",
+                "2"
+              ],
+              "explanation": "SUM(total_amount) is the revenue.",
+              "xp_reward": 10,
+              "starter_code": "SELECT ROUND(SUM(total_amount), ___) AS revenue FROM orders;",
+              "options": [
+                "0",
+                "2",
+                "1",
+                "4"
+              ],
+              "correct_answer": "2"
+            },
+            {
+              "id": "sql-15-bug",
+              "type": "debugging",
+              "question": "The wrong line is the one that misses the job, which sums the order revenue, for ROUND and 2.",
+              "hints": [
+                "Follow the job, which sums the order revenue.",
+                "The sum adds quantities instead of the money column.",
+                "Line 1"
+              ],
+              "explanation": "The sum adds quantities instead of the money column.",
+              "xp_reward": 10,
+              "starter_code": "SELECT ROUND(SUM(quantity), 2) AS revenue FROM orders;",
+              "correct_answer": "1"
+            },
+            {
+              "id": "sql-15-predict-2",
+              "type": "output_prediction",
+              "question": "A new input still has code that sums the order revenue for ROUND and 2, and the correct choice is what it prints.",
+              "hints": [
+                "Follow the job, which sums the order revenue.",
+                "SUM(total_amount) is the revenue.",
+                "┌─────────┐\n│ revenue │\n├─────────┤\n│ 1511.98 │\n└─────────┘"
+              ],
+              "explanation": "SUM(total_amount) is the revenue.",
+              "xp_reward": 10,
+              "starter_code": "SELECT ROUND(SUM(total_amount), 2) AS revenue FROM orders WHERE customer_id = 1;\n",
+              "options": [
+                "┌─────────┐\n│ revenue │\n├─────────┤\n│ 1962.44 │\n└─────────┘",
+                "none",
+                "0",
+                "┌─────────┐\n│ revenue │\n├─────────┤\n│ 1511.98 │\n└─────────┘"
+              ],
+              "correct_answer": "┌─────────┐\n│ revenue │\n├─────────┤\n│ 1511.98 │\n└─────────┘"
+            },
+            {
+              "id": "sql-15-write",
+              "type": "code",
+              "question": "The blank is the missing piece of the program that sums the order revenue for ROUND and 2.",
+              "hints": [
+                "Follow the job, which sums the order revenue.",
+                "The query result is what this step sums the order revenue.",
+                "SUM(total_amount)"
+              ],
+              "explanation": "The query result is what this step sums the order revenue.",
+              "xp_reward": 10,
+              "starter_code": "SELECT ROUND(___(total_amount), 2) AS revenue FROM orders;\n",
+              "solution_code": "SELECT ROUND((SUM(total_amount)), 2) AS revenue FROM orders;\n",
+              "tests": [
+                {
+                  "name": "sql-15-prints",
+                  "description": "The query result is what this step sums the order revenue.",
+                  "expected_stdout": "┌─────────┐\n│ revenue │\n├─────────┤\n│ 1962.44 │\n└─────────┘",
+                  "required": true
+                }
+              ]
+            }
+          ]
+        }
+      ]
     }
   ]
 }

@@ -14,8 +14,8 @@
   "lessons": [
     {
       "id": "overfit-train-val",
-      "title": "1. Train vs Val Error",
-      "description": "Implement `error_gap(train_err, val_err)` = val_err - train_err. The test checks that `error_gap(0.1, 0.4)` equals `0.3`.",
+      "title": "Train vs Val Error",
+      "description": "Implement error_gap(train_err, val_err) = val_err - train_err. The test checks that error_gap(0.1, 0.4) equals 0.3.",
       "order": 16,
       "difficulty": "intermediate",
       "duration_minutes": 5,
@@ -27,7 +27,7 @@
       ],
       "prerequisites": [],
       "learning_objectives": [
-        "Measure train/val generalization gap"
+        "This step subtracts the training error from the validation error, using train and 53."
       ],
       "starter_code": "def error_gap(train_err, val_err):\n    # TODO\n    pass\n",
       "solution_code": "def error_gap(train_err, val_err):\n    return val_err - train_err\n",
@@ -48,12 +48,178 @@
         "url": "https://developers.google.com/machine-learning/crash-course/overfitting/interpreting-loss-curves",
         "license": "CC BY 4.0 (Google Machine Learning Crash Course)"
       },
-      "xp_reward": 10
+      "xp_reward": 10,
+      "player_mode": "micro",
+      "sublessons": [
+        {
+          "id": "overfit-train-val-micro",
+          "title": "Train vs Val Error",
+          "description": "",
+          "order": 1,
+          "exercises": [
+            {
+              "id": "overfit-train-val-teach",
+              "type": "teach",
+              "question": "This step subtracts the training error from the validation error, using train and 53.",
+              "hints": [
+                "Follow the job, which subtracts the training error from the validation error.",
+                "The gap is validation error minus training error.",
+                "val - train"
+              ],
+              "explanation": "This step subtracts the training error from the validation error, using train and 53.",
+              "xp_reward": 0,
+              "worked_example": "val - train"
+            },
+            {
+              "id": "overfit-train-val-mcq",
+              "type": "mcq",
+              "question": "Keep the choice that subtracts the training error from the validation error for train and 53.",
+              "hints": [
+                "Follow the job, which subtracts the training error from the validation error.",
+                "The gap is validation error minus training error.",
+                "val - train"
+              ],
+              "explanation": "The gap is validation error minus training error.",
+              "xp_reward": 10,
+              "options": [
+                "val == train",
+                "val - train",
+                "return val",
+                "pass"
+              ],
+              "correct_answer": "val - train"
+            },
+            {
+              "id": "overfit-train-val-predict",
+              "type": "output_prediction",
+              "question": "Trace the code that subtracts the training error from the validation error using train and 53, and select what it displays.",
+              "hints": [
+                "Follow the job, which subtracts the training error from the validation error.",
+                "The gap is validation error minus training error.",
+                "52"
+              ],
+              "explanation": "The gap is validation error minus training error.",
+              "xp_reward": 10,
+              "starter_code": "train = 1\nval = 53\nprint(val - train)\n",
+              "options": [
+                "1",
+                "52",
+                "none",
+                "0"
+              ],
+              "correct_answer": "52"
+            },
+            {
+              "id": "overfit-train-val-order",
+              "type": "ordering",
+              "question": "Tap the pieces, in order, of the line that subtracts the training error from the validation error for train and 53.",
+              "hints": [
+                "Follow the job, which subtracts the training error from the validation error.",
+                "The gap is validation error minus training error.",
+                "gap = val - train"
+              ],
+              "explanation": "The gap is validation error minus training error.",
+              "xp_reward": 10,
+              "options": [
+                "gap",
+                "=",
+                "val",
+                "-",
+                "train",
+                "+"
+              ],
+              "correct_answer": [
+                "gap",
+                "=",
+                "val",
+                "-",
+                "train"
+              ]
+            },
+            {
+              "id": "overfit-train-val-fill",
+              "type": "fill_blank",
+              "question": "The blank is the missing piece of the line that subtracts the training error from the validation error for train and 53.",
+              "hints": [
+                "Follow the job, which subtracts the training error from the validation error.",
+                "The gap is validation error minus training error.",
+                "-"
+              ],
+              "explanation": "The gap is validation error minus training error.",
+              "xp_reward": 10,
+              "starter_code": "gap = val ___ train\n",
+              "options": [
+                "+",
+                "-",
+                "*",
+                "/"
+              ],
+              "correct_answer": "-"
+            },
+            {
+              "id": "overfit-train-val-bug",
+              "type": "debugging",
+              "question": "Choose the line that does another job than the one that subtracts the training error from the validation error for train and.",
+              "hints": [
+                "Follow the job, which subtracts the training error from the validation error.",
+                "The print adds the two errors.",
+                "Line 3"
+              ],
+              "explanation": "The print adds the two errors.",
+              "xp_reward": 10,
+              "starter_code": "train = 1\nval = 53\nprint(train + val)\n",
+              "correct_answer": "3"
+            },
+            {
+              "id": "overfit-train-val-predict-2",
+              "type": "output_prediction",
+              "question": "Trace the second run, which subtracts the training error from the validation error for train and 53, and select what it displays.",
+              "hints": [
+                "Follow the job, which subtracts the training error from the validation error.",
+                "The gap is validation error minus training error.",
+                "1"
+              ],
+              "explanation": "The gap is validation error minus training error.",
+              "xp_reward": 10,
+              "starter_code": "train = 4\nval = 5\nprint(val - train)\n",
+              "options": [
+                "52",
+                "none",
+                "0",
+                "1"
+              ],
+              "correct_answer": "1"
+            },
+            {
+              "id": "overfit-train-val-write",
+              "type": "code",
+              "question": "Type the missing piece so the program subtracts the training error from the validation error for train and 53 and prints it.",
+              "hints": [
+                "Follow the job, which subtracts the training error from the validation error.",
+                "The printed value is the result after this step subtracts the training error from the validation error.",
+                "label = val - train"
+              ],
+              "explanation": "The printed value is the result after this step subtracts the training error from the validation error.",
+              "xp_reward": 10,
+              "starter_code": "train = 1\nval = 53\nlabel = ___\nprint(label)\n",
+              "solution_code": "train = 1\nval = 53\nlabel = val - train\nprint(label)\n",
+              "tests": [
+                {
+                  "name": "overfit-train-val-prints",
+                  "description": "The printed value is the result after this step subtracts the training error fro",
+                  "expected_stdout": "52\n",
+                  "required": true
+                }
+              ]
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "overfit-l2",
-      "title": "2. L2 Penalty",
-      "description": "Implement `l2_loss(mse, weights, lam)` = mse + lam * sum(w^2). The test checks that `l2_loss(1.0, [1, 2], 0.5)` equals `1.0 + 0.5 * 5`.",
+      "title": "Practice L2 Penalty",
+      "description": "Implement l2_loss(mse, weights, lam) = mse + lam * sum(w^2). The test checks that l2_loss(1.0, [1, 2], 0.5) equals 1.0 + 0.5 * 5.",
       "order": 17,
       "difficulty": "intermediate",
       "duration_minutes": 5,
@@ -65,7 +231,7 @@
       ],
       "prerequisites": [],
       "learning_objectives": [
-        "Add L2 regularization to loss"
+        "This step squares the weight as a penalty, using weight and 21."
       ],
       "starter_code": "def l2_loss(mse, weights, lam):\n    # TODO\n    pass\n",
       "solution_code": "def l2_loss(mse, weights, lam):\n    return mse + lam * sum(w * w for w in weights)\n",
@@ -86,12 +252,174 @@
         "url": "https://developers.google.com/machine-learning/crash-course/overfitting/regularization",
         "license": "CC BY 4.0 (Google Machine Learning Crash Course)"
       },
-      "xp_reward": 10
+      "xp_reward": 10,
+      "player_mode": "micro",
+      "sublessons": [
+        {
+          "id": "overfit-l2-micro",
+          "title": "Practice L2 Penalty",
+          "description": "",
+          "order": 1,
+          "exercises": [
+            {
+              "id": "overfit-l2-teach",
+              "type": "teach",
+              "question": "This step squares the weight as a penalty, using weight and 21.",
+              "hints": [
+                "Follow the job, which squares the weight as a penalty.",
+                "The L2 penalty is the weight squared.",
+                "weight * weight"
+              ],
+              "explanation": "This step squares the weight as a penalty, using weight and 21.",
+              "xp_reward": 0,
+              "worked_example": "weight * weight"
+            },
+            {
+              "id": "overfit-l2-mcq",
+              "type": "mcq",
+              "question": "Keep the choice that squares the weight as a penalty for weight and 21.",
+              "hints": [
+                "Follow the job, which squares the weight as a penalty.",
+                "The L2 penalty is the weight squared.",
+                "weight * weight"
+              ],
+              "explanation": "The L2 penalty is the weight squared.",
+              "xp_reward": 10,
+              "options": [
+                "weight == weight",
+                "return weight",
+                "weight * weight",
+                "pass"
+              ],
+              "correct_answer": "weight * weight"
+            },
+            {
+              "id": "overfit-l2-predict",
+              "type": "output_prediction",
+              "question": "Trace the code that squares the weight as a penalty using weight and 21, and select what it displays.",
+              "hints": [
+                "Follow the job, which squares the weight as a penalty.",
+                "The L2 penalty is the weight squared.",
+                "441"
+              ],
+              "explanation": "The L2 penalty is the weight squared.",
+              "xp_reward": 10,
+              "starter_code": "weight = 21\nprint(weight * weight)\n",
+              "options": [
+                "576",
+                "0",
+                "441",
+                "none"
+              ],
+              "correct_answer": "441"
+            },
+            {
+              "id": "overfit-l2-order",
+              "type": "ordering",
+              "question": "Tap the pieces, in order, of the line that squares the weight as a penalty for weight and 21.",
+              "hints": [
+                "Follow the job, which squares the weight as a penalty.",
+                "The L2 penalty is the weight squared.",
+                "penalty = weight*weight"
+              ],
+              "explanation": "The L2 penalty is the weight squared.",
+              "xp_reward": 10,
+              "options": [
+                "penalty",
+                "=",
+                "weight*weight",
+                "+"
+              ],
+              "correct_answer": [
+                "penalty",
+                "=",
+                "weight*weight"
+              ]
+            },
+            {
+              "id": "overfit-l2-fill",
+              "type": "fill_blank",
+              "question": "The blank is the missing piece of the line that squares the weight as a penalty for weight and 21.",
+              "hints": [
+                "Follow the job, which squares the weight as a penalty.",
+                "The L2 penalty is the weight squared.",
+                "*"
+              ],
+              "explanation": "The L2 penalty is the weight squared.",
+              "xp_reward": 10,
+              "starter_code": "penalty = weight ___ weight\n",
+              "options": [
+                "+",
+                "-",
+                "*",
+                "/"
+              ],
+              "correct_answer": "*"
+            },
+            {
+              "id": "overfit-l2-bug",
+              "type": "debugging",
+              "question": "Choose the line that does another job than the one that squares the weight as a penalty for weight and.",
+              "hints": [
+                "Follow the job, which squares the weight as a penalty.",
+                "The print doubles the weight instead of squaring it.",
+                "Line 2"
+              ],
+              "explanation": "The print doubles the weight instead of squaring it.",
+              "xp_reward": 10,
+              "starter_code": "weight = 21\nprint(weight + weight)\n",
+              "correct_answer": "2"
+            },
+            {
+              "id": "overfit-l2-predict-2",
+              "type": "output_prediction",
+              "question": "Trace the second run, which squares the weight as a penalty for weight and 21, and select what it displays.",
+              "hints": [
+                "Follow the job, which squares the weight as a penalty.",
+                "The L2 penalty is the weight squared.",
+                "576"
+              ],
+              "explanation": "The L2 penalty is the weight squared.",
+              "xp_reward": 10,
+              "starter_code": "weight = 24\nprint(weight * weight)\n",
+              "options": [
+                "441",
+                "576",
+                "0",
+                "none"
+              ],
+              "correct_answer": "576"
+            },
+            {
+              "id": "overfit-l2-write",
+              "type": "code",
+              "question": "Type the missing piece so the program squares the weight as a penalty for weight and 21 and prints it.",
+              "hints": [
+                "Follow the job, which squares the weight as a penalty.",
+                "The printed value is the result after this step squares the weight as a penalty.",
+                "label = weight * weight"
+              ],
+              "explanation": "The printed value is the result after this step squares the weight as a penalty.",
+              "xp_reward": 10,
+              "starter_code": "weight = 21\nlabel = ___\nprint(label)\n",
+              "solution_code": "weight = 21\nlabel = weight * weight\nprint(label)\n",
+              "tests": [
+                {
+                  "name": "overfit-l2-prints",
+                  "description": "The printed value is the result after this step squares the weight as a penalty.",
+                  "expected_stdout": "441\n",
+                  "required": true
+                }
+              ]
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "overfit-early-stop",
-      "title": "3. Early Stopping",
-      "description": "Implement `early_stop_epoch(val_losses, patience)` returning first epoch index to stop (0-based) or last index if never. The test checks that `early_stop_epoch([1.0, 0.5, 0.6, 0.7], 2)` equals `3`; `early_stop_epoch([1.0, 0.8, 0.6], 5)` equals `2`.",
+      "title": "Practice Early Stopping",
+      "description": "Implement early_stop_epoch(val_losses, patience) returning first epoch index to stop (0-based) or last index if never. The test checks that early_stop_epoch([1.0, 0.5, 0.6, 0.7], 2) equals 3; early_stop_epoch([1.0, 0.8, 0.6], 5) equals 2.",
       "order": 18,
       "difficulty": "intermediate",
       "duration_minutes": 8,
@@ -103,7 +431,7 @@
       ],
       "prerequisites": [],
       "learning_objectives": [
-        "Simulate early stopping"
+        "This step keeps the index of the lowest loss, using losses and 6."
       ],
       "starter_code": "def early_stop_epoch(val_losses, patience):\n    # TODO\n    pass\n",
       "solution_code": "def early_stop_epoch(val_losses, patience):\n    best = float('inf')\n    wait = 0\n    for i, loss in enumerate(val_losses):\n        if loss < best:\n            best = loss\n            wait = 0\n        else:\n            wait += 1\n            if wait >= patience:\n                return i\n    return len(val_losses) - 1\n",
@@ -124,12 +452,182 @@
         "url": "https://developers.google.com/machine-learning/crash-course/overfitting/interpreting-loss-curves",
         "license": "CC BY 4.0 (Google Machine Learning Crash Course)"
       },
-      "xp_reward": 25
+      "xp_reward": 25,
+      "player_mode": "micro",
+      "sublessons": [
+        {
+          "id": "overfit-early-stop-micro",
+          "title": "Practice Early Stopping",
+          "description": "",
+          "order": 1,
+          "exercises": [
+            {
+              "id": "overfit-early-stop-teach",
+              "type": "teach",
+              "question": "This step keeps the index of the lowest loss, using losses and 6.",
+              "hints": [
+                "Follow the job, which keeps the index of the lowest loss.",
+                "Early stopping keeps the index with the lowest loss.",
+                "loss < losses[best]"
+              ],
+              "explanation": "This step keeps the index of the lowest loss, using losses and 6.",
+              "xp_reward": 0,
+              "worked_example": "loss < losses[best]"
+            },
+            {
+              "id": "overfit-early-stop-mcq",
+              "type": "mcq",
+              "question": "Mark the choice that keeps the index of the lowest loss when the code mentions losses and 6.",
+              "hints": [
+                "Follow the job, which keeps the index of the lowest loss.",
+                "Early stopping keeps the index with the lowest loss.",
+                "if loss < losses[best]: best = index"
+              ],
+              "explanation": "Early stopping keeps the index with the lowest loss.",
+              "xp_reward": 10,
+              "options": [
+                "loss == loss",
+                "return losses",
+                "if loss < losses[best]: best = index",
+                "pass"
+              ],
+              "correct_answer": "if loss < losses[best]: best = index"
+            },
+            {
+              "id": "overfit-early-stop-predict",
+              "type": "output_prediction",
+              "question": "After losses and 6, the code keeps the index of the lowest loss, and the correct choice is the printed value.",
+              "hints": [
+                "Follow the job, which keeps the index of the lowest loss.",
+                "Early stopping keeps the index with the lowest loss.",
+                "1"
+              ],
+              "explanation": "Early stopping keeps the index with the lowest loss.",
+              "xp_reward": 10,
+              "starter_code": "losses = [5, 4, 4, 6]\nbest = 0\nfor index, loss in enumerate(losses):\n    if loss < losses[best]:\n        best = index\nprint(best)\n",
+              "options": [
+                "0",
+                "1",
+                "2",
+                "none"
+              ],
+              "correct_answer": "1"
+            },
+            {
+              "id": "overfit-early-stop-order",
+              "type": "ordering",
+              "question": "The finished line keeps the index of the lowest loss, so place its pieces in order for losses and 6.",
+              "hints": [
+                "Follow the job, which keeps the index of the lowest loss.",
+                "Early stopping keeps the index with the lowest loss.",
+                "if loss < losses[best]: best = index"
+              ],
+              "explanation": "Early stopping keeps the index with the lowest loss.",
+              "xp_reward": 10,
+              "options": [
+                "if",
+                "loss",
+                "<",
+                "losses[best]:",
+                "best",
+                "=",
+                "index",
+                ">"
+              ],
+              "correct_answer": [
+                "if",
+                "loss",
+                "<",
+                "losses[best]:",
+                "best",
+                "=",
+                "index"
+              ]
+            },
+            {
+              "id": "overfit-early-stop-fill",
+              "type": "fill_blank",
+              "question": "Finish the line that keeps the index of the lowest loss by filling the blank for losses and 6.",
+              "hints": [
+                "Follow the job, which keeps the index of the lowest loss.",
+                "Early stopping keeps the index with the lowest loss.",
+                "<"
+              ],
+              "explanation": "Early stopping keeps the index with the lowest loss.",
+              "xp_reward": 10,
+              "starter_code": "if loss ___ losses[best]:\n    best = index\n",
+              "options": [
+                ">",
+                "!=",
+                "<",
+                "=="
+              ],
+              "correct_answer": "<"
+            },
+            {
+              "id": "overfit-early-stop-bug",
+              "type": "debugging",
+              "question": "Mark the line that breaks the job, which keeps the index of the lowest loss, for losses and 6.",
+              "hints": [
+                "Follow the job, which keeps the index of the lowest loss.",
+                "The print keeps the last index even after the loss got worse.",
+                "Line 2"
+              ],
+              "explanation": "The print keeps the last index even after the loss got worse.",
+              "xp_reward": 10,
+              "starter_code": "losses = [5, 4, 4, 6]\nprint(len(losses) - 1)\n",
+              "correct_answer": "2"
+            },
+            {
+              "id": "overfit-early-stop-predict-2",
+              "type": "output_prediction",
+              "question": "Follow the second program, which keeps the index of the lowest loss for losses and 6, and choose its output.",
+              "hints": [
+                "Follow the job, which keeps the index of the lowest loss.",
+                "Early stopping keeps the index with the lowest loss.",
+                "2"
+              ],
+              "explanation": "Early stopping keeps the index with the lowest loss.",
+              "xp_reward": 10,
+              "starter_code": "losses = [5, 4, 3]\nbest = 0\nfor index, loss in enumerate(losses):\n    if loss < losses[best]:\n        best = index\nprint(best)\n",
+              "options": [
+                "1",
+                "0",
+                "none",
+                "2"
+              ],
+              "correct_answer": "2"
+            },
+            {
+              "id": "overfit-early-stop-write",
+              "type": "code",
+              "question": "Finish the program that keeps the index of the lowest loss by filling the blank for losses and 6.",
+              "hints": [
+                "Follow the job, which keeps the index of the lowest loss.",
+                "The printed value is the result after this step keeps the index of the lowest loss.",
+                "label = best"
+              ],
+              "explanation": "The printed value is the result after this step keeps the index of the lowest loss.",
+              "xp_reward": 10,
+              "starter_code": "losses = [5, 4, 4, 6]\nbest = 0\nfor index, loss in enumerate(losses):\n    if loss < losses[best]:\n        best = index\nlabel = ___\nprint(label)\n",
+              "solution_code": "losses = [5, 4, 4, 6]\nbest = 0\nfor index, loss in enumerate(losses):\n    if loss < losses[best]:\n        best = index\nlabel = best\nprint(label)\n",
+              "tests": [
+                {
+                  "name": "overfit-early-stop-prints",
+                  "description": "The printed value is the result after this step keeps the index of the lowest lo",
+                  "expected_stdout": "1\n",
+                  "required": true
+                }
+              ]
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "overfit-poly-features",
-      "title": "4. Polynomial Features (Practice)",
-      "description": "Implement `poly_features(x, degree)` returning [x^1, x^2, ..., x^degree]. The test checks that `poly_features(2, 3)` equals `[2, 4, 8]`.",
+      "title": "Practice Polynomial Features",
+      "description": "Implement poly_features(x, degree) returning [x^1, x^2, ..., x^degree]. The test checks that poly_features(2, 3) equals [2, 4, 8].",
       "order": 19,
       "difficulty": "intermediate",
       "duration_minutes": 6,
@@ -141,7 +639,7 @@
       ],
       "prerequisites": [],
       "learning_objectives": [
-        "Expand polynomial features"
+        "This step squares x into a new feature, using x and 23."
       ],
       "starter_code": "def poly_features(x, degree):\n    # TODO\n    pass\n",
       "solution_code": "def poly_features(x, degree):\n    return [x ** d for d in range(1, degree + 1)]\n",
@@ -162,12 +660,174 @@
         "url": "https://developers.google.com/machine-learning/crash-course/overfitting/model-complexity",
         "license": "CC BY 4.0 (Google Machine Learning Crash Course)"
       },
-      "xp_reward": 15
+      "xp_reward": 15,
+      "player_mode": "micro",
+      "sublessons": [
+        {
+          "id": "overfit-poly-features-micro",
+          "title": "Practice Polynomial Features",
+          "description": "",
+          "order": 1,
+          "exercises": [
+            {
+              "id": "overfit-poly-features-teach",
+              "type": "teach",
+              "question": "This step squares x into a new feature, using x and 23.",
+              "hints": [
+                "Follow the job, which squares x into a new feature.",
+                "The polynomial feature is x squared.",
+                "x * x"
+              ],
+              "explanation": "This step squares x into a new feature, using x and 23.",
+              "xp_reward": 0,
+              "worked_example": "x * x"
+            },
+            {
+              "id": "overfit-poly-features-mcq",
+              "type": "mcq",
+              "question": "Mark the choice that squares x into a new feature when the code mentions x and 23.",
+              "hints": [
+                "Follow the job, which squares x into a new feature.",
+                "The polynomial feature is x squared.",
+                "x * x"
+              ],
+              "explanation": "The polynomial feature is x squared.",
+              "xp_reward": 10,
+              "options": [
+                "x == x",
+                "x * x",
+                "return x",
+                "pass"
+              ],
+              "correct_answer": "x * x"
+            },
+            {
+              "id": "overfit-poly-features-predict",
+              "type": "output_prediction",
+              "question": "After x and 23, the code squares x into a new feature, and the correct choice is the printed value.",
+              "hints": [
+                "Follow the job, which squares x into a new feature.",
+                "The polynomial feature is x squared.",
+                "529"
+              ],
+              "explanation": "The polynomial feature is x squared.",
+              "xp_reward": 10,
+              "starter_code": "x = 23\nprint(x * x)\n",
+              "options": [
+                "676",
+                "529",
+                "none",
+                "0"
+              ],
+              "correct_answer": "529"
+            },
+            {
+              "id": "overfit-poly-features-order",
+              "type": "ordering",
+              "question": "The finished line squares x into a new feature, so place its pieces in order for x and 23.",
+              "hints": [
+                "Follow the job, which squares x into a new feature.",
+                "The polynomial feature is x squared.",
+                "feature = x*x"
+              ],
+              "explanation": "The polynomial feature is x squared.",
+              "xp_reward": 10,
+              "options": [
+                "feature",
+                "=",
+                "x*x",
+                "+"
+              ],
+              "correct_answer": [
+                "feature",
+                "=",
+                "x*x"
+              ]
+            },
+            {
+              "id": "overfit-poly-features-fill",
+              "type": "fill_blank",
+              "question": "Finish the line that squares x into a new feature by filling the blank for x and 23.",
+              "hints": [
+                "Follow the job, which squares x into a new feature.",
+                "The polynomial feature is x squared.",
+                "*"
+              ],
+              "explanation": "The polynomial feature is x squared.",
+              "xp_reward": 10,
+              "starter_code": "feature = x ___ x\n",
+              "options": [
+                "+",
+                "*",
+                "-",
+                "/"
+              ],
+              "correct_answer": "*"
+            },
+            {
+              "id": "overfit-poly-features-bug",
+              "type": "debugging",
+              "question": "Mark the line that breaks the job, which squares x into a new feature, for x and.",
+              "hints": [
+                "Follow the job, which squares x into a new feature.",
+                "The line doubles x instead of squaring it.",
+                "Line 2"
+              ],
+              "explanation": "The line doubles x instead of squaring it.",
+              "xp_reward": 10,
+              "starter_code": "x = 23\nprint(x + x)\n",
+              "correct_answer": "2"
+            },
+            {
+              "id": "overfit-poly-features-predict-2",
+              "type": "output_prediction",
+              "question": "Follow the second program, which squares x into a new feature for x and 23, and choose its output.",
+              "hints": [
+                "Follow the job, which squares x into a new feature.",
+                "The polynomial feature is x squared.",
+                "676"
+              ],
+              "explanation": "The polynomial feature is x squared.",
+              "xp_reward": 10,
+              "starter_code": "x = 26\nprint(x * x)\n",
+              "options": [
+                "529",
+                "none",
+                "0",
+                "676"
+              ],
+              "correct_answer": "676"
+            },
+            {
+              "id": "overfit-poly-features-write",
+              "type": "code",
+              "question": "Finish the program that squares x into a new feature by filling the blank for x and 23.",
+              "hints": [
+                "Follow the job, which squares x into a new feature.",
+                "The printed value is the result after this step squares x into a new feature.",
+                "label = x * x"
+              ],
+              "explanation": "The printed value is the result after this step squares x into a new feature.",
+              "xp_reward": 10,
+              "starter_code": "x = 23\nlabel = ___\nprint(label)\n",
+              "solution_code": "x = 23\nlabel = x * x\nprint(label)\n",
+              "tests": [
+                {
+                  "name": "overfit-poly-features-prints",
+                  "description": "The printed value is the result after this step squares x into a new feature.",
+                  "expected_stdout": "529\n",
+                  "required": true
+                }
+              ]
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "overfit-checkpoint",
-      "title": "5. Checkpoint: Choose Complexity",
-      "description": "Implement `choose_degree(val_errors)` returning degree (1-based index) with lowest val error. The test checks that `choose_degree([0.5, 0.2, 0.3])` equals `2`.",
+      "title": "Practice Checkpoint Choose Complexity",
+      "description": "Implement choose_degree(val_errors) returning degree (1-based index) with lowest val error. The test checks that choose_degree([0.5, 0.2, 0.3]) equals 2.",
       "order": 20,
       "difficulty": "intermediate",
       "duration_minutes": 10,
@@ -179,7 +839,7 @@
       ],
       "prerequisites": [],
       "learning_objectives": [
-        "Select model complexity via validation"
+        "This step picks the index of the smallest score, using scores and 2."
       ],
       "starter_code": "def choose_degree(val_errors):\n    # TODO\n    pass\n",
       "solution_code": "def choose_degree(val_errors):\n    best_i = min(range(len(val_errors)), key=lambda i: val_errors[i])\n    return best_i + 1\n",
@@ -200,7 +860,169 @@
         "url": "https://developers.google.com/machine-learning/crash-course/overfitting/model-complexity",
         "license": "CC BY 4.0 (Google Machine Learning Crash Course)"
       },
-      "xp_reward": 40
+      "xp_reward": 40,
+      "player_mode": "micro",
+      "sublessons": [
+        {
+          "id": "overfit-checkpoint-micro",
+          "title": "Practice Checkpoint Choose Complexity",
+          "description": "",
+          "order": 1,
+          "exercises": [
+            {
+              "id": "overfit-checkpoint-teach",
+              "type": "teach",
+              "question": "This step picks the index of the smallest score, using scores and 2.",
+              "hints": [
+                "Follow the job, which picks the index of the smallest score.",
+                "The simplest good model is the index of the minimum score.",
+                "min(scores)"
+              ],
+              "explanation": "This step picks the index of the smallest score, using scores and 2.",
+              "xp_reward": 0,
+              "worked_example": "min(scores)"
+            },
+            {
+              "id": "overfit-checkpoint-mcq",
+              "type": "mcq",
+              "question": "Mark the choice that picks the index of the smallest score when the code mentions scores and 2.",
+              "hints": [
+                "Follow the job, which picks the index of the smallest score.",
+                "The simplest good model is the index of the minimum score.",
+                "scores.index(min(scores))"
+              ],
+              "explanation": "The simplest good model is the index of the minimum score.",
+              "xp_reward": 10,
+              "options": [
+                "scores == scores",
+                "return scores",
+                "scores.index(min(scores))",
+                "pass"
+              ],
+              "correct_answer": "scores.index(min(scores))"
+            },
+            {
+              "id": "overfit-checkpoint-predict",
+              "type": "output_prediction",
+              "question": "After scores and 2, the code picks the index of the smallest score, and the correct choice is the printed value.",
+              "hints": [
+                "Follow the job, which picks the index of the smallest score.",
+                "The simplest good model is the index of the minimum score.",
+                "1"
+              ],
+              "explanation": "The simplest good model is the index of the minimum score.",
+              "xp_reward": 10,
+              "starter_code": "scores = [3, 1, 2]\nprint(scores.index(min(scores)))\n",
+              "options": [
+                "2",
+                "none",
+                "1",
+                "0"
+              ],
+              "correct_answer": "1"
+            },
+            {
+              "id": "overfit-checkpoint-order",
+              "type": "ordering",
+              "question": "The finished line picks the index of the smallest score, so place its pieces in order for scores and 2.",
+              "hints": [
+                "Follow the job, which picks the index of the smallest score.",
+                "The simplest good model is the index of the minimum score.",
+                "picked = scores.index(min(scores))"
+              ],
+              "explanation": "The simplest good model is the index of the minimum score.",
+              "xp_reward": 10,
+              "options": [
+                "picked",
+                "=",
+                "scores.index(min(scores))",
+                "max"
+              ],
+              "correct_answer": [
+                "picked",
+                "=",
+                "scores.index(min(scores))"
+              ]
+            },
+            {
+              "id": "overfit-checkpoint-fill",
+              "type": "fill_blank",
+              "question": "Finish the line that picks the index of the smallest score by filling the blank for scores and 2.",
+              "hints": [
+                "Follow the job, which picks the index of the smallest score.",
+                "The simplest good model is the index of the minimum score.",
+                "min"
+              ],
+              "explanation": "The simplest good model is the index of the minimum score.",
+              "xp_reward": 10,
+              "starter_code": "picked = scores.index(___(scores))\n",
+              "options": [
+                "max",
+                "sum",
+                "min",
+                "len"
+              ],
+              "correct_answer": "min"
+            },
+            {
+              "id": "overfit-checkpoint-bug",
+              "type": "debugging",
+              "question": "Mark the line that breaks the job, which picks the index of the smallest score, for scores and.",
+              "hints": [
+                "Follow the job, which picks the index of the smallest score.",
+                "The print takes the last score instead of the smallest.",
+                "Line 2"
+              ],
+              "explanation": "The print takes the last score instead of the smallest.",
+              "xp_reward": 10,
+              "starter_code": "scores = [3, 1, 2]\nprint(scores[-1])\n",
+              "correct_answer": "2"
+            },
+            {
+              "id": "overfit-checkpoint-predict-2",
+              "type": "output_prediction",
+              "question": "Follow the second program, which picks the index of the smallest score for scores and and choose its output.",
+              "hints": [
+                "Follow the job, which picks the index of the smallest score.",
+                "The simplest good model is the index of the minimum score.",
+                "2"
+              ],
+              "explanation": "The simplest good model is the index of the minimum score.",
+              "xp_reward": 10,
+              "starter_code": "scores = [3, 4, 2]\nprint(scores.index(min(scores)))\n",
+              "options": [
+                "1",
+                "2",
+                "none",
+                "0"
+              ],
+              "correct_answer": "2"
+            },
+            {
+              "id": "overfit-checkpoint-write",
+              "type": "code",
+              "question": "Finish the program that picks the index of the smallest score by filling the blank for scores and 2.",
+              "hints": [
+                "Follow the job, which picks the index of the smallest score.",
+                "The printed value is the result after this step picks the index of the smallest score.",
+                "label = scores.index(min(scores))"
+              ],
+              "explanation": "The printed value is the result after this step picks the index of the smallest score.",
+              "xp_reward": 10,
+              "starter_code": "scores = [3, 1, 2]\nlabel = ___\nprint(label)\n",
+              "solution_code": "scores = [3, 1, 2]\nlabel = scores.index(min(scores))\nprint(label)\n",
+              "tests": [
+                {
+                  "name": "overfit-checkpoint-prints",
+                  "description": "The printed value is the result after this step picks the index of the smallest ",
+                  "expected_stdout": "1\n",
+                  "required": true
+                }
+              ]
+            }
+          ]
+        }
+      ]
     }
   ]
 }

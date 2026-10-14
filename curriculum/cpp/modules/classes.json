@@ -14,8 +14,8 @@
   "lessons": [
     {
       "id": "cpp-classes-step-1",
-      "title": "1. Defining Classes & Constructors",
-      "description": "Finish `name_`, `get_name`, `get_health`. C++ classes encapsulate member variables and functions. Member initialization lists are preferred in constructors. Create a `Player` class. The test checks that `p.get_name()` equals `\"Arthur\" && p.get_health() == 120`.",
+      "title": "Define Classes Constructors",
+      "description": "Finish name_, get_name, get_health. C++ classes encapsulate member variables and functions. Member initialization lists are preferred in constructors. Create a Player class. The test checks that p.get_name() equals \"Arthur\" && p.get_health() == 120.",
       "order": 26,
       "difficulty": "intermediate",
       "duration_minutes": 5,
@@ -27,7 +27,7 @@
         "cpp-vectors"
       ],
       "learning_objectives": [
-        "Define C++ class with constructor and getter member functions"
+        "This step stores the constructor argument, using struct holding birch."
       ],
       "starter_code": "#include <string>\n\nclass Player {\nprivate:\n    std::string name_;\n    int health_;\npublic:\n    // TODO: initialize name_ and health_ in a member initializer list\n    Player(const std::string& name, int health = 100)\n        : name_(), health_(0) {}\n\n    std::string get_name() const { return name_; }\n    int get_health() const { return health_; }\n};\n",
       "solution_code": "#include <string>\n\nclass Player {\nprivate:\n    std::string name_;\n    int health_;\npublic:\n    Player(const std::string& name, int health = 100)\n        : name_(name), health_(health) {}\n\n    std::string get_name() const { return name_; }\n    int get_health() const { return health_; }\n};\n",
@@ -48,12 +48,176 @@
         "url": "https://en.cppreference.com/w/cpp/language/initializer_list",
         "license": "CC BY-SA 4.0 (cppreference.com)"
       },
-      "xp_reward": 10
+      "xp_reward": 10,
+      "player_mode": "micro",
+      "sublessons": [
+        {
+          "id": "cpp-classes-step-1-micro",
+          "title": "Define Classes Constructors",
+          "description": "",
+          "order": 1,
+          "exercises": [
+            {
+              "id": "cpp-classes-step-1-teach",
+              "type": "teach",
+              "question": "This step stores the constructor argument, using struct holding birch.",
+              "hints": [
+                "Follow the job, which stores the constructor argument.",
+                "The member initializer stores the constructor argument.",
+                "Bag(\"birch\")"
+              ],
+              "explanation": "This step stores the constructor argument, using struct holding birch.",
+              "xp_reward": 0,
+              "worked_example": "Bag(\"birch\")"
+            },
+            {
+              "id": "cpp-classes-step-1-mcq",
+              "type": "mcq",
+              "question": "The match is the line that stores the constructor argument for struct holding birch.",
+              "hints": [
+                "Follow the job, which stores the constructor argument.",
+                "The member initializer stores the constructor argument.",
+                "item(std::move(value))"
+              ],
+              "explanation": "The member initializer stores the constructor argument.",
+              "xp_reward": 10,
+              "options": [
+                "item == value;",
+                "item = item;",
+                "return item;",
+                "item(std::move(value))"
+              ],
+              "correct_answer": "item(std::move(value))"
+            },
+            {
+              "id": "cpp-classes-step-1-predict",
+              "type": "output_prediction",
+              "question": "Work out what is printed when the code stores the constructor argument for struct holding.",
+              "hints": [
+                "Follow the job, which stores the constructor argument.",
+                "The member initializer stores the constructor argument.",
+                "birch"
+              ],
+              "explanation": "The member initializer stores the constructor argument.",
+              "xp_reward": 10,
+              "starter_code": "#include <iostream>\n#include <string>\n#include <vector>\n#include <algorithm>\n#include <memory>\nint main() {\n    struct Bag { std::string item; explicit Bag(std::string value) : item(std::move(value)) {} };\n    std::cout << Bag(\"birch\").item << std::endl;\n    return 0;\n}\n",
+              "options": [
+                "flint",
+                "birch",
+                "none",
+                "0"
+              ],
+              "correct_answer": "birch"
+            },
+            {
+              "id": "cpp-classes-step-1-order",
+              "type": "ordering",
+              "question": "Rebuild, from the left, the line that stores the constructor argument for struct holding birch.",
+              "hints": [
+                "Follow the job, which stores the constructor argument.",
+                "The member initializer stores the constructor argument.",
+                "std::string item = word;"
+              ],
+              "explanation": "The member initializer stores the constructor argument.",
+              "xp_reward": 10,
+              "options": [
+                "std::string",
+                "item",
+                "=",
+                "word;",
+                "=="
+              ],
+              "correct_answer": [
+                "std::string",
+                "item",
+                "=",
+                "word;"
+              ]
+            },
+            {
+              "id": "cpp-classes-step-1-fill",
+              "type": "fill_blank",
+              "question": "The completed line stores the constructor argument once you fill the blank for struct holding birch.",
+              "hints": [
+                "Follow the job, which stores the constructor argument.",
+                "The member initializer stores the constructor argument.",
+                "word"
+              ],
+              "explanation": "The member initializer stores the constructor argument.",
+              "xp_reward": 10,
+              "starter_code": "std::string item = ___;",
+              "options": [
+                "name",
+                "word",
+                "left",
+                "count"
+              ],
+              "correct_answer": "word"
+            },
+            {
+              "id": "cpp-classes-step-1-bug",
+              "type": "debugging",
+              "question": "One line does another job than the one that stores the constructor argument for struct holding birch.",
+              "hints": [
+                "Follow the job, which stores the constructor argument.",
+                "The constructor appends a mark.",
+                "Line 7"
+              ],
+              "explanation": "The constructor appends a mark.",
+              "xp_reward": 10,
+              "starter_code": "#include <iostream>\n#include <string>\n#include <vector>\n#include <algorithm>\n#include <memory>\nint main() {\n    struct Bag { std::string item; explicit Bag(std::string value) : item(value + \"!\") {} };\n    std::cout << Bag(\"birch\").item << std::endl;\n    return 0;\n}\n",
+              "correct_answer": "7"
+            },
+            {
+              "id": "cpp-classes-step-1-predict-2",
+              "type": "output_prediction",
+              "question": "The second display is what prints after the code stores the constructor argument for struct holding birch.",
+              "hints": [
+                "Follow the job, which stores the constructor argument.",
+                "The member initializer stores the constructor argument.",
+                "flint"
+              ],
+              "explanation": "The member initializer stores the constructor argument.",
+              "xp_reward": 10,
+              "starter_code": "#include <iostream>\n#include <string>\n#include <vector>\n#include <algorithm>\n#include <memory>\nint main() {\n    struct Bag { std::string item; explicit Bag(std::string value) : item(std::move(value)) {} };\n    std::cout << Bag(\"flint\").item << std::endl;\n    return 0;\n}\n",
+              "options": [
+                "birch",
+                "0",
+                "none",
+                "flint"
+              ],
+              "correct_answer": "flint"
+            },
+            {
+              "id": "cpp-classes-step-1-write",
+              "type": "code",
+              "question": "Supply the blank so the run stores the constructor argument and prints the result for struct holding.",
+              "hints": [
+                "Follow the job, which stores the constructor argument.",
+                "The printed value is the result after this step stores the constructor argument.",
+                "std::string label = bag.item;"
+              ],
+              "explanation": "The printed value is the result after this step stores the constructor argument.",
+              "xp_reward": 10,
+              "starter_code": "#include <iostream>\n#include <string>\n#include <vector>\n#include <algorithm>\n#include <memory>\nint main() {\n    struct Bag { std::string item; explicit Bag(std::string value) : item(std::move(value)) {} };\n    Bag bag{\"birch\"};\n    std::string label = ___;\n    std::cout << label << std::endl;\n    return 0;\n}\n",
+              "solution_code": "#include <iostream>\n#include <string>\n#include <vector>\n#include <algorithm>\n#include <memory>\nint main() {\n    struct Bag { std::string item; explicit Bag(std::string value) : item(std::move(value)) {} };\n    Bag bag{\"birch\"};\n    std::string label = bag.item;\n    std::cout << label << std::endl;\n    return 0;\n}\n",
+              "tests": [
+                {
+                  "name": "cpp-classes-step-1-prints",
+                  "description": "The printed value is the result after this step stores the constructor argument.",
+                  "expected_stdout": "birch\n",
+                  "required": true
+                }
+              ]
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "cpp-classes-step-2",
-      "title": "2. Mutator Member Functions",
-      "description": "Add a `take_damage(int damage)` method to modify `health_` safely. The test checks that `p.get_health()` equals `60`.",
+      "title": "Practice Mutator Member Functions",
+      "description": "Add a take_damage(int damage) method to modify health_ safely. The test checks that p.get_health() equals 60.",
       "order": 27,
       "difficulty": "intermediate",
       "duration_minutes": 5,
@@ -65,7 +229,7 @@
         "cpp-vectors"
       ],
       "learning_objectives": [
-        "Implement member functions that modify object state"
+        "This step adds through a mutator, using struct and 33."
       ],
       "starter_code": "#include <string>\n#include <algorithm>\n\nclass Player {\nprivate:\n    std::string name_;\n    int health_;\npublic:\n    Player(const std::string& name, int health = 100)\n        : name_(name), health_(health) {}\n\n    int get_health() const { return health_; }\n\n    void take_damage(int damage) {\n        // TODO: Subtract damage from health_ (minimum 0)\n    }\n};\n",
       "solution_code": "#include <string>\n#include <algorithm>\n\nclass Player {\nprivate:\n    std::string name_;\n    int health_;\npublic:\n    Player(const std::string& name, int health = 100)\n        : name_(name), health_(health) {}\n\n    int get_health() const { return health_; }\n\n    void take_damage(int damage) {\n        health_ = std::max(0, health_ - damage);\n    }\n};\n",
@@ -86,12 +250,180 @@
         "url": "https://en.cppreference.com/w/cpp/language/class",
         "license": "CC BY-SA 4.0 (cppreference.com)"
       },
-      "xp_reward": 10
+      "xp_reward": 10,
+      "player_mode": "micro",
+      "sublessons": [
+        {
+          "id": "cpp-classes-step-2-micro",
+          "title": "Practice Mutator Member Functions",
+          "description": "",
+          "order": 1,
+          "exercises": [
+            {
+              "id": "cpp-classes-step-2-teach",
+              "type": "teach",
+              "question": "This step adds through a mutator, using struct and 33.",
+              "hints": [
+                "Follow the job, which adds through a mutator.",
+                "add updates the object's charge.",
+                "meter.add(33)"
+              ],
+              "explanation": "This step adds through a mutator, using struct and 33.",
+              "xp_reward": 0,
+              "worked_example": "meter.add(33)"
+            },
+            {
+              "id": "cpp-classes-step-2-mcq",
+              "type": "mcq",
+              "question": "Pick the line that adds through a mutator, not a line about something else, for struct and 33.",
+              "hints": [
+                "Follow the job, which adds through a mutator.",
+                "add updates the object's charge.",
+                "charge = charge + amount;"
+              ],
+              "explanation": "add updates the object's charge.",
+              "xp_reward": 10,
+              "options": [
+                "charge == amount;",
+                "return charge;",
+                "charge = charge + amount;",
+                "charge = 0;"
+              ],
+              "correct_answer": "charge = charge + amount;"
+            },
+            {
+              "id": "cpp-classes-step-2-predict",
+              "type": "output_prediction",
+              "question": "The displayed value is what the code prints when it adds through a mutator for struct and.",
+              "hints": [
+                "Follow the job, which adds through a mutator.",
+                "add updates the object's charge.",
+                "33"
+              ],
+              "explanation": "add updates the object's charge.",
+              "xp_reward": 10,
+              "starter_code": "#include <iostream>\n#include <string>\n#include <vector>\n#include <algorithm>\n#include <memory>\nint main() {\n    struct Meter { int charge = 0; void add(int amount) { charge = charge + amount; } };\n    Meter meter;\n    meter.add(33);\n    std::cout << meter.charge << std::endl;\n    return 0;\n}\n",
+              "options": [
+                "36",
+                "none",
+                "33",
+                "0"
+              ],
+              "correct_answer": "33"
+            },
+            {
+              "id": "cpp-classes-step-2-order",
+              "type": "ordering",
+              "question": "Place every piece so the result adds through a mutator for struct and 33.",
+              "hints": [
+                "Follow the job, which adds through a mutator.",
+                "add updates the object's charge.",
+                "int total = left + right;"
+              ],
+              "explanation": "add updates the object's charge.",
+              "xp_reward": 10,
+              "options": [
+                "int",
+                "total",
+                "=",
+                "left",
+                "+",
+                "right;",
+                "=="
+              ],
+              "correct_answer": [
+                "int",
+                "total",
+                "=",
+                "left",
+                "+",
+                "right;"
+              ]
+            },
+            {
+              "id": "cpp-classes-step-2-fill",
+              "type": "fill_blank",
+              "question": "Drop in the piece that lets the line adds through a mutator for struct and 33.",
+              "hints": [
+                "Follow the job, which adds through a mutator.",
+                "add updates the object's charge.",
+                "+"
+              ],
+              "explanation": "add updates the object's charge.",
+              "xp_reward": 10,
+              "starter_code": "int charge = 0; int amount = left; charge = charge ___ amount;",
+              "options": [
+                "==",
+                "-",
+                "+",
+                "*"
+              ],
+              "correct_answer": "+"
+            },
+            {
+              "id": "cpp-classes-step-2-bug",
+              "type": "debugging",
+              "question": "The mismatch misses the job, which adds through a mutator, for struct and 33.",
+              "hints": [
+                "Follow the job, which adds through a mutator.",
+                "The mutator subtracts.",
+                "Line 7"
+              ],
+              "explanation": "The mutator subtracts.",
+              "xp_reward": 10,
+              "starter_code": "#include <iostream>\n#include <string>\n#include <vector>\n#include <algorithm>\n#include <memory>\nint main() {\n    struct Meter { int charge = 0; void add(int amount) { charge = charge - amount; } };\n    Meter meter;\n    meter.add(33);\n    std::cout << meter.charge << std::endl;\n    return 0;\n}\n",
+              "correct_answer": "7"
+            },
+            {
+              "id": "cpp-classes-step-2-predict-2",
+              "type": "output_prediction",
+              "question": "Choose the printed result of the second run that adds through a mutator for struct and 33.",
+              "hints": [
+                "Follow the job, which adds through a mutator.",
+                "add updates the object's charge.",
+                "36"
+              ],
+              "explanation": "add updates the object's charge.",
+              "xp_reward": 10,
+              "starter_code": "#include <iostream>\n#include <string>\n#include <vector>\n#include <algorithm>\n#include <memory>\nint main() {\n    struct Meter { int charge = 0; void add(int amount) { charge = charge + amount; } };\n    Meter meter;\n    meter.add(36);\n    std::cout << meter.charge << std::endl;\n    return 0;\n}\n",
+              "options": [
+                "33",
+                "36",
+                "none",
+                "0"
+              ],
+              "correct_answer": "36"
+            },
+            {
+              "id": "cpp-classes-step-2-write",
+              "type": "code",
+              "question": "Make the program adds through a mutator by filling the blank for struct and.",
+              "hints": [
+                "Follow the job, which adds through a mutator.",
+                "The printed value is the result after this step adds through a mutator.",
+                "int label = meter.charge;"
+              ],
+              "explanation": "The printed value is the result after this step adds through a mutator.",
+              "xp_reward": 10,
+              "starter_code": "#include <iostream>\n#include <string>\n#include <vector>\n#include <algorithm>\n#include <memory>\nint main() {\n    struct Meter { int charge = 0; void add(int amount) { charge = charge + amount; } };\n    Meter meter;\n    meter.add(33);\n    int label = ___;\n    std::cout << label << std::endl;\n    return 0;\n}\n",
+              "solution_code": "#include <iostream>\n#include <string>\n#include <vector>\n#include <algorithm>\n#include <memory>\nint main() {\n    struct Meter { int charge = 0; void add(int amount) { charge = charge + amount; } };\n    Meter meter;\n    meter.add(33);\n    int label = meter.charge;\n    std::cout << label << std::endl;\n    return 0;\n}\n",
+              "tests": [
+                {
+                  "name": "cpp-classes-step-2-prints",
+                  "description": "The printed value is the result after this step adds through a mutator.",
+                  "expected_stdout": "33\n",
+                  "required": true
+                }
+              ]
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "cpp-classes-01",
-      "title": "3. Bank Account Ledger (Concept Challenge)",
-      "description": "Finish `owner_`, `get_balance`, `deposit`, `withdraw`. Encapsulate account balance and transaction operations in C++. The test checks that `acc.get_balance()` equals `150.0`; `acc.withdraw(30.0)` equals `true`; `acc.get_balance()` equals `120.0`.",
+      "title": "Practice Bank Account Ledger",
+      "description": "Finish owner_, get_balance, deposit, withdraw. Encapsulate account balance and transaction operations in C++. The test checks that acc.get_balance() equals 150.0; acc.withdraw(30.0) equals true; acc.get_balance() equals 120.0.",
       "order": 28,
       "difficulty": "intermediate",
       "duration_minutes": 8,
@@ -103,7 +435,7 @@
         "cpp-vectors"
       ],
       "learning_objectives": [
-        "Implement BankAccount class with deposit and withdraw methods"
+        "This step deposits into an account, using struct and 25."
       ],
       "starter_code": "#include <string>\n\nclass BankAccount {\nprivate:\n    std::string owner_;\n    double balance_;\npublic:\n    BankAccount(const std::string& owner, double initial_balance = 0.0)\n        : owner_(owner), balance_(initial_balance) {}\n\n    double get_balance() const { return balance_; }\n\n    void deposit(double amount) {\n        // TODO: Add amount to balance_\n    }\n\n    bool withdraw(double amount) {\n        // TODO: Subtract amount if balance_ >= amount, return true, else false\n        return false;\n    }\n};\n",
       "solution_code": "#include <string>\n\nclass BankAccount {\nprivate:\n    std::string owner_;\n    double balance_;\npublic:\n    BankAccount(const std::string& owner, double initial_balance = 0.0)\n        : owner_(owner), balance_(initial_balance) {}\n\n    double get_balance() const { return balance_; }\n\n    void deposit(double amount) {\n        if (amount > 0) balance_ += amount;\n    }\n\n    bool withdraw(double amount) {\n        if (balance_ >= amount) {\n            balance_ -= amount;\n            return true;\n        }\n        return false;\n    }\n};\n",
@@ -124,12 +456,180 @@
         "url": "https://en.cppreference.com/w/cpp/language/class",
         "license": "CC BY-SA 4.0 (cppreference.com)"
       },
-      "xp_reward": 25
+      "xp_reward": 25,
+      "player_mode": "micro",
+      "sublessons": [
+        {
+          "id": "cpp-classes-01-micro",
+          "title": "Practice Bank Account Ledger",
+          "description": "",
+          "order": 1,
+          "exercises": [
+            {
+              "id": "cpp-classes-01-teach",
+              "type": "teach",
+              "question": "This step deposits into an account, using struct and 25.",
+              "hints": [
+                "Follow the job, which deposits into an account.",
+                "deposit adds the amount to the balance.",
+                "account.deposit(25)"
+              ],
+              "explanation": "This step deposits into an account, using struct and 25.",
+              "xp_reward": 0,
+              "worked_example": "account.deposit(25)"
+            },
+            {
+              "id": "cpp-classes-01-mcq",
+              "type": "mcq",
+              "question": "Mark the choice that deposits into an account when the code mentions struct and 25.",
+              "hints": [
+                "Follow the job, which deposits into an account.",
+                "deposit adds the amount to the balance.",
+                "balance = balance + amount;"
+              ],
+              "explanation": "deposit adds the amount to the balance.",
+              "xp_reward": 10,
+              "options": [
+                "balance == amount;",
+                "balance = balance + amount;",
+                "return balance;",
+                "balance = 0;"
+              ],
+              "correct_answer": "balance = balance + amount;"
+            },
+            {
+              "id": "cpp-classes-01-predict",
+              "type": "output_prediction",
+              "question": "After struct and the code deposits into an account, and the correct choice is the printed value.",
+              "hints": [
+                "Follow the job, which deposits into an account.",
+                "deposit adds the amount to the balance.",
+                "25"
+              ],
+              "explanation": "deposit adds the amount to the balance.",
+              "xp_reward": 10,
+              "starter_code": "#include <iostream>\n#include <string>\n#include <vector>\n#include <algorithm>\n#include <memory>\nint main() {\n    struct Account { int balance = 0; void deposit(int amount) { balance = balance + amount; } };\n    Account account;\n    account.deposit(25);\n    std::cout << account.balance << std::endl;\n    return 0;\n}\n",
+              "options": [
+                "40",
+                "25",
+                "none",
+                "0"
+              ],
+              "correct_answer": "25"
+            },
+            {
+              "id": "cpp-classes-01-order",
+              "type": "ordering",
+              "question": "The finished line deposits into an account, so place its pieces in order for struct and 25.",
+              "hints": [
+                "Follow the job, which deposits into an account.",
+                "deposit adds the amount to the balance.",
+                "int total = left + right;"
+              ],
+              "explanation": "deposit adds the amount to the balance.",
+              "xp_reward": 10,
+              "options": [
+                "int",
+                "total",
+                "=",
+                "left",
+                "+",
+                "right;",
+                "=="
+              ],
+              "correct_answer": [
+                "int",
+                "total",
+                "=",
+                "left",
+                "+",
+                "right;"
+              ]
+            },
+            {
+              "id": "cpp-classes-01-fill",
+              "type": "fill_blank",
+              "question": "Finish the line that deposits into an account by filling the blank for struct and 25.",
+              "hints": [
+                "Follow the job, which deposits into an account.",
+                "deposit adds the amount to the balance.",
+                "+"
+              ],
+              "explanation": "deposit adds the amount to the balance.",
+              "xp_reward": 10,
+              "starter_code": "int balance = 0; int amount = 25; balance = balance ___ amount;",
+              "options": [
+                "-",
+                "+",
+                "*",
+                "=="
+              ],
+              "correct_answer": "+"
+            },
+            {
+              "id": "cpp-classes-01-bug",
+              "type": "debugging",
+              "question": "Mark the line that breaks the job, which deposits into an account, for struct and 25.",
+              "hints": [
+                "Follow the job, which deposits into an account.",
+                "The deposit subtracts.",
+                "Line 7"
+              ],
+              "explanation": "The deposit subtracts.",
+              "xp_reward": 10,
+              "starter_code": "#include <iostream>\n#include <string>\n#include <vector>\n#include <algorithm>\n#include <memory>\nint main() {\n    struct Account { int balance = 0; void deposit(int amount) { balance = balance - amount; } };\n    Account account;\n    account.deposit(25);\n    std::cout << account.balance << std::endl;\n    return 0;\n}\n",
+              "correct_answer": "7"
+            },
+            {
+              "id": "cpp-classes-01-predict-2",
+              "type": "output_prediction",
+              "question": "Follow the second program, which deposits into an account for struct and 25, and choose its output.",
+              "hints": [
+                "Follow the job, which deposits into an account.",
+                "deposit adds the amount to the balance.",
+                "40"
+              ],
+              "explanation": "deposit adds the amount to the balance.",
+              "xp_reward": 10,
+              "starter_code": "#include <iostream>\n#include <string>\n#include <vector>\n#include <algorithm>\n#include <memory>\nint main() {\n    struct Account { int balance = 0; void deposit(int amount) { balance = balance + amount; } };\n    Account account;\n    account.deposit(40);\n    std::cout << account.balance << std::endl;\n    return 0;\n}\n",
+              "options": [
+                "25",
+                "none",
+                "0",
+                "40"
+              ],
+              "correct_answer": "40"
+            },
+            {
+              "id": "cpp-classes-01-write",
+              "type": "code",
+              "question": "Finish the program that deposits into an account by filling the blank for struct and.",
+              "hints": [
+                "Follow the job, which deposits into an account.",
+                "The printed value is the result after this step deposits into an account.",
+                "int label = account.balance;"
+              ],
+              "explanation": "The printed value is the result after this step deposits into an account.",
+              "xp_reward": 10,
+              "starter_code": "#include <iostream>\n#include <string>\n#include <vector>\n#include <algorithm>\n#include <memory>\nint main() {\n    struct Account { int balance = 0; void deposit(int amount) { balance = balance + amount; } };\n    Account account;\n    account.deposit(25);\n    int label = ___;\n    std::cout << label << std::endl;\n    return 0;\n}\n",
+              "solution_code": "#include <iostream>\n#include <string>\n#include <vector>\n#include <algorithm>\n#include <memory>\nint main() {\n    struct Account { int balance = 0; void deposit(int amount) { balance = balance + amount; } };\n    Account account;\n    account.deposit(25);\n    int label = account.balance;\n    std::cout << label << std::endl;\n    return 0;\n}\n",
+              "tests": [
+                {
+                  "name": "cpp-classes-01-prints",
+                  "description": "The printed value is the result after this step deposits into an account.",
+                  "expected_stdout": "25\n",
+                  "required": true
+                }
+              ]
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "cpp-classes-practice-1",
-      "title": "4. Rectangle Class (Practice)",
-      "description": "Calculate area and perimeter in a Rectangle class. The test checks that `r.area()` equals `20.0`.",
+      "title": "Practice Rectangle Class",
+      "description": "Calculate area and perimeter in a Rectangle class. The test checks that r.area() equals 20.0.",
       "order": 29,
       "difficulty": "intermediate",
       "duration_minutes": 6,
@@ -141,7 +641,7 @@
         "cpp-vectors"
       ],
       "learning_objectives": [
-        "Compute geometric values in C++ member functions"
+        "This step returns the rectangle area, using struct and 5."
       ],
       "starter_code": "class Rectangle {\nprivate:\n    double width_;\n    double height_;\npublic:\n    Rectangle(double width, double height)\n        : width_(width), height_(height) {}\n\n    double area() const {\n        // TODO: return the area of this rectangle\n        return 0.0;\n    }\n};\n",
       "solution_code": "class Rectangle {\nprivate:\n    double width_;\n    double height_;\npublic:\n    Rectangle(double width, double height)\n        : width_(width), height_(height) {}\n\n    double area() const {\n        return width_ * height_;\n    }\n};\n",
@@ -162,12 +662,180 @@
         "url": "https://en.cppreference.com/w/cpp/language/class",
         "license": "CC BY-SA 4.0 (cppreference.com)"
       },
-      "xp_reward": 15
+      "xp_reward": 15,
+      "player_mode": "micro",
+      "sublessons": [
+        {
+          "id": "cpp-classes-practice-1-micro",
+          "title": "Practice Rectangle Class",
+          "description": "",
+          "order": 1,
+          "exercises": [
+            {
+              "id": "cpp-classes-practice-1-teach",
+              "type": "teach",
+              "question": "This step returns the rectangle area, using struct and 5.",
+              "hints": [
+                "Follow the job, which returns the rectangle area.",
+                "area multiplies width by height.",
+                "return width * height;"
+              ],
+              "explanation": "This step returns the rectangle area, using struct and 5.",
+              "xp_reward": 0,
+              "worked_example": "return width * height;"
+            },
+            {
+              "id": "cpp-classes-practice-1-mcq",
+              "type": "mcq",
+              "question": "Mark the choice that returns the rectangle area when the code mentions struct and 5.",
+              "hints": [
+                "Follow the job, which returns the rectangle area.",
+                "area multiplies width by height.",
+                "return width * height;"
+              ],
+              "explanation": "area multiplies width by height.",
+              "xp_reward": 10,
+              "options": [
+                "width == height;",
+                "return width * height;",
+                "width = height;",
+                "return;"
+              ],
+              "correct_answer": "return width * height;"
+            },
+            {
+              "id": "cpp-classes-practice-1-predict",
+              "type": "output_prediction",
+              "question": "After struct and 5, the code returns the rectangle area, and the correct choice is the printed value.",
+              "hints": [
+                "Follow the job, which returns the rectangle area.",
+                "area multiplies width by height.",
+                "20"
+              ],
+              "explanation": "area multiplies width by height.",
+              "xp_reward": 10,
+              "starter_code": "#include <iostream>\n#include <string>\n#include <vector>\n#include <algorithm>\n#include <memory>\nint main() {\n    struct Rect { int width; int height; int area() const { return width * height; } };\n    Rect rect{4, 5};\n    std::cout << rect.area() << std::endl;\n    return 0;\n}\n",
+              "options": [
+                "15",
+                "20",
+                "none",
+                "0"
+              ],
+              "correct_answer": "20"
+            },
+            {
+              "id": "cpp-classes-practice-1-order",
+              "type": "ordering",
+              "question": "The finished line returns the rectangle area, so place its pieces in order for struct and 5.",
+              "hints": [
+                "Follow the job, which returns the rectangle area.",
+                "area multiplies width by height.",
+                "int area = left * right;"
+              ],
+              "explanation": "area multiplies width by height.",
+              "xp_reward": 10,
+              "options": [
+                "int",
+                "area",
+                "=",
+                "left",
+                "*",
+                "right;",
+                "=="
+              ],
+              "correct_answer": [
+                "int",
+                "area",
+                "=",
+                "left",
+                "*",
+                "right;"
+              ]
+            },
+            {
+              "id": "cpp-classes-practice-1-fill",
+              "type": "fill_blank",
+              "question": "Finish the line that returns the rectangle area by filling the blank for struct and 5.",
+              "hints": [
+                "Follow the job, which returns the rectangle area.",
+                "area multiplies width by height.",
+                "*"
+              ],
+              "explanation": "area multiplies width by height.",
+              "xp_reward": 10,
+              "starter_code": "int area = left ___ right;",
+              "options": [
+                "+",
+                "*",
+                "-",
+                "/"
+              ],
+              "correct_answer": "*"
+            },
+            {
+              "id": "cpp-classes-practice-1-bug",
+              "type": "debugging",
+              "question": "Mark the line that breaks the job, which returns the rectangle area, for struct and 5.",
+              "hints": [
+                "Follow the job, which returns the rectangle area.",
+                "The method adds the sides instead of multiplying.",
+                "Line 7"
+              ],
+              "explanation": "The method adds the sides instead of multiplying.",
+              "xp_reward": 10,
+              "starter_code": "#include <iostream>\n#include <string>\n#include <vector>\n#include <algorithm>\n#include <memory>\nint main() {\n    struct Rect { int width; int height; int area() const { return width + height; } };\n    Rect rect{4, 5};\n    std::cout << rect.area() << std::endl;\n    return 0;\n}\n",
+              "correct_answer": "7"
+            },
+            {
+              "id": "cpp-classes-practice-1-predict-2",
+              "type": "output_prediction",
+              "question": "Follow the second program, which returns the rectangle area for struct and 5, and choose its output.",
+              "hints": [
+                "Follow the job, which returns the rectangle area.",
+                "area multiplies width by height.",
+                "15"
+              ],
+              "explanation": "area multiplies width by height.",
+              "xp_reward": 10,
+              "starter_code": "#include <iostream>\n#include <string>\n#include <vector>\n#include <algorithm>\n#include <memory>\nint main() {\n    struct Rect { int width; int height; int area() const { return width * height; } };\n    Rect rect{3, 5};\n    std::cout << rect.area() << std::endl;\n    return 0;\n}\n",
+              "options": [
+                "0",
+                "none",
+                "15",
+                "20"
+              ],
+              "correct_answer": "15"
+            },
+            {
+              "id": "cpp-classes-practice-1-write",
+              "type": "code",
+              "question": "Finish the program that returns the rectangle area by filling the blank for struct and 5.",
+              "hints": [
+                "Follow the job, which returns the rectangle area.",
+                "The printed value is the result after this step returns the rectangle area.",
+                "int label = rect.area();"
+              ],
+              "explanation": "The printed value is the result after this step returns the rectangle area.",
+              "xp_reward": 10,
+              "starter_code": "#include <iostream>\n#include <string>\n#include <vector>\n#include <algorithm>\n#include <memory>\nint main() {\n    struct Rect { int width; int height; int area() const { return width * height; } };\n    Rect rect{4, 5};\n    int label = ___;\n    std::cout << label << std::endl;\n    return 0;\n}\n",
+              "solution_code": "#include <iostream>\n#include <string>\n#include <vector>\n#include <algorithm>\n#include <memory>\nint main() {\n    struct Rect { int width; int height; int area() const { return width * height; } };\n    Rect rect{4, 5};\n    int label = rect.area();\n    std::cout << label << std::endl;\n    return 0;\n}\n",
+              "tests": [
+                {
+                  "name": "cpp-classes-practice-1-prints",
+                  "description": "The printed value is the result after this step returns the rectangle area.",
+                  "expected_stdout": "20\n",
+                  "required": true
+                }
+              ]
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "cpp-classes-checkpoint",
-      "title": "5. Unit 6 Checkpoint: C++ Classes Mastery",
-      "description": "Finish `Counter::increment` so it adds 1 to the private `count_`. The test starts a counter at 5, calls `increment`, and checks that `get_count()` is 6.",
+      "title": "Practice Unit 6 Checkpoint C Classes",
+      "description": "Finish Counter::increment so it adds 1 to the private count_. The test starts a counter at 5, calls increment, and checks that get_count() is 6.",
       "order": 30,
       "difficulty": "intermediate",
       "duration_minutes": 10,
@@ -179,7 +847,7 @@
         "cpp-vectors"
       ],
       "learning_objectives": [
-        "Add 1 to a Counter's private count in increment"
+        "This step reads the stored item, using struct holding cedar."
       ],
       "starter_code": "class Counter {\nprivate:\n    int count_;\npublic:\n    Counter(int initial = 0) : count_(initial) {}\n    int get_count() const { return count_; }\n    void increment() {\n        // TODO: Add 1 to count_\n    }\n};\n",
       "solution_code": "class Counter {\nprivate:\n    int count_;\npublic:\n    Counter(int initial = 0) : count_(initial) {}\n    int get_count() const { return count_; }\n    void increment() {\n        count_++;\n    }\n};\n",
@@ -200,7 +868,171 @@
         "url": "https://en.cppreference.com/w/cpp/language/class",
         "license": "CC BY-SA 4.0 (cppreference.com)"
       },
-      "xp_reward": 40
+      "xp_reward": 40,
+      "player_mode": "micro",
+      "sublessons": [
+        {
+          "id": "cpp-classes-checkpoint-micro",
+          "title": "Practice Unit 6 Checkpoint C Classes",
+          "description": "",
+          "order": 1,
+          "exercises": [
+            {
+              "id": "cpp-classes-checkpoint-teach",
+              "type": "teach",
+              "question": "This step reads the stored item, using struct holding cedar.",
+              "hints": [
+                "Follow the job, which reads the stored item.",
+                "note.item is the stored text.",
+                "Note(\"cedar\")"
+              ],
+              "explanation": "This step reads the stored item, using struct holding cedar.",
+              "xp_reward": 0,
+              "worked_example": "Note(\"cedar\")"
+            },
+            {
+              "id": "cpp-classes-checkpoint-mcq",
+              "type": "mcq",
+              "question": "Select the line that reads the stored item, the one that belongs with struct holding cedar.",
+              "hints": [
+                "Follow the job, which reads the stored item.",
+                "note.item is the stored text.",
+                "item(std::move(value))"
+              ],
+              "explanation": "note.item is the stored text.",
+              "xp_reward": 10,
+              "options": [
+                "item == value;",
+                "return item;",
+                "item(std::move(value))",
+                "item = item;"
+              ],
+              "correct_answer": "item(std::move(value))"
+            },
+            {
+              "id": "cpp-classes-checkpoint-predict",
+              "type": "output_prediction",
+              "question": "Follow the code that reads the stored item for struct holding then choose the displayed value.",
+              "hints": [
+                "Follow the job, which reads the stored item.",
+                "note.item is the stored text.",
+                "cedar"
+              ],
+              "explanation": "note.item is the stored text.",
+              "xp_reward": 10,
+              "starter_code": "#include <iostream>\n#include <string>\n#include <vector>\n#include <algorithm>\n#include <memory>\nint main() {\n    struct Note { std::string item; explicit Note(std::string value) : item(std::move(value)) {} };\n    std::cout << Note(\"cedar\").item << std::endl;\n    return 0;\n}\n",
+              "options": [
+                "grove",
+                "none",
+                "cedar",
+                "0"
+              ],
+              "correct_answer": "cedar"
+            },
+            {
+              "id": "cpp-classes-checkpoint-order",
+              "type": "ordering",
+              "question": "Order the pieces so the line reads the stored item for struct holding cedar.",
+              "hints": [
+                "Follow the job, which reads the stored item.",
+                "note.item is the stored text.",
+                "std::string item = name;"
+              ],
+              "explanation": "note.item is the stored text.",
+              "xp_reward": 10,
+              "options": [
+                "std::string",
+                "item",
+                "=",
+                "name;",
+                "=="
+              ],
+              "correct_answer": [
+                "std::string",
+                "item",
+                "=",
+                "name;"
+              ]
+            },
+            {
+              "id": "cpp-classes-checkpoint-fill",
+              "type": "fill_blank",
+              "question": "Supply the missing piece so the line reads the stored item for struct holding cedar.",
+              "hints": [
+                "Follow the job, which reads the stored item.",
+                "note.item is the stored text.",
+                "name"
+              ],
+              "explanation": "note.item is the stored text.",
+              "xp_reward": 10,
+              "starter_code": "std::string item = ___;",
+              "options": [
+                "word",
+                "left",
+                "name",
+                "count"
+              ],
+              "correct_answer": "name"
+            },
+            {
+              "id": "cpp-classes-checkpoint-bug",
+              "type": "debugging",
+              "question": "The wrong line is the one that misses the job, which reads the stored item, for struct holding cedar.",
+              "hints": [
+                "Follow the job, which reads the stored item.",
+                "The constructor stores an empty string.",
+                "Line 7"
+              ],
+              "explanation": "The constructor stores an empty string.",
+              "xp_reward": 10,
+              "starter_code": "#include <iostream>\n#include <string>\n#include <vector>\n#include <algorithm>\n#include <memory>\nint main() {\n    struct Note { std::string item; explicit Note(std::string value) : item(\"\") {} };\n    std::cout << Note(\"cedar\").item << std::endl;\n    return 0;\n}\n",
+              "correct_answer": "7"
+            },
+            {
+              "id": "cpp-classes-checkpoint-predict-2",
+              "type": "output_prediction",
+              "question": "A new input still has code that reads the stored item for struct holding cedar, and the correct choice is what it prints.",
+              "hints": [
+                "Follow the job, which reads the stored item.",
+                "note.item is the stored text.",
+                "grove"
+              ],
+              "explanation": "note.item is the stored text.",
+              "xp_reward": 10,
+              "starter_code": "#include <iostream>\n#include <string>\n#include <vector>\n#include <algorithm>\n#include <memory>\nint main() {\n    struct Note { std::string item; explicit Note(std::string value) : item(std::move(value)) {} };\n    std::cout << Note(\"grove\").item << std::endl;\n    return 0;\n}\n",
+              "options": [
+                "cedar",
+                "grove",
+                "none",
+                "0"
+              ],
+              "correct_answer": "grove"
+            },
+            {
+              "id": "cpp-classes-checkpoint-write",
+              "type": "code",
+              "question": "The blank is the missing piece of the program that reads the stored item for struct holding.",
+              "hints": [
+                "Follow the job, which reads the stored item.",
+                "The printed value is the result after this step reads the stored item.",
+                "std::string label = note.item;"
+              ],
+              "explanation": "The printed value is the result after this step reads the stored item.",
+              "xp_reward": 10,
+              "starter_code": "#include <iostream>\n#include <string>\n#include <vector>\n#include <algorithm>\n#include <memory>\nint main() {\n    struct Note { std::string item; explicit Note(std::string value) : item(std::move(value)) {} };\n    Note note{\"cedar\"};\n    std::string label = ___;\n    std::cout << label << std::endl;\n    return 0;\n}\n",
+              "solution_code": "#include <iostream>\n#include <string>\n#include <vector>\n#include <algorithm>\n#include <memory>\nint main() {\n    struct Note { std::string item; explicit Note(std::string value) : item(std::move(value)) {} };\n    Note note{\"cedar\"};\n    std::string label = note.item;\n    std::cout << label << std::endl;\n    return 0;\n}\n",
+              "tests": [
+                {
+                  "name": "cpp-classes-checkpoint-prints",
+                  "description": "The printed value is the result after this step reads the stored item.",
+                  "expected_stdout": "cedar\n",
+                  "required": true
+                }
+              ]
+            }
+          ]
+        }
+      ]
     }
   ]
 }

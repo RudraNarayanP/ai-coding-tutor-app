@@ -15,8 +15,8 @@
   "lessons": [
     {
       "id": "context-managers-step-1",
-      "title": "1. with and contextlib",
-      "description": "Implement a context manager class `TempValue` that temporarily sets an attribute and restores it. The test checks that `Box().x` equals `99`; `Box().x` equals `1`.",
+      "title": "Practice with and contextlib",
+      "description": "Implement a context manager class TempValue that temporarily sets an attribute and restores it. The test checks that Box().x equals 99; Box().x equals 1.",
       "order": 91,
       "difficulty": "intermediate",
       "duration_minutes": 5,
@@ -30,7 +30,7 @@
         "classes"
       ],
       "learning_objectives": [
-        "Implement __enter__/__exit__"
+        "This step shows the value handed out of the managed block, using Door and 1."
       ],
       "starter_code": "class TempValue:\n    def __init__(self, obj, attr, value):\n        self.obj = obj\n        self.attr = attr\n        self.value = value\n        self._old = None\n\n    def __enter__(self):\n        # TODO: save old value, set new, return self\n        pass\n\n    def __exit__(self, *args):\n        # TODO: restore old value\n        pass\n",
       "solution_code": "class TempValue:\n    def __init__(self, obj, attr, value):\n        self.obj = obj\n        self.attr = attr\n        self.value = value\n        self._old = None\n\n    def __enter__(self):\n        self._old = getattr(self.obj, self.attr)\n        setattr(self.obj, self.attr, self.value)\n        return self\n\n    def __exit__(self, *args):\n        setattr(self.obj, self.attr, self._old)\n",
@@ -51,12 +51,178 @@
         "url": "https://docs.python.org/3/reference/datamodel.html#with-statement-context-managers",
         "license": "Python documentation license (PSF)"
       },
-      "xp_reward": 10
+      "xp_reward": 10,
+      "player_mode": "micro",
+      "sublessons": [
+        {
+          "id": "context-managers-step-1-micro",
+          "title": "Practice with and contextlib",
+          "description": "",
+          "order": 1,
+          "exercises": [
+            {
+              "id": "context-managers-step-1-teach",
+              "type": "teach",
+              "question": "This step shows the value handed out of the managed block, using Door and 1.",
+              "hints": [
+                "Follow the job, which shows the value handed out of the managed block.",
+                "__enter__ hands the value to the with line.",
+                "with Door() as state:"
+              ],
+              "explanation": "This step shows the value handed out of the managed block, using Door and 1.",
+              "xp_reward": 0,
+              "worked_example": "with Door() as state:"
+            },
+            {
+              "id": "context-managers-step-1-mcq",
+              "type": "mcq",
+              "question": "A correct choice shows the value handed out of the managed block and goes with Door and 1.",
+              "hints": [
+                "Follow the job, which shows the value handed out of the managed block.",
+                "__enter__ hands the value to the with line.",
+                "return self"
+              ],
+              "explanation": "__enter__ hands the value to the with line.",
+              "xp_reward": 10,
+              "options": [
+                "with Door() as state",
+                "return self",
+                "state == Door",
+                "print(Door)"
+              ],
+              "correct_answer": "return self"
+            },
+            {
+              "id": "context-managers-step-1-predict",
+              "type": "output_prediction",
+              "question": "Select the output after the code shows the value handed out of the managed block, using Door and 1.",
+              "hints": [
+                "Follow the job, which shows the value handed out of the managed block.",
+                "__enter__ hands the value to the with line.",
+                "58"
+              ],
+              "explanation": "__enter__ hands the value to the with line.",
+              "xp_reward": 10,
+              "starter_code": "class Door:\n    def __enter__(self):\n        return 57\n    def __exit__(self, *args):\n        return False\nwith Door() as state:\n    print(state + 1)\n",
+              "options": [
+                "62",
+                "58",
+                "none",
+                "0"
+              ],
+              "correct_answer": "58"
+            },
+            {
+              "id": "context-managers-step-1-order",
+              "type": "ordering",
+              "question": "Make the line that shows the value handed out of the managed block by ordering the pieces for Door and 1.",
+              "hints": [
+                "Follow the job, which shows the value handed out of the managed block.",
+                "with Door() as state: opens the managed block.",
+                "with Door() as state: pass"
+              ],
+              "explanation": "with Door() as state: opens the managed block.",
+              "xp_reward": 10,
+              "options": [
+                "with",
+                "Door()",
+                "as",
+                "state:",
+                "pass",
+                "if"
+              ],
+              "correct_answer": [
+                "with",
+                "Door()",
+                "as",
+                "state:",
+                "pass"
+              ]
+            },
+            {
+              "id": "context-managers-step-1-fill",
+              "type": "fill_blank",
+              "question": "Complete the line for Door and 1 so that it shows the value handed out of the managed block.",
+              "hints": [
+                "Follow the job, which shows the value handed out of the managed block.",
+                "Plus adds one to the handed-out value.",
+                "+"
+              ],
+              "explanation": "Plus adds one to the handed-out value.",
+              "xp_reward": 10,
+              "starter_code": "bonus = state ___ 1\n",
+              "options": [
+                "-",
+                "==",
+                "*",
+                "+"
+              ],
+              "correct_answer": "+"
+            },
+            {
+              "id": "context-managers-step-1-bug",
+              "type": "debugging",
+              "question": "Select the line that gets in the way of the job, which shows the value handed out of the managed block, for Door and 1.",
+              "hints": [
+                "Follow the job, which shows the value handed out of the managed block.",
+                "__enter__ hands out zero instead of the reading.",
+                "Line 3"
+              ],
+              "explanation": "__enter__ hands out zero instead of the reading.",
+              "xp_reward": 10,
+              "starter_code": "class Door:\n    def __enter__(self):\n        return 0\n    def __exit__(self, *args):\n        return False\nwith Door() as state:\n    print(state + 57)\n",
+              "correct_answer": "3"
+            },
+            {
+              "id": "context-managers-step-1-predict-2",
+              "type": "output_prediction",
+              "question": "With the new data around Door and 1, the code shows the value handed out of the managed block, so select the new output.",
+              "hints": [
+                "Follow the job, which shows the value handed out of the managed block.",
+                "__enter__ hands the value to the with line.",
+                "62"
+              ],
+              "explanation": "__enter__ hands the value to the with line.",
+              "xp_reward": 10,
+              "starter_code": "class Door:\n    def __enter__(self):\n        return 61\n    def __exit__(self, *args):\n        return False\nwith Door() as state:\n    print(state + 1)\n",
+              "options": [
+                "58",
+                "none",
+                "62",
+                "0"
+              ],
+              "correct_answer": "62"
+            },
+            {
+              "id": "context-managers-step-1-write",
+              "type": "code",
+              "question": "The printed result shows up after you fill the blank so the code shows the value handed out of the managed block for Door and 1.",
+              "hints": [
+                "Follow the job, which shows the value handed out of the managed block.",
+                "The handed-out value is what gets printed.",
+                "label = state"
+              ],
+              "explanation": "The handed-out value is what gets printed.",
+              "xp_reward": 10,
+              "starter_code": "class Door:\n    def __enter__(self):\n        return 57\n    def __exit__(self, *args):\n        return False\nwith Door() as state:\n    label = ___\nprint(label)\n",
+              "solution_code": "class Door:\n    def __enter__(self):\n        return 57\n    def __exit__(self, *args):\n        return False\nwith Door() as state:\n    label = state\nprint(label)\n",
+              "tests": [
+                {
+                  "name": "context-managers-step-1-prints",
+                  "description": "The handed-out value is what gets printed.",
+                  "expected_stdout": "57\n",
+                  "required": true
+                }
+              ]
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "context-managers-step-2",
-      "title": "2. contextlib.contextmanager",
-      "description": "Finish `opened_list`, a context manager that yields a fresh list and clears that list when the block ends. The test appends `1` inside the block, checks the list equals `[1]` there, and checks it equals `[]` afterwards.",
+      "title": "Practice contextlib contextmanager",
+      "description": "Finish opened_list, a context manager that yields a fresh list and clears that list when the block ends. The test appends 1 inside the block, checks the list equals [1] there, and checks it equals [] afterwards.",
       "order": 92,
       "difficulty": "intermediate",
       "duration_minutes": 5,
@@ -70,7 +236,7 @@
         "decorators"
       ],
       "learning_objectives": [
-        "Use contextlib.contextmanager"
+        "This step yields the reading into the managed block, using contextlib and 2."
       ],
       "starter_code": "from contextlib import contextmanager\n\n@contextmanager\ndef opened_list():\n    data = []\n    # TODO: yield data, then clear it in finally\n    yield data\n",
       "solution_code": "from contextlib import contextmanager\n\n@contextmanager\ndef opened_list():\n    data = []\n    try:\n        yield data\n    finally:\n        data.clear()\n",
@@ -91,12 +257,176 @@
         "url": "https://docs.python.org/3/library/contextlib.html#contextlib.contextmanager",
         "license": "Python documentation license (PSF)"
       },
-      "xp_reward": 10
+      "xp_reward": 10,
+      "player_mode": "micro",
+      "sublessons": [
+        {
+          "id": "context-managers-step-2-micro",
+          "title": "Practice contextlib contextmanager",
+          "description": "",
+          "order": 1,
+          "exercises": [
+            {
+              "id": "context-managers-step-2-teach",
+              "type": "teach",
+              "question": "This step yields the reading into the managed block, using contextlib and 2.",
+              "hints": [
+                "Follow the job, which yields the reading into the managed block.",
+                "yield hands the reading to the with line.",
+                "yield reading"
+              ],
+              "explanation": "This step yields the reading into the managed block, using contextlib and 2.",
+              "xp_reward": 0,
+              "worked_example": "yield reading"
+            },
+            {
+              "id": "context-managers-step-2-mcq",
+              "type": "mcq",
+              "question": "Choose the line that yields the reading into the managed block, which is the line that fits contextlib and 2.",
+              "hints": [
+                "Follow the job, which yields the reading into the managed block.",
+                "yield hands the reading to the with line.",
+                "yield reading"
+              ],
+              "explanation": "yield hands the reading to the with line.",
+              "xp_reward": 10,
+              "options": [
+                "return reading",
+                "print(reading)",
+                "yield reading",
+                "pass"
+              ],
+              "correct_answer": "yield reading"
+            },
+            {
+              "id": "context-managers-step-2-predict",
+              "type": "output_prediction",
+              "question": "Read the code that yields the reading into the managed block for contextlib and 2, and choose the value it prints.",
+              "hints": [
+                "Follow the job, which yields the reading into the managed block.",
+                "yield hands the reading to the with line.",
+                "60"
+              ],
+              "explanation": "yield hands the reading to the with line.",
+              "xp_reward": 10,
+              "starter_code": "from contextlib import contextmanager\n@contextmanager\ndef door():\n    yield 58\nwith door() as state:\n    print(state + 2)\n",
+              "options": [
+                "63",
+                "60",
+                "none",
+                "0"
+              ],
+              "correct_answer": "60"
+            },
+            {
+              "id": "context-managers-step-2-order",
+              "type": "ordering",
+              "question": "Arrange the pieces of the line that yields the reading into the managed block, left to right, for contextlib and 2.",
+              "hints": [
+                "Follow the job, which yields the reading into the managed block.",
+                "def door(): yield value hands the reading out.",
+                "def door(): yield value"
+              ],
+              "explanation": "def door(): yield value hands the reading out.",
+              "xp_reward": 10,
+              "options": [
+                "def",
+                "door():",
+                "yield",
+                "value",
+                "return"
+              ],
+              "correct_answer": [
+                "def",
+                "door():",
+                "yield",
+                "value"
+              ]
+            },
+            {
+              "id": "context-managers-step-2-fill",
+              "type": "fill_blank",
+              "question": "Fill the blank so the line yields the reading into the managed block for contextlib and 2.",
+              "hints": [
+                "Follow the job, which yields the reading into the managed block.",
+                "Plus adds two to the yielded reading.",
+                "+"
+              ],
+              "explanation": "Plus adds two to the yielded reading.",
+              "xp_reward": 10,
+              "starter_code": "bonus = state ___ 2\n",
+              "options": [
+                "==",
+                "*",
+                "-",
+                "+"
+              ],
+              "correct_answer": "+"
+            },
+            {
+              "id": "context-managers-step-2-bug",
+              "type": "debugging",
+              "question": "Find the line that misses the job, which yields the reading into the managed block, for contextlib and 2.",
+              "hints": [
+                "Follow the job, which yields the reading into the managed block.",
+                "The generator returns instead of yielding a reading.",
+                "Line 4"
+              ],
+              "explanation": "The generator returns instead of yielding a reading.",
+              "xp_reward": 10,
+              "starter_code": "from contextlib import contextmanager\n@contextmanager\ndef door():\n    return\nwith door() as state:\n    print(state)\n",
+              "correct_answer": "4"
+            },
+            {
+              "id": "context-managers-step-2-predict-2",
+              "type": "output_prediction",
+              "question": "On the new input, the code still yields the reading into the managed block for contextlib and 2, so choose what it prints.",
+              "hints": [
+                "Follow the job, which yields the reading into the managed block.",
+                "yield hands the reading to the with line.",
+                "63"
+              ],
+              "explanation": "yield hands the reading to the with line.",
+              "xp_reward": 10,
+              "starter_code": "from contextlib import contextmanager\n@contextmanager\ndef door():\n    yield 61\nwith door() as state:\n    print(state + 2)\n",
+              "options": [
+                "60",
+                "63",
+                "none",
+                "0"
+              ],
+              "correct_answer": "63"
+            },
+            {
+              "id": "context-managers-step-2-write",
+              "type": "code",
+              "question": "Fill the blank so the program yields the reading into the managed block, and the print shows that result for contextlib and 2.",
+              "hints": [
+                "Follow the job, which yields the reading into the managed block.",
+                "The yielded reading is what gets printed.",
+                "label = state"
+              ],
+              "explanation": "The yielded reading is what gets printed.",
+              "xp_reward": 10,
+              "starter_code": "from contextlib import contextmanager\n@contextmanager\ndef door():\n    yield 58\nwith door() as state:\n    label = ___\nprint(label)\n",
+              "solution_code": "from contextlib import contextmanager\n@contextmanager\ndef door():\n    yield 58\nwith door() as state:\n    label = state\nprint(label)\n",
+              "tests": [
+                {
+                  "name": "context-managers-step-2-prints",
+                  "description": "The yielded reading is what gets printed.",
+                  "expected_stdout": "58\n",
+                  "required": true
+                }
+              ]
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "context-managers-01",
-      "title": "3. Timing Context (Concept Challenge)",
-      "description": "Finish `Timer` so `elapsed` is how many seconds passed inside the `with` block. The test checks that `elapsed` is at least `0` after the block.",
+      "title": "Practice Timing Context",
+      "description": "Finish Timer so elapsed is how many seconds passed inside the with block. The test checks that elapsed is at least 0 after the block.",
       "order": 93,
       "difficulty": "intermediate",
       "duration_minutes": 8,
@@ -110,7 +440,7 @@
         "classes"
       ],
       "learning_objectives": [
-        "Measure wall time across enter/exit"
+        "This step shows how far the end sits past the mark, using Timer and 57."
       ],
       "starter_code": "import time\n\nclass Timer:\n    def __init__(self):\n        self.elapsed = 0.0\n        self._start = None\n\n    def __enter__(self):\n        # TODO: record start time\n        pass\n\n    def __exit__(self, *args):\n        # TODO: set self.elapsed\n        pass\n",
       "solution_code": "import time\n\nclass Timer:\n    def __init__(self):\n        self.elapsed = 0.0\n        self._start = None\n\n    def __enter__(self):\n        self._start = time.perf_counter()\n        return self\n\n    def __exit__(self, *args):\n        self.elapsed = time.perf_counter() - self._start\n",
@@ -131,12 +461,178 @@
         "url": "https://docs.python.org/3/reference/datamodel.html#with-statement-context-managers",
         "license": "Python documentation license (PSF)"
       },
-      "xp_reward": 25
+      "xp_reward": 25,
+      "player_mode": "micro",
+      "sublessons": [
+        {
+          "id": "context-managers-01-micro",
+          "title": "Practice Timing Context",
+          "description": "",
+          "order": 1,
+          "exercises": [
+            {
+              "id": "context-managers-01-teach",
+              "type": "teach",
+              "question": "This step shows how far the end sits past the mark, using Timer and 57.",
+              "hints": [
+                "Follow the job, which shows how far the end sits past the mark.",
+                "end - mark is the elapsed gap.",
+                "end - mark"
+              ],
+              "explanation": "This step shows how far the end sits past the mark, using Timer and 57.",
+              "xp_reward": 0,
+              "worked_example": "end - mark"
+            },
+            {
+              "id": "context-managers-01-mcq",
+              "type": "mcq",
+              "question": "Pick the line that shows how far the end sits past the mark, not a line about something else, for Timer and 57.",
+              "hints": [
+                "Follow the job, which shows how far the end sits past the mark.",
+                "end - mark is the elapsed gap.",
+                "end - mark"
+              ],
+              "explanation": "end - mark is the elapsed gap.",
+              "xp_reward": 10,
+              "options": [
+                "end + mark",
+                "end - mark",
+                "end == mark",
+                "print(mark)"
+              ],
+              "correct_answer": "end - mark"
+            },
+            {
+              "id": "context-managers-01-predict",
+              "type": "output_prediction",
+              "question": "The displayed value is what the code prints when it shows how far the end sits past the mark for Timer and 57.",
+              "hints": [
+                "Follow the job, which shows how far the end sits past the mark.",
+                "end - mark is the elapsed gap.",
+                "47"
+              ],
+              "explanation": "end - mark is the elapsed gap.",
+              "xp_reward": 10,
+              "starter_code": "class Timer:\n    def __enter__(self):\n        self.mark = 10\n        return self\n    def __exit__(self, *args):\n        return False\nwith Timer() as timer:\n    print(57 - timer.mark)\n",
+              "options": [
+                "52",
+                "47",
+                "none",
+                "0"
+              ],
+              "correct_answer": "47"
+            },
+            {
+              "id": "context-managers-01-order",
+              "type": "ordering",
+              "question": "Place every piece so the result shows how far the end sits past the mark for Timer and 57.",
+              "hints": [
+                "Follow the job, which shows how far the end sits past the mark.",
+                "elapsed = end - start is the gap.",
+                "elapsed = end - start"
+              ],
+              "explanation": "elapsed = end - start is the gap.",
+              "xp_reward": 10,
+              "options": [
+                "elapsed",
+                "=",
+                "end",
+                "-",
+                "start",
+                "+"
+              ],
+              "correct_answer": [
+                "elapsed",
+                "=",
+                "end",
+                "-",
+                "start"
+              ]
+            },
+            {
+              "id": "context-managers-01-fill",
+              "type": "fill_blank",
+              "question": "Drop in the piece that lets the line shows how far the end sits past the mark for Timer and 57.",
+              "hints": [
+                "Follow the job, which shows how far the end sits past the mark.",
+                "Minus finds the gap.",
+                "-"
+              ],
+              "explanation": "Minus finds the gap.",
+              "xp_reward": 10,
+              "starter_code": "elapsed = end ___ start\n",
+              "options": [
+                "*",
+                "==",
+                "-",
+                "+"
+              ],
+              "correct_answer": "-"
+            },
+            {
+              "id": "context-managers-01-bug",
+              "type": "debugging",
+              "question": "The mismatch misses the job, which shows how far the end sits past the mark, for Timer and 57.",
+              "hints": [
+                "Follow the job, which shows how far the end sits past the mark.",
+                "The print adds the mark instead of subtracting it.",
+                "Line 8"
+              ],
+              "explanation": "The print adds the mark instead of subtracting it.",
+              "xp_reward": 10,
+              "starter_code": "class Timer:\n    def __enter__(self):\n        self.mark = 10\n        return self\n    def __exit__(self, *args):\n        return False\nwith Timer() as timer:\n    print(57 + timer.mark)\n",
+              "correct_answer": "8"
+            },
+            {
+              "id": "context-managers-01-predict-2",
+              "type": "output_prediction",
+              "question": "Choose the printed result of the second run that shows how far the end sits past the mark for Timer and 57.",
+              "hints": [
+                "Follow the job, which shows how far the end sits past the mark.",
+                "end - mark is the elapsed gap.",
+                "52"
+              ],
+              "explanation": "end - mark is the elapsed gap.",
+              "xp_reward": 10,
+              "starter_code": "class Timer:\n    def __enter__(self):\n        self.mark = 10\n        return self\n    def __exit__(self, *args):\n        return False\nwith Timer() as timer:\n    print(62 - timer.mark)\n",
+              "options": [
+                "47",
+                "none",
+                "0",
+                "52"
+              ],
+              "correct_answer": "52"
+            },
+            {
+              "id": "context-managers-01-write",
+              "type": "code",
+              "question": "Make the program shows how far the end sits past the mark by filling the blank for Timer and 57.",
+              "hints": [
+                "Follow the job, which shows how far the end sits past the mark.",
+                "The elapsed gap is what gets printed.",
+                "label = 57 - timer.mark"
+              ],
+              "explanation": "The elapsed gap is what gets printed.",
+              "xp_reward": 10,
+              "starter_code": "class Timer:\n    def __enter__(self):\n        self.mark = 10\n        return self\n    def __exit__(self, *args):\n        return False\nwith Timer() as timer:\n    label = ___\nprint(label)\n",
+              "solution_code": "class Timer:\n    def __enter__(self):\n        self.mark = 10\n        return self\n    def __exit__(self, *args):\n        return False\nwith Timer() as timer:\n    label = 57 - timer.mark\nprint(label)\n",
+              "tests": [
+                {
+                  "name": "context-managers-01-prints",
+                  "description": "The elapsed gap is what gets printed.",
+                  "expected_stdout": "47\n",
+                  "required": true
+                }
+              ]
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "context-managers-practice-1",
-      "title": "4. Suppress Specific Errors (Practice)",
-      "description": "Implement `suppress(exc_type)` that swallows the given exception type. The test checks that invalid input raises `TypeError`.",
+      "title": "Practice Suppress Specific Errors",
+      "description": "Implement suppress(exc_type) that swallows the given exception type. The test checks that invalid input raises TypeError.",
       "order": 94,
       "difficulty": "intermediate",
       "duration_minutes": 6,
@@ -150,7 +646,7 @@
         "exceptions"
       ],
       "learning_objectives": [
-        "Return True from __exit__ to suppress"
+        "This step lets the block finish when the exit asks to suppress, using Quiet holding nope."
       ],
       "starter_code": "class suppress:\n    def __init__(self, exc_type):\n        self.exc_type = exc_type\n\n    def __enter__(self):\n        return self\n\n    def __exit__(self, exc_type, exc, tb):\n        # TODO: return True if exc_type is self.exc_type (or subclass)\n        pass\n",
       "solution_code": "class suppress:\n    def __init__(self, exc_type):\n        self.exc_type = exc_type\n\n    def __enter__(self):\n        return self\n\n    def __exit__(self, exc_type, exc, tb):\n        return exc_type is not None and issubclass(exc_type, self.exc_type)\n",
@@ -171,12 +667,174 @@
         "url": "https://docs.python.org/3/library/contextlib.html#contextlib.suppress",
         "license": "Python documentation license (PSF)"
       },
-      "xp_reward": 15
+      "xp_reward": 15,
+      "player_mode": "micro",
+      "sublessons": [
+        {
+          "id": "context-managers-practice-1-micro",
+          "title": "Practice Suppress Specific Errors",
+          "description": "",
+          "order": 1,
+          "exercises": [
+            {
+              "id": "context-managers-practice-1-teach",
+              "type": "teach",
+              "question": "This step lets the block finish when the exit asks to suppress, using Quiet holding nope.",
+              "hints": [
+                "Follow the job, which lets the block finish when the exit asks to suppress.",
+                "Returning True from __exit__ suppresses the error.",
+                "return True"
+              ],
+              "explanation": "This step lets the block finish when the exit asks to suppress, using Quiet holding nope.",
+              "xp_reward": 0,
+              "worked_example": "return True"
+            },
+            {
+              "id": "context-managers-practice-1-mcq",
+              "type": "mcq",
+              "question": "Pick the line that lets the block finish when the exit asks to suppress, not a line about something else, for Quiet holding nope.",
+              "hints": [
+                "Follow the job, which lets the block finish when the exit asks to suppress.",
+                "Returning True from __exit__ suppresses the error.",
+                "return True"
+              ],
+              "explanation": "Returning True from __exit__ suppresses the error.",
+              "xp_reward": 10,
+              "options": [
+                "return False",
+                "return True",
+                "raise RuntimeError",
+                "print(error)"
+              ],
+              "correct_answer": "return True"
+            },
+            {
+              "id": "context-managers-practice-1-predict",
+              "type": "output_prediction",
+              "question": "The displayed value is what the code prints when it lets the block finish when the exit asks to suppress for Quiet holding nope.",
+              "hints": [
+                "Follow the job, which lets the block finish when the exit asks to suppress.",
+                "Returning True from __exit__ suppresses the error.",
+                "62"
+              ],
+              "explanation": "Returning True from __exit__ suppresses the error.",
+              "xp_reward": 10,
+              "starter_code": "class Quiet:\n    def __enter__(self):\n        return self\n    def __exit__(self, exc_type, exc, tb):\n        return True\ntry:\n    with Quiet():\n        raise RuntimeError('nope')\n    print(62)\nexcept RuntimeError:\n    print(57)\n",
+              "options": [
+                "57",
+                "62",
+                "none",
+                "0"
+              ],
+              "correct_answer": "62"
+            },
+            {
+              "id": "context-managers-practice-1-order",
+              "type": "ordering",
+              "question": "Place every piece so the result lets the block finish when the exit asks to suppress for Quiet holding nope.",
+              "hints": [
+                "Follow the job, which lets the block finish when the exit asks to suppress.",
+                "flag = True is the suppress signal.",
+                "flag = True"
+              ],
+              "explanation": "flag = True is the suppress signal.",
+              "xp_reward": 10,
+              "options": [
+                "flag",
+                "=",
+                "True",
+                "False"
+              ],
+              "correct_answer": [
+                "flag",
+                "=",
+                "True"
+              ]
+            },
+            {
+              "id": "context-managers-practice-1-fill",
+              "type": "fill_blank",
+              "question": "Drop in the piece that lets the line lets the block finish when the exit asks to suppress for Quiet holding nope.",
+              "hints": [
+                "Follow the job, which lets the block finish when the exit asks to suppress.",
+                "Plus adds five after the block finishes.",
+                "+"
+              ],
+              "explanation": "Plus adds five after the block finishes.",
+              "xp_reward": 10,
+              "starter_code": "bonus = reading ___ 5\n",
+              "options": [
+                "-",
+                "+",
+                "*",
+                "=="
+              ],
+              "correct_answer": "+"
+            },
+            {
+              "id": "context-managers-practice-1-bug",
+              "type": "debugging",
+              "question": "The mismatch misses the job, which lets the block finish when the exit asks to suppress, for Quiet holding nope.",
+              "hints": [
+                "Follow the job, which lets the block finish when the exit asks to suppress.",
+                "__exit__ lets the error escape.",
+                "Line 5"
+              ],
+              "explanation": "__exit__ lets the error escape.",
+              "xp_reward": 10,
+              "starter_code": "class Quiet:\n    def __enter__(self):\n        return self\n    def __exit__(self, exc_type, exc, tb):\n        return False\nprint(1)\n",
+              "correct_answer": "5"
+            },
+            {
+              "id": "context-managers-practice-1-predict-2",
+              "type": "output_prediction",
+              "question": "Choose the printed result of the second run that lets the block finish when the exit asks to suppress for Quiet holding nope.",
+              "hints": [
+                "Follow the job, which lets the block finish when the exit asks to suppress.",
+                "Returning True from __exit__ suppresses the error.",
+                "57"
+              ],
+              "explanation": "Returning True from __exit__ suppresses the error.",
+              "xp_reward": 10,
+              "starter_code": "class Quiet:\n    def __enter__(self):\n        return self\n    def __exit__(self, exc_type, exc, tb):\n        return False\ntry:\n    with Quiet():\n        raise RuntimeError('nope')\n    print(62)\nexcept RuntimeError:\n    print(57)\n",
+              "options": [
+                "62",
+                "0",
+                "none",
+                "57"
+              ],
+              "correct_answer": "57"
+            },
+            {
+              "id": "context-managers-practice-1-write",
+              "type": "code",
+              "question": "Make the program lets the block finish when the exit asks to suppress by filling the blank for Quiet holding nope.",
+              "hints": [
+                "Follow the job, which lets the block finish when the exit asks to suppress.",
+                "The finished-block reading is what gets printed.",
+                "label = 57"
+              ],
+              "explanation": "The finished-block reading is what gets printed.",
+              "xp_reward": 10,
+              "starter_code": "class Quiet:\n    def __enter__(self):\n        return self\n    def __exit__(self, exc_type, exc, tb):\n        return True\ntry:\n    with Quiet():\n        raise RuntimeError('nope')\n    label = ___\nexcept RuntimeError:\n    label = 0\nprint(label)\n",
+              "solution_code": "class Quiet:\n    def __enter__(self):\n        return self\n    def __exit__(self, exc_type, exc, tb):\n        return True\ntry:\n    with Quiet():\n        raise RuntimeError('nope')\n    label = 57\nexcept RuntimeError:\n    label = 0\nprint(label)\n",
+              "tests": [
+                {
+                  "name": "context-managers-practice-1-prints",
+                  "description": "The finished-block reading is what gets printed.",
+                  "expected_stdout": "57\n",
+                  "required": true
+                }
+              ]
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "context-managers-checkpoint",
-      "title": "5. Unit 19 Checkpoint: Context Managers",
-      "description": "Implement `locked(flag_dict)` that sets flag_dict['locked']=True on enter and False on exit. The test checks that `flags['locked']` is true; `flags['locked']` is false.",
+      "title": "Practice Unit 19 Checkpoint Context Managers",
+      "description": "Implement locked(flag_dict) that sets flag_dict['locked']=True on enter and False on exit. The test checks that flags['locked'] is true; flags['locked'] is false.",
       "order": 95,
       "difficulty": "intermediate",
       "duration_minutes": 10,
@@ -190,7 +848,7 @@
         "dictionaries"
       ],
       "learning_objectives": [
-        "Manage a boolean lock flag"
+        "This step shows the flag while the lock is held, using Lock and 24."
       ],
       "starter_code": "class locked:\n    def __init__(self, flag_dict):\n        self.flag_dict = flag_dict\n\n    def __enter__(self):\n        # TODO: set locked True\n        pass\n\n    def __exit__(self, *args):\n        # TODO: set locked False\n        pass\n",
       "solution_code": "class locked:\n    def __init__(self, flag_dict):\n        self.flag_dict = flag_dict\n\n    def __enter__(self):\n        self.flag_dict['locked'] = True\n        return self\n\n    def __exit__(self, *args):\n        self.flag_dict['locked'] = False\n",
@@ -211,7 +869,169 @@
         "url": "https://docs.python.org/3/reference/datamodel.html#with-statement-context-managers",
         "license": "Python documentation license (PSF)"
       },
-      "xp_reward": 40
+      "xp_reward": 40,
+      "player_mode": "micro",
+      "sublessons": [
+        {
+          "id": "context-managers-checkpoint-micro",
+          "title": "Practice Unit 19 Checkpoint Context Managers",
+          "description": "",
+          "order": 1,
+          "exercises": [
+            {
+              "id": "context-managers-checkpoint-teach",
+              "type": "teach",
+              "question": "This step shows the flag while the lock is held, using Lock and 24.",
+              "hints": [
+                "Follow the job, which shows the flag while the lock is held.",
+                "Inside the block the flag is on.",
+                "self.open = 1"
+              ],
+              "explanation": "This step shows the flag while the lock is held, using Lock and 24.",
+              "xp_reward": 0,
+              "worked_example": "self.open = 1"
+            },
+            {
+              "id": "context-managers-checkpoint-mcq",
+              "type": "mcq",
+              "question": "The match is the line that shows the flag while the lock is held for Lock and 24.",
+              "hints": [
+                "Follow the job, which shows the flag while the lock is held.",
+                "Inside the block the flag is on.",
+                "self.open = 1"
+              ],
+              "explanation": "Inside the block the flag is on.",
+              "xp_reward": 10,
+              "options": [
+                "self.open == 1",
+                "print(self)",
+                "self.open = 1",
+                "return 0"
+              ],
+              "correct_answer": "self.open = 1"
+            },
+            {
+              "id": "context-managers-checkpoint-predict",
+              "type": "output_prediction",
+              "question": "Work out what is printed when the code shows the flag while the lock is held for Lock and 24.",
+              "hints": [
+                "Follow the job, which shows the flag while the lock is held.",
+                "Inside the block the flag is on.",
+                "25"
+              ],
+              "explanation": "Inside the block the flag is on.",
+              "xp_reward": 10,
+              "starter_code": "class Lock:\n    def __init__(self):\n        self.open = 0\n    def __enter__(self):\n        self.open = 1\n        return self\n    def __exit__(self, *args):\n        self.open = 0\n        return False\nlock = Lock()\nwith lock:\n    held = lock.open\nprint(held * 24 + held)\n",
+              "options": [
+                "24",
+                "0",
+                "25",
+                "none"
+              ],
+              "correct_answer": "25"
+            },
+            {
+              "id": "context-managers-checkpoint-order",
+              "type": "ordering",
+              "question": "Rebuild, from the left, the line that shows the flag while the lock is held for Lock and 24.",
+              "hints": [
+                "Follow the job, which shows the flag while the lock is held.",
+                "self.open = 1 turns the flag on.",
+                "self.open = 1"
+              ],
+              "explanation": "self.open = 1 turns the flag on.",
+              "xp_reward": 10,
+              "options": [
+                "self.open",
+                "=",
+                "1",
+                "=="
+              ],
+              "correct_answer": [
+                "self.open",
+                "=",
+                "1"
+              ]
+            },
+            {
+              "id": "context-managers-checkpoint-fill",
+              "type": "fill_blank",
+              "question": "The completed line shows the flag while the lock is held once you fill the blank for Lock and 24.",
+              "hints": [
+                "Follow the job, which shows the flag while the lock is held.",
+                "Plus adds the flag after the scaled reading.",
+                "+"
+              ],
+              "explanation": "Plus adds the flag after the scaled reading.",
+              "xp_reward": 10,
+              "starter_code": "shown = held * reading ___ held\n",
+              "options": [
+                "-",
+                "*",
+                "+",
+                "=="
+              ],
+              "correct_answer": "+"
+            },
+            {
+              "id": "context-managers-checkpoint-bug",
+              "type": "debugging",
+              "question": "One line does another job than the one that shows the flag while the lock is held for Lock and 24.",
+              "hints": [
+                "Follow the job, which shows the flag while the lock is held.",
+                "The flag is set to five instead of on.",
+                "Line 5"
+              ],
+              "explanation": "The flag is set to five instead of on.",
+              "xp_reward": 10,
+              "starter_code": "class Lock:\n    def __init__(self):\n        self.open = 0\n    def __enter__(self):\n        self.open = 5\n        return self\n    def __exit__(self, *args):\n        self.open = 0\n        return False\nlock = Lock()\nwith lock:\n    held = lock.open\nprint(held)\n",
+              "correct_answer": "5"
+            },
+            {
+              "id": "context-managers-checkpoint-predict-2",
+              "type": "output_prediction",
+              "question": "The second display is what prints after the code shows the flag while the lock is held for Lock and.",
+              "hints": [
+                "Follow the job, which shows the flag while the lock is held.",
+                "Inside the block the flag is on.",
+                "24"
+              ],
+              "explanation": "Inside the block the flag is on.",
+              "xp_reward": 10,
+              "starter_code": "class Lock:\n    def __init__(self):\n        self.open = 0\n    def __enter__(self):\n        self.open = 1\n        return self\n    def __exit__(self, *args):\n        self.open = 0\n        return False\nlock = Lock()\nwith lock:\n    held = lock.open\nheld = lock.open\nprint(held * 24 + 24)\n",
+              "options": [
+                "25",
+                "24",
+                "none",
+                "0"
+              ],
+              "correct_answer": "24"
+            },
+            {
+              "id": "context-managers-checkpoint-write",
+              "type": "code",
+              "question": "Supply the blank so the run shows the flag while the lock is held and prints the result for Lock and 24.",
+              "hints": [
+                "Follow the job, which shows the flag while the lock is held.",
+                "The held flag is what gets printed.",
+                "label = lock.open"
+              ],
+              "explanation": "The held flag is what gets printed.",
+              "xp_reward": 10,
+              "starter_code": "class Lock:\n    def __init__(self):\n        self.open = 0\n    def __enter__(self):\n        self.open = 1\n        return self\n    def __exit__(self, *args):\n        self.open = 0\n        return False\nlock = Lock()\nwith lock:\n    label = ___\nprint(label)\n",
+              "solution_code": "class Lock:\n    def __init__(self):\n        self.open = 0\n    def __enter__(self):\n        self.open = 1\n        return self\n    def __exit__(self, *args):\n        self.open = 0\n        return False\nlock = Lock()\nwith lock:\n    label = lock.open\nprint(label)\n",
+              "tests": [
+                {
+                  "name": "context-managers-checkpoint-prints",
+                  "description": "The held flag is what gets printed.",
+                  "expected_stdout": "1\n",
+                  "required": true
+                }
+              ]
+            }
+          ]
+        }
+      ]
     }
   ]
 }

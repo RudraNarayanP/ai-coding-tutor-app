@@ -14,8 +14,8 @@
   "lessons": [
     {
       "id": "ai-rag-chunk",
-      "title": "24. Chunk Text",
-      "description": "Implement `chunk_text(text, size, overlap)` splitting on characters with overlap. The test checks that `chunk_text('abcdefgh', 4, 2)` equals `['abcd', 'cdef', 'efgh']`.",
+      "title": "Practice Chunk Text",
+      "description": "Implement chunk_text(text, size, overlap) splitting on characters with overlap. The test checks that chunk_text('abcdefgh', 4, 2) equals ['abcd', 'cdef', 'efgh'].",
       "order": 24,
       "difficulty": "intermediate",
       "duration_minutes": 5,
@@ -27,7 +27,7 @@
       ],
       "prerequisites": [],
       "learning_objectives": [
-        "Chunk documents for RAG"
+        "This step counts fixed-size chunks, using text holding abcdefgh."
       ],
       "starter_code": "def chunk_text(text, size, overlap):\n    # TODO\n    pass\n",
       "solution_code": "def chunk_text(text, size, overlap):\n    if size <= 0:\n        raise ValueError('size')\n    step = max(size - overlap, 1)\n    chunks = []\n    for i in range(0, len(text), step):\n        chunk = text[i:i + size]\n        if chunk:\n            chunks.append(chunk)\n        if i + size >= len(text):\n            break\n    return chunks\n",
@@ -48,12 +48,178 @@
         "url": "https://developers.llamaindex.ai/python/framework/module_guides/loading/node_parsers/",
         "license": "MIT (LlamaIndex documentation)"
       },
-      "xp_reward": 10
+      "xp_reward": 10,
+      "player_mode": "micro",
+      "sublessons": [
+        {
+          "id": "ai-rag-chunk-micro",
+          "title": "Practice Chunk Text",
+          "description": "",
+          "order": 1,
+          "exercises": [
+            {
+              "id": "ai-rag-chunk-teach",
+              "type": "teach",
+              "question": "This step counts fixed-size chunks, using text holding abcdefgh.",
+              "hints": [
+                "Follow the job, which counts fixed-size chunks.",
+                "Whole-number division by the size counts the chunks.",
+                "len(text) // size"
+              ],
+              "explanation": "This step counts fixed-size chunks, using text holding abcdefgh.",
+              "xp_reward": 0,
+              "worked_example": "len(text) // size"
+            },
+            {
+              "id": "ai-rag-chunk-mcq",
+              "type": "mcq",
+              "question": "A correct choice counts fixed-size chunks and goes with text holding abcdefgh.",
+              "hints": [
+                "Follow the job, which counts fixed-size chunks.",
+                "Whole-number division by the size counts the chunks.",
+                "len(text) // size"
+              ],
+              "explanation": "Whole-number division by the size counts the chunks.",
+              "xp_reward": 10,
+              "options": [
+                "text == text",
+                "len(text) // size",
+                "return text",
+                "pass"
+              ],
+              "correct_answer": "len(text) // size"
+            },
+            {
+              "id": "ai-rag-chunk-predict",
+              "type": "output_prediction",
+              "question": "Select the output after the code counts fixed-size chunks, using text holding abcdefgh.",
+              "hints": [
+                "Follow the job, which counts fixed-size chunks.",
+                "Whole-number division by the size counts the chunks.",
+                "2"
+              ],
+              "explanation": "Whole-number division by the size counts the chunks.",
+              "xp_reward": 10,
+              "starter_code": "text = 'abcdefgh'\nsize = 3\nprint(len(text) // size)\n",
+              "options": [
+                "3",
+                "2",
+                "none",
+                "0"
+              ],
+              "correct_answer": "2"
+            },
+            {
+              "id": "ai-rag-chunk-order",
+              "type": "ordering",
+              "question": "Make the line that counts fixed-size chunks by ordering the pieces for text holding abcdefgh.",
+              "hints": [
+                "Follow the job, which counts fixed-size chunks.",
+                "Whole-number division by the size counts the chunks.",
+                "chunks = len(text) // size"
+              ],
+              "explanation": "Whole-number division by the size counts the chunks.",
+              "xp_reward": 10,
+              "options": [
+                "chunks",
+                "=",
+                "len(text)",
+                "//",
+                "size",
+                "/"
+              ],
+              "correct_answer": [
+                "chunks",
+                "=",
+                "len(text)",
+                "//",
+                "size"
+              ]
+            },
+            {
+              "id": "ai-rag-chunk-fill",
+              "type": "fill_blank",
+              "question": "Complete the line for text holding abcdefgh so that it counts fixed-size chunks.",
+              "hints": [
+                "Follow the job, which counts fixed-size chunks.",
+                "Whole-number division by the size counts the chunks.",
+                "//"
+              ],
+              "explanation": "Whole-number division by the size counts the chunks.",
+              "xp_reward": 10,
+              "starter_code": "chunks = len(text) ___ size\n",
+              "options": [
+                "/",
+                "//",
+                "%",
+                "*"
+              ],
+              "correct_answer": "//"
+            },
+            {
+              "id": "ai-rag-chunk-bug",
+              "type": "debugging",
+              "question": "Select the line that gets in the way of the job, which counts fixed-size chunks, for text holding abcdefgh.",
+              "hints": [
+                "Follow the job, which counts fixed-size chunks.",
+                "The print counts characters instead of chunks.",
+                "Line 3"
+              ],
+              "explanation": "The print counts characters instead of chunks.",
+              "xp_reward": 10,
+              "starter_code": "text = 'abcdefgh'\nsize = 3\nprint(len(text))\n",
+              "correct_answer": "3"
+            },
+            {
+              "id": "ai-rag-chunk-predict-2",
+              "type": "output_prediction",
+              "question": "With the new data around text holding abcdefgh, the code counts fixed-size chunks, so select the new output.",
+              "hints": [
+                "Follow the job, which counts fixed-size chunks.",
+                "Whole-number division by the size counts the chunks.",
+                "3"
+              ],
+              "explanation": "Whole-number division by the size counts the chunks.",
+              "xp_reward": 10,
+              "starter_code": "text = 'abcdefghi'\nsize = 3\nprint(len(text) // size)\n",
+              "options": [
+                "2",
+                "0",
+                "none",
+                "3"
+              ],
+              "correct_answer": "3"
+            },
+            {
+              "id": "ai-rag-chunk-write",
+              "type": "code",
+              "question": "The printed result shows up after you fill the blank so the code counts fixed-size chunks for text holding abcdefgh.",
+              "hints": [
+                "Follow the job, which counts fixed-size chunks.",
+                "The printed value is the result after this step counts fixed-size chunks.",
+                "label = len(text) // size"
+              ],
+              "explanation": "The printed value is the result after this step counts fixed-size chunks.",
+              "xp_reward": 10,
+              "starter_code": "text = 'abcdefgh'\nsize = 3\nlabel = ___\nprint(label)\n",
+              "solution_code": "text = 'abcdefgh'\nsize = 3\nlabel = len(text) // size\nprint(label)\n",
+              "tests": [
+                {
+                  "name": "ai-rag-chunk-prints",
+                  "description": "The printed value is the result after this step counts fixed-size chunks.",
+                  "expected_stdout": "2\n",
+                  "required": true
+                }
+              ]
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "ai-rag-index",
-      "title": "25. Build Lexical Index",
-      "description": "Implement `build_index(chunks)` mapping tokens to chunk id lists. The test checks that `build_index(['Hello world', 'Hello AI'])['hello']` equals `[0, 1]`; `build_index(['Hello world', 'Hello AI'])['world']` equals `[0]`.",
+      "title": "Build Lexical Index",
+      "description": "Implement build_index(chunks) mapping tokens to chunk id lists. The test checks that build_index(['Hello world', 'Hello AI'])['hello'] equals [0, 1]; build_index(['Hello world', 'Hello AI'])['world'] equals [0].",
       "order": 25,
       "difficulty": "intermediate",
       "duration_minutes": 5,
@@ -65,7 +231,7 @@
       ],
       "prerequisites": [],
       "learning_objectives": [
-        "Build an inverted index"
+        "This step counts the postings for one token, using index holding ridge."
       ],
       "starter_code": "def build_index(chunks):\n    # TODO\n    pass\n",
       "solution_code": "def build_index(chunks):\n    index = {}\n    for i, chunk in enumerate(chunks):\n        for tok in chunk.lower().split():\n            index.setdefault(tok, [])\n            if i not in index[tok]:\n                index[tok].append(i)\n    return index\n",
@@ -86,12 +252,174 @@
         "url": "https://developers.llamaindex.ai/python/framework/module_guides/indexing/",
         "license": "MIT (LlamaIndex documentation)"
       },
-      "xp_reward": 10
+      "xp_reward": 10,
+      "player_mode": "micro",
+      "sublessons": [
+        {
+          "id": "ai-rag-index-micro",
+          "title": "Build Lexical Index",
+          "description": "",
+          "order": 1,
+          "exercises": [
+            {
+              "id": "ai-rag-index-teach",
+              "type": "teach",
+              "question": "This step counts the postings for one token, using index holding ridge.",
+              "hints": [
+                "Follow the job, which counts the postings for one token.",
+                "The posting list is stored under the token.",
+                "index['ridge']"
+              ],
+              "explanation": "This step counts the postings for one token, using index holding ridge.",
+              "xp_reward": 0,
+              "worked_example": "index['ridge']"
+            },
+            {
+              "id": "ai-rag-index-mcq",
+              "type": "mcq",
+              "question": "Pick the line that counts the postings for one token, not a line about something else, for index holding ridge.",
+              "hints": [
+                "Follow the job, which counts the postings for one token.",
+                "The posting list is stored under the token.",
+                "index[token]"
+              ],
+              "explanation": "The posting list is stored under the token.",
+              "xp_reward": 10,
+              "options": [
+                "index == index",
+                "return index",
+                "pass",
+                "index[token]"
+              ],
+              "correct_answer": "index[token]"
+            },
+            {
+              "id": "ai-rag-index-predict",
+              "type": "output_prediction",
+              "question": "The displayed value is what the code prints when it counts the postings for one token for index holding ridge.",
+              "hints": [
+                "Follow the job, which counts the postings for one token.",
+                "The posting list is stored under the token.",
+                "2"
+              ],
+              "explanation": "The posting list is stored under the token.",
+              "xp_reward": 10,
+              "starter_code": "index = {'ridge': [1, 2]}\nprint(len(index['ridge']))\n",
+              "options": [
+                "1",
+                "none",
+                "0",
+                "2"
+              ],
+              "correct_answer": "2"
+            },
+            {
+              "id": "ai-rag-index-order",
+              "type": "ordering",
+              "question": "Place every piece so the result counts the postings for one token for index holding ridge.",
+              "hints": [
+                "Follow the job, which counts the postings for one token.",
+                "The posting list is stored under the token.",
+                "postings = index[token]"
+              ],
+              "explanation": "The posting list is stored under the token.",
+              "xp_reward": 10,
+              "options": [
+                "postings",
+                "=",
+                "index[token]",
+                "=="
+              ],
+              "correct_answer": [
+                "postings",
+                "=",
+                "index[token]"
+              ]
+            },
+            {
+              "id": "ai-rag-index-fill",
+              "type": "fill_blank",
+              "question": "Drop in the piece that lets the line counts the postings for one token for index holding ridge.",
+              "hints": [
+                "Follow the job, which counts the postings for one token.",
+                "The posting list is stored under the token.",
+                "'ridge'"
+              ],
+              "explanation": "The posting list is stored under the token.",
+              "xp_reward": 10,
+              "starter_code": "postings = index[___]\n",
+              "options": [
+                "'violet'",
+                "'missing'",
+                "'id'",
+                "'ridge'"
+              ],
+              "correct_answer": "'ridge'"
+            },
+            {
+              "id": "ai-rag-index-bug",
+              "type": "debugging",
+              "question": "The mismatch misses the job, which counts the postings for one token, for index holding ridge.",
+              "hints": [
+                "Follow the job, which counts the postings for one token.",
+                "The print counts tokens, not the postings of one token.",
+                "Line 2"
+              ],
+              "explanation": "The print counts tokens, not the postings of one token.",
+              "xp_reward": 10,
+              "starter_code": "index = {'ridge': [1, 2]}\nprint(len(index))\n",
+              "correct_answer": "2"
+            },
+            {
+              "id": "ai-rag-index-predict-2",
+              "type": "output_prediction",
+              "question": "Choose the printed result of the second run that counts the postings for one token for index holding ridge.",
+              "hints": [
+                "Follow the job, which counts the postings for one token.",
+                "The posting list is stored under the token.",
+                "1"
+              ],
+              "explanation": "The posting list is stored under the token.",
+              "xp_reward": 10,
+              "starter_code": "index = {'ridge': [1]}\nprint(len(index['ridge']))\n",
+              "options": [
+                "2",
+                "none",
+                "1",
+                "0"
+              ],
+              "correct_answer": "1"
+            },
+            {
+              "id": "ai-rag-index-write",
+              "type": "code",
+              "question": "Make the program counts the postings for one token by filling the blank for index holding ridge.",
+              "hints": [
+                "Follow the job, which counts the postings for one token.",
+                "The printed value is the result after this step counts the postings for one token.",
+                "label = len(index['ridge'])"
+              ],
+              "explanation": "The printed value is the result after this step counts the postings for one token.",
+              "xp_reward": 10,
+              "starter_code": "index = {'ridge': [1, 2]}\nlabel = ___\nprint(label)\n",
+              "solution_code": "index = {'ridge': [1, 2]}\nlabel = len(index['ridge'])\nprint(label)\n",
+              "tests": [
+                {
+                  "name": "ai-rag-index-prints",
+                  "description": "The printed value is the result after this step counts the postings for one toke",
+                  "expected_stdout": "2\n",
+                  "required": true
+                }
+              ]
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "ai-rag-retrieve",
-      "title": "26. Retrieve by Overlap",
-      "description": "Implement `retrieve(query, chunks, k)` scoring by shared lowercase tokens; return top-k chunk strings. The test checks that `retrieve('cats', chunks, 2)[0]` equals `'cats are nice'`.",
+      "title": "Practice Retrieve by Overlap",
+      "description": "Implement retrieve(query, chunks, k) scoring by shared lowercase tokens; return top-k chunk strings. The test checks that retrieve('cats', chunks, 2)[0] equals 'cats are nice'.",
       "order": 26,
       "difficulty": "intermediate",
       "duration_minutes": 8,
@@ -103,7 +431,7 @@
       ],
       "prerequisites": [],
       "learning_objectives": [
-        "Retrieve chunks by token overlap"
+        "This step counts the overlapping letters, using query holding amber."
       ],
       "starter_code": "def retrieve(query, chunks, k):\n    # TODO\n    pass\n",
       "solution_code": "def retrieve(query, chunks, k):\n    q = set(query.lower().split())\n    scored = []\n    for i, ch in enumerate(chunks):\n        score = len(q & set(ch.lower().split()))\n        scored.append((score, i, ch))\n    scored.sort(key=lambda t: (-t[0], t[1]))\n    positives = [ch for score, _, ch in scored[:k] if score > 0]\n    return positives if positives else [ch for _, _, ch in scored[:k]]\n",
@@ -124,12 +452,178 @@
         "url": "https://developers.llamaindex.ai/python/framework/module_guides/indexing/",
         "license": "MIT (LlamaIndex documentation)"
       },
-      "xp_reward": 25
+      "xp_reward": 25,
+      "player_mode": "micro",
+      "sublessons": [
+        {
+          "id": "ai-rag-retrieve-micro",
+          "title": "Practice Retrieve by Overlap",
+          "description": "",
+          "order": 1,
+          "exercises": [
+            {
+              "id": "ai-rag-retrieve-teach",
+              "type": "teach",
+              "question": "This step counts the overlapping letters, using query holding amber.",
+              "hints": [
+                "Follow the job, which counts the overlapping letters.",
+                "The intersection is the overlap.",
+                "query & doc"
+              ],
+              "explanation": "This step counts the overlapping letters, using query holding amber.",
+              "xp_reward": 0,
+              "worked_example": "query & doc"
+            },
+            {
+              "id": "ai-rag-retrieve-mcq",
+              "type": "mcq",
+              "question": "Mark the choice that counts the overlapping letters when the code mentions query holding amber.",
+              "hints": [
+                "Follow the job, which counts the overlapping letters.",
+                "The intersection is the overlap.",
+                "query & doc"
+              ],
+              "explanation": "The intersection is the overlap.",
+              "xp_reward": 10,
+              "options": [
+                "query == doc",
+                "query & doc",
+                "pass",
+                "return query"
+              ],
+              "correct_answer": "query & doc"
+            },
+            {
+              "id": "ai-rag-retrieve-predict",
+              "type": "output_prediction",
+              "question": "After query holding amber, the code counts the overlapping letters, and the correct choice is the printed value.",
+              "hints": [
+                "Follow the job, which counts the overlapping letters.",
+                "The intersection is the overlap.",
+                "5"
+              ],
+              "explanation": "The intersection is the overlap.",
+              "xp_reward": 10,
+              "starter_code": "query = set('amber')\ndoc = set('amber')\nprint(len(query & doc))\n",
+              "options": [
+                "0",
+                "5",
+                "none",
+                "1"
+              ],
+              "correct_answer": "5"
+            },
+            {
+              "id": "ai-rag-retrieve-order",
+              "type": "ordering",
+              "question": "The finished line counts the overlapping letters, so place its pieces in order for query holding amber.",
+              "hints": [
+                "Follow the job, which counts the overlapping letters.",
+                "The intersection is the overlap.",
+                "shared = query & doc"
+              ],
+              "explanation": "The intersection is the overlap.",
+              "xp_reward": 10,
+              "options": [
+                "shared",
+                "=",
+                "query",
+                "&",
+                "doc",
+                "|"
+              ],
+              "correct_answer": [
+                "shared",
+                "=",
+                "query",
+                "&",
+                "doc"
+              ]
+            },
+            {
+              "id": "ai-rag-retrieve-fill",
+              "type": "fill_blank",
+              "question": "Finish the line that counts the overlapping letters by filling the blank for query holding amber.",
+              "hints": [
+                "Follow the job, which counts the overlapping letters.",
+                "The intersection is the overlap.",
+                "&"
+              ],
+              "explanation": "The intersection is the overlap.",
+              "xp_reward": 10,
+              "starter_code": "shared = query ___ doc\n",
+              "options": [
+                "|",
+                "&",
+                "-",
+                "^"
+              ],
+              "correct_answer": "&"
+            },
+            {
+              "id": "ai-rag-retrieve-bug",
+              "type": "debugging",
+              "question": "Mark the line that breaks the job, which counts the overlapping letters, for query holding amber.",
+              "hints": [
+                "Follow the job, which counts the overlapping letters.",
+                "The print counts the query and ignores the document.",
+                "Line 3"
+              ],
+              "explanation": "The print counts the query and ignores the document.",
+              "xp_reward": 10,
+              "starter_code": "query = set('amber')\ndoc = set('amber')\nprint(len(query))\n",
+              "correct_answer": "3"
+            },
+            {
+              "id": "ai-rag-retrieve-predict-2",
+              "type": "output_prediction",
+              "question": "Follow the second program, which counts the overlapping letters for query holding amber, and choose its output.",
+              "hints": [
+                "Follow the job, which counts the overlapping letters.",
+                "The intersection is the overlap.",
+                "0"
+              ],
+              "explanation": "The intersection is the overlap.",
+              "xp_reward": 10,
+              "starter_code": "query = set('amber')\ndoc = set('zzzzz')\nprint(len(query & doc))\n",
+              "options": [
+                "5",
+                "none",
+                "1",
+                "0"
+              ],
+              "correct_answer": "0"
+            },
+            {
+              "id": "ai-rag-retrieve-write",
+              "type": "code",
+              "question": "Finish the program that counts the overlapping letters by filling the blank for query holding amber.",
+              "hints": [
+                "Follow the job, which counts the overlapping letters.",
+                "The printed value is the result after this step counts the overlapping letters.",
+                "label = len(query & doc)"
+              ],
+              "explanation": "The printed value is the result after this step counts the overlapping letters.",
+              "xp_reward": 10,
+              "starter_code": "query = set('amber')\ndoc = set('amber')\nlabel = ___\nprint(label)\n",
+              "solution_code": "query = set('amber')\ndoc = set('amber')\nlabel = len(query & doc)\nprint(label)\n",
+              "tests": [
+                {
+                  "name": "ai-rag-retrieve-prints",
+                  "description": "The printed value is the result after this step counts the overlapping letters.",
+                  "expected_stdout": "5\n",
+                  "required": true
+                }
+              ]
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "ai-rag-context",
-      "title": "27. Pack Context (Practice)",
-      "description": "Implement `pack_context(chunks, budget)` joining with a separator without exceeding budget chars. The test checks that `pack_context(['ab', 'cd'], 100)` equals `'ab' + sep + 'cd'`; `pack_context(['abcdef'], 3)` equals `''`.",
+      "title": "Practice Pack Context",
+      "description": "Implement pack_context(chunks, budget) joining with a separator without exceeding budget chars. The test checks that pack_context(['ab', 'cd'], 100) equals 'ab' + sep + 'cd'; pack_context(['abcdef'], 3) equals ''.",
       "order": 27,
       "difficulty": "intermediate",
       "duration_minutes": 6,
@@ -141,7 +635,7 @@
       ],
       "prerequisites": [],
       "learning_objectives": [
-        "Pack retrieved context under a budget"
+        "This step keeps the chunks that fit the limit, using chunks holding ember."
       ],
       "starter_code": "def pack_context(chunks, budget):\n    # TODO\n    pass\n",
       "solution_code": "def pack_context(chunks, budget):\n    parts = []\n    used = 0\n    sep = chr(10) + '---' + chr(10)\n    for ch in chunks:\n        add = len(ch) if not parts else len(sep) + len(ch)\n        if used + add > budget:\n            break\n        parts.append(ch)\n        used += add\n    return sep.join(parts)\n",
@@ -162,12 +656,174 @@
         "url": "https://developers.llamaindex.ai/python/framework/module_guides/indexing/",
         "license": "MIT (LlamaIndex documentation)"
       },
-      "xp_reward": 15
+      "xp_reward": 15,
+      "player_mode": "micro",
+      "sublessons": [
+        {
+          "id": "ai-rag-context-micro",
+          "title": "Practice Pack Context",
+          "description": "",
+          "order": 1,
+          "exercises": [
+            {
+              "id": "ai-rag-context-teach",
+              "type": "teach",
+              "question": "This step keeps the chunks that fit the limit, using chunks holding ember.",
+              "hints": [
+                "Follow the job, which keeps the chunks that fit the limit.",
+                "The slice keeps the first chunks up to the limit.",
+                "chunks[:limit]"
+              ],
+              "explanation": "This step keeps the chunks that fit the limit, using chunks holding ember.",
+              "xp_reward": 0,
+              "worked_example": "chunks[:limit]"
+            },
+            {
+              "id": "ai-rag-context-mcq",
+              "type": "mcq",
+              "question": "Select the line that keeps the chunks that fit the limit, the one that belongs with chunks holding ember.",
+              "hints": [
+                "Follow the job, which keeps the chunks that fit the limit.",
+                "The slice keeps the first chunks up to the limit.",
+                "chunks[:limit]"
+              ],
+              "explanation": "The slice keeps the first chunks up to the limit.",
+              "xp_reward": 10,
+              "options": [
+                "chunks == chunks",
+                "pass",
+                "chunks[:limit]",
+                "return chunks"
+              ],
+              "correct_answer": "chunks[:limit]"
+            },
+            {
+              "id": "ai-rag-context-predict",
+              "type": "output_prediction",
+              "question": "Follow the code that keeps the chunks that fit the limit for chunks holding ember, then choose the displayed value.",
+              "hints": [
+                "Follow the job, which keeps the chunks that fit the limit.",
+                "The slice keeps the first chunks up to the limit.",
+                "1"
+              ],
+              "explanation": "The slice keeps the first chunks up to the limit.",
+              "xp_reward": 10,
+              "starter_code": "chunks = ['ember', 'ivory', 'extra']\nlimit = 1\nprint(len(chunks[:limit]))\n",
+              "options": [
+                "2",
+                "none",
+                "0",
+                "1"
+              ],
+              "correct_answer": "1"
+            },
+            {
+              "id": "ai-rag-context-order",
+              "type": "ordering",
+              "question": "Order the pieces so the line keeps the chunks that fit the limit for chunks holding ember.",
+              "hints": [
+                "Follow the job, which keeps the chunks that fit the limit.",
+                "The slice keeps the first chunks up to the limit.",
+                "packed = chunks[:limit]"
+              ],
+              "explanation": "The slice keeps the first chunks up to the limit.",
+              "xp_reward": 10,
+              "options": [
+                "packed",
+                "=",
+                "chunks[:limit]",
+                "=="
+              ],
+              "correct_answer": [
+                "packed",
+                "=",
+                "chunks[:limit]"
+              ]
+            },
+            {
+              "id": "ai-rag-context-fill",
+              "type": "fill_blank",
+              "question": "Supply the missing piece so the line keeps the chunks that fit the limit for chunks holding ember.",
+              "hints": [
+                "Follow the job, which keeps the chunks that fit the limit.",
+                "The slice keeps the first chunks up to the limit.",
+                ":"
+              ],
+              "explanation": "The slice keeps the first chunks up to the limit.",
+              "xp_reward": 10,
+              "starter_code": "packed = chunks[___limit]\n",
+              "options": [
+                "::",
+                "==",
+                "!=",
+                ":"
+              ],
+              "correct_answer": ":"
+            },
+            {
+              "id": "ai-rag-context-bug",
+              "type": "debugging",
+              "question": "The wrong line is the one that misses the job, which keeps the chunks that fit the limit, for chunks holding ember.",
+              "hints": [
+                "Follow the job, which keeps the chunks that fit the limit.",
+                "The print ignores the limit.",
+                "Line 3"
+              ],
+              "explanation": "The print ignores the limit.",
+              "xp_reward": 10,
+              "starter_code": "chunks = ['ember', 'ivory']\nlimit = 1\nprint(len(chunks))\n",
+              "correct_answer": "3"
+            },
+            {
+              "id": "ai-rag-context-predict-2",
+              "type": "output_prediction",
+              "question": "A new input still has code that keeps the chunks that fit the limit for chunks holding ember, and the correct choice is what it prints.",
+              "hints": [
+                "Follow the job, which keeps the chunks that fit the limit.",
+                "The slice keeps the first chunks up to the limit.",
+                "2"
+              ],
+              "explanation": "The slice keeps the first chunks up to the limit.",
+              "xp_reward": 10,
+              "starter_code": "chunks = ['ember', 'ivory', 'extra']\nlimit = 2\nprint(len(chunks[:limit]))\n",
+              "options": [
+                "none",
+                "1",
+                "2",
+                "0"
+              ],
+              "correct_answer": "2"
+            },
+            {
+              "id": "ai-rag-context-write",
+              "type": "code",
+              "question": "The blank is the missing piece of the program that keeps the chunks that fit the limit for chunks holding ember.",
+              "hints": [
+                "Follow the job, which keeps the chunks that fit the limit.",
+                "The printed value is the result after this step keeps the chunks that fit the limit.",
+                "label = len(chunks[:limit])"
+              ],
+              "explanation": "The printed value is the result after this step keeps the chunks that fit the limit.",
+              "xp_reward": 10,
+              "starter_code": "chunks = ['ember', 'ivory', 'extra']\nlimit = 1\nlabel = ___\nprint(label)\n",
+              "solution_code": "chunks = ['ember', 'ivory', 'extra']\nlimit = 1\nlabel = len(chunks[:limit])\nprint(label)\n",
+              "tests": [
+                {
+                  "name": "ai-rag-context-prints",
+                  "description": "The printed value is the result after this step keeps the chunks that fit the li",
+                  "expected_stdout": "1\n",
+                  "required": true
+                }
+              ]
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "ai-rag-checkpoint2",
-      "title": "28. Checkpoint: Citation Map",
-      "description": "Implement `cite(chunks)` returning list of id/text dicts. The test checks that `cite(['a', 'b'])` equals `[{'id': 0, 'text': 'a'}, {'id': 1, 'text': 'b'}]`.",
+      "title": "Practice Checkpoint Citation Map",
+      "description": "Implement cite(chunks) returning list of id/text dicts. The test checks that cite(['a', 'b']) equals [{'id': 0, 'text': 'a'}, {'id': 1, 'text': 'b'}].",
       "order": 28,
       "difficulty": "intermediate",
       "duration_minutes": 10,
@@ -179,7 +835,7 @@
       ],
       "prerequisites": [],
       "learning_objectives": [
-        "Attach citation ids to chunks"
+        "This step reads the citation stored for a chunk, using cite holding umber."
       ],
       "starter_code": "def cite(chunks):\n    # TODO\n    pass\n",
       "solution_code": "def cite(chunks):\n    return [{'id': i, 'text': c} for i, c in enumerate(chunks)]\n",
@@ -200,7 +856,169 @@
         "url": "https://developers.llamaindex.ai/python/framework/module_guides/loading/node_parsers/",
         "license": "MIT (LlamaIndex documentation)"
       },
-      "xp_reward": 40
+      "xp_reward": 40,
+      "player_mode": "micro",
+      "sublessons": [
+        {
+          "id": "ai-rag-checkpoint2-micro",
+          "title": "Practice Checkpoint Citation Map",
+          "description": "",
+          "order": 1,
+          "exercises": [
+            {
+              "id": "ai-rag-checkpoint2-teach",
+              "type": "teach",
+              "question": "This step reads the citation stored for a chunk, using cite holding umber.",
+              "hints": [
+                "Follow the job, which reads the citation stored for a chunk.",
+                "The map stores the source under the chunk id.",
+                "cite[1]"
+              ],
+              "explanation": "This step reads the citation stored for a chunk, using cite holding umber.",
+              "xp_reward": 0,
+              "worked_example": "cite[1]"
+            },
+            {
+              "id": "ai-rag-checkpoint2-mcq",
+              "type": "mcq",
+              "question": "Choose the line that reads the citation stored for a chunk, which is the line that fits cite holding umber.",
+              "hints": [
+                "Follow the job, which reads the citation stored for a chunk.",
+                "The map stores the source under the chunk id.",
+                "cite[1]"
+              ],
+              "explanation": "The map stores the source under the chunk id.",
+              "xp_reward": 10,
+              "options": [
+                "cite == cite",
+                "return cite",
+                "cite[1]",
+                "pass"
+              ],
+              "correct_answer": "cite[1]"
+            },
+            {
+              "id": "ai-rag-checkpoint2-predict",
+              "type": "output_prediction",
+              "question": "Read the code that reads the citation stored for a chunk for cite holding and choose the value it prints.",
+              "hints": [
+                "Follow the job, which reads the citation stored for a chunk.",
+                "The map stores the source under the chunk id.",
+                "umber"
+              ],
+              "explanation": "The map stores the source under the chunk id.",
+              "xp_reward": 10,
+              "starter_code": "cite = {1: 'umber'}\nprint(cite[1])\n",
+              "options": [
+                "zircon",
+                "none",
+                "umber",
+                "0"
+              ],
+              "correct_answer": "umber"
+            },
+            {
+              "id": "ai-rag-checkpoint2-order",
+              "type": "ordering",
+              "question": "Arrange the pieces of the line that reads the citation stored for a chunk, left to right, for cite holding umber.",
+              "hints": [
+                "Follow the job, which reads the citation stored for a chunk.",
+                "The map stores the source under the chunk id.",
+                "source = cite[1]"
+              ],
+              "explanation": "The map stores the source under the chunk id.",
+              "xp_reward": 10,
+              "options": [
+                "source",
+                "=",
+                "cite[1]",
+                "=="
+              ],
+              "correct_answer": [
+                "source",
+                "=",
+                "cite[1]"
+              ]
+            },
+            {
+              "id": "ai-rag-checkpoint2-fill",
+              "type": "fill_blank",
+              "question": "Fill the blank so the line reads the citation stored for a chunk for cite holding umber.",
+              "hints": [
+                "Follow the job, which reads the citation stored for a chunk.",
+                "The map stores the source under the chunk id.",
+                "1"
+              ],
+              "explanation": "The map stores the source under the chunk id.",
+              "xp_reward": 10,
+              "starter_code": "source = cite[___]\n",
+              "options": [
+                "2",
+                "0",
+                "1",
+                "9"
+              ],
+              "correct_answer": "1"
+            },
+            {
+              "id": "ai-rag-checkpoint2-bug",
+              "type": "debugging",
+              "question": "Find the line that misses the job, which reads the citation stored for a chunk, for cite holding umber.",
+              "hints": [
+                "Follow the job, which reads the citation stored for a chunk.",
+                "The print counts citations instead of reading one.",
+                "Line 2"
+              ],
+              "explanation": "The print counts citations instead of reading one.",
+              "xp_reward": 10,
+              "starter_code": "cite = {1: 'umber'}\nprint(len(cite))\n",
+              "correct_answer": "2"
+            },
+            {
+              "id": "ai-rag-checkpoint2-predict-2",
+              "type": "output_prediction",
+              "question": "On the new input, the code still reads the citation stored for a chunk for cite holding umber, so choose what it prints.",
+              "hints": [
+                "Follow the job, which reads the citation stored for a chunk.",
+                "The map stores the source under the chunk id.",
+                "zircon"
+              ],
+              "explanation": "The map stores the source under the chunk id.",
+              "xp_reward": 10,
+              "starter_code": "cite = {1: 'zircon'}\nprint(cite[1])\n",
+              "options": [
+                "none",
+                "0",
+                "umber",
+                "zircon"
+              ],
+              "correct_answer": "zircon"
+            },
+            {
+              "id": "ai-rag-checkpoint2-write",
+              "type": "code",
+              "question": "Fill the blank so the program reads the citation stored for a chunk, and the print shows that result for cite holding.",
+              "hints": [
+                "Follow the job, which reads the citation stored for a chunk.",
+                "The printed value is the result after this step reads the citation stored for a chunk.",
+                "label = cite[1]"
+              ],
+              "explanation": "The printed value is the result after this step reads the citation stored for a chunk.",
+              "xp_reward": 10,
+              "starter_code": "cite = {1: 'umber'}\nlabel = ___\nprint(label)\n",
+              "solution_code": "cite = {1: 'umber'}\nlabel = cite[1]\nprint(label)\n",
+              "tests": [
+                {
+                  "name": "ai-rag-checkpoint2-prints",
+                  "description": "The printed value is the result after this step reads the citation stored for a ",
+                  "expected_stdout": "umber\n",
+                  "required": true
+                }
+              ]
+            }
+          ]
+        }
+      ]
     }
   ]
 }

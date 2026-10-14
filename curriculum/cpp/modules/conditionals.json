@@ -14,8 +14,8 @@
   "lessons": [
     {
       "id": "cpp-conditionals-step-1",
-      "title": "1. If-Else Statements",
-      "description": "C++ uses `if`, `else if`, and `else`. Implement `is_even(int n)` returning `true` if n is divisible by 2. The test checks that `is_even(4)` equals `true`; `is_even(7)` equals `false`.",
+      "title": "Practice If-Else Statements",
+      "description": "C++ uses if, else if, and else. Implement is_even(int n) returning true if n is divisible by 2. The test checks that is_even(4) equals true; is_even(7) equals false.",
       "order": 6,
       "difficulty": "beginner",
       "duration_minutes": 5,
@@ -27,7 +27,7 @@
         "cpp-variables"
       ],
       "learning_objectives": [
-        "Use if-else and % modulo operator in C++"
+        "This step prints yes when the score meets the limit, using score holding yes."
       ],
       "starter_code": "bool is_even(int n) {\n    // TODO: Return true if n % 2 == 0\n    return false;\n}\n",
       "solution_code": "bool is_even(int n) {\n    return n % 2 == 0;\n}\n",
@@ -48,12 +48,178 @@
         "url": "https://en.cppreference.com/w/cpp/language/if",
         "license": "CC BY-SA 4.0 (cppreference.com)"
       },
-      "xp_reward": 10
+      "xp_reward": 10,
+      "player_mode": "micro",
+      "sublessons": [
+        {
+          "id": "cpp-conditionals-step-1-micro",
+          "title": "Practice If-Else Statements",
+          "description": "",
+          "order": 1,
+          "exercises": [
+            {
+              "id": "cpp-conditionals-step-1-teach",
+              "type": "teach",
+              "question": "This step prints yes when the score meets the limit, using score holding yes.",
+              "hints": [
+                "Follow the job, which prints yes when the score meets the limit.",
+                "score >= 30 chooses yes at the boundary.",
+                "int score = 40;"
+              ],
+              "explanation": "This step prints yes when the score meets the limit, using score holding yes.",
+              "xp_reward": 0,
+              "worked_example": "int score = 40;"
+            },
+            {
+              "id": "cpp-conditionals-step-1-mcq",
+              "type": "mcq",
+              "question": "Pick the line that prints yes when the score meets the limit, not a line about something else, for score holding yes.",
+              "hints": [
+                "Follow the job, which prints yes when the score meets the limit.",
+                "score >= 30 chooses yes at the boundary.",
+                "score >= 30 ? \"yes\" : \"no\""
+              ],
+              "explanation": "score >= 30 chooses yes at the boundary.",
+              "xp_reward": 10,
+              "options": [
+                "score == 30;",
+                "score >= 30 ? \"yes\" : \"no\"",
+                "return score;",
+                "score = 30;"
+              ],
+              "correct_answer": "score >= 30 ? \"yes\" : \"no\""
+            },
+            {
+              "id": "cpp-conditionals-step-1-predict",
+              "type": "output_prediction",
+              "question": "The displayed value is what the code prints when it prints when the score meets the limit for score holding.",
+              "hints": [
+                "Follow the job, which Follow the job, which prints when the score meets the limit.",
+                "score >= 30 chooses yes at the boundary.",
+                "yes"
+              ],
+              "explanation": "score >= 30 chooses yes at the boundary.",
+              "xp_reward": 10,
+              "starter_code": "#include <iostream>\n#include <string>\n#include <vector>\n#include <algorithm>\n#include <memory>\nint main() {\n    int score = 40;\n    std::cout << (score >= 30 ? \"yes\" : \"no\") << std::endl;\n    return 0;\n}\n",
+              "options": [
+                "no",
+                "yes",
+                "none",
+                "0"
+              ],
+              "correct_answer": "yes"
+            },
+            {
+              "id": "cpp-conditionals-step-1-order",
+              "type": "ordering",
+              "question": "Place every piece so the result prints yes when the score meets the limit for score holding yes.",
+              "hints": [
+                "Follow the job, which prints yes when the score meets the limit.",
+                "score >= 30 chooses yes at the boundary.",
+                "if (left >= right) left++;"
+              ],
+              "explanation": "score >= 30 chooses yes at the boundary.",
+              "xp_reward": 10,
+              "options": [
+                "if",
+                "(left",
+                ">=",
+                "right)",
+                "left++;",
+                "=="
+              ],
+              "correct_answer": [
+                "if",
+                "(left",
+                ">=",
+                "right)",
+                "left++;"
+              ]
+            },
+            {
+              "id": "cpp-conditionals-step-1-fill",
+              "type": "fill_blank",
+              "question": "Drop in the piece that lets the line prints yes when the score meets the limit for score holding yes.",
+              "hints": [
+                "Follow the job, which prints yes when the score meets the limit.",
+                "score >= 30 chooses yes at the boundary.",
+                ">="
+              ],
+              "explanation": "score >= 30 chooses yes at the boundary.",
+              "xp_reward": 10,
+              "starter_code": "if (left ___ right) left++;",
+              "options": [
+                "<=",
+                "!=",
+                "==",
+                ">="
+              ],
+              "correct_answer": ">="
+            },
+            {
+              "id": "cpp-conditionals-step-1-bug",
+              "type": "debugging",
+              "question": "The mismatch misses the job, which prints yes when the score meets the limit, for score holding yes.",
+              "hints": [
+                "Follow the job, which prints yes when the score meets the limit.",
+                "The comparison is flipped.",
+                "Line 8"
+              ],
+              "explanation": "The comparison is flipped.",
+              "xp_reward": 10,
+              "starter_code": "#include <iostream>\n#include <string>\n#include <vector>\n#include <algorithm>\n#include <memory>\nint main() {\n    int score = 40;\n    std::cout << (score < 30 ? \"yes\" : \"no\") << std::endl;\n    return 0;\n}\n",
+              "correct_answer": "8"
+            },
+            {
+              "id": "cpp-conditionals-step-1-predict-2",
+              "type": "output_prediction",
+              "question": "Choose the printed result of the second run that prints yes when the score meets the limit for score holding yes.",
+              "hints": [
+                "Follow the job, which prints yes when the score meets the limit.",
+                "score >= 30 chooses yes at the boundary.",
+                "no"
+              ],
+              "explanation": "score >= 30 chooses yes at the boundary.",
+              "xp_reward": 10,
+              "starter_code": "#include <iostream>\n#include <string>\n#include <vector>\n#include <algorithm>\n#include <memory>\nint main() {\n    int score = 10;\n    std::cout << (score >= 30 ? \"yes\" : \"no\") << std::endl;\n    return 0;\n}\n",
+              "options": [
+                "none",
+                "yes",
+                "0",
+                "no"
+              ],
+              "correct_answer": "no"
+            },
+            {
+              "id": "cpp-conditionals-step-1-write",
+              "type": "code",
+              "question": "Make the program prints when the score meets the limit by filling the blank for score holding.",
+              "hints": [
+                "Follow the job, which prints yes when the score meets the limit.",
+                "The printed value is the result after this step prints yes when the score meets the limit.",
+                "std::string label = score >= 30 ? \"yes\" : \"no\";"
+              ],
+              "explanation": "The printed value is the result after this step prints yes when the score meets the limit.",
+              "xp_reward": 10,
+              "starter_code": "#include <iostream>\n#include <string>\n#include <vector>\n#include <algorithm>\n#include <memory>\nint main() {\n    int score = 40;\n    std::string label = ___;\n    std::cout << label << std::endl;\n    return 0;\n}\n",
+              "solution_code": "#include <iostream>\n#include <string>\n#include <vector>\n#include <algorithm>\n#include <memory>\nint main() {\n    int score = 40;\n    std::string label = score >= 30 ? \"yes\" : \"no\";\n    std::cout << label << std::endl;\n    return 0;\n}\n",
+              "tests": [
+                {
+                  "name": "cpp-conditionals-step-1-prints",
+                  "description": "The printed value is the result after this step prints yes when the score meets ",
+                  "expected_stdout": "yes\n",
+                  "required": true
+                }
+              ]
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "cpp-conditionals-step-2",
-      "title": "2. Logical Operators (&&, ||, !)",
-      "description": "C++ uses `&&` for AND, `||` for OR, and `!` for NOT. Implement `can_drive(bool has_license, bool is_sober)`, which is true only when the driver holds a licence and is sober. The test checks that `can_drive(true, true)` equals `true`; `can_drive(true, false)` equals `false`.",
+      "title": "Practice Logical Operators",
+      "description": "C++ uses && for AND, || for OR, and ! for NOT. Implement can_drive(bool has_license, bool is_sober), which is true only when the driver holds a licence and is sober. The test checks that can_drive(true, true) equals true; can_drive(true, false) equals false.",
       "order": 7,
       "difficulty": "beginner",
       "duration_minutes": 5,
@@ -65,7 +231,7 @@
         "cpp-variables"
       ],
       "learning_objectives": [
-        "Use logical AND && and OR || in C++"
+        "This step requires both comparisons, using speed holding yes."
       ],
       "starter_code": "bool can_drive(bool has_license, bool is_sober) {\n    // TODO: return true only when both conditions hold\n    return false;\n}\n",
       "solution_code": "bool can_drive(bool has_license, bool is_sober) {\n    return has_license && is_sober;\n}\n",
@@ -89,49 +255,183 @@
       "xp_reward": 10,
       "sublessons": [
         {
-          "id": "cpp-logic-ops-sub",
-          "title": "Match the operator to its rule",
+          "id": "cpp-conditionals-step-2-micro",
+          "title": "Practice Logical Operators",
+          "description": "",
           "order": 1,
           "exercises": [
             {
-              "id": "cpp-logic-ops-match-1",
-              "type": "matching",
-              "question": "Match each C++ expression to when it is true.",
-              "pairs": [
-                {
-                  "left": "a && b",
-                  "right": "both a and b are true"
-                },
-                {
-                  "left": "a || b",
-                  "right": "at least one of a and b is true"
-                },
-                {
-                  "left": "!flag",
-                  "right": "flag is false"
-                },
-                {
-                  "left": "n % 2 == 0",
-                  "right": "n divides by 2 with no remainder"
-                }
+              "id": "cpp-conditionals-step-2-teach",
+              "type": "teach",
+              "question": "This step requires both comparisons, using speed holding yes.",
+              "hints": [
+                "Follow the job, which requires both comparisons.",
+                "&& requires both comparisons.",
+                "speed >= 30 && speed <= 50"
               ],
-              "correct_answer": {
-                "a && b": "both a and b are true",
-                "a || b": "at least one of a and b is true",
-                "!flag": "flag is false",
-                "n % 2 == 0": "n divides by 2 with no remainder"
-              },
-              "explanation": "`&&` needs both, `||` needs one, `!` flips, and `%` gives the remainder that decides divisibility.",
-              "xp_reward": 10
+              "explanation": "This step requires both comparisons, using speed holding yes.",
+              "xp_reward": 0,
+              "worked_example": "speed >= 30 && speed <= 50"
+            },
+            {
+              "id": "cpp-conditionals-step-2-mcq",
+              "type": "mcq",
+              "question": "A correct choice requires both comparisons and goes with speed holding yes.",
+              "hints": [
+                "Follow the job, which requires both comparisons.",
+                "&& requires both comparisons.",
+                "speed >= 30 && speed <= 50"
+              ],
+              "explanation": "&& requires both comparisons.",
+              "xp_reward": 10,
+              "options": [
+                "speed == 30;",
+                "return speed;",
+                "speed >= 30 && speed <= 50",
+                "speed = 30;"
+              ],
+              "correct_answer": "speed >= 30 && speed <= 50"
+            },
+            {
+              "id": "cpp-conditionals-step-2-predict",
+              "type": "output_prediction",
+              "question": "Select the output after the code requires both comparisons, using speed holding.",
+              "hints": [
+                "Follow the job, which requires both comparisons.",
+                "&& requires both comparisons.",
+                "yes"
+              ],
+              "explanation": "&& requires both comparisons.",
+              "xp_reward": 10,
+              "starter_code": "#include <iostream>\n#include <string>\n#include <vector>\n#include <algorithm>\n#include <memory>\nint main() {\n    int speed = 40;\n    std::cout << ((speed >= 30 && speed <= 50) ? \"yes\" : \"no\") << std::endl;\n    return 0;\n}\n",
+              "options": [
+                "no",
+                "0",
+                "yes",
+                "none"
+              ],
+              "correct_answer": "yes"
+            },
+            {
+              "id": "cpp-conditionals-step-2-order",
+              "type": "ordering",
+              "question": "Make the line that requires both comparisons by ordering the pieces for speed holding yes.",
+              "hints": [
+                "Follow the job, which requires both comparisons.",
+                "&& requires both comparisons.",
+                "if (left >= right && count > 0) left++;"
+              ],
+              "explanation": "&& requires both comparisons.",
+              "xp_reward": 10,
+              "options": [
+                "if",
+                "(left",
+                ">=",
+                "right",
+                "&&",
+                "count",
+                ">",
+                "0)",
+                "left++;",
+                "=="
+              ],
+              "correct_answer": [
+                "if",
+                "(left",
+                ">=",
+                "right",
+                "&&",
+                "count",
+                ">",
+                "0)",
+                "left++;"
+              ]
+            },
+            {
+              "id": "cpp-conditionals-step-2-fill",
+              "type": "fill_blank",
+              "question": "Complete the line for speed holding yes so that it requires both comparisons.",
+              "hints": [
+                "Follow the job, which requires both comparisons.",
+                "&& requires both comparisons.",
+                "&&"
+              ],
+              "explanation": "&& requires both comparisons.",
+              "xp_reward": 10,
+              "starter_code": "if (left >= right ___ count > 0) left++;",
+              "options": [
+                "||",
+                "==",
+                "&&",
+                "!="
+              ],
+              "correct_answer": "&&"
+            },
+            {
+              "id": "cpp-conditionals-step-2-bug",
+              "type": "debugging",
+              "question": "Select the line that gets in the way of the job, which requires both comparisons, for speed holding yes.",
+              "hints": [
+                "Follow the job, which requires both comparisons.",
+                "Or stays yes when only one side matches.",
+                "Line 8"
+              ],
+              "explanation": "Or stays yes when only one side matches.",
+              "xp_reward": 10,
+              "starter_code": "#include <iostream>\n#include <string>\n#include <vector>\n#include <algorithm>\n#include <memory>\nint main() {\n    int speed = 40;\n    std::cout << ((speed >= 30 || speed <= 50) ? \"yes\" : \"no\") << std::endl;\n    return 0;\n}\n",
+              "correct_answer": "8"
+            },
+            {
+              "id": "cpp-conditionals-step-2-predict-2",
+              "type": "output_prediction",
+              "question": "With the new data around speed holding yes, the code requires both comparisons, so select the new output.",
+              "hints": [
+                "Follow the job, which requires both comparisons.",
+                "&& requires both comparisons.",
+                "no"
+              ],
+              "explanation": "&& requires both comparisons.",
+              "xp_reward": 10,
+              "starter_code": "#include <iostream>\n#include <string>\n#include <vector>\n#include <algorithm>\n#include <memory>\nint main() {\n    int speed = 10;\n    std::cout << ((speed >= 30 && speed <= 50) ? \"yes\" : \"no\") << std::endl;\n    return 0;\n}\n",
+              "options": [
+                "yes",
+                "no",
+                "none",
+                "0"
+              ],
+              "correct_answer": "no"
+            },
+            {
+              "id": "cpp-conditionals-step-2-write",
+              "type": "code",
+              "question": "The printed result shows up after you fill the blank so the code requires both comparisons for speed holding.",
+              "hints": [
+                "Follow the job, which requires both comparisons.",
+                "The printed value is the result after this step requires both comparisons.",
+                "std::string label = (speed >= 30 && speed <= 50) ? \"yes\" : \"no\";"
+              ],
+              "explanation": "The printed value is the result after this step requires both comparisons.",
+              "xp_reward": 10,
+              "starter_code": "#include <iostream>\n#include <string>\n#include <vector>\n#include <algorithm>\n#include <memory>\nint main() {\n    int speed = 40;\n    std::string label = ___;\n    std::cout << label << std::endl;\n    return 0;\n}\n",
+              "solution_code": "#include <iostream>\n#include <string>\n#include <vector>\n#include <algorithm>\n#include <memory>\nint main() {\n    int speed = 40;\n    std::string label = (speed >= 30 && speed <= 50) ? \"yes\" : \"no\";\n    std::cout << label << std::endl;\n    return 0;\n}\n",
+              "tests": [
+                {
+                  "name": "cpp-conditionals-step-2-prints",
+                  "description": "The printed value is the result after this step requires both comparisons.",
+                  "expected_stdout": "yes\n",
+                  "required": true
+                }
+              ]
             }
           ]
         }
-      ]
+      ],
+      "player_mode": "micro"
     },
     {
       "id": "cpp-conditionals-01",
-      "title": "3. Temperature Alarm (Concept Challenge)",
-      "description": "Finish `get_alarm_status`. Return alarm status based on reactor core temperature. The test checks that `get_alarm_status(85.0)` equals `\"NORMAL\"`; `get_alarm_status(120.0)` equals `\"WARNING\"`; `get_alarm_status(200.0)` equals `\"CRITICAL\"`.",
+      "title": "Practice Temperature Alarm",
+      "description": "Finish get_alarm_status. Return alarm status based on reactor core temperature. The test checks that get_alarm_status(85.0) equals \"NORMAL\"; get_alarm_status(120.0) equals \"WARNING\"; get_alarm_status(200.0) equals \"CRITICAL\".",
       "order": 8,
       "difficulty": "beginner",
       "duration_minutes": 8,
@@ -143,7 +443,7 @@
         "cpp-variables"
       ],
       "learning_objectives": [
-        "Implement multi-stage if-else status checks"
+        "This step labels a high temperature, using temp holding hot."
       ],
       "starter_code": "#include <string>\n\nstd::string get_alarm_status(double temp) {\n    // TODO: Return \"NORMAL\" if temp < 100.0\n    // Return \"WARNING\" if temp <= 150.0\n    // Return \"CRITICAL\" otherwise\n    return \"\";\n}\n",
       "solution_code": "#include <string>\n\nstd::string get_alarm_status(double temp) {\n    if (temp < 100.0) return \"NORMAL\";\n    if (temp <= 150.0) return \"WARNING\";\n    return \"CRITICAL\";\n}\n",
@@ -164,12 +464,178 @@
         "url": "https://en.cppreference.com/w/cpp/language/if",
         "license": "CC BY-SA 4.0 (cppreference.com)"
       },
-      "xp_reward": 25
+      "xp_reward": 25,
+      "player_mode": "micro",
+      "sublessons": [
+        {
+          "id": "cpp-conditionals-01-micro",
+          "title": "Practice Temperature Alarm",
+          "description": "",
+          "order": 1,
+          "exercises": [
+            {
+              "id": "cpp-conditionals-01-teach",
+              "type": "teach",
+              "question": "This step labels a high temperature, using temp holding hot.",
+              "hints": [
+                "Follow the job, which labels a high temperature.",
+                "temp >= 75 selects the hot branch.",
+                "int temp = 80;"
+              ],
+              "explanation": "This step labels a high temperature, using temp holding hot.",
+              "xp_reward": 0,
+              "worked_example": "int temp = 80;"
+            },
+            {
+              "id": "cpp-conditionals-01-mcq",
+              "type": "mcq",
+              "question": "The match is the line that labels a high temperature for temp holding hot.",
+              "hints": [
+                "Follow the job, which labels a high temperature.",
+                "temp >= 75 selects the hot branch.",
+                "temp >= 75 ? \"hot\" : \"ok\""
+              ],
+              "explanation": "temp >= 75 selects the hot branch.",
+              "xp_reward": 10,
+              "options": [
+                "temp == 75;",
+                "temp >= 75 ? \"hot\" : \"ok\"",
+                "return temp;",
+                "temp = 75;"
+              ],
+              "correct_answer": "temp >= 75 ? \"hot\" : \"ok\""
+            },
+            {
+              "id": "cpp-conditionals-01-predict",
+              "type": "output_prediction",
+              "question": "Work out what is printed when the code labels a high temperature for temp holding.",
+              "hints": [
+                "Follow the job, which labels a high temperature.",
+                "temp >= 75 selects the hot branch.",
+                "hot"
+              ],
+              "explanation": "temp >= 75 selects the hot branch.",
+              "xp_reward": 10,
+              "starter_code": "#include <iostream>\n#include <string>\n#include <vector>\n#include <algorithm>\n#include <memory>\nint main() {\n    int temp = 80;\n    std::cout << (temp >= 75 ? \"hot\" : \"ok\") << std::endl;\n    return 0;\n}\n",
+              "options": [
+                "ok",
+                "hot",
+                "none",
+                "0"
+              ],
+              "correct_answer": "hot"
+            },
+            {
+              "id": "cpp-conditionals-01-order",
+              "type": "ordering",
+              "question": "Rebuild, from the left, the line that labels a high temperature for temp holding hot.",
+              "hints": [
+                "Follow the job, which labels a high temperature.",
+                "temp >= 75 selects the hot branch.",
+                "if (left >= right) left++;"
+              ],
+              "explanation": "temp >= 75 selects the hot branch.",
+              "xp_reward": 10,
+              "options": [
+                "if",
+                "(left",
+                ">=",
+                "right)",
+                "left++;",
+                "=="
+              ],
+              "correct_answer": [
+                "if",
+                "(left",
+                ">=",
+                "right)",
+                "left++;"
+              ]
+            },
+            {
+              "id": "cpp-conditionals-01-fill",
+              "type": "fill_blank",
+              "question": "The completed line labels a high temperature once you fill the blank for temp holding hot.",
+              "hints": [
+                "Follow the job, which labels a high temperature.",
+                "temp >= 75 selects the hot branch.",
+                ">="
+              ],
+              "explanation": "temp >= 75 selects the hot branch.",
+              "xp_reward": 10,
+              "starter_code": "if (left ___ right) left++;",
+              "options": [
+                "<",
+                ">=",
+                "==",
+                "!="
+              ],
+              "correct_answer": ">="
+            },
+            {
+              "id": "cpp-conditionals-01-bug",
+              "type": "debugging",
+              "question": "One line does another job than the one that labels a high temperature for temp holding hot.",
+              "hints": [
+                "Follow the job, which labels a high temperature.",
+                "The comparison is flipped, so a high reading is ok.",
+                "Line 8"
+              ],
+              "explanation": "The comparison is flipped, so a high reading is ok.",
+              "xp_reward": 10,
+              "starter_code": "#include <iostream>\n#include <string>\n#include <vector>\n#include <algorithm>\n#include <memory>\nint main() {\n    int temp = 80;\n    std::cout << (temp < 75 ? \"hot\" : \"ok\") << std::endl;\n    return 0;\n}\n",
+              "correct_answer": "8"
+            },
+            {
+              "id": "cpp-conditionals-01-predict-2",
+              "type": "output_prediction",
+              "question": "The second display is what prints after the code labels a high temperature for temp holding hot.",
+              "hints": [
+                "Follow the job, which labels a high temperature.",
+                "temp >= 75 selects the hot branch.",
+                "ok"
+              ],
+              "explanation": "temp >= 75 selects the hot branch.",
+              "xp_reward": 10,
+              "starter_code": "#include <iostream>\n#include <string>\n#include <vector>\n#include <algorithm>\n#include <memory>\nint main() {\n    int temp = 60;\n    std::cout << (temp >= 75 ? \"hot\" : \"ok\") << std::endl;\n    return 0;\n}\n",
+              "options": [
+                "hot",
+                "none",
+                "0",
+                "ok"
+              ],
+              "correct_answer": "ok"
+            },
+            {
+              "id": "cpp-conditionals-01-write",
+              "type": "code",
+              "question": "Supply the blank so the run labels a high temperature and prints the result for temp holding.",
+              "hints": [
+                "Follow the job, which labels a high temperature.",
+                "The printed value is the result after this step labels a high temperature.",
+                "std::string label = temp >= 75 ? \"hot\" : \"ok\";"
+              ],
+              "explanation": "The printed value is the result after this step labels a high temperature.",
+              "xp_reward": 10,
+              "starter_code": "#include <iostream>\n#include <string>\n#include <vector>\n#include <algorithm>\n#include <memory>\nint main() {\n    int temp = 80;\n    std::string label = ___;\n    std::cout << label << std::endl;\n    return 0;\n}\n",
+              "solution_code": "#include <iostream>\n#include <string>\n#include <vector>\n#include <algorithm>\n#include <memory>\nint main() {\n    int temp = 80;\n    std::string label = temp >= 75 ? \"hot\" : \"ok\";\n    std::cout << label << std::endl;\n    return 0;\n}\n",
+              "tests": [
+                {
+                  "name": "cpp-conditionals-01-prints",
+                  "description": "The printed value is the result after this step labels a high temperature.",
+                  "expected_stdout": "hot\n",
+                  "required": true
+                }
+              ]
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "cpp-conditionals-practice-1",
-      "title": "4. Triangle Validity (Practice)",
-      "description": "Finish `is_valid_triangle`. Check if 3 side lengths can form a valid triangle. The test checks that `is_valid_triangle(3, 4, 5)` equals `true`; `is_valid_triangle(1, 2, 10)` equals `false`.",
+      "title": "Practice Triangle Validity",
+      "description": "Finish is_valid_triangle. Check if 3 side lengths can form a valid triangle. The test checks that is_valid_triangle(3, 4, 5) equals true; is_valid_triangle(1, 2, 10) equals false.",
       "order": 9,
       "difficulty": "beginner",
       "duration_minutes": 6,
@@ -181,7 +647,7 @@
         "cpp-variables"
       ],
       "learning_objectives": [
-        "Apply triangle inequality theorem in C++"
+        "This step checks that three sides can form a triangle, using a holding yes."
       ],
       "starter_code": "bool is_valid_triangle(double a, double b, double c) {\n    // TODO: Return true if (a + b > c) && (a + c > b) && (b + c > a)\n    return false;\n}\n",
       "solution_code": "bool is_valid_triangle(double a, double b, double c) {\n    return (a + b > c) && (a + c > b) && (b + c > a);\n}\n",
@@ -202,11 +668,181 @@
         "url": "https://en.cppreference.com/w/cpp/language/if",
         "license": "CC BY-SA 4.0 (cppreference.com)"
       },
-      "xp_reward": 15
+      "xp_reward": 15,
+      "player_mode": "micro",
+      "sublessons": [
+        {
+          "id": "cpp-conditionals-practice-1-micro",
+          "title": "Practice Triangle Validity",
+          "description": "",
+          "order": 1,
+          "exercises": [
+            {
+              "id": "cpp-conditionals-practice-1-teach",
+              "type": "teach",
+              "question": "This step checks that three sides can form a triangle, using a holding yes.",
+              "hints": [
+                "Follow the job, which checks that three sides can form a triangle.",
+                "Each pair of sides must be longer than the third.",
+                "a + b > c"
+              ],
+              "explanation": "This step checks that three sides can form a triangle, using a holding yes.",
+              "xp_reward": 0,
+              "worked_example": "a + b > c"
+            },
+            {
+              "id": "cpp-conditionals-practice-1-mcq",
+              "type": "mcq",
+              "question": "The match is the line that checks that three sides can form a triangle for a holding yes.",
+              "hints": [
+                "Follow the job, which checks that three sides can form a triangle.",
+                "Each pair of sides must be longer than the third.",
+                "a + b > c"
+              ],
+              "explanation": "Each pair of sides must be longer than the third.",
+              "xp_reward": 10,
+              "options": [
+                "return a;",
+                "a == b;",
+                "a = c;",
+                "a + b > c"
+              ],
+              "correct_answer": "a + b > c"
+            },
+            {
+              "id": "cpp-conditionals-practice-1-predict",
+              "type": "output_prediction",
+              "question": "Work out what is printed when the code checks that three sides can form a triangle for a holding.",
+              "hints": [
+                "Follow the job, which checks that three sides can form a triangle.",
+                "Each pair of sides must be longer than the third.",
+                "yes"
+              ],
+              "explanation": "Each pair of sides must be longer than the third.",
+              "xp_reward": 10,
+              "starter_code": "#include <iostream>\n#include <string>\n#include <vector>\n#include <algorithm>\n#include <memory>\nint main() {\n    int a = 3;\n    int b = 4;\n    int c = 5;\n    std::cout << ((a + b > c && a + c > b && b + c > a) ? \"yes\" : \"no\") << std::endl;\n    return 0;\n}\n",
+              "options": [
+                "no",
+                "yes",
+                "0",
+                "none"
+              ],
+              "correct_answer": "yes"
+            },
+            {
+              "id": "cpp-conditionals-practice-1-order",
+              "type": "ordering",
+              "question": "Rebuild, from the left, the line that checks that three sides can form a triangle for a holding yes.",
+              "hints": [
+                "Follow the job, which checks that three sides can form a triangle.",
+                "Each pair of sides must be longer than the third.",
+                "if (left + right > count) left++;"
+              ],
+              "explanation": "Each pair of sides must be longer than the third.",
+              "xp_reward": 10,
+              "options": [
+                "if",
+                "(left",
+                "+",
+                "right",
+                ">",
+                "count)",
+                "left++;",
+                "=="
+              ],
+              "correct_answer": [
+                "if",
+                "(left",
+                "+",
+                "right",
+                ">",
+                "count)",
+                "left++;"
+              ]
+            },
+            {
+              "id": "cpp-conditionals-practice-1-fill",
+              "type": "fill_blank",
+              "question": "The completed line checks that three sides can form a triangle once you fill the blank for a holding yes.",
+              "hints": [
+                "Follow the job, which checks that three sides can form a triangle.",
+                "Each pair of sides must be longer than the third.",
+                ">"
+              ],
+              "explanation": "Each pair of sides must be longer than the third.",
+              "xp_reward": 10,
+              "starter_code": "if (left + right ___ count) left++;",
+              "options": [
+                "<",
+                ">",
+                "==",
+                "!="
+              ],
+              "correct_answer": ">"
+            },
+            {
+              "id": "cpp-conditionals-practice-1-bug",
+              "type": "debugging",
+              "question": "One line does another job than the one that checks that three sides can form a triangle for a holding yes.",
+              "hints": [
+                "Follow the job, which checks that three sides can form a triangle.",
+                "The test is flipped and ignores the other sides.",
+                "Line 10"
+              ],
+              "explanation": "The test is flipped and ignores the other sides.",
+              "xp_reward": 10,
+              "starter_code": "#include <iostream>\n#include <string>\n#include <vector>\n#include <algorithm>\n#include <memory>\nint main() {\n    int a = 3;\n    int b = 4;\n    int c = 5;\n    std::cout << ((a + b < c) ? \"yes\" : \"no\") << std::endl;\n    return 0;\n}\n",
+              "correct_answer": "10"
+            },
+            {
+              "id": "cpp-conditionals-practice-1-predict-2",
+              "type": "output_prediction",
+              "question": "The second display is what prints after the code checks that three sides can form a triangle for a holding yes.",
+              "hints": [
+                "Follow the job, which checks that three sides can form a triangle.",
+                "Each pair of sides must be longer than the third.",
+                "no"
+              ],
+              "explanation": "Each pair of sides must be longer than the third.",
+              "xp_reward": 10,
+              "starter_code": "#include <iostream>\n#include <string>\n#include <vector>\n#include <algorithm>\n#include <memory>\nint main() {\n    int a = 1;\n    int b = 2;\n    int c = 9;\n    std::cout << ((a + b > c && a + c > b && b + c > a) ? \"yes\" : \"no\") << std::endl;\n    return 0;\n}\n",
+              "options": [
+                "none",
+                "yes",
+                "0",
+                "no"
+              ],
+              "correct_answer": "no"
+            },
+            {
+              "id": "cpp-conditionals-practice-1-write",
+              "type": "code",
+              "question": "Supply the blank so the run checks that three sides can form a triangle and prints the result for a holding.",
+              "hints": [
+                "Follow the job, which checks that three sides can form a triangle.",
+                "The printed value is the result after this step checks that three sides can form a triangle.",
+                "std::string label = (a + b > c && a + c > b && b + c > a) ? \"yes\" : \"no\";"
+              ],
+              "explanation": "The printed value is the result after this step checks that three sides can form a triangle.",
+              "xp_reward": 10,
+              "starter_code": "#include <iostream>\n#include <string>\n#include <vector>\n#include <algorithm>\n#include <memory>\nint main() {\n    int a = 3;\n    int b = 4;\n    int c = 5;\n    std::string label = ___;\n    std::cout << label << std::endl;\n    return 0;\n}\n",
+              "solution_code": "#include <iostream>\n#include <string>\n#include <vector>\n#include <algorithm>\n#include <memory>\nint main() {\n    int a = 3;\n    int b = 4;\n    int c = 5;\n    std::string label = (a + b > c && a + c > b && b + c > a) ? \"yes\" : \"no\";\n    std::cout << label << std::endl;\n    return 0;\n}\n",
+              "tests": [
+                {
+                  "name": "cpp-conditionals-practice-1-prints",
+                  "description": "The printed value is the result after this step checks that three sides can form",
+                  "expected_stdout": "yes\n",
+                  "required": true
+                }
+              ]
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "cpp-conditionals-checkpoint",
-      "title": "5. Unit 2 Checkpoint: C++ Conditionals Mastery",
+      "title": "Practice Unit 2 Checkpoint C Conditionals",
       "description": "Checkpoint for control flow: implement max_of_three(int a, int b, int c) returning the largest of the three values — nested if/else comparisons or std::max(a, std::max(b, c)). The test asserts max_of_three(10, 42, 25) == 42.",
       "order": 10,
       "difficulty": "beginner",
@@ -219,7 +855,7 @@
         "cpp-variables"
       ],
       "learning_objectives": [
-        "Pass C++ conditionals checkpoint"
+        "This step accepts either match, using gate holding yes."
       ],
       "starter_code": "#include <algorithm>\n\nint max_of_three(int a, int b, int c) {\n    // TODO: Return highest value\n    return 0;\n}\n",
       "solution_code": "#include <algorithm>\n\nint max_of_three(int a, int b, int c) {\n    return std::max(a, std::max(b, c));\n}\n",
@@ -240,7 +876,181 @@
         "url": "https://en.cppreference.com/w/cpp/language/if",
         "license": "CC BY-SA 4.0 (cppreference.com)"
       },
-      "xp_reward": 40
+      "xp_reward": 40,
+      "player_mode": "micro",
+      "sublessons": [
+        {
+          "id": "cpp-conditionals-checkpoint-micro",
+          "title": "Practice Unit 2 Checkpoint C Conditionals",
+          "description": "",
+          "order": 1,
+          "exercises": [
+            {
+              "id": "cpp-conditionals-checkpoint-teach",
+              "type": "teach",
+              "question": "This step accepts either match, using gate holding yes.",
+              "hints": [
+                "Follow the job, which accepts either match.",
+                "|| matches when either comparison is true.",
+                "gate == 0 || gate == 1"
+              ],
+              "explanation": "This step accepts either match, using gate holding yes.",
+              "xp_reward": 0,
+              "worked_example": "gate == 0 || gate == 1"
+            },
+            {
+              "id": "cpp-conditionals-checkpoint-mcq",
+              "type": "mcq",
+              "question": "Mark the choice that accepts either match when the code mentions gate holding yes.",
+              "hints": [
+                "Follow the job, which accepts either match.",
+                "|| matches when either comparison is true.",
+                "gate == 0 || gate == 1"
+              ],
+              "explanation": "|| matches when either comparison is true.",
+              "xp_reward": 10,
+              "options": [
+                "gate == gate;",
+                "return gate;",
+                "gate == 0 || gate == 1",
+                "gate = 1;"
+              ],
+              "correct_answer": "gate == 0 || gate == 1"
+            },
+            {
+              "id": "cpp-conditionals-checkpoint-predict",
+              "type": "output_prediction",
+              "question": "After gate holding the code accepts either match, and the correct choice is the printed value.",
+              "hints": [
+                "Follow the job, which accepts either match.",
+                "|| matches when either comparison is true.",
+                "yes"
+              ],
+              "explanation": "|| matches when either comparison is true.",
+              "xp_reward": 10,
+              "starter_code": "#include <iostream>\n#include <string>\n#include <vector>\n#include <algorithm>\n#include <memory>\nint main() {\n    int gate = 1;\n    std::cout << ((gate == 0 || gate == 1) ? \"yes\" : \"no\") << std::endl;\n    return 0;\n}\n",
+              "options": [
+                "no",
+                "none",
+                "yes",
+                "0"
+              ],
+              "correct_answer": "yes"
+            },
+            {
+              "id": "cpp-conditionals-checkpoint-order",
+              "type": "ordering",
+              "question": "The finished line accepts either match, so place its pieces in order for gate holding yes.",
+              "hints": [
+                "Follow the job, which accepts either match.",
+                "|| matches when either comparison is true.",
+                "if (left < 0 || right > 0) left++;"
+              ],
+              "explanation": "|| matches when either comparison is true.",
+              "xp_reward": 10,
+              "options": [
+                "if",
+                "(left",
+                "<",
+                "0",
+                "||",
+                "right",
+                ">",
+                "0)",
+                "left++;",
+                "=="
+              ],
+              "correct_answer": [
+                "if",
+                "(left",
+                "<",
+                "0",
+                "||",
+                "right",
+                ">",
+                "0)",
+                "left++;"
+              ]
+            },
+            {
+              "id": "cpp-conditionals-checkpoint-fill",
+              "type": "fill_blank",
+              "question": "Finish the line that accepts either match by filling the blank for gate holding yes.",
+              "hints": [
+                "Follow the job, which accepts either match.",
+                "|| matches when either comparison is true.",
+                "||"
+              ],
+              "explanation": "|| matches when either comparison is true.",
+              "xp_reward": 10,
+              "starter_code": "if (left < 0 ___ right > 0) left++;",
+              "options": [
+                "!=",
+                "&&",
+                "==",
+                "||"
+              ],
+              "correct_answer": "||"
+            },
+            {
+              "id": "cpp-conditionals-checkpoint-bug",
+              "type": "debugging",
+              "question": "Mark the line that breaks the job, which accepts either match, for gate holding yes.",
+              "hints": [
+                "Follow the job, which accepts either match.",
+                "And cannot match when the two comparisons disagree.",
+                "Line 8"
+              ],
+              "explanation": "And cannot match when the two comparisons disagree.",
+              "xp_reward": 10,
+              "starter_code": "#include <iostream>\n#include <string>\n#include <vector>\n#include <algorithm>\n#include <memory>\nint main() {\n    int gate = 1;\n    std::cout << ((gate == 0 && gate == 1) ? \"yes\" : \"no\") << std::endl;\n    return 0;\n}\n",
+              "correct_answer": "8"
+            },
+            {
+              "id": "cpp-conditionals-checkpoint-predict-2",
+              "type": "output_prediction",
+              "question": "Follow the second program, which accepts either match for gate holding yes, and choose its output.",
+              "hints": [
+                "Follow the job, which accepts either match.",
+                "|| matches when either comparison is true.",
+                "no"
+              ],
+              "explanation": "|| matches when either comparison is true.",
+              "xp_reward": 10,
+              "starter_code": "#include <iostream>\n#include <string>\n#include <vector>\n#include <algorithm>\n#include <memory>\nint main() {\n    int gate = 2;\n    std::cout << ((gate == 0 || gate == 1) ? \"yes\" : \"no\") << std::endl;\n    return 0;\n}\n",
+              "options": [
+                "yes",
+                "no",
+                "none",
+                "0"
+              ],
+              "correct_answer": "no"
+            },
+            {
+              "id": "cpp-conditionals-checkpoint-write",
+              "type": "code",
+              "question": "Finish the program that accepts either match by filling the blank for gate holding.",
+              "hints": [
+                "Follow the job, which accepts either match.",
+                "The printed value is the result after this step accepts either match.",
+                "std::string label = (gate == 0 || gate == 1) ? \"yes\" : \"no\";"
+              ],
+              "explanation": "The printed value is the result after this step accepts either match.",
+              "xp_reward": 10,
+              "starter_code": "#include <iostream>\n#include <string>\n#include <vector>\n#include <algorithm>\n#include <memory>\nint main() {\n    int gate = 1;\n    std::string label = ___;\n    std::cout << label << std::endl;\n    return 0;\n}\n",
+              "solution_code": "#include <iostream>\n#include <string>\n#include <vector>\n#include <algorithm>\n#include <memory>\nint main() {\n    int gate = 1;\n    std::string label = (gate == 0 || gate == 1) ? \"yes\" : \"no\";\n    std::cout << label << std::endl;\n    return 0;\n}\n",
+              "tests": [
+                {
+                  "name": "cpp-conditionals-checkpoint-prints",
+                  "description": "The printed value is the result after this step accepts either match.",
+                  "expected_stdout": "yes\n",
+                  "required": true
+                }
+              ]
+            }
+          ]
+        }
+      ]
     }
   ]
 }

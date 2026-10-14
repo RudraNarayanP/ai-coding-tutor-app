@@ -16,8 +16,8 @@
   "lessons": [
     {
       "id": "comprehensions-step-1",
-      "title": "1. List Comprehensions",
-      "description": "Build lists with `[expr for x in iterable if cond]`. Implement `squares(n)` returning squares of 0..n-1. The test checks that `squares(4)` equals `[0, 1, 4, 9]`.",
+      "title": "Practice List Comprehensions",
+      "description": "Build lists with [expr for x in iterable if cond]. Implement squares(n) returning squares of 0..n-1. The test checks that squares(4) equals [0, 1, 4, 9].",
       "order": 76,
       "difficulty": "intermediate",
       "duration_minutes": 5,
@@ -31,7 +31,7 @@
         "lists"
       ],
       "learning_objectives": [
-        "Write a filtered list comprehension"
+        "This step builds a new list by adding one to each reading, using raw and 1."
       ],
       "starter_code": "def squares(n):\n    # TODO: return [0, 1, 4, ...] for i in range(n)\n    pass\n",
       "solution_code": "def squares(n):\n    return [i * i for i in range(n)]\n",
@@ -52,12 +52,190 @@
         "url": "https://docs.python.org/3/tutorial/datastructures.html#list-comprehensions",
         "license": "Python documentation license (PSF)"
       },
-      "xp_reward": 10
+      "xp_reward": 10,
+      "player_mode": "micro",
+      "sublessons": [
+        {
+          "id": "comprehensions-step-1-micro",
+          "title": "Practice List Comprehensions",
+          "description": "",
+          "order": 1,
+          "exercises": [
+            {
+              "id": "comprehensions-step-1-teach",
+              "type": "teach",
+              "question": "This step builds a new list by adding one to each reading, using raw and 1.",
+              "hints": [
+                "Follow the job, which builds a new list by adding one to each reading.",
+                "step + 1 transforms each reading.",
+                "[step + 1 for step in raw]"
+              ],
+              "explanation": "This step builds a new list by adding one to each reading, using raw and 1.",
+              "xp_reward": 0,
+              "worked_example": "[step + 1 for step in raw]"
+            },
+            {
+              "id": "comprehensions-step-1-mcq",
+              "type": "mcq",
+              "question": "Mark the choice that builds a new list by adding one to each reading when the code mentions raw and 1.",
+              "hints": [
+                "Follow the job, which builds a new list by adding one to each reading.",
+                "step + 1 transforms each reading.",
+                "[step + 1 for step in raw]"
+              ],
+              "explanation": "step + 1 transforms each reading.",
+              "xp_reward": 10,
+              "options": [
+                "step = raw",
+                "[step + 1 for step in raw]",
+                "raw + 1",
+                "print(raw)"
+              ],
+              "correct_answer": "[step + 1 for step in raw]"
+            },
+            {
+              "id": "comprehensions-step-1-predict",
+              "type": "output_prediction",
+              "question": "After raw and 1, the code builds a new list by adding one to each reading, and the correct choice is the printed value.",
+              "hints": [
+                "Follow the job, which builds a new list by adding one to each reading.",
+                "step + 1 transforms each reading.",
+                "36"
+              ],
+              "explanation": "step + 1 transforms each reading.",
+              "xp_reward": 10,
+              "starter_code": "raw = [30, 4]\ngrown = [step + 1 for step in raw]\nprint(sum(grown))\n",
+              "options": [
+                "39",
+                "36",
+                "none",
+                "0"
+              ],
+              "correct_answer": "36"
+            },
+            {
+              "id": "comprehensions-step-1-order",
+              "type": "ordering",
+              "question": "The finished line builds a new list by adding one to each reading, so place its pieces in order for raw and 1.",
+              "hints": [
+                "Follow the job, which builds a new list by adding one to each reading.",
+                "The comprehension builds the new list.",
+                "grown = [ step + 1 for item in raw ]"
+              ],
+              "explanation": "The comprehension builds the new list.",
+              "xp_reward": 10,
+              "options": [
+                "grown",
+                "=",
+                "[",
+                "step",
+                "+",
+                "1",
+                "for",
+                "item",
+                "in",
+                "raw",
+                "]",
+                "while"
+              ],
+              "correct_answer": [
+                "grown",
+                "=",
+                "[",
+                "step",
+                "+",
+                "1",
+                "for",
+                "item",
+                "in",
+                "raw",
+                "]"
+              ]
+            },
+            {
+              "id": "comprehensions-step-1-fill",
+              "type": "fill_blank",
+              "question": "Finish the line that builds a new list by adding one to each reading by filling the blank for raw and 1.",
+              "hints": [
+                "Follow the job, which builds a new list by adding one to each reading.",
+                "Plus adds one to each reading.",
+                "+"
+              ],
+              "explanation": "Plus adds one to each reading.",
+              "xp_reward": 10,
+              "starter_code": "grown = [step ___ 1 for step in raw]\n",
+              "options": [
+                "-",
+                "+",
+                "==",
+                "*"
+              ],
+              "correct_answer": "+"
+            },
+            {
+              "id": "comprehensions-step-1-bug",
+              "type": "debugging",
+              "question": "Mark the line that breaks the job, which builds a new list by adding one to each reading, for raw and 1.",
+              "hints": [
+                "Follow the job, which builds a new list by adding one to each reading.",
+                "The comprehension subtracts instead of adding.",
+                "Line 2"
+              ],
+              "explanation": "The comprehension subtracts instead of adding.",
+              "xp_reward": 10,
+              "starter_code": "raw = [30, 4]\ngrown = [step - 1 for step in raw]\nprint(sum(grown))\n",
+              "correct_answer": "2"
+            },
+            {
+              "id": "comprehensions-step-1-predict-2",
+              "type": "output_prediction",
+              "question": "Follow the second program, which builds a new list by adding one to each reading for raw and 1, and choose its output.",
+              "hints": [
+                "Follow the job, which builds a new list by adding one to each reading.",
+                "step + 1 transforms each reading.",
+                "39"
+              ],
+              "explanation": "step + 1 transforms each reading.",
+              "xp_reward": 10,
+              "starter_code": "raw = [33, 4]\ngrown = [step + 1 for step in raw]\nprint(sum(grown))\n",
+              "options": [
+                "0",
+                "none",
+                "39",
+                "36"
+              ],
+              "correct_answer": "39"
+            },
+            {
+              "id": "comprehensions-step-1-write",
+              "type": "code",
+              "question": "Finish the program that builds a new list by adding one to each reading by filling the blank for raw and 1.",
+              "hints": [
+                "Follow the job, which builds a new list by adding one to each reading.",
+                "The transformed total is what gets printed.",
+                "label = sum(grown)"
+              ],
+              "explanation": "The transformed total is what gets printed.",
+              "xp_reward": 10,
+              "starter_code": "raw = [30, 4]\ngrown = [step + 1 for step in raw]\nlabel = ___\nprint(label)\n",
+              "solution_code": "raw = [30, 4]\ngrown = [step + 1 for step in raw]\nlabel = sum(grown)\nprint(label)\n",
+              "tests": [
+                {
+                  "name": "comprehensions-step-1-prints",
+                  "description": "The transformed total is what gets printed.",
+                  "expected_stdout": "36\n",
+                  "required": true
+                }
+              ]
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "comprehensions-step-2",
-      "title": "2. Dict Comprehensions",
-      "description": "Create dictionaries with `{k: v for ...}`. Implement `word_lengths(words)` mapping each word to its length. The test checks that `word_lengths(['hi', 'you'])` equals `{'hi': 2, 'you': 3}`.",
+      "title": "Practice Dict Comprehensions",
+      "description": "Create dictionaries with {k: v for ...}. Implement word_lengths(words) mapping each word to its length. The test checks that word_lengths(['hi', 'you']) equals {'hi': 2, 'you': 3}.",
       "order": 77,
       "difficulty": "intermediate",
       "duration_minutes": 5,
@@ -71,7 +249,7 @@
         "dictionaries"
       ],
       "learning_objectives": [
-        "Build a dict comprehension"
+        "This step builds a dictionary that stores the same reading for each name, using names holding a."
       ],
       "starter_code": "def word_lengths(words):\n    # TODO: return a dict mapping each word to how long it is\n    pass\n",
       "solution_code": "def word_lengths(words):\n    return {word: len(word) for word in words}\n",
@@ -92,12 +270,188 @@
         "url": "https://docs.python.org/3/reference/expressions.html#displays-for-lists-sets-and-dictionaries",
         "license": "Python documentation license (PSF)"
       },
-      "xp_reward": 10
+      "xp_reward": 10,
+      "player_mode": "micro",
+      "sublessons": [
+        {
+          "id": "comprehensions-step-2-micro",
+          "title": "Practice Dict Comprehensions",
+          "description": "",
+          "order": 1,
+          "exercises": [
+            {
+              "id": "comprehensions-step-2-teach",
+              "type": "teach",
+              "question": "This step builds a dictionary that stores the same reading for each name, using names holding a.",
+              "hints": [
+                "Follow the job, which builds a dictionary that stores the same reading for each name.",
+                "The dict comprehension stores one entry per name.",
+                "{name: reading for name in names}"
+              ],
+              "explanation": "This step builds a dictionary that stores the same reading for each name, using names holding a.",
+              "xp_reward": 0,
+              "worked_example": "{name: reading for name in names}"
+            },
+            {
+              "id": "comprehensions-step-2-mcq",
+              "type": "mcq",
+              "question": "The match is the line that builds a dictionary that stores the same reading for each name for names holding a.",
+              "hints": [
+                "Follow the job, which builds a dictionary that stores the same reading for each name.",
+                "The dict comprehension stores one entry per name.",
+                "{name: reading for name in names}"
+              ],
+              "explanation": "The dict comprehension stores one entry per name.",
+              "xp_reward": 10,
+              "options": [
+                "names[0]",
+                "len(names)",
+                "{name: reading for name in names}",
+                "names + 1"
+              ],
+              "correct_answer": "{name: reading for name in names}"
+            },
+            {
+              "id": "comprehensions-step-2-predict",
+              "type": "output_prediction",
+              "question": "Work out what is printed when the code builds a dictionary that stores the same reading for each name for names holding a.",
+              "hints": [
+                "Follow the job, which builds a dictionary that stores the same reading for each name.",
+                "The dict comprehension stores one entry per name.",
+                "62"
+              ],
+              "explanation": "The dict comprehension stores one entry per name.",
+              "xp_reward": 10,
+              "starter_code": "names = ['a', 'b']\npairs = {name: 31 for name in names}\nprint(sum(pairs.values()))\n",
+              "options": [
+                "93",
+                "0",
+                "none",
+                "62"
+              ],
+              "correct_answer": "62"
+            },
+            {
+              "id": "comprehensions-step-2-order",
+              "type": "ordering",
+              "question": "Rebuild, from the left, the line that builds a dictionary that stores the same reading for each name for names holding a.",
+              "hints": [
+                "Follow the job, which builds a dictionary that stores the same reading for each name.",
+                "The dict comprehension stores one entry per name.",
+                "pairs = { name: reading for name in names }"
+              ],
+              "explanation": "The dict comprehension stores one entry per name.",
+              "xp_reward": 10,
+              "options": [
+                "pairs",
+                "=",
+                "{",
+                "name:",
+                "reading",
+                "for",
+                "name",
+                "in",
+                "names",
+                "}",
+                "while"
+              ],
+              "correct_answer": [
+                "pairs",
+                "=",
+                "{",
+                "name:",
+                "reading",
+                "for",
+                "name",
+                "in",
+                "names",
+                "}"
+              ]
+            },
+            {
+              "id": "comprehensions-step-2-fill",
+              "type": "fill_blank",
+              "question": "The completed line builds a dictionary that stores the same reading for each name once you fill the blank for names holding a.",
+              "hints": [
+                "Follow the job, which builds a dictionary that stores the same reading for each name.",
+                "The star scales the stored reading.",
+                "*"
+              ],
+              "explanation": "The star scales the stored reading.",
+              "xp_reward": 10,
+              "starter_code": "bonus = reading ___ 2\n",
+              "options": [
+                "+",
+                "-",
+                "*",
+                "=="
+              ],
+              "correct_answer": "*"
+            },
+            {
+              "id": "comprehensions-step-2-bug",
+              "type": "debugging",
+              "question": "One line does another job than the one that builds a dictionary that stores the same reading for each name for names holding a.",
+              "hints": [
+                "Follow the job, which builds a dictionary that stores the same reading for each name.",
+                "Every entry stores zero instead of the reading.",
+                "Line 2"
+              ],
+              "explanation": "Every entry stores zero instead of the reading.",
+              "xp_reward": 10,
+              "starter_code": "names = ['a', 'b']\npairs = {name: 0 for name in names}\nprint(sum(pairs.values()))\n",
+              "correct_answer": "2"
+            },
+            {
+              "id": "comprehensions-step-2-predict-2",
+              "type": "output_prediction",
+              "question": "The second display is what prints after the code builds a dictionary that stores the same reading for each name for names holding a.",
+              "hints": [
+                "Follow the job, which builds a dictionary that stores the same reading for each name.",
+                "The dict comprehension stores one entry per name.",
+                "93"
+              ],
+              "explanation": "The dict comprehension stores one entry per name.",
+              "xp_reward": 10,
+              "starter_code": "names = ['a', 'b', 'c']\npairs = {name: 31 for name in names}\nprint(sum(pairs.values()))\n",
+              "options": [
+                "62",
+                "93",
+                "none",
+                "0"
+              ],
+              "correct_answer": "93"
+            },
+            {
+              "id": "comprehensions-step-2-write",
+              "type": "code",
+              "question": "Supply the blank so the run builds a dictionary that stores the same reading for each name and prints the result for names holding a.",
+              "hints": [
+                "Follow the job, which builds a dictionary that stores the same reading for each name.",
+                "The stored total is what gets printed.",
+                "label = sum(pairs.values())"
+              ],
+              "explanation": "The stored total is what gets printed.",
+              "xp_reward": 10,
+              "starter_code": "names = ['a', 'b']\npairs = {name: 31 for name in names}\nlabel = ___\nprint(label)\n",
+              "solution_code": "names = ['a', 'b']\npairs = {name: 31 for name in names}\nlabel = sum(pairs.values())\nprint(label)\n",
+              "tests": [
+                {
+                  "name": "comprehensions-step-2-prints",
+                  "description": "The stored total is what gets printed.",
+                  "expected_stdout": "62\n",
+                  "required": true
+                }
+              ]
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "comprehensions-01",
-      "title": "3. Flatten Nested Lists (Concept Challenge)",
-      "description": "Use a nested comprehension to flatten a list of lists into one list. The test checks that `flatten([[1, 2], [3], [4, 5]])` equals `[1, 2, 3, 4, 5]`.",
+      "title": "Practice Flatten Nested Lists",
+      "description": "Use a nested comprehension to flatten a list of lists into one list. The test checks that flatten([[1, 2], [3], [4, 5]]) equals [1, 2, 3, 4, 5].",
       "order": 78,
       "difficulty": "intermediate",
       "duration_minutes": 8,
@@ -111,7 +465,7 @@
         "lists"
       ],
       "learning_objectives": [
-        "Flatten with a double for-comprehension"
+        "This step adds the readings after the nested rows are flattened, using nested and 4."
       ],
       "starter_code": "def flatten(matrix):\n    # TODO: return one list of all items in matrix (list of lists)\n    pass\n",
       "solution_code": "def flatten(matrix):\n    return [item for row in matrix for item in row]\n",
@@ -132,12 +486,178 @@
         "url": "https://docs.python.org/3/tutorial/datastructures.html#nested-list-comprehensions",
         "license": "Python documentation license (PSF)"
       },
-      "xp_reward": 25
+      "xp_reward": 25,
+      "player_mode": "micro",
+      "sublessons": [
+        {
+          "id": "comprehensions-01-micro",
+          "title": "Practice Flatten Nested Lists",
+          "description": "",
+          "order": 1,
+          "exercises": [
+            {
+              "id": "comprehensions-01-teach",
+              "type": "teach",
+              "question": "This step adds the readings after the nested rows are flattened, using nested and 4.",
+              "hints": [
+                "Follow the job, which adds the readings after the nested rows are flattened.",
+                "The double comprehension walks every inner row.",
+                "[item for pair in nested for item in pair]"
+              ],
+              "explanation": "This step adds the readings after the nested rows are flattened, using nested and 4.",
+              "xp_reward": 0,
+              "worked_example": "[item for pair in nested for item in pair]"
+            },
+            {
+              "id": "comprehensions-01-mcq",
+              "type": "mcq",
+              "question": "Select the line that adds the readings after the nested rows are flattened, the one that belongs with nested and 4.",
+              "hints": [
+                "Follow the job, which adds the readings after the nested rows are flattened.",
+                "The double comprehension walks every inner row.",
+                "[item for pair in nested for item in pair]"
+              ],
+              "explanation": "The double comprehension walks every inner row.",
+              "xp_reward": 10,
+              "options": [
+                "nested[0]",
+                "[item for pair in nested for item in pair]",
+                "len(nested)",
+                "nested + 1"
+              ],
+              "correct_answer": "[item for pair in nested for item in pair]"
+            },
+            {
+              "id": "comprehensions-01-predict",
+              "type": "output_prediction",
+              "question": "Follow the code that adds the readings after the nested rows are flattened for nested and 4, then choose the displayed value.",
+              "hints": [
+                "Follow the job, which adds the readings after the nested rows are flattened.",
+                "The double comprehension walks every inner row.",
+                "33"
+              ],
+              "explanation": "The double comprehension walks every inner row.",
+              "xp_reward": 10,
+              "starter_code": "nested = [[29], [4]]\nflat = [item for pair in nested for item in pair]\nprint(sum(flat))\n",
+              "options": [
+                "62",
+                "33",
+                "none",
+                "0"
+              ],
+              "correct_answer": "33"
+            },
+            {
+              "id": "comprehensions-01-order",
+              "type": "ordering",
+              "question": "Order the pieces so the line adds the readings after the nested rows are flattened for nested and 4.",
+              "hints": [
+                "Follow the job, which adds the readings after the nested rows are flattened.",
+                "total = left + right adds the flattened readings.",
+                "total = left + right"
+              ],
+              "explanation": "total = left + right adds the flattened readings.",
+              "xp_reward": 10,
+              "options": [
+                "total",
+                "=",
+                "left",
+                "+",
+                "right",
+                "=="
+              ],
+              "correct_answer": [
+                "total",
+                "=",
+                "left",
+                "+",
+                "right"
+              ]
+            },
+            {
+              "id": "comprehensions-01-fill",
+              "type": "fill_blank",
+              "question": "Supply the missing piece so the line adds the readings after the nested rows are flattened for nested and 4.",
+              "hints": [
+                "Follow the job, which adds the readings after the nested rows are flattened.",
+                "Plus adds the flattened readings.",
+                "+"
+              ],
+              "explanation": "Plus adds the flattened readings.",
+              "xp_reward": 10,
+              "starter_code": "total = left ___ right\n",
+              "options": [
+                "-",
+                "+",
+                "*",
+                "=="
+              ],
+              "correct_answer": "+"
+            },
+            {
+              "id": "comprehensions-01-bug",
+              "type": "debugging",
+              "question": "The wrong line is the one that misses the job, which adds the readings after the nested rows are flattened, for nested and 4.",
+              "hints": [
+                "Follow the job, which adds the readings after the nested rows are flattened.",
+                "The comprehension keeps the rows instead of the inner readings.",
+                "Line 2"
+              ],
+              "explanation": "The comprehension keeps the rows instead of the inner readings.",
+              "xp_reward": 10,
+              "starter_code": "nested = [[29], [4]]\nflat = [pair for pair in nested]\nprint(len(flat))\n",
+              "correct_answer": "2"
+            },
+            {
+              "id": "comprehensions-01-predict-2",
+              "type": "output_prediction",
+              "question": "A new input still has code that adds the readings after the nested rows are flattened for nested and 4, and the correct choice is what it prints.",
+              "hints": [
+                "Follow the job, which adds the readings after the nested rows are flattened.",
+                "The double comprehension walks every inner row.",
+                "62"
+              ],
+              "explanation": "The double comprehension walks every inner row.",
+              "xp_reward": 10,
+              "starter_code": "nested = [[29], [4], [29]]\nflat = [item for pair in nested for item in pair]\nprint(sum(flat))\n",
+              "options": [
+                "33",
+                "none",
+                "0",
+                "62"
+              ],
+              "correct_answer": "62"
+            },
+            {
+              "id": "comprehensions-01-write",
+              "type": "code",
+              "question": "The blank is the missing piece of the program that adds the readings after the nested rows are flattened for nested and 4.",
+              "hints": [
+                "Follow the job, which adds the readings after the nested rows are flattened.",
+                "The flattened total is what gets printed.",
+                "label = sum(flat)"
+              ],
+              "explanation": "The flattened total is what gets printed.",
+              "xp_reward": 10,
+              "starter_code": "nested = [[29], [4]]\nflat = [item for pair in nested for item in pair]\nlabel = ___\nprint(label)\n",
+              "solution_code": "nested = [[29], [4]]\nflat = [item for pair in nested for item in pair]\nlabel = sum(flat)\nprint(label)\n",
+              "tests": [
+                {
+                  "name": "comprehensions-01-prints",
+                  "description": "The flattened total is what gets printed.",
+                  "expected_stdout": "33\n",
+                  "required": true
+                }
+              ]
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "comprehensions-practice-1",
-      "title": "4. Filter & Transform (Practice)",
-      "description": "Finish `long_upper`. Return the uppercase of words longer than 3 characters. The test checks that `long_upper(['a', 'test', 'hi', 'code'])` equals `['TEST', 'CODE']`.",
+      "title": "Filter Transform",
+      "description": "Finish long_upper. Return the uppercase of words longer than 3 characters. The test checks that long_upper(['a', 'test', 'hi', 'code']) equals ['TEST', 'CODE'].",
       "order": 79,
       "difficulty": "intermediate",
       "duration_minutes": 6,
@@ -151,7 +671,7 @@
         "strings"
       ],
       "learning_objectives": [
-        "Combine filter and transform in one comprehension"
+        "Using items and 11, this step keeps the values above the cutoff and adds them."
       ],
       "starter_code": "def long_upper(words):\n    # TODO: uppercase words with len > 3\n    pass\n",
       "solution_code": "def long_upper(words):\n    return [w.upper() for w in words if len(w) > 3]\n",
@@ -172,12 +692,190 @@
         "url": "https://docs.python.org/3/tutorial/datastructures.html#list-comprehensions",
         "license": "Python documentation license (PSF)"
       },
-      "xp_reward": 15
+      "xp_reward": 15,
+      "player_mode": "micro",
+      "sublessons": [
+        {
+          "id": "comprehensions-practice-1-micro",
+          "title": "Filter Transform",
+          "description": "",
+          "order": 1,
+          "exercises": [
+            {
+              "id": "comprehensions-practice-1-teach",
+              "type": "teach",
+              "question": "Using items and 11, this step keeps the values above the cutoff and adds them.",
+              "hints": [
+                "Follow the job, which keeps the values above the cutoff and adds them.",
+                "The comprehension drops values that are not above the cutoff.",
+                "item > 11"
+              ],
+              "explanation": "Using items and 11, this step keeps the values above the cutoff and adds them.",
+              "xp_reward": 0,
+              "worked_example": "item > 11"
+            },
+            {
+              "id": "comprehensions-practice-1-mcq",
+              "type": "mcq",
+              "question": "Pick the line that keeps the values above the cutoff and adds them, not a line about something else, for items and 11.",
+              "hints": [
+                "Follow the job, which keeps the values above the cutoff and adds them.",
+                "The comprehension drops values that are not above the cutoff.",
+                "item > 11"
+              ],
+              "explanation": "The comprehension drops values that are not above the cutoff.",
+              "xp_reward": 10,
+              "options": [
+                "item == 11",
+                "item > 11",
+                "item = items",
+                "print(item)"
+              ],
+              "correct_answer": "item > 11"
+            },
+            {
+              "id": "comprehensions-practice-1-predict",
+              "type": "output_prediction",
+              "question": "The displayed value is what the code prints when it keeps the values above the cutoff and adds them for items and 11.",
+              "hints": [
+                "Follow the job, which keeps the values above the cutoff and adds them.",
+                "The comprehension drops values that are not above the cutoff.",
+                "60"
+              ],
+              "explanation": "The comprehension drops values that are not above the cutoff.",
+              "xp_reward": 10,
+              "starter_code": "items = [1, 29, 31]\nkept = [item for item in items if item > 11]\nprint(sum(kept))\n",
+              "options": [
+                "29",
+                "60",
+                "none",
+                "0"
+              ],
+              "correct_answer": "60"
+            },
+            {
+              "id": "comprehensions-practice-1-order",
+              "type": "ordering",
+              "question": "Place every piece so the result keeps the values above the cutoff and adds them for items and 11.",
+              "hints": [
+                "Follow the job, which keeps the values above the cutoff and adds them.",
+                "rows = [a for b in c if d] keeps the matches.",
+                "rows = [ a for b in c if d ]"
+              ],
+              "explanation": "rows = [a for b in c if d] keeps the matches.",
+              "xp_reward": 10,
+              "options": [
+                "rows",
+                "=",
+                "[",
+                "a",
+                "for",
+                "b",
+                "in",
+                "c",
+                "if",
+                "d",
+                "]",
+                "while"
+              ],
+              "correct_answer": [
+                "rows",
+                "=",
+                "[",
+                "a",
+                "for",
+                "b",
+                "in",
+                "c",
+                "if",
+                "d",
+                "]"
+              ]
+            },
+            {
+              "id": "comprehensions-practice-1-fill",
+              "type": "fill_blank",
+              "question": "Drop in the piece that lets the line keeps the values above the cutoff and adds them for items and 11.",
+              "hints": [
+                "Follow the job, which keeps the values above the cutoff and adds them.",
+                "The cutoff keeps the greater values.",
+                ">"
+              ],
+              "explanation": "The cutoff keeps the greater values.",
+              "xp_reward": 10,
+              "starter_code": "kept = [item for item in items if item ___ 11]\n",
+              "options": [
+                "<",
+                ">",
+                "==",
+                "!="
+              ],
+              "correct_answer": ">"
+            },
+            {
+              "id": "comprehensions-practice-1-bug",
+              "type": "debugging",
+              "question": "The mismatch misses the job, which keeps the values above the cutoff and adds them, for items and 11.",
+              "hints": [
+                "Follow the job, which keeps the values above the cutoff and adds them.",
+                "The filter keeps the small values instead of the large ones.",
+                "Line 2"
+              ],
+              "explanation": "The filter keeps the small values instead of the large ones.",
+              "xp_reward": 10,
+              "starter_code": "items = [1, 29, 31]\nkept = [item for item in items if item < 11]\nprint(sum(kept))\n",
+              "correct_answer": "2"
+            },
+            {
+              "id": "comprehensions-practice-1-predict-2",
+              "type": "output_prediction",
+              "question": "Choose the printed result of the second run that keeps the values above the cutoff and adds them for items and 11.",
+              "hints": [
+                "Follow the job, which keeps the values above the cutoff and adds them.",
+                "The comprehension drops values that are not above the cutoff.",
+                "29"
+              ],
+              "explanation": "The comprehension drops values that are not above the cutoff.",
+              "xp_reward": 10,
+              "starter_code": "items = [1, 2, 29]\nkept = [item for item in items if item > 11]\nprint(sum(kept))\n",
+              "options": [
+                "60",
+                "none",
+                "0",
+                "29"
+              ],
+              "correct_answer": "29"
+            },
+            {
+              "id": "comprehensions-practice-1-write",
+              "type": "code",
+              "question": "Make the program keeps the values above the cutoff and adds them by filling the blank for items and 11.",
+              "hints": [
+                "Follow the job, which keeps the values above the cutoff and adds them.",
+                "The kept total is what gets printed.",
+                "label = sum(kept)"
+              ],
+              "explanation": "The kept total is what gets printed.",
+              "xp_reward": 10,
+              "starter_code": "items = [1, 29, 31]\nkept = [item for item in items if item > 11]\nlabel = ___\nprint(label)\n",
+              "solution_code": "items = [1, 29, 31]\nkept = [item for item in items if item > 11]\nlabel = sum(kept)\nprint(label)\n",
+              "tests": [
+                {
+                  "name": "comprehensions-practice-1-prints",
+                  "description": "The kept total is what gets printed.",
+                  "expected_stdout": "60\n",
+                  "required": true
+                }
+              ]
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "comprehensions-checkpoint",
-      "title": "5. Unit 16 Checkpoint: Comprehensions",
-      "description": "Finish `unique_vowels`. Build a set of unique vowels found in a string (case-insensitive). The test checks that `unique_vowels('Education')` equals `{'e', 'u', 'a', 'i', 'o'}`.",
+      "title": "Practice Unit 16 Checkpoint Comprehensions",
+      "description": "Finish unique_vowels. Build a set of unique vowels found in a string (case-insensitive). The test checks that unique_vowels('Education') equals {'e', 'u', 'a', 'i', 'o'}.",
       "order": 80,
       "difficulty": "intermediate",
       "duration_minutes": 10,
@@ -191,7 +889,7 @@
         "strings"
       ],
       "learning_objectives": [
-        "Use a set comprehension"
+        "This step adds each reading once, using nums and 4."
       ],
       "starter_code": "def unique_vowels(text):\n    # TODO: return set of vowels in text.lower()\n    pass\n",
       "solution_code": "def unique_vowels(text):\n    return {ch for ch in text.lower() if ch in 'aeiou'}\n",
@@ -212,7 +910,175 @@
         "url": "https://docs.python.org/3/reference/expressions.html#displays-for-lists-sets-and-dictionaries",
         "license": "Python documentation license (PSF)"
       },
-      "xp_reward": 40
+      "xp_reward": 40,
+      "player_mode": "micro",
+      "sublessons": [
+        {
+          "id": "comprehensions-checkpoint-micro",
+          "title": "Practice Unit 16 Checkpoint Comprehensions",
+          "description": "",
+          "order": 1,
+          "exercises": [
+            {
+              "id": "comprehensions-checkpoint-teach",
+              "type": "teach",
+              "question": "This step adds each reading once, using nums and 4.",
+              "hints": [
+                "Follow the job, which adds each reading once.",
+                "A set comprehension drops repeated readings.",
+                "{item for item in nums}"
+              ],
+              "explanation": "This step adds each reading once, using nums and 4.",
+              "xp_reward": 0,
+              "worked_example": "{item for item in nums}"
+            },
+            {
+              "id": "comprehensions-checkpoint-mcq",
+              "type": "mcq",
+              "question": "Keep the choice that adds each reading once for nums and 4.",
+              "hints": [
+                "Follow the job, which adds each reading once.",
+                "A set comprehension drops repeated readings.",
+                "{item for item in nums}"
+              ],
+              "explanation": "A set comprehension drops repeated readings.",
+              "xp_reward": 10,
+              "options": [
+                "nums[0]",
+                "print(nums)",
+                "{item for item in nums}",
+                "nums + nums"
+              ],
+              "correct_answer": "{item for item in nums}"
+            },
+            {
+              "id": "comprehensions-checkpoint-predict",
+              "type": "output_prediction",
+              "question": "Trace the code that adds each reading once using nums and 4, and select what it displays.",
+              "hints": [
+                "Follow the job, which adds each reading once.",
+                "A set comprehension drops repeated readings.",
+                "40"
+              ],
+              "explanation": "A set comprehension drops repeated readings.",
+              "xp_reward": 10,
+              "starter_code": "nums = [36, 36, 4]\nprint(sum({item for item in nums}))\n",
+              "options": [
+                "36",
+                "none",
+                "40",
+                "0"
+              ],
+              "correct_answer": "40"
+            },
+            {
+              "id": "comprehensions-checkpoint-order",
+              "type": "ordering",
+              "question": "Tap the pieces, in order, of the line that adds each reading once for nums and 4.",
+              "hints": [
+                "Follow the job, which adds each reading once.",
+                "kept = len(seen) counts the unique readings.",
+                "kept = len ( seen )"
+              ],
+              "explanation": "kept = len(seen) counts the unique readings.",
+              "xp_reward": 10,
+              "options": [
+                "kept",
+                "=",
+                "len",
+                "(",
+                "seen",
+                ")",
+                "sum"
+              ],
+              "correct_answer": [
+                "kept",
+                "=",
+                "len",
+                "(",
+                "seen",
+                ")"
+              ]
+            },
+            {
+              "id": "comprehensions-checkpoint-fill",
+              "type": "fill_blank",
+              "question": "The blank is the missing piece of the line that adds each reading once for nums and 4.",
+              "hints": [
+                "Follow the job, which adds each reading once.",
+                "Plus adds the unique readings.",
+                "+"
+              ],
+              "explanation": "Plus adds the unique readings.",
+              "xp_reward": 10,
+              "starter_code": "total = left ___ right\n",
+              "options": [
+                "-",
+                "*",
+                "+",
+                "=="
+              ],
+              "correct_answer": "+"
+            },
+            {
+              "id": "comprehensions-checkpoint-bug",
+              "type": "debugging",
+              "question": "Choose the line that does another job than the one that adds each reading once for nums and 4.",
+              "hints": [
+                "Follow the job, which adds each reading once.",
+                "The print adds the repeats instead of the unique readings.",
+                "Line 2"
+              ],
+              "explanation": "The print adds the repeats instead of the unique readings.",
+              "xp_reward": 10,
+              "starter_code": "nums = [36, 36, 4]\nprint(sum(nums))\n",
+              "correct_answer": "2"
+            },
+            {
+              "id": "comprehensions-checkpoint-predict-2",
+              "type": "output_prediction",
+              "question": "Trace the second run, which adds each reading once for nums and 4, and select what it displays.",
+              "hints": [
+                "Follow the job, which adds each reading once.",
+                "A set comprehension drops repeated readings.",
+                "36"
+              ],
+              "explanation": "A set comprehension drops repeated readings.",
+              "xp_reward": 10,
+              "starter_code": "nums = [36, 36, 36]\nprint(sum({item for item in nums}))\n",
+              "options": [
+                "40",
+                "0",
+                "none",
+                "36"
+              ],
+              "correct_answer": "36"
+            },
+            {
+              "id": "comprehensions-checkpoint-write",
+              "type": "code",
+              "question": "Type the missing piece so the program adds each reading once for nums and 4 and prints it.",
+              "hints": [
+                "Follow the job, which adds each reading once.",
+                "The unique total is what gets printed.",
+                "label = sum(unique)"
+              ],
+              "explanation": "The unique total is what gets printed.",
+              "xp_reward": 10,
+              "starter_code": "nums = [36, 36, 4]\nunique = {item for item in nums}\nlabel = ___\nprint(label)\n",
+              "solution_code": "nums = [36, 36, 4]\nunique = {item for item in nums}\nlabel = sum(unique)\nprint(label)\n",
+              "tests": [
+                {
+                  "name": "comprehensions-checkpoint-prints",
+                  "description": "The unique total is what gets printed.",
+                  "expected_stdout": "40\n",
+                  "required": true
+                }
+              ]
+            }
+          ]
+        }
+      ]
     }
   ]
 }

@@ -14,8 +14,8 @@
   "lessons": [
     {
       "id": "sql-09",
-      "title": "9. NULL & CASE Statements",
-      "description": "Add a `price_tier` column with `CASE`: `Budget` when `price` is below 50, otherwise `Premium`. The test checks that the result has at least 5 rows and a column named `price_tier`.",
+      "title": "Practice NULL CASE Statements",
+      "description": "Add a price_tier column with CASE: Budget when price is below 50, otherwise Premium. The test checks that the result has at least 5 rows and a column named price_tier.",
       "order": 9,
       "difficulty": "intermediate",
       "duration_minutes": 5,
@@ -45,10 +45,187 @@
         "license": "Public domain (SQLite documentation)"
       },
       "learning_objectives": [
-        "Handle missing data: NULL is not a value but a marker for 'no data'",
-        "Branch per row with CASE WHEN ... THEN ... ELSE ... END"
+        "This step labels a salary with CASE, using salary holding high."
       ],
-      "xp_reward": 10
+      "xp_reward": 10,
+      "player_mode": "micro",
+      "sublessons": [
+        {
+          "id": "sql-09-micro",
+          "title": "Practice NULL CASE Statements",
+          "description": "",
+          "order": 1,
+          "exercises": [
+            {
+              "id": "sql-09-teach",
+              "type": "teach",
+              "question": "This step labels a salary with CASE, using salary holding high.",
+              "hints": [
+                "Follow the job, which labels a salary with CASE.",
+                "CASE picks high when the salary is at least 100000.",
+                "CASE WHEN salary >= 100000 THEN 'high' ELSE 'mid' END"
+              ],
+              "explanation": "This step labels a salary with CASE, using salary holding high.",
+              "xp_reward": 0,
+              "worked_example": "CASE WHEN salary >= 100000 THEN 'high' ELSE 'mid' END"
+            },
+            {
+              "id": "sql-09-mcq",
+              "type": "mcq",
+              "question": "Pick the line that labels a salary with CASE, not a line about something else, for salary holding high.",
+              "hints": [
+                "Follow the job, which labels a salary with CASE.",
+                "CASE picks high when the salary is at least 100000.",
+                "CASE WHEN salary >= 100000 THEN 'high' ELSE 'mid' END"
+              ],
+              "explanation": "CASE picks high when the salary is at least 100000.",
+              "xp_reward": 10,
+              "options": [
+                "INSERT INTO employees",
+                "CASE WHEN salary >= 100000 THEN 'high' ELSE 'mid' END",
+                "DROP TABLE employees",
+                "salary == salary"
+              ],
+              "correct_answer": "CASE WHEN salary >= 100000 THEN 'high' ELSE 'mid' END"
+            },
+            {
+              "id": "sql-09-predict",
+              "type": "output_prediction",
+              "question": "The displayed value is what the code prints when it labels a salary with CASE for salary holding high.",
+              "hints": [
+                "Follow the job, which labels a salary with CASE.",
+                "CASE picks high when the salary is at least 100000.",
+                "┌──────┐\n│ band │\n├──────┤\n│ high │\n└──────┘"
+              ],
+              "explanation": "CASE picks high when the salary is at least 100000.",
+              "xp_reward": 10,
+              "starter_code": "SELECT CASE WHEN salary >= 100000 THEN 'high' ELSE 'mid' END AS band FROM employees WHERE id = 2;\n",
+              "options": [
+                "none",
+                "┌──────┐\n│ band │\n├──────┤\n│ high │\n└──────┘",
+                "┌──────┐\n│ band │\n├──────┤\n│ mid  │\n└──────┘",
+                "0"
+              ],
+              "correct_answer": "┌──────┐\n│ band │\n├──────┤\n│ high │\n└──────┘"
+            },
+            {
+              "id": "sql-09-order",
+              "type": "ordering",
+              "question": "Place every piece so the result labels a salary with CASE for salary holding high.",
+              "hints": [
+                "Follow the job, which labels a salary with CASE.",
+                "CASE picks high when the salary is at least 100000.",
+                "SELECT CASE WHEN salary >= 100000 THEN 'high' ELSE 'mid' END"
+              ],
+              "explanation": "CASE picks high when the salary is at least 100000.",
+              "xp_reward": 10,
+              "options": [
+                "SELECT",
+                "CASE",
+                "WHEN",
+                "salary",
+                ">=",
+                "100000",
+                "THEN",
+                "'high'",
+                "ELSE",
+                "'mid'",
+                "END",
+                "DROP"
+              ],
+              "correct_answer": [
+                "SELECT",
+                "CASE",
+                "WHEN",
+                "salary",
+                ">=",
+                "100000",
+                "THEN",
+                "'high'",
+                "ELSE",
+                "'mid'",
+                "END"
+              ]
+            },
+            {
+              "id": "sql-09-fill",
+              "type": "fill_blank",
+              "question": "Drop in the piece that lets the line labels a salary with CASE for salary holding high.",
+              "hints": [
+                "Follow the job, which labels a salary with CASE.",
+                "CASE picks high when the salary is at least 100000.",
+                ">="
+              ],
+              "explanation": "CASE picks high when the salary is at least 100000.",
+              "xp_reward": 10,
+              "starter_code": "SELECT CASE WHEN salary ___ 100000 THEN 'high' ELSE 'mid' END AS band FROM employees WHERE id = 2;",
+              "options": [
+                "<=",
+                ">=",
+                "=",
+                "!="
+              ],
+              "correct_answer": ">="
+            },
+            {
+              "id": "sql-09-bug",
+              "type": "debugging",
+              "question": "The mismatch misses the job, which labels a salary with CASE, for salary holding high.",
+              "hints": [
+                "Follow the job, which labels a salary with CASE.",
+                "The high branch is labeled low.",
+                "Line 1"
+              ],
+              "explanation": "The high branch is labeled low.",
+              "xp_reward": 10,
+              "starter_code": "SELECT CASE WHEN salary >= 100000 THEN 'low' ELSE 'mid' END AS band FROM employees WHERE id = 2;",
+              "correct_answer": "1"
+            },
+            {
+              "id": "sql-09-predict-2",
+              "type": "output_prediction",
+              "question": "Choose the printed result of the second run that labels a salary with CASE for salary holding high.",
+              "hints": [
+                "Follow the job, which labels a salary with CASE.",
+                "CASE picks high when the salary is at least 100000.",
+                "┌──────┐\n│ band │\n├──────┤\n│ mid  │\n└──────┘"
+              ],
+              "explanation": "CASE picks high when the salary is at least 100000.",
+              "xp_reward": 10,
+              "starter_code": "SELECT CASE WHEN salary >= 100000 THEN 'high' ELSE 'mid' END AS band FROM employees WHERE id = 3;\n",
+              "options": [
+                "┌──────┐\n│ band │\n├──────┤\n│ high │\n└──────┘",
+                "none",
+                "0",
+                "┌──────┐\n│ band │\n├──────┤\n│ mid  │\n└──────┘"
+              ],
+              "correct_answer": "┌──────┐\n│ band │\n├──────┤\n│ mid  │\n└──────┘"
+            },
+            {
+              "id": "sql-09-write",
+              "type": "code",
+              "question": "Make the program labels a salary with CASE by filling the blank for salary holding high.",
+              "hints": [
+                "Follow the job, which labels a salary with CASE.",
+                "The query result is what this step labels a salary with CASE.",
+                "THEN 'high'"
+              ],
+              "explanation": "The query result is what this step labels a salary with CASE.",
+              "xp_reward": 10,
+              "starter_code": "SELECT CASE WHEN salary >= 100000 THEN ___ ELSE 'mid' END AS band FROM employees WHERE id = 2;\n",
+              "solution_code": "SELECT CASE WHEN salary >= 100000 THEN 'high' ELSE 'mid' END AS band FROM employees WHERE id = 2;\n",
+              "tests": [
+                {
+                  "name": "sql-09-prints",
+                  "description": "The query result is what this step labels a salary with CASE.",
+                  "expected_stdout": "┌──────┐\n│ band │\n├──────┤\n│ high │\n└──────┘",
+                  "required": true
+                }
+              ]
+            }
+          ]
+        }
+      ]
     }
   ]
 }

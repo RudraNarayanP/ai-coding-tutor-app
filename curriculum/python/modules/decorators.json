@@ -15,8 +15,8 @@
   "lessons": [
     {
       "id": "decorators-step-1",
-      "title": "1. Simple Decorator",
-      "description": "A decorator wraps a function. Implement `shout` that uppercases the string returned by the wrapped function. The test checks that `greet('ada')` equals `'HELLO ADA'`.",
+      "title": "Practice Simple Decorator",
+      "description": "A decorator wraps a function. Implement shout that uppercases the string returned by the wrapped function. The test checks that greet('ada') equals 'HELLO ADA'.",
       "order": 86,
       "difficulty": "intermediate",
       "duration_minutes": 5,
@@ -30,7 +30,7 @@
         "functions"
       ],
       "learning_objectives": [
-        "Write a decorator that wraps a return value"
+        "This step adds the bonus before handing the result back, using bonus and fn."
       ],
       "starter_code": "def shout(fn):\n    def wrapper(*args, **kwargs):\n        # TODO: call fn and return result.upper()\n        pass\n    return wrapper\n\n@shout\ndef greet(name):\n    return f'hello {name}'\n",
       "solution_code": "def shout(fn):\n    def wrapper(*args, **kwargs):\n        return fn(*args, **kwargs).upper()\n    return wrapper\n\n@shout\ndef greet(name):\n    return f'hello {name}'\n",
@@ -51,12 +51,178 @@
         "url": "https://docs.python.org/3/reference/compound_stmts.html#function-definitions",
         "license": "Python documentation license (PSF)"
       },
-      "xp_reward": 10
+      "xp_reward": 10,
+      "player_mode": "micro",
+      "sublessons": [
+        {
+          "id": "decorators-step-1-micro",
+          "title": "Practice Simple Decorator",
+          "description": "",
+          "order": 1,
+          "exercises": [
+            {
+              "id": "decorators-step-1-teach",
+              "type": "teach",
+              "question": "This step adds the bonus before handing the result back, using bonus and fn.",
+              "hints": [
+                "Follow the job, which adds the bonus before handing the result back.",
+                "The wrapper adds the bonus to the original result.",
+                "fn(value) + 3"
+              ],
+              "explanation": "This step adds the bonus before handing the result back, using bonus and fn.",
+              "xp_reward": 0,
+              "worked_example": "fn(value) + 3"
+            },
+            {
+              "id": "decorators-step-1-mcq",
+              "type": "mcq",
+              "question": "The match is the line that adds the bonus before handing the result back for bonus and 31.",
+              "hints": [
+                "Follow the job, which adds the bonus before handing the result back.",
+                "The wrapper adds the bonus to the original result.",
+                "fn(value) + 3"
+              ],
+              "explanation": "The wrapper adds the bonus to the original result.",
+              "xp_reward": 10,
+              "options": [
+                "fn(value) == value",
+                "print(fn)",
+                "pass",
+                "fn(value) + 3"
+              ],
+              "correct_answer": "fn(value) + 3"
+            },
+            {
+              "id": "decorators-step-1-predict",
+              "type": "output_prediction",
+              "question": "Work out what is printed when the code adds the bonus before handing the result back for bonus and 31.",
+              "hints": [
+                "Follow the job, which adds the bonus before handing the result back.",
+                "The wrapper adds the bonus to the original result.",
+                "34"
+              ],
+              "explanation": "The wrapper adds the bonus to the original result.",
+              "xp_reward": 10,
+              "starter_code": "def bonus(fn):\n    def wrapped(value):\n        return fn(value) + 3\n    return wrapped\n@bonus\ndef base(value):\n    return value\nprint(base(31))\n",
+              "options": [
+                "38",
+                "none",
+                "0",
+                "34"
+              ],
+              "correct_answer": "34"
+            },
+            {
+              "id": "decorators-step-1-order",
+              "type": "ordering",
+              "question": "Rebuild, from the left, the line that adds the bonus before handing the result back for bonus and 31.",
+              "hints": [
+                "Follow the job, which adds the bonus before handing the result back.",
+                "return fn(value) calls the wrapped function.",
+                "return fn ( value )"
+              ],
+              "explanation": "return fn(value) calls the wrapped function.",
+              "xp_reward": 10,
+              "options": [
+                "return",
+                "fn",
+                "(",
+                "value",
+                ")",
+                "print"
+              ],
+              "correct_answer": [
+                "return",
+                "fn",
+                "(",
+                "value",
+                ")"
+              ]
+            },
+            {
+              "id": "decorators-step-1-fill",
+              "type": "fill_blank",
+              "question": "The completed line adds the bonus before handing the result back once you fill the blank for bonus and 31.",
+              "hints": [
+                "Follow the job, which adds the bonus before handing the result back.",
+                "Plus adds the bonus.",
+                "+"
+              ],
+              "explanation": "Plus adds the bonus.",
+              "xp_reward": 10,
+              "starter_code": "return fn(value) ___ extra\n",
+              "options": [
+                "*",
+                "+",
+                "==",
+                "-"
+              ],
+              "correct_answer": "+"
+            },
+            {
+              "id": "decorators-step-1-bug",
+              "type": "debugging",
+              "question": "One line does another job than the one that adds the bonus before handing the result back for the snippet.",
+              "hints": [
+                "Follow the job, which adds the bonus before handing the result back.",
+                "The wrapper subtracts the bonus.",
+                "Line 3"
+              ],
+              "explanation": "The wrapper subtracts the bonus.",
+              "xp_reward": 10,
+              "starter_code": "def bonus(fn):\n    def wrapped(value):\n        return fn(value) - extra\n    return wrapped\nextra = 3\n@bonus\ndef base(value):\n    return value\nprint(base(31))\n",
+              "correct_answer": "3"
+            },
+            {
+              "id": "decorators-step-1-predict-2",
+              "type": "output_prediction",
+              "question": "The second display is what prints after the code adds the bonus before handing the result back for bonus and 31.",
+              "hints": [
+                "Follow the job, which adds the bonus before handing the result back.",
+                "The wrapper adds the bonus to the original result.",
+                "38"
+              ],
+              "explanation": "The wrapper adds the bonus to the original result.",
+              "xp_reward": 10,
+              "starter_code": "def bonus(fn):\n    def wrapped(value):\n        return fn(value) + 7\n    return wrapped\n@bonus\ndef base(value):\n    return value\nprint(base(31))\n",
+              "options": [
+                "34",
+                "none",
+                "38",
+                "0"
+              ],
+              "correct_answer": "38"
+            },
+            {
+              "id": "decorators-step-1-write",
+              "type": "code",
+              "question": "Supply the blank so the run adds the bonus before handing the result back and prints the result for bonus and 31.",
+              "hints": [
+                "Follow the job, which adds the bonus before handing the result back.",
+                "The wrapped result is what gets printed.",
+                "label = base(31)"
+              ],
+              "explanation": "The wrapped result is what gets printed.",
+              "xp_reward": 10,
+              "starter_code": "def bonus(fn):\n    def wrapped(value):\n        return fn(value) + 3\n    return wrapped\n@bonus\ndef base(value):\n    return value\nlabel = ___\nprint(label)\n",
+              "solution_code": "def bonus(fn):\n    def wrapped(value):\n        return fn(value) + 3\n    return wrapped\n@bonus\ndef base(value):\n    return value\nlabel = base(31)\nprint(label)\n",
+              "tests": [
+                {
+                  "name": "decorators-step-1-prints",
+                  "description": "The wrapped result is what gets printed.",
+                  "expected_stdout": "34\n",
+                  "required": true
+                }
+              ]
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "decorators-step-2",
-      "title": "2. Decorator with Arguments",
-      "description": "Implement `repeat(n)` that calls the wrapped function n times and returns a list of results. The test checks that `ping()` equals `['pong', 'pong', 'pong']`.",
+      "title": "Practice Decorator with Arguments",
+      "description": "Implement repeat(n) that calls the wrapped function n times and returns a list of results. The test checks that ping() equals ['pong', 'pong', 'pong'].",
       "order": 87,
       "difficulty": "intermediate",
       "duration_minutes": 5,
@@ -70,7 +236,7 @@
         "functions"
       ],
       "learning_objectives": [
-        "Build a parameterized decorator"
+        "Using bonus and 33, this step adds the bonus before handing the result back."
       ],
       "starter_code": "def repeat(n):\n    def decorator(fn):\n        def wrapper(*args, **kwargs):\n            # TODO: return list of n calls to fn\n            pass\n        return wrapper\n    return decorator\n\n@repeat(3)\ndef ping():\n    return 'pong'\n",
       "solution_code": "def repeat(n):\n    def decorator(fn):\n        def wrapper(*args, **kwargs):\n            return [fn(*args, **kwargs) for _ in range(n)]\n        return wrapper\n    return decorator\n\n@repeat(3)\ndef ping():\n    return 'pong'\n",
@@ -91,12 +257,178 @@
         "url": "https://docs.python.org/3/reference/compound_stmts.html#function-definitions",
         "license": "Python documentation license (PSF)"
       },
-      "xp_reward": 10
+      "xp_reward": 10,
+      "player_mode": "micro",
+      "sublessons": [
+        {
+          "id": "decorators-step-2-micro",
+          "title": "Practice Decorator with Arguments",
+          "description": "",
+          "order": 1,
+          "exercises": [
+            {
+              "id": "decorators-step-2-teach",
+              "type": "teach",
+              "question": "Using bonus and 33, this step adds the bonus before handing the result back.",
+              "hints": [
+                "Follow the job, which adds the bonus before handing the result back.",
+                "The wrapper adds the bonus to the original result.",
+                "fn(value) + 4"
+              ],
+              "explanation": "Using bonus and 33, this step adds the bonus before handing the result back.",
+              "xp_reward": 0,
+              "worked_example": "fn(value) + 4"
+            },
+            {
+              "id": "decorators-step-2-mcq",
+              "type": "mcq",
+              "question": "The correct line adds the bonus before handing the result back, and it is the line tied to bonus and fn.",
+              "hints": [
+                "Follow the job, which adds the bonus before handing the result back.",
+                "The wrapper adds the bonus to the original result.",
+                "fn(value) + 4"
+              ],
+              "explanation": "The wrapper adds the bonus to the original result.",
+              "xp_reward": 10,
+              "options": [
+                "print(fn)",
+                "fn(value) == value",
+                "pass",
+                "fn(value) + 4"
+              ],
+              "correct_answer": "fn(value) + 4"
+            },
+            {
+              "id": "decorators-step-2-predict",
+              "type": "output_prediction",
+              "question": "The program adds the bonus before handing the result back with bonus and fn, so choose the printed value.",
+              "hints": [
+                "Follow the job, which adds the bonus before handing the result back.",
+                "The wrapper adds the bonus to the original result.",
+                "37"
+              ],
+              "explanation": "The wrapper adds the bonus to the original result.",
+              "xp_reward": 10,
+              "starter_code": "def bonus(fn):\n    def wrapped(value):\n        return fn(value) + 4\n    return wrapped\n@bonus\ndef base(value):\n    return value\nprint(base(33))\n",
+              "options": [
+                "41",
+                "37",
+                "none",
+                "0"
+              ],
+              "correct_answer": "37"
+            },
+            {
+              "id": "decorators-step-2-order",
+              "type": "ordering",
+              "question": "Build the line that adds the bonus before handing the result back for bonus and fn, from the first piece to the last.",
+              "hints": [
+                "Follow the job, which adds the bonus before handing the result back.",
+                "return fn(value) calls the wrapped function.",
+                "return fn ( value )"
+              ],
+              "explanation": "return fn(value) calls the wrapped function.",
+              "xp_reward": 10,
+              "options": [
+                "return",
+                "fn",
+                "(",
+                "value",
+                ")",
+                "print"
+              ],
+              "correct_answer": [
+                "return",
+                "fn",
+                "(",
+                "value",
+                ")"
+              ]
+            },
+            {
+              "id": "decorators-step-2-fill",
+              "type": "fill_blank",
+              "question": "Replace the blank with the piece that makes the line adds the bonus before handing the result back for bonus and fn.",
+              "hints": [
+                "Follow the job, which adds the bonus before handing the result back.",
+                "Plus adds the bonus.",
+                "+"
+              ],
+              "explanation": "Plus adds the bonus.",
+              "xp_reward": 10,
+              "starter_code": "return fn(value) ___ extra\n",
+              "options": [
+                "-",
+                "+",
+                "*",
+                "=="
+              ],
+              "correct_answer": "+"
+            },
+            {
+              "id": "decorators-step-2-bug",
+              "type": "debugging",
+              "question": "Spot the line that fails the job, which adds the bonus before handing the result back, around bonus and fn.",
+              "hints": [
+                "Follow the job, which adds the bonus before handing the result back.",
+                "The wrapper subtracts the bonus.",
+                "Line 3"
+              ],
+              "explanation": "The wrapper subtracts the bonus.",
+              "xp_reward": 10,
+              "starter_code": "def bonus(fn):\n    def wrapped(value):\n        return fn(value) - extra\n    return wrapped\nextra = 3\n@bonus\ndef base(value):\n    return value\nprint(base(33))\n",
+              "correct_answer": "3"
+            },
+            {
+              "id": "decorators-step-2-predict-2",
+              "type": "output_prediction",
+              "question": "The second program adds the bonus before handing the result back for bonus and fn, so choose the new printed value.",
+              "hints": [
+                "Follow the job, which adds the bonus before handing the result back.",
+                "The wrapper adds the bonus to the original result.",
+                "41"
+              ],
+              "explanation": "The wrapper adds the bonus to the original result.",
+              "xp_reward": 10,
+              "starter_code": "def bonus(fn):\n    def wrapped(value):\n        return fn(value) + 8\n    return wrapped\n@bonus\ndef base(value):\n    return value\nprint(base(33))\n",
+              "options": [
+                "37",
+                "none",
+                "0",
+                "41"
+              ],
+              "correct_answer": "41"
+            },
+            {
+              "id": "decorators-step-2-write",
+              "type": "code",
+              "question": "Complete the blank so this program adds the bonus before handing the result back and prints the result for bonus and fn.",
+              "hints": [
+                "Follow the job, which adds the bonus before handing the result back.",
+                "The wrapped result is what gets printed.",
+                "label = base(33)"
+              ],
+              "explanation": "The wrapped result is what gets printed.",
+              "xp_reward": 10,
+              "starter_code": "def bonus(fn):\n    def wrapped(value):\n        return fn(value) + 4\n    return wrapped\n@bonus\ndef base(value):\n    return value\nlabel = ___\nprint(label)\n",
+              "solution_code": "def bonus(fn):\n    def wrapped(value):\n        return fn(value) + 4\n    return wrapped\n@bonus\ndef base(value):\n    return value\nlabel = base(33)\nprint(label)\n",
+              "tests": [
+                {
+                  "name": "decorators-step-2-prints",
+                  "description": "The wrapped result is what gets printed.",
+                  "expected_stdout": "37\n",
+                  "required": true
+                }
+              ]
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "decorators-01",
-      "title": "3. Memoize Decorator (Concept Challenge)",
-      "description": "Finish `memoize`, `wrapper`, `add`. Cache function results by args so repeated calls are cheap. The test checks that `add(2, 3)` equals `5`.",
+      "title": "Practice Memoize Decorator",
+      "description": "Finish memoize, wrapper, add. Cache function results by args so repeated calls are cheap. The test checks that add(2, 3) equals 5.",
       "order": 88,
       "difficulty": "intermediate",
       "duration_minutes": 8,
@@ -110,7 +442,7 @@
         "functions"
       ],
       "learning_objectives": [
-        "Cache return values keyed by arguments"
+        "This step reuses the stored result for a repeated call, using memo and 31."
       ],
       "starter_code": "def memoize(fn):\n    cache = {}\n    def wrapper(*args):\n        # TODO: return cached value or compute and store\n        pass\n    return wrapper\n\n@memoize\ndef add(a, b):\n    return a + b\n",
       "solution_code": "def memoize(fn):\n    cache = {}\n    def wrapper(*args):\n        if args not in cache:\n            cache[args] = fn(*args)\n        return cache[args]\n    wrapper.cache = cache\n    return wrapper\n\n@memoize\ndef add(a, b):\n    return a + b\n",
@@ -131,12 +463,180 @@
         "url": "https://docs.python.org/3/library/functools.html#functools.cache",
         "license": "Python documentation license (PSF)"
       },
-      "xp_reward": 25
+      "xp_reward": 25,
+      "player_mode": "micro",
+      "sublessons": [
+        {
+          "id": "decorators-01-micro",
+          "title": "Practice Memoize Decorator",
+          "description": "",
+          "order": 1,
+          "exercises": [
+            {
+              "id": "decorators-01-teach",
+              "type": "teach",
+              "question": "This step reuses the stored result for a repeated call, using memo and 31.",
+              "hints": [
+                "Follow the job, which reuses the stored result for a repeated call.",
+                "The cache returns the stored result on the second call.",
+                "cache[value] = fn(value)"
+              ],
+              "explanation": "This step reuses the stored result for a repeated call, using memo and 31.",
+              "xp_reward": 0,
+              "worked_example": "cache[value] = fn(value)"
+            },
+            {
+              "id": "decorators-01-mcq",
+              "type": "mcq",
+              "question": "Mark the choice that reuses the stored result for a repeated call when the code mentions memo and 31.",
+              "hints": [
+                "Follow the job, which reuses the stored result for a repeated call.",
+                "The cache returns the stored result on the second call.",
+                "cache[value] = fn(value)"
+              ],
+              "explanation": "The cache returns the stored result on the second call.",
+              "xp_reward": 10,
+              "options": [
+                "cache == value",
+                "print(cache)",
+                "pass",
+                "cache[value] = fn(value)"
+              ],
+              "correct_answer": "cache[value] = fn(value)"
+            },
+            {
+              "id": "decorators-01-predict",
+              "type": "output_prediction",
+              "question": "After memo and 31, the code reuses the stored result for a repeated call, and the correct choice is the printed value.",
+              "hints": [
+                "Follow the job, which reuses the stored result for a repeated call.",
+                "The cache returns the stored result on the second call.",
+                "124"
+              ],
+              "explanation": "The cache returns the stored result on the second call.",
+              "xp_reward": 10,
+              "starter_code": "def memo(fn):\n    cache = {}\n    def wrapped(value):\n        if value not in cache:\n            cache[value] = fn(value)\n        return cache[value]\n    return wrapped\n@memo\ndef double(value):\n    return value * 2\nprint(double(31) + double(31))\n",
+              "options": [
+                "128",
+                "0",
+                "none",
+                "124"
+              ],
+              "correct_answer": "124"
+            },
+            {
+              "id": "decorators-01-order",
+              "type": "ordering",
+              "question": "The finished line reuses the stored result for a repeated call, so place its pieces in order for memo and 31.",
+              "hints": [
+                "Follow the job, which reuses the stored result for a repeated call.",
+                "cache[value] = fn(value) stores the result.",
+                "cache [ value ] = fn(value)"
+              ],
+              "explanation": "cache[value] = fn(value) stores the result.",
+              "xp_reward": 10,
+              "options": [
+                "cache",
+                "[",
+                "value",
+                "]",
+                "=",
+                "fn(value)",
+                "=="
+              ],
+              "correct_answer": [
+                "cache",
+                "[",
+                "value",
+                "]",
+                "=",
+                "fn(value)"
+              ]
+            },
+            {
+              "id": "decorators-01-fill",
+              "type": "fill_blank",
+              "question": "Finish the line that reuses the stored result for a repeated call by filling the blank for memo and 31.",
+              "hints": [
+                "Follow the job, which reuses the stored result for a repeated call.",
+                "The star doubles the stored input.",
+                "*"
+              ],
+              "explanation": "The star doubles the stored input.",
+              "xp_reward": 10,
+              "starter_code": "return value ___ 2\n",
+              "options": [
+                "+",
+                "-",
+                "==",
+                "*"
+              ],
+              "correct_answer": "*"
+            },
+            {
+              "id": "decorators-01-bug",
+              "type": "debugging",
+              "question": "Mark the line that breaks the job, which reuses the stored result for a repeated call, for memo and 31.",
+              "hints": [
+                "Follow the job, which reuses the stored result for a repeated call.",
+                "The cache stores zero instead of the result.",
+                "Line 5"
+              ],
+              "explanation": "The cache stores zero instead of the result.",
+              "xp_reward": 10,
+              "starter_code": "def memo(fn):\n    cache = {}\n    def wrapped(value):\n        if value not in cache:\n            cache[value] = 0\n        return cache[value]\n    return wrapped\n@memo\ndef double(value):\n    return value * 2\nprint(double(31))\n",
+              "correct_answer": "5"
+            },
+            {
+              "id": "decorators-01-predict-2",
+              "type": "output_prediction",
+              "question": "Follow the second program, which reuses the stored result for a repeated call for memo and 31, and choose its output.",
+              "hints": [
+                "Follow the job, which reuses the stored result for a repeated call.",
+                "The cache returns the stored result on the second call.",
+                "128"
+              ],
+              "explanation": "The cache returns the stored result on the second call.",
+              "xp_reward": 10,
+              "starter_code": "def memo(fn):\n    cache = {}\n    def wrapped(value):\n        if value not in cache:\n            cache[value] = fn(value)\n        return cache[value]\n    return wrapped\n@memo\ndef double(value):\n    return value * 2\nprint(double(32) + double(32))\n",
+              "options": [
+                "124",
+                "none",
+                "128",
+                "0"
+              ],
+              "correct_answer": "128"
+            },
+            {
+              "id": "decorators-01-write",
+              "type": "code",
+              "question": "Finish the program that reuses the stored result for a repeated call by filling the blank for memo and 31.",
+              "hints": [
+                "Follow the job, which reuses the stored result for a repeated call.",
+                "The cached result is what gets printed.",
+                "label = double(31)"
+              ],
+              "explanation": "The cached result is what gets printed.",
+              "xp_reward": 10,
+              "starter_code": "def memo(fn):\n    cache = {}\n    def wrapped(value):\n        if value not in cache:\n            cache[value] = fn(value)\n        return cache[value]\n    return wrapped\n@memo\ndef double(value):\n    return value * 2\nlabel = ___\nprint(label)\n",
+              "solution_code": "def memo(fn):\n    cache = {}\n    def wrapped(value):\n        if value not in cache:\n            cache[value] = fn(value)\n        return cache[value]\n    return wrapped\n@memo\ndef double(value):\n    return value * 2\nlabel = double(31)\nprint(label)\n",
+              "tests": [
+                {
+                  "name": "decorators-01-prints",
+                  "description": "The cached result is what gets printed.",
+                  "expected_stdout": "62\n",
+                  "required": true
+                }
+              ]
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "decorators-practice-1",
-      "title": "4. Call Counter (Practice)",
-      "description": "Implement `count_calls` that tracks how many times a function was invoked via `.calls`. The test checks that `inc(1)` equals `2`; `inc(2)` equals `3`.",
+      "title": "Call Counter",
+      "description": "Implement count_calls that tracks how many times a function was invoked via .calls. The test checks that inc(1) equals 2; inc(2) equals 3.",
       "order": 89,
       "difficulty": "intermediate",
       "duration_minutes": 6,
@@ -150,7 +650,7 @@
         "functions"
       ],
       "learning_objectives": [
-        "Attach state to a wrapper function"
+        "This step counts how many times the wrapper runs, using count_calls and 31."
       ],
       "starter_code": "def count_calls(fn):\n    def wrapper(*args, **kwargs):\n        # TODO: increment wrapper.calls and call fn\n        pass\n    wrapper.calls = 0\n    return wrapper\n\n@count_calls\ndef inc(x):\n    return x + 1\n",
       "solution_code": "def count_calls(fn):\n    def wrapper(*args, **kwargs):\n        wrapper.calls += 1\n        return fn(*args, **kwargs)\n    wrapper.calls = 0\n    return wrapper\n\n@count_calls\ndef inc(x):\n    return x + 1\n",
@@ -171,12 +671,178 @@
         "url": "https://docs.python.org/3/reference/compound_stmts.html#function-definitions",
         "license": "Python documentation license (PSF)"
       },
-      "xp_reward": 15
+      "xp_reward": 15,
+      "player_mode": "micro",
+      "sublessons": [
+        {
+          "id": "decorators-practice-1-micro",
+          "title": "Call Counter",
+          "description": "",
+          "order": 1,
+          "exercises": [
+            {
+              "id": "decorators-practice-1-teach",
+              "type": "teach",
+              "question": "This step counts how many times the wrapper runs, using count_calls and 31.",
+              "hints": [
+                "Follow the job, which counts how many times the wrapper runs.",
+                "Each call adds one to the wrapper tally.",
+                "wrapped.calls + 1"
+              ],
+              "explanation": "This step counts how many times the wrapper runs, using count_calls and 31.",
+              "xp_reward": 0,
+              "worked_example": "wrapped.calls + 1"
+            },
+            {
+              "id": "decorators-practice-1-mcq",
+              "type": "mcq",
+              "question": "Mark the choice that counts how many times the wrapper runs when the code mentions count_calls and 31.",
+              "hints": [
+                "Follow the job, which counts how many times the wrapper runs.",
+                "Each call adds one to the wrapper tally.",
+                "wrapped.calls + 1"
+              ],
+              "explanation": "Each call adds one to the wrapper tally.",
+              "xp_reward": 10,
+              "options": [
+                "wrapped.calls == 1",
+                "print(calls)",
+                "pass",
+                "wrapped.calls + 1"
+              ],
+              "correct_answer": "wrapped.calls + 1"
+            },
+            {
+              "id": "decorators-practice-1-predict",
+              "type": "output_prediction",
+              "question": "After count_calls and 31, the code counts how many times the wrapper runs, and the correct choice is the printed value.",
+              "hints": [
+                "Follow the job, which counts how many times the wrapper runs.",
+                "Each call adds one to the wrapper tally.",
+                "62"
+              ],
+              "explanation": "Each call adds one to the wrapper tally.",
+              "xp_reward": 10,
+              "starter_code": "def count_calls(fn):\n    def wrapped(value):\n        wrapped.calls = wrapped.calls + 1\n        return fn(value)\n    wrapped.calls = 0\n    return wrapped\n@count_calls\ndef echo(value):\n    return value\necho(31)\necho(31)\nprint(echo.calls * 31)\n",
+              "options": [
+                "31",
+                "none",
+                "0",
+                "62"
+              ],
+              "correct_answer": "62"
+            },
+            {
+              "id": "decorators-practice-1-order",
+              "type": "ordering",
+              "question": "The finished line counts how many times the wrapper runs, so place its pieces in order for count_calls and 31.",
+              "hints": [
+                "Follow the job, which counts how many times the wrapper runs.",
+                "seen = calls + 1 records one more call.",
+                "seen = calls + 1"
+              ],
+              "explanation": "seen = calls + 1 records one more call.",
+              "xp_reward": 10,
+              "options": [
+                "seen",
+                "=",
+                "calls",
+                "+",
+                "1",
+                "=="
+              ],
+              "correct_answer": [
+                "seen",
+                "=",
+                "calls",
+                "+",
+                "1"
+              ]
+            },
+            {
+              "id": "decorators-practice-1-fill",
+              "type": "fill_blank",
+              "question": "Finish the line that counts how many times the wrapper runs by filling the blank for count_calls and 31.",
+              "hints": [
+                "Follow the job, which counts how many times the wrapper runs.",
+                "Plus records one more call.",
+                "+"
+              ],
+              "explanation": "Plus records one more call.",
+              "xp_reward": 10,
+              "starter_code": "wrapped.calls = wrapped.calls ___ 1\n",
+              "options": [
+                "-",
+                "*",
+                "==",
+                "+"
+              ],
+              "correct_answer": "+"
+            },
+            {
+              "id": "decorators-practice-1-bug",
+              "type": "debugging",
+              "question": "Mark the line that breaks the job, which counts how many times the wrapper runs, for count_calls and.",
+              "hints": [
+                "Follow the job, which counts how many times the wrapper runs.",
+                "The tally adds zero, so the call is not recorded.",
+                "Line 3"
+              ],
+              "explanation": "The tally adds zero, so the call is not recorded.",
+              "xp_reward": 10,
+              "starter_code": "def count_calls(fn):\n    def wrapped(value):\n        wrapped.calls = wrapped.calls + 0\n        return fn(value)\n    wrapped.calls = 0\n    return wrapped\n@count_calls\ndef echo(value):\n    return value\necho(31)\nprint(echo.calls)\n",
+              "correct_answer": "3"
+            },
+            {
+              "id": "decorators-practice-1-predict-2",
+              "type": "output_prediction",
+              "question": "Follow the second program, which counts how many times the wrapper runs for count_calls and and choose its output.",
+              "hints": [
+                "Follow the job, which counts how many times the wrapper runs.",
+                "Each call adds one to the wrapper tally.",
+                "31"
+              ],
+              "explanation": "Each call adds one to the wrapper tally.",
+              "xp_reward": 10,
+              "starter_code": "def count_calls(fn):\n    def wrapped(value):\n        wrapped.calls = wrapped.calls + 1\n        return fn(value)\n    wrapped.calls = 0\n    return wrapped\n@count_calls\ndef echo(value):\n    return value\necho(31)\nprint(echo.calls * 31)\n",
+              "options": [
+                "62",
+                "none",
+                "31",
+                "0"
+              ],
+              "correct_answer": "31"
+            },
+            {
+              "id": "decorators-practice-1-write",
+              "type": "code",
+              "question": "Finish the program that counts how many times the wrapper runs by filling the blank for count_calls and 31.",
+              "hints": [
+                "Follow the job, which counts how many times the wrapper runs.",
+                "The call tally is what gets printed.",
+                "label = echo.calls"
+              ],
+              "explanation": "The call tally is what gets printed.",
+              "xp_reward": 10,
+              "starter_code": "def count_calls(fn):\n    def wrapped(value):\n        wrapped.calls = wrapped.calls + 1\n        return fn(value)\n    wrapped.calls = 0\n    return wrapped\n@count_calls\ndef echo(value):\n    return value\necho(31)\necho(31)\nlabel = ___\nprint(label)\n",
+              "solution_code": "def count_calls(fn):\n    def wrapped(value):\n        wrapped.calls = wrapped.calls + 1\n        return fn(value)\n    wrapped.calls = 0\n    return wrapped\n@count_calls\ndef echo(value):\n    return value\necho(31)\necho(31)\nlabel = echo.calls\nprint(label)\n",
+              "tests": [
+                {
+                  "name": "decorators-practice-1-prints",
+                  "description": "The call tally is what gets printed.",
+                  "expected_stdout": "2\n",
+                  "required": true
+                }
+              ]
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "decorators-checkpoint",
-      "title": "5. Unit 18 Checkpoint: Decorators",
-      "description": "Implement `ensure_non_negative` that raises ValueError if the first argument is negative. The test checks that `double(3)` equals `6`; invalid input raises `ValueError`.",
+      "title": "Practice Unit 18 Checkpoint Decorators",
+      "description": "Implement ensure_non_negative that raises ValueError if the first argument is negative. The test checks that double(3) equals 6; invalid input raises ValueError.",
       "order": 90,
       "difficulty": "intermediate",
       "duration_minutes": 10,
@@ -190,7 +856,7 @@
         "exceptions"
       ],
       "learning_objectives": [
-        "Validate arguments inside a decorator"
+        "This step rejects a non-positive argument before the call, using positive and 38."
       ],
       "starter_code": "def ensure_non_negative(fn):\n    def wrapper(x, *args, **kwargs):\n        # TODO: raise ValueError if x < 0 else call fn\n        pass\n    return wrapper\n\n@ensure_non_negative\ndef double(x):\n    return x * 2\n",
       "solution_code": "def ensure_non_negative(fn):\n    def wrapper(x, *args, **kwargs):\n        if x < 0:\n            raise ValueError('negative')\n        return fn(x, *args, **kwargs)\n    return wrapper\n\n@ensure_non_negative\ndef double(x):\n    return x * 2\n",
@@ -211,7 +877,175 @@
         "url": "https://docs.python.org/3/reference/compound_stmts.html#function-definitions",
         "license": "Python documentation license (PSF)"
       },
-      "xp_reward": 40
+      "xp_reward": 40,
+      "player_mode": "micro",
+      "sublessons": [
+        {
+          "id": "decorators-checkpoint-micro",
+          "title": "Practice Unit 18 Checkpoint Decorators",
+          "description": "",
+          "order": 1,
+          "exercises": [
+            {
+              "id": "decorators-checkpoint-teach",
+              "type": "teach",
+              "question": "This step rejects a non-positive argument before the call, using positive and 38.",
+              "hints": [
+                "Follow the job, which rejects a non-positive argument before the call.",
+                "The guard returns early when the argument is not positive.",
+                "if value <= 0: return 90"
+              ],
+              "explanation": "This step rejects a non-positive argument before the call, using positive and 38.",
+              "xp_reward": 0,
+              "worked_example": "if value <= 0: return 90"
+            },
+            {
+              "id": "decorators-checkpoint-mcq",
+              "type": "mcq",
+              "question": "Select the line that rejects a non-positive argument before the call, the one that belongs with positive and 38.",
+              "hints": [
+                "Follow the job, which rejects a non-positive argument before the call.",
+                "The guard returns early when the argument is not positive.",
+                "value <= 0"
+              ],
+              "explanation": "The guard returns early when the argument is not positive.",
+              "xp_reward": 10,
+              "options": [
+                "print(value)",
+                "value == 0",
+                "value <= 0",
+                "pass"
+              ],
+              "correct_answer": "value <= 0"
+            },
+            {
+              "id": "decorators-checkpoint-predict",
+              "type": "output_prediction",
+              "question": "Follow the code that rejects a non-positive argument before the call for positive and then choose the displayed value.",
+              "hints": [
+                "Follow the job, which rejects a non-positive argument before the call.",
+                "The guard returns early when the argument is not positive.",
+                "38"
+              ],
+              "explanation": "The guard returns early when the argument is not positive.",
+              "xp_reward": 10,
+              "starter_code": "def positive(fn):\n    def wrapped(value):\n        if value <= 0:\n            return 90\n        return fn(value)\n    return wrapped\n@positive\ndef echo(value):\n    return value\nprint(echo(38))\n",
+              "options": [
+                "90",
+                "38",
+                "none",
+                "0"
+              ],
+              "correct_answer": "38"
+            },
+            {
+              "id": "decorators-checkpoint-order",
+              "type": "ordering",
+              "question": "Order the pieces so the line rejects a non-positive argument before the call for positive and 38.",
+              "hints": [
+                "Follow the job, which rejects a non-positive argument before the call.",
+                "if value <= 0: return 90 rejects the bad argument.",
+                "if value <= 0: return 90"
+              ],
+              "explanation": "if value <= 0: return 90 rejects the bad argument.",
+              "xp_reward": 10,
+              "options": [
+                "if",
+                "value",
+                "<=",
+                "0:",
+                "return",
+                "90",
+                "=="
+              ],
+              "correct_answer": [
+                "if",
+                "value",
+                "<=",
+                "0:",
+                "return",
+                "90"
+              ]
+            },
+            {
+              "id": "decorators-checkpoint-fill",
+              "type": "fill_blank",
+              "question": "Supply the missing piece so the line rejects a non-positive argument before the call for positive and 38.",
+              "hints": [
+                "Follow the job, which rejects a non-positive argument before the call.",
+                "The check includes zero.",
+                "<="
+              ],
+              "explanation": "The check includes zero.",
+              "xp_reward": 10,
+              "starter_code": "if value ___ 0:\n    label = 1\n",
+              "options": [
+                "<",
+                "<=",
+                "==",
+                ">"
+              ],
+              "correct_answer": "<="
+            },
+            {
+              "id": "decorators-checkpoint-bug",
+              "type": "debugging",
+              "question": "The wrong line is the one that misses the job, which rejects a non-positive argument before the call, for positive and.",
+              "hints": [
+                "Follow the job, which rejects a non-positive argument before the call.",
+                "The guard rejects positive arguments.",
+                "Line 3"
+              ],
+              "explanation": "The guard rejects positive arguments.",
+              "xp_reward": 10,
+              "starter_code": "def positive(fn):\n    def wrapped(value):\n        if value > 0:\n            return 90\n        return fn(value)\n    return wrapped\n@positive\ndef echo(value):\n    return value\nprint(echo(38))\n",
+              "correct_answer": "3"
+            },
+            {
+              "id": "decorators-checkpoint-predict-2",
+              "type": "output_prediction",
+              "question": "A new input still has code that rejects a non-positive argument before the call for positive and 38, and the correct choice is what it prints.",
+              "hints": [
+                "Follow the job, which rejects a non-positive argument before the call.",
+                "The guard returns early when the argument is not positive.",
+                "90"
+              ],
+              "explanation": "The guard returns early when the argument is not positive.",
+              "xp_reward": 10,
+              "starter_code": "def positive(fn):\n    def wrapped(value):\n        if value <= 0:\n            return 90\n        return fn(value)\n    return wrapped\n@positive\ndef echo(value):\n    return value\nprint(echo(0))\n",
+              "options": [
+                "38",
+                "none",
+                "0",
+                "90"
+              ],
+              "correct_answer": "90"
+            },
+            {
+              "id": "decorators-checkpoint-write",
+              "type": "code",
+              "question": "The blank is the missing piece of the program that rejects a non-positive argument before the call for positive and.",
+              "hints": [
+                "Follow the job, which rejects a non-positive argument before the call.",
+                "The accepted argument is what gets printed.",
+                "label = echo(38)"
+              ],
+              "explanation": "The accepted argument is what gets printed.",
+              "xp_reward": 10,
+              "starter_code": "def positive(fn):\n    def wrapped(value):\n        if value <= 0:\n            return 90\n        return fn(value)\n    return wrapped\n@positive\ndef echo(value):\n    return value\nlabel = ___\nprint(label)\n",
+              "solution_code": "def positive(fn):\n    def wrapped(value):\n        if value <= 0:\n            return 90\n        return fn(value)\n    return wrapped\n@positive\ndef echo(value):\n    return value\nlabel = echo(38)\nprint(label)\n",
+              "tests": [
+                {
+                  "name": "decorators-checkpoint-prints",
+                  "description": "The accepted argument is what gets printed.",
+                  "expected_stdout": "38\n",
+                  "required": true
+                }
+              ]
+            }
+          ]
+        }
+      ]
     }
   ]
 }

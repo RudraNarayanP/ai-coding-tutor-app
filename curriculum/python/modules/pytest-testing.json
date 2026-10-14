@@ -15,8 +15,8 @@
   "lessons": [
     {
       "id": "pytest-testing-step-1",
-      "title": "1. Assert Helpers",
-      "description": "Write `assert_equal(actual, expected)` that raises AssertionError with a clear message on mismatch. The test checks that invalid input raises `AssertionError`.",
+      "title": "Practice Assert Helpers",
+      "description": "Write assert_equal(actual, expected) that raises AssertionError with a clear message on mismatch. The test checks that invalid input raises AssertionError.",
       "order": 101,
       "difficulty": "intermediate",
       "duration_minutes": 5,
@@ -30,7 +30,7 @@
         "exceptions"
       ],
       "learning_objectives": [
-        "Raise AssertionError with a helpful message"
+        "This step hands the reading back after the check passes, using check and 3."
       ],
       "starter_code": "def assert_equal(actual, expected):\n    # TODO: if actual != expected raise AssertionError(f'{actual!r} != {expected!r}')\n    pass\n",
       "solution_code": "def assert_equal(actual, expected):\n    if actual != expected:\n        raise AssertionError(f'{actual!r} != {expected!r}')\n",
@@ -51,12 +51,176 @@
         "url": "https://docs.pytest.org/en/stable/getting-started.html",
         "license": "MIT license (pytest documentation)"
       },
-      "xp_reward": 10
+      "xp_reward": 10,
+      "player_mode": "micro",
+      "sublessons": [
+        {
+          "id": "pytest-testing-step-1-micro",
+          "title": "Practice Assert Helpers",
+          "description": "",
+          "order": 1,
+          "exercises": [
+            {
+              "id": "pytest-testing-step-1-teach",
+              "type": "teach",
+              "question": "This step hands the reading back after the check passes, using check and 3.",
+              "hints": [
+                "Follow the job, which hands the reading back after the check passes.",
+                "assert value > 0 stops the function when the reading is not positive.",
+                "assert value > 0"
+              ],
+              "explanation": "This step hands the reading back after the check passes, using check and 3.",
+              "xp_reward": 0,
+              "worked_example": "assert value > 0"
+            },
+            {
+              "id": "pytest-testing-step-1-mcq",
+              "type": "mcq",
+              "question": "Select the line that hands the reading back after the check passes, the one that belongs with check and 3.",
+              "hints": [
+                "Follow the job, which hands the reading back after the check passes.",
+                "assert value > 0 stops the function when the reading is not positive.",
+                "assert value > 0"
+              ],
+              "explanation": "assert value > 0 stops the function when the reading is not positive.",
+              "xp_reward": 10,
+              "options": [
+                "value == 0",
+                "print(value)",
+                "pass",
+                "assert value > 0"
+              ],
+              "correct_answer": "assert value > 0"
+            },
+            {
+              "id": "pytest-testing-step-1-predict",
+              "type": "output_prediction",
+              "question": "Follow the code that hands the reading back after the check passes for check and 3, then choose the displayed value.",
+              "hints": [
+                "Follow the job, which hands the reading back after the check passes.",
+                "assert value > 0 stops the function when the reading is not positive.",
+                "48"
+              ],
+              "explanation": "assert value > 0 stops the function when the reading is not positive.",
+              "xp_reward": 10,
+              "starter_code": "def check(value):\n    assert value > 0\n    return value\nprint(check(45) + 3)\n",
+              "options": [
+                "0",
+                "50",
+                "48",
+                "none"
+              ],
+              "correct_answer": "48"
+            },
+            {
+              "id": "pytest-testing-step-1-order",
+              "type": "ordering",
+              "question": "Order the pieces so the line hands the reading back after the check passes for check and 3.",
+              "hints": [
+                "Follow the job, which hands the reading back after the check passes.",
+                "assert value > 0 is the check.",
+                "assert value > 0"
+              ],
+              "explanation": "assert value > 0 is the check.",
+              "xp_reward": 10,
+              "options": [
+                "assert",
+                "value",
+                ">",
+                "0",
+                "=="
+              ],
+              "correct_answer": [
+                "assert",
+                "value",
+                ">",
+                "0"
+              ]
+            },
+            {
+              "id": "pytest-testing-step-1-fill",
+              "type": "fill_blank",
+              "question": "Supply the missing piece so the line hands the reading back after the check passes for check and 3.",
+              "hints": [
+                "Follow the job, which hands the reading back after the check passes.",
+                "The check requires a positive reading.",
+                ">"
+              ],
+              "explanation": "The check requires a positive reading.",
+              "xp_reward": 10,
+              "starter_code": "assert value ___ 0\n",
+              "options": [
+                "+",
+                "*",
+                "-",
+                ">"
+              ],
+              "correct_answer": ">"
+            },
+            {
+              "id": "pytest-testing-step-1-bug",
+              "type": "debugging",
+              "question": "The wrong line is the one that misses the job, which hands the reading back after the check passes, for check and 3.",
+              "hints": [
+                "Follow the job, which hands the reading back after the check passes.",
+                "The check rejects positive readings.",
+                "Line 2"
+              ],
+              "explanation": "The check rejects positive readings.",
+              "xp_reward": 10,
+              "starter_code": "def check(value):\n    assert value < 0\n    return value\nprint(check(45))\n",
+              "correct_answer": "2"
+            },
+            {
+              "id": "pytest-testing-step-1-predict-2",
+              "type": "output_prediction",
+              "question": "A new input still has code that hands the reading back after the check passes for check and 3, and the correct choice is what it prints.",
+              "hints": [
+                "Follow the job, which hands the reading back after the check passes.",
+                "assert value > 0 stops the function when the reading is not positive.",
+                "50"
+              ],
+              "explanation": "assert value > 0 stops the function when the reading is not positive.",
+              "xp_reward": 10,
+              "starter_code": "def check(value):\n    assert value > 0\n    return value\nprint(check(47) + 3)\n",
+              "options": [
+                "0",
+                "48",
+                "none",
+                "50"
+              ],
+              "correct_answer": "50"
+            },
+            {
+              "id": "pytest-testing-step-1-write",
+              "type": "code",
+              "question": "The blank is the missing piece of the program that hands the reading back after the check passes for check and 3.",
+              "hints": [
+                "Follow the job, which hands the reading back after the check passes.",
+                "The checked reading is what gets printed.",
+                "label = check(45)"
+              ],
+              "explanation": "The checked reading is what gets printed.",
+              "xp_reward": 10,
+              "starter_code": "def check(value):\n    assert value > 0\n    return value\nlabel = ___\nprint(label)\n",
+              "solution_code": "def check(value):\n    assert value > 0\n    return value\nlabel = check(45)\nprint(label)\n",
+              "tests": [
+                {
+                  "name": "pytest-testing-step-1-prints",
+                  "description": "The checked reading is what gets printed.",
+                  "expected_stdout": "45\n",
+                  "required": true
+                }
+              ]
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "pytest-testing-step-2",
-      "title": "2. Parametrized Cases",
-      "description": "Implement `run_cases(fn, cases)` where each case is (args_tuple, expected). The test checks that `run_cases(lambda a, b: a + b, [((1, 2), 3), ((0, 0), 0)])` equals `2`.",
+      "title": "Practice Parametrized Cases",
+      "description": "Implement run_cases(fn, cases) where each case is (args_tuple, expected). The test checks that run_cases(lambda a, b: a + b, [((1, 2), 3), ((0, 0), 0)]) equals 2.",
       "order": 102,
       "difficulty": "intermediate",
       "duration_minutes": 5,
@@ -70,7 +234,7 @@
         "functions"
       ],
       "learning_objectives": [
-        "Drive multiple cases through one helper"
+        "This step hands the reading back when it matches the expected value, using check and 2."
       ],
       "starter_code": "def run_cases(fn, cases):\n    # TODO: for args, expected in cases: assert fn(*args) == expected; return len(cases)\n    pass\n",
       "solution_code": "def run_cases(fn, cases):\n    for args, expected in cases:\n        assert fn(*args) == expected\n    return len(cases)\n",
@@ -91,12 +255,176 @@
         "url": "https://docs.pytest.org/en/stable/getting-started.html",
         "license": "MIT license (pytest documentation)"
       },
-      "xp_reward": 10
+      "xp_reward": 10,
+      "player_mode": "micro",
+      "sublessons": [
+        {
+          "id": "pytest-testing-step-2-micro",
+          "title": "Practice Parametrized Cases",
+          "description": "",
+          "order": 1,
+          "exercises": [
+            {
+              "id": "pytest-testing-step-2-teach",
+              "type": "teach",
+              "question": "This step hands the reading back when it matches the expected value, using check and 2.",
+              "hints": [
+                "Follow the job, which hands the reading back when it matches the expected value.",
+                "assert value == expected checks one case.",
+                "assert value == expected"
+              ],
+              "explanation": "This step hands the reading back when it matches the expected value, using check and 2.",
+              "xp_reward": 0,
+              "worked_example": "assert value == expected"
+            },
+            {
+              "id": "pytest-testing-step-2-mcq",
+              "type": "mcq",
+              "question": "Mark the choice that hands the reading back when it matches the expected value when the code mentions check and 2.",
+              "hints": [
+                "Follow the job, which hands the reading back when it matches the expected value.",
+                "assert value == expected checks one case.",
+                "assert value == expected"
+              ],
+              "explanation": "assert value == expected checks one case.",
+              "xp_reward": 10,
+              "options": [
+                "value = expected",
+                "assert value == expected",
+                "print(value)",
+                "pass"
+              ],
+              "correct_answer": "assert value == expected"
+            },
+            {
+              "id": "pytest-testing-step-2-predict",
+              "type": "output_prediction",
+              "question": "After check and 2, the code hands the reading back when it matches the expected value, and the correct choice is the printed value.",
+              "hints": [
+                "Follow the job, which hands the reading back when it matches the expected value.",
+                "assert value == expected checks one case.",
+                "48"
+              ],
+              "explanation": "assert value == expected checks one case.",
+              "xp_reward": 10,
+              "starter_code": "def check(value, expected):\n    assert value == expected\n    return value\nprint(check(46, 46) + 2)\n",
+              "options": [
+                "51",
+                "48",
+                "none",
+                "0"
+              ],
+              "correct_answer": "48"
+            },
+            {
+              "id": "pytest-testing-step-2-order",
+              "type": "ordering",
+              "question": "The finished line hands the reading back when it matches the expected value, so place its pieces in order for check and 2.",
+              "hints": [
+                "Follow the job, which hands the reading back when it matches the expected value.",
+                "assert value == expected checks the case.",
+                "assert value == expected"
+              ],
+              "explanation": "assert value == expected checks the case.",
+              "xp_reward": 10,
+              "options": [
+                "assert",
+                "value",
+                "==",
+                "expected",
+                "="
+              ],
+              "correct_answer": [
+                "assert",
+                "value",
+                "==",
+                "expected"
+              ]
+            },
+            {
+              "id": "pytest-testing-step-2-fill",
+              "type": "fill_blank",
+              "question": "Finish the line that hands the reading back when it matches the expected value by filling the blank for check and 2.",
+              "hints": [
+                "Follow the job, which hands the reading back when it matches the expected value.",
+                "Plus adds two after the check.",
+                "+"
+              ],
+              "explanation": "Plus adds two after the check.",
+              "xp_reward": 10,
+              "starter_code": "return value ___ 2\n",
+              "options": [
+                "*",
+                "-",
+                "==",
+                "+"
+              ],
+              "correct_answer": "+"
+            },
+            {
+              "id": "pytest-testing-step-2-bug",
+              "type": "debugging",
+              "question": "Mark the line that breaks the job, which hands the reading back when it matches the expected value, for check and.",
+              "hints": [
+                "Follow the job, which hands the reading back when it matches the expected value.",
+                "The check rejects a match.",
+                "Line 2"
+              ],
+              "explanation": "The check rejects a match.",
+              "xp_reward": 10,
+              "starter_code": "def check(value, expected):\n    assert value != expected\n    return value\nprint(check(46, 46))\n",
+              "correct_answer": "2"
+            },
+            {
+              "id": "pytest-testing-step-2-predict-2",
+              "type": "output_prediction",
+              "question": "Follow the second program, which hands the reading back when it matches the expected value for check and 2, and choose its output.",
+              "hints": [
+                "Follow the job, which hands the reading back when it matches the expected value.",
+                "assert value == expected checks one case.",
+                "51"
+              ],
+              "explanation": "assert value == expected checks one case.",
+              "xp_reward": 10,
+              "starter_code": "def check(value, expected):\n    assert value == expected\n    return value\nprint(check(46, 46) + 5)\n",
+              "options": [
+                "48",
+                "none",
+                "0",
+                "51"
+              ],
+              "correct_answer": "51"
+            },
+            {
+              "id": "pytest-testing-step-2-write",
+              "type": "code",
+              "question": "Finish the program that hands the reading back when it matches the expected value by filling the blank for check and 2.",
+              "hints": [
+                "Follow the job, which hands the reading back when it matches the expected value.",
+                "The matching reading is what gets printed.",
+                "label = check(46, 46)"
+              ],
+              "explanation": "The matching reading is what gets printed.",
+              "xp_reward": 10,
+              "starter_code": "def check(value, expected):\n    assert value == expected\n    return value\nlabel = ___\nprint(label)\n",
+              "solution_code": "def check(value, expected):\n    assert value == expected\n    return value\nlabel = check(46, 46)\nprint(label)\n",
+              "tests": [
+                {
+                  "name": "pytest-testing-step-2-prints",
+                  "description": "The matching reading is what gets printed.",
+                  "expected_stdout": "46\n",
+                  "required": true
+                }
+              ]
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "pytest-testing-01",
-      "title": "3. Fixture-like Setup (Concept Challenge)",
-      "description": "Build `with_temp_dict(factory)` that creates a dict via factory, yields it to a callback, then clears it. The test checks that `with_temp_dict(dict, cb)` equals `{}`.",
+      "title": "Practice Fixture-like Setup",
+      "description": "Build with_temp_dict(factory) that creates a dict via factory, yields it to a callback, then clears it. The test checks that with_temp_dict(dict, cb) equals {}.",
       "order": 103,
       "difficulty": "intermediate",
       "duration_minutes": 8,
@@ -110,7 +438,7 @@
         "functions"
       ],
       "learning_objectives": [
-        "Simulate fixture setup/teardown"
+        "This step shows the setup reading after teardown adjusts it, using setup and 1."
       ],
       "starter_code": "def with_temp_dict(factory, callback):\n    # TODO: data = factory(); callback(data); data.clear(); return data\n    pass\n",
       "solution_code": "def with_temp_dict(factory, callback):\n    data = factory()\n    callback(data)\n    data.clear()\n    return data\n",
@@ -134,37 +462,175 @@
       "xp_reward": 25,
       "sublessons": [
         {
-          "id": "pytest-testing-01-order-1-sub",
-          "title": "Order the steps",
+          "id": "pytest-testing-01-micro",
+          "title": "Practice Fixture-like Setup",
+          "description": "",
           "order": 1,
           "exercises": [
             {
-              "id": "pytest-testing-01-order-1",
-              "type": "ordering",
-              "question": "Put the steps of `3. Fixture-like Setup (Concept Challenge)` back in order. Each line depends on the one before it.",
+              "id": "pytest-testing-01-teach",
+              "type": "teach",
+              "question": "This step shows the setup reading after teardown adjusts it, using setup and 1.",
+              "hints": [
+                "Follow the job, which shows the setup reading after teardown adjusts it.",
+                "setup provides the reading and teardown adjusts it.",
+                "teardown(setup())"
+              ],
+              "explanation": "This step shows the setup reading after teardown adjusts it, using setup and 1.",
+              "xp_reward": 0,
+              "worked_example": "teardown(setup())"
+            },
+            {
+              "id": "pytest-testing-01-mcq",
+              "type": "mcq",
+              "question": "Keep the choice that shows the setup reading after teardown adjusts it for setup and 1.",
+              "hints": [
+                "Follow the job, which shows the setup reading after teardown adjusts it.",
+                "setup provides the reading and teardown adjusts it.",
+                "teardown(setup())"
+              ],
+              "explanation": "setup provides the reading and teardown adjusts it.",
+              "xp_reward": 10,
               "options": [
-                "return data",
-                "data = factory()",
-                "callback(data)",
-                "data.clear()"
+                "setup == teardown",
+                "print(setup)",
+                "pass",
+                "teardown(setup())"
+              ],
+              "correct_answer": "teardown(setup())"
+            },
+            {
+              "id": "pytest-testing-01-predict",
+              "type": "output_prediction",
+              "question": "Trace the code that shows the setup reading after teardown adjusts it using setup and 1, and select what it displays.",
+              "hints": [
+                "Follow the job, which shows the setup reading after teardown adjusts it.",
+                "setup provides the reading and teardown adjusts it.",
+                "45"
+              ],
+              "explanation": "setup provides the reading and teardown adjusts it.",
+              "xp_reward": 10,
+              "starter_code": "def setup():\n    return 44\ndef teardown(value):\n    return value + 1\nprint(teardown(setup()))\n",
+              "options": [
+                "48",
+                "none",
+                "0",
+                "45"
+              ],
+              "correct_answer": "45"
+            },
+            {
+              "id": "pytest-testing-01-order",
+              "type": "ordering",
+              "question": "Tap the pieces, in order, of the line that shows the setup reading after teardown adjusts it for setup and 1.",
+              "hints": [
+                "Follow the job, which shows the setup reading after teardown adjusts it.",
+                "base = setup() stores the prepared reading.",
+                "base = setup ( )"
+              ],
+              "explanation": "base = setup() stores the prepared reading.",
+              "xp_reward": 10,
+              "options": [
+                "base",
+                "=",
+                "setup",
+                "(",
+                ")",
+                "=="
               ],
               "correct_answer": [
-                "data = factory()",
-                "callback(data)",
-                "data.clear()",
-                "return data"
+                "base",
+                "=",
+                "setup",
+                "(",
+                ")"
+              ]
+            },
+            {
+              "id": "pytest-testing-01-fill",
+              "type": "fill_blank",
+              "question": "The blank is the missing piece of the line that shows the setup reading after teardown adjusts it for setup and 1.",
+              "hints": [
+                "Follow the job, which shows the setup reading after teardown adjusts it.",
+                "Plus adjusts the prepared reading.",
+                "+"
               ],
-              "explanation": "The order the solution in “3. Fixture-like Setup (Concept Challenge)” actually runs in.",
-              "xp_reward": 10
+              "explanation": "Plus adjusts the prepared reading.",
+              "xp_reward": 10,
+              "starter_code": "return value ___ 1\n",
+              "options": [
+                "-",
+                "*",
+                "==",
+                "+"
+              ],
+              "correct_answer": "+"
+            },
+            {
+              "id": "pytest-testing-01-bug",
+              "type": "debugging",
+              "question": "Choose the line that does another job than the one that shows the setup reading after teardown adjusts it for setup and 1.",
+              "hints": [
+                "Follow the job, which shows the setup reading after teardown adjusts it.",
+                "Teardown subtracts instead of adjusting upward.",
+                "Line 4"
+              ],
+              "explanation": "Teardown subtracts instead of adjusting upward.",
+              "xp_reward": 10,
+              "starter_code": "def setup():\n    return 44\ndef teardown(value):\n    return value - 1\nprint(teardown(setup()))\n",
+              "correct_answer": "4"
+            },
+            {
+              "id": "pytest-testing-01-predict-2",
+              "type": "output_prediction",
+              "question": "Trace the second run, which shows the setup reading after teardown adjusts it for setup and 1, and select what it displays.",
+              "hints": [
+                "Follow the job, which shows the setup reading after teardown adjusts it.",
+                "setup provides the reading and teardown adjusts it.",
+                "48"
+              ],
+              "explanation": "setup provides the reading and teardown adjusts it.",
+              "xp_reward": 10,
+              "starter_code": "def setup():\n    return 44\ndef teardown(value):\n    return value + 4\nprint(teardown(setup()))\n",
+              "options": [
+                "45",
+                "none",
+                "48",
+                "0"
+              ],
+              "correct_answer": "48"
+            },
+            {
+              "id": "pytest-testing-01-write",
+              "type": "code",
+              "question": "Type the missing piece so the program shows the setup reading after teardown adjusts it for setup and 1 and prints it.",
+              "hints": [
+                "Follow the job, which shows the setup reading after teardown adjusts it.",
+                "The adjusted reading is what gets printed.",
+                "label = teardown(setup())"
+              ],
+              "explanation": "The adjusted reading is what gets printed.",
+              "xp_reward": 10,
+              "starter_code": "def setup():\n    return 44\ndef teardown(value):\n    return value + 1\nlabel = ___\nprint(label)\n",
+              "solution_code": "def setup():\n    return 44\ndef teardown(value):\n    return value + 1\nlabel = teardown(setup())\nprint(label)\n",
+              "tests": [
+                {
+                  "name": "pytest-testing-01-prints",
+                  "description": "The adjusted reading is what gets printed.",
+                  "expected_stdout": "45\n",
+                  "required": true
+                }
+              ]
             }
           ]
         }
-      ]
+      ],
+      "player_mode": "micro"
     },
     {
       "id": "pytest-testing-practice-1",
-      "title": "4. Approximate Float Compare (Practice)",
-      "description": "Implement `approx_equal(a, b, tol=1e-6)` for float comparisons in tests: two numbers count as equal when their distance is within `tol`. The test checks that `approx_equal(0.1 + 0.2, 0.3, tol=1e-9)` is true; `approx_equal(1.0, 1.1, tol=1e-3)` is false.",
+      "title": "Practice Approximate Float Compare",
+      "description": "Implement approx_equal(a, b, tol=1e-6) for float comparisons in tests: two numbers count as equal when their distance is within tol. The test checks that approx_equal(0.1 + 0.2, 0.3, tol=1e-9) is true; approx_equal(1.0, 1.1, tol=1e-3) is false.",
       "order": 104,
       "difficulty": "intermediate",
       "duration_minutes": 6,
@@ -178,7 +644,7 @@
         "numbers"
       ],
       "learning_objectives": [
-        "Compare floats with tolerance"
+        "This step keeps the reading when it sits close to the target, using close and 45."
       ],
       "starter_code": "def approx_equal(a, b, tol=1e-6):\n    # TODO: return True when a and b are within tol of each other\n    pass\n",
       "solution_code": "def approx_equal(a, b, tol=1e-6):\n    return abs(a - b) <= tol\n",
@@ -199,12 +665,178 @@
         "url": "https://docs.pytest.org/en/stable/getting-started.html",
         "license": "MIT license (pytest documentation)"
       },
-      "xp_reward": 15
+      "xp_reward": 15,
+      "player_mode": "micro",
+      "sublessons": [
+        {
+          "id": "pytest-testing-practice-1-micro",
+          "title": "Practice Approximate Float Compare",
+          "description": "",
+          "order": 1,
+          "exercises": [
+            {
+              "id": "pytest-testing-practice-1-teach",
+              "type": "teach",
+              "question": "This step keeps the reading when it sits close to the target, using close and 45.",
+              "hints": [
+                "Follow the job, which keeps the reading when it sits close to the target.",
+                "A small absolute gap counts as close.",
+                "gap < 3"
+              ],
+              "explanation": "This step keeps the reading when it sits close to the target, using close and 45.",
+              "xp_reward": 0,
+              "worked_example": "gap < 3"
+            },
+            {
+              "id": "pytest-testing-practice-1-mcq",
+              "type": "mcq",
+              "question": "Keep the choice that keeps the reading when it sits close to the target for close and 45.",
+              "hints": [
+                "Follow the job, which keeps the reading when it sits close to the target.",
+                "A small absolute gap counts as close.",
+                "gap < 3"
+              ],
+              "explanation": "A small absolute gap counts as close.",
+              "xp_reward": 10,
+              "options": [
+                "gap == 3",
+                "print(gap)",
+                "pass",
+                "gap < 3"
+              ],
+              "correct_answer": "gap < 3"
+            },
+            {
+              "id": "pytest-testing-practice-1-predict",
+              "type": "output_prediction",
+              "question": "Trace the code that keeps the reading when it sits close to the target using close and 45, and select what it displays.",
+              "hints": [
+                "Follow the job, which keeps the reading when it sits close to the target.",
+                "A small absolute gap counts as close.",
+                "44"
+              ],
+              "explanation": "A small absolute gap counts as close.",
+              "xp_reward": 10,
+              "starter_code": "def close(value, target):\n    gap = value - target\n    if gap < 0:\n        gap = -gap\n    return value if gap < 3 else value + 15\nprint(close(44, 45))\n",
+              "options": [
+                "none",
+                "59",
+                "0",
+                "44"
+              ],
+              "correct_answer": "44"
+            },
+            {
+              "id": "pytest-testing-practice-1-order",
+              "type": "ordering",
+              "question": "Tap the pieces, in order, of the line that keeps the reading when it sits close to the target for close and 45.",
+              "hints": [
+                "Follow the job, which keeps the reading when it sits close to the target.",
+                "gap = value - target is the distance.",
+                "gap = value - target"
+              ],
+              "explanation": "gap = value - target is the distance.",
+              "xp_reward": 10,
+              "options": [
+                "gap",
+                "=",
+                "value",
+                "-",
+                "target",
+                "+"
+              ],
+              "correct_answer": [
+                "gap",
+                "=",
+                "value",
+                "-",
+                "target"
+              ]
+            },
+            {
+              "id": "pytest-testing-practice-1-fill",
+              "type": "fill_blank",
+              "question": "The blank is the missing piece of the line that keeps the reading when it sits close to the target for close and 45.",
+              "hints": [
+                "Follow the job, which keeps the reading when it sits close to the target.",
+                "The tolerance keeps a gap below three.",
+                "<"
+              ],
+              "explanation": "The tolerance keeps a gap below three.",
+              "xp_reward": 10,
+              "starter_code": "if gap ___ 3:\n    label = 1\n",
+              "options": [
+                "+",
+                "-",
+                "<",
+                "*"
+              ],
+              "correct_answer": "<"
+            },
+            {
+              "id": "pytest-testing-practice-1-bug",
+              "type": "debugging",
+              "question": "Choose the line that does another job than the one that keeps the reading when it sits close to the target for close and.",
+              "hints": [
+                "Follow the job, which keeps the reading when it sits close to the target.",
+                "The tolerance is reversed.",
+                "Line 5"
+              ],
+              "explanation": "The tolerance is reversed.",
+              "xp_reward": 10,
+              "starter_code": "def close(value, target):\n    gap = value - target\n    if gap < 0:\n        gap = -gap\n    return value if gap > 3 else value + 15\nprint(close(44, 45))\n",
+              "correct_answer": "5"
+            },
+            {
+              "id": "pytest-testing-practice-1-predict-2",
+              "type": "output_prediction",
+              "question": "Trace the second run, which keeps the reading when it sits close to the target for close and 45, and select what it displays.",
+              "hints": [
+                "Follow the job, which keeps the reading when it sits close to the target.",
+                "A small absolute gap counts as close.",
+                "59"
+              ],
+              "explanation": "A small absolute gap counts as close.",
+              "xp_reward": 10,
+              "starter_code": "def close(value, target):\n    gap = value - target\n    if gap < 0:\n        gap = -gap\n    return value if gap < 3 else value + 15\nprint(close(44, 54))\n",
+              "options": [
+                "44",
+                "none",
+                "59",
+                "0"
+              ],
+              "correct_answer": "59"
+            },
+            {
+              "id": "pytest-testing-practice-1-write",
+              "type": "code",
+              "question": "Type the missing piece so the program keeps the reading when it sits close to the target for close and 45 and prints it.",
+              "hints": [
+                "Follow the job, which keeps the reading when it sits close to the target.",
+                "The close reading is what gets printed.",
+                "label = close(44, 45)"
+              ],
+              "explanation": "The close reading is what gets printed.",
+              "xp_reward": 10,
+              "starter_code": "def close(value, target):\n    gap = value - target\n    if gap < 0:\n        gap = -gap\n    return value if gap < 3 else value + 15\nlabel = ___\nprint(label)\n",
+              "solution_code": "def close(value, target):\n    gap = value - target\n    if gap < 0:\n        gap = -gap\n    return value if gap < 3 else value + 15\nlabel = close(44, 45)\nprint(label)\n",
+              "tests": [
+                {
+                  "name": "pytest-testing-practice-1-prints",
+                  "description": "The close reading is what gets printed.",
+                  "expected_stdout": "44\n",
+                  "required": true
+                }
+              ]
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "pytest-testing-checkpoint",
-      "title": "5. Unit 21 Checkpoint: Testing Patterns",
-      "description": "Implement `raises(exc_type, fn)` that returns True if fn() raises exc_type, else False. The test checks that `raises(ValueError, lambda: int('x'))` is true; `raises(ValueError, lambda: int('3'))` is false.",
+      "title": "Practice Unit 21 Checkpoint Testing Patterns",
+      "description": "Implement raises(exc_type, fn) that returns True if fn() raises exc_type, else False. The test checks that raises(ValueError, lambda: int('x')) is true; raises(ValueError, lambda: int('3')) is false.",
       "order": 105,
       "difficulty": "intermediate",
       "duration_minutes": 10,
@@ -218,7 +850,7 @@
         "exceptions"
       ],
       "learning_objectives": [
-        "Detect expected exceptions in a helper"
+        "This step shows the caught reading when the call fails, using fails holding stop."
       ],
       "starter_code": "def raises(exc_type, fn):\n    # TODO: call fn(); return True if exc_type raised else False\n    pass\n",
       "solution_code": "def raises(exc_type, fn):\n    try:\n        fn()\n    except exc_type:\n        return True\n    return False\n",
@@ -239,7 +871,173 @@
         "url": "https://docs.pytest.org/en/stable/reference/reference.html#pytest.raises",
         "license": "MIT license (pytest documentation)"
       },
-      "xp_reward": 40
+      "xp_reward": 40,
+      "player_mode": "micro",
+      "sublessons": [
+        {
+          "id": "pytest-testing-checkpoint-micro",
+          "title": "Practice Unit 21 Checkpoint Testing Patterns",
+          "description": "",
+          "order": 1,
+          "exercises": [
+            {
+              "id": "pytest-testing-checkpoint-teach",
+              "type": "teach",
+              "question": "This step shows the caught reading when the call fails, using fails holding stop.",
+              "hints": [
+                "Follow the job, which shows the caught reading when the call fails.",
+                "except RuntimeError runs when the call raises.",
+                "raise RuntimeError('stop')"
+              ],
+              "explanation": "This step shows the caught reading when the call fails, using fails holding stop.",
+              "xp_reward": 0,
+              "worked_example": "raise RuntimeError('stop')"
+            },
+            {
+              "id": "pytest-testing-checkpoint-mcq",
+              "type": "mcq",
+              "question": "The correct line shows the caught reading when the call fails, and it is the line tied to fails holding stop.",
+              "hints": [
+                "Follow the job, which shows the caught reading when the call fails.",
+                "except RuntimeError runs when the call raises.",
+                "raise RuntimeError('stop')"
+              ],
+              "explanation": "except RuntimeError runs when the call raises.",
+              "xp_reward": 10,
+              "options": [
+                "return None",
+                "raise RuntimeError('stop')",
+                "print(stop)",
+                "pass"
+              ],
+              "correct_answer": "raise RuntimeError('stop')"
+            },
+            {
+              "id": "pytest-testing-checkpoint-predict",
+              "type": "output_prediction",
+              "question": "The program shows the caught reading when the call fails with fails holding stop, so choose the printed value.",
+              "hints": [
+                "Follow the job, which shows the caught reading when the call fails.",
+                "except RuntimeError runs when the call raises.",
+                "52"
+              ],
+              "explanation": "except RuntimeError runs when the call raises.",
+              "xp_reward": 10,
+              "starter_code": "def fails():\n    raise RuntimeError('stop')\ntry:\n    fails()\n    print(58)\nexcept RuntimeError:\n    print(52)\n",
+              "options": [
+                "58",
+                "52",
+                "none",
+                "0"
+              ],
+              "correct_answer": "52"
+            },
+            {
+              "id": "pytest-testing-checkpoint-order",
+              "type": "ordering",
+              "question": "Build the line that shows the caught reading when the call fails for fails holding stop, from the first piece to the last.",
+              "hints": [
+                "Follow the job, which shows the caught reading when the call fails.",
+                "raise RuntimeError('stop') is the expected failure.",
+                "raise RuntimeError ( 'stop' )"
+              ],
+              "explanation": "raise RuntimeError('stop') is the expected failure.",
+              "xp_reward": 10,
+              "options": [
+                "raise",
+                "RuntimeError",
+                "(",
+                "'stop'",
+                ")",
+                "return"
+              ],
+              "correct_answer": [
+                "raise",
+                "RuntimeError",
+                "(",
+                "'stop'",
+                ")"
+              ]
+            },
+            {
+              "id": "pytest-testing-checkpoint-fill",
+              "type": "fill_blank",
+              "question": "Replace the blank with the piece that makes the line shows the caught reading when the call fails for fails holding stop.",
+              "hints": [
+                "Follow the job, which shows the caught reading when the call fails.",
+                "Plus builds the reading used when the call succeeds.",
+                "+"
+              ],
+              "explanation": "Plus builds the reading used when the call succeeds.",
+              "xp_reward": 10,
+              "starter_code": "shown = 52 ___ 6\n",
+              "options": [
+                "-",
+                "+",
+                "*",
+                "=="
+              ],
+              "correct_answer": "+"
+            },
+            {
+              "id": "pytest-testing-checkpoint-bug",
+              "type": "debugging",
+              "question": "Spot the line that fails the job, which shows the caught reading when the call fails, around fails holding stop.",
+              "hints": [
+                "Follow the job, which shows the caught reading when the call fails.",
+                "The call raises a different error than the handler catches.",
+                "Line 2"
+              ],
+              "explanation": "The call raises a different error than the handler catches.",
+              "xp_reward": 10,
+              "starter_code": "def fails():\n    raise ValueError('stop')\ntry:\n    fails()\n    print(58)\nexcept RuntimeError:\n    print(52)\n",
+              "correct_answer": "2"
+            },
+            {
+              "id": "pytest-testing-checkpoint-predict-2",
+              "type": "output_prediction",
+              "question": "The second program shows the caught reading when the call fails for fails holding stop, so choose the new printed value.",
+              "hints": [
+                "Follow the job, which shows the caught reading when the call fails.",
+                "except RuntimeError runs when the call raises.",
+                "58"
+              ],
+              "explanation": "except RuntimeError runs when the call raises.",
+              "xp_reward": 10,
+              "starter_code": "def fails():\n    return None\ntry:\n    fails()\n    print(58)\nexcept RuntimeError:\n    print(52)\n",
+              "options": [
+                "52",
+                "none",
+                "0",
+                "58"
+              ],
+              "correct_answer": "58"
+            },
+            {
+              "id": "pytest-testing-checkpoint-write",
+              "type": "code",
+              "question": "Complete the blank so this program shows the caught reading when the call fails and prints the result for fails holding stop.",
+              "hints": [
+                "Follow the job, which shows the caught reading when the call fails.",
+                "The caught reading is what gets printed.",
+                "label = 52"
+              ],
+              "explanation": "The caught reading is what gets printed.",
+              "xp_reward": 10,
+              "starter_code": "def fails():\n    raise RuntimeError('stop')\ntry:\n    fails()\n    label = 0\nexcept RuntimeError:\n    label = ___\nprint(label)\n",
+              "solution_code": "def fails():\n    raise RuntimeError('stop')\ntry:\n    fails()\n    label = 0\nexcept RuntimeError:\n    label = 52\nprint(label)\n",
+              "tests": [
+                {
+                  "name": "pytest-testing-checkpoint-prints",
+                  "description": "The caught reading is what gets printed.",
+                  "expected_stdout": "52\n",
+                  "required": true
+                }
+              ]
+            }
+          ]
+        }
+      ]
     }
   ]
 }

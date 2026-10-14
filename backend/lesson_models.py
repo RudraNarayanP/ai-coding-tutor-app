@@ -158,6 +158,7 @@ class PublicExerciseView(BaseModel):
     pairs: list[MatchingPair] = []
     starter_code: str = ""
     hints: list[str] = []
+    explanation: str = ""
     xp_reward: int = 10
 
 
@@ -197,6 +198,7 @@ def public_exercise_view(
         pairs=e.pairs,
         starter_code=public_starter_code(e.type, e.starter_code, e.blanks, e.question),
         hints=e.hints if teaching_fields else [],
+        explanation=(e.explanation or "") if teaching_fields else "",
         xp_reward=e.xp_reward,
     )
 

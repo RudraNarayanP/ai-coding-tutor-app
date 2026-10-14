@@ -89,6 +89,17 @@ async def test_correct_answer_contains_check_for_code():
     assert failed is False
 
 
+@pytest.mark.asyncio
+async def test_python_family_runs_on_the_host_without_docker():
+    from backend.sandbox import sandbox
+
+    engine = _engine(sandbox)
+    assert await engine._sandbox_supported("ai") is True
+    assert await engine._sandbox_supported("javascript") is True
+    assert await engine._sandbox_supported("java") is True
+    assert await engine._sandbox_supported("sql") is True
+
+
 def test_static_execution_result_shape_for_run_code():
     engine = _engine()
     lesson = SimpleNamespace(

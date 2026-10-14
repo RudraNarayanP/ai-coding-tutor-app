@@ -16,8 +16,8 @@
   "lessons": [
     {
       "id": "dictionaries-step-1",
-      "title": "1. Key-Value Lookup & Safe Retrieval (`.get()`)",
-      "description": "Finish `get_item_count(inventory, item)`. Return how many of `item` are in the dictionary, or `0` when the key is missing. Use `.get` so a missing key does not crash. For `{\"apple\": 10}`, apple is `10` and orange is `0`. The test checks that `get_item_count(inv, \"apple\")` equals `10`; `get_item_count(inv, \"orange\")` equals `0`.",
+      "title": "Practice Key-Value Lookup Safe Retrieval",
+      "description": "Finish get_item_count(inventory, item). Return how many of item are in the dictionary, or 0 when the key is missing. Use .get so a missing key does not crash. For {\"apple\": 10}, apple is 10 and orange is 0. The test checks that get_item_count(inv, \"apple\") equals 10; get_item_count(inv, \"orange\") equals 0.",
       "order": 56,
       "difficulty": "intermediate",
       "duration_minutes": 5,
@@ -29,7 +29,7 @@
         "lists"
       ],
       "learning_objectives": [
-        "Access and assign dictionary keys and use .get()"
+        "Using payload holding status, this step reads the value stored under status."
       ],
       "starter_code": "def get_item_count(inventory, item):\n    # TODO: return the count for item, or 0 when it is missing\n    pass\n",
       "tests": [
@@ -50,12 +50,176 @@
         "url": "https://docs.python.org/3/library/stdtypes.html#mapping-types-dict",
         "license": "Python documentation license (PSF)"
       },
-      "xp_reward": 10
+      "xp_reward": 10,
+      "player_mode": "micro",
+      "sublessons": [
+        {
+          "id": "dictionaries-step-1-micro",
+          "title": "Practice Key-Value Lookup Safe Retrieval",
+          "description": "",
+          "order": 1,
+          "exercises": [
+            {
+              "id": "dictionaries-step-1-teach",
+              "type": "teach",
+              "question": "Using payload holding status, this step reads the value stored under status.",
+              "hints": [
+                "Follow the job, which reads the value stored under status.",
+                "payload['status'] reads that entry.",
+                "payload['status']"
+              ],
+              "explanation": "Using payload holding status, this step reads the value stored under status.",
+              "xp_reward": 0,
+              "worked_example": "payload['status']"
+            },
+            {
+              "id": "dictionaries-step-1-mcq",
+              "type": "mcq",
+              "question": "Choose the line that reads the value stored under status, which is the line that fits payload and 1.",
+              "hints": [
+                "Follow the job, which reads the value stored under status.",
+                "payload['status'] reads that entry.",
+                "payload['status']"
+              ],
+              "explanation": "payload['status'] reads that entry.",
+              "xp_reward": 10,
+              "options": [
+                "len(payload)",
+                "payload['status']",
+                "payload + 1",
+                "payload[0]"
+              ],
+              "correct_answer": "payload['status']"
+            },
+            {
+              "id": "dictionaries-step-1-predict",
+              "type": "output_prediction",
+              "question": "Read the code that reads the value stored under status for payload and 1, and choose the value it prints.",
+              "hints": [
+                "Follow the job, which reads the value stored under status.",
+                "payload['status'] reads that entry.",
+                "34"
+              ],
+              "explanation": "payload['status'] reads that entry.",
+              "xp_reward": 10,
+              "starter_code": "payload = {'status': 34, 'ok': 1}\nprint(payload['status'])\n",
+              "options": [
+                "39",
+                "none",
+                "34",
+                "0"
+              ],
+              "correct_answer": "34"
+            },
+            {
+              "id": "dictionaries-step-1-order",
+              "type": "ordering",
+              "question": "Arrange the pieces of the line that reads the value stored under status, left to right, for payload and 1.",
+              "hints": [
+                "Follow the job, which reads the value stored under status.",
+                "payload['status'] reads the stored status.",
+                "payload [ 'status' ]"
+              ],
+              "explanation": "payload['status'] reads the stored status.",
+              "xp_reward": 10,
+              "options": [
+                "payload",
+                "[",
+                "'status'",
+                "]",
+                "len"
+              ],
+              "correct_answer": [
+                "payload",
+                "[",
+                "'status'",
+                "]"
+              ]
+            },
+            {
+              "id": "dictionaries-step-1-fill",
+              "type": "fill_blank",
+              "question": "Fill the blank so the line reads the value stored under status for payload and 1.",
+              "hints": [
+                "Follow the job, which reads the value stored under status.",
+                "The quoted name selects the status entry.",
+                "'status'"
+              ],
+              "explanation": "The quoted name selects the status entry.",
+              "xp_reward": 10,
+              "starter_code": "print(payload[___])\n",
+              "options": [
+                "'missing'",
+                "0",
+                "'status'",
+                "None"
+              ],
+              "correct_answer": "'status'"
+            },
+            {
+              "id": "dictionaries-step-1-bug",
+              "type": "debugging",
+              "question": "Find the line that misses the job, which reads the value stored under status, for payload and 1.",
+              "hints": [
+                "Follow the job, which reads the value stored under status.",
+                "The print asks for a name that was never stored.",
+                "Line 2"
+              ],
+              "explanation": "The print asks for a name that was never stored.",
+              "xp_reward": 10,
+              "starter_code": "payload = {'status': 1}\nprint(payload['missing'])\n",
+              "correct_answer": "2"
+            },
+            {
+              "id": "dictionaries-step-1-predict-2",
+              "type": "output_prediction",
+              "question": "On the new input, the code still reads the value stored under status for payload and 1, so choose what it prints.",
+              "hints": [
+                "Follow the job, which reads the value stored under status.",
+                "payload['status'] reads that entry.",
+                "39"
+              ],
+              "explanation": "payload['status'] reads that entry.",
+              "xp_reward": 10,
+              "starter_code": "payload = {'status': 39, 'ok': 1}\nprint(payload['status'])\n",
+              "options": [
+                "34",
+                "39",
+                "none",
+                "0"
+              ],
+              "correct_answer": "39"
+            },
+            {
+              "id": "dictionaries-step-1-write",
+              "type": "code",
+              "question": "Fill the blank so the program reads the value stored under status, and the print shows that result for payload and 1.",
+              "hints": [
+                "Follow the job, which reads the value stored under status.",
+                "The stored status is what gets printed.",
+                "label = payload['status']"
+              ],
+              "explanation": "The stored status is what gets printed.",
+              "xp_reward": 10,
+              "starter_code": "payload = {'status': 34, 'ok': 1}\nlabel = ___\nprint(label)\n",
+              "solution_code": "payload = {'status': 34, 'ok': 1}\nlabel = payload['status']\nprint(label)\n",
+              "tests": [
+                {
+                  "name": "dictionaries-step-1-prints",
+                  "description": "The stored status is what gets printed.",
+                  "expected_stdout": "34\n",
+                  "required": true
+                }
+              ]
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "dictionaries-step-2",
-      "title": "2. Iterating Over Dictionaries (`.items()`, `del`)",
-      "description": "Finish `total_inventory_count(inventory)` so it returns the sum of every stored count. `total_inventory_count({\"a\": 5, \"b\": 15})` equals `20`. The test checks that `total_inventory_count({\"a\": 5, \"b\": 15})` equals `20`.",
+      "title": "Practice Iterating Over Dictionaries, del",
+      "description": "Finish total_inventory_count(inventory) so it returns the sum of every stored count. total_inventory_count({\"a\": 5, \"b\": 15}) equals 20. The test checks that total_inventory_count({\"a\": 5, \"b\": 15}) equals 20.",
       "order": 57,
       "difficulty": "intermediate",
       "duration_minutes": 5,
@@ -68,7 +232,7 @@
         "lists"
       ],
       "learning_objectives": [
-        "Iterate over key-value pairs with .items()"
+        "This step adds every stored value, using pairs and 2."
       ],
       "starter_code": "def total_inventory_count(inventory):\n    # TODO: Return sum of all values in inventory using .items() or .values()\n    pass\n",
       "tests": [
@@ -89,12 +253,180 @@
         "url": "https://docs.python.org/3/tutorial/datastructures.html#dictionaries",
         "license": "Python documentation license (PSF)"
       },
-      "xp_reward": 10
+      "xp_reward": 10,
+      "player_mode": "micro",
+      "sublessons": [
+        {
+          "id": "dictionaries-step-2-micro",
+          "title": "Practice Iterating Over Dictionaries, del",
+          "description": "",
+          "order": 1,
+          "exercises": [
+            {
+              "id": "dictionaries-step-2-teach",
+              "type": "teach",
+              "question": "This step adds every stored value, using pairs and 2.",
+              "hints": [
+                "Follow the job, which adds every stored value.",
+                "pairs.items() walks each stored pair.",
+                "for key, value in pairs.items():"
+              ],
+              "explanation": "This step adds every stored value, using pairs and 2.",
+              "xp_reward": 0,
+              "worked_example": "for key, value in pairs.items():"
+            },
+            {
+              "id": "dictionaries-step-2-mcq",
+              "type": "mcq",
+              "question": "Pick the line that adds every stored value, not a line about something else, for pairs holding a.",
+              "hints": [
+                "Follow the job, which adds every stored value.",
+                "pairs.items() walks each stored pair.",
+                "pairs.items()"
+              ],
+              "explanation": "pairs.items() walks each stored pair.",
+              "xp_reward": 10,
+              "options": [
+                "pairs[0]",
+                "len(pairs)",
+                "pairs + 1",
+                "pairs.items()"
+              ],
+              "correct_answer": "pairs.items()"
+            },
+            {
+              "id": "dictionaries-step-2-predict",
+              "type": "output_prediction",
+              "question": "The displayed value is what the code prints when it adds every stored value for pairs holding a.",
+              "hints": [
+                "Follow the job, which adds every stored value.",
+                "pairs.items() walks each stored pair.",
+                "34"
+              ],
+              "explanation": "pairs.items() walks each stored pair.",
+              "xp_reward": 10,
+              "starter_code": "pairs = {'a': 32, 'b': 2}\ntotal = 0\nfor key, value in pairs.items():\n    total = total + value\nprint(total)\n",
+              "options": [
+                "37",
+                "none",
+                "0",
+                "34"
+              ],
+              "correct_answer": "34"
+            },
+            {
+              "id": "dictionaries-step-2-order",
+              "type": "ordering",
+              "question": "Place every piece so the result adds every stored value for pairs holding a.",
+              "hints": [
+                "Follow the job, which adds every stored value.",
+                "for key, value in pairs.items(): walks the pairs.",
+                "for key, value in pairs.items(): pass"
+              ],
+              "explanation": "for key, value in pairs.items(): walks the pairs.",
+              "xp_reward": 10,
+              "options": [
+                "for",
+                "key,",
+                "value",
+                "in",
+                "pairs.items():",
+                "pass",
+                "if"
+              ],
+              "correct_answer": [
+                "for",
+                "key,",
+                "value",
+                "in",
+                "pairs.items():",
+                "pass"
+              ]
+            },
+            {
+              "id": "dictionaries-step-2-fill",
+              "type": "fill_blank",
+              "question": "Drop in the piece that lets the line adds every stored value for pairs holding a.",
+              "hints": [
+                "Follow the job, which adds every stored value.",
+                "Plus adds the stored value.",
+                "+"
+              ],
+              "explanation": "Plus adds the stored value.",
+              "xp_reward": 10,
+              "starter_code": "total = total ___ value\n",
+              "options": [
+                "-",
+                "*",
+                "==",
+                "+"
+              ],
+              "correct_answer": "+"
+            },
+            {
+              "id": "dictionaries-step-2-bug",
+              "type": "debugging",
+              "question": "The mismatch misses the job, which adds every stored value, for pairs holding a.",
+              "hints": [
+                "Follow the job, which adds every stored value.",
+                "The walk reads names only, so the values are never added.",
+                "Line 3"
+              ],
+              "explanation": "The walk reads names only, so the values are never added.",
+              "xp_reward": 10,
+              "starter_code": "pairs = {'a': 32}\ntotal = 0\nfor key, value in pairs:\n    total = total + value\nprint(total)\n",
+              "correct_answer": "3"
+            },
+            {
+              "id": "dictionaries-step-2-predict-2",
+              "type": "output_prediction",
+              "question": "Choose the printed result of the second run that adds every stored value for pairs holding a.",
+              "hints": [
+                "Follow the job, which adds every stored value.",
+                "pairs.items() walks each stored pair.",
+                "37"
+              ],
+              "explanation": "pairs.items() walks each stored pair.",
+              "xp_reward": 10,
+              "starter_code": "pairs = {'a': 35, 'b': 2}\ntotal = 0\nfor key, value in pairs.items():\n    total = total + value\nprint(total)\n",
+              "options": [
+                "34",
+                "none",
+                "37",
+                "0"
+              ],
+              "correct_answer": "37"
+            },
+            {
+              "id": "dictionaries-step-2-write",
+              "type": "code",
+              "question": "Make the program adds every stored value by filling the blank for pairs holding a.",
+              "hints": [
+                "Follow the job, which adds every stored value.",
+                "The added values are what get printed.",
+                "label = total"
+              ],
+              "explanation": "The added values are what get printed.",
+              "xp_reward": 10,
+              "starter_code": "pairs = {'a': 32, 'b': 2}\ntotal = 0\nfor key, value in pairs.items():\n    total = total + value\nlabel = ___\nprint(label)\n",
+              "solution_code": "pairs = {'a': 32, 'b': 2}\ntotal = 0\nfor key, value in pairs.items():\n    total = total + value\nlabel = total\nprint(label)\n",
+              "tests": [
+                {
+                  "name": "dictionaries-step-2-prints",
+                  "description": "The added values are what get printed.",
+                  "expected_stdout": "34\n",
+                  "required": true
+                }
+              ]
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "dictionaries-01",
-      "title": "3. Inventory Management (Concept Challenge)",
-      "description": "Finish `create_inventory`, `add_items`, `decrement_items`, `remove_item` and 1 more. Create and mutate store inventory using dictionary methods. The test checks that `create_inventory(['coal', 'wood', 'wood'])` equals `{'coal': 1, 'wood': 2}`; `add_items({'wood': 4, 'iron': 1}, ['wood', 'iron', 'diamond'])` equals `{'wood': 5, 'iron': 2, 'diamond': 1}`; `decrement_items({'wood': 2, 'iron': 1}, ['wood', 'wood', 'wood', 'iron'])` equals `{'wood': 0, 'iron': 0}`.",
+      "title": "Practice Inventory Management",
+      "description": "Finish create_inventory, add_items, decrement_items, remove_item and 1 more. Create and mutate store inventory using dictionary methods. The test checks that create_inventory(['coal', 'wood', 'wood']) equals {'coal': 1, 'wood': 2}; add_items({'wood': 4, 'iron': 1}, ['wood', 'iron', 'diamond']) equals {'wood': 5, 'iron': 2, 'diamond': 1}; decrement_items({'wood': 2, 'iron': 1}, ['wood', 'wood', 'wood', 'iron']) equals {'wood': 0, 'iron': 0}.",
       "order": 58,
       "difficulty": "intermediate",
       "duration_minutes": 8,
@@ -108,10 +440,7 @@
         "tuples"
       ],
       "learning_objectives": [
-        "Create dictionaries from collections",
-        "Use .get() and dict assignment to update counts",
-        "Iterate over key-value pairs with .items()",
-        "Delete keys safely"
+        "The job in this step reads the value stored under status, and the code uses payload holding status."
       ],
       "starter_code": "def create_inventory(items):\n    \"\"\"Create inventory dict from item list.\"\"\"\n    pass\n\ndef add_items(inventory, items):\n    \"\"\"Increment or add items in inventory.\"\"\"\n    pass\n\ndef decrement_items(inventory, items):\n    \"\"\"Decrement counts, never below zero; ignore unknown items.\"\"\"\n    pass\n\ndef remove_item(inventory, item):\n    \"\"\"Remove item from inventory if present.\"\"\"\n    pass\n\ndef list_inventory(inventory):\n    \"\"\"Return list of (item, count) for items with count > 0.\"\"\"\n    pass\n",
       "tests": [
@@ -156,12 +485,176 @@
         "license": "MIT"
       },
       "solution_code": "def create_inventory(items):\n    \"\"\"Create inventory dict from item list.\"\"\"\n    inventory = {}\n    for item in items:\n        inventory[item] = inventory.get(item, 0) + 1\n    return inventory\n\n\ndef add_items(inventory, items):\n    \"\"\"Increment or add items in inventory.\"\"\"\n    for item in items:\n        inventory[item] = inventory.get(item, 0) + 1\n    return inventory\n\n\ndef decrement_items(inventory, items):\n    \"\"\"Decrement counts, never below zero; ignore unknown items.\"\"\"\n    for item in items:\n        if item in inventory and inventory[item] > 0:\n            inventory[item] -= 1\n    return inventory\n\n\ndef remove_item(inventory, item):\n    \"\"\"Remove item from inventory if present.\"\"\"\n    if item in inventory:\n        del inventory[item]\n    return inventory\n\n\ndef list_inventory(inventory):\n    \"\"\"Return list of (item, count) for items with count > 0.\"\"\"\n    return [(item, count) for item, count in inventory.items() if count > 0]\n",
-      "xp_reward": 25
+      "xp_reward": 25,
+      "player_mode": "micro",
+      "sublessons": [
+        {
+          "id": "dictionaries-01-micro",
+          "title": "Practice Inventory Management",
+          "description": "",
+          "order": 1,
+          "exercises": [
+            {
+              "id": "dictionaries-01-teach",
+              "type": "teach",
+              "question": "The job in this step reads the value stored under status, and the code uses payload holding status.",
+              "hints": [
+                "Follow the job, which reads the value stored under status.",
+                "payload['status'] reads that entry.",
+                "payload['status']"
+              ],
+              "explanation": "The job in this step reads the value stored under status, and the code uses payload holding status.",
+              "xp_reward": 0,
+              "worked_example": "payload['status']"
+            },
+            {
+              "id": "dictionaries-01-mcq",
+              "type": "mcq",
+              "question": "Keep the choice that reads the value stored under status for payload and 1.",
+              "hints": [
+                "Follow the job, which reads the value stored under status.",
+                "payload['status'] reads that entry.",
+                "payload['status']"
+              ],
+              "explanation": "payload['status'] reads that entry.",
+              "xp_reward": 10,
+              "options": [
+                "payload[0]",
+                "len(payload)",
+                "payload['status']",
+                "payload + 1"
+              ],
+              "correct_answer": "payload['status']"
+            },
+            {
+              "id": "dictionaries-01-predict",
+              "type": "output_prediction",
+              "question": "Trace the code that reads the value stored under status using payload and 1, and select what it displays.",
+              "hints": [
+                "Follow the job, which reads the value stored under status.",
+                "payload['status'] reads that entry.",
+                "36"
+              ],
+              "explanation": "payload['status'] reads that entry.",
+              "xp_reward": 10,
+              "starter_code": "payload = {'status': 36, 'ok': 1}\nprint(payload['status'])\n",
+              "options": [
+                "41",
+                "none",
+                "36",
+                "0"
+              ],
+              "correct_answer": "36"
+            },
+            {
+              "id": "dictionaries-01-order",
+              "type": "ordering",
+              "question": "Tap the pieces, in order, of the line that reads the value stored under status for payload and 1.",
+              "hints": [
+                "Follow the job, which reads the value stored under status.",
+                "payload['status'] reads the stored status.",
+                "payload [ 'status' ]"
+              ],
+              "explanation": "payload['status'] reads the stored status.",
+              "xp_reward": 10,
+              "options": [
+                "payload",
+                "[",
+                "'status'",
+                "]",
+                "len"
+              ],
+              "correct_answer": [
+                "payload",
+                "[",
+                "'status'",
+                "]"
+              ]
+            },
+            {
+              "id": "dictionaries-01-fill",
+              "type": "fill_blank",
+              "question": "The blank is the missing piece of the line that reads the value stored under status for payload and 1.",
+              "hints": [
+                "Follow the job, which reads the value stored under status.",
+                "The quoted name selects the status entry.",
+                "'status'"
+              ],
+              "explanation": "The quoted name selects the status entry.",
+              "xp_reward": 10,
+              "starter_code": "print(payload[___])\n",
+              "options": [
+                "'missing'",
+                "0",
+                "'status'",
+                "None"
+              ],
+              "correct_answer": "'status'"
+            },
+            {
+              "id": "dictionaries-01-bug",
+              "type": "debugging",
+              "question": "Choose the line that does another job than the one that reads the value stored under status for payload and 1.",
+              "hints": [
+                "Follow the job, which reads the value stored under status.",
+                "The print asks for a name that was never stored.",
+                "Line 2"
+              ],
+              "explanation": "The print asks for a name that was never stored.",
+              "xp_reward": 10,
+              "starter_code": "payload = {'status': 1}\nprint(payload['missing'])\n",
+              "correct_answer": "2"
+            },
+            {
+              "id": "dictionaries-01-predict-2",
+              "type": "output_prediction",
+              "question": "Trace the second run, which reads the value stored under status for payload and 1, and select what it displays.",
+              "hints": [
+                "Follow the job, which reads the value stored under status.",
+                "payload['status'] reads that entry.",
+                "41"
+              ],
+              "explanation": "payload['status'] reads that entry.",
+              "xp_reward": 10,
+              "starter_code": "payload = {'status': 41, 'ok': 1}\nprint(payload['status'])\n",
+              "options": [
+                "36",
+                "41",
+                "none",
+                "0"
+              ],
+              "correct_answer": "41"
+            },
+            {
+              "id": "dictionaries-01-write",
+              "type": "code",
+              "question": "Type the missing piece so the program reads the value stored under status for payload and 1 and prints it.",
+              "hints": [
+                "Follow the job, which reads the value stored under status.",
+                "The stored status is what gets printed.",
+                "label = payload['status']"
+              ],
+              "explanation": "The stored status is what gets printed.",
+              "xp_reward": 10,
+              "starter_code": "payload = {'status': 36, 'ok': 1}\nlabel = ___\nprint(label)\n",
+              "solution_code": "payload = {'status': 36, 'ok': 1}\nlabel = payload['status']\nprint(label)\n",
+              "tests": [
+                {
+                  "name": "dictionaries-01-prints",
+                  "description": "The stored status is what gets printed.",
+                  "expected_stdout": "36\n",
+                  "required": true
+                }
+              ]
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "dictionaries-practice-1",
-      "title": "4. Word Frequency Counter (Practice)",
-      "description": "Finish `count_words`. Count word occurrences in a list using a dictionary. The test checks that `count_words([\"a\", \"b\", \"a\"])` equals `{\"a\": 2, \"b\": 1}`.",
+      "title": "Practice Word Frequency Counter",
+      "description": "Finish count_words. Count word occurrences in a list using a dictionary. The test checks that count_words([\"a\", \"b\", \"a\"]) equals {\"a\": 2, \"b\": 1}.",
       "order": 59,
       "difficulty": "intermediate",
       "duration_minutes": 6,
@@ -174,7 +667,7 @@
         "lists"
       ],
       "learning_objectives": [
-        "Aggregate frequencies with dictionaries"
+        "This step counts how often the word was seen, using counts holding kelp."
       ],
       "starter_code": "def count_words(words):\n    # TODO: Return dict mapping word -> count\n    pass\n",
       "tests": [
@@ -195,12 +688,180 @@
         "url": "https://docs.python.org/3/tutorial/datastructures.html#dictionaries",
         "license": "Python documentation license (PSF)"
       },
-      "xp_reward": 15
+      "xp_reward": 15,
+      "player_mode": "micro",
+      "sublessons": [
+        {
+          "id": "dictionaries-practice-1-micro",
+          "title": "Practice Word Frequency Counter",
+          "description": "",
+          "order": 1,
+          "exercises": [
+            {
+              "id": "dictionaries-practice-1-teach",
+              "type": "teach",
+              "question": "This step counts how often the word was seen, using counts holding kelp.",
+              "hints": [
+                "Follow the job, which counts how often the word was seen.",
+                "counts.get(piece, 0) + 1 stores one more sighting.",
+                "counts.get(piece, 0) + 1"
+              ],
+              "explanation": "This step counts how often the word was seen, using counts holding kelp.",
+              "xp_reward": 0,
+              "worked_example": "counts.get(piece, 0) + 1"
+            },
+            {
+              "id": "dictionaries-practice-1-mcq",
+              "type": "mcq",
+              "question": "Mark the choice that counts how often the word was seen when the code mentions counts holding kelp.",
+              "hints": [
+                "Follow the job, which counts how often the word was seen.",
+                "counts.get(piece, 0) + 1 stores one more sighting.",
+                "counts.get(piece, 0) + 1"
+              ],
+              "explanation": "counts.get(piece, 0) + 1 stores one more sighting.",
+              "xp_reward": 10,
+              "options": [
+                "counts[0]",
+                "len(piece)",
+                "counts.get(piece, 0) + 1",
+                "piece == piece"
+              ],
+              "correct_answer": "counts.get(piece, 0) + 1"
+            },
+            {
+              "id": "dictionaries-practice-1-predict",
+              "type": "output_prediction",
+              "question": "After counts holding kelp, the code counts how often the word was seen, and the correct choice is the printed value.",
+              "hints": [
+                "Follow the job, which counts how often the word was seen.",
+                "counts.get(piece, 0) + 1 stores one more sighting.",
+                "4"
+              ],
+              "explanation": "counts.get(piece, 0) + 1 stores one more sighting.",
+              "xp_reward": 10,
+              "starter_code": "counts = {}\nfor piece in ['kelp', 'kelp', 'other']:\n    counts[piece] = counts.get(piece, 0) + 1\nprint(counts['kelp'] + 2)\n",
+              "options": [
+                "3",
+                "none",
+                "4",
+                "0"
+              ],
+              "correct_answer": "4"
+            },
+            {
+              "id": "dictionaries-practice-1-order",
+              "type": "ordering",
+              "question": "The finished line counts how often the word was seen, so place its pieces in order for counts holding kelp.",
+              "hints": [
+                "Follow the job, which counts how often the word was seen.",
+                "counts[piece] = seen stores the new tally.",
+                "counts [ piece ] = seen"
+              ],
+              "explanation": "counts[piece] = seen stores the new tally.",
+              "xp_reward": 10,
+              "options": [
+                "counts",
+                "[",
+                "piece",
+                "]",
+                "=",
+                "seen",
+                "=="
+              ],
+              "correct_answer": [
+                "counts",
+                "[",
+                "piece",
+                "]",
+                "=",
+                "seen"
+              ]
+            },
+            {
+              "id": "dictionaries-practice-1-fill",
+              "type": "fill_blank",
+              "question": "Finish the line that counts how often the word was seen by filling the blank for counts holding kelp.",
+              "hints": [
+                "Follow the job, which counts how often the word was seen.",
+                "Plus records one more sighting.",
+                "+"
+              ],
+              "explanation": "Plus records one more sighting.",
+              "xp_reward": 10,
+              "starter_code": "counts[piece] = counts.get(piece, 0) ___ 1\n",
+              "options": [
+                "==",
+                "-",
+                "*",
+                "+"
+              ],
+              "correct_answer": "+"
+            },
+            {
+              "id": "dictionaries-practice-1-bug",
+              "type": "debugging",
+              "question": "Mark the line that breaks the job, which counts how often the word was seen, for counts holding kelp.",
+              "hints": [
+                "Follow the job, which counts how often the word was seen.",
+                "The tally is stored without adding the new sighting.",
+                "Line 3"
+              ],
+              "explanation": "The tally is stored without adding the new sighting.",
+              "xp_reward": 10,
+              "starter_code": "counts = {}\nfor piece in ['kelp', 'kelp']:\n    counts[piece] = counts.get(piece, 0)\nprint(counts['kelp'])\n",
+              "correct_answer": "3"
+            },
+            {
+              "id": "dictionaries-practice-1-predict-2",
+              "type": "output_prediction",
+              "question": "Follow the second program, which counts how often the word was seen for counts holding kelp, and choose its output.",
+              "hints": [
+                "Follow the job, which counts how often the word was seen.",
+                "counts.get(piece, 0) + 1 stores one more sighting.",
+                "3"
+              ],
+              "explanation": "counts.get(piece, 0) + 1 stores one more sighting.",
+              "xp_reward": 10,
+              "starter_code": "counts = {}\nfor piece in ['kelp', 'other']:\n    counts[piece] = counts.get(piece, 0) + 1\nprint(counts['kelp'] + 2)\n",
+              "options": [
+                "4",
+                "3",
+                "none",
+                "0"
+              ],
+              "correct_answer": "3"
+            },
+            {
+              "id": "dictionaries-practice-1-write",
+              "type": "code",
+              "question": "Finish the program that counts how often the word was seen by filling the blank for counts holding kelp.",
+              "hints": [
+                "Follow the job, which counts how often the word was seen.",
+                "The word tally is what gets printed.",
+                "label = counts['kelp']"
+              ],
+              "explanation": "The word tally is what gets printed.",
+              "xp_reward": 10,
+              "starter_code": "counts = {}\nfor piece in ['kelp', 'kelp', 'other']:\n    counts[piece] = counts.get(piece, 0) + 1\nlabel = ___\nprint(label)\n",
+              "solution_code": "counts = {}\nfor piece in ['kelp', 'kelp', 'other']:\n    counts[piece] = counts.get(piece, 0) + 1\nlabel = counts['kelp']\nprint(label)\n",
+              "tests": [
+                {
+                  "name": "dictionaries-practice-1-prints",
+                  "description": "The word tally is what gets printed.",
+                  "expected_stdout": "2\n",
+                  "required": true
+                }
+              ]
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "dictionaries-checkpoint",
-      "title": "5. Unit 12 Checkpoint: Dictionaries Mastery",
-      "description": "Finish `merge_inventories(inv1, inv2)`. Return a new dictionary with the counts from both inventories added together. Do not change the originals. `merge_inventories({\"a\": 2}, {\"a\": 3, \"b\": 4})` equals `{\"a\": 5, \"b\": 4}`. The test checks that `merge_inventories({\"a\": 2}, {\"a\": 3, \"b\": 4})` equals `{\"a\": 5, \"b\": 4}`.",
+      "title": "Practice Unit 12 Checkpoint Dictionaries Mastery",
+      "description": "Finish merge_inventories(inv1, inv2). Return a new dictionary with the counts from both inventories added together. Do not change the originals. merge_inventories({\"a\": 2}, {\"a\": 3, \"b\": 4}) equals {\"a\": 5, \"b\": 4}. The test checks that merge_inventories({\"a\": 2}, {\"a\": 3, \"b\": 4}) equals {\"a\": 5, \"b\": 4}.",
       "order": 60,
       "difficulty": "intermediate",
       "duration_minutes": 10,
@@ -213,7 +874,7 @@
         "lists"
       ],
       "learning_objectives": [
-        "Master dictionary lookup and mutation"
+        "Using pairs holding a, this step adds every stored value."
       ],
       "starter_code": "def merge_inventories(inv1, inv2):\n    # TODO: Return new dict combining counts from inv1 and inv2\n    pass\n",
       "tests": [
@@ -234,7 +895,175 @@
         "url": "https://docs.python.org/3/tutorial/datastructures.html#dictionaries",
         "license": "Python documentation license (PSF)"
       },
-      "xp_reward": 40
+      "xp_reward": 40,
+      "player_mode": "micro",
+      "sublessons": [
+        {
+          "id": "dictionaries-checkpoint-micro",
+          "title": "Practice Unit 12 Checkpoint Dictionaries Mastery",
+          "description": "",
+          "order": 1,
+          "exercises": [
+            {
+              "id": "dictionaries-checkpoint-teach",
+              "type": "teach",
+              "question": "Using pairs holding a, this step adds every stored value.",
+              "hints": [
+                "Follow the job, which adds every stored value.",
+                "pairs.items() walks each stored pair.",
+                "for key, value in pairs.items():"
+              ],
+              "explanation": "Using pairs holding a, this step adds every stored value.",
+              "xp_reward": 0,
+              "worked_example": "for key, value in pairs.items():"
+            },
+            {
+              "id": "dictionaries-checkpoint-mcq",
+              "type": "mcq",
+              "question": "A correct choice adds every stored value and goes with pairs holding a.",
+              "hints": [
+                "Follow the job, which adds every stored value.",
+                "pairs.items() walks each stored pair.",
+                "pairs.items()"
+              ],
+              "explanation": "pairs.items() walks each stored pair.",
+              "xp_reward": 10,
+              "options": [
+                "pairs[0]",
+                "pairs + 1",
+                "len(pairs)",
+                "pairs.items()"
+              ],
+              "correct_answer": "pairs.items()"
+            },
+            {
+              "id": "dictionaries-checkpoint-predict",
+              "type": "output_prediction",
+              "question": "Select the output after the code adds every stored value, using pairs holding a.",
+              "hints": [
+                "Follow the job, which adds every stored value.",
+                "pairs.items() walks each stored pair.",
+                "42"
+              ],
+              "explanation": "pairs.items() walks each stored pair.",
+              "xp_reward": 10,
+              "starter_code": "pairs = {'a': 40, 'b': 2}\ntotal = 0\nfor key, value in pairs.items():\n    total = total + value\nprint(total)\n",
+              "options": [
+                "45",
+                "none",
+                "0",
+                "42"
+              ],
+              "correct_answer": "42"
+            },
+            {
+              "id": "dictionaries-checkpoint-order",
+              "type": "ordering",
+              "question": "Make the line that adds every stored value by ordering the pieces for pairs holding a.",
+              "hints": [
+                "Follow the job, which adds every stored value.",
+                "for key, value in pairs.items(): walks the pairs.",
+                "for key, value in pairs.items(): pass"
+              ],
+              "explanation": "for key, value in pairs.items(): walks the pairs.",
+              "xp_reward": 10,
+              "options": [
+                "for",
+                "key,",
+                "value",
+                "in",
+                "pairs.items():",
+                "pass",
+                "if"
+              ],
+              "correct_answer": [
+                "for",
+                "key,",
+                "value",
+                "in",
+                "pairs.items():",
+                "pass"
+              ]
+            },
+            {
+              "id": "dictionaries-checkpoint-fill",
+              "type": "fill_blank",
+              "question": "Complete the line for pairs holding a so that it adds every stored value.",
+              "hints": [
+                "Follow the job, which adds every stored value.",
+                "Plus adds the stored value.",
+                "+"
+              ],
+              "explanation": "Plus adds the stored value.",
+              "xp_reward": 10,
+              "starter_code": "total = total ___ value\n",
+              "options": [
+                "-",
+                "*",
+                "==",
+                "+"
+              ],
+              "correct_answer": "+"
+            },
+            {
+              "id": "dictionaries-checkpoint-bug",
+              "type": "debugging",
+              "question": "Select the line that gets in the way of the job, which adds every stored value, for pairs holding a.",
+              "hints": [
+                "Follow the job, which adds every stored value.",
+                "The walk reads names only, so the values are never added.",
+                "Line 3"
+              ],
+              "explanation": "The walk reads names only, so the values are never added.",
+              "xp_reward": 10,
+              "starter_code": "pairs = {'a': 40}\ntotal = 0\nfor key, value in pairs:\n    total = total + value\nprint(total)\n",
+              "correct_answer": "3"
+            },
+            {
+              "id": "dictionaries-checkpoint-predict-2",
+              "type": "output_prediction",
+              "question": "With the new data around pairs holding a, the code adds every stored value, so select the new output.",
+              "hints": [
+                "Follow the job, which adds every stored value.",
+                "pairs.items() walks each stored pair.",
+                "45"
+              ],
+              "explanation": "pairs.items() walks each stored pair.",
+              "xp_reward": 10,
+              "starter_code": "pairs = {'a': 43, 'b': 2}\ntotal = 0\nfor key, value in pairs.items():\n    total = total + value\nprint(total)\n",
+              "options": [
+                "42",
+                "none",
+                "45",
+                "0"
+              ],
+              "correct_answer": "45"
+            },
+            {
+              "id": "dictionaries-checkpoint-write",
+              "type": "code",
+              "question": "The printed result shows up after you fill the blank so the code adds every stored value for pairs holding a.",
+              "hints": [
+                "Follow the job, which adds every stored value.",
+                "The added values are what get printed.",
+                "label = total"
+              ],
+              "explanation": "The added values are what get printed.",
+              "xp_reward": 10,
+              "starter_code": "pairs = {'a': 40, 'b': 2}\ntotal = 0\nfor key, value in pairs.items():\n    total = total + value\nlabel = ___\nprint(label)\n",
+              "solution_code": "pairs = {'a': 40, 'b': 2}\ntotal = 0\nfor key, value in pairs.items():\n    total = total + value\nlabel = total\nprint(label)\n",
+              "tests": [
+                {
+                  "name": "dictionaries-checkpoint-prints",
+                  "description": "The added values are what get printed.",
+                  "expected_stdout": "42\n",
+                  "required": true
+                }
+              ]
+            }
+          ]
+        }
+      ]
     }
   ]
 }

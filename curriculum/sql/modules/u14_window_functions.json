@@ -14,8 +14,8 @@
   "lessons": [
     {
       "id": "sql-14",
-      "title": "14. Window Functions",
-      "description": "For each department, rank employees by `salary` descending with `ROW_NUMBER() OVER (PARTITION BY department ORDER BY salary DESC)`. Name that column `rank`. The test checks that you return at least 5 rows and a column named `rank`.",
+      "title": "Practice Window Functions",
+      "description": "For each department, rank employees by salary descending with ROW_NUMBER() OVER (PARTITION BY department ORDER BY salary DESC). Name that column rank. The test checks that you return at least 5 rows and a column named rank.",
       "order": 14,
       "difficulty": "advanced",
       "duration_minutes": 5,
@@ -45,10 +45,189 @@
         "license": "Public domain (SQLite documentation)"
       },
       "learning_objectives": [
-        "Compute per-row results without collapsing rows using OVER()",
-        "Partition a window with PARTITION BY and order it with ORDER BY"
+        "This step ranks employees by salary, using name and 1."
       ],
-      "xp_reward": 10
+      "xp_reward": 10,
+      "player_mode": "micro",
+      "sublessons": [
+        {
+          "id": "sql-14-micro",
+          "title": "Practice Window Functions",
+          "description": "",
+          "order": 1,
+          "exercises": [
+            {
+              "id": "sql-14-teach",
+              "type": "teach",
+              "question": "This step ranks employees by salary, using name and 1.",
+              "hints": [
+                "Follow the job, which ranks employees by salary.",
+                "RANK over salary descending puts the highest salary at place 1.",
+                "RANK() OVER (ORDER BY salary DESC)"
+              ],
+              "explanation": "This step ranks employees by salary, using name and 1.",
+              "xp_reward": 0,
+              "worked_example": "RANK() OVER (ORDER BY salary DESC)"
+            },
+            {
+              "id": "sql-14-mcq",
+              "type": "mcq",
+              "question": "Keep the choice that ranks employees by salary for name and 1.",
+              "hints": [
+                "Follow the job, which ranks employees by salary.",
+                "RANK over salary descending puts the highest salary at place 1.",
+                "RANK() OVER (ORDER BY salary DESC)"
+              ],
+              "explanation": "RANK over salary descending puts the highest salary at place 1.",
+              "xp_reward": 10,
+              "options": [
+                "INSERT INTO employees",
+                "DROP TABLE employees",
+                "salary == salary",
+                "RANK() OVER (ORDER BY salary DESC)"
+              ],
+              "correct_answer": "RANK() OVER (ORDER BY salary DESC)"
+            },
+            {
+              "id": "sql-14-predict",
+              "type": "output_prediction",
+              "question": "Trace the code that ranks employees by salary using name and 1, and select what it displays.",
+              "hints": [
+                "Follow the job, which ranks employees by salary.",
+                "RANK over salary descending puts the highest salary at place 1.",
+                "┌──────┐\n│ name │\n├──────┤\n│ Jane │\n└──────┘"
+              ],
+              "explanation": "RANK over salary descending puts the highest salary at place 1.",
+              "xp_reward": 10,
+              "starter_code": "SELECT name FROM (SELECT first_name AS name, RANK() OVER (ORDER BY salary DESC) AS place FROM employees) ranked WHERE place = 1;\n",
+              "options": [
+                "0",
+                "none",
+                "┌──────┐\n│ name │\n├──────┤\n│ Jane │\n└──────┘",
+                "┌──────┐\n│ name │\n├──────┤\n│ John │\n└──────┘"
+              ],
+              "correct_answer": "┌──────┐\n│ name │\n├──────┤\n│ Jane │\n└──────┘"
+            },
+            {
+              "id": "sql-14-order",
+              "type": "ordering",
+              "question": "Tap the pieces, in order, of the line that ranks employees by salary for name and 1.",
+              "hints": [
+                "Follow the job, which ranks employees by salary.",
+                "RANK over salary descending puts the highest salary at place 1.",
+                "SELECT first_name, RANK() OVER (ORDER BY salary DESC) AS place FROM employees"
+              ],
+              "explanation": "RANK over salary descending puts the highest salary at place 1.",
+              "xp_reward": 10,
+              "options": [
+                "SELECT",
+                "first_name,",
+                "RANK()",
+                "OVER",
+                "(ORDER",
+                "BY",
+                "salary",
+                "DESC)",
+                "AS",
+                "place",
+                "FROM",
+                "employees",
+                "DROP"
+              ],
+              "correct_answer": [
+                "SELECT",
+                "first_name,",
+                "RANK()",
+                "OVER",
+                "(ORDER",
+                "BY",
+                "salary",
+                "DESC)",
+                "AS",
+                "place",
+                "FROM",
+                "employees"
+              ]
+            },
+            {
+              "id": "sql-14-fill",
+              "type": "fill_blank",
+              "question": "The blank is the missing piece of the line that ranks employees by salary for name and 1.",
+              "hints": [
+                "Follow the job, which ranks employees by salary.",
+                "RANK over salary descending puts the highest salary at place 1.",
+                "DESC"
+              ],
+              "explanation": "RANK over salary descending puts the highest salary at place 1.",
+              "xp_reward": 10,
+              "starter_code": "SELECT first_name FROM employees ORDER BY salary ___;",
+              "options": [
+                "ASC",
+                "WHERE",
+                "LIMIT",
+                "DESC"
+              ],
+              "correct_answer": "DESC"
+            },
+            {
+              "id": "sql-14-bug",
+              "type": "debugging",
+              "question": "Choose the line that does another job than the one that ranks employees by salary for name and.",
+              "hints": [
+                "Follow the job, which ranks employees by salary.",
+                "The sort is ascending, so the lowest salary comes first.",
+                "Line 1"
+              ],
+              "explanation": "The sort is ascending, so the lowest salary comes first.",
+              "xp_reward": 10,
+              "starter_code": "SELECT first_name FROM employees ORDER BY salary ASC LIMIT 1;",
+              "correct_answer": "1"
+            },
+            {
+              "id": "sql-14-predict-2",
+              "type": "output_prediction",
+              "question": "Trace the second run, which ranks employees by salary for name and 1, and select what it displays.",
+              "hints": [
+                "Follow the job, which ranks employees by salary.",
+                "RANK over salary descending puts the highest salary at place 1.",
+                "┌──────┐\n│ name │\n├──────┤\n│ John │\n└──────┘"
+              ],
+              "explanation": "RANK over salary descending puts the highest salary at place 1.",
+              "xp_reward": 10,
+              "starter_code": "SELECT name FROM (SELECT first_name AS name, RANK() OVER (ORDER BY salary DESC) AS place FROM employees) ranked WHERE place = 2;\n",
+              "options": [
+                "┌──────┐\n│ name │\n├──────┤\n│ Jane │\n└──────┘",
+                "none",
+                "┌──────┐\n│ name │\n├──────┤\n│ John │\n└──────┘",
+                "0"
+              ],
+              "correct_answer": "┌──────┐\n│ name │\n├──────┤\n│ John │\n└──────┘"
+            },
+            {
+              "id": "sql-14-write",
+              "type": "code",
+              "question": "Type the missing piece so the program ranks employees by salary for name and 1 and prints it.",
+              "hints": [
+                "Follow the job, which ranks employees by salary.",
+                "The query result is what this step ranks employees by salary.",
+                "WHERE place = 1"
+              ],
+              "explanation": "The query result is what this step ranks employees by salary.",
+              "xp_reward": 10,
+              "starter_code": "SELECT name FROM (SELECT first_name AS name, RANK() OVER (ORDER BY salary DESC) AS place FROM employees) ranked WHERE place = ___;\n",
+              "solution_code": "SELECT name FROM (SELECT first_name AS name, RANK() OVER (ORDER BY salary DESC) AS place FROM employees) ranked WHERE place = (1);\n",
+              "tests": [
+                {
+                  "name": "sql-14-prints",
+                  "description": "The query result is what this step ranks employees by salary.",
+                  "expected_stdout": "┌──────┐\n│ name │\n├──────┤\n│ Jane │\n└──────┘",
+                  "required": true
+                }
+              ]
+            }
+          ]
+        }
+      ]
     }
   ]
 }

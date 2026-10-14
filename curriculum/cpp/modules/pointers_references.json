@@ -14,8 +14,8 @@
   "lessons": [
     {
       "id": "cpp-ptr-01",
-      "title": "1. Pointers & References in C++",
-      "description": "Finish `swapValues` so the two integers trade places through their references. Save the first value in a temporary variable before you overwrite it. After `swapValues(x, y)` with `x` equal to 10 and `y` equal to 20, `x` is 20 and `y` is 10. The test checks that `x` equals `20 || y != 10`.",
+      "title": "Practice Pointers References in C",
+      "description": "Finish swapValues so the two integers trade places through their references. Save the first value in a temporary variable before you overwrite it. After swapValues(x, y) with x equal to 10 and y equal to 20, x is 20 and y is 10. The test checks that x equals 20 || y != 10.",
       "order": 31,
       "difficulty": "intermediate",
       "duration_minutes": 5,
@@ -45,32 +45,173 @@
         "license": "CC BY-SA 4.0 (cppreference.com)"
       },
       "learning_objectives": [
-        "Swap two integers through references without losing a value"
+        "This step reads the integer through a pointer, using value and 22."
       ],
       "xp_reward": 10,
       "sublessons": [
         {
-          "id": "cpp-ptr-01-mcq-1-sub",
-          "title": "Reading through a pointer",
+          "id": "cpp-ptr-01-micro",
+          "title": "Practice Pointers References in C",
+          "description": "",
           "order": 1,
           "exercises": [
             {
-              "id": "cpp-ptr-01-mcq-1",
-              "type": "mcq",
-              "question": "Given `int value = 7;` and `int* ptr = &value;`, which expression reaches the number `value` holds *through the pointer*?",
-              "options": [
-                "ptr",
-                "&value",
-                "ptr->value",
-                "*ptr"
+              "id": "cpp-ptr-01-teach",
+              "type": "teach",
+              "question": "This step reads the integer through a pointer, using value and 22.",
+              "hints": [
+                "Follow the job, which reads the integer through a pointer.",
+                "*slot reads the integer stored at the address.",
+                "int* slot = &value;"
               ],
-              "correct_answer": "*ptr",
-              "explanation": "`*ptr` dereferences the address and yields the pointed-to object. `ptr` alone is the address, and `&value` just recomputes it.",
-              "xp_reward": 10
+              "explanation": "This step reads the integer through a pointer, using value and 22.",
+              "xp_reward": 0,
+              "worked_example": "int* slot = &value;"
+            },
+            {
+              "id": "cpp-ptr-01-mcq",
+              "type": "mcq",
+              "question": "Mark the choice that reads the integer through a pointer when the code mentions value and 22.",
+              "hints": [
+                "Follow the job, which reads the integer through a pointer.",
+                "*slot reads the integer stored at the address.",
+                "int* slot = &value;"
+              ],
+              "explanation": "*slot reads the integer stored at the address.",
+              "xp_reward": 10,
+              "options": [
+                "slot == &value;",
+                "int* slot = &value;",
+                "return value;",
+                "slot = slot;"
+              ],
+              "correct_answer": "int* slot = &value;"
+            },
+            {
+              "id": "cpp-ptr-01-predict",
+              "type": "output_prediction",
+              "question": "After value and the code reads the integer through a pointer, and the correct choice is the printed value.",
+              "hints": [
+                "Follow the job, which reads the integer through a pointer.",
+                "*slot reads the integer stored at the address.",
+                "22"
+              ],
+              "explanation": "*slot reads the integer stored at the address.",
+              "xp_reward": 10,
+              "starter_code": "#include <iostream>\n#include <string>\n#include <vector>\n#include <algorithm>\n#include <memory>\nint main() {\n    int value = 22;\n    int* slot = &value;\n    std::cout << *slot << std::endl;\n    return 0;\n}\n",
+              "options": [
+                "25",
+                "22",
+                "none",
+                "0"
+              ],
+              "correct_answer": "22"
+            },
+            {
+              "id": "cpp-ptr-01-order",
+              "type": "ordering",
+              "question": "The finished line reads the integer through a pointer, so place its pieces in order for value and 22.",
+              "hints": [
+                "Follow the job, which reads the integer through a pointer.",
+                "*slot reads the integer stored at the address.",
+                "int* slot = &left;"
+              ],
+              "explanation": "*slot reads the integer stored at the address.",
+              "xp_reward": 10,
+              "options": [
+                "int*",
+                "slot",
+                "=",
+                "&left;",
+                "=="
+              ],
+              "correct_answer": [
+                "int*",
+                "slot",
+                "=",
+                "&left;"
+              ]
+            },
+            {
+              "id": "cpp-ptr-01-fill",
+              "type": "fill_blank",
+              "question": "Finish the line that reads the integer through a pointer by filling the blank for value and 22.",
+              "hints": [
+                "Follow the job, which reads the integer through a pointer.",
+                "*slot reads the integer stored at the address.",
+                "&"
+              ],
+              "explanation": "*slot reads the integer stored at the address.",
+              "xp_reward": 10,
+              "starter_code": "int* slot = ___left;",
+              "options": [
+                "*",
+                "&",
+                "+",
+                "-"
+              ],
+              "correct_answer": "&"
+            },
+            {
+              "id": "cpp-ptr-01-bug",
+              "type": "debugging",
+              "question": "Mark the line that breaks the job, which reads the integer through a pointer, for value and 22.",
+              "hints": [
+                "Follow the job, which reads the integer through a pointer.",
+                "The print writes the address instead of the integer it points at.",
+                "Line 9"
+              ],
+              "explanation": "The print writes the address instead of the integer it points at.",
+              "xp_reward": 10,
+              "starter_code": "#include <iostream>\n#include <string>\n#include <vector>\n#include <algorithm>\n#include <memory>\nint main() {\n    int value = 22;\n    int* slot = &value;\n    std::cout << slot << std::endl;\n    return 0;\n}\n",
+              "correct_answer": "9"
+            },
+            {
+              "id": "cpp-ptr-01-predict-2",
+              "type": "output_prediction",
+              "question": "Follow the second program, which reads the integer through a pointer for value and 22, and choose its output.",
+              "hints": [
+                "Follow the job, which reads the integer through a pointer.",
+                "*slot reads the integer stored at the address.",
+                "25"
+              ],
+              "explanation": "*slot reads the integer stored at the address.",
+              "xp_reward": 10,
+              "starter_code": "#include <iostream>\n#include <string>\n#include <vector>\n#include <algorithm>\n#include <memory>\nint main() {\n    int value = 25;\n    int* slot = &value;\n    std::cout << *slot << std::endl;\n    return 0;\n}\n",
+              "options": [
+                "22",
+                "none",
+                "0",
+                "25"
+              ],
+              "correct_answer": "25"
+            },
+            {
+              "id": "cpp-ptr-01-write",
+              "type": "code",
+              "question": "Finish the program that reads the integer through a pointer by filling the blank for value and.",
+              "hints": [
+                "Follow the job, which reads the integer through a pointer.",
+                "The printed value is the result after this step reads the integer through a pointer.",
+                "int label = *slot;"
+              ],
+              "explanation": "The printed value is the result after this step reads the integer through a pointer.",
+              "xp_reward": 10,
+              "starter_code": "#include <iostream>\n#include <string>\n#include <vector>\n#include <algorithm>\n#include <memory>\nint main() {\n    int value = 22;\n    int* slot = &value;\n    int label = ___;\n    std::cout << label << std::endl;\n    return 0;\n}\n",
+              "solution_code": "#include <iostream>\n#include <string>\n#include <vector>\n#include <algorithm>\n#include <memory>\nint main() {\n    int value = 22;\n    int* slot = &value;\n    int label = *slot;\n    std::cout << label << std::endl;\n    return 0;\n}\n",
+              "tests": [
+                {
+                  "name": "cpp-ptr-01-prints",
+                  "description": "The printed value is the result after this step reads the integer through a poin",
+                  "expected_stdout": "22\n",
+                  "required": true
+                }
+              ]
             }
           ]
         }
-      ]
+      ],
+      "player_mode": "micro"
     }
   ]
 }

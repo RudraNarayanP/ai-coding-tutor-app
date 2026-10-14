@@ -14,8 +14,8 @@
   "lessons": [
     {
       "id": "fs-state-update",
-      "title": "1. Immutable Set Field",
-      "description": "Implement `set_field(state, key, value)` returning a new dict. The test checks that `set_field(s, 'a', 2)['a']` equals `2`; `s['a']` equals `1`.",
+      "title": "Practice Immutable Set Field",
+      "description": "Implement set_field(state, key, value) returning a new dict. The test checks that set_field(s, 'a', 2)['a'] equals 2; s['a'] equals 1.",
       "order": 11,
       "difficulty": "intermediate",
       "duration_minutes": 5,
@@ -27,7 +27,7 @@
       ],
       "prerequisites": [],
       "learning_objectives": [
-        "Immutably update state fields"
+        "This step copies the state and changes one field, using state holding name."
       ],
       "starter_code": "def set_field(state, key, value):\n    # TODO\n    pass\n",
       "solution_code": "def set_field(state, key, value):\n    out = dict(state)\n    out[key] = value\n    return out\n",
@@ -51,35 +51,175 @@
       "xp_reward": 10,
       "sublessons": [
         {
-          "id": "fs-state-update-order-1-sub",
-          "title": "Order the steps",
+          "id": "fs-state-update-micro",
+          "title": "Practice Immutable Set Field",
+          "description": "",
           "order": 1,
           "exercises": [
             {
-              "id": "fs-state-update-order-1",
-              "type": "ordering",
-              "question": "Put the steps of `1. Immutable Set Field` back in order. Each line depends on the one before it.",
+              "id": "fs-state-update-teach",
+              "type": "teach",
+              "question": "This step copies the state and changes one field, using state holding name.",
+              "hints": [
+                "Follow the job, which copies the state and changes one field.",
+                "Spreading the old state and setting the field makes a new state.",
+                "{**state, 'name': name}"
+              ],
+              "explanation": "This step copies the state and changes one field, using state holding name.",
+              "xp_reward": 0,
+              "worked_example": "{**state, 'name': name}"
+            },
+            {
+              "id": "fs-state-update-mcq",
+              "type": "mcq",
+              "question": "A correct choice copies the state and changes one field and goes with state holding name.",
+              "hints": [
+                "Follow the job, which copies the state and changes one field.",
+                "Spreading the old state and setting the field makes a new state.",
+                "{**state, 'name': name}"
+              ],
+              "explanation": "Spreading the old state and setting the field makes a new state.",
+              "xp_reward": 10,
               "options": [
-                "out[key] = value",
-                "return out",
-                "out = dict(state)"
+                "state == state",
+                "return state",
+                "{**state, 'name': name}",
+                "pass"
+              ],
+              "correct_answer": "{**state, 'name': name}"
+            },
+            {
+              "id": "fs-state-update-predict",
+              "type": "output_prediction",
+              "question": "Select the output after the code copies the state and changes one field, using state holding name.",
+              "hints": [
+                "Follow the job, which copies the state and changes one field.",
+                "Spreading the old state and setting the field makes a new state.",
+                "umber"
+              ],
+              "explanation": "Spreading the old state and setting the field makes a new state.",
+              "xp_reward": 10,
+              "starter_code": "state = {'name': 'old'}\nnext_state = {**state, 'name': 'umber'}\nprint(next_state['name'])\n",
+              "options": [
+                "zircon",
+                "none",
+                "umber",
+                "0"
+              ],
+              "correct_answer": "umber"
+            },
+            {
+              "id": "fs-state-update-order",
+              "type": "ordering",
+              "question": "Make the line that copies the state and changes one field by ordering the pieces for state holding name.",
+              "hints": [
+                "Follow the job, which copies the state and changes one field.",
+                "Spreading the old state and setting the field makes a new state.",
+                "next_state = {**state, 'name': name}"
+              ],
+              "explanation": "Spreading the old state and setting the field makes a new state.",
+              "xp_reward": 10,
+              "options": [
+                "next_state",
+                "=",
+                "{**state,",
+                "'name':",
+                "name}",
+                "=="
               ],
               "correct_answer": [
-                "out = dict(state)",
-                "out[key] = value",
-                "return out"
+                "next_state",
+                "=",
+                "{**state,",
+                "'name':",
+                "name}"
+              ]
+            },
+            {
+              "id": "fs-state-update-fill",
+              "type": "fill_blank",
+              "question": "Complete the line for state holding name so that it copies the state and changes one field.",
+              "hints": [
+                "Follow the job, which copies the state and changes one field.",
+                "Spreading the old state and setting the field makes a new state.",
+                "'umber'"
               ],
-              "explanation": "The order the solution in “1. Immutable Set Field” actually runs in.",
-              "xp_reward": 10
+              "explanation": "Spreading the old state and setting the field makes a new state.",
+              "xp_reward": 10,
+              "starter_code": "next_state = {**state, 'name': ___}\n",
+              "options": [
+                "'zircon'",
+                "'old'",
+                "'umber'",
+                "'id'"
+              ],
+              "correct_answer": "'umber'"
+            },
+            {
+              "id": "fs-state-update-bug",
+              "type": "debugging",
+              "question": "Select the line that gets in the way of the job, which copies the state and changes one field, for state holding name.",
+              "hints": [
+                "Follow the job, which copies the state and changes one field.",
+                "The update writes into the old state instead of a copy.",
+                "Line 2"
+              ],
+              "explanation": "The update writes into the old state instead of a copy.",
+              "xp_reward": 10,
+              "starter_code": "state = {'name': 'old'}\nstate['name'] = 'umber'\nprint(state['name'])\n",
+              "correct_answer": "2"
+            },
+            {
+              "id": "fs-state-update-predict-2",
+              "type": "output_prediction",
+              "question": "With the new data around state holding name, the code copies the state and changes one field, so select the new output.",
+              "hints": [
+                "Follow the job, which copies the state and changes one field.",
+                "Spreading the old state and setting the field makes a new state.",
+                "zircon"
+              ],
+              "explanation": "Spreading the old state and setting the field makes a new state.",
+              "xp_reward": 10,
+              "starter_code": "state = {'name': 'old'}\nnext_state = {**state, 'name': 'zircon'}\nprint(next_state['name'])\n",
+              "options": [
+                "umber",
+                "0",
+                "none",
+                "zircon"
+              ],
+              "correct_answer": "zircon"
+            },
+            {
+              "id": "fs-state-update-write",
+              "type": "code",
+              "question": "The printed result shows up after you fill the blank so the code copies the state and changes one field for state holding name.",
+              "hints": [
+                "Follow the job, which copies the state and changes one field.",
+                "The printed value is the result after this step copies the state and changes one field.",
+                "label = next_state['name']"
+              ],
+              "explanation": "The printed value is the result after this step copies the state and changes one field.",
+              "xp_reward": 10,
+              "starter_code": "state = {'name': 'old'}\nnext_state = {**state, 'name': 'umber'}\nlabel = ___\nprint(label)\n",
+              "solution_code": "state = {'name': 'old'}\nnext_state = {**state, 'name': 'umber'}\nlabel = next_state['name']\nprint(label)\n",
+              "tests": [
+                {
+                  "name": "fs-state-update-prints",
+                  "description": "The printed value is the result after this step copies the state and changes one",
+                  "expected_stdout": "umber\n",
+                  "required": true
+                }
+              ]
             }
           ]
         }
-      ]
+      ],
+      "player_mode": "micro"
     },
     {
       "id": "fs-state-reducer",
-      "title": "2. Simple Reducer",
-      "description": "Implement `reduce(state, action)` handling inc and set actions for {'count': int}. The test checks that `reduce({'count': 1}, {'type': 'inc'})` equals `{'count': 2}`; `reduce({'count': 1}, {'type': 'set', 'value': 9})` equals `{'count': 9}`.",
+      "title": "Practice Simple Reducer",
+      "description": "Implement reduce(state, action) handling inc and set actions for {'count': int}. The test checks that reduce({'count': 1}, {'type': 'inc'}) equals {'count': 2}; reduce({'count': 1}, {'type': 'set', 'value': 9}) equals {'count': 9}.",
       "order": 12,
       "difficulty": "intermediate",
       "duration_minutes": 5,
@@ -91,7 +231,7 @@
       ],
       "prerequisites": [],
       "learning_objectives": [
-        "Implement a tiny state reducer"
+        "This step adds the action amount to the count, using state holding n."
       ],
       "starter_code": "def reduce(state, action):\n    # TODO\n    pass\n",
       "solution_code": "def reduce(state, action):\n    t = action.get('type')\n    if t == 'inc':\n        return {'count': state['count'] + 1}\n    if t == 'set':\n        return {'count': action['value']}\n    return state\n",
@@ -115,44 +255,175 @@
       "xp_reward": 10,
       "sublessons": [
         {
-          "id": "reducer-dec-sub",
-          "title": "Extend the reducer",
+          "id": "fs-state-reducer-micro",
+          "title": "Practice Simple Reducer",
+          "description": "",
           "order": 1,
           "exercises": [
             {
-              "id": "reducer-dec-code-1",
+              "id": "fs-state-reducer-teach",
+              "type": "teach",
+              "question": "This step adds the action amount to the count, using state holding n.",
+              "hints": [
+                "Follow the job, which adds the action amount to the count.",
+                "An add action increases the count by the by field.",
+                "action['type'] == 'add'"
+              ],
+              "explanation": "This step adds the action amount to the count, using state holding n.",
+              "xp_reward": 0,
+              "worked_example": "action['type'] == 'add'"
+            },
+            {
+              "id": "fs-state-reducer-mcq",
+              "type": "mcq",
+              "question": "Pick the line that adds the action amount to the count, not a line about something else, for state holding n.",
+              "hints": [
+                "Follow the job, which adds the action amount to the count.",
+                "An add action increases the count by the by field.",
+                "action['type'] == 'add'"
+              ],
+              "explanation": "An add action increases the count by the by field.",
+              "xp_reward": 10,
+              "options": [
+                "state == action",
+                "return state",
+                "pass",
+                "action['type'] == 'add'"
+              ],
+              "correct_answer": "action['type'] == 'add'"
+            },
+            {
+              "id": "fs-state-reducer-predict",
+              "type": "output_prediction",
+              "question": "The displayed value is what the code prints when it adds the action amount to the count for state holding n.",
+              "hints": [
+                "Follow the job, which adds the action amount to the count.",
+                "An add action increases the count by the by field.",
+                "50"
+              ],
+              "explanation": "An add action increases the count by the by field.",
+              "xp_reward": 10,
+              "starter_code": "state = {'n': 1}\naction = {'type': 'add', 'by': 49}\nprint(state['n'] + action['by'] if action['type'] == 'add' else state['n'])\n",
+              "options": [
+                "53",
+                "none",
+                "0",
+                "50"
+              ],
+              "correct_answer": "50"
+            },
+            {
+              "id": "fs-state-reducer-order",
+              "type": "ordering",
+              "question": "Place every piece so the result adds the action amount to the count for state holding n.",
+              "hints": [
+                "Follow the job, which adds the action amount to the count.",
+                "An add action increases the count by the by field.",
+                "if action['type'] == 'add': pass"
+              ],
+              "explanation": "An add action increases the count by the by field.",
+              "xp_reward": 10,
+              "options": [
+                "if",
+                "action['type']",
+                "==",
+                "'add':",
+                "pass",
+                "!="
+              ],
+              "correct_answer": [
+                "if",
+                "action['type']",
+                "==",
+                "'add':",
+                "pass"
+              ]
+            },
+            {
+              "id": "fs-state-reducer-fill",
+              "type": "fill_blank",
+              "question": "Drop in the piece that lets the line adds the action amount to the count for state holding n.",
+              "hints": [
+                "Follow the job, which adds the action amount to the count.",
+                "An add action increases the count by the by field.",
+                "=="
+              ],
+              "explanation": "An add action increases the count by the by field.",
+              "xp_reward": 10,
+              "starter_code": "if action['type'] ___ 'add':\n    nxt = state['n']\n",
+              "options": [
+                "!=",
+                ">",
+                "<",
+                "=="
+              ],
+              "correct_answer": "=="
+            },
+            {
+              "id": "fs-state-reducer-bug",
+              "type": "debugging",
+              "question": "The mismatch misses the job, which adds the action amount to the count, for state holding n.",
+              "hints": [
+                "Follow the job, which adds the action amount to the count.",
+                "The print shows the old count and ignores the action.",
+                "Line 3"
+              ],
+              "explanation": "The print shows the old count and ignores the action.",
+              "xp_reward": 10,
+              "starter_code": "state = {'n': 1}\naction = {'type': 'add', 'by': 49}\nprint(state['n'])\n",
+              "correct_answer": "3"
+            },
+            {
+              "id": "fs-state-reducer-predict-2",
+              "type": "output_prediction",
+              "question": "Choose the printed result of the second run that adds the action amount to the count for state holding n.",
+              "hints": [
+                "Follow the job, which adds the action amount to the count.",
+                "An add action increases the count by the by field.",
+                "53"
+              ],
+              "explanation": "An add action increases the count by the by field.",
+              "xp_reward": 10,
+              "starter_code": "state = {'n': 1}\naction = {'type': 'add', 'by': 52}\nprint(state['n'] + action['by'] if action['type'] == 'add' else state['n'])\n",
+              "options": [
+                "50",
+                "none",
+                "53",
+                "0"
+              ],
+              "correct_answer": "53"
+            },
+            {
+              "id": "fs-state-reducer-write",
               "type": "code",
-              "question": "Extend the reducer: implement `reduce(state, action)` for a `{'count': int}` state so `{'type': 'dec'}` lowers the count by one and an unknown type returns the state unchanged. Never mutate the old state object.",
-              "starter_code": "def reduce(state, action):\n    t = action.get('type')\n    if t == 'inc':\n        return {'count': state['count'] + 1}\n    # TODO: handle 'dec', and leave the state alone for anything else\n    return state\n",
-              "solution_code": "def reduce(state, action):\n    t = action.get('type')\n    if t == 'inc':\n        return {'count': state['count'] + 1}\n    if t == 'dec':\n        return {'count': state['count'] - 1}\n    return state\n",
+              "question": "Make the program adds the action amount to the count by filling the blank for state holding n.",
+              "hints": [
+                "Follow the job, which adds the action amount to the count.",
+                "The printed value is the result after this step adds the action amount to the count.",
+                "label = state['n'] + action['by'] if action['type'] == 'add' else state['n']"
+              ],
+              "explanation": "The printed value is the result after this step adds the action amount to the count.",
+              "xp_reward": 10,
+              "starter_code": "state = {'n': 1}\naction = {'type': 'add', 'by': 49}\nlabel = ___\nprint(label)\n",
+              "solution_code": "state = {'n': 1}\naction = {'type': 'add', 'by': 49}\nlabel = state['n'] + action['by'] if action['type'] == 'add' else state['n']\nprint(label)\n",
               "tests": [
                 {
-                  "name": "test_dec",
-                  "unittest_code": "def test_dec(self):\n    self.assertEqual(reduce({'count': 3}, {'type': 'dec'}), {'count': 2})\n"
-                },
-                {
-                  "name": "test_unknown_action_keeps_state",
-                  "unittest_code": "def test_unknown_action_keeps_state(self):\n    self.assertEqual(reduce({'count': 5}, {'type': 'nope'}), {'count': 5})\n"
-                },
-                {
-                  "name": "test_inc_still_works",
-                  "unittest_code": "def test_inc_still_works(self):\n    self.assertEqual(reduce({'count': 0}, {'type': 'inc'}), {'count': 1})\n"
-                },
-                {
-                  "name": "test_returns_a_new_object",
-                  "unittest_code": "def test_returns_a_new_object(self):\n    original = {'count': 1}\n    result = reduce(original, {'type': 'dec'})\n    self.assertEqual(original, {'count': 1})\n    self.assertIsNot(original, result)\n"
+                  "name": "fs-state-reducer-prints",
+                  "description": "The printed value is the result after this step adds the action amount to the co",
+                  "expected_stdout": "50\n",
+                  "required": true
                 }
-              ],
-              "xp_reward": 15
+              ]
             }
           ]
         }
-      ]
+      ],
+      "player_mode": "micro"
     },
     {
       "id": "fs-state-list",
-      "title": "3. List CRUD",
-      "description": "Implement `upsert_item(items, item)` by id (replace or append). The test checks that `upsert_item(items, {'id': 1, 'n': 'b'})` equals `[{'id': 1, 'n': 'b'}]`; `upsert_item(items, {'id': 2, 'n': 'c'})[-1]['id']` equals `2`.",
+      "title": "Practice List CRUD",
+      "description": "Implement upsert_item(items, item) by id (replace or append). The test checks that upsert_item(items, {'id': 1, 'n': 'b'}) equals [{'id': 1, 'n': 'b'}]; upsert_item(items, {'id': 2, 'n': 'c'})[-1]['id'] equals 2.",
       "order": 13,
       "difficulty": "intermediate",
       "duration_minutes": 8,
@@ -164,7 +435,7 @@
       ],
       "prerequisites": [],
       "learning_objectives": [
-        "Upsert items in client state"
+        "This step counts the list after an append, using items holding willow."
       ],
       "starter_code": "def upsert_item(items, item):\n    # TODO\n    pass\n",
       "solution_code": "def upsert_item(items, item):\n    out = []\n    found = False\n    for it in items:\n        if it.get('id') == item.get('id'):\n            out.append(item)\n            found = True\n        else:\n            out.append(it)\n    if not found:\n        out.append(item)\n    return out\n",
@@ -185,12 +456,174 @@
         "url": "https://react.dev/learn/updating-objects-in-state",
         "license": "CC BY 4.0 (React documentation)"
       },
-      "xp_reward": 25
+      "xp_reward": 25,
+      "player_mode": "micro",
+      "sublessons": [
+        {
+          "id": "fs-state-list-micro",
+          "title": "Practice List CRUD",
+          "description": "",
+          "order": 1,
+          "exercises": [
+            {
+              "id": "fs-state-list-teach",
+              "type": "teach",
+              "question": "This step counts the list after an append, using items holding willow.",
+              "hints": [
+                "Follow the job, which counts the list after an append.",
+                "Adding a one-item list creates the new list.",
+                "items + ['other']"
+              ],
+              "explanation": "This step counts the list after an append, using items holding willow.",
+              "xp_reward": 0,
+              "worked_example": "items + ['other']"
+            },
+            {
+              "id": "fs-state-list-mcq",
+              "type": "mcq",
+              "question": "Choose the line that counts the list after an append, which is the line that fits items holding willow.",
+              "hints": [
+                "Follow the job, which counts the list after an append.",
+                "Adding a one-item list creates the new list.",
+                "items + ['other']"
+              ],
+              "explanation": "Adding a one-item list creates the new list.",
+              "xp_reward": 10,
+              "options": [
+                "items == items",
+                "items + ['other']",
+                "return items",
+                "pass"
+              ],
+              "correct_answer": "items + ['other']"
+            },
+            {
+              "id": "fs-state-list-predict",
+              "type": "output_prediction",
+              "question": "Read the code that counts the list after an append for items holding willow, and choose the value it prints.",
+              "hints": [
+                "Follow the job, which counts the list after an append.",
+                "Adding a one-item list creates the new list.",
+                "2"
+              ],
+              "explanation": "Adding a one-item list creates the new list.",
+              "xp_reward": 10,
+              "starter_code": "items = ['willow']\nitems = items + ['other']\nprint(len(items))\n",
+              "options": [
+                "3",
+                "2",
+                "none",
+                "0"
+              ],
+              "correct_answer": "2"
+            },
+            {
+              "id": "fs-state-list-order",
+              "type": "ordering",
+              "question": "Arrange the pieces of the line that counts the list after an append, left to right, for items holding willow.",
+              "hints": [
+                "Follow the job, which counts the list after an append.",
+                "Adding a one-item list creates the new list.",
+                "items= items+ ['other']"
+              ],
+              "explanation": "Adding a one-item list creates the new list.",
+              "xp_reward": 10,
+              "options": [
+                "items=",
+                "items+",
+                "['other']",
+                "=="
+              ],
+              "correct_answer": [
+                "items=",
+                "items+",
+                "['other']"
+              ]
+            },
+            {
+              "id": "fs-state-list-fill",
+              "type": "fill_blank",
+              "question": "Fill the blank so the line counts the list after an append for items holding willow.",
+              "hints": [
+                "Follow the job, which counts the list after an append.",
+                "Adding a one-item list creates the new list.",
+                "+"
+              ],
+              "explanation": "Adding a one-item list creates the new list.",
+              "xp_reward": 10,
+              "starter_code": "items = items ___ ['other']\n",
+              "options": [
+                "-",
+                "+",
+                "*",
+                "=="
+              ],
+              "correct_answer": "+"
+            },
+            {
+              "id": "fs-state-list-bug",
+              "type": "debugging",
+              "question": "Find the line that misses the job, which counts the list after an append, for items holding willow.",
+              "hints": [
+                "Follow the job, which counts the list after an append.",
+                "The print happens before the new item is added.",
+                "Line 2"
+              ],
+              "explanation": "The print happens before the new item is added.",
+              "xp_reward": 10,
+              "starter_code": "items = ['willow']\nprint(len(items))\n",
+              "correct_answer": "2"
+            },
+            {
+              "id": "fs-state-list-predict-2",
+              "type": "output_prediction",
+              "question": "On the new input, the code still counts the list after an append for items holding willow, so choose what it prints.",
+              "hints": [
+                "Follow the job, which counts the list after an append.",
+                "Adding a one-item list creates the new list.",
+                "3"
+              ],
+              "explanation": "Adding a one-item list creates the new list.",
+              "xp_reward": 10,
+              "starter_code": "items = ['willow']\nitems = items + ['other', 'extra']\nprint(len(items))\n",
+              "options": [
+                "2",
+                "none",
+                "0",
+                "3"
+              ],
+              "correct_answer": "3"
+            },
+            {
+              "id": "fs-state-list-write",
+              "type": "code",
+              "question": "Fill the blank so the program counts the list after an append, and the print shows that result for items holding willow.",
+              "hints": [
+                "Follow the job, which counts the list after an append.",
+                "The printed value is the result after this step counts the list after an append.",
+                "label = len(items)"
+              ],
+              "explanation": "The printed value is the result after this step counts the list after an append.",
+              "xp_reward": 10,
+              "starter_code": "items = ['willow']\nitems = items + ['other']\nlabel = ___\nprint(label)\n",
+              "solution_code": "items = ['willow']\nitems = items + ['other']\nlabel = len(items)\nprint(label)\n",
+              "tests": [
+                {
+                  "name": "fs-state-list-prints",
+                  "description": "The printed value is the result after this step counts the list after an append.",
+                  "expected_stdout": "2\n",
+                  "required": true
+                }
+              ]
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "fs-state-select",
-      "title": "4. Derived Selector (Practice)",
-      "description": "Implement `select_active(items)` returning those with active True. The test checks that `select_active([{'active': True}, {'active': False}])` equals `[{'active': True}]`.",
+      "title": "Practice Derived Selector",
+      "description": "Implement select_active(items) returning those with active True. The test checks that select_active([{'active': True}, {'active': False}]) equals [{'active': True}].",
       "order": 14,
       "difficulty": "intermediate",
       "duration_minutes": 6,
@@ -202,7 +635,7 @@
       ],
       "prerequisites": [],
       "learning_objectives": [
-        "Derive views from state"
+        "This step sums the items derived from state, using state holding items."
       ],
       "starter_code": "def select_active(items):\n    # TODO\n    pass\n",
       "solution_code": "def select_active(items):\n    return [it for it in items if it.get('active')]\n",
@@ -223,12 +656,174 @@
         "url": "https://react.dev/reference/react/useReducer",
         "license": "CC BY 4.0 (React documentation)"
       },
-      "xp_reward": 15
+      "xp_reward": 15,
+      "player_mode": "micro",
+      "sublessons": [
+        {
+          "id": "fs-state-select-micro",
+          "title": "Practice Derived Selector",
+          "description": "",
+          "order": 1,
+          "exercises": [
+            {
+              "id": "fs-state-select-teach",
+              "type": "teach",
+              "question": "This step sums the items derived from state, using state holding items.",
+              "hints": [
+                "Follow the job, which sums the items derived from state.",
+                "The selector adds the items stored on the state.",
+                "sum(state['items'])"
+              ],
+              "explanation": "This step sums the items derived from state, using state holding items.",
+              "xp_reward": 0,
+              "worked_example": "sum(state['items'])"
+            },
+            {
+              "id": "fs-state-select-mcq",
+              "type": "mcq",
+              "question": "Mark the choice that sums the items derived from state when the code mentions state holding items.",
+              "hints": [
+                "Follow the job, which sums the items derived from state.",
+                "The selector adds the items stored on the state.",
+                "sum(state['items'])"
+              ],
+              "explanation": "The selector adds the items stored on the state.",
+              "xp_reward": 10,
+              "options": [
+                "state == state",
+                "return state",
+                "sum(state['items'])",
+                "pass"
+              ],
+              "correct_answer": "sum(state['items'])"
+            },
+            {
+              "id": "fs-state-select-predict",
+              "type": "output_prediction",
+              "question": "After state holding items, the code sums the items derived from state, and the correct choice is the printed value.",
+              "hints": [
+                "Follow the job, which sums the items derived from state.",
+                "The selector adds the items stored on the state.",
+                "26"
+              ],
+              "explanation": "The selector adds the items stored on the state.",
+              "xp_reward": 10,
+              "starter_code": "state = {'items': [1, 2, 23]}\nprint(sum(state['items']))\n",
+              "options": [
+                "none",
+                "26",
+                "0",
+                "29"
+              ],
+              "correct_answer": "26"
+            },
+            {
+              "id": "fs-state-select-order",
+              "type": "ordering",
+              "question": "The finished line sums the items derived from state, so place its pieces in order for state holding items.",
+              "hints": [
+                "Follow the job, which sums the items derived from state.",
+                "The selector adds the items stored on the state.",
+                "total = sum(state['items'])"
+              ],
+              "explanation": "The selector adds the items stored on the state.",
+              "xp_reward": 10,
+              "options": [
+                "total",
+                "=",
+                "sum(state['items'])",
+                "len"
+              ],
+              "correct_answer": [
+                "total",
+                "=",
+                "sum(state['items'])"
+              ]
+            },
+            {
+              "id": "fs-state-select-fill",
+              "type": "fill_blank",
+              "question": "Finish the line that the items derived from state by filling the blank for state holding items.",
+              "hints": [
+                "Follow the job, which Follow the job, which the items derived from state.",
+                "The selector adds the items stored on the state.",
+                "sum"
+              ],
+              "explanation": "The selector adds the items stored on the state.",
+              "xp_reward": 10,
+              "starter_code": "total = ___(state['items'])\n",
+              "options": [
+                "len",
+                "min",
+                "sum",
+                "max"
+              ],
+              "correct_answer": "sum"
+            },
+            {
+              "id": "fs-state-select-bug",
+              "type": "debugging",
+              "question": "Mark the line that breaks the job, which sums the items derived from state, for state holding items.",
+              "hints": [
+                "Follow the job, which sums the items derived from state.",
+                "The print counts items instead of adding them.",
+                "Line 2"
+              ],
+              "explanation": "The print counts items instead of adding them.",
+              "xp_reward": 10,
+              "starter_code": "state = {'items': [1, 2, 23]}\nprint(len(state['items']))\n",
+              "correct_answer": "2"
+            },
+            {
+              "id": "fs-state-select-predict-2",
+              "type": "output_prediction",
+              "question": "Follow the second program, which sums the items derived from state for state holding items, and choose its output.",
+              "hints": [
+                "Follow the job, which sums the items derived from state.",
+                "The selector adds the items stored on the state.",
+                "29"
+              ],
+              "explanation": "The selector adds the items stored on the state.",
+              "xp_reward": 10,
+              "starter_code": "state = {'items': [1, 2, 26]}\nprint(sum(state['items']))\n",
+              "options": [
+                "26",
+                "29",
+                "none",
+                "0"
+              ],
+              "correct_answer": "29"
+            },
+            {
+              "id": "fs-state-select-write",
+              "type": "code",
+              "question": "Finish the program that sums the items derived from state by filling the blank for state holding items.",
+              "hints": [
+                "Follow the job, which Follow the job, which the items derived from state.",
+                "The printed value is the result after this step sums the items derived from state.",
+                "label = sum(state['items'])"
+              ],
+              "explanation": "The printed value is the result after this step sums the items derived from state.",
+              "xp_reward": 10,
+              "starter_code": "state = {'items': [1, 2, 23]}\nlabel = ___\nprint(label)\n",
+              "solution_code": "state = {'items': [1, 2, 23]}\nlabel = sum(state['items'])\nprint(label)\n",
+              "tests": [
+                {
+                  "name": "fs-state-select-prints",
+                  "description": "The printed value is the result after this step sums the items derived from stat",
+                  "expected_stdout": "26\n",
+                  "required": true
+                }
+              ]
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "fs-state-checkpoint",
-      "title": "5. Checkpoint: Batch Actions",
-      "description": "Implement `apply_actions(state, actions)` folding a reducer over actions. The test checks that `apply_actions({'count': 0}, [{'type': 'inc'}, {'type': 'inc'}])` equals `{'count': 2}`.",
+      "title": "Practice Checkpoint Batch Actions",
+      "description": "Implement apply_actions(state, actions) folding a reducer over actions. The test checks that apply_actions({'count': 0}, [{'type': 'inc'}, {'type': 'inc'}]) equals {'count': 2}.",
       "order": 15,
       "difficulty": "intermediate",
       "duration_minutes": 10,
@@ -240,7 +835,7 @@
       ],
       "prerequisites": [],
       "learning_objectives": [
-        "Apply batches of state actions"
+        "This step applies a batch of increments, using n and 3."
       ],
       "starter_code": "def reduce(state, action):\n    t = action.get('type')\n    if t == 'inc':\n        return {'count': state['count'] + 1}\n    if t == 'set':\n        return {'count': action['value']}\n    return state\n\ndef apply_actions(state, actions):\n    # TODO\n    pass\n",
       "solution_code": "def reduce(state, action):\n    t = action.get('type')\n    if t == 'inc':\n        return {'count': state['count'] + 1}\n    if t == 'set':\n        return {'count': action['value']}\n    return state\n\ndef apply_actions(state, actions):\n    for action in actions:\n        state = reduce(state, action)\n    return state\n",
@@ -261,7 +856,173 @@
         "url": "https://react.dev/reference/react/useReducer",
         "license": "CC BY 4.0 (React documentation)"
       },
-      "xp_reward": 40
+      "xp_reward": 40,
+      "player_mode": "micro",
+      "sublessons": [
+        {
+          "id": "fs-state-checkpoint-micro",
+          "title": "Practice Checkpoint Batch Actions",
+          "description": "",
+          "order": 1,
+          "exercises": [
+            {
+              "id": "fs-state-checkpoint-teach",
+              "type": "teach",
+              "question": "This step applies a batch of increments, using n and 3.",
+              "hints": [
+                "Follow the job, which applies a batch of increments.",
+                "Each action in the batch adds its step.",
+                "n = n + step"
+              ],
+              "explanation": "This step applies a batch of increments, using n and 3.",
+              "xp_reward": 0,
+              "worked_example": "n = n + step"
+            },
+            {
+              "id": "fs-state-checkpoint-mcq",
+              "type": "mcq",
+              "question": "Mark the choice that applies a batch of increments when the code mentions n and 3.",
+              "hints": [
+                "Follow the job, which applies a batch of increments.",
+                "Each action in the batch adds its step.",
+                "n = n + step"
+              ],
+              "explanation": "Each action in the batch adds its step.",
+              "xp_reward": 10,
+              "options": [
+                "n == step",
+                "return n",
+                "pass",
+                "n = n + step"
+              ],
+              "correct_answer": "n = n + step"
+            },
+            {
+              "id": "fs-state-checkpoint-predict",
+              "type": "output_prediction",
+              "question": "After n and 3, the code applies a batch of increments, and the correct choice is the printed value.",
+              "hints": [
+                "Follow the job, which applies a batch of increments.",
+                "Each action in the batch adds its step.",
+                "6"
+              ],
+              "explanation": "Each action in the batch adds its step.",
+              "xp_reward": 10,
+              "starter_code": "n = 0\nfor step in (1, 2, 3):\n    n = n + step\nprint(n)\n",
+              "options": [
+                "3",
+                "none",
+                "0",
+                "6"
+              ],
+              "correct_answer": "6"
+            },
+            {
+              "id": "fs-state-checkpoint-order",
+              "type": "ordering",
+              "question": "The finished line applies a batch of increments, so place its pieces in order for n and 3.",
+              "hints": [
+                "Follow the job, which applies a batch of increments.",
+                "Each action in the batch adds its step.",
+                "for step in steps: n+=step"
+              ],
+              "explanation": "Each action in the batch adds its step.",
+              "xp_reward": 10,
+              "options": [
+                "for",
+                "step",
+                "in",
+                "steps:",
+                "n+=step",
+                "if"
+              ],
+              "correct_answer": [
+                "for",
+                "step",
+                "in",
+                "steps:",
+                "n+=step"
+              ]
+            },
+            {
+              "id": "fs-state-checkpoint-fill",
+              "type": "fill_blank",
+              "question": "Finish the line that applies a batch of increments by filling the blank for n and 3.",
+              "hints": [
+                "Follow the job, which applies a batch of increments.",
+                "Each action in the batch adds its step.",
+                "+"
+              ],
+              "explanation": "Each action in the batch adds its step.",
+              "xp_reward": 10,
+              "starter_code": "n = n ___ step\n",
+              "options": [
+                "-",
+                "==",
+                "*",
+                "+"
+              ],
+              "correct_answer": "+"
+            },
+            {
+              "id": "fs-state-checkpoint-bug",
+              "type": "debugging",
+              "question": "Mark the line that breaks the job, which applies a batch of increments, for n and.",
+              "hints": [
+                "Follow the job, which applies a batch of increments.",
+                "The batch subtracts each step.",
+                "Line 3"
+              ],
+              "explanation": "The batch subtracts each step.",
+              "xp_reward": 10,
+              "starter_code": "n = 0\nfor step in (1, 2, 3):\n    n = n - step\nprint(n)\n",
+              "correct_answer": "3"
+            },
+            {
+              "id": "fs-state-checkpoint-predict-2",
+              "type": "output_prediction",
+              "question": "Follow the second program, which applies a batch of increments for n and and choose its output.",
+              "hints": [
+                "Follow the job, which applies a batch of increments.",
+                "Each action in the batch adds its step.",
+                "3"
+              ],
+              "explanation": "Each action in the batch adds its step.",
+              "xp_reward": 10,
+              "starter_code": "n = 0\nfor step in (1, 2):\n    n = n + step\nprint(n)\n",
+              "options": [
+                "6",
+                "none",
+                "3",
+                "0"
+              ],
+              "correct_answer": "3"
+            },
+            {
+              "id": "fs-state-checkpoint-write",
+              "type": "code",
+              "question": "Finish the program that applies a batch of increments by filling the blank for n and 3.",
+              "hints": [
+                "Follow the job, which applies a batch of increments.",
+                "The printed value is the result after this step applies a batch of increments.",
+                "label = n"
+              ],
+              "explanation": "The printed value is the result after this step applies a batch of increments.",
+              "xp_reward": 10,
+              "starter_code": "n = 0\nfor step in (1, 2, 3):\n    n = n + step\nlabel = ___\nprint(label)\n",
+              "solution_code": "n = 0\nfor step in (1, 2, 3):\n    n = n + step\nlabel = n\nprint(label)\n",
+              "tests": [
+                {
+                  "name": "fs-state-checkpoint-prints",
+                  "description": "The printed value is the result after this step applies a batch of increments.",
+                  "expected_stdout": "6\n",
+                  "required": true
+                }
+              ]
+            }
+          ]
+        }
+      ]
     }
   ]
 }

@@ -14,8 +14,8 @@
   "lessons": [
     {
       "id": "ai-tool-parse-call",
-      "title": "19. Parse Tool Call",
-      "description": "Implement `parse_tool_call(payload)` expecting name/arguments and returning (name, arguments). The test checks that `parse_tool_call({'name': 'sum', 'arguments': {'a': 1}})` equals `('sum', {'a': 1})`.",
+      "title": "Parse Tool Call",
+      "description": "Implement parse_tool_call(payload) expecting name/arguments and returning (name, arguments). The test checks that parse_tool_call({'name': 'sum', 'arguments': {'a': 1}}) equals ('sum', {'a': 1}).",
       "order": 19,
       "difficulty": "intermediate",
       "duration_minutes": 5,
@@ -27,7 +27,7 @@
       ],
       "prerequisites": [],
       "learning_objectives": [
-        "Parse tool-call payloads"
+        "This step reads the tool name from the call, using call holding name."
       ],
       "starter_code": "def parse_tool_call(payload):\n    # TODO\n    pass\n",
       "solution_code": "def parse_tool_call(payload):\n    return payload['name'], payload['arguments']\n",
@@ -48,12 +48,174 @@
         "url": "https://developers.openai.com/api/docs/guides/function-calling",
         "license": "OpenAI API documentation (developers.openai.com)"
       },
-      "xp_reward": 10
+      "xp_reward": 10,
+      "player_mode": "micro",
+      "sublessons": [
+        {
+          "id": "ai-tool-parse-call-micro",
+          "title": "Parse Tool Call",
+          "description": "",
+          "order": 1,
+          "exercises": [
+            {
+              "id": "ai-tool-parse-call-teach",
+              "type": "teach",
+              "question": "This step reads the tool name from the call, using call holding name.",
+              "hints": [
+                "Follow the job, which reads the tool name from the call.",
+                "The name field says which tool to call.",
+                "call['name']"
+              ],
+              "explanation": "This step reads the tool name from the call, using call holding name.",
+              "xp_reward": 0,
+              "worked_example": "call['name']"
+            },
+            {
+              "id": "ai-tool-parse-call-mcq",
+              "type": "mcq",
+              "question": "Pick the line that reads the tool name from the call, not a line about something else, for call holding name.",
+              "hints": [
+                "Follow the job, which reads the tool name from the call.",
+                "The name field says which tool to call.",
+                "call['name']"
+              ],
+              "explanation": "The name field says which tool to call.",
+              "xp_reward": 10,
+              "options": [
+                "call == call",
+                "call['name']",
+                "return call",
+                "pass"
+              ],
+              "correct_answer": "call['name']"
+            },
+            {
+              "id": "ai-tool-parse-call-predict",
+              "type": "output_prediction",
+              "question": "The displayed value is what the code prints when it reads the tool name from the call for call holding name.",
+              "hints": [
+                "Follow the job, which reads the tool name from the call.",
+                "The name field says which tool to call.",
+                "sum"
+              ],
+              "explanation": "The name field says which tool to call.",
+              "xp_reward": 10,
+              "starter_code": "import json\ncall = json.loads('{\"name\": \"sum\", \"n\": 2}')\nprint(call['name'])\n",
+              "options": [
+                "echo",
+                "sum",
+                "none",
+                "0"
+              ],
+              "correct_answer": "sum"
+            },
+            {
+              "id": "ai-tool-parse-call-order",
+              "type": "ordering",
+              "question": "Place every piece so the result reads the tool name from the call for call holding name.",
+              "hints": [
+                "Follow the job, which reads the tool name from the call.",
+                "The name field says which tool to call.",
+                "name = call['name']"
+              ],
+              "explanation": "The name field says which tool to call.",
+              "xp_reward": 10,
+              "options": [
+                "name",
+                "=",
+                "call['name']",
+                "=="
+              ],
+              "correct_answer": [
+                "name",
+                "=",
+                "call['name']"
+              ]
+            },
+            {
+              "id": "ai-tool-parse-call-fill",
+              "type": "fill_blank",
+              "question": "Drop in the piece that lets the line reads the tool name from the call for call holding name.",
+              "hints": [
+                "Follow the job, which reads the tool name from the call.",
+                "The name field says which tool to call.",
+                "'name'"
+              ],
+              "explanation": "The name field says which tool to call.",
+              "xp_reward": 10,
+              "starter_code": "name = call[___]\n",
+              "options": [
+                "'n'",
+                "'name'",
+                "'id'",
+                "'ok'"
+              ],
+              "correct_answer": "'name'"
+            },
+            {
+              "id": "ai-tool-parse-call-bug",
+              "type": "debugging",
+              "question": "The mismatch misses the job, which reads the tool name from the call, for call holding name.",
+              "hints": [
+                "Follow the job, which reads the tool name from the call.",
+                "The print reads the argument instead of the tool name.",
+                "Line 3"
+              ],
+              "explanation": "The print reads the argument instead of the tool name.",
+              "xp_reward": 10,
+              "starter_code": "import json\ncall = json.loads('{\"name\": \"sum\", \"n\": 2}')\nprint(call['n'])\n",
+              "correct_answer": "3"
+            },
+            {
+              "id": "ai-tool-parse-call-predict-2",
+              "type": "output_prediction",
+              "question": "Choose the printed result of the second run that reads the tool name from the call for call holding name.",
+              "hints": [
+                "Follow the job, which reads the tool name from the call.",
+                "The name field says which tool to call.",
+                "echo"
+              ],
+              "explanation": "The name field says which tool to call.",
+              "xp_reward": 10,
+              "starter_code": "import json\ncall = json.loads('{\"name\": \"echo\", \"n\": 2}')\nprint(call['name'])\n",
+              "options": [
+                "sum",
+                "none",
+                "0",
+                "echo"
+              ],
+              "correct_answer": "echo"
+            },
+            {
+              "id": "ai-tool-parse-call-write",
+              "type": "code",
+              "question": "Make the program reads the tool name from the call by filling the blank for call holding name.",
+              "hints": [
+                "Follow the job, which reads the tool name from the call.",
+                "The printed value is the result after this step reads the tool name from the call.",
+                "label = call['name']"
+              ],
+              "explanation": "The printed value is the result after this step reads the tool name from the call.",
+              "xp_reward": 10,
+              "starter_code": "import json\ncall = json.loads('{\"name\": \"sum\", \"n\": 2}')\nlabel = ___\nprint(label)\n",
+              "solution_code": "import json\ncall = json.loads('{\"name\": \"sum\", \"n\": 2}')\nlabel = call['name']\nprint(label)\n",
+              "tests": [
+                {
+                  "name": "ai-tool-parse-call-prints",
+                  "description": "The printed value is the result after this step reads the tool name from the cal",
+                  "expected_stdout": "sum\n",
+                  "required": true
+                }
+              ]
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "ai-tool-dispatch",
-      "title": "20. Dispatch Tool",
-      "description": "Implement `dispatch(name, args, registry)` calling registry[name](**args). The test checks that `dispatch('add', {'x': 2, 'y': 3}, reg)` equals `5`.",
+      "title": "Practice Dispatch Tool",
+      "description": "Implement dispatch(name, args, registry) calling registry[name](**args). The test checks that dispatch('add', {'x': 2, 'y': 3}, reg) equals 5.",
       "order": 20,
       "difficulty": "intermediate",
       "duration_minutes": 5,
@@ -65,7 +227,7 @@
       ],
       "prerequisites": [],
       "learning_objectives": [
-        "Dispatch tool calls to functions"
+        "This step runs the registered tool, using tools holding sum."
       ],
       "starter_code": "def dispatch(name, args, registry):\n    # TODO\n    pass\n",
       "solution_code": "def dispatch(name, args, registry):\n    return registry[name](**args)\n",
@@ -86,12 +248,174 @@
         "url": "https://docs.python.org/3/library/stdtypes.html#mapping-types-dict",
         "license": "Python documentation license (PSF)"
       },
-      "xp_reward": 10
+      "xp_reward": 10,
+      "player_mode": "micro",
+      "sublessons": [
+        {
+          "id": "ai-tool-dispatch-micro",
+          "title": "Practice Dispatch Tool",
+          "description": "",
+          "order": 1,
+          "exercises": [
+            {
+              "id": "ai-tool-dispatch-teach",
+              "type": "teach",
+              "question": "This step runs the registered tool, using tools holding sum.",
+              "hints": [
+                "Follow the job, which runs the registered tool.",
+                "Dispatch looks up the function and calls it.",
+                "tools['sum']"
+              ],
+              "explanation": "This step runs the registered tool, using tools holding sum.",
+              "xp_reward": 0,
+              "worked_example": "tools['sum']"
+            },
+            {
+              "id": "ai-tool-dispatch-mcq",
+              "type": "mcq",
+              "question": "Keep the choice that runs the registered tool for tools holding sum.",
+              "hints": [
+                "Follow the job, which runs the registered tool.",
+                "Dispatch looks up the function and calls it.",
+                "tools['sum'](n)"
+              ],
+              "explanation": "Dispatch looks up the function and calls it.",
+              "xp_reward": 10,
+              "options": [
+                "tools == tools",
+                "return tools",
+                "pass",
+                "tools['sum'](n)"
+              ],
+              "correct_answer": "tools['sum'](n)"
+            },
+            {
+              "id": "ai-tool-dispatch-predict",
+              "type": "output_prediction",
+              "question": "Trace the code that runs the registered tool using tools holding sum, and select what it displays.",
+              "hints": [
+                "Follow the job, which runs the registered tool.",
+                "Dispatch looks up the function and calls it.",
+                "38"
+              ],
+              "explanation": "Dispatch looks up the function and calls it.",
+              "xp_reward": 10,
+              "starter_code": "tools = {'sum': lambda n: n + 1}\nprint(tools['sum'](37))\n",
+              "options": [
+                "0",
+                "38",
+                "none",
+                "41"
+              ],
+              "correct_answer": "38"
+            },
+            {
+              "id": "ai-tool-dispatch-order",
+              "type": "ordering",
+              "question": "Tap the pieces, in order, of the line that runs the registered tool for tools holding sum.",
+              "hints": [
+                "Follow the job, which runs the registered tool.",
+                "Dispatch looks up the function and calls it.",
+                "result = tools['sum'](n)"
+              ],
+              "explanation": "Dispatch looks up the function and calls it.",
+              "xp_reward": 10,
+              "options": [
+                "result",
+                "=",
+                "tools['sum'](n)",
+                "=="
+              ],
+              "correct_answer": [
+                "result",
+                "=",
+                "tools['sum'](n)"
+              ]
+            },
+            {
+              "id": "ai-tool-dispatch-fill",
+              "type": "fill_blank",
+              "question": "The blank is the missing piece of the line that runs the registered tool for tools holding sum.",
+              "hints": [
+                "Follow the job, which runs the registered tool.",
+                "Dispatch looks up the function and calls it.",
+                "'sum'"
+              ],
+              "explanation": "Dispatch looks up the function and calls it.",
+              "xp_reward": 10,
+              "starter_code": "result = tools[___](n)\n",
+              "options": [
+                "'drop'",
+                "'echo'",
+                "'sum'",
+                "'missing'"
+              ],
+              "correct_answer": "'sum'"
+            },
+            {
+              "id": "ai-tool-dispatch-bug",
+              "type": "debugging",
+              "question": "Choose the line that does another job than the one that runs the registered tool for tools holding sum.",
+              "hints": [
+                "Follow the job, which runs the registered tool.",
+                "The print shows the input and never calls the tool.",
+                "Line 2"
+              ],
+              "explanation": "The print shows the input and never calls the tool.",
+              "xp_reward": 10,
+              "starter_code": "tools = {'sum': lambda n: n + 1}\nprint(37)\n",
+              "correct_answer": "2"
+            },
+            {
+              "id": "ai-tool-dispatch-predict-2",
+              "type": "output_prediction",
+              "question": "Trace the second run, which runs the registered tool for tools holding sum, and select what it displays.",
+              "hints": [
+                "Follow the job, which runs the registered tool.",
+                "Dispatch looks up the function and calls it.",
+                "41"
+              ],
+              "explanation": "Dispatch looks up the function and calls it.",
+              "xp_reward": 10,
+              "starter_code": "tools = {'sum': lambda n: n + 1}\nprint(tools['sum'](40))\n",
+              "options": [
+                "38",
+                "41",
+                "0",
+                "none"
+              ],
+              "correct_answer": "41"
+            },
+            {
+              "id": "ai-tool-dispatch-write",
+              "type": "code",
+              "question": "Type the missing piece so the program runs the registered tool for tools holding sum and prints it.",
+              "hints": [
+                "Follow the job, which runs the registered tool.",
+                "The printed value is the result after this step runs the registered tool.",
+                "label = tools['sum'](37)"
+              ],
+              "explanation": "The printed value is the result after this step runs the registered tool.",
+              "xp_reward": 10,
+              "starter_code": "tools = {'sum': lambda n: n + 1}\nlabel = ___\nprint(label)\n",
+              "solution_code": "tools = {'sum': lambda n: n + 1}\nlabel = tools['sum'](37)\nprint(label)\n",
+              "tests": [
+                {
+                  "name": "ai-tool-dispatch-prints",
+                  "description": "The printed value is the result after this step runs the registered tool.",
+                  "expected_stdout": "38\n",
+                  "required": true
+                }
+              ]
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "ai-tool-validate",
-      "title": "21. Validate Arguments",
-      "description": "Implement `validate_args(args, required)` raising ValueError if any required key missing. The test checks that `validate_args({'a': 1}, ['a'])` equals `{'a': 1}`; invalid input raises `ValueError`.",
+      "title": "Practice Validate Arguments",
+      "description": "Implement validate_args(args, required) raising ValueError if any required key missing. The test checks that validate_args({'a': 1}, ['a']) equals {'a': 1}; invalid input raises ValueError.",
       "order": 21,
       "difficulty": "intermediate",
       "duration_minutes": 8,
@@ -103,7 +427,7 @@
       ],
       "prerequisites": [],
       "learning_objectives": [
-        "Validate required tool arguments"
+        "This step accepts a call that has the required key, using args holding n."
       ],
       "starter_code": "def validate_args(args, required):\n    # TODO\n    pass\n",
       "solution_code": "def validate_args(args, required):\n    missing = [k for k in required if k not in args]\n    if missing:\n        raise ValueError('missing: ' + str(missing))\n    return args\n",
@@ -124,12 +448,178 @@
         "url": "https://docs.python.org/3/tutorial/datastructures.html#dictionaries",
         "license": "Python documentation license (PSF)"
       },
-      "xp_reward": 25
+      "xp_reward": 25,
+      "player_mode": "micro",
+      "sublessons": [
+        {
+          "id": "ai-tool-validate-micro",
+          "title": "Practice Validate Arguments",
+          "description": "",
+          "order": 1,
+          "exercises": [
+            {
+              "id": "ai-tool-validate-teach",
+              "type": "teach",
+              "question": "This step accepts a call that has the required key, using args holding n.",
+              "hints": [
+                "Follow the job, which accepts a call that has the required key.",
+                "The call is ok when the required key is present.",
+                "'n' in args"
+              ],
+              "explanation": "This step accepts a call that has the required key, using args holding n.",
+              "xp_reward": 0,
+              "worked_example": "'n' in args"
+            },
+            {
+              "id": "ai-tool-validate-mcq",
+              "type": "mcq",
+              "question": "Mark the choice that accepts a call that has the required key when the code mentions args holding n.",
+              "hints": [
+                "Follow the job, which accepts a call that has the required key.",
+                "The call is ok when the required key is present.",
+                "'n' in args"
+              ],
+              "explanation": "The call is ok when the required key is present.",
+              "xp_reward": 10,
+              "options": [
+                "args == args",
+                "return args",
+                "pass",
+                "'n' in args"
+              ],
+              "correct_answer": "'n' in args"
+            },
+            {
+              "id": "ai-tool-validate-predict",
+              "type": "output_prediction",
+              "question": "After args holding n, the code accepts a call that has the required key, and the correct choice is the printed value.",
+              "hints": [
+                "Follow the job, which accepts a call that has the required key.",
+                "The call is ok when the required key is present.",
+                "ok"
+              ],
+              "explanation": "The call is ok when the required key is present.",
+              "xp_reward": 10,
+              "starter_code": "args = {'n': 31}\nprint('ok' if 'n' in args else 'bad')\n",
+              "options": [
+                "bad",
+                "none",
+                "0",
+                "ok"
+              ],
+              "correct_answer": "ok"
+            },
+            {
+              "id": "ai-tool-validate-order",
+              "type": "ordering",
+              "question": "The finished line accepts a call that has the required key, so place its pieces in order for args holding n.",
+              "hints": [
+                "Follow the job, which accepts a call that has the required key.",
+                "The call is ok when the required key is present.",
+                "if 'n' in args: pass"
+              ],
+              "explanation": "The call is ok when the required key is present.",
+              "xp_reward": 10,
+              "options": [
+                "if",
+                "'n'",
+                "in",
+                "args:",
+                "pass",
+                "not"
+              ],
+              "correct_answer": [
+                "if",
+                "'n'",
+                "in",
+                "args:",
+                "pass"
+              ]
+            },
+            {
+              "id": "ai-tool-validate-fill",
+              "type": "fill_blank",
+              "question": "Finish the line that accepts a call that has the required key by filling the blank for args holding n.",
+              "hints": [
+                "Follow the job, which accepts a call that has the required key.",
+                "The call is ok when the required key is present.",
+                "'n'"
+              ],
+              "explanation": "The call is ok when the required key is present.",
+              "xp_reward": 10,
+              "starter_code": "if ___ in args:\n    status = 'ok'\n",
+              "options": [
+                "'x'",
+                "'ok'",
+                "'id'",
+                "'n'"
+              ],
+              "correct_answer": "'n'"
+            },
+            {
+              "id": "ai-tool-validate-bug",
+              "type": "debugging",
+              "question": "Mark the line that breaks the job, which accepts a call that has the required key, for args holding n.",
+              "hints": [
+                "Follow the job, which accepts a call that has the required key.",
+                "The print says bad even though the key is present.",
+                "Line 2"
+              ],
+              "explanation": "The print says bad even though the key is present.",
+              "xp_reward": 10,
+              "starter_code": "args = {'n': 31}\nprint('bad')\n",
+              "correct_answer": "2"
+            },
+            {
+              "id": "ai-tool-validate-predict-2",
+              "type": "output_prediction",
+              "question": "Follow the second program, which accepts a call that has the required key for args holding n, and choose its output.",
+              "hints": [
+                "Follow the job, which accepts a call that has the required key.",
+                "The call is ok when the required key is present.",
+                "bad"
+              ],
+              "explanation": "The call is ok when the required key is present.",
+              "xp_reward": 10,
+              "starter_code": "args = {}\nprint('ok' if 'n' in args else 'bad')\n",
+              "options": [
+                "none",
+                "0",
+                "ok",
+                "bad"
+              ],
+              "correct_answer": "bad"
+            },
+            {
+              "id": "ai-tool-validate-write",
+              "type": "code",
+              "question": "Finish the program that accepts a call that has the required key by filling the blank for args holding n.",
+              "hints": [
+                "Follow the job, which accepts a call that has the required key.",
+                "The printed value is the result after this step accepts a call that has the required key.",
+                "label = 'ok' if 'n' in args else 'bad'"
+              ],
+              "explanation": "The printed value is the result after this step accepts a call that has the required key.",
+              "xp_reward": 10,
+              "starter_code": "args = {'n': 31}\nlabel = ___\nprint(label)\n",
+              "solution_code": "args = {'n': 31}\nlabel = 'ok' if 'n' in args else 'bad'\nprint(label)\n",
+              "tests": [
+                {
+                  "name": "ai-tool-validate-prints",
+                  "description": "The printed value is the result after this step accepts a call that has the requ",
+                  "expected_stdout": "ok\n",
+                  "required": true
+                }
+              ]
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "ai-tool-result-msg",
-      "title": "22. Tool Result Message (Practice)",
-      "description": "After executing a tool, the model must see the result message tied to the originating call — the OpenAI guide references tool calls by a `call_id`. Implement tool_result_message(call_id, content) returning {'role': 'tool', 'call_id': call_id, 'content': content}. Tests check role, call_id and content.",
+      "title": "Practice Tool Result Message",
+      "description": "After executing a tool, the model must see the result message tied to the originating call — the OpenAI guide references tool calls by a call_id. Implement tool_result_message(call_id, content) returning {'role': 'tool', 'call_id': call_id, 'content': content}. Tests check role, call_id and content.",
       "order": 22,
       "difficulty": "intermediate",
       "duration_minutes": 6,
@@ -141,7 +631,7 @@
       ],
       "prerequisites": [],
       "learning_objectives": [
-        "Format tool result messages"
+        "This step formats the tool result, using value holding tool:{value}."
       ],
       "starter_code": "def tool_result_message(call_id, content):\n    # TODO: return the tool result message described in the task\n    return {}\n",
       "solution_code": "def tool_result_message(call_id, content):\n    return {'role': 'tool', 'call_id': call_id, 'content': content}\n",
@@ -162,12 +652,174 @@
         "url": "https://developers.openai.com/api/docs/guides/function-calling",
         "license": "OpenAI API documentation (developers.openai.com)"
       },
-      "xp_reward": 15
+      "xp_reward": 15,
+      "player_mode": "micro",
+      "sublessons": [
+        {
+          "id": "ai-tool-result-msg-micro",
+          "title": "Practice Tool Result Message",
+          "description": "",
+          "order": 1,
+          "exercises": [
+            {
+              "id": "ai-tool-result-msg-teach",
+              "type": "teach",
+              "question": "This step formats the tool result, using value holding tool:{value}.",
+              "hints": [
+                "Follow the job, which formats the tool result.",
+                "The message prefixes the value so the chat can tell it is a tool result.",
+                "f'tool:{value}'"
+              ],
+              "explanation": "This step formats the tool result, using value holding tool:{value}.",
+              "xp_reward": 0,
+              "worked_example": "f'tool:{value}'"
+            },
+            {
+              "id": "ai-tool-result-msg-mcq",
+              "type": "mcq",
+              "question": "The match is the line that formats the tool result for value holding tool:{value}.",
+              "hints": [
+                "Follow the job, which formats the tool result.",
+                "The message prefixes the value so the chat can tell it is a tool result.",
+                "f'tool:{value}'"
+              ],
+              "explanation": "The message prefixes the value so the chat can tell it is a tool result.",
+              "xp_reward": 10,
+              "options": [
+                "value == value",
+                "return value",
+                "pass",
+                "f'tool:{value}'"
+              ],
+              "correct_answer": "f'tool:{value}'"
+            },
+            {
+              "id": "ai-tool-result-msg-predict",
+              "type": "output_prediction",
+              "question": "Work out what is printed when the code formats the tool result for value holding tool:{value}.",
+              "hints": [
+                "Follow the job, which formats the tool result.",
+                "The message prefixes the value so the chat can tell it is a tool result.",
+                "tool:32"
+              ],
+              "explanation": "The message prefixes the value so the chat can tell it is a tool result.",
+              "xp_reward": 10,
+              "starter_code": "value = 32\nprint(f'tool:{value}')\n",
+              "options": [
+                "tool:35",
+                "none",
+                "0",
+                "tool:32"
+              ],
+              "correct_answer": "tool:32"
+            },
+            {
+              "id": "ai-tool-result-msg-order",
+              "type": "ordering",
+              "question": "Rebuild, from the left, the line that formats the tool result for value holding tool:{value}.",
+              "hints": [
+                "Follow the job, which formats the tool result.",
+                "The message prefixes the value so the chat can tell it is a tool result.",
+                "text = f'tool:{value}'"
+              ],
+              "explanation": "The message prefixes the value so the chat can tell it is a tool result.",
+              "xp_reward": 10,
+              "options": [
+                "text",
+                "=",
+                "f'tool:{value}'",
+                "+"
+              ],
+              "correct_answer": [
+                "text",
+                "=",
+                "f'tool:{value}'"
+              ]
+            },
+            {
+              "id": "ai-tool-result-msg-fill",
+              "type": "fill_blank",
+              "question": "The completed line formats the tool result once you fill the blank for value holding.",
+              "hints": [
+                "Follow the job, which formats the tool result.",
+                "The message prefixes the value so the chat can tell it is a tool result.",
+                "{value}"
+              ],
+              "explanation": "The message prefixes the value so the chat can tell it is a tool result.",
+              "xp_reward": 10,
+              "starter_code": "text = f'tool:___'\n",
+              "options": [
+                "{name}",
+                "{id}",
+                "{ok}",
+                "{value}"
+              ],
+              "correct_answer": "{value}"
+            },
+            {
+              "id": "ai-tool-result-msg-bug",
+              "type": "debugging",
+              "question": "One line does another job than the one that formats the tool result for value holding tool:{value}.",
+              "hints": [
+                "Follow the job, which formats the tool result.",
+                "The print shows the bare value without the tool prefix.",
+                "Line 2"
+              ],
+              "explanation": "The print shows the bare value without the tool prefix.",
+              "xp_reward": 10,
+              "starter_code": "value = 32\nprint(value)\n",
+              "correct_answer": "2"
+            },
+            {
+              "id": "ai-tool-result-msg-predict-2",
+              "type": "output_prediction",
+              "question": "The second display is what prints after the code formats the tool result for value holding tool:{value}.",
+              "hints": [
+                "Follow the job, which formats the tool result.",
+                "The message prefixes the value so the chat can tell it is a tool result.",
+                "tool:35"
+              ],
+              "explanation": "The message prefixes the value so the chat can tell it is a tool result.",
+              "xp_reward": 10,
+              "starter_code": "value = 35\nprint(f'tool:{value}')\n",
+              "options": [
+                "tool:32",
+                "none",
+                "tool:35",
+                "0"
+              ],
+              "correct_answer": "tool:35"
+            },
+            {
+              "id": "ai-tool-result-msg-write",
+              "type": "code",
+              "question": "Supply the blank so the run formats the tool result and prints the result for value holding tool:{value}.",
+              "hints": [
+                "Follow the job, which formats the tool result.",
+                "The printed value is the result after this step formats the tool result.",
+                "label = f'tool:{value}'"
+              ],
+              "explanation": "The printed value is the result after this step formats the tool result.",
+              "xp_reward": 10,
+              "starter_code": "value = 32\nlabel = ___\nprint(label)\n",
+              "solution_code": "value = 32\nlabel = f'tool:{value}'\nprint(label)\n",
+              "tests": [
+                {
+                  "name": "ai-tool-result-msg-prints",
+                  "description": "The printed value is the result after this step formats the tool result.",
+                  "expected_stdout": "tool:32\n",
+                  "required": true
+                }
+              ]
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "ai-tool-checkpoint",
-      "title": "23. Checkpoint: Safe Registry",
-      "description": "Implement `safe_dispatch(name, args, registry)` returning error dict if unknown else result dict. The test checks that `safe_dispatch('ping', {}, reg)` equals `{'result': 'pong'}`; `safe_dispatch('nope', {}, reg)` contains `'error'`.",
+      "title": "Practice Checkpoint Safe Registry",
+      "description": "Implement safe_dispatch(name, args, registry) returning error dict if unknown else result dict. The test checks that safe_dispatch('ping', {}, reg) equals {'result': 'pong'}; safe_dispatch('nope', {}, reg) contains 'error'.",
       "order": 23,
       "difficulty": "intermediate",
       "duration_minutes": 10,
@@ -179,7 +831,7 @@
       ],
       "prerequisites": [],
       "learning_objectives": [
-        "Safely dispatch unknown tools"
+        "This step allows only registered tool names, using allowed holding sum."
       ],
       "starter_code": "def safe_dispatch(name, args, registry):\n    # TODO\n    pass\n",
       "solution_code": "def safe_dispatch(name, args, registry):\n    if name not in registry:\n        return {'error': 'unknown tool: ' + name}\n    return {'result': registry[name](**args)}\n",
@@ -200,7 +852,173 @@
         "url": "https://docs.python.org/3/library/stdtypes.html#mapping-types-dict",
         "license": "Python documentation license (PSF)"
       },
-      "xp_reward": 40
+      "xp_reward": 40,
+      "player_mode": "micro",
+      "sublessons": [
+        {
+          "id": "ai-tool-checkpoint-micro",
+          "title": "Practice Checkpoint Safe Registry",
+          "description": "",
+          "order": 1,
+          "exercises": [
+            {
+              "id": "ai-tool-checkpoint-teach",
+              "type": "teach",
+              "question": "This step allows only registered tool names, using allowed holding sum.",
+              "hints": [
+                "Follow the job, which allows only registered tool names.",
+                "A name in the registry is safe to call.",
+                "'sum' in allowed"
+              ],
+              "explanation": "This step allows only registered tool names, using allowed holding sum.",
+              "xp_reward": 0,
+              "worked_example": "'sum' in allowed"
+            },
+            {
+              "id": "ai-tool-checkpoint-mcq",
+              "type": "mcq",
+              "question": "Keep the choice that allows only registered tool names for allowed holding sum.",
+              "hints": [
+                "Follow the job, which allows only registered tool names.",
+                "A name in the registry is safe to call.",
+                "'sum' in allowed"
+              ],
+              "explanation": "A name in the registry is safe to call.",
+              "xp_reward": 10,
+              "options": [
+                "allowed == allowed",
+                "return allowed",
+                "pass",
+                "'sum' in allowed"
+              ],
+              "correct_answer": "'sum' in allowed"
+            },
+            {
+              "id": "ai-tool-checkpoint-predict",
+              "type": "output_prediction",
+              "question": "Trace the code that allows only registered tool names using allowed holding sum, and select what it displays.",
+              "hints": [
+                "Follow the job, which allows only registered tool names.",
+                "A name in the registry is safe to call.",
+                "yes"
+              ],
+              "explanation": "A name in the registry is safe to call.",
+              "xp_reward": 10,
+              "starter_code": "allowed = {'sum', 'echo'}\nprint('yes' if 'sum' in allowed else 'no')\n",
+              "options": [
+                "no",
+                "none",
+                "0",
+                "yes"
+              ],
+              "correct_answer": "yes"
+            },
+            {
+              "id": "ai-tool-checkpoint-order",
+              "type": "ordering",
+              "question": "Tap the pieces, in order, of the line that allows only registered tool names for allowed holding sum.",
+              "hints": [
+                "Follow the job, which allows only registered tool names.",
+                "A name in the registry is safe to call.",
+                "if 'sum' in allowed: pass"
+              ],
+              "explanation": "A name in the registry is safe to call.",
+              "xp_reward": 10,
+              "options": [
+                "if",
+                "'sum'",
+                "in",
+                "allowed:",
+                "pass",
+                "not"
+              ],
+              "correct_answer": [
+                "if",
+                "'sum'",
+                "in",
+                "allowed:",
+                "pass"
+              ]
+            },
+            {
+              "id": "ai-tool-checkpoint-fill",
+              "type": "fill_blank",
+              "question": "The blank is the missing piece of the line that allows only registered tool names for allowed holding sum.",
+              "hints": [
+                "Follow the job, which allows only registered tool names.",
+                "A name in the registry is safe to call.",
+                "'sum'"
+              ],
+              "explanation": "A name in the registry is safe to call.",
+              "xp_reward": 10,
+              "starter_code": "if ___ in allowed:\n    status = 'yes'\n",
+              "options": [
+                "'ok'",
+                "'sum'",
+                "'drop'",
+                "'id'"
+              ],
+              "correct_answer": "'sum'"
+            },
+            {
+              "id": "ai-tool-checkpoint-bug",
+              "type": "debugging",
+              "question": "Choose the line that does another job than the one that allows only registered tool names for allowed holding sum.",
+              "hints": [
+                "Follow the job, which allows only registered tool names.",
+                "The print says no for a name that is registered.",
+                "Line 2"
+              ],
+              "explanation": "The print says no for a name that is registered.",
+              "xp_reward": 10,
+              "starter_code": "allowed = {'sum', 'echo'}\nprint('no')\n",
+              "correct_answer": "2"
+            },
+            {
+              "id": "ai-tool-checkpoint-predict-2",
+              "type": "output_prediction",
+              "question": "Trace the second run, which allows only registered tool names for allowed holding sum, and select what it displays.",
+              "hints": [
+                "Follow the job, which allows only registered tool names.",
+                "A name in the registry is safe to call.",
+                "no"
+              ],
+              "explanation": "A name in the registry is safe to call.",
+              "xp_reward": 10,
+              "starter_code": "allowed = {'sum', 'echo'}\nprint('yes' if 'drop' in allowed else 'no')\n",
+              "options": [
+                "yes",
+                "none",
+                "no",
+                "0"
+              ],
+              "correct_answer": "no"
+            },
+            {
+              "id": "ai-tool-checkpoint-write",
+              "type": "code",
+              "question": "Type the missing piece so the program allows only registered tool names for allowed holding sum and prints it.",
+              "hints": [
+                "Follow the job, which allows only registered tool names.",
+                "The printed value is the result after this step allows only registered tool names.",
+                "label = 'yes' if 'sum' in allowed else 'no'"
+              ],
+              "explanation": "The printed value is the result after this step allows only registered tool names.",
+              "xp_reward": 10,
+              "starter_code": "allowed = {'sum', 'echo'}\nlabel = ___\nprint(label)\n",
+              "solution_code": "allowed = {'sum', 'echo'}\nlabel = 'yes' if 'sum' in allowed else 'no'\nprint(label)\n",
+              "tests": [
+                {
+                  "name": "ai-tool-checkpoint-prints",
+                  "description": "The printed value is the result after this step allows only registered tool name",
+                  "expected_stdout": "yes\n",
+                  "required": true
+                }
+              ]
+            }
+          ]
+        }
+      ]
     }
   ]
 }

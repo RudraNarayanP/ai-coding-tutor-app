@@ -14,8 +14,8 @@
   "lessons": [
     {
       "id": "sql-12",
-      "title": "12. Transactions & Atomicity",
-      "description": "Give the Engineering department a 5% raise inside `BEGIN TRANSACTION` ... `COMMIT`, then select that department and its average salary. The test checks that you return one row and the average salary is greater than 95000.",
+      "title": "Practice Transactions Atomicity",
+      "description": "Give the Engineering department a 5% raise inside BEGIN TRANSACTION ... COMMIT, then select that department and its average salary. The test checks that you return one row and the average salary is greater than 95000.",
       "order": 12,
       "difficulty": "advanced",
       "duration_minutes": 5,
@@ -45,10 +45,181 @@
         "license": "Public domain (SQLite documentation)"
       },
       "learning_objectives": [
-        "Wrap multiple statements in BEGIN TRANSACTION ... COMMIT",
-        "Explain atomicity: all changes apply or none do"
+        "This step commits a stock change and shows the stored value, using BEGIN and 4."
       ],
-      "xp_reward": 10
+      "xp_reward": 10,
+      "player_mode": "micro",
+      "sublessons": [
+        {
+          "id": "sql-12-micro",
+          "title": "Practice Transactions Atomicity",
+          "description": "",
+          "order": 1,
+          "exercises": [
+            {
+              "id": "sql-12-teach",
+              "type": "teach",
+              "question": "This step commits a stock change and shows the stored value, using BEGIN and 4.",
+              "hints": [
+                "Follow the job, which commits a stock change and shows the stored value.",
+                "COMMIT keeps the update.",
+                "COMMIT;"
+              ],
+              "explanation": "This step commits a stock change and shows the stored value, using BEGIN and 4.",
+              "xp_reward": 0,
+              "worked_example": "COMMIT;"
+            },
+            {
+              "id": "sql-12-mcq",
+              "type": "mcq",
+              "question": "Choose the line that a stock change and shows the stored value, which is the line that fits BEGIN and 4.",
+              "hints": [
+                "Follow the job, which Follow the job, which a stock change and shows the stored value.",
+                "COMMIT keeps the update.",
+                "COMMIT"
+              ],
+              "explanation": "COMMIT keeps the update.",
+              "xp_reward": 10,
+              "options": [
+                "ROLLBACK",
+                "COMMIT",
+                "DROP TABLE products",
+                "BEGIN"
+              ],
+              "correct_answer": "COMMIT"
+            },
+            {
+              "id": "sql-12-predict",
+              "type": "output_prediction",
+              "question": "Read the code that commits a stock change and shows the stored value for BEGIN and 4, and choose the value it prints.",
+              "hints": [
+                "Follow the job, which commits a stock change and shows the stored value.",
+                "COMMIT keeps the update.",
+                "┌───────┐\n│ stock │\n├───────┤\n│ 99    │\n└───────┘"
+              ],
+              "explanation": "COMMIT keeps the update.",
+              "xp_reward": 10,
+              "starter_code": "BEGIN;\nUPDATE products SET stock = stock - 1 WHERE id = 4;\nCOMMIT;\nSELECT stock FROM products WHERE id = 4;\n",
+              "options": [
+                "┌───────┐\n│ stock │\n├───────┤\n│ 98    │\n└───────┘",
+                "┌───────┐\n│ stock │\n├───────┤\n│ 99    │\n└───────┘",
+                "none",
+                "0"
+              ],
+              "correct_answer": "┌───────┐\n│ stock │\n├───────┤\n│ 99    │\n└───────┘"
+            },
+            {
+              "id": "sql-12-order",
+              "type": "ordering",
+              "question": "Arrange the pieces of the line that commits a stock change and shows the stored value, left to right, for BEGIN and 4.",
+              "hints": [
+                "Follow the job, which commits a stock change and shows the stored value.",
+                "COMMIT keeps the update.",
+                "BEGIN; UPDATE products SET stock=stock-1 WHERE id=4; COMMIT;"
+              ],
+              "explanation": "COMMIT keeps the update.",
+              "xp_reward": 10,
+              "options": [
+                "BEGIN;",
+                "UPDATE",
+                "products",
+                "SET",
+                "stock=stock-1",
+                "WHERE",
+                "id=4;",
+                "COMMIT;",
+                "DROP"
+              ],
+              "correct_answer": [
+                "BEGIN;",
+                "UPDATE",
+                "products",
+                "SET",
+                "stock=stock-1",
+                "WHERE",
+                "id=4;",
+                "COMMIT;"
+              ]
+            },
+            {
+              "id": "sql-12-fill",
+              "type": "fill_blank",
+              "question": "Fill the blank so the line a stock change and shows the stored value for BEGIN and 4.",
+              "hints": [
+                "Follow the job, which Follow the job, which a stock change and shows the stored value.",
+                "COMMIT keeps the update.",
+                "COMMIT"
+              ],
+              "explanation": "COMMIT keeps the update.",
+              "xp_reward": 10,
+              "starter_code": "BEGIN;\nUPDATE products SET stock = 90 WHERE id = 4;\n___;\nSELECT stock FROM products WHERE id = 4;",
+              "options": [
+                "ROLLBACK",
+                "COMMIT",
+                "BEGIN",
+                "END"
+              ],
+              "correct_answer": "COMMIT"
+            },
+            {
+              "id": "sql-12-bug",
+              "type": "debugging",
+              "question": "Find the line that misses the job, which commits a stock change and shows the stored value, for BEGIN and 4.",
+              "hints": [
+                "Follow the job, which commits a stock change and shows the stored value.",
+                "ROLLBACK undoes the stock change the transaction was supposed to keep.",
+                "Line 3"
+              ],
+              "explanation": "ROLLBACK undoes the stock change the transaction was supposed to keep.",
+              "xp_reward": 10,
+              "starter_code": "BEGIN;\nUPDATE products SET stock = stock - 1 WHERE id = 4;\nROLLBACK;\nSELECT stock FROM products WHERE id = 4;",
+              "correct_answer": "3"
+            },
+            {
+              "id": "sql-12-predict-2",
+              "type": "output_prediction",
+              "question": "On the new input, the code still commits a stock change and shows the stored value for BEGIN and 4, so choose what it prints.",
+              "hints": [
+                "Follow the job, which commits a stock change and shows the stored value.",
+                "COMMIT keeps the update.",
+                "┌───────┐\n│ stock │\n├───────┤\n│ 98    │\n└───────┘"
+              ],
+              "explanation": "COMMIT keeps the update.",
+              "xp_reward": 10,
+              "starter_code": "BEGIN;\nUPDATE products SET stock = stock - 2 WHERE id = 4;\nCOMMIT;\nSELECT stock FROM products WHERE id = 4;\n",
+              "options": [
+                "┌───────┐\n│ stock │\n├───────┤\n│ 99    │\n└───────┘",
+                "none",
+                "0",
+                "┌───────┐\n│ stock │\n├───────┤\n│ 98    │\n└───────┘"
+              ],
+              "correct_answer": "┌───────┐\n│ stock │\n├───────┤\n│ 98    │\n└───────┘"
+            },
+            {
+              "id": "sql-12-write",
+              "type": "code",
+              "question": "Fill the blank so the program commits a stock change and shows the stored value, and the print shows that result for BEGIN and 4.",
+              "hints": [
+                "Follow the job, which Follow the job, which a stock change and shows the stored value.",
+                "The query result is what this step commits a stock change and shows the stored value.",
+                "COMMIT"
+              ],
+              "explanation": "The query result is what this step commits a stock change and shows the stored value.",
+              "xp_reward": 10,
+              "starter_code": "BEGIN;\nUPDATE products SET stock = stock - 1 WHERE id = 4;\n___;\nSELECT stock FROM products WHERE id = 4;\n",
+              "solution_code": "BEGIN;\nUPDATE products SET stock = stock - 1 WHERE id = 4;\nCOMMIT;\nSELECT stock FROM products WHERE id = 4;\n",
+              "tests": [
+                {
+                  "name": "sql-12-prints",
+                  "description": "The query result is what this step commits a stock change and shows the stored v",
+                  "expected_stdout": "┌───────┐\n│ stock │\n├───────┤\n│ 99    │\n└───────┘",
+                  "required": true
+                }
+              ]
+            }
+          ]
+        }
+      ]
     }
   ]
 }

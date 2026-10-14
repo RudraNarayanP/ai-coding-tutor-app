@@ -14,8 +14,8 @@
   "lessons": [
     {
       "id": "tree-stump",
-      "title": "1. Decision Stump",
-      "description": "Implement `stump_predict(x, threshold)` → 1 if x>=threshold else 0. The test checks that `stump_predict(3, 2)` equals `1`; `stump_predict(1, 2)` equals `0`.",
+      "title": "Practice Decision Stump",
+      "description": "Implement stump_predict(x, threshold) → 1 if x>=threshold else 0. The test checks that stump_predict(3, 2) equals 1; stump_predict(1, 2) equals 0.",
       "order": 21,
       "difficulty": "intermediate",
       "duration_minutes": 5,
@@ -27,7 +27,7 @@
       ],
       "prerequisites": [],
       "learning_objectives": [
-        "Predict with a decision stump"
+        "This step labels values at or above the stump cutoff, using value holding yes."
       ],
       "starter_code": "def stump_predict(x, threshold):\n    # TODO\n    pass\n",
       "solution_code": "def stump_predict(x, threshold):\n    return 1 if x >= threshold else 0\n",
@@ -48,12 +48,178 @@
         "url": "https://scikit-learn.org/stable/modules/tree.html",
         "license": "BSD 3-Clause (scikit-learn documentation)"
       },
-      "xp_reward": 10
+      "xp_reward": 10,
+      "player_mode": "micro",
+      "sublessons": [
+        {
+          "id": "tree-stump-micro",
+          "title": "Practice Decision Stump",
+          "description": "",
+          "order": 1,
+          "exercises": [
+            {
+              "id": "tree-stump-teach",
+              "type": "teach",
+              "question": "This step labels values at or above the stump cutoff, using value holding yes.",
+              "hints": [
+                "Follow the job, which labels values at or above the stump cutoff.",
+                "The stump sends values of at least 30 to yes.",
+                "value >= 30"
+              ],
+              "explanation": "This step labels values at or above the stump cutoff, using value holding yes.",
+              "xp_reward": 0,
+              "worked_example": "value >= 30"
+            },
+            {
+              "id": "tree-stump-mcq",
+              "type": "mcq",
+              "question": "Pick the line that labels values at or above the stump cutoff, not a line about something else, for value holding yes.",
+              "hints": [
+                "Follow the job, which labels values at or above the stump cutoff.",
+                "The stump sends values of at least 30 to yes.",
+                "value >= 30"
+              ],
+              "explanation": "The stump sends values of at least 30 to yes.",
+              "xp_reward": 10,
+              "options": [
+                "value == 30",
+                "return value",
+                "pass",
+                "value >= 30"
+              ],
+              "correct_answer": "value >= 30"
+            },
+            {
+              "id": "tree-stump-predict",
+              "type": "output_prediction",
+              "question": "The displayed value is what the code prints when it labels values at or above the stump cutoff for value holding.",
+              "hints": [
+                "Follow the job, which labels values at or above the stump cutoff.",
+                "The stump sends values of at least 30 to yes.",
+                "yes"
+              ],
+              "explanation": "The stump sends values of at least 30 to yes.",
+              "xp_reward": 10,
+              "starter_code": "value = 40\nprint('yes' if value >= 30 else 'no')\n",
+              "options": [
+                "no",
+                "0",
+                "none",
+                "yes"
+              ],
+              "correct_answer": "yes"
+            },
+            {
+              "id": "tree-stump-order",
+              "type": "ordering",
+              "question": "Place every piece so the result labels values at or above the stump cutoff for value holding yes.",
+              "hints": [
+                "Follow the job, which labels values at or above the stump cutoff.",
+                "The stump sends values of at least 30 to yes.",
+                "if value >= 30: pass"
+              ],
+              "explanation": "The stump sends values of at least 30 to yes.",
+              "xp_reward": 10,
+              "options": [
+                "if",
+                "value",
+                ">=",
+                "30:",
+                "pass",
+                "<"
+              ],
+              "correct_answer": [
+                "if",
+                "value",
+                ">=",
+                "30:",
+                "pass"
+              ]
+            },
+            {
+              "id": "tree-stump-fill",
+              "type": "fill_blank",
+              "question": "Drop in the piece that lets the line labels values at or above the stump cutoff for value holding yes.",
+              "hints": [
+                "Follow the job, which labels values at or above the stump cutoff.",
+                "The stump sends values of at least 30 to yes.",
+                ">="
+              ],
+              "explanation": "The stump sends values of at least 30 to yes.",
+              "xp_reward": 10,
+              "starter_code": "label = 'yes' if value ___ 30 else 'no'\n",
+              "options": [
+                "==",
+                ">=",
+                "<",
+                "!="
+              ],
+              "correct_answer": ">="
+            },
+            {
+              "id": "tree-stump-bug",
+              "type": "debugging",
+              "question": "The mismatch misses the job, which labels values at or above the stump cutoff, for value holding yes.",
+              "hints": [
+                "Follow the job, which labels values at or above the stump cutoff.",
+                "The print says no for a value that clears the stump.",
+                "Line 2"
+              ],
+              "explanation": "The print says no for a value that clears the stump.",
+              "xp_reward": 10,
+              "starter_code": "value = 40\nprint('no')\n",
+              "correct_answer": "2"
+            },
+            {
+              "id": "tree-stump-predict-2",
+              "type": "output_prediction",
+              "question": "Choose the printed result of the second run that labels values at or above the stump cutoff for value holding yes.",
+              "hints": [
+                "Follow the job, which labels values at or above the stump cutoff.",
+                "The stump sends values of at least 30 to yes.",
+                "no"
+              ],
+              "explanation": "The stump sends values of at least 30 to yes.",
+              "xp_reward": 10,
+              "starter_code": "value = 10\nprint('yes' if value >= 30 else 'no')\n",
+              "options": [
+                "yes",
+                "none",
+                "no",
+                "0"
+              ],
+              "correct_answer": "no"
+            },
+            {
+              "id": "tree-stump-write",
+              "type": "code",
+              "question": "Make the program labels values at or above the stump cutoff by filling the blank for value holding.",
+              "hints": [
+                "Follow the job, which labels values at or above the stump cutoff.",
+                "The printed value is the result after this step labels values at or above the stump cutoff.",
+                "label = 'yes' if value >= 30 else 'no'"
+              ],
+              "explanation": "The printed value is the result after this step labels values at or above the stump cutoff.",
+              "xp_reward": 10,
+              "starter_code": "value = 40\nlabel = ___\nprint(label)\n",
+              "solution_code": "value = 40\nlabel = 'yes' if value >= 30 else 'no'\nprint(label)\n",
+              "tests": [
+                {
+                  "name": "tree-stump-prints",
+                  "description": "The printed value is the result after this step labels values at or above the st",
+                  "expected_stdout": "yes\n",
+                  "required": true
+                }
+              ]
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "tree-gini",
-      "title": "2. Gini Impurity",
-      "description": "Implement `gini(labels)` for a list of class labels. The test checks that `gini([0, 0, 0])` equals `0.0`; `gini([0, 1])` equals `0.5`.",
+      "title": "Practice Gini Impurity",
+      "description": "Implement gini(labels) for a list of class labels. The test checks that gini([0, 0, 0]) equals 0.0; gini([0, 1]) equals 0.5.",
       "order": 22,
       "difficulty": "intermediate",
       "duration_minutes": 5,
@@ -65,7 +231,7 @@
       ],
       "prerequisites": [],
       "learning_objectives": [
-        "Compute Gini impurity"
+        "This step scores a balanced split as impure, using yes and 1."
       ],
       "starter_code": "def gini(labels):\n    # TODO\n    pass\n",
       "solution_code": "def gini(labels):\n    n = len(labels)\n    if n == 0:\n        return 0.0\n    counts = {}\n    for lab in labels:\n        counts[lab] = counts.get(lab, 0) + 1\n    return 1.0 - sum((c / n) ** 2 for c in counts.values())\n",
@@ -86,12 +252,182 @@
         "url": "https://scikit-learn.org/stable/modules/tree.html",
         "license": "BSD 3-Clause (scikit-learn documentation)"
       },
-      "xp_reward": 10
+      "xp_reward": 10,
+      "player_mode": "micro",
+      "sublessons": [
+        {
+          "id": "tree-gini-micro",
+          "title": "Practice Gini Impurity",
+          "description": "",
+          "order": 1,
+          "exercises": [
+            {
+              "id": "tree-gini-teach",
+              "type": "teach",
+              "question": "This step scores a balanced split as impure, using yes and 1.",
+              "hints": [
+                "Follow the job, which scores a balanced split as impure.",
+                "Gini impurity is one minus the squared shares.",
+                "1 - (share ** 2)"
+              ],
+              "explanation": "This step scores a balanced split as impure, using yes and 1.",
+              "xp_reward": 0,
+              "worked_example": "1 - (share ** 2)"
+            },
+            {
+              "id": "tree-gini-mcq",
+              "type": "mcq",
+              "question": "Mark the choice that scores a balanced split as impure when the code mentions yes and 1.",
+              "hints": [
+                "Follow the job, which scores a balanced split as impure.",
+                "Gini impurity is one minus the squared shares.",
+                "1 - (share ** 2)"
+              ],
+              "explanation": "Gini impurity is one minus the squared shares.",
+              "xp_reward": 10,
+              "options": [
+                "share == 1",
+                "1 - (share ** 2)",
+                "return share",
+                "pass"
+              ],
+              "correct_answer": "1 - (share ** 2)"
+            },
+            {
+              "id": "tree-gini-predict",
+              "type": "output_prediction",
+              "question": "After yes and 1, the code scores a balanced split as impure, and the correct choice is the printed value.",
+              "hints": [
+                "Follow the job, which scores a balanced split as impure.",
+                "Gini impurity is one minus the squared shares.",
+                "0.5"
+              ],
+              "explanation": "Gini impurity is one minus the squared shares.",
+              "xp_reward": 10,
+              "starter_code": "yes = 2\ntotal = 4\nshare = yes / total\nprint(round(1 - (share ** 2 + (1 - share) ** 2), 2))\n",
+              "options": [
+                "0.0",
+                "0.5",
+                "none",
+                "0"
+              ],
+              "correct_answer": "0.5"
+            },
+            {
+              "id": "tree-gini-order",
+              "type": "ordering",
+              "question": "The finished line scores a balanced split as impure, so place its pieces in order for yes and 1.",
+              "hints": [
+                "Follow the job, which scores a balanced split as impure.",
+                "Gini impurity is one minus the squared shares.",
+                "impurity = 1 - (share ** 2)"
+              ],
+              "explanation": "Gini impurity is one minus the squared shares.",
+              "xp_reward": 10,
+              "options": [
+                "impurity",
+                "=",
+                "1",
+                "-",
+                "(share",
+                "**",
+                "2)",
+                "+"
+              ],
+              "correct_answer": [
+                "impurity",
+                "=",
+                "1",
+                "-",
+                "(share",
+                "**",
+                "2)"
+              ]
+            },
+            {
+              "id": "tree-gini-fill",
+              "type": "fill_blank",
+              "question": "Finish the line that scores a balanced split as impure by filling the blank for yes and 1.",
+              "hints": [
+                "Follow the job, which scores a balanced split as impure.",
+                "Gini impurity is one minus the squared shares.",
+                "-"
+              ],
+              "explanation": "Gini impurity is one minus the squared shares.",
+              "xp_reward": 10,
+              "starter_code": "impurity = 1 ___ (share ** 2)\n",
+              "options": [
+                "+",
+                "-",
+                "*",
+                "/"
+              ],
+              "correct_answer": "-"
+            },
+            {
+              "id": "tree-gini-bug",
+              "type": "debugging",
+              "question": "Mark the line that breaks the job, which scores a balanced split as impure, for yes and 1.",
+              "hints": [
+                "Follow the job, which scores a balanced split as impure.",
+                "The print is the share, not the impurity of that share.",
+                "Line 3"
+              ],
+              "explanation": "The print is the share, not the impurity of that share.",
+              "xp_reward": 10,
+              "starter_code": "yes = 2\ntotal = 4\nprint(yes / total)\n",
+              "correct_answer": "3"
+            },
+            {
+              "id": "tree-gini-predict-2",
+              "type": "output_prediction",
+              "question": "Follow the second program, which scores a balanced split as impure for yes and 1, and choose its output.",
+              "hints": [
+                "Follow the job, which scores a balanced split as impure.",
+                "Gini impurity is one minus the squared shares.",
+                "0.0"
+              ],
+              "explanation": "Gini impurity is one minus the squared shares.",
+              "xp_reward": 10,
+              "starter_code": "yes = 4\ntotal = 4\nshare = yes / total\nprint(round(1 - (share ** 2 + (1 - share) ** 2), 2))\n",
+              "options": [
+                "0.5",
+                "none",
+                "0",
+                "0.0"
+              ],
+              "correct_answer": "0.0"
+            },
+            {
+              "id": "tree-gini-write",
+              "type": "code",
+              "question": "Finish the program that scores a balanced split as impure by filling the blank for yes and 1.",
+              "hints": [
+                "Follow the job, which scores a balanced split as impure.",
+                "The printed value is the result after this step scores a balanced split as impure.",
+                "label = round(1 - (share ** 2 + (1 - share) ** 2), 2)"
+              ],
+              "explanation": "The printed value is the result after this step scores a balanced split as impure.",
+              "xp_reward": 10,
+              "starter_code": "yes = 2\ntotal = 4\nshare = yes / total\nlabel = ___\nprint(label)\n",
+              "solution_code": "yes = 2\ntotal = 4\nshare = yes / total\nlabel = round(1 - (share ** 2 + (1 - share) ** 2), 2)\nprint(label)\n",
+              "tests": [
+                {
+                  "name": "tree-gini-prints",
+                  "description": "The printed value is the result after this step scores a balanced split as impur",
+                  "expected_stdout": "0.5\n",
+                  "required": true
+                }
+              ]
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "tree-best-split",
-      "title": "3. Best Threshold Split",
-      "description": "Implement `best_split(xs, labels)` minimizing weighted gini of left (x<t) / right (x>=t). Return threshold. The test checks that `best_split([1, 2, 3, 10], [0, 0, 0, 1])` equals `10`.",
+      "title": "Practice Best Threshold Split",
+      "description": "Implement best_split(xs, labels) minimizing weighted gini of left (x<t) / right (x>=t). Return threshold. The test checks that best_split([1, 2, 3, 10], [0, 0, 0, 1]) equals 10.",
       "order": 23,
       "difficulty": "intermediate",
       "duration_minutes": 8,
@@ -103,7 +439,7 @@
       ],
       "prerequisites": [],
       "learning_objectives": [
-        "Find best stump threshold"
+        "This step picks the index of the smallest gap, using gaps and index."
       ],
       "starter_code": "def best_split(xs, labels):\n    # TODO\n    pass\n",
       "solution_code": "def best_split(xs, labels):\n    def _gini(labs):\n        n = len(labs)\n        if n == 0:\n            return 0.0\n        counts = {}\n        for lab in labs:\n            counts[lab] = counts.get(lab, 0) + 1\n        return 1.0 - sum((c / n) ** 2 for c in counts.values())\n    best_t, best_g = xs[0], float('inf')\n    for t in sorted(set(xs)):\n        left = [lab for x, lab in zip(xs, labels) if x < t]\n        right = [lab for x, lab in zip(xs, labels) if x >= t]\n        if not left or not right:\n            continue\n        g = (len(left) * _gini(left) + len(right) * _gini(right)) / len(labels)\n        if g < best_g:\n            best_g, best_t = g, t\n    return best_t\n",
@@ -124,12 +460,174 @@
         "url": "https://scikit-learn.org/stable/modules/tree.html",
         "license": "BSD 3-Clause (scikit-learn documentation)"
       },
-      "xp_reward": 25
+      "xp_reward": 25,
+      "player_mode": "micro",
+      "sublessons": [
+        {
+          "id": "tree-best-split-micro",
+          "title": "Practice Best Threshold Split",
+          "description": "",
+          "order": 1,
+          "exercises": [
+            {
+              "id": "tree-best-split-teach",
+              "type": "teach",
+              "question": "This step picks the index of the smallest gap, using gaps and index.",
+              "hints": [
+                "Follow the job, which picks the index of the smallest gap.",
+                "The best split is the index of the smallest gap.",
+                "min(gaps)"
+              ],
+              "explanation": "This step picks the index of the smallest gap, using gaps and index.",
+              "xp_reward": 0,
+              "worked_example": "min(gaps)"
+            },
+            {
+              "id": "tree-best-split-mcq",
+              "type": "mcq",
+              "question": "The match is the line that picks the index of the smallest gap for gaps and 4.",
+              "hints": [
+                "Follow the job, which picks the index of the smallest gap.",
+                "The best split is the index of the smallest gap.",
+                "gaps.index(min(gaps))"
+              ],
+              "explanation": "The best split is the index of the smallest gap.",
+              "xp_reward": 10,
+              "options": [
+                "gaps == gaps",
+                "return gaps",
+                "pass",
+                "gaps.index(min(gaps))"
+              ],
+              "correct_answer": "gaps.index(min(gaps))"
+            },
+            {
+              "id": "tree-best-split-predict",
+              "type": "output_prediction",
+              "question": "Work out what is printed when the code picks the index of the smallest gap for gaps and 4.",
+              "hints": [
+                "Follow the job, which picks the index of the smallest gap.",
+                "The best split is the index of the smallest gap.",
+                "1"
+              ],
+              "explanation": "The best split is the index of the smallest gap.",
+              "xp_reward": 10,
+              "starter_code": "gaps = [3, 1, 4]\nprint(gaps.index(min(gaps)))\n",
+              "options": [
+                "2",
+                "none",
+                "0",
+                "1"
+              ],
+              "correct_answer": "1"
+            },
+            {
+              "id": "tree-best-split-order",
+              "type": "ordering",
+              "question": "Rebuild, from the left, the line that picks the index of the smallest gap for gaps and 4.",
+              "hints": [
+                "Follow the job, which picks the index of the smallest gap.",
+                "The best split is the index of the smallest gap.",
+                "picked = gaps.index(min(gaps))"
+              ],
+              "explanation": "The best split is the index of the smallest gap.",
+              "xp_reward": 10,
+              "options": [
+                "picked",
+                "=",
+                "gaps.index(min(gaps))",
+                "max"
+              ],
+              "correct_answer": [
+                "picked",
+                "=",
+                "gaps.index(min(gaps))"
+              ]
+            },
+            {
+              "id": "tree-best-split-fill",
+              "type": "fill_blank",
+              "question": "The completed line picks the index of the smallest gap once you fill the blank for gaps and 4.",
+              "hints": [
+                "Follow the job, which picks the index of the smallest gap.",
+                "The best split is the index of the smallest gap.",
+                "min"
+              ],
+              "explanation": "The best split is the index of the smallest gap.",
+              "xp_reward": 10,
+              "starter_code": "picked = gaps.index(___(gaps))\n",
+              "options": [
+                "max",
+                "sum",
+                "len",
+                "min"
+              ],
+              "correct_answer": "min"
+            },
+            {
+              "id": "tree-best-split-bug",
+              "type": "debugging",
+              "question": "One line does another job than the one that picks the index of the smallest gap for gaps and 4.",
+              "hints": [
+                "Follow the job, which picks the index of the smallest gap.",
+                "The print takes the first gap instead of the smallest.",
+                "Line 2"
+              ],
+              "explanation": "The print takes the first gap instead of the smallest.",
+              "xp_reward": 10,
+              "starter_code": "gaps = [3, 1, 4]\nprint(gaps[0])\n",
+              "correct_answer": "2"
+            },
+            {
+              "id": "tree-best-split-predict-2",
+              "type": "output_prediction",
+              "question": "The second display is what prints after the code picks the index of the smallest gap for gaps and 4.",
+              "hints": [
+                "Follow the job, which picks the index of the smallest gap.",
+                "The best split is the index of the smallest gap.",
+                "2"
+              ],
+              "explanation": "The best split is the index of the smallest gap.",
+              "xp_reward": 10,
+              "starter_code": "gaps = [3, 4, 2]\nprint(gaps.index(min(gaps)))\n",
+              "options": [
+                "1",
+                "none",
+                "2",
+                "0"
+              ],
+              "correct_answer": "2"
+            },
+            {
+              "id": "tree-best-split-write",
+              "type": "code",
+              "question": "Supply the blank so the run picks the index of the smallest gap and prints the result for gaps and 4.",
+              "hints": [
+                "Follow the job, which picks the index of the smallest gap.",
+                "The printed value is the result after this step picks the index of the smallest gap.",
+                "label = gaps.index(min(gaps))"
+              ],
+              "explanation": "The printed value is the result after this step picks the index of the smallest gap.",
+              "xp_reward": 10,
+              "starter_code": "gaps = [3, 1, 4]\nlabel = ___\nprint(label)\n",
+              "solution_code": "gaps = [3, 1, 4]\nlabel = gaps.index(min(gaps))\nprint(label)\n",
+              "tests": [
+                {
+                  "name": "tree-best-split-prints",
+                  "description": "The printed value is the result after this step picks the index of the smallest ",
+                  "expected_stdout": "1\n",
+                  "required": true
+                }
+              ]
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "tree-bagging",
-      "title": "4. Majority Vote Ensemble (Practice)",
-      "description": "Implement `majority_vote(pred_lists)` — each pred_lists[i] is predictions from one model. Tie → min label. The test checks that `majority_vote([[1, 0], [1, 1], [0, 1]])` equals `[1, 1]`.",
+      "title": "Practice Majority Vote Ensemble",
+      "description": "Implement majority_vote(pred_lists) — each pred_lists[i] is predictions from one model. Tie → min label. The test checks that majority_vote([[1, 0], [1, 1], [0, 1]]) equals [1, 1].",
       "order": 24,
       "difficulty": "intermediate",
       "duration_minutes": 6,
@@ -141,7 +639,7 @@
       ],
       "prerequisites": [],
       "learning_objectives": [
-        "Ensemble via majority vote"
+        "This step takes the majority vote, using votes and 2."
       ],
       "starter_code": "from collections import Counter\n\ndef majority_vote(pred_lists):\n    # TODO\n    pass\n",
       "solution_code": "from collections import Counter\n\ndef majority_vote(pred_lists):\n    n = len(pred_lists[0])\n    out = []\n    for i in range(n):\n        votes = [plist[i] for plist in pred_lists]\n        counts = Counter(votes)\n        best = max(counts.values())\n        out.append(min(v for v, c in counts.items() if c == best))\n    return out\n",
@@ -162,12 +660,182 @@
         "url": "https://scikit-learn.org/stable/modules/ensemble.html",
         "license": "BSD 3-Clause (scikit-learn documentation)"
       },
-      "xp_reward": 15
+      "xp_reward": 15,
+      "player_mode": "micro",
+      "sublessons": [
+        {
+          "id": "tree-bagging-micro",
+          "title": "Practice Majority Vote Ensemble",
+          "description": "",
+          "order": 1,
+          "exercises": [
+            {
+              "id": "tree-bagging-teach",
+              "type": "teach",
+              "question": "This step takes the majority vote, using votes and 2.",
+              "hints": [
+                "Follow the job, which takes the majority vote.",
+                "The majority is the label with more than half the votes.",
+                "sum(votes) * 2 > len(votes)"
+              ],
+              "explanation": "This step takes the majority vote, using votes and 2.",
+              "xp_reward": 0,
+              "worked_example": "sum(votes) * 2 > len(votes)"
+            },
+            {
+              "id": "tree-bagging-mcq",
+              "type": "mcq",
+              "question": "Mark the choice that takes the majority vote when the code mentions votes and 2.",
+              "hints": [
+                "Follow the job, which takes the majority vote.",
+                "The majority is the label with more than half the votes.",
+                "sum(votes) * 2 > len(votes)"
+              ],
+              "explanation": "The majority is the label with more than half the votes.",
+              "xp_reward": 10,
+              "options": [
+                "votes == votes",
+                "return votes",
+                "pass",
+                "sum(votes) * 2 > len(votes)"
+              ],
+              "correct_answer": "sum(votes) * 2 > len(votes)"
+            },
+            {
+              "id": "tree-bagging-predict",
+              "type": "output_prediction",
+              "question": "After votes and 2, the code takes the majority vote, and the correct choice is the printed value.",
+              "hints": [
+                "Follow the job, which takes the majority vote.",
+                "The majority is the label with more than half the votes.",
+                "1"
+              ],
+              "explanation": "The majority is the label with more than half the votes.",
+              "xp_reward": 10,
+              "starter_code": "votes = [1, 1, 0]\nprint(1 if sum(votes) * 2 > len(votes) else 0)\n",
+              "options": [
+                "0",
+                "none",
+                "blank",
+                "1"
+              ],
+              "correct_answer": "1"
+            },
+            {
+              "id": "tree-bagging-order",
+              "type": "ordering",
+              "question": "The finished line takes the majority vote, so place its pieces in order for votes and 2.",
+              "hints": [
+                "Follow the job, which takes the majority vote.",
+                "The majority is the label with more than half the votes.",
+                "if sum(votes) * 2 > len(votes): pass"
+              ],
+              "explanation": "The majority is the label with more than half the votes.",
+              "xp_reward": 10,
+              "options": [
+                "if",
+                "sum(votes)",
+                "*",
+                "2",
+                ">",
+                "len(votes):",
+                "pass",
+                "<"
+              ],
+              "correct_answer": [
+                "if",
+                "sum(votes)",
+                "*",
+                "2",
+                ">",
+                "len(votes):",
+                "pass"
+              ]
+            },
+            {
+              "id": "tree-bagging-fill",
+              "type": "fill_blank",
+              "question": "Finish the line that takes the majority vote by filling the blank for votes and 2.",
+              "hints": [
+                "Follow the job, which takes the majority vote.",
+                "The majority is the label with more than half the votes.",
+                ">"
+              ],
+              "explanation": "The majority is the label with more than half the votes.",
+              "xp_reward": 10,
+              "starter_code": "win = 1 if sum(votes) * 2 ___ len(votes) else 0\n",
+              "options": [
+                "<",
+                "==",
+                "!=",
+                ">"
+              ],
+              "correct_answer": ">"
+            },
+            {
+              "id": "tree-bagging-bug",
+              "type": "debugging",
+              "question": "Mark the line that breaks the job, which takes the majority vote, for votes and.",
+              "hints": [
+                "Follow the job, which takes the majority vote.",
+                "The print takes one vote and ignores the rest.",
+                "Line 2"
+              ],
+              "explanation": "The print takes one vote and ignores the rest.",
+              "xp_reward": 10,
+              "starter_code": "votes = [1, 1, 0]\nprint(votes[0])\n",
+              "correct_answer": "2"
+            },
+            {
+              "id": "tree-bagging-predict-2",
+              "type": "output_prediction",
+              "question": "Follow the second program, which takes the majority vote for votes and 2, and choose its output.",
+              "hints": [
+                "Follow the job, which takes the majority vote.",
+                "The majority is the label with more than half the votes.",
+                "0"
+              ],
+              "explanation": "The majority is the label with more than half the votes.",
+              "xp_reward": 10,
+              "starter_code": "votes = [0, 0, 1]\nprint(1 if sum(votes) * 2 > len(votes) else 0)\n",
+              "options": [
+                "1",
+                "none",
+                "0",
+                "blank"
+              ],
+              "correct_answer": "0"
+            },
+            {
+              "id": "tree-bagging-write",
+              "type": "code",
+              "question": "Finish the program that takes the majority vote by filling the blank for votes and 2.",
+              "hints": [
+                "Follow the job, which takes the majority vote.",
+                "The printed value is the result after this step takes the majority vote.",
+                "label = 1 if sum(votes) * 2 > len(votes) else 0"
+              ],
+              "explanation": "The printed value is the result after this step takes the majority vote.",
+              "xp_reward": 10,
+              "starter_code": "votes = [1, 1, 0]\nlabel = ___\nprint(label)\n",
+              "solution_code": "votes = [1, 1, 0]\nlabel = 1 if sum(votes) * 2 > len(votes) else 0\nprint(label)\n",
+              "tests": [
+                {
+                  "name": "tree-bagging-prints",
+                  "description": "The printed value is the result after this step takes the majority vote.",
+                  "expected_stdout": "1\n",
+                  "required": true
+                }
+              ]
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "tree-checkpoint",
-      "title": "5. Checkpoint: Tree Depth Limit",
-      "description": "Implement `should_stop(depth, max_depth, labels)` True if depth>=max_depth or all labels equal. The test checks that `should_stop(3, 3, [0, 1])` is true; `should_stop(0, 5, [1, 1, 1])` is true; `should_stop(1, 5, [0, 1])` is false.",
+      "title": "Practice Checkpoint Tree Depth Limit",
+      "description": "Implement should_stop(depth, max_depth, labels) True if depth>=max_depth or all labels equal. The test checks that should_stop(3, 3, [0, 1]) is true; should_stop(0, 5, [1, 1, 1]) is true; should_stop(1, 5, [0, 1]) is false.",
       "order": 25,
       "difficulty": "intermediate",
       "duration_minutes": 10,
@@ -179,7 +847,7 @@
       ],
       "prerequisites": [],
       "learning_objectives": [
-        "Apply tree stopping rules"
+        "This step caps the depth at the limit, using depth and 3."
       ],
       "starter_code": "def should_stop(depth, max_depth, labels):\n    # TODO\n    pass\n",
       "solution_code": "def should_stop(depth, max_depth, labels):\n    return depth >= max_depth or len(set(labels)) <= 1\n",
@@ -200,7 +868,177 @@
         "url": "https://scikit-learn.org/stable/modules/tree.html",
         "license": "BSD 3-Clause (scikit-learn documentation)"
       },
-      "xp_reward": 40
+      "xp_reward": 40,
+      "player_mode": "micro",
+      "sublessons": [
+        {
+          "id": "tree-checkpoint-micro",
+          "title": "Practice Checkpoint Tree Depth Limit",
+          "description": "",
+          "order": 1,
+          "exercises": [
+            {
+              "id": "tree-checkpoint-teach",
+              "type": "teach",
+              "question": "This step caps the depth at the limit, using depth and 3.",
+              "hints": [
+                "Follow the job, which caps the depth at the limit.",
+                "A depth past the limit is replaced by the limit.",
+                "depth > limit"
+              ],
+              "explanation": "This step caps the depth at the limit, using depth and 3.",
+              "xp_reward": 0,
+              "worked_example": "depth > limit"
+            },
+            {
+              "id": "tree-checkpoint-mcq",
+              "type": "mcq",
+              "question": "The match is the line that caps the depth at the limit for depth and 3.",
+              "hints": [
+                "Follow the job, which caps the depth at the limit.",
+                "A depth past the limit is replaced by the limit.",
+                "limit if depth > limit else depth"
+              ],
+              "explanation": "A depth past the limit is replaced by the limit.",
+              "xp_reward": 10,
+              "options": [
+                "depth == limit",
+                "return depth",
+                "pass",
+                "limit if depth > limit else depth"
+              ],
+              "correct_answer": "limit if depth > limit else depth"
+            },
+            {
+              "id": "tree-checkpoint-predict",
+              "type": "output_prediction",
+              "question": "Work out what is printed when the code caps the depth at the limit for depth and.",
+              "hints": [
+                "Follow the job, which caps the depth at the limit.",
+                "A depth past the limit is replaced by the limit.",
+                "3"
+              ],
+              "explanation": "A depth past the limit is replaced by the limit.",
+              "xp_reward": 10,
+              "starter_code": "depth = 31\nlimit = 3\nprint(limit if depth > limit else depth)\n",
+              "options": [
+                "2",
+                "none",
+                "0",
+                "3"
+              ],
+              "correct_answer": "3"
+            },
+            {
+              "id": "tree-checkpoint-order",
+              "type": "ordering",
+              "question": "Rebuild, from the left, the line that caps the depth at the limit for depth and 3.",
+              "hints": [
+                "Follow the job, which caps the depth at the limit.",
+                "A depth past the limit is replaced by the limit.",
+                "kept = limit if depth>limit else depth"
+              ],
+              "explanation": "A depth past the limit is replaced by the limit.",
+              "xp_reward": 10,
+              "options": [
+                "kept",
+                "=",
+                "limit",
+                "if",
+                "depth>limit",
+                "else",
+                "depth",
+                "<"
+              ],
+              "correct_answer": [
+                "kept",
+                "=",
+                "limit",
+                "if",
+                "depth>limit",
+                "else",
+                "depth"
+              ]
+            },
+            {
+              "id": "tree-checkpoint-fill",
+              "type": "fill_blank",
+              "question": "The completed line caps the depth at the limit once you fill the blank for depth and 3.",
+              "hints": [
+                "Follow the job, which caps the depth at the limit.",
+                "A depth past the limit is replaced by the limit.",
+                ">"
+              ],
+              "explanation": "A depth past the limit is replaced by the limit.",
+              "xp_reward": 10,
+              "starter_code": "if depth ___ limit:\n    kept = limit\n",
+              "options": [
+                "<",
+                "==",
+                "!=",
+                ">"
+              ],
+              "correct_answer": ">"
+            },
+            {
+              "id": "tree-checkpoint-bug",
+              "type": "debugging",
+              "question": "One line does another job than the one that caps the depth at the limit for depth and.",
+              "hints": [
+                "Follow the job, which caps the depth at the limit.",
+                "The print keeps the raw depth and never applies the cap.",
+                "Line 3"
+              ],
+              "explanation": "The print keeps the raw depth and never applies the cap.",
+              "xp_reward": 10,
+              "starter_code": "depth = 31\nlimit = 3\nprint(depth)\n",
+              "correct_answer": "3"
+            },
+            {
+              "id": "tree-checkpoint-predict-2",
+              "type": "output_prediction",
+              "question": "The second display is what prints after the code caps the depth at the limit for depth and 3.",
+              "hints": [
+                "Follow the job, which caps the depth at the limit.",
+                "A depth past the limit is replaced by the limit.",
+                "2"
+              ],
+              "explanation": "A depth past the limit is replaced by the limit.",
+              "xp_reward": 10,
+              "starter_code": "depth = 2\nlimit = 3\nprint(limit if depth > limit else depth)\n",
+              "options": [
+                "3",
+                "none",
+                "2",
+                "0"
+              ],
+              "correct_answer": "2"
+            },
+            {
+              "id": "tree-checkpoint-write",
+              "type": "code",
+              "question": "Supply the blank so the run caps the depth at the limit and prints the result for depth and.",
+              "hints": [
+                "Follow the job, which caps the depth at the limit.",
+                "The printed value is the result after this step caps the depth at the limit.",
+                "label = limit if depth > limit else depth"
+              ],
+              "explanation": "The printed value is the result after this step caps the depth at the limit.",
+              "xp_reward": 10,
+              "starter_code": "depth = 31\nlimit = 3\nlabel = ___\nprint(label)\n",
+              "solution_code": "depth = 31\nlimit = 3\nlabel = limit if depth > limit else depth\nprint(label)\n",
+              "tests": [
+                {
+                  "name": "tree-checkpoint-prints",
+                  "description": "The printed value is the result after this step caps the depth at the limit.",
+                  "expected_stdout": "3\n",
+                  "required": true
+                }
+              ]
+            }
+          ]
+        }
+      ]
     }
   ]
 }

@@ -14,8 +14,8 @@
   "lessons": [
     {
       "id": "cpp-functions-step-1",
-      "title": "1. Pass-by-Reference (&)",
-      "description": "Finish `swap_ints`. In C++, pass-by-reference (`type&`) allows functions to modify caller variables efficiently. Implement `swap(int& a, int& b)`. The test checks that `x` equals `10 && y == 5`.",
+      "title": "Practice Pass-by-Reference",
+      "description": "Finish swap_ints. In C++, pass-by-reference (type&) allows functions to modify caller variables efficiently. Implement swap(int& a, int& b). The test checks that x equals 10 && y == 5.",
       "order": 16,
       "difficulty": "intermediate",
       "duration_minutes": 5,
@@ -27,7 +27,7 @@
         "cpp-loops"
       ],
       "learning_objectives": [
-        "Use C++ reference parameters & to mutate values"
+        "This step updates a value through a reference, using value and 1."
       ],
       "starter_code": "void swap_ints(int& a, int& b) {\n    // TODO: Swap values of a and b using references\n}\n",
       "solution_code": "void swap_ints(int& a, int& b) {\n    int temp = a;\n    a = b;\n    b = temp;\n}\n",
@@ -48,12 +48,176 @@
         "url": "https://en.cppreference.com/w/cpp/language/reference",
         "license": "CC BY-SA 4.0 (cppreference.com)"
       },
-      "xp_reward": 10
+      "xp_reward": 10,
+      "player_mode": "micro",
+      "sublessons": [
+        {
+          "id": "cpp-functions-step-1-micro",
+          "title": "Practice Pass-by-Reference",
+          "description": "",
+          "order": 1,
+          "exercises": [
+            {
+              "id": "cpp-functions-step-1-teach",
+              "type": "teach",
+              "question": "This step updates a value through a reference, using value and 1.",
+              "hints": [
+                "Follow the job, which updates a value through a reference.",
+                "A reference names the same integer, so the increment shows up.",
+                "int& alias = value;"
+              ],
+              "explanation": "This step updates a value through a reference, using value and 1.",
+              "xp_reward": 0,
+              "worked_example": "int& alias = value;"
+            },
+            {
+              "id": "cpp-functions-step-1-mcq",
+              "type": "mcq",
+              "question": "Choose the line that updates a value through a reference, which is the line that fits value and 1.",
+              "hints": [
+                "Follow the job, which updates a value through a reference.",
+                "A reference names the same integer, so the increment shows up.",
+                "int& alias = value;"
+              ],
+              "explanation": "A reference names the same integer, so the increment shows up.",
+              "xp_reward": 10,
+              "options": [
+                "alias == value;",
+                "return value;",
+                "int& alias = value;",
+                "alias = alias;"
+              ],
+              "correct_answer": "int& alias = value;"
+            },
+            {
+              "id": "cpp-functions-step-1-predict",
+              "type": "output_prediction",
+              "question": "Read the code that updates a value through a reference for value and 1, and choose the value it prints.",
+              "hints": [
+                "Follow the job, which updates a value through a reference.",
+                "A reference names the same integer, so the increment shows up.",
+                "27"
+              ],
+              "explanation": "A reference names the same integer, so the increment shows up.",
+              "xp_reward": 10,
+              "starter_code": "#include <iostream>\n#include <string>\n#include <vector>\n#include <algorithm>\n#include <memory>\nint main() {\n    int value = 26;\n    int& alias = value;\n    alias = alias + 1;\n    std::cout << value << std::endl;\n    return 0;\n}\n",
+              "options": [
+                "0",
+                "27",
+                "30",
+                "none"
+              ],
+              "correct_answer": "27"
+            },
+            {
+              "id": "cpp-functions-step-1-order",
+              "type": "ordering",
+              "question": "Arrange the pieces of the line that updates a value through a reference, left to right, for value and 1.",
+              "hints": [
+                "Follow the job, which updates a value through a reference.",
+                "A reference names the same integer, so the increment shows up.",
+                "int& alias = left;"
+              ],
+              "explanation": "A reference names the same integer, so the increment shows up.",
+              "xp_reward": 10,
+              "options": [
+                "int&",
+                "alias",
+                "=",
+                "left;",
+                "=="
+              ],
+              "correct_answer": [
+                "int&",
+                "alias",
+                "=",
+                "left;"
+              ]
+            },
+            {
+              "id": "cpp-functions-step-1-fill",
+              "type": "fill_blank",
+              "question": "Fill the blank so the line updates a value through a reference for value and 1.",
+              "hints": [
+                "Follow the job, which updates a value through a reference.",
+                "A reference names the same integer, so the increment shows up.",
+                "left"
+              ],
+              "explanation": "A reference names the same integer, so the increment shows up.",
+              "xp_reward": 10,
+              "starter_code": "int& alias = ___;",
+              "options": [
+                "right",
+                "count",
+                "left",
+                "alias"
+              ],
+              "correct_answer": "left"
+            },
+            {
+              "id": "cpp-functions-step-1-bug",
+              "type": "debugging",
+              "question": "Find the line that misses the job, which updates a value through a reference, for value and 1.",
+              "hints": [
+                "Follow the job, which updates a value through a reference.",
+                "The copy does not update the original value.",
+                "Line 8"
+              ],
+              "explanation": "The copy does not update the original value.",
+              "xp_reward": 10,
+              "starter_code": "#include <iostream>\n#include <string>\n#include <vector>\n#include <algorithm>\n#include <memory>\nint main() {\n    int value = 26;\n    int alias = value;\n    alias = alias + 1;\n    std::cout << value << std::endl;\n    return 0;\n}\n",
+              "correct_answer": "8"
+            },
+            {
+              "id": "cpp-functions-step-1-predict-2",
+              "type": "output_prediction",
+              "question": "On the new input, the code still updates a value through a reference for value and 1, so choose what it prints.",
+              "hints": [
+                "Follow the job, which updates a value through a reference.",
+                "A reference names the same integer, so the increment shows up.",
+                "30"
+              ],
+              "explanation": "A reference names the same integer, so the increment shows up.",
+              "xp_reward": 10,
+              "starter_code": "#include <iostream>\n#include <string>\n#include <vector>\n#include <algorithm>\n#include <memory>\nint main() {\n    int value = 29;\n    int& alias = value;\n    alias = alias + 1;\n    std::cout << value << std::endl;\n    return 0;\n}\n",
+              "options": [
+                "27",
+                "30",
+                "none",
+                "0"
+              ],
+              "correct_answer": "30"
+            },
+            {
+              "id": "cpp-functions-step-1-write",
+              "type": "code",
+              "question": "Fill the blank so the program updates a value through a reference, and the print shows that result for value and 1.",
+              "hints": [
+                "Follow the job, which updates a value through a reference.",
+                "The printed value is the result after this step updates a value through a reference.",
+                "int label = value;"
+              ],
+              "explanation": "The printed value is the result after this step updates a value through a reference.",
+              "xp_reward": 10,
+              "starter_code": "#include <iostream>\n#include <string>\n#include <vector>\n#include <algorithm>\n#include <memory>\nint main() {\n    int value = 26;\n    int& alias = value;\n    alias = alias + 1;\n    int label = ___;\n    std::cout << label << std::endl;\n    return 0;\n}\n",
+              "solution_code": "#include <iostream>\n#include <string>\n#include <vector>\n#include <algorithm>\n#include <memory>\nint main() {\n    int value = 26;\n    int& alias = value;\n    alias = alias + 1;\n    int label = value;\n    std::cout << label << std::endl;\n    return 0;\n}\n",
+              "tests": [
+                {
+                  "name": "cpp-functions-step-1-prints",
+                  "description": "The printed value is the result after this step updates a value through a refere",
+                  "expected_stdout": "27\n",
+                  "required": true
+                }
+              ]
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "cpp-functions-step-2",
-      "title": "2. Const References (const &)",
-      "description": "Pass large objects by `const &` to avoid expensive copies while guaranteeing immutability. Implement `greeting(const std::string& name)` returning `\"Hello, \"` followed by the name and a `!`. The test checks that `greeting(\"Ada\")` equals `\"Hello, Ada!\"`.",
+      "title": "Practice Const References",
+      "description": "Pass large objects by const & to avoid expensive copies while guaranteeing immutability. Implement greeting(const std::string& name) returning \"Hello, \" followed by the name and a !. The test checks that greeting(\"Ada\") equals \"Hello, Ada!\".",
       "order": 17,
       "difficulty": "intermediate",
       "duration_minutes": 5,
@@ -65,7 +229,7 @@
         "cpp-loops"
       ],
       "learning_objectives": [
-        "Pass parameters by const std::string& in C++"
+        "This step reads a value through a const reference, using auto and 27."
       ],
       "starter_code": "#include <string>\n\nstd::string greeting(const std::string& name) {\n    // TODO: return the greeting for this name\n    return \"\";\n}\n",
       "solution_code": "#include <string>\n\nstd::string greeting(const std::string& name) {\n    return \"Hello, \" + name + \"!\";\n}\n",
@@ -89,35 +253,175 @@
       "xp_reward": 10,
       "sublessons": [
         {
-          "id": "cpp-const-ref-sub",
-          "title": "Select the const references",
+          "id": "cpp-functions-step-2-micro",
+          "title": "Practice Const References",
+          "description": "",
           "order": 1,
           "exercises": [
             {
-              "id": "cpp-const-ref-multi-1",
-              "type": "select_multiple",
-              "question": "This lesson passes large objects by `const &` to avoid a copy while guaranteeing the function cannot change them. Select every parameter declaration that does both.",
+              "id": "cpp-functions-step-2-teach",
+              "type": "teach",
+              "question": "This step reads a value through a const reference, using auto and 27.",
+              "hints": [
+                "Follow the job, which reads a value through a const reference.",
+                "A const reference can be read and cannot be reassigned.",
+                "const int& value"
+              ],
+              "explanation": "This step reads a value through a const reference, using auto and 27.",
+              "xp_reward": 0,
+              "worked_example": "const int& value"
+            },
+            {
+              "id": "cpp-functions-step-2-mcq",
+              "type": "mcq",
+              "question": "The correct line reads a value through a const reference, and it is the line tied to auto and 27.",
+              "hints": [
+                "Follow the job, which reads a value through a const reference.",
+                "A const reference can be read and cannot be reassigned.",
+                "const int& value"
+              ],
+              "explanation": "A const reference can be read and cannot be reassigned.",
+              "xp_reward": 10,
               "options": [
-                "const std::string& name",
-                "std::string name",
-                "const std::string& text",
-                "std::string& ref"
+                "return;",
+                "value == value;",
+                "value = value;",
+                "const int& value"
+              ],
+              "correct_answer": "const int& value"
+            },
+            {
+              "id": "cpp-functions-step-2-predict",
+              "type": "output_prediction",
+              "question": "The program reads a value through a const reference with auto and 27, so choose the printed value.",
+              "hints": [
+                "Follow the job, which reads a value through a const reference.",
+                "A const reference can be read and cannot be reassigned.",
+                "28"
+              ],
+              "explanation": "A const reference can be read and cannot be reassigned.",
+              "xp_reward": 10,
+              "starter_code": "#include <iostream>\n#include <string>\n#include <vector>\n#include <algorithm>\n#include <memory>\nint main() {\n    auto read = [](const int& value) { return value + 1; };\n    std::cout << read(27) << std::endl;\n    return 0;\n}\n",
+              "options": [
+                "31",
+                "none",
+                "0",
+                "28"
+              ],
+              "correct_answer": "28"
+            },
+            {
+              "id": "cpp-functions-step-2-order",
+              "type": "ordering",
+              "question": "Build the line that reads a value through a const reference for auto and 27, from the first piece to the last.",
+              "hints": [
+                "Follow the job, which reads a value through a const reference.",
+                "A const reference can be read and cannot be reassigned.",
+                "const int& alias = left;"
+              ],
+              "explanation": "A const reference can be read and cannot be reassigned.",
+              "xp_reward": 10,
+              "options": [
+                "const",
+                "int&",
+                "alias",
+                "=",
+                "left;",
+                "=="
               ],
               "correct_answer": [
-                "const std::string& name",
-                "const std::string& text"
+                "const",
+                "int&",
+                "alias",
+                "=",
+                "left;"
+              ]
+            },
+            {
+              "id": "cpp-functions-step-2-fill",
+              "type": "fill_blank",
+              "question": "Replace the blank with the piece that makes the line reads a value through a const reference for auto and 27.",
+              "hints": [
+                "Follow the job, which reads a value through a const reference.",
+                "A const reference can be read and cannot be reassigned.",
+                "left"
               ],
-              "explanation": "`const &` borrows without copying and forbids writes. Plain `std::string` copies, and a non-const reference can modify the caller's object.",
-              "xp_reward": 10
+              "explanation": "A const reference can be read and cannot be reassigned.",
+              "xp_reward": 10,
+              "starter_code": "const int& alias = ___;",
+              "options": [
+                "right",
+                "count",
+                "alias",
+                "left"
+              ],
+              "correct_answer": "left"
+            },
+            {
+              "id": "cpp-functions-step-2-bug",
+              "type": "debugging",
+              "question": "Spot the line that fails the job, which reads a value through a const reference, around auto and.",
+              "hints": [
+                "Follow the job, which reads a value through a const reference.",
+                "The function subtracts one instead of adding one.",
+                "Line 7"
+              ],
+              "explanation": "The function subtracts one instead of adding one.",
+              "xp_reward": 10,
+              "starter_code": "#include <iostream>\n#include <string>\n#include <vector>\n#include <algorithm>\n#include <memory>\nint main() {\n    auto read = [](const int& value) { return value - 1; };\n    std::cout << read(27) << std::endl;\n    return 0;\n}\n",
+              "correct_answer": "7"
+            },
+            {
+              "id": "cpp-functions-step-2-predict-2",
+              "type": "output_prediction",
+              "question": "The second program reads a value through a const reference for auto and 27, so choose the new printed value.",
+              "hints": [
+                "Follow the job, which reads a value through a const reference.",
+                "A const reference can be read and cannot be reassigned.",
+                "31"
+              ],
+              "explanation": "A const reference can be read and cannot be reassigned.",
+              "xp_reward": 10,
+              "starter_code": "#include <iostream>\n#include <string>\n#include <vector>\n#include <algorithm>\n#include <memory>\nint main() {\n    auto read = [](const int& value) { return value + 1; };\n    std::cout << read(30) << std::endl;\n    return 0;\n}\n",
+              "options": [
+                "0",
+                "31",
+                "none",
+                "28"
+              ],
+              "correct_answer": "31"
+            },
+            {
+              "id": "cpp-functions-step-2-write",
+              "type": "code",
+              "question": "Complete the blank so this program reads a value through a const reference and prints the result for auto and 27.",
+              "hints": [
+                "Follow the job, which reads a value through a const reference.",
+                "The printed value is the result after this step reads a value through a const reference.",
+                "int label = read(27);"
+              ],
+              "explanation": "The printed value is the result after this step reads a value through a const reference.",
+              "xp_reward": 10,
+              "starter_code": "#include <iostream>\n#include <string>\n#include <vector>\n#include <algorithm>\n#include <memory>\nint main() {\n    auto read = [](const int& value) { return value + 1; };\n    int label = ___;\n    std::cout << label << std::endl;\n    return 0;\n}\n",
+              "solution_code": "#include <iostream>\n#include <string>\n#include <vector>\n#include <algorithm>\n#include <memory>\nint main() {\n    auto read = [](const int& value) { return value + 1; };\n    int label = read(27);\n    std::cout << label << std::endl;\n    return 0;\n}\n",
+              "tests": [
+                {
+                  "name": "cpp-functions-step-2-prints",
+                  "description": "The printed value is the result after this step reads a value through a const re",
+                  "expected_stdout": "28\n",
+                  "required": true
+                }
+              ]
             }
           ]
         }
-      ]
+      ],
+      "player_mode": "micro"
     },
     {
       "id": "cpp-functions-01",
-      "title": "3. In-Place Range Clamping (Concept Challenge)",
-      "description": "Finish `clamp`. Clamp a double variable in-place using reference. The test checks that `v` equals `100.0`; `v2` equals `0.0`.",
+      "title": "Practice In-Place Range Clamping",
+      "description": "Finish clamp. Clamp a double variable in-place using reference. The test checks that v equals 100.0; v2 equals 0.0.",
       "order": 18,
       "difficulty": "intermediate",
       "duration_minutes": 8,
@@ -129,7 +433,7 @@
         "cpp-loops"
       ],
       "learning_objectives": [
-        "Clamp values in-place using reference parameters"
+        "This step clamps a value into a range, using value and 10."
       ],
       "starter_code": "void clamp(double& val, double min_val, double max_val) {\n    // TODO: If val < min_val, val = min_val; if val > max_val, val = max_val\n}\n",
       "solution_code": "void clamp(double& val, double min_val, double max_val) {\n    if (val < min_val) val = min_val;\n    else if (val > max_val) val = max_val;\n}\n",
@@ -150,11 +454,181 @@
         "url": "https://en.cppreference.com/w/cpp/language/reference",
         "license": "CC BY-SA 4.0 (cppreference.com)"
       },
-      "xp_reward": 25
+      "xp_reward": 25,
+      "player_mode": "micro",
+      "sublessons": [
+        {
+          "id": "cpp-functions-01-micro",
+          "title": "Practice In-Place Range Clamping",
+          "description": "",
+          "order": 1,
+          "exercises": [
+            {
+              "id": "cpp-functions-01-teach",
+              "type": "teach",
+              "question": "This step clamps a value into a range, using value and 10.",
+              "hints": [
+                "Follow the job, which clamps a value into a range.",
+                "Values above the top become the top.",
+                "if (value > 10) value = 10;"
+              ],
+              "explanation": "This step clamps a value into a range, using value and 10.",
+              "xp_reward": 0,
+              "worked_example": "if (value > 10) value = 10;"
+            },
+            {
+              "id": "cpp-functions-01-mcq",
+              "type": "mcq",
+              "question": "A correct choice clamps a value into a range and goes with value and 10.",
+              "hints": [
+                "Follow the job, which clamps a value into a range.",
+                "Values above the top become the top.",
+                "if (value > 10) value = 10;"
+              ],
+              "explanation": "Values above the top become the top.",
+              "xp_reward": 10,
+              "options": [
+                "value == 10;",
+                "return value;",
+                "if (value > 10) value = 10;",
+                "value = 0;"
+              ],
+              "correct_answer": "if (value > 10) value = 10;"
+            },
+            {
+              "id": "cpp-functions-01-predict",
+              "type": "output_prediction",
+              "question": "Select the output after the code clamps a value into a range, using value and.",
+              "hints": [
+                "Follow the job, which clamps a value into a range.",
+                "Values above the top become the top.",
+                "10"
+              ],
+              "explanation": "Values above the top become the top.",
+              "xp_reward": 10,
+              "starter_code": "#include <iostream>\n#include <string>\n#include <vector>\n#include <algorithm>\n#include <memory>\nint main() {\n    int value = 40;\n    if (value < 0) value = 0;\n    if (value > 10) value = 10;\n    std::cout << value << std::endl;\n    return 0;\n}\n",
+              "options": [
+                "4",
+                "none",
+                "10",
+                "0"
+              ],
+              "correct_answer": "10"
+            },
+            {
+              "id": "cpp-functions-01-order",
+              "type": "ordering",
+              "question": "Make the line that clamps a value into a range by ordering the pieces for value and 10.",
+              "hints": [
+                "Follow the job, which clamps a value into a range.",
+                "Values above the top become the top.",
+                "if (left > right) left = right;"
+              ],
+              "explanation": "Values above the top become the top.",
+              "xp_reward": 10,
+              "options": [
+                "if",
+                "(left",
+                ">",
+                "right)",
+                "left",
+                "=",
+                "right;",
+                "=="
+              ],
+              "correct_answer": [
+                "if",
+                "(left",
+                ">",
+                "right)",
+                "left",
+                "=",
+                "right;"
+              ]
+            },
+            {
+              "id": "cpp-functions-01-fill",
+              "type": "fill_blank",
+              "question": "Complete the line for value and 10 so that it clamps a value into a range.",
+              "hints": [
+                "Follow the job, which clamps a value into a range.",
+                "Values above the top become the top.",
+                "="
+              ],
+              "explanation": "Values above the top become the top.",
+              "xp_reward": 10,
+              "starter_code": "if (left > right) left ___ right;",
+              "options": [
+                "==",
+                "!=",
+                "=",
+                "+"
+              ],
+              "correct_answer": "="
+            },
+            {
+              "id": "cpp-functions-01-bug",
+              "type": "debugging",
+              "question": "Select the line that gets in the way of the job, which clamps a value into a range, for value and 10.",
+              "hints": [
+                "Follow the job, which clamps a value into a range.",
+                "The high clamp stores zero instead of the top of the range.",
+                "Line 8"
+              ],
+              "explanation": "The high clamp stores zero instead of the top of the range.",
+              "xp_reward": 10,
+              "starter_code": "#include <iostream>\n#include <string>\n#include <vector>\n#include <algorithm>\n#include <memory>\nint main() {\n    int value = 40;\n    if (value < 0) value = 0;\n    if (value > 10) value = 0;\n    std::cout << value << std::endl;\n    return 0;\n}\n",
+              "correct_answer": "8"
+            },
+            {
+              "id": "cpp-functions-01-predict-2",
+              "type": "output_prediction",
+              "question": "With the new data around value and 10, the code clamps a value into a range, so select the new output.",
+              "hints": [
+                "Follow the job, which clamps a value into a range.",
+                "Values above the top become the top.",
+                "4"
+              ],
+              "explanation": "Values above the top become the top.",
+              "xp_reward": 10,
+              "starter_code": "#include <iostream>\n#include <string>\n#include <vector>\n#include <algorithm>\n#include <memory>\nint main() {\n    int value = 4;\n    if (value < 0) value = 0;\n    if (value > 10) value = 10;\n    std::cout << value << std::endl;\n    return 0;\n}\n",
+              "options": [
+                "10",
+                "4",
+                "none",
+                "0"
+              ],
+              "correct_answer": "4"
+            },
+            {
+              "id": "cpp-functions-01-write",
+              "type": "code",
+              "question": "The printed result shows up after you fill the blank so the code clamps a value into a range for value and.",
+              "hints": [
+                "Follow the job, which clamps a value into a range.",
+                "The printed value is the result after this step clamps a value into a range.",
+                "int label = value;"
+              ],
+              "explanation": "The printed value is the result after this step clamps a value into a range.",
+              "xp_reward": 10,
+              "starter_code": "#include <iostream>\n#include <string>\n#include <vector>\n#include <algorithm>\n#include <memory>\nint main() {\n    int value = 40;\n    if (value < 0) value = 0;\n    if (value > 10) value = 10;\n    int label = ___;\n    std::cout << label << std::endl;\n    return 0;\n}\n",
+              "solution_code": "#include <iostream>\n#include <string>\n#include <vector>\n#include <algorithm>\n#include <memory>\nint main() {\n    int value = 40;\n    if (value < 0) value = 0;\n    if (value > 10) value = 10;\n    int label = value;\n    std::cout << label << std::endl;\n    return 0;\n}\n",
+              "tests": [
+                {
+                  "name": "cpp-functions-01-prints",
+                  "description": "The printed value is the result after this step clamps a value into a range.",
+                  "expected_stdout": "10\n",
+                  "required": true
+                }
+              ]
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "cpp-functions-practice-1",
-      "title": "4. Value Incrementer (Practice)",
+      "title": "Practice Value Incrementer",
       "description": "Practice with pass-by-reference: implement increment(int& value, int amount = 1) so it adds amount to value in-place; the caller's variable must change. The test runs increment(val, 5) on val == 10 and asserts val == 15.",
       "order": 19,
       "difficulty": "intermediate",
@@ -167,7 +641,7 @@
         "cpp-loops"
       ],
       "learning_objectives": [
-        "Mutate reference parameter in C++"
+        "This step adds one to the integer, using value and 1."
       ],
       "starter_code": "void increment(int& value, int amount = 1) {\n    // TODO: Add amount to value\n}\n",
       "solution_code": "void increment(int& value, int amount = 1) {\n    value += amount;\n}\n",
@@ -188,12 +662,180 @@
         "url": "https://en.cppreference.com/w/cpp/language/reference",
         "license": "CC BY-SA 4.0 (cppreference.com)"
       },
-      "xp_reward": 15
+      "xp_reward": 15,
+      "player_mode": "micro",
+      "sublessons": [
+        {
+          "id": "cpp-functions-practice-1-micro",
+          "title": "Practice Value Incrementer",
+          "description": "",
+          "order": 1,
+          "exercises": [
+            {
+              "id": "cpp-functions-practice-1-teach",
+              "type": "teach",
+              "question": "This step adds one to the integer, using value and 1.",
+              "hints": [
+                "Follow the job, which adds one to the integer.",
+                "value = value + 1; is the increment.",
+                "value = value + 1;"
+              ],
+              "explanation": "This step adds one to the integer, using value and 1.",
+              "xp_reward": 0,
+              "worked_example": "value = value + 1;"
+            },
+            {
+              "id": "cpp-functions-practice-1-mcq",
+              "type": "mcq",
+              "question": "A correct choice adds one to the integer and goes with value and 1.",
+              "hints": [
+                "Follow the job, which adds one to the integer.",
+                "value = value + 1; is the increment.",
+                "value = value + 1;"
+              ],
+              "explanation": "value = value + 1; is the increment.",
+              "xp_reward": 10,
+              "options": [
+                "value == 1;",
+                "return value;",
+                "value = value + 1;",
+                "value = 1;"
+              ],
+              "correct_answer": "value = value + 1;"
+            },
+            {
+              "id": "cpp-functions-practice-1-predict",
+              "type": "output_prediction",
+              "question": "Select the output after the code adds one to the integer, using value and 1.",
+              "hints": [
+                "Follow the job, which adds one to the integer.",
+                "value = value + 1; is the increment.",
+                "26"
+              ],
+              "explanation": "value = value + 1; is the increment.",
+              "xp_reward": 10,
+              "starter_code": "#include <iostream>\n#include <string>\n#include <vector>\n#include <algorithm>\n#include <memory>\nint main() {\n    int value = 25;\n    value = value + 1;\n    std::cout << value << std::endl;\n    return 0;\n}\n",
+              "options": [
+                "29",
+                "none",
+                "26",
+                "0"
+              ],
+              "correct_answer": "26"
+            },
+            {
+              "id": "cpp-functions-practice-1-order",
+              "type": "ordering",
+              "question": "Make the line that adds one to the integer by ordering the pieces for value and 1.",
+              "hints": [
+                "Follow the job, which adds one to the integer.",
+                "value = value + 1; is the increment.",
+                "int next = left + 1;"
+              ],
+              "explanation": "value = value + 1; is the increment.",
+              "xp_reward": 10,
+              "options": [
+                "int",
+                "next",
+                "=",
+                "left",
+                "+",
+                "1;",
+                "=="
+              ],
+              "correct_answer": [
+                "int",
+                "next",
+                "=",
+                "left",
+                "+",
+                "1;"
+              ]
+            },
+            {
+              "id": "cpp-functions-practice-1-fill",
+              "type": "fill_blank",
+              "question": "Complete the line for value and 1 so that it adds one to the integer.",
+              "hints": [
+                "Follow the job, which adds one to the integer.",
+                "value = value + 1; is the increment.",
+                "+"
+              ],
+              "explanation": "value = value + 1; is the increment.",
+              "xp_reward": 10,
+              "starter_code": "int next = left ___ 1;",
+              "options": [
+                "-",
+                "*",
+                "+",
+                "=="
+              ],
+              "correct_answer": "+"
+            },
+            {
+              "id": "cpp-functions-practice-1-bug",
+              "type": "debugging",
+              "question": "Select the line that gets in the way of the job, which adds one to the integer, for value and 1.",
+              "hints": [
+                "Follow the job, which adds one to the integer.",
+                "The update subtracts one.",
+                "Line 8"
+              ],
+              "explanation": "The update subtracts one.",
+              "xp_reward": 10,
+              "starter_code": "#include <iostream>\n#include <string>\n#include <vector>\n#include <algorithm>\n#include <memory>\nint main() {\n    int value = 25;\n    value = value - 1;\n    std::cout << value << std::endl;\n    return 0;\n}\n",
+              "correct_answer": "8"
+            },
+            {
+              "id": "cpp-functions-practice-1-predict-2",
+              "type": "output_prediction",
+              "question": "With the new data around value and 1, the code adds one to the integer, so select the new output.",
+              "hints": [
+                "Follow the job, which adds one to the integer.",
+                "value = value + 1; is the increment.",
+                "29"
+              ],
+              "explanation": "value = value + 1; is the increment.",
+              "xp_reward": 10,
+              "starter_code": "#include <iostream>\n#include <string>\n#include <vector>\n#include <algorithm>\n#include <memory>\nint main() {\n    int value = 28;\n    value = value + 1;\n    std::cout << value << std::endl;\n    return 0;\n}\n",
+              "options": [
+                "26",
+                "29",
+                "0",
+                "none"
+              ],
+              "correct_answer": "29"
+            },
+            {
+              "id": "cpp-functions-practice-1-write",
+              "type": "code",
+              "question": "The printed result shows up after you fill the blank so the code adds one to the integer for value and 1.",
+              "hints": [
+                "Follow the job, which adds one to the integer.",
+                "The printed value is the result after this step adds one to the integer.",
+                "int label = value;"
+              ],
+              "explanation": "The printed value is the result after this step adds one to the integer.",
+              "xp_reward": 10,
+              "starter_code": "#include <iostream>\n#include <string>\n#include <vector>\n#include <algorithm>\n#include <memory>\nint main() {\n    int value = 25;\n    value = value + 1;\n    int label = ___;\n    std::cout << label << std::endl;\n    return 0;\n}\n",
+              "solution_code": "#include <iostream>\n#include <string>\n#include <vector>\n#include <algorithm>\n#include <memory>\nint main() {\n    int value = 25;\n    value = value + 1;\n    int label = value;\n    std::cout << label << std::endl;\n    return 0;\n}\n",
+              "tests": [
+                {
+                  "name": "cpp-functions-practice-1-prints",
+                  "description": "The printed value is the result after this step adds one to the integer.",
+                  "expected_stdout": "26\n",
+                  "required": true
+                }
+              ]
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "cpp-functions-checkpoint",
-      "title": "5. Unit 4 Checkpoint: C++ Functions Mastery",
-      "description": "Finish `double_value` so it returns `n * 2`. The test checks that `double_value(21)` equals `42`.",
+      "title": "Practice Unit 4 Checkpoint C Functions",
+      "description": "Finish double_value so it returns n * 2. The test checks that double_value(21) equals 42.",
       "order": 20,
       "difficulty": "intermediate",
       "duration_minutes": 10,
@@ -205,7 +847,7 @@
         "cpp-loops"
       ],
       "learning_objectives": [
-        "Return twice an int from double_value"
+        "This step adds two integers in a lambda, using auto and 5."
       ],
       "starter_code": "int double_value(int n) {\n    // TODO: Return n * 2\n    return 0;\n}\n",
       "solution_code": "int double_value(int n) {\n    return n * 2;\n}\n",
@@ -226,7 +868,175 @@
         "url": "https://en.cppreference.com/w/cpp/language/reference",
         "license": "CC BY-SA 4.0 (cppreference.com)"
       },
-      "xp_reward": 40
+      "xp_reward": 40,
+      "player_mode": "micro",
+      "sublessons": [
+        {
+          "id": "cpp-functions-checkpoint-micro",
+          "title": "Practice Unit 4 Checkpoint C Functions",
+          "description": "",
+          "order": 1,
+          "exercises": [
+            {
+              "id": "cpp-functions-checkpoint-teach",
+              "type": "teach",
+              "question": "This step adds two integers in a lambda, using auto and 5.",
+              "hints": [
+                "Follow the job, which adds two integers in a lambda.",
+                "The lambda returns the sum.",
+                "return left + right;"
+              ],
+              "explanation": "This step adds two integers in a lambda, using auto and 5.",
+              "xp_reward": 0,
+              "worked_example": "return left + right;"
+            },
+            {
+              "id": "cpp-functions-checkpoint-mcq",
+              "type": "mcq",
+              "question": "Pick the line that adds two integers in a lambda, not a line about something else, for auto and 5.",
+              "hints": [
+                "Follow the job, which adds two integers in a lambda.",
+                "The lambda returns the sum.",
+                "return left + right;"
+              ],
+              "explanation": "The lambda returns the sum.",
+              "xp_reward": 10,
+              "options": [
+                "left == right;",
+                "return;",
+                "left = right;",
+                "return left + right;"
+              ],
+              "correct_answer": "return left + right;"
+            },
+            {
+              "id": "cpp-functions-checkpoint-predict",
+              "type": "output_prediction",
+              "question": "The displayed value is what the code prints when it adds two integers in a lambda for auto and 5.",
+              "hints": [
+                "Follow the job, which adds two integers in a lambda.",
+                "The lambda returns the sum.",
+                "37"
+              ],
+              "explanation": "The lambda returns the sum.",
+              "xp_reward": 10,
+              "starter_code": "#include <iostream>\n#include <string>\n#include <vector>\n#include <algorithm>\n#include <memory>\nint main() {\n    auto add = [](int left, int right) { return left + right; };\n    std::cout << add(32, 5) << std::endl;\n    return 0;\n}\n",
+              "options": [
+                "41",
+                "0",
+                "none",
+                "37"
+              ],
+              "correct_answer": "37"
+            },
+            {
+              "id": "cpp-functions-checkpoint-order",
+              "type": "ordering",
+              "question": "Place every piece so the result adds two integers in a lambda for auto and 5.",
+              "hints": [
+                "Follow the job, which adds two integers in a lambda.",
+                "The lambda returns the sum.",
+                "int total = left + right;"
+              ],
+              "explanation": "The lambda returns the sum.",
+              "xp_reward": 10,
+              "options": [
+                "int",
+                "total",
+                "=",
+                "left",
+                "+",
+                "right;",
+                "=="
+              ],
+              "correct_answer": [
+                "int",
+                "total",
+                "=",
+                "left",
+                "+",
+                "right;"
+              ]
+            },
+            {
+              "id": "cpp-functions-checkpoint-fill",
+              "type": "fill_blank",
+              "question": "Drop in the piece that lets the line adds two integers in a lambda for auto and 5.",
+              "hints": [
+                "Follow the job, which adds two integers in a lambda.",
+                "The lambda returns the sum.",
+                "+"
+              ],
+              "explanation": "The lambda returns the sum.",
+              "xp_reward": 10,
+              "starter_code": "int total = left ___ right;",
+              "options": [
+                "-",
+                "*",
+                "==",
+                "+"
+              ],
+              "correct_answer": "+"
+            },
+            {
+              "id": "cpp-functions-checkpoint-bug",
+              "type": "debugging",
+              "question": "The mismatch misses the job, which adds two integers in a lambda, for auto and 5.",
+              "hints": [
+                "Follow the job, which adds two integers in a lambda.",
+                "The lambda subtracts.",
+                "Line 7"
+              ],
+              "explanation": "The lambda subtracts.",
+              "xp_reward": 10,
+              "starter_code": "#include <iostream>\n#include <string>\n#include <vector>\n#include <algorithm>\n#include <memory>\nint main() {\n    auto add = [](int left, int right) { return left - right; };\n    std::cout << add(32, 5) << std::endl;\n    return 0;\n}\n",
+              "correct_answer": "7"
+            },
+            {
+              "id": "cpp-functions-checkpoint-predict-2",
+              "type": "output_prediction",
+              "question": "Choose the printed result of the second run that adds two integers in a lambda for auto and 5.",
+              "hints": [
+                "Follow the job, which adds two integers in a lambda.",
+                "The lambda returns the sum.",
+                "41"
+              ],
+              "explanation": "The lambda returns the sum.",
+              "xp_reward": 10,
+              "starter_code": "#include <iostream>\n#include <string>\n#include <vector>\n#include <algorithm>\n#include <memory>\nint main() {\n    auto add = [](int left, int right) { return left + right; };\n    std::cout << add(32, 9) << std::endl;\n    return 0;\n}\n",
+              "options": [
+                "37",
+                "none",
+                "41",
+                "0"
+              ],
+              "correct_answer": "41"
+            },
+            {
+              "id": "cpp-functions-checkpoint-write",
+              "type": "code",
+              "question": "Make the program adds two integers in a lambda by filling the blank for auto and 5.",
+              "hints": [
+                "Follow the job, which adds two integers in a lambda.",
+                "The printed value is the result after this step adds two integers in a lambda.",
+                "int label = add(32, 5);"
+              ],
+              "explanation": "The printed value is the result after this step adds two integers in a lambda.",
+              "xp_reward": 10,
+              "starter_code": "#include <iostream>\n#include <string>\n#include <vector>\n#include <algorithm>\n#include <memory>\nint main() {\n    auto add = [](int left, int right) { return left + right; };\n    int label = ___;\n    std::cout << label << std::endl;\n    return 0;\n}\n",
+              "solution_code": "#include <iostream>\n#include <string>\n#include <vector>\n#include <algorithm>\n#include <memory>\nint main() {\n    auto add = [](int left, int right) { return left + right; };\n    int label = add(32, 5);\n    std::cout << label << std::endl;\n    return 0;\n}\n",
+              "tests": [
+                {
+                  "name": "cpp-functions-checkpoint-prints",
+                  "description": "The printed value is the result after this step adds two integers in a lambda.",
+                  "expected_stdout": "37\n",
+                  "required": true
+                }
+              ]
+            }
+          ]
+        }
+      ]
     }
   ]
 }

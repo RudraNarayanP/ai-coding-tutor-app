@@ -322,6 +322,9 @@ def main() -> None:
             patch = lessons.get(lesson["id"])
             if not patch:
                 continue
+            if lesson.get("player_mode") == "micro":
+                print("skip shipped", lesson["id"])
+                continue
             lesson.update(patch)
         path.write_text(json.dumps(data, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
         print("updated", filename)

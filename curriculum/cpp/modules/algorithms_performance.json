@@ -14,7 +14,7 @@
   "lessons": [
     {
       "id": "cpp-perf-01",
-      "title": "1. Modern C++ STL Algorithms",
+      "title": "Practice Modern C STL Algorithms",
       "description": "Modern C++ checkpoint: implement sortVector(std::vector<int>& vec) so it sorts the vector in place with std::sort over the [vec.begin(), vec.end()) iterator range. The test sorts {3, 1, 2} and checks the result.",
       "order": 33,
       "difficulty": "advanced",
@@ -46,37 +46,175 @@
         "license": "CC BY-SA 4.0 (cppreference.com)"
       },
       "learning_objectives": [
-        "Sort a std::vector in place with std::sort",
-        "Pass iterator ranges [first, last) to STL algorithms",
-        "Include <algorithm> for std::sort and <vector> for the container"
+        "This step sorts and reads the largest value, using vector and 29."
       ],
       "xp_reward": 45,
       "sublessons": [
         {
-          "id": "cpp-perf-01-multi-1-sub",
-          "title": "Headers for std::sort",
+          "id": "cpp-perf-01-micro",
+          "title": "Practice Modern C STL Algorithms",
+          "description": "",
           "order": 1,
           "exercises": [
             {
-              "id": "cpp-perf-01-multi-1",
-              "type": "select_multiple",
-              "question": "A file calls `std::sort` on a `std::vector<int>`. Which headers must it include? Select all that apply.",
+              "id": "cpp-perf-01-teach",
+              "type": "teach",
+              "question": "This step sorts and reads the largest value, using vector and 29.",
+              "hints": [
+                "Follow the job, which sorts and reads the largest value.",
+                "After sorting, back() is the largest value.",
+                "std::sort(items.begin(), items.end());"
+              ],
+              "explanation": "This step sorts and reads the largest value, using vector and 29.",
+              "xp_reward": 0,
+              "worked_example": "std::sort(items.begin(), items.end());"
+            },
+            {
+              "id": "cpp-perf-01-mcq",
+              "type": "mcq",
+              "question": "Select the line that sorts and reads the largest value, the one that belongs with vector and 29.",
+              "hints": [
+                "Follow the job, which sorts and reads the largest value.",
+                "After sorting, back() is the largest value.",
+                "std::sort(items.begin(), items.end());"
+              ],
+              "explanation": "After sorting, back() is the largest value.",
+              "xp_reward": 10,
               "options": [
-                "<algorithm>",
-                "<vector>",
-                "<string>",
-                "<cstring>"
+                "items = items;",
+                "std::sort(items.begin(), items.end());",
+                "items == items;",
+                "return;"
+              ],
+              "correct_answer": "std::sort(items.begin(), items.end());"
+            },
+            {
+              "id": "cpp-perf-01-predict",
+              "type": "output_prediction",
+              "question": "Follow the code that sorts and reads the largest value for vector and then choose the displayed value.",
+              "hints": [
+                "Follow the job, which sorts and reads the largest value.",
+                "After sorting, back() is the largest value.",
+                "29"
+              ],
+              "explanation": "After sorting, back() is the largest value.",
+              "xp_reward": 10,
+              "starter_code": "#include <iostream>\n#include <string>\n#include <vector>\n#include <algorithm>\n#include <memory>\nint main() {\n    std::vector<int> items{{3, 1, 29}};\n    std::sort(items.begin(), items.end());\n    std::cout << items.back() << std::endl;\n    return 0;\n}\n",
+              "options": [
+                "3",
+                "29",
+                "none",
+                "0"
+              ],
+              "correct_answer": "29"
+            },
+            {
+              "id": "cpp-perf-01-order",
+              "type": "ordering",
+              "question": "Order the pieces so the line sorts and reads the largest value for vector and 29.",
+              "hints": [
+                "Follow the job, which sorts and reads the largest value.",
+                "After sorting, back() is the largest value.",
+                "std::vector<int> items{left, right}; std::sort(items.begin(), items.end());"
+              ],
+              "explanation": "After sorting, back() is the largest value.",
+              "xp_reward": 10,
+              "options": [
+                "std::vector<int>",
+                "items{left,",
+                "right};",
+                "std::sort(items.begin(),",
+                "items.end());",
+                "new"
               ],
               "correct_answer": [
-                "<algorithm>",
-                "<vector>"
+                "std::vector<int>",
+                "items{left,",
+                "right};",
+                "std::sort(items.begin(),",
+                "items.end());"
+              ]
+            },
+            {
+              "id": "cpp-perf-01-fill",
+              "type": "fill_blank",
+              "question": "Supply the missing piece so the line sorts and reads the largest value for vector and 29.",
+              "hints": [
+                "Follow the job, which sorts and reads the largest value.",
+                "After sorting, back() is the largest value.",
+                "end()"
               ],
-              "explanation": "`std::sort` is declared in <algorithm> and the container itself needs <vector>; the other two are unrelated.",
-              "xp_reward": 15
+              "explanation": "After sorting, back() is the largest value.",
+              "xp_reward": 10,
+              "starter_code": "std::vector<int> items{{left, right}}; std::sort(items.begin(), items.___);",
+              "options": [
+                "begin()",
+                "end()",
+                "size()",
+                "front()"
+              ],
+              "correct_answer": "end()"
+            },
+            {
+              "id": "cpp-perf-01-bug",
+              "type": "debugging",
+              "question": "The wrong line is the one that misses the job, which sorts and reads the largest value, for vector and 29.",
+              "hints": [
+                "Follow the job, which sorts and reads the largest value.",
+                "The print reads the front before sorting, so it is not the largest.",
+                "Line 8"
+              ],
+              "explanation": "The print reads the front before sorting, so it is not the largest.",
+              "xp_reward": 10,
+              "starter_code": "#include <iostream>\n#include <string>\n#include <vector>\n#include <algorithm>\n#include <memory>\nint main() {\n    std::vector<int> items{{3, 1, 29}};\n    std::cout << items.front() << std::endl;\n    return 0;\n}\n",
+              "correct_answer": "8"
+            },
+            {
+              "id": "cpp-perf-01-predict-2",
+              "type": "output_prediction",
+              "question": "A new input still has code that sorts and reads the largest value for vector and 29, and the correct choice is what it prints.",
+              "hints": [
+                "Follow the job, which sorts and reads the largest value.",
+                "After sorting, back() is the largest value.",
+                "3"
+              ],
+              "explanation": "After sorting, back() is the largest value.",
+              "xp_reward": 10,
+              "starter_code": "#include <iostream>\n#include <string>\n#include <vector>\n#include <algorithm>\n#include <memory>\nint main() {\n    std::vector<int> items{{3, 1, 2}};\n    std::sort(items.begin(), items.end());\n    std::cout << items.back() << std::endl;\n    return 0;\n}\n",
+              "options": [
+                "29",
+                "none",
+                "0",
+                "3"
+              ],
+              "correct_answer": "3"
+            },
+            {
+              "id": "cpp-perf-01-write",
+              "type": "code",
+              "question": "The blank is the missing piece of the program that sorts and reads the largest value for vector and.",
+              "hints": [
+                "Follow the job, which sorts and reads the largest value.",
+                "The printed value is the result after this step sorts and reads the largest value.",
+                "int label = items.back();"
+              ],
+              "explanation": "The printed value is the result after this step sorts and reads the largest value.",
+              "xp_reward": 10,
+              "starter_code": "#include <iostream>\n#include <string>\n#include <vector>\n#include <algorithm>\n#include <memory>\nint main() {\n    std::vector<int> items{{3, 1, 29}};\n    std::sort(items.begin(), items.end());\n    int label = ___;\n    std::cout << label << std::endl;\n    return 0;\n}\n",
+              "solution_code": "#include <iostream>\n#include <string>\n#include <vector>\n#include <algorithm>\n#include <memory>\nint main() {\n    std::vector<int> items{{3, 1, 29}};\n    std::sort(items.begin(), items.end());\n    int label = items.back();\n    std::cout << label << std::endl;\n    return 0;\n}\n",
+              "tests": [
+                {
+                  "name": "cpp-perf-01-prints",
+                  "description": "The printed value is the result after this step sorts and reads the largest valu",
+                  "expected_stdout": "29\n",
+                  "required": true
+                }
+              ]
             }
           ]
         }
-      ]
+      ],
+      "player_mode": "micro"
     }
   ]
 }

@@ -14,8 +14,8 @@
   "lessons": [
     {
       "id": "stats-mean",
-      "title": "1. Mean",
-      "description": "Implement `mean(xs)` for a non-empty list of numbers. The test checks that `mean([1, 2, 3, 4])` equals `2.5`.",
+      "title": "Practice Mean",
+      "description": "Implement mean(xs) for a non-empty list of numbers. The test checks that mean([1, 2, 3, 4]) equals 2.5.",
       "order": 11,
       "difficulty": "intermediate",
       "duration_minutes": 5,
@@ -27,7 +27,7 @@
       ],
       "prerequisites": [],
       "learning_objectives": [
-        "Compute arithmetic mean"
+        "This step computes the whole-number mean, using sum and 6."
       ],
       "starter_code": "def mean(xs):\n    # TODO\n    pass\n",
       "solution_code": "def mean(xs):\n    return sum(xs) / len(xs)\n",
@@ -48,12 +48,178 @@
         "url": "https://docs.python.org/3/library/statistics.html",
         "license": "Python documentation license (PSF)"
       },
-      "xp_reward": 10
+      "xp_reward": 10,
+      "player_mode": "micro",
+      "sublessons": [
+        {
+          "id": "stats-mean-micro",
+          "title": "Practice Mean",
+          "description": "",
+          "order": 1,
+          "exercises": [
+            {
+              "id": "stats-mean-teach",
+              "type": "teach",
+              "question": "This step computes the whole-number mean, using sum and 6.",
+              "hints": [
+                "Follow the job, which computes the whole-number mean.",
+                "sum divided by the count is the whole-number mean.",
+                "sum(values) // len(values)"
+              ],
+              "explanation": "This step computes the whole-number mean, using sum and 6.",
+              "xp_reward": 0,
+              "worked_example": "sum(values) // len(values)"
+            },
+            {
+              "id": "stats-mean-mcq",
+              "type": "mcq",
+              "question": "The match is the line that computes the whole-number mean for sum and 6.",
+              "hints": [
+                "Follow the job, which computes the whole-number mean.",
+                "sum divided by the count is the whole-number mean.",
+                "sum(values) // len(values)"
+              ],
+              "explanation": "sum divided by the count is the whole-number mean.",
+              "xp_reward": 10,
+              "options": [
+                "len(values)",
+                "values[0]",
+                "sum(values) // len(values)",
+                "sum(values)"
+              ],
+              "correct_answer": "sum(values) // len(values)"
+            },
+            {
+              "id": "stats-mean-predict",
+              "type": "output_prediction",
+              "question": "Work out what is printed when the code computes the whole-number mean for sum and 6.",
+              "hints": [
+                "Follow the job, which computes the whole-number mean.",
+                "sum divided by the count is the whole-number mean.",
+                "4"
+              ],
+              "explanation": "sum divided by the count is the whole-number mean.",
+              "xp_reward": 10,
+              "starter_code": "values = [2, 4, 6]\nprint(sum(values) // len(values))\n",
+              "options": [
+                "6",
+                "none",
+                "4",
+                "0"
+              ],
+              "correct_answer": "4"
+            },
+            {
+              "id": "stats-mean-order",
+              "type": "ordering",
+              "question": "Rebuild, from the left, the line that computes the whole-number mean for sum and 6.",
+              "hints": [
+                "Follow the job, which computes the whole-number mean.",
+                "sum divided by the count is the whole-number mean.",
+                "total = sum(values) // len(values)"
+              ],
+              "explanation": "sum divided by the count is the whole-number mean.",
+              "xp_reward": 10,
+              "options": [
+                "total",
+                "=",
+                "sum(values)",
+                "//",
+                "len(values)",
+                "/"
+              ],
+              "correct_answer": [
+                "total",
+                "=",
+                "sum(values)",
+                "//",
+                "len(values)"
+              ]
+            },
+            {
+              "id": "stats-mean-fill",
+              "type": "fill_blank",
+              "question": "The completed line computes the whole-number mean once you fill the blank for sum and 6.",
+              "hints": [
+                "Follow the job, which computes the whole-number mean.",
+                "sum divided by the count is the whole-number mean.",
+                "//"
+              ],
+              "explanation": "sum divided by the count is the whole-number mean.",
+              "xp_reward": 10,
+              "starter_code": "total = sum(values) ___ len(values)\n",
+              "options": [
+                "/",
+                "%",
+                "//",
+                "*"
+              ],
+              "correct_answer": "//"
+            },
+            {
+              "id": "stats-mean-bug",
+              "type": "debugging",
+              "question": "One line does another job than the one that computes the whole-number mean for sum and 6.",
+              "hints": [
+                "Follow the job, which computes the whole-number mean.",
+                "The print uses remainder instead of whole-number division.",
+                "Line 2"
+              ],
+              "explanation": "The print uses remainder instead of whole-number division.",
+              "xp_reward": 10,
+              "starter_code": "values = [2, 4, 6]\nprint(sum(values) % len(values))\n",
+              "correct_answer": "2"
+            },
+            {
+              "id": "stats-mean-predict-2",
+              "type": "output_prediction",
+              "question": "The second display is what prints after the code computes the whole-number mean for sum and.",
+              "hints": [
+                "Follow the job, which computes the whole-number mean.",
+                "sum divided by the count is the whole-number mean.",
+                "6"
+              ],
+              "explanation": "sum divided by the count is the whole-number mean.",
+              "xp_reward": 10,
+              "starter_code": "values = [2, 4, 12]\nprint(sum(values) // len(values))\n",
+              "options": [
+                "4",
+                "none",
+                "6",
+                "0"
+              ],
+              "correct_answer": "6"
+            },
+            {
+              "id": "stats-mean-write",
+              "type": "code",
+              "question": "Supply the blank so the run computes the whole-number mean and prints the result for sum and 6.",
+              "hints": [
+                "Follow the job, which computes the whole-number mean.",
+                "The printed value is the result after this step computes the whole-number mean.",
+                "label = sum(values) // len(values)"
+              ],
+              "explanation": "The printed value is the result after this step computes the whole-number mean.",
+              "xp_reward": 10,
+              "starter_code": "values = [2, 4, 6]\nlabel = ___\nprint(label)\n",
+              "solution_code": "values = [2, 4, 6]\nlabel = sum(values) // len(values)\nprint(label)\n",
+              "tests": [
+                {
+                  "name": "stats-mean-prints",
+                  "description": "The printed value is the result after this step computes the whole-number mean.",
+                  "expected_stdout": "4\n",
+                  "required": true
+                }
+              ]
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "stats-median",
-      "title": "2. Median",
-      "description": "Implement `median(xs)` for a non-empty list (sort a copy). The test checks that `median([3, 1, 2])` equals `2.0`; `median([1, 2, 3, 4])` equals `2.5`.",
+      "title": "Practice Median",
+      "description": "Implement median(xs) for a non-empty list (sort a copy). The test checks that median([3, 1, 2]) equals 2.0; median([1, 2, 3, 4]) equals 2.5.",
       "order": 12,
       "difficulty": "intermediate",
       "duration_minutes": 5,
@@ -65,7 +231,7 @@
       ],
       "prerequisites": [],
       "learning_objectives": [
-        "Compute median"
+        "This step reads the middle value of a sorted list, using sorted and 2."
       ],
       "starter_code": "def median(xs):\n    # TODO\n    pass\n",
       "solution_code": "def median(xs):\n    s = sorted(xs)\n    n = len(s)\n    mid = n // 2\n    if n % 2:\n        return float(s[mid])\n    return (s[mid - 1] + s[mid]) / 2\n",
@@ -89,49 +255,171 @@
       "xp_reward": 10,
       "sublessons": [
         {
-          "id": "median-cases-sub",
-          "title": "Match case to behaviour",
+          "id": "stats-median-micro",
+          "title": "Practice Median",
+          "description": "",
           "order": 1,
           "exercises": [
             {
-              "id": "median-cases-match-1",
-              "type": "matching",
-              "question": "`median(xs)` sorts a copy of a non-empty list. Match each input case to what the function must do.",
-              "pairs": [
-                {
-                  "left": "odd length",
-                  "right": "the single middle value of the sorted copy"
-                },
-                {
-                  "left": "even length",
-                  "right": "the mean of the two middle values"
-                },
-                {
-                  "left": "input in random order",
-                  "right": "sort a copy, leaving the caller's list alone"
-                },
-                {
-                  "left": "repeated values",
-                  "right": "count each repeat, because length decides the middle"
-                }
+              "id": "stats-median-teach",
+              "type": "teach",
+              "question": "This step reads the middle value of a sorted list, using sorted and 2.",
+              "hints": [
+                "Follow the job, which reads the middle value of a sorted list.",
+                "Sorting puts the middle value at the middle index.",
+                "sorted(values)"
               ],
-              "correct_answer": {
-                "odd length": "the single middle value of the sorted copy",
-                "even length": "the mean of the two middle values",
-                "input in random order": "sort a copy, leaving the caller's list alone",
-                "repeated values": "count each repeat, because length decides the middle"
-              },
-              "explanation": "The middle is chosen after sorting and depends only on length, so duplicates are ordinary members of the list.",
-              "xp_reward": 10
+              "explanation": "This step reads the middle value of a sorted list, using sorted and 2.",
+              "xp_reward": 0,
+              "worked_example": "sorted(values)"
+            },
+            {
+              "id": "stats-median-mcq",
+              "type": "mcq",
+              "question": "Keep the choice that reads the middle value of a sorted list for sorted and 2.",
+              "hints": [
+                "Follow the job, which reads the middle value of a sorted list.",
+                "Sorting puts the middle value at the middle index.",
+                "sorted(values)"
+              ],
+              "explanation": "Sorting puts the middle value at the middle index.",
+              "xp_reward": 10,
+              "options": [
+                "values == values",
+                "return values",
+                "pass",
+                "sorted(values)"
+              ],
+              "correct_answer": "sorted(values)"
+            },
+            {
+              "id": "stats-median-predict",
+              "type": "output_prediction",
+              "question": "Trace the code that reads the middle value of a sorted list using sorted and 2, and select what it displays.",
+              "hints": [
+                "Follow the job, which reads the middle value of a sorted list.",
+                "Sorting puts the middle value at the middle index.",
+                "3"
+              ],
+              "explanation": "Sorting puts the middle value at the middle index.",
+              "xp_reward": 10,
+              "starter_code": "values = [9, 1, 3]\nvalues = sorted(values)\nprint(values[len(values) // 2])\n",
+              "options": [
+                "0",
+                "3",
+                "none",
+                "5"
+              ],
+              "correct_answer": "3"
+            },
+            {
+              "id": "stats-median-order",
+              "type": "ordering",
+              "question": "Tap the pieces, in order, of the line that reads the middle value of a sorted list for sorted and 2.",
+              "hints": [
+                "Follow the job, which reads the middle value of a sorted list.",
+                "Sorting puts the middle value at the middle index.",
+                "values = sorted(values)"
+              ],
+              "explanation": "Sorting puts the middle value at the middle index.",
+              "xp_reward": 10,
+              "options": [
+                "values",
+                "=",
+                "sorted(values)",
+                "=="
+              ],
+              "correct_answer": [
+                "values",
+                "=",
+                "sorted(values)"
+              ]
+            },
+            {
+              "id": "stats-median-fill",
+              "type": "fill_blank",
+              "question": "The blank is the missing piece of the line that reads the middle value of a sorted list for sorted and 2.",
+              "hints": [
+                "Follow the job, which reads the middle value of a sorted list.",
+                "Sorting puts the middle value at the middle index.",
+                "//"
+              ],
+              "explanation": "Sorting puts the middle value at the middle index.",
+              "xp_reward": 10,
+              "starter_code": "mid = len(values) ___ 2\n",
+              "options": [
+                "/",
+                "%",
+                "//",
+                "*"
+              ],
+              "correct_answer": "//"
+            },
+            {
+              "id": "stats-median-bug",
+              "type": "debugging",
+              "question": "Choose the line that does another job than the one that reads the middle value of a sorted list for sorted and.",
+              "hints": [
+                "Follow the job, which reads the middle value of a sorted list.",
+                "The print reads the unsorted first value.",
+                "Line 2"
+              ],
+              "explanation": "The print reads the unsorted first value.",
+              "xp_reward": 10,
+              "starter_code": "values = [9, 1, 3]\nprint(values[0])\n",
+              "correct_answer": "2"
+            },
+            {
+              "id": "stats-median-predict-2",
+              "type": "output_prediction",
+              "question": "Trace the second run, which reads the middle value of a sorted list for sorted and 2, and select what it displays.",
+              "hints": [
+                "Follow the job, which reads the middle value of a sorted list.",
+                "Sorting puts the middle value at the middle index.",
+                "5"
+              ],
+              "explanation": "Sorting puts the middle value at the middle index.",
+              "xp_reward": 10,
+              "starter_code": "values = [9, 1, 5]\nvalues = sorted(values)\nprint(values[len(values) // 2])\n",
+              "options": [
+                "3",
+                "none",
+                "5",
+                "0"
+              ],
+              "correct_answer": "5"
+            },
+            {
+              "id": "stats-median-write",
+              "type": "code",
+              "question": "Type the missing piece so the program reads the middle value of a sorted list for sorted and 2 and prints it.",
+              "hints": [
+                "Follow the job, which reads the middle value of a sorted list.",
+                "The printed value is the result after this step reads the middle value of a sorted list.",
+                "label = values[len(values) // 2]"
+              ],
+              "explanation": "The printed value is the result after this step reads the middle value of a sorted list.",
+              "xp_reward": 10,
+              "starter_code": "values = [9, 1, 3]\nvalues = sorted(values)\nlabel = ___\nprint(label)\n",
+              "solution_code": "values = [9, 1, 3]\nvalues = sorted(values)\nlabel = values[len(values) // 2]\nprint(label)\n",
+              "tests": [
+                {
+                  "name": "stats-median-prints",
+                  "description": "The printed value is the result after this step reads the middle value of a sort",
+                  "expected_stdout": "3\n",
+                  "required": true
+                }
+              ]
             }
           ]
         }
-      ]
+      ],
+      "player_mode": "micro"
     },
     {
       "id": "stats-variance",
-      "title": "3. Population Variance",
-      "description": "Implement `variance(xs)` as mean of squared deviations from the mean. The test checks that `variance([1, 2, 3])` equals `2 / 3`.",
+      "title": "Practice Population Variance",
+      "description": "Implement variance(xs) as mean of squared deviations from the mean. The test checks that variance([1, 2, 3]) equals 2 / 3.",
       "order": 13,
       "difficulty": "intermediate",
       "duration_minutes": 8,
@@ -143,7 +431,7 @@
       ],
       "prerequisites": [],
       "learning_objectives": [
-        "Compute population variance"
+        "This step computes the whole-number population variance, using mean and 6."
       ],
       "starter_code": "def variance(xs):\n    # TODO\n    pass\n",
       "solution_code": "def variance(xs):\n    m = sum(xs) / len(xs)\n    return sum((x - m) ** 2 for x in xs) / len(xs)\n",
@@ -164,12 +452,182 @@
         "url": "https://docs.python.org/3/library/statistics.html",
         "license": "Python documentation license (PSF)"
       },
-      "xp_reward": 25
+      "xp_reward": 25,
+      "player_mode": "micro",
+      "sublessons": [
+        {
+          "id": "stats-variance-micro",
+          "title": "Practice Population Variance",
+          "description": "",
+          "order": 1,
+          "exercises": [
+            {
+              "id": "stats-variance-teach",
+              "type": "teach",
+              "question": "This step computes the whole-number population variance, using mean and 6.",
+              "hints": [
+                "Follow the job, which computes the whole-number population variance.",
+                "Each gap is squared before the average.",
+                "(item - mean) ** 2"
+              ],
+              "explanation": "This step computes the whole-number population variance, using mean and 6.",
+              "xp_reward": 0,
+              "worked_example": "(item - mean) ** 2"
+            },
+            {
+              "id": "stats-variance-mcq",
+              "type": "mcq",
+              "question": "The match is the line that computes the whole-number population variance for mean and 6.",
+              "hints": [
+                "Follow the job, which computes the whole-number population variance.",
+                "Each gap is squared before the average.",
+                "(item - mean) ** 2"
+              ],
+              "explanation": "Each gap is squared before the average.",
+              "xp_reward": 10,
+              "options": [
+                "return mean",
+                "item == mean",
+                "pass",
+                "(item - mean) ** 2"
+              ],
+              "correct_answer": "(item - mean) ** 2"
+            },
+            {
+              "id": "stats-variance-predict",
+              "type": "output_prediction",
+              "question": "Work out what is printed when the code computes the whole-number population variance for mean and 6.",
+              "hints": [
+                "Follow the job, which computes the whole-number population variance.",
+                "Each gap is squared before the average.",
+                "2"
+              ],
+              "explanation": "Each gap is squared before the average.",
+              "xp_reward": 10,
+              "starter_code": "values = [2, 4, 6]\nmean = sum(values) // len(values)\nprint(sum((item - mean) ** 2 for item in values) // len(values))\n",
+              "options": [
+                "8",
+                "none",
+                "0",
+                "2"
+              ],
+              "correct_answer": "2"
+            },
+            {
+              "id": "stats-variance-order",
+              "type": "ordering",
+              "question": "Rebuild, from the left, the line that computes the whole-number population variance for mean and 6.",
+              "hints": [
+                "Follow the job, which computes the whole-number population variance.",
+                "Each gap is squared before the average.",
+                "spread = (item - mean) ** 2"
+              ],
+              "explanation": "Each gap is squared before the average.",
+              "xp_reward": 10,
+              "options": [
+                "spread",
+                "=",
+                "(item",
+                "-",
+                "mean)",
+                "**",
+                "2",
+                "+"
+              ],
+              "correct_answer": [
+                "spread",
+                "=",
+                "(item",
+                "-",
+                "mean)",
+                "**",
+                "2"
+              ]
+            },
+            {
+              "id": "stats-variance-fill",
+              "type": "fill_blank",
+              "question": "The completed line computes the whole-number population variance once you fill the blank for mean and 6.",
+              "hints": [
+                "Follow the job, which computes the whole-number population variance.",
+                "Each gap is squared before the average.",
+                "**"
+              ],
+              "explanation": "Each gap is squared before the average.",
+              "xp_reward": 10,
+              "starter_code": "spread = (item - mean) ___ 2\n",
+              "options": [
+                "*",
+                "+",
+                "-",
+                "**"
+              ],
+              "correct_answer": "**"
+            },
+            {
+              "id": "stats-variance-bug",
+              "type": "debugging",
+              "question": "One line does another job than the one that computes the whole-number population variance for mean and 6.",
+              "hints": [
+                "Follow the job, which computes the whole-number population variance.",
+                "The sum of raw gaps cancels out and is not the variance.",
+                "Line 3"
+              ],
+              "explanation": "The sum of raw gaps cancels out and is not the variance.",
+              "xp_reward": 10,
+              "starter_code": "values = [2, 4, 6]\nmean = 4\nprint(sum(item - mean for item in values))\n",
+              "correct_answer": "3"
+            },
+            {
+              "id": "stats-variance-predict-2",
+              "type": "output_prediction",
+              "question": "The second display is what prints after the code computes the whole-number population variance for mean and 6.",
+              "hints": [
+                "Follow the job, which computes the whole-number population variance.",
+                "Each gap is squared before the average.",
+                "8"
+              ],
+              "explanation": "Each gap is squared before the average.",
+              "xp_reward": 10,
+              "starter_code": "values = [1, 1, 7]\nmean = sum(values) // len(values)\nprint(sum((item - mean) ** 2 for item in values) // len(values))\n",
+              "options": [
+                "2",
+                "none",
+                "8",
+                "0"
+              ],
+              "correct_answer": "8"
+            },
+            {
+              "id": "stats-variance-write",
+              "type": "code",
+              "question": "Supply the blank so the run computes the whole-number population variance and prints the result for mean and 6.",
+              "hints": [
+                "Follow the job, which computes the whole-number population variance.",
+                "The printed value is the result after this step computes the whole-number population variance.",
+                "label = sum((item - mean) ** 2 for item in values) // len(values)"
+              ],
+              "explanation": "The printed value is the result after this step computes the whole-number population variance.",
+              "xp_reward": 10,
+              "starter_code": "values = [2, 4, 6]\nmean = sum(values) // len(values)\nlabel = ___\nprint(label)\n",
+              "solution_code": "values = [2, 4, 6]\nmean = sum(values) // len(values)\nlabel = sum((item - mean) ** 2 for item in values) // len(values)\nprint(label)\n",
+              "tests": [
+                {
+                  "name": "stats-variance-prints",
+                  "description": "The printed value is the result after this step computes the whole-number popula",
+                  "expected_stdout": "2\n",
+                  "required": true
+                }
+              ]
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "stats-zscore",
-      "title": "4. Z-Score (Practice)",
-      "description": "Implement `zscore(x, mu, sigma)` = (x-mu)/sigma. Raise if sigma==0. The test checks that `zscore(10, 8, 2)` equals `1.0`.",
+      "title": "Practice Z-Score",
+      "description": "Implement zscore(x, mu, sigma) = (x-mu)/sigma. Raise if sigma==0. The test checks that zscore(10, 8, 2) equals 1.0.",
       "order": 14,
       "difficulty": "intermediate",
       "duration_minutes": 6,
@@ -181,7 +639,7 @@
       ],
       "prerequisites": [],
       "learning_objectives": [
-        "Standardize with z-scores"
+        "This step computes a whole-number z-score, using value and 4."
       ],
       "starter_code": "def zscore(x, mu, sigma):\n    # TODO\n    pass\n",
       "solution_code": "def zscore(x, mu, sigma):\n    if sigma == 0:\n        raise ValueError('sigma must be non-zero')\n    return (x - mu) / sigma\n",
@@ -205,32 +663,179 @@
       "xp_reward": 15,
       "sublessons": [
         {
-          "id": "stats-zscore-out-sub",
-          "title": "Predict the output",
+          "id": "stats-zscore-micro",
+          "title": "Practice Z-Score",
+          "description": "",
           "order": 1,
           "exercises": [
             {
-              "id": "stats-zscore-out-1",
-              "type": "output_prediction",
-              "question": "What does this program print?\n\n```python\ndef zscore(x, mu, sigma):\n    return (x - mu) / sigma\n\nprint(zscore(10, 8, 2))\n```",
-              "options": [
-                "-1.0",
-                "4",
-                "6.0",
-                "1.0"
+              "id": "stats-zscore-teach",
+              "type": "teach",
+              "question": "This step computes a whole-number z-score, using value and 4.",
+              "hints": [
+                "Follow the job, which computes a whole-number z-score.",
+                "The gap divided by the spread is the z-score.",
+                "(value - mean) // spread"
               ],
-              "correct_answer": "1.0",
-              "explanation": "(10 - 8) / 2 is 1.0. -1.0 is the subtracted the wrong way round, 4 comes from multiplying by sigma instead of dividing, and 6.0 comes from dropping the brackets so only mu is divided.",
-              "xp_reward": 10
+              "explanation": "This step computes a whole-number z-score, using value and 4.",
+              "xp_reward": 0,
+              "worked_example": "(value - mean) // spread"
+            },
+            {
+              "id": "stats-zscore-mcq",
+              "type": "mcq",
+              "question": "Keep the choice that computes a whole-number z-score for value and 4.",
+              "hints": [
+                "Follow the job, which computes a whole-number z-score.",
+                "The gap divided by the spread is the z-score.",
+                "(value - mean) // spread"
+              ],
+              "explanation": "The gap divided by the spread is the z-score.",
+              "xp_reward": 10,
+              "options": [
+                "value == mean",
+                "(value - mean) // spread",
+                "return value",
+                "pass"
+              ],
+              "correct_answer": "(value - mean) // spread"
+            },
+            {
+              "id": "stats-zscore-predict",
+              "type": "output_prediction",
+              "question": "Trace the code that computes a whole-number z-score using value and 4, and select what it displays.",
+              "hints": [
+                "Follow the job, which computes a whole-number z-score.",
+                "The gap divided by the spread is the z-score.",
+                "2"
+              ],
+              "explanation": "The gap divided by the spread is the z-score.",
+              "xp_reward": 10,
+              "starter_code": "value = 28\nmean = 20\nspread = 4\nprint((value - mean) // spread)\n",
+              "options": [
+                "-2",
+                "2",
+                "none",
+                "0"
+              ],
+              "correct_answer": "2"
+            },
+            {
+              "id": "stats-zscore-order",
+              "type": "ordering",
+              "question": "Tap the pieces, in order, of the line that computes a whole-number z-score for value and 4.",
+              "hints": [
+                "Follow the job, which computes a whole-number z-score.",
+                "The gap divided by the spread is the z-score.",
+                "score = (value - mean) // spread"
+              ],
+              "explanation": "The gap divided by the spread is the z-score.",
+              "xp_reward": 10,
+              "options": [
+                "score",
+                "=",
+                "(value",
+                "-",
+                "mean)",
+                "//",
+                "spread",
+                "/"
+              ],
+              "correct_answer": [
+                "score",
+                "=",
+                "(value",
+                "-",
+                "mean)",
+                "//",
+                "spread"
+              ]
+            },
+            {
+              "id": "stats-zscore-fill",
+              "type": "fill_blank",
+              "question": "The blank is the missing piece of the line that computes a whole-number z-score for value and 4.",
+              "hints": [
+                "Follow the job, which computes a whole-number z-score.",
+                "The gap divided by the spread is the z-score.",
+                "//"
+              ],
+              "explanation": "The gap divided by the spread is the z-score.",
+              "xp_reward": 10,
+              "starter_code": "score = (value - mean) ___ spread\n",
+              "options": [
+                "/",
+                "//",
+                "%",
+                "*"
+              ],
+              "correct_answer": "//"
+            },
+            {
+              "id": "stats-zscore-bug",
+              "type": "debugging",
+              "question": "Choose the line that does another job than the one that computes a whole-number z-score for value and 4.",
+              "hints": [
+                "Follow the job, which computes a whole-number z-score.",
+                "The print is the raw gap and never divides by the spread.",
+                "Line 2"
+              ],
+              "explanation": "The print is the raw gap and never divides by the spread.",
+              "xp_reward": 10,
+              "starter_code": "value = 36\nprint(value - 20)\n",
+              "correct_answer": "2"
+            },
+            {
+              "id": "stats-zscore-predict-2",
+              "type": "output_prediction",
+              "question": "Trace the second run, which computes a whole-number z-score for value and 4, and select what it displays.",
+              "hints": [
+                "Follow the job, which computes a whole-number z-score.",
+                "The gap divided by the spread is the z-score.",
+                "-2"
+              ],
+              "explanation": "The gap divided by the spread is the z-score.",
+              "xp_reward": 10,
+              "starter_code": "value = 12\nmean = 20\nspread = 4\nprint((value - mean) // spread)\n",
+              "options": [
+                "2",
+                "none",
+                "0",
+                "-2"
+              ],
+              "correct_answer": "-2"
+            },
+            {
+              "id": "stats-zscore-write",
+              "type": "code",
+              "question": "Type the missing piece so the program computes a whole-number z-score for value and 4 and prints it.",
+              "hints": [
+                "Follow the job, which computes a whole-number z-score.",
+                "The printed value is the result after this step computes a whole-number z-score.",
+                "label = (value - mean) // spread"
+              ],
+              "explanation": "The printed value is the result after this step computes a whole-number z-score.",
+              "xp_reward": 10,
+              "starter_code": "value = 28\nmean = 20\nspread = 4\nlabel = ___\nprint(label)\n",
+              "solution_code": "value = 28\nmean = 20\nspread = 4\nlabel = (value - mean) // spread\nprint(label)\n",
+              "tests": [
+                {
+                  "name": "stats-zscore-prints",
+                  "description": "The printed value is the result after this step computes a whole-number z-score.",
+                  "expected_stdout": "2\n",
+                  "required": true
+                }
+              ]
             }
           ]
         }
-      ]
+      ],
+      "player_mode": "micro"
     },
     {
       "id": "stats-checkpoint",
-      "title": "5. Checkpoint: Pearson Correlation",
-      "description": "Implement `pearson(xs, ys)` for equal-length lists. Return 0 if either std is 0. The test checks that `pearson([1, 1, 1], [1, 2, 3])` equals `0.0`; `pearson([1, 2, 3], [2, 4, 6])` equals `1.0`.",
+      "title": "Practice Checkpoint Pearson Correlation",
+      "description": "Implement pearson(xs, ys) for equal-length lists. Return 0 if either std is 0. The test checks that pearson([1, 1, 1], [1, 2, 3]) equals 0.0; pearson([1, 2, 3], [2, 4, 6]) equals 1.0.",
       "order": 15,
       "difficulty": "intermediate",
       "duration_minutes": 10,
@@ -242,7 +847,7 @@
       ],
       "prerequisites": [],
       "learning_objectives": [
-        "Compute Pearson correlation"
+        "This step computes a whole-number correlation direction, using xs and 6."
       ],
       "starter_code": "import math\n\ndef pearson(xs, ys):\n    # TODO\n    pass\n",
       "solution_code": "import math\n\ndef pearson(xs, ys):\n    n = len(xs)\n    mx = sum(xs) / n\n    my = sum(ys) / n\n    num = sum((x - mx) * (y - my) for x, y in zip(xs, ys))\n    dx = math.sqrt(sum((x - mx) ** 2 for x in xs))\n    dy = math.sqrt(sum((y - my) ** 2 for y in ys))\n    if dx == 0 or dy == 0:\n        return 0.0\n    return num / (dx * dy)\n",
@@ -263,7 +868,173 @@
         "url": "https://developers.google.com/machine-learning/glossary/metrics",
         "license": "CC BY 4.0 (Google Machine Learning Crash Course)"
       },
-      "xp_reward": 40
+      "xp_reward": 40,
+      "player_mode": "micro",
+      "sublessons": [
+        {
+          "id": "stats-checkpoint-micro",
+          "title": "Practice Checkpoint Pearson Correlation",
+          "description": "",
+          "order": 1,
+          "exercises": [
+            {
+              "id": "stats-checkpoint-teach",
+              "type": "teach",
+              "question": "This step computes a whole-number correlation direction, using xs and 6.",
+              "hints": [
+                "Follow the job, which computes a whole-number correlation direction.",
+                "Both series rising together is a positive direction.",
+                "ys[-1] > ys[0]"
+              ],
+              "explanation": "This step computes a whole-number correlation direction, using xs and 6.",
+              "xp_reward": 0,
+              "worked_example": "ys[-1] > ys[0]"
+            },
+            {
+              "id": "stats-checkpoint-mcq",
+              "type": "mcq",
+              "question": "Mark the choice that computes a whole-number correlation direction when the code mentions xs and 6.",
+              "hints": [
+                "Follow the job, which computes a whole-number correlation direction.",
+                "Both series rising together is a positive direction.",
+                "xs[-1] > xs[0] and ys[-1] > ys[0]"
+              ],
+              "explanation": "Both series rising together is a positive direction.",
+              "xp_reward": 10,
+              "options": [
+                "xs == ys",
+                "xs[-1] > xs[0] and ys[-1] > ys[0]",
+                "pass",
+                "return xs"
+              ],
+              "correct_answer": "xs[-1] > xs[0] and ys[-1] > ys[0]"
+            },
+            {
+              "id": "stats-checkpoint-predict",
+              "type": "output_prediction",
+              "question": "After xs and 6, the code computes a whole-number correlation direction, and the correct choice is the printed value.",
+              "hints": [
+                "Follow the job, which computes a whole-number correlation direction.",
+                "Both series rising together is a positive direction.",
+                "1"
+              ],
+              "explanation": "Both series rising together is a positive direction.",
+              "xp_reward": 10,
+              "starter_code": "xs = [1, 2, 3]\nys = [2, 4, 6]\nprint(1 if xs[-1] > xs[0] and ys[-1] > ys[0] else 0)\n",
+              "options": [
+                "0",
+                "1",
+                "none",
+                "blank"
+              ],
+              "correct_answer": "1"
+            },
+            {
+              "id": "stats-checkpoint-order",
+              "type": "ordering",
+              "question": "The finished line computes a whole-number correlation direction, so place its pieces in order for xs and 6.",
+              "hints": [
+                "Follow the job, which computes a whole-number correlation direction.",
+                "Both series rising together is a positive direction.",
+                "if xs[-1]>xs[0] and ys[-1]>ys[0]: pass"
+              ],
+              "explanation": "Both series rising together is a positive direction.",
+              "xp_reward": 10,
+              "options": [
+                "if",
+                "xs[-1]>xs[0]",
+                "and",
+                "ys[-1]>ys[0]:",
+                "pass",
+                "or"
+              ],
+              "correct_answer": [
+                "if",
+                "xs[-1]>xs[0]",
+                "and",
+                "ys[-1]>ys[0]:",
+                "pass"
+              ]
+            },
+            {
+              "id": "stats-checkpoint-fill",
+              "type": "fill_blank",
+              "question": "Finish the line that computes a whole-number correlation direction by filling the blank for xs 6.",
+              "hints": [
+                "Follow the job, which computes a whole-number correlation direction.",
+                "Both series rising together is a positive direction.",
+                "and"
+              ],
+              "explanation": "Both series rising together is a positive direction.",
+              "xp_reward": 10,
+              "starter_code": "same = xs[-1] > xs[0] ___ ys[-1] > ys[0]\n",
+              "options": [
+                "==",
+                "and",
+                "or",
+                "!="
+              ],
+              "correct_answer": "and"
+            },
+            {
+              "id": "stats-checkpoint-bug",
+              "type": "debugging",
+              "question": "Mark the line that breaks the job, which computes a whole-number correlation direction, for xs and 6.",
+              "hints": [
+                "Follow the job, which computes a whole-number correlation direction.",
+                "The print shows one x value and never compares the pairs.",
+                "Line 3"
+              ],
+              "explanation": "The print shows one x value and never compares the pairs.",
+              "xp_reward": 10,
+              "starter_code": "xs = [1, 2, 3]\nys = [2, 4, 6]\nprint(xs[-1])\n",
+              "correct_answer": "3"
+            },
+            {
+              "id": "stats-checkpoint-predict-2",
+              "type": "output_prediction",
+              "question": "Follow the second program, which computes a whole-number correlation direction for xs and 6, and choose its output.",
+              "hints": [
+                "Follow the job, which computes a whole-number correlation direction.",
+                "Both series rising together is a positive direction.",
+                "0"
+              ],
+              "explanation": "Both series rising together is a positive direction.",
+              "xp_reward": 10,
+              "starter_code": "xs = [1, 2, 3]\nys = [6, 4, 2]\nprint(1 if xs[-1] > xs[0] and ys[-1] > ys[0] else 0)\n",
+              "options": [
+                "1",
+                "none",
+                "blank",
+                "0"
+              ],
+              "correct_answer": "0"
+            },
+            {
+              "id": "stats-checkpoint-write",
+              "type": "code",
+              "question": "Finish the program that computes a whole-number correlation direction by filling the blank for xs and 6.",
+              "hints": [
+                "Follow the job, which computes a whole-number correlation direction.",
+                "The printed value is the result after this step computes a whole-number correlation direction.",
+                "label = 1 if xs[-1] > xs[0] and ys[-1] > ys[0] else 0"
+              ],
+              "explanation": "The printed value is the result after this step computes a whole-number correlation direction.",
+              "xp_reward": 10,
+              "starter_code": "xs = [1, 2, 3]\nys = [2, 4, 6]\nlabel = ___\nprint(label)\n",
+              "solution_code": "xs = [1, 2, 3]\nys = [2, 4, 6]\nlabel = 1 if xs[-1] > xs[0] and ys[-1] > ys[0] else 0\nprint(label)\n",
+              "tests": [
+                {
+                  "name": "stats-checkpoint-prints",
+                  "description": "The printed value is the result after this step computes a whole-number correlat",
+                  "expected_stdout": "1\n",
+                  "required": true
+                }
+              ]
+            }
+          ]
+        }
+      ]
     }
   ]
 }

@@ -14,8 +14,8 @@
   "lessons": [
     {
       "id": "ai-tok-split",
-      "title": "4. Whitespace Tokenize",
-      "description": "Implement `tokenize(text)` splitting on whitespace and dropping empties. The test checks that `tokenize(' hello world ')` equals `['hello', 'world']`.",
+      "title": "Practice Whitespace Tokenize",
+      "description": "Implement tokenize(text) splitting on whitespace and dropping empties. The test checks that tokenize(' hello world ') equals ['hello', 'world'].",
       "order": 4,
       "difficulty": "intermediate",
       "duration_minutes": 5,
@@ -27,7 +27,7 @@
       ],
       "prerequisites": [],
       "learning_objectives": [
-        "Tokenize text on whitespace"
+        "This step counts whitespace tokens, using text holding red fox."
       ],
       "starter_code": "def tokenize(text):\n    # TODO\n    pass\n",
       "solution_code": "def tokenize(text):\n    return [t for t in text.split() if t]\n",
@@ -48,12 +48,174 @@
         "url": "https://docs.python.org/3/library/stdtypes.html#string-methods",
         "license": "Python documentation license (PSF)"
       },
-      "xp_reward": 10
+      "xp_reward": 10,
+      "player_mode": "micro",
+      "sublessons": [
+        {
+          "id": "ai-tok-split-micro",
+          "title": "Practice Whitespace Tokenize",
+          "description": "",
+          "order": 1,
+          "exercises": [
+            {
+              "id": "ai-tok-split-teach",
+              "type": "teach",
+              "question": "This step counts whitespace tokens, using text holding red fox.",
+              "hints": [
+                "Follow the job, which counts whitespace tokens.",
+                "split on whitespace makes one token per word.",
+                "text.split()"
+              ],
+              "explanation": "This step counts whitespace tokens, using text holding red fox.",
+              "xp_reward": 0,
+              "worked_example": "text.split()"
+            },
+            {
+              "id": "ai-tok-split-mcq",
+              "type": "mcq",
+              "question": "Pick the line that counts whitespace tokens, not a line about something else, for text holding red fox.",
+              "hints": [
+                "Follow the job, which counts whitespace tokens.",
+                "split on whitespace makes one token per word.",
+                "text.split()"
+              ],
+              "explanation": "split on whitespace makes one token per word.",
+              "xp_reward": 10,
+              "options": [
+                "text == text",
+                "text.split()",
+                "return text",
+                "pass"
+              ],
+              "correct_answer": "text.split()"
+            },
+            {
+              "id": "ai-tok-split-predict",
+              "type": "output_prediction",
+              "question": "The displayed value is what the code prints when it counts whitespace tokens for text holding red fox.",
+              "hints": [
+                "Follow the job, which counts whitespace tokens.",
+                "split on whitespace makes one token per word.",
+                "2"
+              ],
+              "explanation": "split on whitespace makes one token per word.",
+              "xp_reward": 10,
+              "starter_code": "text = 'red fox'\nprint(len(text.split()))\n",
+              "options": [
+                "3",
+                "2",
+                "none",
+                "0"
+              ],
+              "correct_answer": "2"
+            },
+            {
+              "id": "ai-tok-split-order",
+              "type": "ordering",
+              "question": "Place every piece so the result counts whitespace tokens for text holding red fox.",
+              "hints": [
+                "Follow the job, which counts whitespace tokens.",
+                "split on whitespace makes one token per word.",
+                "tokens = text.split()"
+              ],
+              "explanation": "split on whitespace makes one token per word.",
+              "xp_reward": 10,
+              "options": [
+                "tokens",
+                "=",
+                "text.split()",
+                "=="
+              ],
+              "correct_answer": [
+                "tokens",
+                "=",
+                "text.split()"
+              ]
+            },
+            {
+              "id": "ai-tok-split-fill",
+              "type": "fill_blank",
+              "question": "Drop in the piece that lets the line counts whitespace tokens for text holding red fox.",
+              "hints": [
+                "Follow the job, which counts whitespace tokens.",
+                "split on whitespace makes one token per word.",
+                "split()"
+              ],
+              "explanation": "split on whitespace makes one token per word.",
+              "xp_reward": 10,
+              "starter_code": "tokens = text.___\n",
+              "options": [
+                "upper()",
+                "split()",
+                "strip()",
+                "lower()"
+              ],
+              "correct_answer": "split()"
+            },
+            {
+              "id": "ai-tok-split-bug",
+              "type": "debugging",
+              "question": "The mismatch misses the job, which counts whitespace tokens, for text holding red fox.",
+              "hints": [
+                "Follow the job, which counts whitespace tokens.",
+                "The print counts characters instead of words.",
+                "Line 2"
+              ],
+              "explanation": "The print counts characters instead of words.",
+              "xp_reward": 10,
+              "starter_code": "text = 'red fox'\nprint(len(text))\n",
+              "correct_answer": "2"
+            },
+            {
+              "id": "ai-tok-split-predict-2",
+              "type": "output_prediction",
+              "question": "Choose the printed result of the second run that counts whitespace tokens for text holding red fox.",
+              "hints": [
+                "Follow the job, which counts whitespace tokens.",
+                "split on whitespace makes one token per word.",
+                "3"
+              ],
+              "explanation": "split on whitespace makes one token per word.",
+              "xp_reward": 10,
+              "starter_code": "text = 'red fox jumps'\nprint(len(text.split()))\n",
+              "options": [
+                "2",
+                "none",
+                "0",
+                "3"
+              ],
+              "correct_answer": "3"
+            },
+            {
+              "id": "ai-tok-split-write",
+              "type": "code",
+              "question": "Make the program counts whitespace tokens by filling the blank for text holding red fox.",
+              "hints": [
+                "Follow the job, which counts whitespace tokens.",
+                "The printed value is the result after this step counts whitespace tokens.",
+                "label = len(text.split())"
+              ],
+              "explanation": "The printed value is the result after this step counts whitespace tokens.",
+              "xp_reward": 10,
+              "starter_code": "text = 'red fox'\nlabel = ___\nprint(label)\n",
+              "solution_code": "text = 'red fox'\nlabel = len(text.split())\nprint(label)\n",
+              "tests": [
+                {
+                  "name": "ai-tok-split-prints",
+                  "description": "The printed value is the result after this step counts whitespace tokens.",
+                  "expected_stdout": "2\n",
+                  "required": true
+                }
+              ]
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "ai-tok-lower",
-      "title": "5. Normalize Tokens",
-      "description": "Implement `normalize_tokens(tokens)` lowercasing and stripping punctuation from ends. The test checks that `normalize_tokens(['Hello!', 'WORLD.'])` equals `['hello', 'world']`.",
+      "title": "Practice Normalize Tokens",
+      "description": "Implement normalize_tokens(tokens) lowercasing and stripping punctuation from ends. The test checks that normalize_tokens(['Hello!', 'WORLD.']) equals ['hello', 'world'].",
       "order": 5,
       "difficulty": "intermediate",
       "duration_minutes": 5,
@@ -65,7 +227,7 @@
       ],
       "prerequisites": [],
       "learning_objectives": [
-        "Normalize tokens for NLP"
+        "This step normalizes the token to lowercase, using token holding flint."
       ],
       "starter_code": "import string\n\ndef normalize_tokens(tokens):\n    # TODO\n    pass\n",
       "solution_code": "import string\n\ndef normalize_tokens(tokens):\n    out = []\n    for t in tokens:\n        t = t.lower().strip(string.punctuation)\n        if t:\n            out.append(t)\n    return out\n",
@@ -86,12 +248,174 @@
         "url": "https://docs.python.org/3/library/stdtypes.html#string-methods",
         "license": "Python documentation license (PSF)"
       },
-      "xp_reward": 10
+      "xp_reward": 10,
+      "player_mode": "micro",
+      "sublessons": [
+        {
+          "id": "ai-tok-lower-micro",
+          "title": "Practice Normalize Tokens",
+          "description": "",
+          "order": 1,
+          "exercises": [
+            {
+              "id": "ai-tok-lower-teach",
+              "type": "teach",
+              "question": "This step normalizes the token to lowercase, using token holding flint.",
+              "hints": [
+                "Follow the job, which normalizes the token to lowercase.",
+                "lower makes the token comparable.",
+                "token.lower()"
+              ],
+              "explanation": "This step normalizes the token to lowercase, using token holding flint.",
+              "xp_reward": 0,
+              "worked_example": "token.lower()"
+            },
+            {
+              "id": "ai-tok-lower-mcq",
+              "type": "mcq",
+              "question": "Select the line that normalizes the token to lowercase, the one that belongs with token holding flint.",
+              "hints": [
+                "Follow the job, which normalizes the token to lowercase.",
+                "lower makes the token comparable.",
+                "token.lower()"
+              ],
+              "explanation": "lower makes the token comparable.",
+              "xp_reward": 10,
+              "options": [
+                "token == token",
+                "token.lower()",
+                "return token",
+                "pass"
+              ],
+              "correct_answer": "token.lower()"
+            },
+            {
+              "id": "ai-tok-lower-predict",
+              "type": "output_prediction",
+              "question": "Follow the code that normalizes the token to lowercase for token holding then choose the displayed value.",
+              "hints": [
+                "Follow the job, which normalizes the token to lowercase.",
+                "lower makes the token comparable.",
+                "flint"
+              ],
+              "explanation": "lower makes the token comparable.",
+              "xp_reward": 10,
+              "starter_code": "token = 'flint'.upper()\nprint(token.lower())\n",
+              "options": [
+                "juniper",
+                "flint",
+                "none",
+                "0"
+              ],
+              "correct_answer": "flint"
+            },
+            {
+              "id": "ai-tok-lower-order",
+              "type": "ordering",
+              "question": "Order the pieces so the line normalizes the token to lowercase for token holding flint.",
+              "hints": [
+                "Follow the job, which normalizes the token to lowercase.",
+                "lower makes the token comparable.",
+                "normal = token.lower()"
+              ],
+              "explanation": "lower makes the token comparable.",
+              "xp_reward": 10,
+              "options": [
+                "normal",
+                "=",
+                "token.lower()",
+                "upper"
+              ],
+              "correct_answer": [
+                "normal",
+                "=",
+                "token.lower()"
+              ]
+            },
+            {
+              "id": "ai-tok-lower-fill",
+              "type": "fill_blank",
+              "question": "Supply the missing piece so the line normalizes the token to lowercase for token holding flint.",
+              "hints": [
+                "Follow the job, which normalizes the token to lowercase.",
+                "lower makes the token comparable.",
+                "lower()"
+              ],
+              "explanation": "lower makes the token comparable.",
+              "xp_reward": 10,
+              "starter_code": "normal = token.___\n",
+              "options": [
+                "upper()",
+                "lower()",
+                "title()",
+                "strip()"
+              ],
+              "correct_answer": "lower()"
+            },
+            {
+              "id": "ai-tok-lower-bug",
+              "type": "debugging",
+              "question": "The wrong line is the one that misses the job, which normalizes the token to lowercase, for token holding flint.",
+              "hints": [
+                "Follow the job, which normalizes the token to lowercase.",
+                "The print keeps the uppercase token.",
+                "Line 2"
+              ],
+              "explanation": "The print keeps the uppercase token.",
+              "xp_reward": 10,
+              "starter_code": "token = 'flint'.upper()\nprint(token)\n",
+              "correct_answer": "2"
+            },
+            {
+              "id": "ai-tok-lower-predict-2",
+              "type": "output_prediction",
+              "question": "A new input still has code that normalizes the token to lowercase for token holding flint, and the correct choice is what it prints.",
+              "hints": [
+                "Follow the job, which normalizes the token to lowercase.",
+                "lower makes the token comparable.",
+                "juniper"
+              ],
+              "explanation": "lower makes the token comparable.",
+              "xp_reward": 10,
+              "starter_code": "token = 'juniper'.upper()\nprint(token.lower())\n",
+              "options": [
+                "flint",
+                "none",
+                "0",
+                "juniper"
+              ],
+              "correct_answer": "juniper"
+            },
+            {
+              "id": "ai-tok-lower-write",
+              "type": "code",
+              "question": "The blank is the missing piece of the program that normalizes the token to lowercase for token holding.",
+              "hints": [
+                "Follow the job, which normalizes the token to lowercase.",
+                "The printed value is the result after this step normalizes the token to lowercase.",
+                "label = (token.lower())"
+              ],
+              "explanation": "The printed value is the result after this step normalizes the token to lowercase.",
+              "xp_reward": 10,
+              "starter_code": "token = 'flint'.upper()\nlabel = ___\nprint(label)\n",
+              "solution_code": "token = 'flint'.upper()\nlabel = (token.lower())\nprint(label)\n",
+              "tests": [
+                {
+                  "name": "ai-tok-lower-prints",
+                  "description": "The printed value is the result after this step normalizes the token to lowercas",
+                  "expected_stdout": "flint\n",
+                  "required": true
+                }
+              ]
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "ai-tok-vocab",
-      "title": "6. Build Vocabulary",
-      "description": "Implement `build_vocab(token_lists)` mapping tokens to sorted alphabetical ids from 0. The test checks that `build_vocab([['b', 'a'], ['a']])` equals `{'a': 0, 'b': 1}`.",
+      "title": "Build Vocabulary",
+      "description": "Implement build_vocab(token_lists) mapping tokens to sorted alphabetical ids from 0. The test checks that build_vocab([['b', 'a'], ['a']]) equals {'a': 0, 'b': 1}.",
       "order": 6,
       "difficulty": "intermediate",
       "duration_minutes": 8,
@@ -103,7 +427,7 @@
       ],
       "prerequisites": [],
       "learning_objectives": [
-        "Build a token vocabulary"
+        "This step counts the distinct tokens, using tokens holding amber."
       ],
       "starter_code": "def build_vocab(token_lists):\n    # TODO\n    pass\n",
       "solution_code": "def build_vocab(token_lists):\n    uniq = sorted({t for tokens in token_lists for t in tokens})\n    return {t: i for i, t in enumerate(uniq)}\n",
@@ -124,12 +448,174 @@
         "url": "https://docs.python.org/3/library/functions.html#sorted",
         "license": "Python documentation license (PSF)"
       },
-      "xp_reward": 25
+      "xp_reward": 25,
+      "player_mode": "micro",
+      "sublessons": [
+        {
+          "id": "ai-tok-vocab-micro",
+          "title": "Build Vocabulary",
+          "description": "",
+          "order": 1,
+          "exercises": [
+            {
+              "id": "ai-tok-vocab-teach",
+              "type": "teach",
+              "question": "This step counts the distinct tokens, using tokens holding amber.",
+              "hints": [
+                "Follow the job, which counts the distinct tokens.",
+                "The vocabulary keeps each token once.",
+                "set(tokens)"
+              ],
+              "explanation": "This step counts the distinct tokens, using tokens holding amber.",
+              "xp_reward": 0,
+              "worked_example": "set(tokens)"
+            },
+            {
+              "id": "ai-tok-vocab-mcq",
+              "type": "mcq",
+              "question": "The match is the line that counts the distinct tokens for tokens holding amber.",
+              "hints": [
+                "Follow the job, which counts the distinct tokens.",
+                "The vocabulary keeps each token once.",
+                "set(tokens)"
+              ],
+              "explanation": "The vocabulary keeps each token once.",
+              "xp_reward": 10,
+              "options": [
+                "tokens == tokens",
+                "set(tokens)",
+                "return tokens",
+                "pass"
+              ],
+              "correct_answer": "set(tokens)"
+            },
+            {
+              "id": "ai-tok-vocab-predict",
+              "type": "output_prediction",
+              "question": "Work out what is printed when the code counts the distinct tokens for tokens holding amber.",
+              "hints": [
+                "Follow the job, which counts the distinct tokens.",
+                "The vocabulary keeps each token once.",
+                "2"
+              ],
+              "explanation": "The vocabulary keeps each token once.",
+              "xp_reward": 10,
+              "starter_code": "tokens = ['amber', 'amber', 'ember']\nprint(len(set(tokens)))\n",
+              "options": [
+                "3",
+                "2",
+                "none",
+                "0"
+              ],
+              "correct_answer": "2"
+            },
+            {
+              "id": "ai-tok-vocab-order",
+              "type": "ordering",
+              "question": "Rebuild, from the left, the line that counts the distinct tokens for tokens holding amber.",
+              "hints": [
+                "Follow the job, which counts the distinct tokens.",
+                "The vocabulary keeps each token once.",
+                "vocab = set(tokens)"
+              ],
+              "explanation": "The vocabulary keeps each token once.",
+              "xp_reward": 10,
+              "options": [
+                "vocab",
+                "=",
+                "set(tokens)",
+                "=="
+              ],
+              "correct_answer": [
+                "vocab",
+                "=",
+                "set(tokens)"
+              ]
+            },
+            {
+              "id": "ai-tok-vocab-fill",
+              "type": "fill_blank",
+              "question": "The completed line counts the distinct tokens once you fill the blank for tokens holding amber.",
+              "hints": [
+                "Follow the job, which counts the distinct tokens.",
+                "The vocabulary keeps each token once.",
+                "set"
+              ],
+              "explanation": "The vocabulary keeps each token once.",
+              "xp_reward": 10,
+              "starter_code": "vocab = ___(tokens)\n",
+              "options": [
+                "list",
+                "set",
+                "dict",
+                "tuple"
+              ],
+              "correct_answer": "set"
+            },
+            {
+              "id": "ai-tok-vocab-bug",
+              "type": "debugging",
+              "question": "One line does another job than the one that counts the distinct tokens for tokens holding amber.",
+              "hints": [
+                "Follow the job, which counts the distinct tokens.",
+                "The print counts repeats instead of the vocabulary.",
+                "Line 2"
+              ],
+              "explanation": "The print counts repeats instead of the vocabulary.",
+              "xp_reward": 10,
+              "starter_code": "tokens = ['amber', 'amber']\nprint(len(tokens))\n",
+              "correct_answer": "2"
+            },
+            {
+              "id": "ai-tok-vocab-predict-2",
+              "type": "output_prediction",
+              "question": "The second display is what prints after the code counts the distinct tokens for tokens holding amber.",
+              "hints": [
+                "Follow the job, which counts the distinct tokens.",
+                "The vocabulary keeps each token once.",
+                "3"
+              ],
+              "explanation": "The vocabulary keeps each token once.",
+              "xp_reward": 10,
+              "starter_code": "tokens = ['amber', 'ember', 'extra']\nprint(len(set(tokens)))\n",
+              "options": [
+                "2",
+                "none",
+                "0",
+                "3"
+              ],
+              "correct_answer": "3"
+            },
+            {
+              "id": "ai-tok-vocab-write",
+              "type": "code",
+              "question": "Supply the blank so the run counts the distinct tokens and prints the result for tokens holding amber.",
+              "hints": [
+                "Follow the job, which counts the distinct tokens.",
+                "The printed value is the result after this step counts the distinct tokens.",
+                "label = len(set(tokens))"
+              ],
+              "explanation": "The printed value is the result after this step counts the distinct tokens.",
+              "xp_reward": 10,
+              "starter_code": "tokens = ['amber', 'amber', 'ember']\nlabel = ___\nprint(label)\n",
+              "solution_code": "tokens = ['amber', 'amber', 'ember']\nlabel = len(set(tokens))\nprint(label)\n",
+              "tests": [
+                {
+                  "name": "ai-tok-vocab-prints",
+                  "description": "The printed value is the result after this step counts the distinct tokens.",
+                  "expected_stdout": "2\n",
+                  "required": true
+                }
+              ]
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "ai-tok-encode",
-      "title": "7. Encode Sequence (Practice)",
-      "description": "Implement `encode(tokens, vocab, unk_id)` mapping unknown tokens to unk_id. The test checks that `encode(['a', 'z'], {'a': 1}, 0)` equals `[1, 0]`.",
+      "title": "Encode Sequence",
+      "description": "Implement encode(tokens, vocab, unk_id) mapping unknown tokens to unk_id. The test checks that encode(['a', 'z'], {'a': 1}, 0) equals [1, 0].",
       "order": 7,
       "difficulty": "intermediate",
       "duration_minutes": 6,
@@ -141,7 +627,7 @@
       ],
       "prerequisites": [],
       "learning_objectives": [
-        "Encode tokens to ids"
+        "This step looks up the token id, using vocab holding yarrow."
       ],
       "starter_code": "def encode(tokens, vocab, unk_id):\n    # TODO\n    pass\n",
       "solution_code": "def encode(tokens, vocab, unk_id):\n    return [vocab.get(t, unk_id) for t in tokens]\n",
@@ -162,12 +648,174 @@
         "url": "https://docs.python.org/3/library/stdtypes.html#mapping-types-dict",
         "license": "Python documentation license (PSF)"
       },
-      "xp_reward": 15
+      "xp_reward": 15,
+      "player_mode": "micro",
+      "sublessons": [
+        {
+          "id": "ai-tok-encode-micro",
+          "title": "Encode Sequence",
+          "description": "",
+          "order": 1,
+          "exercises": [
+            {
+              "id": "ai-tok-encode-teach",
+              "type": "teach",
+              "question": "This step looks up the token id, using vocab holding yarrow.",
+              "hints": [
+                "Follow the job, which looks up the token id.",
+                "The encoder reads the id stored under the token.",
+                "vocab['yarrow']"
+              ],
+              "explanation": "This step looks up the token id, using vocab holding yarrow.",
+              "xp_reward": 0,
+              "worked_example": "vocab['yarrow']"
+            },
+            {
+              "id": "ai-tok-encode-mcq",
+              "type": "mcq",
+              "question": "Choose the line that looks up the token id, which is the line that fits vocab holding yarrow.",
+              "hints": [
+                "Follow the job, which looks up the token id.",
+                "The encoder reads the id stored under the token.",
+                "vocab[token]"
+              ],
+              "explanation": "The encoder reads the id stored under the token.",
+              "xp_reward": 10,
+              "options": [
+                "token == token",
+                "vocab[token]",
+                "return vocab",
+                "pass"
+              ],
+              "correct_answer": "vocab[token]"
+            },
+            {
+              "id": "ai-tok-encode-predict",
+              "type": "output_prediction",
+              "question": "Read the code that looks up the token id for vocab holding yarrow, and choose the value it prints.",
+              "hints": [
+                "Follow the job, which looks up the token id.",
+                "The encoder reads the id stored under the token.",
+                "1"
+              ],
+              "explanation": "The encoder reads the id stored under the token.",
+              "xp_reward": 10,
+              "starter_code": "vocab = {'yarrow': 1, 'cedar': 2}\nprint(vocab['yarrow'])\n",
+              "options": [
+                "none",
+                "1",
+                "2",
+                "0"
+              ],
+              "correct_answer": "1"
+            },
+            {
+              "id": "ai-tok-encode-order",
+              "type": "ordering",
+              "question": "Arrange the pieces of the line that looks up the token id, left to right, for vocab holding yarrow.",
+              "hints": [
+                "Follow the job, which looks up the token id.",
+                "The encoder reads the id stored under the token.",
+                "code = vocab[token]"
+              ],
+              "explanation": "The encoder reads the id stored under the token.",
+              "xp_reward": 10,
+              "options": [
+                "code",
+                "=",
+                "vocab[token]",
+                "=="
+              ],
+              "correct_answer": [
+                "code",
+                "=",
+                "vocab[token]"
+              ]
+            },
+            {
+              "id": "ai-tok-encode-fill",
+              "type": "fill_blank",
+              "question": "Fill the blank so the line looks up the token id for vocab holding yarrow.",
+              "hints": [
+                "Follow the job, which looks up the token id.",
+                "The encoder reads the id stored under the token.",
+                "'yarrow'"
+              ],
+              "explanation": "The encoder reads the id stored under the token.",
+              "xp_reward": 10,
+              "starter_code": "code = vocab[___]\n",
+              "options": [
+                "'cedar'",
+                "'yarrow'",
+                "'missing'",
+                "'id'"
+              ],
+              "correct_answer": "'yarrow'"
+            },
+            {
+              "id": "ai-tok-encode-bug",
+              "type": "debugging",
+              "question": "Find the line that misses the job, which looks up the token id, for vocab holding yarrow.",
+              "hints": [
+                "Follow the job, which looks up the token id.",
+                "The print counts the vocabulary instead of reading one id.",
+                "Line 2"
+              ],
+              "explanation": "The print counts the vocabulary instead of reading one id.",
+              "xp_reward": 10,
+              "starter_code": "vocab = {'yarrow': 1}\nprint(len(vocab))\n",
+              "correct_answer": "2"
+            },
+            {
+              "id": "ai-tok-encode-predict-2",
+              "type": "output_prediction",
+              "question": "On the new input, the code still looks up the token id for vocab holding yarrow, so choose what it prints.",
+              "hints": [
+                "Follow the job, which looks up the token id.",
+                "The encoder reads the id stored under the token.",
+                "2"
+              ],
+              "explanation": "The encoder reads the id stored under the token.",
+              "xp_reward": 10,
+              "starter_code": "vocab = {'yarrow': 1, 'cedar': 2}\nprint(vocab['cedar'])\n",
+              "options": [
+                "1",
+                "none",
+                "0",
+                "2"
+              ],
+              "correct_answer": "2"
+            },
+            {
+              "id": "ai-tok-encode-write",
+              "type": "code",
+              "question": "Fill the blank so the program looks up the token id, and the print shows that result for vocab holding yarrow.",
+              "hints": [
+                "Follow the job, which looks up the token id.",
+                "The printed value is the result after this step looks up the token id.",
+                "label = vocab['yarrow']"
+              ],
+              "explanation": "The printed value is the result after this step looks up the token id.",
+              "xp_reward": 10,
+              "starter_code": "vocab = {'yarrow': 1, 'cedar': 2}\nlabel = ___\nprint(label)\n",
+              "solution_code": "vocab = {'yarrow': 1, 'cedar': 2}\nlabel = vocab['yarrow']\nprint(label)\n",
+              "tests": [
+                {
+                  "name": "ai-tok-encode-prints",
+                  "description": "The printed value is the result after this step looks up the token id.",
+                  "expected_stdout": "1\n",
+                  "required": true
+                }
+              ]
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "ai-tok-checkpoint",
-      "title": "8. Checkpoint: Sliding Windows",
-      "description": "Implement `ngrams(tokens, n)` returning list of n-length tuples. The test checks that `ngrams(['a', 'b', 'c'], 2)` equals `[('a', 'b'), ('b', 'c')]`.",
+      "title": "Practice Checkpoint Sliding Windows",
+      "description": "Implement ngrams(tokens, n) returning list of n-length tuples. The test checks that ngrams(['a', 'b', 'c'], 2) equals [('a', 'b'), ('b', 'c')].",
       "order": 8,
       "difficulty": "intermediate",
       "duration_minutes": 10,
@@ -179,7 +827,7 @@
       ],
       "prerequisites": [],
       "learning_objectives": [
-        "Generate n-grams"
+        "This step counts windows that fit in the text, using text holding abcdefgh."
       ],
       "starter_code": "def ngrams(tokens, n):\n    # TODO\n    pass\n",
       "solution_code": "def ngrams(tokens, n):\n    return [tuple(tokens[i:i + n]) for i in range(len(tokens) - n + 1)]\n",
@@ -200,7 +848,177 @@
         "url": "https://docs.python.org/3/tutorial/introduction.html#strings",
         "license": "Python documentation license (PSF)"
       },
-      "xp_reward": 40
+      "xp_reward": 40,
+      "player_mode": "micro",
+      "sublessons": [
+        {
+          "id": "ai-tok-checkpoint-micro",
+          "title": "Practice Checkpoint Sliding Windows",
+          "description": "",
+          "order": 1,
+          "exercises": [
+            {
+              "id": "ai-tok-checkpoint-teach",
+              "type": "teach",
+              "question": "This step counts windows that fit in the text, using text holding abcdefgh.",
+              "hints": [
+                "Follow the job, which counts windows that fit in the text.",
+                "The window count is the length minus the size plus one.",
+                "len(text) - size + 1"
+              ],
+              "explanation": "This step counts windows that fit in the text, using text holding abcdefgh.",
+              "xp_reward": 0,
+              "worked_example": "len(text) - size + 1"
+            },
+            {
+              "id": "ai-tok-checkpoint-mcq",
+              "type": "mcq",
+              "question": "Keep the choice that counts windows that fit in the text for text holding abcdefgh.",
+              "hints": [
+                "Follow the job, which counts windows that fit in the text.",
+                "The window count is the length minus the size plus one.",
+                "len(text) - size + 1"
+              ],
+              "explanation": "The window count is the length minus the size plus one.",
+              "xp_reward": 10,
+              "options": [
+                "text == text",
+                "return text",
+                "len(text) - size + 1",
+                "pass"
+              ],
+              "correct_answer": "len(text) - size + 1"
+            },
+            {
+              "id": "ai-tok-checkpoint-predict",
+              "type": "output_prediction",
+              "question": "Trace the code that counts windows that fit in the text using text holding abcdefgh, and select what it displays.",
+              "hints": [
+                "Follow the job, which counts windows that fit in the text.",
+                "The window count is the length minus the size plus one.",
+                "6"
+              ],
+              "explanation": "The window count is the length minus the size plus one.",
+              "xp_reward": 10,
+              "starter_code": "text = 'abcdefgh'\nsize = 3\nprint(len(text) - size + 1)\n",
+              "options": [
+                "8",
+                "none",
+                "6",
+                "0"
+              ],
+              "correct_answer": "6"
+            },
+            {
+              "id": "ai-tok-checkpoint-order",
+              "type": "ordering",
+              "question": "Tap the pieces, in order, of the line that counts windows that fit in the text for text holding abcdefgh.",
+              "hints": [
+                "Follow the job, which counts windows that fit in the text.",
+                "The window count is the length minus the size plus one.",
+                "windows = len(text) - size + 1"
+              ],
+              "explanation": "The window count is the length minus the size plus one.",
+              "xp_reward": 10,
+              "options": [
+                "windows",
+                "=",
+                "len(text)",
+                "-",
+                "size",
+                "+",
+                "1",
+                "*"
+              ],
+              "correct_answer": [
+                "windows",
+                "=",
+                "len(text)",
+                "-",
+                "size",
+                "+",
+                "1"
+              ]
+            },
+            {
+              "id": "ai-tok-checkpoint-fill",
+              "type": "fill_blank",
+              "question": "The blank is the missing piece of the line that counts windows that fit in the text for text holding abcdefgh.",
+              "hints": [
+                "Follow the job, which counts windows that fit in the text.",
+                "The window count is the length minus the size plus one.",
+                "-"
+              ],
+              "explanation": "The window count is the length minus the size plus one.",
+              "xp_reward": 10,
+              "starter_code": "windows = len(text) ___ size + 1\n",
+              "options": [
+                "/",
+                "+",
+                "*",
+                "-"
+              ],
+              "correct_answer": "-"
+            },
+            {
+              "id": "ai-tok-checkpoint-bug",
+              "type": "debugging",
+              "question": "Choose the line that does another job than the one that counts windows that fit in the text for text holding abcdefgh.",
+              "hints": [
+                "Follow the job, which counts windows that fit in the text.",
+                "The print counts characters, not windows.",
+                "Line 3"
+              ],
+              "explanation": "The print counts characters, not windows.",
+              "xp_reward": 10,
+              "starter_code": "text = 'abcdefgh'\nsize = 3\nprint(len(text))\n",
+              "correct_answer": "3"
+            },
+            {
+              "id": "ai-tok-checkpoint-predict-2",
+              "type": "output_prediction",
+              "question": "Trace the second run, which counts windows that fit in the text for text holding abcdefgh, and select what it displays.",
+              "hints": [
+                "Follow the job, which counts windows that fit in the text.",
+                "The window count is the length minus the size plus one.",
+                "8"
+              ],
+              "explanation": "The window count is the length minus the size plus one.",
+              "xp_reward": 10,
+              "starter_code": "text = 'abcdefghij'\nsize = 3\nprint(len(text) - size + 1)\n",
+              "options": [
+                "6",
+                "8",
+                "none",
+                "0"
+              ],
+              "correct_answer": "8"
+            },
+            {
+              "id": "ai-tok-checkpoint-write",
+              "type": "code",
+              "question": "Type the missing piece so the program counts windows that fit in the text for text holding abcdefgh and prints it.",
+              "hints": [
+                "Follow the job, which counts windows that fit in the text.",
+                "The printed value is the result after this step counts windows that fit in the text.",
+                "label = len(text) - size + 1"
+              ],
+              "explanation": "The printed value is the result after this step counts windows that fit in the text.",
+              "xp_reward": 10,
+              "starter_code": "text = 'abcdefgh'\nsize = 3\nlabel = ___\nprint(label)\n",
+              "solution_code": "text = 'abcdefgh'\nsize = 3\nlabel = len(text) - size + 1\nprint(label)\n",
+              "tests": [
+                {
+                  "name": "ai-tok-checkpoint-prints",
+                  "description": "The printed value is the result after this step counts windows that fit in the t",
+                  "expected_stdout": "6\n",
+                  "required": true
+                }
+              ]
+            }
+          ]
+        }
+      ]
     }
   ]
 }

@@ -14,8 +14,8 @@
   "lessons": [
     {
       "id": "js-04",
-      "title": "4. Node.js & Application Foundations",
-      "description": "Checkpoint: implement `createServerConfig(port = 8080)` using a default parameter (default function parameters initialize named parameters when no value is passed) and return the shorthand object { port, env: 'development' }. Tests check createServerConfig(3000).port === 3000, createServerConfig().port === 8080, and env === 'development'.",
+      "title": "Practice Node js Application Foundations",
+      "description": "Checkpoint: implement createServerConfig(port = 8080) using a default parameter (default function parameters initialize named parameters when no value is passed) and return the shorthand object { port, env: 'development' }. Tests check createServerConfig(3000).port === 3000, createServerConfig().port === 8080, and env === 'development'.",
       "order": 4,
       "difficulty": "intermediate",
       "duration_minutes": 10,
@@ -41,21 +41,185 @@
         ]
       },
       "learning_objectives": [
-        "Use default parameter values for optional arguments",
-        "Use shorthand property names in object literals",
-        "Apply core JavaScript syntax under checkpoint conditions"
+        "This step stores the version and exports that object, using version and 57."
       ],
       "source": {
         "name": "MDN Web Docs — Functions — Default parameters: 'allow named parameters to be initialized with default values if no value or undefined is passed'",
         "url": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Functions/Default_parameters",
         "license": "CC0 1.0 Universal (MDN Web Docs)"
       },
-      "xp_reward": 40
+      "xp_reward": 40,
+      "player_mode": "micro",
+      "sublessons": [
+        {
+          "id": "js-04-micro",
+          "title": "Practice Node js Application Foundations",
+          "description": "",
+          "order": 1,
+          "exercises": [
+            {
+              "id": "js-04-teach",
+              "type": "teach",
+              "question": "This step stores the version and exports that object, using version and 57.",
+              "hints": [
+                "Follow the job, which stores the version and exports that object.",
+                "module.exports = { version }; stores the export.",
+                "module.exports = { version };"
+              ],
+              "explanation": "This step stores the version and exports that object, using version and 57.",
+              "xp_reward": 0,
+              "worked_example": "module.exports = { version };"
+            },
+            {
+              "id": "js-04-mcq",
+              "type": "mcq",
+              "question": "Pick the line that stores the version and exports that object, not a line about something else, for version and 57.",
+              "hints": [
+                "Follow the job, which stores the version and exports that object.",
+                "module.exports = { version }; stores the export.",
+                "module.exports = { version };"
+              ],
+              "explanation": "module.exports = { version }; stores the export.",
+              "xp_reward": 10,
+              "options": [
+                "console.log(version);",
+                "module.exports = { version };",
+                "version == version;",
+                "return version;"
+              ],
+              "correct_answer": "module.exports = { version };"
+            },
+            {
+              "id": "js-04-predict",
+              "type": "output_prediction",
+              "question": "The displayed value is what the code prints when it stores the version and exports that object for version and.",
+              "hints": [
+                "Follow the job, which stores the version and exports that object.",
+                "module.exports = { version }; stores the export.",
+                "57"
+              ],
+              "explanation": "module.exports = { version }; stores the export.",
+              "xp_reward": 10,
+              "starter_code": "const version = 57;\nmodule.exports = { version };\nconsole.log(version);\n",
+              "options": [
+                "none",
+                "0",
+                "57",
+                "60"
+              ],
+              "correct_answer": "57"
+            },
+            {
+              "id": "js-04-order",
+              "type": "ordering",
+              "question": "Place every piece so the result stores the version and exports that object for version and 57.",
+              "hints": [
+                "Follow the job, which stores the version and exports that object.",
+                "module.exports = { version }; stores the export.",
+                "module.exports = { version };"
+              ],
+              "explanation": "module.exports = { version }; stores the export.",
+              "xp_reward": 10,
+              "options": [
+                "module.exports",
+                "=",
+                "{",
+                "version",
+                "};",
+                "=="
+              ],
+              "correct_answer": [
+                "module.exports",
+                "=",
+                "{",
+                "version",
+                "};"
+              ]
+            },
+            {
+              "id": "js-04-fill",
+              "type": "fill_blank",
+              "question": "Drop in the piece that lets the line stores the version and exports that object for version and 57.",
+              "hints": [
+                "Follow the job, which stores the version and exports that object.",
+                "module.exports = { version }; stores the export.",
+                "="
+              ],
+              "explanation": "module.exports = { version }; stores the export.",
+              "xp_reward": 10,
+              "starter_code": "const version = 57;\nmodule.exports ___ { version };\n",
+              "options": [
+                "==",
+                "=",
+                "!=",
+                "+"
+              ],
+              "correct_answer": "="
+            },
+            {
+              "id": "js-04-bug",
+              "type": "debugging",
+              "question": "The mismatch misses the job, which stores the version and exports that object, for version and 57.",
+              "hints": [
+                "Follow the job, which stores the version and exports that object.",
+                "The export line compares the object instead of storing it.",
+                "Line 2"
+              ],
+              "explanation": "The export line compares the object instead of storing it.",
+              "xp_reward": 10,
+              "starter_code": "const version = 57;\nmodule.exports == { version };\nconsole.log(version);\n",
+              "correct_answer": "2"
+            },
+            {
+              "id": "js-04-predict-2",
+              "type": "output_prediction",
+              "question": "Choose the printed result of the second run that stores the version and exports that object for version and 57.",
+              "hints": [
+                "Follow the job, which stores the version and exports that object.",
+                "module.exports = { version }; stores the export.",
+                "60"
+              ],
+              "explanation": "module.exports = { version }; stores the export.",
+              "xp_reward": 10,
+              "starter_code": "const version = 60;\nmodule.exports = { version };\nconsole.log(version);\n",
+              "options": [
+                "57",
+                "none",
+                "0",
+                "60"
+              ],
+              "correct_answer": "60"
+            },
+            {
+              "id": "js-04-write",
+              "type": "code",
+              "question": "Make the program stores the version and exports that object by filling the blank for version and.",
+              "hints": [
+                "Follow the job, which stores the version and exports that object.",
+                "The printed value is the result after this step stores the version and exports that object.",
+                "const label = version;"
+              ],
+              "explanation": "The printed value is the result after this step stores the version and exports that object.",
+              "xp_reward": 10,
+              "starter_code": "const version = 57;\nmodule.exports = { version };\nconst label = ___;\nconsole.log(label);\n",
+              "solution_code": "const version = 57;\nmodule.exports = { version };\nconst label = version;\nconsole.log(label);\n",
+              "tests": [
+                {
+                  "name": "js-04-prints",
+                  "description": "The printed value is the result after this step stores the version and exports t",
+                  "expected_stdout": "57\n",
+                  "required": true
+                }
+              ]
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "js-07",
-      "title": "7. ES Modules: import & export",
-      "description": "Modules provide top-level scoping — nothing is global unless explicitly exported. Replace the placeholders: export a const appName with the value 'Patchwork' and export a function formatTitle(title) that returns a template literal: `${title} - ${appName}` (note the hyphen and spaces). The test imports your module as an ES module.",
+      "title": "Practice ES Modules import export",
+      "description": "Modules provide top-level scoping — nothing is global unless explicitly exported. Replace the placeholders: export a const appName with the value 'Patchwork' and export a function formatTitle(title) that returns a template literal: ${title} - ${appName} (note the hyphen and spaces). The test imports your module as an ES module.",
       "order": 7,
       "difficulty": "beginner",
       "duration_minutes": 6,
@@ -68,9 +232,7 @@
       ],
       "prerequisites": [],
       "learning_objectives": [
-        "Export named bindings with ES module syntax",
-        "Use template literals to compose strings",
-        "Know that module scope is not global scope"
+        "This step prints the label that an export would share, using labelValue holding umber."
       ],
       "source": {
         "name": "MDN Web Docs — Guide — JavaScript modules: 'Modules provide top-level scoping'",
@@ -91,7 +253,173 @@
           "test_es_module_exports"
         ]
       },
-      "xp_reward": 15
+      "xp_reward": 15,
+      "player_mode": "micro",
+      "sublessons": [
+        {
+          "id": "js-07-micro",
+          "title": "Practice ES Modules import export",
+          "description": "",
+          "order": 1,
+          "exercises": [
+            {
+              "id": "js-07-teach",
+              "type": "teach",
+              "question": "This step prints the label that an export would share, using labelValue holding umber.",
+              "hints": [
+                "Follow the job, which prints the label that an export would share.",
+                "export const label shares a binding from the module.",
+                "export const label = 1;"
+              ],
+              "explanation": "This step prints the label that an export would share, using labelValue holding umber.",
+              "xp_reward": 0,
+              "worked_example": "export const label = 1;"
+            },
+            {
+              "id": "js-07-mcq",
+              "type": "mcq",
+              "question": "The correct line prints the label that an export would share, and it is the line tied to labelValue holding umber.",
+              "hints": [
+                "Follow the job, which prints the label that an export would share.",
+                "export const label shares a binding from the module.",
+                "export const label = 1;"
+              ],
+              "explanation": "export const label shares a binding from the module.",
+              "xp_reward": 10,
+              "options": [
+                "return label;",
+                "console.log(label);",
+                "label == 1;",
+                "export const label = 1;"
+              ],
+              "correct_answer": "export const label = 1;"
+            },
+            {
+              "id": "js-07-predict",
+              "type": "output_prediction",
+              "question": "The program prints the label that an export would share with labelValue holding so choose the printed value.",
+              "hints": [
+                "Follow the job, which prints the label that an export would share.",
+                "export const label shares a binding from the module.",
+                "umber"
+              ],
+              "explanation": "export const label shares a binding from the module.",
+              "xp_reward": 10,
+              "starter_code": "const labelValue = \"umber\";\nconsole.log(labelValue);\n",
+              "options": [
+                "zircon",
+                "umber",
+                "none",
+                "0"
+              ],
+              "correct_answer": "umber"
+            },
+            {
+              "id": "js-07-order",
+              "type": "ordering",
+              "question": "Build the line that prints the label that an export would share for labelValue holding umber, from the first piece to the last.",
+              "hints": [
+                "Follow the job, which prints the label that an export would share.",
+                "export const label shares a binding from the module.",
+                "export const label = 1;"
+              ],
+              "explanation": "export const label shares a binding from the module.",
+              "xp_reward": 10,
+              "options": [
+                "export",
+                "const",
+                "label",
+                "=",
+                "1;",
+                "import"
+              ],
+              "correct_answer": [
+                "export",
+                "const",
+                "label",
+                "=",
+                "1;"
+              ]
+            },
+            {
+              "id": "js-07-fill",
+              "type": "fill_blank",
+              "question": "Replace the blank with the piece that makes the line prints the label that an export would share for labelValue holding umber.",
+              "hints": [
+                "Follow the job, which prints the label that an export would share.",
+                "export const label shares a binding from the module.",
+                "const"
+              ],
+              "explanation": "export const label shares a binding from the module.",
+              "xp_reward": 10,
+              "starter_code": "export ___ label = 1;\n",
+              "options": [
+                "let",
+                "const",
+                "function",
+                "var"
+              ],
+              "correct_answer": "const"
+            },
+            {
+              "id": "js-07-bug",
+              "type": "debugging",
+              "question": "Spot the line that fails the job, which prints the label that an export would share, around labelValue holding umber.",
+              "hints": [
+                "Follow the job, which prints the label that an export would share.",
+                "The print adds an exclamation mark the export does not include.",
+                "Line 2"
+              ],
+              "explanation": "The print adds an exclamation mark the export does not include.",
+              "xp_reward": 10,
+              "starter_code": "const labelValue = \"umber\";\nconsole.log(labelValue + \"!\");\n",
+              "correct_answer": "2"
+            },
+            {
+              "id": "js-07-predict-2",
+              "type": "output_prediction",
+              "question": "The second program prints the label that an export would share for labelValue holding umber, so choose the new printed value.",
+              "hints": [
+                "Follow the job, which prints the label that an export would share.",
+                "export const label shares a binding from the module.",
+                "zircon"
+              ],
+              "explanation": "export const label shares a binding from the module.",
+              "xp_reward": 10,
+              "starter_code": "const labelValue = \"zircon\";\nconsole.log(labelValue);\n",
+              "options": [
+                "umber",
+                "none",
+                "0",
+                "zircon"
+              ],
+              "correct_answer": "zircon"
+            },
+            {
+              "id": "js-07-write",
+              "type": "code",
+              "question": "Complete the blank so this program prints the label that an export would share and prints the result for labelValue holding.",
+              "hints": [
+                "Follow the job, which prints the label that an export would share.",
+                "The printed value is the result after this step prints the label that an export would share.",
+                "const label = labelValue;"
+              ],
+              "explanation": "The printed value is the result after this step prints the label that an export would share.",
+              "xp_reward": 10,
+              "starter_code": "const labelValue = \"umber\";\nconst label = ___;\nconsole.log(label);\n",
+              "solution_code": "const labelValue = \"umber\";\nconst label = labelValue;\nconsole.log(label);\n",
+              "tests": [
+                {
+                  "name": "js-07-prints",
+                  "description": "The printed value is the result after this step prints the label that an export ",
+                  "expected_stdout": "umber\n",
+                  "required": true
+                }
+              ]
+            }
+          ]
+        }
+      ]
     }
   ]
 }

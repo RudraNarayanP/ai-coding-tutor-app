@@ -14,8 +14,8 @@
   "lessons": [
     {
       "id": "sql-10",
-      "title": "10. Subqueries & Common Table Expressions",
-      "description": "Write a `WITH` clause named `high_spenders` that selects each `customer_id` whose `SUM(total_amount)` is greater than 100. The test checks that you return at least one row and the total is greater than 100.",
+      "title": "Practice Subqueries Common Table Expressions",
+      "description": "Write a WITH clause named high_spenders that selects each customer_id whose SUM(total_amount) is greater than 100. The test checks that you return at least one row and the total is greater than 100.",
       "order": 10,
       "difficulty": "advanced",
       "duration_minutes": 5,
@@ -45,10 +45,179 @@
         "license": "Public domain (SQLite documentation)"
       },
       "learning_objectives": [
-        "Name an intermediate result set with WITH ... AS (CTE)",
-        "Query the CTE like a table within the same statement"
+        "This step finds the product with the highest price, using name and products."
       ],
-      "xp_reward": 10
+      "xp_reward": 10,
+      "player_mode": "micro",
+      "sublessons": [
+        {
+          "id": "sql-10-micro",
+          "title": "Practice Subqueries Common Table Expressions",
+          "description": "",
+          "order": 1,
+          "exercises": [
+            {
+              "id": "sql-10-teach",
+              "type": "teach",
+              "question": "This step finds the product with the highest price, using name and products.",
+              "hints": [
+                "Follow the job, which finds the product with the highest price.",
+                "The subquery MAX(price) picks the highest price.",
+                "WHERE price = (SELECT MAX(price) FROM products)"
+              ],
+              "explanation": "This step finds the product with the highest price, using name and products.",
+              "xp_reward": 0,
+              "worked_example": "WHERE price = (SELECT MAX(price) FROM products)"
+            },
+            {
+              "id": "sql-10-mcq",
+              "type": "mcq",
+              "question": "Pick the line that finds the product with the highest price, not a line about something else, for name and products.",
+              "hints": [
+                "Follow the job, which finds the product with the highest price.",
+                "The subquery MAX(price) picks the highest price.",
+                "SELECT name FROM products WHERE price = (SELECT MAX(price) FROM products)"
+              ],
+              "explanation": "The subquery MAX(price) picks the highest price.",
+              "xp_reward": 10,
+              "options": [
+                "INSERT INTO products",
+                "DROP TABLE products",
+                "SELECT name FROM products WHERE price = (SELECT MAX(price) FROM products)",
+                "price == price"
+              ],
+              "correct_answer": "SELECT name FROM products WHERE price = (SELECT MAX(price) FROM products)"
+            },
+            {
+              "id": "sql-10-predict",
+              "type": "output_prediction",
+              "question": "The displayed value is what the code prints when it finds the product with the highest price for name and products.",
+              "hints": [
+                "Follow the job, which finds the product with the highest price.",
+                "The subquery MAX(price) picks the highest price.",
+                "┌────────────┐\n│ name       │\n├────────────┤\n│ Laptop Pro │\n└────────────┘"
+              ],
+              "explanation": "The subquery MAX(price) picks the highest price.",
+              "xp_reward": 10,
+              "starter_code": "SELECT name FROM products WHERE price = (SELECT MAX(price) FROM products);\n",
+              "options": [
+                "┌────────────┐\n│ name       │\n├────────────┤\n│ Coffee Mug │\n└────────────┘",
+                "none",
+                "┌────────────┐\n│ name       │\n├────────────┤\n│ Laptop Pro │\n└────────────┘",
+                "0"
+              ],
+              "correct_answer": "┌────────────┐\n│ name       │\n├────────────┤\n│ Laptop Pro │\n└────────────┘"
+            },
+            {
+              "id": "sql-10-order",
+              "type": "ordering",
+              "question": "Place every piece so the result finds the product with the highest price for name and products.",
+              "hints": [
+                "Follow the job, which finds the product with the highest price.",
+                "The subquery MAX(price) picks the highest price.",
+                "SELECT name FROM products WHERE price= (SELECT MAX(price) FROM products)"
+              ],
+              "explanation": "The subquery MAX(price) picks the highest price.",
+              "xp_reward": 10,
+              "options": [
+                "SELECT",
+                "name",
+                "FROM",
+                "products",
+                "WHERE",
+                "price=",
+                "(SELECT MAX(price) FROM products)",
+                "DROP"
+              ],
+              "correct_answer": [
+                "SELECT",
+                "name",
+                "FROM",
+                "products",
+                "WHERE",
+                "price=",
+                "(SELECT MAX(price) FROM products)"
+              ]
+            },
+            {
+              "id": "sql-10-fill",
+              "type": "fill_blank",
+              "question": "Drop in the piece that lets the line finds the product with the highest price for name and products.",
+              "hints": [
+                "Follow the job, which finds the product with the highest price.",
+                "The subquery MAX(price) picks the highest price.",
+                "MAX"
+              ],
+              "explanation": "The subquery MAX(price) picks the highest price.",
+              "xp_reward": 10,
+              "starter_code": "SELECT name FROM products WHERE price = (SELECT ___(price) FROM products);",
+              "options": [
+                "MIN",
+                "COUNT",
+                "MAX",
+                "AVG"
+              ],
+              "correct_answer": "MAX"
+            },
+            {
+              "id": "sql-10-bug",
+              "type": "debugging",
+              "question": "The mismatch misses the job, which finds the product with the highest price, for name and products.",
+              "hints": [
+                "Follow the job, which finds the product with the highest price.",
+                "The subquery asks for the lowest price instead of the highest.",
+                "Line 1"
+              ],
+              "explanation": "The subquery asks for the lowest price instead of the highest.",
+              "xp_reward": 10,
+              "starter_code": "SELECT name FROM products WHERE price = (SELECT MIN(price) FROM products);",
+              "correct_answer": "1"
+            },
+            {
+              "id": "sql-10-predict-2",
+              "type": "output_prediction",
+              "question": "Choose the printed result of the second run that finds the product with the highest price for name and products.",
+              "hints": [
+                "Follow the job, which finds the product with the highest price.",
+                "The subquery MAX(price) picks the highest price.",
+                "┌────────────┐\n│ name       │\n├────────────┤\n│ Coffee Mug │\n└────────────┘"
+              ],
+              "explanation": "The subquery MAX(price) picks the highest price.",
+              "xp_reward": 10,
+              "starter_code": "SELECT name FROM products WHERE price = (SELECT MIN(price) FROM products);\n",
+              "options": [
+                "┌────────────┐\n│ name       │\n├────────────┤\n│ Laptop Pro │\n└────────────┘",
+                "┌────────────┐\n│ name       │\n├────────────┤\n│ Coffee Mug │\n└────────────┘",
+                "none",
+                "0"
+              ],
+              "correct_answer": "┌────────────┐\n│ name       │\n├────────────┤\n│ Coffee Mug │\n└────────────┘"
+            },
+            {
+              "id": "sql-10-write",
+              "type": "code",
+              "question": "Make the program finds the product with the highest price by filling the blank for name and products.",
+              "hints": [
+                "Follow the job, which finds the product with the highest price.",
+                "The query result is what this step finds the product with the highest price.",
+                "SELECT MAX(price) FROM products"
+              ],
+              "explanation": "The query result is what this step finds the product with the highest price.",
+              "xp_reward": 10,
+              "starter_code": "SELECT name FROM products WHERE price = (SELECT ___(price) FROM products);\n",
+              "solution_code": "SELECT name FROM products WHERE price = (SELECT (MAX(price)) FROM products);\n",
+              "tests": [
+                {
+                  "name": "sql-10-prints",
+                  "description": "The query result is what this step finds the product with the highest price.",
+                  "expected_stdout": "┌────────────┐\n│ name       │\n├────────────┤\n│ Laptop Pro │\n└────────────┘",
+                  "required": true
+                }
+              ]
+            }
+          ]
+        }
+      ]
     }
   ]
 }

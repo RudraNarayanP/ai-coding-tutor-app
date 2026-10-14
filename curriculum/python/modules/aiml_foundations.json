@@ -14,8 +14,8 @@
   "lessons": [
     {
       "id": "py-aiml-01",
-      "title": "1. Dot Product & Similarity",
-      "description": "Finish `dot_product`. Calculate dot product between two numerical feature vectors in Python. The test checks that `dot_product([1.0, 2.0], [3.0, 4.0])` equals `11.0`.",
+      "title": "Practice Dot Product Similarity",
+      "description": "Finish dot_product. Calculate dot product between two numerical feature vectors in Python. The test checks that dot_product([1.0, 2.0], [3.0, 4.0]) equals 11.0.",
       "order": 108,
       "difficulty": "intermediate",
       "duration_minutes": 5,
@@ -45,11 +45,175 @@
         "license": "Apache 2.0 (Dive into Deep Learning book)"
       },
       "learning_objectives": [
-        "Compute the dot product of two equal-length vectors",
-        "Pair elements positionally with zip()",
-        "Accumulate element-wise products with a generator expression and sum()"
+        "This step multiplies the pair and then adds the width, using width and 4."
       ],
-      "xp_reward": 10
+      "xp_reward": 10,
+      "player_mode": "micro",
+      "sublessons": [
+        {
+          "id": "py-aiml-01-micro",
+          "title": "Practice Dot Product Similarity",
+          "description": "",
+          "order": 1,
+          "exercises": [
+            {
+              "id": "py-aiml-01-teach",
+              "type": "teach",
+              "question": "This step multiplies the pair and then adds the width, using width and 4.",
+              "hints": [
+                "Follow the job, which multiplies the pair and then adds the width.",
+                "width * height + width is the combined product.",
+                "width = 49"
+              ],
+              "explanation": "This step multiplies the pair and then adds the width, using width and 4.",
+              "xp_reward": 0,
+              "worked_example": "width = 49"
+            },
+            {
+              "id": "py-aiml-01-mcq",
+              "type": "mcq",
+              "question": "A correct choice multiplies the pair and then adds the width and goes with width and 4.",
+              "hints": [
+                "Follow the job, which multiplies the pair and then adds the width.",
+                "width * height + width is the combined product.",
+                "width * height + width"
+              ],
+              "explanation": "width * height + width is the combined product.",
+              "xp_reward": 10,
+              "options": [
+                "width == height",
+                "width + height",
+                "print(width)",
+                "width * height + width"
+              ],
+              "correct_answer": "width * height + width"
+            },
+            {
+              "id": "py-aiml-01-predict",
+              "type": "output_prediction",
+              "question": "Select the output after the code multiplies the pair and then adds the width, using width and 4.",
+              "hints": [
+                "Follow the job, which multiplies the pair and then adds the width.",
+                "width * height + width is the combined product.",
+                "245"
+              ],
+              "explanation": "width * height + width is the combined product.",
+              "xp_reward": 10,
+              "starter_code": "width = 49\nheight = 4\nprint(width * height + width)\n",
+              "options": [
+                "255",
+                "none",
+                "0",
+                "245"
+              ],
+              "correct_answer": "245"
+            },
+            {
+              "id": "py-aiml-01-order",
+              "type": "ordering",
+              "question": "Make the line that multiplies the pair and then adds the width by ordering the pieces for width and 4.",
+              "hints": [
+                "Follow the job, which multiplies the pair and then adds the width.",
+                "part = width * height multiplies the pair.",
+                "part = width * height"
+              ],
+              "explanation": "part = width * height multiplies the pair.",
+              "xp_reward": 10,
+              "options": [
+                "part",
+                "=",
+                "width",
+                "*",
+                "height",
+                "+"
+              ],
+              "correct_answer": [
+                "part",
+                "=",
+                "width",
+                "*",
+                "height"
+              ]
+            },
+            {
+              "id": "py-aiml-01-fill",
+              "type": "fill_blank",
+              "question": "Complete the line for width and 4 so that it multiplies the pair and then adds the width.",
+              "hints": [
+                "Follow the job, which multiplies the pair and then adds the width.",
+                "The star multiplies the pair.",
+                "*"
+              ],
+              "explanation": "The star multiplies the pair.",
+              "xp_reward": 10,
+              "starter_code": "part = width ___ height\n",
+              "options": [
+                "+",
+                "-",
+                "==",
+                "*"
+              ],
+              "correct_answer": "*"
+            },
+            {
+              "id": "py-aiml-01-bug",
+              "type": "debugging",
+              "question": "Select the line that gets in the way of the job, which multiplies the pair and then adds the width, for width and 4.",
+              "hints": [
+                "Follow the job, which multiplies the pair and then adds the width.",
+                "The print adds the pair instead of multiplying.",
+                "Line 3"
+              ],
+              "explanation": "The print adds the pair instead of multiplying.",
+              "xp_reward": 10,
+              "starter_code": "width = 49\nheight = 4\nprint(width + height + width)\n",
+              "correct_answer": "3"
+            },
+            {
+              "id": "py-aiml-01-predict-2",
+              "type": "output_prediction",
+              "question": "With the new data around width and 4, the code multiplies the pair and then adds the width, so select the new output.",
+              "hints": [
+                "Follow the job, which multiplies the pair and then adds the width.",
+                "width * height + width is the combined product.",
+                "255"
+              ],
+              "explanation": "width * height + width is the combined product.",
+              "xp_reward": 10,
+              "starter_code": "width = 51\nheight = 4\nprint(width * height + width)\n",
+              "options": [
+                "245",
+                "none",
+                "255",
+                "0"
+              ],
+              "correct_answer": "255"
+            },
+            {
+              "id": "py-aiml-01-write",
+              "type": "code",
+              "question": "The printed result shows up after you fill the blank so the code multiplies the pair and then adds the width for width and 4.",
+              "hints": [
+                "Follow the job, which multiplies the pair and then adds the width.",
+                "The combined product is what gets printed.",
+                "label = width * height + width"
+              ],
+              "explanation": "The combined product is what gets printed.",
+              "xp_reward": 10,
+              "starter_code": "width = 49\nheight = 4\nlabel = ___\nprint(label)\n",
+              "solution_code": "width = 49\nheight = 4\nlabel = width * height + width\nprint(label)\n",
+              "tests": [
+                {
+                  "name": "py-aiml-01-prints",
+                  "description": "The combined product is what gets printed.",
+                  "expected_stdout": "245\n",
+                  "required": true
+                }
+              ]
+            }
+          ]
+        }
+      ]
     }
   ]
 }

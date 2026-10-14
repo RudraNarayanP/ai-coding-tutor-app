@@ -12,8 +12,8 @@
   "lessons": [
     {
       "id": "js-01",
-      "title": "1. Modern JavaScript Variables & Functions",
-      "description": "An arrow function expression has a shorter syntax compared to function expressions. Implement `calculateTotal(price, tax)` as a `const` arrow function returning `price + price * tax`, and export it with `module.exports = { calculateTotal }`. The tests check calculateTotal(100, 0.1) === 110 and calculateTotal(50, 0.2) === 60.",
+      "title": "Practice Modern JavaScript Variables Functions",
+      "description": "An arrow function expression has a shorter syntax compared to function expressions. Implement calculateTotal(price, tax) as a const arrow function returning price + price * tax, and export it with module.exports = { calculateTotal }. The tests check calculateTotal(100, 0.1) === 110 and calculateTotal(50, 0.2) === 60.",
       "order": 1,
       "difficulty": "beginner",
       "duration_minutes": 5,
@@ -40,42 +40,189 @@
       },
       "sublessons": [
         {
-          "id": "js-sub-1",
-          "title": "const vs let",
+          "id": "js-01-micro",
+          "title": "Practice Modern JavaScript Variables Functions",
+          "description": "",
           "order": 1,
           "exercises": [
             {
-              "id": "js-ex-1",
-              "type": "mcq",
-              "question": "Which keyword defines block-scoped variables that cannot be reassigned?",
-              "options": [
-                "let",
-                "var",
-                "function",
-                "const"
+              "id": "js-01-teach",
+              "type": "teach",
+              "question": "This step returns twice the input from an arrow function, using double and 53.",
+              "hints": [
+                "Follow the job, which returns twice the input from an arrow function.",
+                "const double = (value) => value * 2; doubles the input.",
+                "const double = (value) => value * 2;"
               ],
-              "correct_answer": "const",
-              "explanation": "const is block-scoped and cannot be reassigned; let can be.",
-              "xp_reward": 10
+              "explanation": "This step returns twice the input from an arrow function, using double and 53.",
+              "xp_reward": 0,
+              "worked_example": "const double = (value) => value * 2;"
+            },
+            {
+              "id": "js-01-mcq",
+              "type": "mcq",
+              "question": "Select the line that returns twice the input from an arrow function, the one that belongs with double and 53.",
+              "hints": [
+                "Follow the job, which returns twice the input from an arrow function.",
+                "const double = (value) => value * 2; doubles the input.",
+                "const double = (value) => value * 2;"
+              ],
+              "explanation": "const double = (value) => value * 2; doubles the input.",
+              "xp_reward": 10,
+              "options": [
+                "return value;",
+                "value == value;",
+                "console.log(value);",
+                "const double = (value) => value * 2;"
+              ],
+              "correct_answer": "const double = (value) => value * 2;"
+            },
+            {
+              "id": "js-01-predict",
+              "type": "output_prediction",
+              "question": "Follow the code that returns twice the input from an arrow function for double and 53, then choose the displayed value.",
+              "hints": [
+                "Follow the job, which returns twice the input from an arrow function.",
+                "const double = (value) => value * 2; doubles the input.",
+                "106"
+              ],
+              "explanation": "const double = (value) => value * 2; doubles the input.",
+              "xp_reward": 10,
+              "starter_code": "const double = (value) => value * 2;\nconsole.log(double(53));\n",
+              "options": [
+                "112",
+                "106",
+                "none",
+                "0"
+              ],
+              "correct_answer": "106"
+            },
+            {
+              "id": "js-01-order",
+              "type": "ordering",
+              "question": "Order the pieces so the line returns twice the input from an arrow function for double and 53.",
+              "hints": [
+                "Follow the job, which returns twice the input from an arrow function.",
+                "const double = (value) => value * 2; doubles the input.",
+                "const double = (value) => value * 2;"
+              ],
+              "explanation": "const double = (value) => value * 2; doubles the input.",
+              "xp_reward": 10,
+              "options": [
+                "const",
+                "double",
+                "=",
+                "(value)",
+                "=>",
+                "value",
+                "*",
+                "2;",
+                "=="
+              ],
+              "correct_answer": [
+                "const",
+                "double",
+                "=",
+                "(value)",
+                "=>",
+                "value",
+                "*",
+                "2;"
+              ]
+            },
+            {
+              "id": "js-01-fill",
+              "type": "fill_blank",
+              "question": "Supply the missing piece so the line returns twice the input from an arrow function for double and 53.",
+              "hints": [
+                "Follow the job, which returns twice the input from an arrow function.",
+                "const double = (value) => value * 2; doubles the input.",
+                "*"
+              ],
+              "explanation": "const double = (value) => value * 2; doubles the input.",
+              "xp_reward": 10,
+              "starter_code": "const double = (value) => value ___ 2;\n",
+              "options": [
+                "+",
+                "*",
+                "==",
+                "-"
+              ],
+              "correct_answer": "*"
+            },
+            {
+              "id": "js-01-bug",
+              "type": "debugging",
+              "question": "The wrong line is the one that misses the job, which returns twice the input from an arrow function, for double and 53.",
+              "hints": [
+                "Follow the job, which returns twice the input from an arrow function.",
+                "The arrow adds two instead of multiplying.",
+                "Line 1"
+              ],
+              "explanation": "The arrow adds two instead of multiplying.",
+              "xp_reward": 10,
+              "starter_code": "const double = (value) => value + 2;\nconsole.log(double(53));\n",
+              "correct_answer": "1"
+            },
+            {
+              "id": "js-01-predict-2",
+              "type": "output_prediction",
+              "question": "A new input still has code that returns twice the input from an arrow function for double and 53, and the correct choice is what it prints.",
+              "hints": [
+                "Follow the job, which returns twice the input from an arrow function.",
+                "const double = (value) => value * 2; doubles the input.",
+                "112"
+              ],
+              "explanation": "const double = (value) => value * 2; doubles the input.",
+              "xp_reward": 10,
+              "starter_code": "const double = (value) => value * 2;\nconsole.log(double(56));\n",
+              "options": [
+                "106",
+                "none",
+                "0",
+                "112"
+              ],
+              "correct_answer": "112"
+            },
+            {
+              "id": "js-01-write",
+              "type": "code",
+              "question": "The blank is the missing piece of the program that returns twice the input from an arrow function for double and 53.",
+              "hints": [
+                "Follow the job, which returns twice the input from an arrow function.",
+                "The printed value is the result after this step returns twice the input from an arrow function.",
+                "const label = double(53);"
+              ],
+              "explanation": "The printed value is the result after this step returns twice the input from an arrow function.",
+              "xp_reward": 10,
+              "starter_code": "const double = (value) => value * 2;\nconst label = ___;\nconsole.log(label);\n",
+              "solution_code": "const double = (value) => value * 2;\nconst label = double(53);\nconsole.log(label);\n",
+              "tests": [
+                {
+                  "name": "js-01-prints",
+                  "description": "The printed value is the result after this step returns twice the input from an ",
+                  "expected_stdout": "106\n",
+                  "required": true
+                }
+              ]
             }
           ]
         }
       ],
       "learning_objectives": [
-        "Declare constants with const (block-scoped, no reassignment)",
-        "Write arrow functions as compact expressions",
-        "Export functions with module.exports"
+        "This step returns twice the input from an arrow function, using double and 53."
       ],
       "source": {
         "name": "MDN Web Docs — Functions guide — 'An arrow function expression has a shorter syntax compared to function expressions'",
         "url": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Functions",
         "license": "CC0 1.0 Universal (MDN Web Docs)"
       },
-      "xp_reward": 10
+      "xp_reward": 10,
+      "player_mode": "micro"
     },
     {
       "id": "js-05",
-      "title": "5. Mapping Over Arrays",
+      "title": "Map Over Arrays",
       "description": "Array.prototype.map() returns a new array containing the results of invoking a function on every element in the calling array. Implement doubleAll(numbers) as an arrow function returning a new array with every value doubled via map, exported with module.exports. The test checks doubleAll([1, 2, 3]) produces [2, 4, 6].",
       "order": 5,
       "difficulty": "beginner",
@@ -89,9 +236,7 @@
       ],
       "prerequisites": [],
       "learning_objectives": [
-        "Transform every array element with map()",
-        "Understand that map returns a NEW array",
-        "Compose arrow functions with built-in array methods"
+        "This step builds a new array by mapping every item, using numbers and 2."
       ],
       "source": {
         "name": "MDN Web Docs — GlobalObjects — Array.prototype.map(): 'Returns a new array containing the results of invoking a function on every element'",
@@ -115,27 +260,170 @@
       "xp_reward": 10,
       "sublessons": [
         {
-          "id": "js-05-mcq-1-sub",
-          "title": "What map gives back",
+          "id": "js-05-micro",
+          "title": "Map Over Arrays",
+          "description": "",
           "order": 1,
           "exercises": [
             {
-              "id": "js-05-mcq-1",
-              "type": "mcq",
-              "question": "What does `numbers.map(double)` return?",
-              "options": [
-                "the original array, changed in place",
-                "a single accumulated total",
-                "a brand new array holding each transformed value",
-                "undefined, because the callback has no return value"
+              "id": "js-05-teach",
+              "type": "teach",
+              "question": "This step builds a new array by mapping every item, using numbers and 2.",
+              "hints": [
+                "Follow the job, which builds a new array by mapping every item.",
+                "map calls the arrow on every item and keeps the new array.",
+                "numbers.map((item) => item * 2)"
               ],
-              "correct_answer": "a brand new array holding each transformed value",
-              "explanation": "`map` never mutates its receiver: it builds and returns a new array of the callback's results.",
-              "xp_reward": 10
+              "explanation": "This step builds a new array by mapping every item, using numbers and 2.",
+              "xp_reward": 0,
+              "worked_example": "numbers.map((item) => item * 2)"
+            },
+            {
+              "id": "js-05-mcq",
+              "type": "mcq",
+              "question": "A correct choice builds a new array by mapping every item and goes with numbers and 2.",
+              "hints": [
+                "Follow the job, which builds a new array by mapping every item.",
+                "map calls the arrow on every item and keeps the new array.",
+                "numbers.map((item) => item * 2)"
+              ],
+              "explanation": "map calls the arrow on every item and keeps the new array.",
+              "xp_reward": 10,
+              "options": [
+                "numbers == numbers;",
+                "console.log(numbers);",
+                "numbers.map((item) => item * 2)",
+                "return numbers;"
+              ],
+              "correct_answer": "numbers.map((item) => item * 2)"
+            },
+            {
+              "id": "js-05-predict",
+              "type": "output_prediction",
+              "question": "Select the output after the code builds a new array by mapping every item, using numbers and 2.",
+              "hints": [
+                "Follow the job, which builds a new array by mapping every item.",
+                "map calls the arrow on every item and keeps the new array.",
+                "114,4"
+              ],
+              "explanation": "map calls the arrow on every item and keeps the new array.",
+              "xp_reward": 10,
+              "starter_code": "const numbers = [57, 2];\nconsole.log(numbers.map((item) => item * 2).join(\",\"));\n",
+              "options": [
+                "114,8",
+                "none",
+                "114,4",
+                "0"
+              ],
+              "correct_answer": "114,4"
+            },
+            {
+              "id": "js-05-order",
+              "type": "ordering",
+              "question": "Make the line that builds a new array by mapping every item by ordering the pieces for numbers and 2.",
+              "hints": [
+                "Follow the job, which builds a new array by mapping every item.",
+                "map calls the arrow on every item and keeps the new array.",
+                "numbers.map((item) => item * 2)"
+              ],
+              "explanation": "map calls the arrow on every item and keeps the new array.",
+              "xp_reward": 10,
+              "options": [
+                "numbers.map((item)",
+                "=>",
+                "item",
+                "*",
+                "2)",
+                "=="
+              ],
+              "correct_answer": [
+                "numbers.map((item)",
+                "=>",
+                "item",
+                "*",
+                "2)"
+              ]
+            },
+            {
+              "id": "js-05-fill",
+              "type": "fill_blank",
+              "question": "Complete the line for numbers and 2 so that it builds a new array by mapping every item.",
+              "hints": [
+                "Follow the job, which builds a new array by mapping every item.",
+                "map calls the arrow on every item and keeps the new array.",
+                "*"
+              ],
+              "explanation": "map calls the arrow on every item and keeps the new array.",
+              "xp_reward": 10,
+              "starter_code": "const numbers = [57, 2];\nconst label = numbers.map((item) => item ___ 2);\n",
+              "options": [
+                "+",
+                "-",
+                "*",
+                "=="
+              ],
+              "correct_answer": "*"
+            },
+            {
+              "id": "js-05-bug",
+              "type": "debugging",
+              "question": "Select the line that gets in the way of the job, which builds a new array by mapping every item, for numbers and.",
+              "hints": [
+                "Follow the job, which builds a new array by mapping every item.",
+                "The mapper adds two instead of doubling.",
+                "Line 2"
+              ],
+              "explanation": "The mapper adds two instead of doubling.",
+              "xp_reward": 10,
+              "starter_code": "const numbers = [57, 2];\nconsole.log(numbers.map((item) => item + 2).join(\",\"));\n",
+              "correct_answer": "2"
+            },
+            {
+              "id": "js-05-predict-2",
+              "type": "output_prediction",
+              "question": "With the new data around numbers and 2, the code builds a new array by mapping every item, so select the new output.",
+              "hints": [
+                "Follow the job, which builds a new array by mapping every item.",
+                "map calls the arrow on every item and keeps the new array.",
+                "114,8"
+              ],
+              "explanation": "map calls the arrow on every item and keeps the new array.",
+              "xp_reward": 10,
+              "starter_code": "const numbers = [57, 4];\nconsole.log(numbers.map((item) => item * 2).join(\",\"));\n",
+              "options": [
+                "none",
+                "114,8",
+                "0",
+                "114,4"
+              ],
+              "correct_answer": "114,8"
+            },
+            {
+              "id": "js-05-write",
+              "type": "code",
+              "question": "The printed result shows up after you fill the blank so the code builds a new array by mapping every item for numbers and 2.",
+              "hints": [
+                "Follow the job, which builds a new array by mapping every item.",
+                "The printed value is the result after this step builds a new array by mapping every item.",
+                "const label = numbers.map((item) => item * 2).join(\",\");"
+              ],
+              "explanation": "The printed value is the result after this step builds a new array by mapping every item.",
+              "xp_reward": 10,
+              "starter_code": "const numbers = [57, 2];\nconst label = ___;\nconsole.log(label);\n",
+              "solution_code": "const numbers = [57, 2];\nconst label = numbers.map((item) => item * 2).join(\",\");\nconsole.log(label);\n",
+              "tests": [
+                {
+                  "name": "js-05-prints",
+                  "description": "The printed value is the result after this step builds a new array by mapping ev",
+                  "expected_stdout": "114,4\n",
+                  "required": true
+                }
+              ]
             }
           ]
         }
-      ]
+      ],
+      "player_mode": "micro"
     }
   ]
 }

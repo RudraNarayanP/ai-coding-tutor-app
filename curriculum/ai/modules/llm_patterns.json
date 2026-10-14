@@ -14,7 +14,7 @@
   "lessons": [
     {
       "id": "ai-02",
-      "title": "2. Function & Tool Definitions for LLMs",
+      "title": "Practice Function Tool Definitions for LLMs",
       "description": "Tool definitions let LLMs trigger local functions. The OpenAI function-calling guide defines a tool as JSON with \"type\": \"function\", \"name\", \"description\", and a JSON-schema \"parameters\" object (\"type\": \"object\", \"properties\", \"required\"). Implement get_sql_query_tool_spec() returning exactly that structure for a read-only SQL tool: name 'run_sql_query', description 'Run a read-only SQL query against database', one string property 'query' described as 'SQL query to execute', required ['query']. Tests check type, name, parameters.properties.query.type and parameters.required.",
       "order": 2,
       "difficulty": "advanced",
@@ -45,41 +45,171 @@
         "license": "OpenAI API documentation (developers.openai.com)"
       },
       "learning_objectives": [
-        "Declare a function tool with type, name, description, parameters",
-        "Describe tool inputs with a JSON schema (properties/required)",
-        "Understand that structured tool JSON lets models trigger local code"
+        "This step counts the parameters declared on the tool, using tool holding name."
       ],
       "xp_reward": 10,
       "sublessons": [
         {
-          "id": "ai-02-multi-sub",
-          "title": "Select every part of a tool definition",
+          "id": "ai-02-micro",
+          "title": "Practice Function Tool Definitions for LLMs",
+          "description": "",
           "order": 1,
           "exercises": [
             {
-              "id": "ai-02-multi-1",
-              "type": "select_multiple",
-              "question": "A tool definition is JSON that lets a model trigger a local function. Select every key that belongs in the definition this lesson builds for `run_sql_query`.",
+              "id": "ai-02-teach",
+              "type": "teach",
+              "question": "This step counts the parameters declared on the tool, using tool holding name.",
+              "hints": [
+                "Follow the job, which counts the parameters declared on the tool.",
+                "The params list is the tool's declared arguments.",
+                "tool['params']"
+              ],
+              "explanation": "This step counts the parameters declared on the tool, using tool holding name.",
+              "xp_reward": 0,
+              "worked_example": "tool['params']"
+            },
+            {
+              "id": "ai-02-mcq",
+              "type": "mcq",
+              "question": "The correct line counts the parameters declared on the tool, and it is the line tied to tool holding name.",
+              "hints": [
+                "Follow the job, which counts the parameters declared on the tool.",
+                "The params list is the tool's declared arguments.",
+                "tool['params']"
+              ],
+              "explanation": "The params list is the tool's declared arguments.",
+              "xp_reward": 10,
               "options": [
-                "type",
-                "name",
-                "description",
-                "parameters",
-                "temperature",
-                "api_key"
+                "tool == tool",
+                "tool['params']",
+                "pass",
+                "return tool"
+              ],
+              "correct_answer": "tool['params']"
+            },
+            {
+              "id": "ai-02-predict",
+              "type": "output_prediction",
+              "question": "The program counts the parameters declared on the tool with tool holding name, so choose the printed value.",
+              "hints": [
+                "Follow the job, which counts the parameters declared on the tool.",
+                "The params list is the tool's declared arguments.",
+                "1"
+              ],
+              "explanation": "The params list is the tool's declared arguments.",
+              "xp_reward": 10,
+              "starter_code": "tool = {'name': 'sum', 'params': ['n']}\nprint(len(tool['params']))\n",
+              "options": [
+                "2",
+                "1",
+                "0",
+                "none"
+              ],
+              "correct_answer": "1"
+            },
+            {
+              "id": "ai-02-order",
+              "type": "ordering",
+              "question": "Build the line that counts the parameters declared on the tool for tool holding name, from the first piece to the last.",
+              "hints": [
+                "Follow the job, which counts the parameters declared on the tool.",
+                "The params list is the tool's declared arguments.",
+                "params = tool['params']"
+              ],
+              "explanation": "The params list is the tool's declared arguments.",
+              "xp_reward": 10,
+              "options": [
+                "params",
+                "=",
+                "tool['params']",
+                "=="
               ],
               "correct_answer": [
-                "type",
-                "name",
-                "description",
-                "parameters"
+                "params",
+                "=",
+                "tool['params']"
+              ]
+            },
+            {
+              "id": "ai-02-fill",
+              "type": "fill_blank",
+              "question": "Replace the blank with the piece that makes the line counts the parameters declared on the tool for tool holding name.",
+              "hints": [
+                "Follow the job, which counts the parameters declared on the tool.",
+                "The params list is the tool's declared arguments.",
+                "'params'"
               ],
-              "explanation": "The definition carries the tool's `type` ('function'), its `name`, a `description` the model reads, and a JSON-schema `parameters` object. `temperature` is a generation setting and `api_key` is a credential - neither belongs in a tool declaration.",
-              "xp_reward": 10
+              "explanation": "The params list is the tool's declared arguments.",
+              "xp_reward": 10,
+              "starter_code": "count = len(tool[___])\n",
+              "options": [
+                "'name'",
+                "'params'",
+                "'id'",
+                "'ok'"
+              ],
+              "correct_answer": "'params'"
+            },
+            {
+              "id": "ai-02-bug",
+              "type": "debugging",
+              "question": "Spot the line that fails the job, which counts the parameters declared on the tool, around tool holding name.",
+              "hints": [
+                "Follow the job, which counts the parameters declared on the tool.",
+                "The print shows the tool name instead of the parameter count.",
+                "Line 2"
+              ],
+              "explanation": "The print shows the tool name instead of the parameter count.",
+              "xp_reward": 10,
+              "starter_code": "tool = {'name': 'sum', 'params': ['n']}\nprint(tool['name'])\n",
+              "correct_answer": "2"
+            },
+            {
+              "id": "ai-02-predict-2",
+              "type": "output_prediction",
+              "question": "The second program counts the parameters declared on the tool for tool holding name, so choose the new printed value.",
+              "hints": [
+                "Follow the job, which counts the parameters declared on the tool.",
+                "The params list is the tool's declared arguments.",
+                "2"
+              ],
+              "explanation": "The params list is the tool's declared arguments.",
+              "xp_reward": 10,
+              "starter_code": "tool = {'name': 'sum', 'params': ['n', 'm']}\nprint(len(tool['params']))\n",
+              "options": [
+                "1",
+                "none",
+                "0",
+                "2"
+              ],
+              "correct_answer": "2"
+            },
+            {
+              "id": "ai-02-write",
+              "type": "code",
+              "question": "Complete the blank so this program counts the parameters declared on the tool and prints the result for tool holding name.",
+              "hints": [
+                "Follow the job, which counts the parameters declared on the tool.",
+                "The printed value is the result after this step counts the parameters declared on the tool.",
+                "label = len(tool['params'])"
+              ],
+              "explanation": "The printed value is the result after this step counts the parameters declared on the tool.",
+              "xp_reward": 10,
+              "starter_code": "tool = {'name': 'sum', 'params': ['n']}\nlabel = ___\nprint(label)\n",
+              "solution_code": "tool = {'name': 'sum', 'params': ['n']}\nlabel = len(tool['params'])\nprint(label)\n",
+              "tests": [
+                {
+                  "name": "ai-02-prints",
+                  "description": "The printed value is the result after this step counts the parameters declared o",
+                  "expected_stdout": "1\n",
+                  "required": true
+                }
+              ]
             }
           ]
         }
-      ]
+      ],
+      "player_mode": "micro"
     }
   ]
 }

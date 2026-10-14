@@ -14,8 +14,8 @@
   "lessons": [
     {
       "id": "sql-04",
-      "title": "4. ORDER BY & LIMIT",
-      "description": "Sort products by `price` descending and keep only the top 3. The test checks that the result has exactly 3 rows.",
+      "title": "Practice ORDER BY LIMIT",
+      "description": "Sort products by price descending and keep only the top 3. The test checks that the result has exactly 3 rows.",
       "order": 4,
       "difficulty": "beginner",
       "duration_minutes": 5,
@@ -45,10 +45,179 @@
         "license": "Public domain (SQLite documentation)"
       },
       "learning_objectives": [
-        "Sort result sets with ORDER BY, descending when needed",
-        "Restrict result size with LIMIT"
+        "This step returns the first name in sorted order, using name and 1."
       ],
-      "xp_reward": 10
+      "xp_reward": 10,
+      "player_mode": "micro",
+      "sublessons": [
+        {
+          "id": "sql-04-micro",
+          "title": "Practice ORDER BY LIMIT",
+          "description": "",
+          "order": 1,
+          "exercises": [
+            {
+              "id": "sql-04-teach",
+              "type": "teach",
+              "question": "This step returns the first name in sorted order, using name and 1.",
+              "hints": [
+                "Follow the job, which returns the first name in sorted order.",
+                "ORDER BY name LIMIT 1 returns the first sorted name.",
+                "ORDER BY name LIMIT 1"
+              ],
+              "explanation": "This step returns the first name in sorted order, using name and 1.",
+              "xp_reward": 0,
+              "worked_example": "ORDER BY name LIMIT 1"
+            },
+            {
+              "id": "sql-04-mcq",
+              "type": "mcq",
+              "question": "The correct line returns the first name in sorted order, and it is the line tied to name and 1.",
+              "hints": [
+                "Follow the job, which returns the first name in sorted order.",
+                "ORDER BY name LIMIT 1 returns the first sorted name.",
+                "SELECT name FROM customers ORDER BY name LIMIT 1"
+              ],
+              "explanation": "ORDER BY name LIMIT 1 returns the first sorted name.",
+              "xp_reward": 10,
+              "options": [
+                "INSERT INTO customers",
+                "DROP TABLE customers",
+                "SELECT name FROM customers ORDER BY name LIMIT 1",
+                "name == name"
+              ],
+              "correct_answer": "SELECT name FROM customers ORDER BY name LIMIT 1"
+            },
+            {
+              "id": "sql-04-predict",
+              "type": "output_prediction",
+              "question": "The program returns the first name in sorted order with name and 1, so choose the printed value.",
+              "hints": [
+                "Follow the job, which returns the first name in sorted order.",
+                "ORDER BY name LIMIT 1 returns the first sorted name.",
+                "┌─────────────┐\n│ name        │\n├─────────────┤\n│ Alice Smith │\n└─────────────┘"
+              ],
+              "explanation": "ORDER BY name LIMIT 1 returns the first sorted name.",
+              "xp_reward": 10,
+              "starter_code": "SELECT name FROM customers ORDER BY name LIMIT 1;\n",
+              "options": [
+                "┌────────────┐\n│ name       │\n├────────────┤\n│ Coffee Mug │\n└────────────┘",
+                "0",
+                "┌─────────────┐\n│ name        │\n├─────────────┤\n│ Alice Smith │\n└─────────────┘",
+                "none"
+              ],
+              "correct_answer": "┌─────────────┐\n│ name        │\n├─────────────┤\n│ Alice Smith │\n└─────────────┘"
+            },
+            {
+              "id": "sql-04-order",
+              "type": "ordering",
+              "question": "Build the line that returns the first name in sorted order for name and 1, from the first piece to the last.",
+              "hints": [
+                "Follow the job, which returns the first name in sorted order.",
+                "ORDER BY name LIMIT 1 returns the first sorted name.",
+                "SELECT name FROM customers ORDER BY name LIMIT 1"
+              ],
+              "explanation": "ORDER BY name LIMIT 1 returns the first sorted name.",
+              "xp_reward": 10,
+              "options": [
+                "SELECT",
+                "name",
+                "FROM",
+                "customers",
+                "ORDER BY name",
+                "LIMIT",
+                "1",
+                "DROP"
+              ],
+              "correct_answer": [
+                "SELECT",
+                "name",
+                "FROM",
+                "customers",
+                "ORDER BY name",
+                "LIMIT",
+                "1"
+              ]
+            },
+            {
+              "id": "sql-04-fill",
+              "type": "fill_blank",
+              "question": "Replace the blank with the piece that makes the line returns the first name in sorted order for name and.",
+              "hints": [
+                "Follow the job, which returns the first name in sorted order.",
+                "ORDER BY name LIMIT 1 returns the first sorted name.",
+                "1"
+              ],
+              "explanation": "ORDER BY name LIMIT 1 returns the first sorted name.",
+              "xp_reward": 10,
+              "starter_code": "SELECT name FROM customers ORDER BY name LIMIT ___;",
+              "options": [
+                "2",
+                "3",
+                "1",
+                "4"
+              ],
+              "correct_answer": "1"
+            },
+            {
+              "id": "sql-04-bug",
+              "type": "debugging",
+              "question": "Spot the line that fails the job, which returns the first name in sorted order, around name and.",
+              "hints": [
+                "Follow the job, which returns the first name in sorted order.",
+                "Without LIMIT the query returns every name.",
+                "Line 1"
+              ],
+              "explanation": "Without LIMIT the query returns every name.",
+              "xp_reward": 10,
+              "starter_code": "SELECT name FROM customers ORDER BY name;",
+              "correct_answer": "1"
+            },
+            {
+              "id": "sql-04-predict-2",
+              "type": "output_prediction",
+              "question": "The second program returns the first name in sorted order for name and 1, so choose the new printed value.",
+              "hints": [
+                "Follow the job, which returns the first name in sorted order.",
+                "ORDER BY name LIMIT 1 returns the first sorted name.",
+                "┌────────────┐\n│ name       │\n├────────────┤\n│ Coffee Mug │\n└────────────┘"
+              ],
+              "explanation": "ORDER BY name LIMIT 1 returns the first sorted name.",
+              "xp_reward": 10,
+              "starter_code": "SELECT name FROM products ORDER BY price LIMIT 1;\n",
+              "options": [
+                "┌─────────────┐\n│ name        │\n├─────────────┤\n│ Alice Smith │\n└─────────────┘",
+                "┌────────────┐\n│ name       │\n├────────────┤\n│ Coffee Mug │\n└────────────┘",
+                "none",
+                "0"
+              ],
+              "correct_answer": "┌────────────┐\n│ name       │\n├────────────┤\n│ Coffee Mug │\n└────────────┘"
+            },
+            {
+              "id": "sql-04-write",
+              "type": "code",
+              "question": "Complete the blank so this program returns the first name in sorted order and prints the result for name and 1.",
+              "hints": [
+                "Follow the job, which returns the first name in sorted order.",
+                "The query result is what this step returns the first name in sorted order.",
+                "SELECT name FROM customers ORDER BY name LIMIT 1;"
+              ],
+              "explanation": "The query result is what this step returns the first name in sorted order.",
+              "xp_reward": 10,
+              "starter_code": "SELECT name FROM customers ORDER BY name LIMIT ___;\n",
+              "solution_code": "SELECT name FROM customers ORDER BY name LIMIT 1;\n",
+              "tests": [
+                {
+                  "name": "sql-04-prints",
+                  "description": "The query result is what this step returns the first name in sorted order.",
+                  "expected_stdout": "┌─────────────┐\n│ name        │\n├─────────────┤\n│ Alice Smith │\n└─────────────┘",
+                  "required": true
+                }
+              ]
+            }
+          ]
+        }
+      ]
     }
   ]
 }

@@ -14,8 +14,8 @@
   "lessons": [
     {
       "id": "js-03",
-      "title": "3. Async/Await & APIs",
-      "description": "An async function always returns a promise, and await suspends until that promise settles. Implement `fetchUserData(userId)` as an async function resolving to { id: userId, active: true }, exported with module.exports. The test awaits it and checks both fields.",
+      "title": "Practice Async Await APIs",
+      "description": "An async function always returns a promise, and await suspends until that promise settles. Implement fetchUserData(userId) as an async function resolving to { id: userId, active: true }, exported with module.exports. The test awaits it and checks both fields.",
       "order": 3,
       "difficulty": "intermediate",
       "duration_minutes": 5,
@@ -40,20 +40,192 @@
         ]
       },
       "learning_objectives": [
-        "Declare async functions that return promises",
-        "Await asynchronous results in test code",
-        "Resolve structured objects asynchronously"
+        "This step returns the loaded number from an async function, using load and 55."
       ],
       "source": {
         "name": "MDN Web Docs — Statements — async_function: 'An async function ... always returns a promise'",
         "url": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/async_function",
         "license": "CC0 1.0 Universal (MDN Web Docs)"
       },
-      "xp_reward": 10
+      "xp_reward": 10,
+      "player_mode": "micro",
+      "sublessons": [
+        {
+          "id": "js-03-micro",
+          "title": "Practice Async Await APIs",
+          "description": "",
+          "order": 1,
+          "exercises": [
+            {
+              "id": "js-03-teach",
+              "type": "teach",
+              "question": "This step returns the loaded number from an async function, using load and 55.",
+              "hints": [
+                "Follow the job, which returns the loaded number from an async function.",
+                "async function load returns the value plus one.",
+                "load(55)"
+              ],
+              "explanation": "This step returns the loaded number from an async function, using load and 55.",
+              "xp_reward": 0,
+              "worked_example": "load(55)"
+            },
+            {
+              "id": "js-03-mcq",
+              "type": "mcq",
+              "question": "The match is the line that returns the loaded number from an async function for load and 55.",
+              "hints": [
+                "Follow the job, which returns the loaded number from an async function.",
+                "async function load returns the value plus one.",
+                "async function load(value) { return value + 1; }"
+              ],
+              "explanation": "async function load returns the value plus one.",
+              "xp_reward": 10,
+              "options": [
+                "value == value;",
+                "console.log(value);",
+                "return;",
+                "async function load(value) { return value + 1; }"
+              ],
+              "correct_answer": "async function load(value) { return value + 1; }"
+            },
+            {
+              "id": "js-03-predict",
+              "type": "output_prediction",
+              "question": "Work out what is printed when the code returns the loaded number from an async function for load and 55.",
+              "hints": [
+                "Follow the job, which returns the loaded number from an async function.",
+                "async function load returns the value plus one.",
+                "56"
+              ],
+              "explanation": "async function load returns the value plus one.",
+              "xp_reward": 10,
+              "starter_code": "async function load(value) { return value + 1; }\nload(55).then((got) => console.log(got));\n",
+              "options": [
+                "59",
+                "none",
+                "0",
+                "56"
+              ],
+              "correct_answer": "56"
+            },
+            {
+              "id": "js-03-order",
+              "type": "ordering",
+              "question": "Rebuild, from the left, the line that returns the loaded number from an async function for load and 55.",
+              "hints": [
+                "Follow the job, which returns the loaded number from an async function.",
+                "async function load returns the value plus one.",
+                "async function load(value) { return value + 1; }"
+              ],
+              "explanation": "async function load returns the value plus one.",
+              "xp_reward": 10,
+              "options": [
+                "async",
+                "function",
+                "load(value)",
+                "{",
+                "return",
+                "value",
+                "+",
+                "1;",
+                "}",
+                "await"
+              ],
+              "correct_answer": [
+                "async",
+                "function",
+                "load(value)",
+                "{",
+                "return",
+                "value",
+                "+",
+                "1;",
+                "}"
+              ]
+            },
+            {
+              "id": "js-03-fill",
+              "type": "fill_blank",
+              "question": "The completed line returns the loaded number from an async function once you fill the blank for load and 55.",
+              "hints": [
+                "Follow the job, which returns the loaded number from an async function.",
+                "async function load returns the value plus one.",
+                "+"
+              ],
+              "explanation": "async function load returns the value plus one.",
+              "xp_reward": 10,
+              "starter_code": "async function load(value) { return value ___ 1; }\n",
+              "options": [
+                "-",
+                "*",
+                "==",
+                "+"
+              ],
+              "correct_answer": "+"
+            },
+            {
+              "id": "js-03-bug",
+              "type": "debugging",
+              "question": "One line does another job than the one that returns the loaded number from an async function for load and 55.",
+              "hints": [
+                "Follow the job, which returns the loaded number from an async function.",
+                "The async function subtracts one instead of adding one.",
+                "Line 1"
+              ],
+              "explanation": "The async function subtracts one instead of adding one.",
+              "xp_reward": 10,
+              "starter_code": "async function load(value) { return value - 1; }\nload(55).then((got) => console.log(got));\n",
+              "correct_answer": "1"
+            },
+            {
+              "id": "js-03-predict-2",
+              "type": "output_prediction",
+              "question": "The second display is what prints after the code returns the loaded number from an async function for load and 55.",
+              "hints": [
+                "Follow the job, which returns the loaded number from an async function.",
+                "async function load returns the value plus one.",
+                "59"
+              ],
+              "explanation": "async function load returns the value plus one.",
+              "xp_reward": 10,
+              "starter_code": "async function load(value) { return value + 1; }\nload(58).then((got) => console.log(got));\n",
+              "options": [
+                "56",
+                "none",
+                "59",
+                "0"
+              ],
+              "correct_answer": "59"
+            },
+            {
+              "id": "js-03-write",
+              "type": "code",
+              "question": "Supply the blank so the run returns the loaded number from an async function and prints the result for load and 55.",
+              "hints": [
+                "Follow the job, which returns the loaded number from an async function.",
+                "The printed value is the result after this step returns the loaded number from an async function.",
+                "const label = 55;"
+              ],
+              "explanation": "The printed value is the result after this step returns the loaded number from an async function.",
+              "xp_reward": 10,
+              "starter_code": "async function load(value) { return value + 1; }\nconst label = ___;\nload(label).then((got) => console.log(got));\n",
+              "solution_code": "async function load(value) { return value + 1; }\nconst label = 55;\nload(label).then((got) => console.log(got));\n",
+              "tests": [
+                {
+                  "name": "js-03-prints",
+                  "description": "The printed value is the result after this step returns the loaded number from a",
+                  "expected_stdout": "56\n",
+                  "required": true
+                }
+              ]
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "js-06",
-      "title": "6. Promise Chaining with then()",
+      "title": "Practice Promise Chaining with then",
       "description": "The then() method takes callback functions for the fulfilled case of a Promise and returns a new Promise. Implement getUserLabel(userId) that returns fetchUserData(userId).then(user => user.name), where the provided fetchUserData resolves { name: 'User' + userId }. Export { getUserLabel }; the test awaits it and expects 'User7' for id 7.",
       "order": 6,
       "difficulty": "beginner",
@@ -67,9 +239,7 @@
       ],
       "prerequisites": [],
       "learning_objectives": [
-        "Chain transformations onto promises with then()",
-        "Understand that then() returns a new promise",
-        "Mix async functions with explicit promise chaining"
+        "This step prints the value after then runs, using Promise and 1."
       ],
       "source": {
         "name": "MDN Web Docs — GlobalObjects — Promise.then(): 'takes up to two arguments: callback functions for the fulfilled and rejected cases'",
@@ -90,7 +260,173 @@
           "test_promise_chain"
         ]
       },
-      "xp_reward": 10
+      "xp_reward": 10,
+      "player_mode": "micro",
+      "sublessons": [
+        {
+          "id": "js-06-micro",
+          "title": "Practice Promise Chaining with then",
+          "description": "",
+          "order": 1,
+          "exercises": [
+            {
+              "id": "js-06-teach",
+              "type": "teach",
+              "question": "This step prints the value after then runs, using Promise and 1.",
+              "hints": [
+                "Follow the job, which prints the value after then runs.",
+                "then runs the callback with the resolved value.",
+                "Promise.resolve(58)"
+              ],
+              "explanation": "This step prints the value after then runs, using Promise and 1.",
+              "xp_reward": 0,
+              "worked_example": "Promise.resolve(58)"
+            },
+            {
+              "id": "js-06-mcq",
+              "type": "mcq",
+              "question": "Choose the line that prints the value after then runs, which is the line that fits Promise and 1.",
+              "hints": [
+                "Follow the job, which prints the value after then runs.",
+                "then runs the callback with the resolved value.",
+                "Promise.resolve(value).then((value) => value + 1)"
+              ],
+              "explanation": "then runs the callback with the resolved value.",
+              "xp_reward": 10,
+              "options": [
+                "value == value;",
+                "return value;",
+                "console.log(value);",
+                "Promise.resolve(value).then((value) => value + 1)"
+              ],
+              "correct_answer": "Promise.resolve(value).then((value) => value + 1)"
+            },
+            {
+              "id": "js-06-predict",
+              "type": "output_prediction",
+              "question": "Read the code that prints the value after then runs for Promise and 1, and choose the value it prints.",
+              "hints": [
+                "Follow the job, which prints the value after then runs.",
+                "then runs the callback with the resolved value.",
+                "59"
+              ],
+              "explanation": "then runs the callback with the resolved value.",
+              "xp_reward": 10,
+              "starter_code": "Promise.resolve(58).then((value) => console.log(value + 1));\n",
+              "options": [
+                "62",
+                "none",
+                "0",
+                "59"
+              ],
+              "correct_answer": "59"
+            },
+            {
+              "id": "js-06-order",
+              "type": "ordering",
+              "question": "Arrange the pieces of the line that prints the value after then runs, left to right, for Promise and 1.",
+              "hints": [
+                "Follow the job, which prints the value after then runs.",
+                "then runs the callback with the resolved value.",
+                "Promise.resolve(58).then((value) => console.log(value + 1));"
+              ],
+              "explanation": "then runs the callback with the resolved value.",
+              "xp_reward": 10,
+              "options": [
+                "Promise.resolve(58).then((value)",
+                "=>",
+                "console.log(value",
+                "+",
+                "1));",
+                "=="
+              ],
+              "correct_answer": [
+                "Promise.resolve(58).then((value)",
+                "=>",
+                "console.log(value",
+                "+",
+                "1));"
+              ]
+            },
+            {
+              "id": "js-06-fill",
+              "type": "fill_blank",
+              "question": "Fill the blank so the line prints the value after then runs for Promise and 1.",
+              "hints": [
+                "Follow the job, which prints the value after then runs.",
+                "then runs the callback with the resolved value.",
+                "+"
+              ],
+              "explanation": "then runs the callback with the resolved value.",
+              "xp_reward": 10,
+              "starter_code": "Promise.resolve(58).then((value) => console.log(value ___ 1));\n",
+              "options": [
+                "-",
+                "==",
+                "*",
+                "+"
+              ],
+              "correct_answer": "+"
+            },
+            {
+              "id": "js-06-bug",
+              "type": "debugging",
+              "question": "Find the line that misses the job, which prints the value after then runs, for Promise and.",
+              "hints": [
+                "Follow the job, which prints the value after then runs.",
+                "The then callback subtracts one instead of adding one.",
+                "Line 1"
+              ],
+              "explanation": "The then callback subtracts one instead of adding one.",
+              "xp_reward": 10,
+              "starter_code": "Promise.resolve(58).then((value) => console.log(value - 1));\n",
+              "correct_answer": "1"
+            },
+            {
+              "id": "js-06-predict-2",
+              "type": "output_prediction",
+              "question": "On the new input, the code still prints the value after then runs for Promise and 1, so choose what it prints.",
+              "hints": [
+                "Follow the job, which prints the value after then runs.",
+                "then runs the callback with the resolved value.",
+                "62"
+              ],
+              "explanation": "then runs the callback with the resolved value.",
+              "xp_reward": 10,
+              "starter_code": "Promise.resolve(61).then((value) => console.log(value + 1));\n",
+              "options": [
+                "59",
+                "none",
+                "62",
+                "blank"
+              ],
+              "correct_answer": "62"
+            },
+            {
+              "id": "js-06-write",
+              "type": "code",
+              "question": "Fill the blank so the program prints the value after then runs, and the print shows that result for Promise and 1.",
+              "hints": [
+                "Follow the job, which prints the value after then runs.",
+                "The printed value is the result after this step prints the value after then runs.",
+                "const label = 58;"
+              ],
+              "explanation": "The printed value is the result after this step prints the value after then runs.",
+              "xp_reward": 10,
+              "starter_code": "const label = ___;\nPromise.resolve(label).then((value) => console.log(value + 1));\n",
+              "solution_code": "const label = 58;\nPromise.resolve(label).then((value) => console.log(value + 1));\n",
+              "tests": [
+                {
+                  "name": "js-06-prints",
+                  "description": "The printed value is the result after this step prints the value after then runs",
+                  "expected_stdout": "59\n",
+                  "required": true
+                }
+              ]
+            }
+          ]
+        }
+      ]
     }
   ]
 }

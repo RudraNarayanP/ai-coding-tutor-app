@@ -14,8 +14,8 @@
   "lessons": [
     {
       "id": "linked-lists-step-1",
-      "title": "1. Node and Singly Linked List",
-      "description": "Implement `ListNode` and `LinkedList.append` / `to_list`. The test checks that `LinkedList().to_list()` equals `[1, 2]`.",
+      "title": "Practice Node and Singly Linked List",
+      "description": "Implement ListNode and LinkedList.append / to_list. The test checks that LinkedList().to_list() equals [1, 2].",
       "order": 11,
       "difficulty": "intermediate",
       "duration_minutes": 5,
@@ -29,7 +29,7 @@
         "stacks-queues"
       ],
       "learning_objectives": [
-        "Build a singly linked list append"
+        "This step reads the value stored on the first node, using Node and 1."
       ],
       "starter_code": "class ListNode:\n    def __init__(self, value, next=None):\n        self.value = value\n        self.next = next\n\nclass LinkedList:\n    def __init__(self):\n        self.head = None\n\n    def append(self, value):\n        # TODO: append new node at end\n        pass\n\n    def to_list(self):\n        out = []\n        cur = self.head\n        while cur:\n            out.append(cur.value)\n            cur = cur.next\n        return out\n",
       "solution_code": "class ListNode:\n    def __init__(self, value, next=None):\n        self.value = value\n        self.next = next\n\nclass LinkedList:\n    def __init__(self):\n        self.head = None\n\n    def append(self, value):\n        node = ListNode(value)\n        if not self.head:\n            self.head = node\n            return\n        cur = self.head\n        while cur.next:\n            cur = cur.next\n        cur.next = node\n\n    def to_list(self):\n        out = []\n        cur = self.head\n        while cur:\n            out.append(cur.value)\n            cur = cur.next\n        return out\n",
@@ -50,12 +50,174 @@
         "url": "https://docs.python.org/3/tutorial/classes.html",
         "license": "Python documentation license (PSF)"
       },
-      "xp_reward": 10
+      "xp_reward": 10,
+      "player_mode": "micro",
+      "sublessons": [
+        {
+          "id": "linked-lists-step-1-micro",
+          "title": "Practice Node and Singly Linked List",
+          "description": "",
+          "order": 1,
+          "exercises": [
+            {
+              "id": "linked-lists-step-1-teach",
+              "type": "teach",
+              "question": "This step reads the value stored on the first node, using Node and 1.",
+              "hints": [
+                "Follow the job, which reads the value stored on the first node.",
+                "self.value = value stores the node value.",
+                "self.value = value"
+              ],
+              "explanation": "This step reads the value stored on the first node, using Node and 1.",
+              "xp_reward": 0,
+              "worked_example": "self.value = value"
+            },
+            {
+              "id": "linked-lists-step-1-mcq",
+              "type": "mcq",
+              "question": "Keep the choice that reads the value stored on the first node for Node and 1.",
+              "hints": [
+                "Follow the job, which reads the value stored on the first node.",
+                "self.value = value stores the node value.",
+                "self.value = value"
+              ],
+              "explanation": "self.value = value stores the node value.",
+              "xp_reward": 10,
+              "options": [
+                "value == value",
+                "self.value = value",
+                "return value",
+                "pass"
+              ],
+              "correct_answer": "self.value = value"
+            },
+            {
+              "id": "linked-lists-step-1-predict",
+              "type": "output_prediction",
+              "question": "Trace the code that reads the value stored on the first node using Node and 1, and select what it displays.",
+              "hints": [
+                "Follow the job, which reads the value stored on the first node.",
+                "self.value = value stores the node value.",
+                "28"
+              ],
+              "explanation": "self.value = value stores the node value.",
+              "xp_reward": 10,
+              "starter_code": "class Node:\n    def __init__(self, value, nxt=None):\n        self.value = value\n        self.nxt = nxt\nhead = Node(28, Node(1))\nprint(head.value)\n",
+              "options": [
+                "31",
+                "28",
+                "0",
+                "none"
+              ],
+              "correct_answer": "28"
+            },
+            {
+              "id": "linked-lists-step-1-order",
+              "type": "ordering",
+              "question": "Tap the pieces, in order, of the line that reads the value stored on the first node for Node and 1.",
+              "hints": [
+                "Follow the job, which reads the value stored on the first node.",
+                "self.value = value stores the node value.",
+                "self.value = value"
+              ],
+              "explanation": "self.value = value stores the node value.",
+              "xp_reward": 10,
+              "options": [
+                "self.value",
+                "=",
+                "value",
+                "=="
+              ],
+              "correct_answer": [
+                "self.value",
+                "=",
+                "value"
+              ]
+            },
+            {
+              "id": "linked-lists-step-1-fill",
+              "type": "fill_blank",
+              "question": "The blank is the missing piece of the line that reads the value stored on the first node for Node and 1.",
+              "hints": [
+                "Follow the job, which reads the value stored on the first node.",
+                "self.value = value stores the node value.",
+                "="
+              ],
+              "explanation": "self.value = value stores the node value.",
+              "xp_reward": 10,
+              "starter_code": "self.value ___ value\n",
+              "options": [
+                "==",
+                "=",
+                "!=",
+                "+"
+              ],
+              "correct_answer": "="
+            },
+            {
+              "id": "linked-lists-step-1-bug",
+              "type": "debugging",
+              "question": "Choose the line that does another job than the one that reads the value stored on the first node for Node and 1.",
+              "hints": [
+                "Follow the job, which reads the value stored on the first node.",
+                "The constructor compares the value and never stores it.",
+                "Line 3"
+              ],
+              "explanation": "The constructor compares the value and never stores it.",
+              "xp_reward": 10,
+              "starter_code": "class Node:\n    def __init__(self, value, nxt=None):\n        self.value == value\nhead = Node(28)\nprint(head.value)\n",
+              "correct_answer": "3"
+            },
+            {
+              "id": "linked-lists-step-1-predict-2",
+              "type": "output_prediction",
+              "question": "Trace the second run, which reads the value stored on the first node for Node and 1, and select what it displays.",
+              "hints": [
+                "Follow the job, which reads the value stored on the first node.",
+                "self.value = value stores the node value.",
+                "31"
+              ],
+              "explanation": "self.value = value stores the node value.",
+              "xp_reward": 10,
+              "starter_code": "class Node:\n    def __init__(self, value, nxt=None):\n        self.value = value\n        self.nxt = nxt\nhead = Node(31, Node(1))\nprint(head.value)\n",
+              "options": [
+                "28",
+                "none",
+                "0",
+                "31"
+              ],
+              "correct_answer": "31"
+            },
+            {
+              "id": "linked-lists-step-1-write",
+              "type": "code",
+              "question": "Type the missing piece so the program reads the value stored on the first node for Node and 1 and prints it.",
+              "hints": [
+                "Follow the job, which reads the value stored on the first node.",
+                "The printed value is the result after this step reads the value stored on the first node.",
+                "label = head.value"
+              ],
+              "explanation": "The printed value is the result after this step reads the value stored on the first node.",
+              "xp_reward": 10,
+              "starter_code": "class Node:\n    def __init__(self, value, nxt=None):\n        self.value = value\n        self.nxt = nxt\nhead = Node(28, Node(1))\nlabel = ___\nprint(label)\n",
+              "solution_code": "class Node:\n    def __init__(self, value, nxt=None):\n        self.value = value\n        self.nxt = nxt\nhead = Node(28, Node(1))\nlabel = head.value\nprint(label)\n",
+              "tests": [
+                {
+                  "name": "linked-lists-step-1-prints",
+                  "description": "The printed value is the result after this step reads the value stored on the fi",
+                  "expected_stdout": "28\n",
+                  "required": true
+                }
+              ]
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "linked-lists-step-2",
-      "title": "2. Prepend and Length",
-      "description": "Add `prepend` and `__len__` to LinkedList. The test checks that `len(ll)` equals `2`; `LinkedList().head.value` equals `1`.",
+      "title": "Practice Prepend and Length",
+      "description": "Add prepend and __len__ to LinkedList. The test checks that len(ll) equals 2; LinkedList().head.value equals 1.",
       "order": 12,
       "difficulty": "intermediate",
       "duration_minutes": 5,
@@ -69,7 +231,7 @@
         "stacks-queues"
       ],
       "learning_objectives": [
-        "Insert at head in O(1)"
+        "This step counts nodes after a prepend, using Node and 29."
       ],
       "starter_code": "class ListNode:\n    def __init__(self, value, next=None):\n        self.value = value\n        self.next = next\n\nclass LinkedList:\n    def __init__(self):\n        self.head = None\n\n    def prepend(self, value):\n        # TODO\n        pass\n\n    def __len__(self):\n        # TODO\n        pass\n",
       "solution_code": "class ListNode:\n    def __init__(self, value, next=None):\n        self.value = value\n        self.next = next\n\nclass LinkedList:\n    def __init__(self):\n        self.head = None\n\n    def prepend(self, value):\n        self.head = ListNode(value, self.head)\n\n    def __len__(self):\n        n = 0\n        cur = self.head\n        while cur:\n            n += 1\n            cur = cur.next\n        return n\n",
@@ -93,40 +255,173 @@
       "xp_reward": 10,
       "sublessons": [
         {
-          "id": "ll-traverse-sub",
-          "title": "Write a traversal",
+          "id": "linked-lists-step-2-micro",
+          "title": "Practice Prepend and Length",
+          "description": "",
           "order": 1,
           "exercises": [
             {
-              "id": "ll-sum-code-1",
+              "id": "linked-lists-step-2-teach",
+              "type": "teach",
+              "question": "This step counts nodes after a prepend, using Node and 29.",
+              "hints": [
+                "Follow the job, which counts nodes after a prepend.",
+                "Putting a new node in front grows the list.",
+                "Node(29, head)"
+              ],
+              "explanation": "This step counts nodes after a prepend, using Node and 29.",
+              "xp_reward": 0,
+              "worked_example": "Node(29, head)"
+            },
+            {
+              "id": "linked-lists-step-2-mcq",
+              "type": "mcq",
+              "question": "Select the line that counts nodes after a prepend, the one that belongs with Node and 29.",
+              "hints": [
+                "Follow the job, which counts nodes after a prepend.",
+                "Putting a new node in front grows the list.",
+                "head = Node(value, head)"
+              ],
+              "explanation": "Putting a new node in front grows the list.",
+              "xp_reward": 10,
+              "options": [
+                "head == head",
+                "return head",
+                "head = Node(value, head)",
+                "pass"
+              ],
+              "correct_answer": "head = Node(value, head)"
+            },
+            {
+              "id": "linked-lists-step-2-predict",
+              "type": "output_prediction",
+              "question": "Follow the code that counts nodes after a prepend for Node and then choose the displayed value.",
+              "hints": [
+                "Follow the job, which counts nodes after a prepend.",
+                "Putting a new node in front grows the list.",
+                "2"
+              ],
+              "explanation": "Putting a new node in front grows the list.",
+              "xp_reward": 10,
+              "starter_code": "class Node:\n    def __init__(self, value, nxt=None):\n        self.value = value\n        self.nxt = nxt\nhead = Node(1)\nhead = Node(29, head)\ncount = 0\ncur = head\nwhile cur:\n    count = count + 1\n    cur = cur.nxt\nprint(count)\n",
+              "options": [
+                "3",
+                "none",
+                "2",
+                "0"
+              ],
+              "correct_answer": "2"
+            },
+            {
+              "id": "linked-lists-step-2-order",
+              "type": "ordering",
+              "question": "Order the pieces so the line counts nodes after a prepend for Node and 29.",
+              "hints": [
+                "Follow the job, which counts nodes after a prepend.",
+                "Putting a new node in front grows the list.",
+                "head = Node(value, head)"
+              ],
+              "explanation": "Putting a new node in front grows the list.",
+              "xp_reward": 10,
+              "options": [
+                "head",
+                "=",
+                "Node(value,",
+                "head)",
+                "=="
+              ],
+              "correct_answer": [
+                "head",
+                "=",
+                "Node(value,",
+                "head)"
+              ]
+            },
+            {
+              "id": "linked-lists-step-2-fill",
+              "type": "fill_blank",
+              "question": "Supply the missing piece so the line counts nodes after a prepend for Node and 29.",
+              "hints": [
+                "Follow the job, which counts nodes after a prepend.",
+                "Putting a new node in front grows the list.",
+                "+"
+              ],
+              "explanation": "Putting a new node in front grows the list.",
+              "xp_reward": 10,
+              "starter_code": "count = count ___ 1\n",
+              "options": [
+                "-",
+                "*",
+                "+",
+                "=="
+              ],
+              "correct_answer": "+"
+            },
+            {
+              "id": "linked-lists-step-2-bug",
+              "type": "debugging",
+              "question": "The wrong line is the one that misses the job, which counts nodes after a prepend, for Node and 29.",
+              "hints": [
+                "Follow the job, which counts nodes after a prepend.",
+                "The print shows one value and never walks the links.",
+                "Line 5"
+              ],
+              "explanation": "The print shows one value and never walks the links.",
+              "xp_reward": 10,
+              "starter_code": "class Node:\n    def __init__(self, value, nxt=None):\n        self.value = value\nhead = Node(1)\nprint(head.value)\n",
+              "correct_answer": "5"
+            },
+            {
+              "id": "linked-lists-step-2-predict-2",
+              "type": "output_prediction",
+              "question": "A new input still has code that counts nodes after a prepend for Node and 29, and the correct choice is what it prints.",
+              "hints": [
+                "Follow the job, which counts nodes after a prepend.",
+                "Putting a new node in front grows the list.",
+                "3"
+              ],
+              "explanation": "Putting a new node in front grows the list.",
+              "xp_reward": 10,
+              "starter_code": "class Node:\n    def __init__(self, value, nxt=None):\n        self.value = value\n        self.nxt = nxt\nhead = Node(1, Node(2))\nhead = Node(29, head)\ncount = 0\ncur = head\nwhile cur:\n    count = count + 1\n    cur = cur.nxt\nprint(count)\n",
+              "options": [
+                "2",
+                "3",
+                "none",
+                "0"
+              ],
+              "correct_answer": "3"
+            },
+            {
+              "id": "linked-lists-step-2-write",
               "type": "code",
-              "question": "Implement `sum_values(head)` that walks the list from `head` and returns the total of every `value`, or 0 for an empty list.",
-              "starter_code": "class ListNode:\n    def __init__(self, value, next=None):\n        self.value = value\n        self.next = next\n\ndef sum_values(head):\n    # TODO: walk the list, adding each value\n    return 0\n",
-              "solution_code": "class ListNode:\n    def __init__(self, value, next=None):\n        self.value = value\n        self.next = next\n\ndef sum_values(head):\n    total = 0\n    node = head\n    while node is not None:\n        total += node.value\n        node = node.next\n    return total\n",
+              "question": "The blank is the missing piece of the program that counts nodes after a prepend for Node and.",
+              "hints": [
+                "Follow the job, which counts nodes after a prepend.",
+                "The printed value is the result after this step counts nodes after a prepend.",
+                "label = count"
+              ],
+              "explanation": "The printed value is the result after this step counts nodes after a prepend.",
+              "xp_reward": 10,
+              "starter_code": "class Node:\n    def __init__(self, value, nxt=None):\n        self.value = value\n        self.nxt = nxt\nhead = Node(1)\nhead = Node(29, head)\ncount = 0\ncur = head\nwhile cur:\n    count = count + 1\n    cur = cur.nxt\nlabel = ___\nprint(label)\n",
+              "solution_code": "class Node:\n    def __init__(self, value, nxt=None):\n        self.value = value\n        self.nxt = nxt\nhead = Node(1)\nhead = Node(29, head)\ncount = 0\ncur = head\nwhile cur:\n    count = count + 1\n    cur = cur.nxt\nlabel = count\nprint(label)\n",
               "tests": [
                 {
-                  "name": "test_sum_values",
-                  "unittest_code": "def test_sum_values(self):\n    head = ListNode(1, ListNode(2, ListNode(3)))\n    self.assertEqual(sum_values(head), 6)\n"
-                },
-                {
-                  "name": "test_sum_empty",
-                  "unittest_code": "def test_sum_empty(self):\n    self.assertEqual(sum_values(None), 0)\n"
-                },
-                {
-                  "name": "test_sum_single",
-                  "unittest_code": "def test_sum_single(self):\n    self.assertEqual(sum_values(ListNode(7)), 7)\n"
+                  "name": "linked-lists-step-2-prints",
+                  "description": "The printed value is the result after this step counts nodes after a prepend.",
+                  "expected_stdout": "2\n",
+                  "required": true
                 }
-              ],
-              "xp_reward": 15
+              ]
             }
           ]
         }
-      ]
+      ],
+      "player_mode": "micro"
     },
     {
       "id": "linked-lists-01",
-      "title": "3. Reverse a Linked List (Concept Challenge)",
-      "description": "Finish `reverse_list`, `to_list`. Reverse a singly linked list in place; return the new head. The test checks that `to_list(reverse_list(head))` equals `[3, 2, 1]`.",
+      "title": "Practice Reverse a Linked List",
+      "description": "Finish reverse_list, to_list. Reverse a singly linked list in place; return the new head. The test checks that to_list(reverse_list(head)) equals [3, 2, 1].",
       "order": 13,
       "difficulty": "intermediate",
       "duration_minutes": 8,
@@ -140,7 +435,7 @@
         "stacks-queues"
       ],
       "learning_objectives": [
-        "Reverse pointers iteratively"
+        "This step reads the new head after reversing the links, using Node and 28."
       ],
       "starter_code": "class ListNode:\n    def __init__(self, value, next=None):\n        self.value = value\n        self.next = next\n\ndef reverse_list(head):\n    # TODO: reverse and return new head\n    pass\n\ndef to_list(head):\n    out = []\n    while head:\n        out.append(head.value)\n        head = head.next\n    return out\n",
       "solution_code": "class ListNode:\n    def __init__(self, value, next=None):\n        self.value = value\n        self.next = next\n\ndef reverse_list(head):\n    prev = None\n    cur = head\n    while cur:\n        nxt = cur.next\n        cur.next = prev\n        prev = cur\n        cur = nxt\n    return prev\n\ndef to_list(head):\n    out = []\n    while head:\n        out.append(head.value)\n        head = head.next\n    return out\n",
@@ -161,12 +456,174 @@
         "url": "https://docs.python.org/3/reference/compound_stmts.html#while",
         "license": "Python documentation license (PSF)"
       },
-      "xp_reward": 25
+      "xp_reward": 25,
+      "player_mode": "micro",
+      "sublessons": [
+        {
+          "id": "linked-lists-01-micro",
+          "title": "Practice Reverse a Linked List",
+          "description": "",
+          "order": 1,
+          "exercises": [
+            {
+              "id": "linked-lists-01-teach",
+              "type": "teach",
+              "question": "This step reads the new head after reversing the links, using Node and 28.",
+              "hints": [
+                "Follow the job, which reads the new head after reversing the links.",
+                "Pointing next at prev reverses that link.",
+                "cur.nxt = prev"
+              ],
+              "explanation": "This step reads the new head after reversing the links, using Node and 28.",
+              "xp_reward": 0,
+              "worked_example": "cur.nxt = prev"
+            },
+            {
+              "id": "linked-lists-01-mcq",
+              "type": "mcq",
+              "question": "The correct line reads the new head after reversing the links, and it is the line tied to Node and 28.",
+              "hints": [
+                "Follow the job, which reads the new head after reversing the links.",
+                "Pointing next at prev reverses that link.",
+                "cur.nxt = prev"
+              ],
+              "explanation": "Pointing next at prev reverses that link.",
+              "xp_reward": 10,
+              "options": [
+                "prev == cur",
+                "cur.nxt = prev",
+                "return prev",
+                "pass"
+              ],
+              "correct_answer": "cur.nxt = prev"
+            },
+            {
+              "id": "linked-lists-01-predict",
+              "type": "output_prediction",
+              "question": "The program reads the new head after reversing the links with Node and so choose the printed value.",
+              "hints": [
+                "Follow the job, which reads the new head after reversing the links.",
+                "Pointing next at prev reverses that link.",
+                "28"
+              ],
+              "explanation": "Pointing next at prev reverses that link.",
+              "xp_reward": 10,
+              "starter_code": "class Node:\n    def __init__(self, value, nxt=None):\n        self.value = value\n        self.nxt = nxt\nhead = Node(1, Node(2, Node(28)))\nprev = None\ncur = head\nwhile cur:\n    nxt = cur.nxt\n    cur.nxt = prev\n    prev = cur\n    cur = nxt\nprint(prev.value)\n",
+              "options": [
+                "1",
+                "28",
+                "0",
+                "none"
+              ],
+              "correct_answer": "28"
+            },
+            {
+              "id": "linked-lists-01-order",
+              "type": "ordering",
+              "question": "Build the line that reads the new head after reversing the links for Node and 28, from the first piece to the last.",
+              "hints": [
+                "Follow the job, which reads the new head after reversing the links.",
+                "Pointing next at prev reverses that link.",
+                "cur.nxt = prev"
+              ],
+              "explanation": "Pointing next at prev reverses that link.",
+              "xp_reward": 10,
+              "options": [
+                "cur.nxt",
+                "=",
+                "prev",
+                "=="
+              ],
+              "correct_answer": [
+                "cur.nxt",
+                "=",
+                "prev"
+              ]
+            },
+            {
+              "id": "linked-lists-01-fill",
+              "type": "fill_blank",
+              "question": "Replace the blank with the piece that makes the line reads the new head after reversing the links for Node and 28.",
+              "hints": [
+                "Follow the job, which reads the new head after reversing the links.",
+                "Pointing next at prev reverses that link.",
+                "="
+              ],
+              "explanation": "Pointing next at prev reverses that link.",
+              "xp_reward": 10,
+              "starter_code": "cur.nxt ___ prev\n",
+              "options": [
+                "==",
+                "=",
+                "!=",
+                "+"
+              ],
+              "correct_answer": "="
+            },
+            {
+              "id": "linked-lists-01-bug",
+              "type": "debugging",
+              "question": "Spot the line that fails the job, which reads the new head after reversing the links, around Node and 28.",
+              "hints": [
+                "Follow the job, which reads the new head after reversing the links.",
+                "The print reads the old head and never reverses the links.",
+                "Line 6"
+              ],
+              "explanation": "The print reads the old head and never reverses the links.",
+              "xp_reward": 10,
+              "starter_code": "class Node:\n    def __init__(self, value, nxt=None):\n        self.value = value\n        self.nxt = nxt\nhead = Node(1, Node(28))\nprint(head.value)\n",
+              "correct_answer": "6"
+            },
+            {
+              "id": "linked-lists-01-predict-2",
+              "type": "output_prediction",
+              "question": "The second program reads the new head after reversing the links for Node and 28, so choose the new printed value.",
+              "hints": [
+                "Follow the job, which reads the new head after reversing the links.",
+                "Pointing next at prev reverses that link.",
+                "1"
+              ],
+              "explanation": "Pointing next at prev reverses that link.",
+              "xp_reward": 10,
+              "starter_code": "class Node:\n    def __init__(self, value, nxt=None):\n        self.value = value\n        self.nxt = nxt\nhead = Node(28, Node(1))\nprev = None\ncur = head\nwhile cur:\n    nxt = cur.nxt\n    cur.nxt = prev\n    prev = cur\n    cur = nxt\nprint(prev.value)\n",
+              "options": [
+                "28",
+                "none",
+                "0",
+                "1"
+              ],
+              "correct_answer": "1"
+            },
+            {
+              "id": "linked-lists-01-write",
+              "type": "code",
+              "question": "Complete the blank so this program reads the new head after reversing the links and prints the result for Node and.",
+              "hints": [
+                "Follow the job, which reads the new head after reversing the links.",
+                "The printed value is the result after this step reads the new head after reversing the links.",
+                "label = prev.value"
+              ],
+              "explanation": "The printed value is the result after this step reads the new head after reversing the links.",
+              "xp_reward": 10,
+              "starter_code": "class Node:\n    def __init__(self, value, nxt=None):\n        self.value = value\n        self.nxt = nxt\nhead = Node(1, Node(2, Node(28)))\nprev = None\ncur = head\nwhile cur:\n    nxt = cur.nxt\n    cur.nxt = prev\n    prev = cur\n    cur = nxt\nlabel = ___\nprint(label)\n",
+              "solution_code": "class Node:\n    def __init__(self, value, nxt=None):\n        self.value = value\n        self.nxt = nxt\nhead = Node(1, Node(2, Node(28)))\nprev = None\ncur = head\nwhile cur:\n    nxt = cur.nxt\n    cur.nxt = prev\n    prev = cur\n    cur = nxt\nlabel = prev.value\nprint(label)\n",
+              "tests": [
+                {
+                  "name": "linked-lists-01-prints",
+                  "description": "The printed value is the result after this step reads the new head after reversi",
+                  "expected_stdout": "28\n",
+                  "required": true
+                }
+              ]
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "linked-lists-practice-1",
-      "title": "4. Find Middle Node (Practice)",
-      "description": "Finish `middle_value`. Return the middle node's value using slow/fast pointers (for even length, return the second middle). The test checks that `middle_value(head)` equals `3`.",
+      "title": "Find Middle Node",
+      "description": "Finish middle_value. Return the middle node's value using slow/fast pointers (for even length, return the second middle). The test checks that middle_value(head) equals 3.",
       "order": 14,
       "difficulty": "intermediate",
       "duration_minutes": 6,
@@ -180,7 +637,7 @@
         "stacks-queues"
       ],
       "learning_objectives": [
-        "Use two-pointer middle finding"
+        "This step reads the middle value, using len and 5."
       ],
       "starter_code": "class ListNode:\n    def __init__(self, value, next=None):\n        self.value = value\n        self.next = next\n\ndef middle_value(head):\n    # TODO: slow/fast pointers\n    pass\n",
       "solution_code": "class ListNode:\n    def __init__(self, value, next=None):\n        self.value = value\n        self.next = next\n\ndef middle_value(head):\n    slow = fast = head\n    while fast and fast.next:\n        slow = slow.next\n        fast = fast.next.next\n    return slow.value\n",
@@ -201,12 +658,178 @@
         "url": "https://docs.python.org/3/tutorial/classes.html",
         "license": "Python documentation license (PSF)"
       },
-      "xp_reward": 15
+      "xp_reward": 15,
+      "player_mode": "micro",
+      "sublessons": [
+        {
+          "id": "linked-lists-practice-1-micro",
+          "title": "Find Middle Node",
+          "description": "",
+          "order": 1,
+          "exercises": [
+            {
+              "id": "linked-lists-practice-1-teach",
+              "type": "teach",
+              "question": "This step reads the middle value, using len and 5.",
+              "hints": [
+                "Follow the job, which reads the middle value.",
+                "Integer division by two lands on the middle index.",
+                "len(values) // 2"
+              ],
+              "explanation": "This step reads the middle value, using len and 5.",
+              "xp_reward": 0,
+              "worked_example": "len(values) // 2"
+            },
+            {
+              "id": "linked-lists-practice-1-mcq",
+              "type": "mcq",
+              "question": "The correct line reads the middle value, and it is the line tied to len and 5.",
+              "hints": [
+                "Follow the job, which reads the middle value.",
+                "Integer division by two lands on the middle index.",
+                "len(values) // 2"
+              ],
+              "explanation": "Integer division by two lands on the middle index.",
+              "xp_reward": 10,
+              "options": [
+                "values == values",
+                "len(values) // 2",
+                "pass",
+                "return values"
+              ],
+              "correct_answer": "len(values) // 2"
+            },
+            {
+              "id": "linked-lists-practice-1-predict",
+              "type": "output_prediction",
+              "question": "The program reads the middle value with len and 5, so choose the printed value.",
+              "hints": [
+                "Follow the job, which reads the middle value.",
+                "Integer division by two lands on the middle index.",
+                "27"
+              ],
+              "explanation": "Integer division by two lands on the middle index.",
+              "xp_reward": 10,
+              "starter_code": "values = [1, 2, 27, 4, 5]\nprint(values[len(values) // 2])\n",
+              "options": [
+                "3",
+                "27",
+                "none",
+                "0"
+              ],
+              "correct_answer": "27"
+            },
+            {
+              "id": "linked-lists-practice-1-order",
+              "type": "ordering",
+              "question": "Build the line that reads the middle value for len and 5, from the first piece to the last.",
+              "hints": [
+                "Follow the job, which reads the middle value.",
+                "Integer division by two lands on the middle index.",
+                "mid = len(values) // 2"
+              ],
+              "explanation": "Integer division by two lands on the middle index.",
+              "xp_reward": 10,
+              "options": [
+                "mid",
+                "=",
+                "len(values)",
+                "//",
+                "2",
+                "/"
+              ],
+              "correct_answer": [
+                "mid",
+                "=",
+                "len(values)",
+                "//",
+                "2"
+              ]
+            },
+            {
+              "id": "linked-lists-practice-1-fill",
+              "type": "fill_blank",
+              "question": "Replace the blank with the piece that makes the line reads the middle value for len and 5.",
+              "hints": [
+                "Follow the job, which reads the middle value.",
+                "Integer division by two lands on the middle index.",
+                "//"
+              ],
+              "explanation": "Integer division by two lands on the middle index.",
+              "xp_reward": 10,
+              "starter_code": "mid = len(values) ___ 2\n",
+              "options": [
+                "%",
+                "*",
+                "/",
+                "//"
+              ],
+              "correct_answer": "//"
+            },
+            {
+              "id": "linked-lists-practice-1-bug",
+              "type": "debugging",
+              "question": "Spot the line that fails the job, which reads the middle value, around len and 5.",
+              "hints": [
+                "Follow the job, which reads the middle value.",
+                "The print reads the first value instead of the middle.",
+                "Line 2"
+              ],
+              "explanation": "The print reads the first value instead of the middle.",
+              "xp_reward": 10,
+              "starter_code": "values = [1, 2, 27, 4, 5]\nprint(values[0])\n",
+              "correct_answer": "2"
+            },
+            {
+              "id": "linked-lists-practice-1-predict-2",
+              "type": "output_prediction",
+              "question": "The second program reads the middle value for len and 5, so choose the new printed value.",
+              "hints": [
+                "Follow the job, which reads the middle value.",
+                "Integer division by two lands on the middle index.",
+                "3"
+              ],
+              "explanation": "Integer division by two lands on the middle index.",
+              "xp_reward": 10,
+              "starter_code": "values = [1, 2, 3, 4, 5]\nprint(values[len(values) // 2])\n",
+              "options": [
+                "27",
+                "none",
+                "0",
+                "3"
+              ],
+              "correct_answer": "3"
+            },
+            {
+              "id": "linked-lists-practice-1-write",
+              "type": "code",
+              "question": "Complete the blank so this program reads the middle value and prints the result for len and 5.",
+              "hints": [
+                "Follow the job, which reads the middle value.",
+                "The printed value is the result after this step reads the middle value.",
+                "label = values[len(values) // 2]"
+              ],
+              "explanation": "The printed value is the result after this step reads the middle value.",
+              "xp_reward": 10,
+              "starter_code": "values = [1, 2, 27, 4, 5]\nlabel = ___\nprint(label)\n",
+              "solution_code": "values = [1, 2, 27, 4, 5]\nlabel = values[len(values) // 2]\nprint(label)\n",
+              "tests": [
+                {
+                  "name": "linked-lists-practice-1-prints",
+                  "description": "The printed value is the result after this step reads the middle value.",
+                  "expected_stdout": "27\n",
+                  "required": true
+                }
+              ]
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "linked-lists-checkpoint",
-      "title": "5. Unit 3 Checkpoint: Linked Lists",
-      "description": "Finish `has_cycle`. Detect whether a linked list has a cycle (Floyd). The test checks that `has_cycle(a)` is true; `has_cycle(ListNode(1, ListNode(2)))` is false.",
+      "title": "Practice Unit 3 Checkpoint Linked Lists",
+      "description": "Finish has_cycle. Detect whether a linked list has a cycle (Floyd). The test checks that has_cycle(a) is true; has_cycle(ListNode(1, ListNode(2))) is false.",
       "order": 15,
       "difficulty": "intermediate",
       "duration_minutes": 10,
@@ -220,7 +843,7 @@
         "stacks-queues"
       ],
       "learning_objectives": [
-        "Detect cycles with slow/fast pointers"
+        "This step counts the nodes in the chain, using Node and 3."
       ],
       "starter_code": "class ListNode:\n    def __init__(self, value, next=None):\n        self.value = value\n        self.next = next\n\ndef has_cycle(head):\n    # TODO: return True if cycle exists\n    pass\n",
       "solution_code": "class ListNode:\n    def __init__(self, value, next=None):\n        self.value = value\n        self.next = next\n\ndef has_cycle(head):\n    slow = fast = head\n    while fast and fast.next:\n        slow = slow.next\n        fast = fast.next.next\n        if slow is fast:\n            return True\n    return False\n",
@@ -241,7 +864,173 @@
         "url": "https://docs.python.org/3/reference/compound_stmts.html#while",
         "license": "Python documentation license (PSF)"
       },
-      "xp_reward": 40
+      "xp_reward": 40,
+      "player_mode": "micro",
+      "sublessons": [
+        {
+          "id": "linked-lists-checkpoint-micro",
+          "title": "Practice Unit 3 Checkpoint Linked Lists",
+          "description": "",
+          "order": 1,
+          "exercises": [
+            {
+              "id": "linked-lists-checkpoint-teach",
+              "type": "teach",
+              "question": "This step counts the nodes in the chain, using Node and 3.",
+              "hints": [
+                "Follow the job, which counts the nodes in the chain.",
+                "Walking next until it ends counts the nodes.",
+                "cur = cur.nxt"
+              ],
+              "explanation": "This step counts the nodes in the chain, using Node and 3.",
+              "xp_reward": 0,
+              "worked_example": "cur = cur.nxt"
+            },
+            {
+              "id": "linked-lists-checkpoint-mcq",
+              "type": "mcq",
+              "question": "Choose the line that counts the nodes in the chain, which is the line that fits Node and 3.",
+              "hints": [
+                "Follow the job, which counts the nodes in the chain.",
+                "Walking next until it ends counts the nodes.",
+                "while cur: count += 1"
+              ],
+              "explanation": "Walking next until it ends counts the nodes.",
+              "xp_reward": 10,
+              "options": [
+                "cur == cur",
+                "return cur",
+                "while cur: count += 1",
+                "pass"
+              ],
+              "correct_answer": "while cur: count += 1"
+            },
+            {
+              "id": "linked-lists-checkpoint-predict",
+              "type": "output_prediction",
+              "question": "Read the code that counts the nodes in the chain for Node and and choose the value it prints.",
+              "hints": [
+                "Follow the job, which counts the nodes in the chain.",
+                "Walking next until it ends counts the nodes.",
+                "3"
+              ],
+              "explanation": "Walking next until it ends counts the nodes.",
+              "xp_reward": 10,
+              "starter_code": "class Node:\n    def __init__(self, value, nxt=None):\n        self.value = value\n        self.nxt = nxt\nhead = Node(1, Node(2, Node(3)))\ncount = 0\ncur = head\nwhile cur:\n    count = count + 1\n    cur = cur.nxt\nprint(count)\n",
+              "options": [
+                "1",
+                "none",
+                "3",
+                "0"
+              ],
+              "correct_answer": "3"
+            },
+            {
+              "id": "linked-lists-checkpoint-order",
+              "type": "ordering",
+              "question": "Arrange the pieces of the line that counts the nodes in the chain, left to right, for Node and 3.",
+              "hints": [
+                "Follow the job, which counts the nodes in the chain.",
+                "Walking next until it ends counts the nodes.",
+                "while cur: count += 1"
+              ],
+              "explanation": "Walking next until it ends counts the nodes.",
+              "xp_reward": 10,
+              "options": [
+                "while",
+                "cur:",
+                "count",
+                "+=",
+                "1",
+                "if"
+              ],
+              "correct_answer": [
+                "while",
+                "cur:",
+                "count",
+                "+=",
+                "1"
+              ]
+            },
+            {
+              "id": "linked-lists-checkpoint-fill",
+              "type": "fill_blank",
+              "question": "Fill the blank so the line counts the nodes in the chain for Node and 3.",
+              "hints": [
+                "Follow the job, which counts the nodes in the chain.",
+                "Walking next until it ends counts the nodes.",
+                "+"
+              ],
+              "explanation": "Walking next until it ends counts the nodes.",
+              "xp_reward": 10,
+              "starter_code": "count = count ___ 1\n",
+              "options": [
+                "-",
+                "*",
+                "+",
+                "=="
+              ],
+              "correct_answer": "+"
+            },
+            {
+              "id": "linked-lists-checkpoint-bug",
+              "type": "debugging",
+              "question": "Find the line that misses the job, which counts the nodes in the chain, for Node and 3.",
+              "hints": [
+                "Follow the job, which counts the nodes in the chain.",
+                "The print shows the first value and ignores the rest of the chain.",
+                "Line 5"
+              ],
+              "explanation": "The print shows the first value and ignores the rest of the chain.",
+              "xp_reward": 10,
+              "starter_code": "class Node:\n    def __init__(self, value, nxt=None):\n        self.value = value\nhead = Node(1, Node(2))\nprint(head.value)\n",
+              "correct_answer": "5"
+            },
+            {
+              "id": "linked-lists-checkpoint-predict-2",
+              "type": "output_prediction",
+              "question": "On the new input, the code still counts the nodes in the chain for Node and 3, so choose what it prints.",
+              "hints": [
+                "Follow the job, which counts the nodes in the chain.",
+                "Walking next until it ends counts the nodes.",
+                "1"
+              ],
+              "explanation": "Walking next until it ends counts the nodes.",
+              "xp_reward": 10,
+              "starter_code": "class Node:\n    def __init__(self, value, nxt=None):\n        self.value = value\n        self.nxt = nxt\nhead = Node(1)\ncount = 0\ncur = head\nwhile cur:\n    count = count + 1\n    cur = cur.nxt\nprint(count)\n",
+              "options": [
+                "3",
+                "0",
+                "none",
+                "1"
+              ],
+              "correct_answer": "1"
+            },
+            {
+              "id": "linked-lists-checkpoint-write",
+              "type": "code",
+              "question": "Fill the blank so the program counts the nodes in the chain, and the print shows that result for Node and.",
+              "hints": [
+                "Follow the job, which counts the nodes in the chain.",
+                "The printed value is the result after this step counts the nodes in the chain.",
+                "label = count"
+              ],
+              "explanation": "The printed value is the result after this step counts the nodes in the chain.",
+              "xp_reward": 10,
+              "starter_code": "class Node:\n    def __init__(self, value, nxt=None):\n        self.value = value\n        self.nxt = nxt\nhead = Node(1, Node(2, Node(3)))\ncount = 0\ncur = head\nwhile cur:\n    count = count + 1\n    cur = cur.nxt\nlabel = ___\nprint(label)\n",
+              "solution_code": "class Node:\n    def __init__(self, value, nxt=None):\n        self.value = value\n        self.nxt = nxt\nhead = Node(1, Node(2, Node(3)))\ncount = 0\ncur = head\nwhile cur:\n    count = count + 1\n    cur = cur.nxt\nlabel = count\nprint(label)\n",
+              "tests": [
+                {
+                  "name": "linked-lists-checkpoint-prints",
+                  "description": "The printed value is the result after this step counts the nodes in the chain.",
+                  "expected_stdout": "3\n",
+                  "required": true
+                }
+              ]
+            }
+          ]
+        }
+      ]
     }
   ]
 }

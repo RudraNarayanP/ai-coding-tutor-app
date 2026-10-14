@@ -14,8 +14,8 @@
   "lessons": [
     {
       "id": "java-conditionals-step-1",
-      "title": "1. If-Else Statements",
-      "description": "Finish `isEven(number)` so it returns true when `number` is divisible by 2, and false otherwise. The test checks that `isEven(4)` is true and `isEven(7)` is false.",
+      "title": "Practice If-Else Statements",
+      "description": "Finish isEven(number) so it returns true when number is divisible by 2, and false otherwise. The test checks that isEven(4) is true and isEven(7) is false.",
       "order": 6,
       "difficulty": "beginner",
       "duration_minutes": 5,
@@ -27,7 +27,7 @@
         "java-variables"
       ],
       "learning_objectives": [
-        "Use boolean conditions and modulo % operator in Java"
+        "This step keeps yes when the score meets the limit, using score holding yes."
       ],
       "starter_code": "public class Solution {\n    public static boolean isEven(int number) {\n        // TODO: Return true if number % 2 == 0\n        return false;\n    }\n}\n",
       "solution_code": "public class Solution {\n    public static boolean isEven(int number) {\n        return number % 2 == 0;\n    }\n}\n",
@@ -48,12 +48,178 @@
         "url": "https://docs.oracle.com/javase/tutorial/java/nutsandbolts/if.html",
         "license": "Oracle Free Use Terms and Conditions (documentation)"
       },
-      "xp_reward": 10
+      "xp_reward": 10,
+      "player_mode": "micro",
+      "sublessons": [
+        {
+          "id": "java-conditionals-step-1-micro",
+          "title": "Practice If-Else Statements",
+          "description": "",
+          "order": 1,
+          "exercises": [
+            {
+              "id": "java-conditionals-step-1-teach",
+              "type": "teach",
+              "question": "This step keeps yes when the score meets the limit, using score holding yes.",
+              "hints": [
+                "Follow the job, which keeps yes when the score meets the limit.",
+                "score >= 30 chooses the yes branch at the boundary.",
+                "int score = 40;"
+              ],
+              "explanation": "This step keeps yes when the score meets the limit, using score holding yes.",
+              "xp_reward": 0,
+              "worked_example": "int score = 40;"
+            },
+            {
+              "id": "java-conditionals-step-1-mcq",
+              "type": "mcq",
+              "question": "The match is the line that keeps yes when the score meets the limit for score holding yes.",
+              "hints": [
+                "Follow the job, which keeps yes when the score meets the limit.",
+                "score >= 30 chooses the yes branch at the boundary.",
+                "score >= 30 ? \"yes\" : \"no\""
+              ],
+              "explanation": "score >= 30 chooses the yes branch at the boundary.",
+              "xp_reward": 10,
+              "options": [
+                "score == 30;",
+                "return score;",
+                "score = 30;",
+                "score >= 30 ? \"yes\" : \"no\""
+              ],
+              "correct_answer": "score >= 30 ? \"yes\" : \"no\""
+            },
+            {
+              "id": "java-conditionals-step-1-predict",
+              "type": "output_prediction",
+              "question": "Work out what is printed when the code keeps when the score meets the limit for score holding.",
+              "hints": [
+                "Follow the job, which Follow the job, which keeps when the score meets the limit.",
+                "score >= 30 chooses the yes branch at the boundary.",
+                "yes"
+              ],
+              "explanation": "score >= 30 chooses the yes branch at the boundary.",
+              "xp_reward": 10,
+              "starter_code": "public class Solution {\n    public static void main(String[] args) {\n        int score = 40;\n        System.out.println(score >= 30 ? \"yes\" : \"no\");\n    }\n}\n",
+              "options": [
+                "no",
+                "none",
+                "0",
+                "yes"
+              ],
+              "correct_answer": "yes"
+            },
+            {
+              "id": "java-conditionals-step-1-order",
+              "type": "ordering",
+              "question": "Rebuild, from the left, the line that keeps yes when the score meets the limit for score holding yes.",
+              "hints": [
+                "Follow the job, which keeps yes when the score meets the limit.",
+                "score >= 30 chooses the yes branch at the boundary.",
+                "if (left >= right) left++;"
+              ],
+              "explanation": "score >= 30 chooses the yes branch at the boundary.",
+              "xp_reward": 10,
+              "options": [
+                "if",
+                "(left",
+                ">=",
+                "right)",
+                "left++;",
+                "=="
+              ],
+              "correct_answer": [
+                "if",
+                "(left",
+                ">=",
+                "right)",
+                "left++;"
+              ]
+            },
+            {
+              "id": "java-conditionals-step-1-fill",
+              "type": "fill_blank",
+              "question": "The completed line keeps yes when the score meets the limit once you fill the blank for score holding yes.",
+              "hints": [
+                "Follow the job, which keeps yes when the score meets the limit.",
+                "score >= 30 chooses the yes branch at the boundary.",
+                ">="
+              ],
+              "explanation": "score >= 30 chooses the yes branch at the boundary.",
+              "xp_reward": 10,
+              "starter_code": "if (left ___ right) left++;",
+              "options": [
+                "==",
+                "<=",
+                "!=",
+                ">="
+              ],
+              "correct_answer": ">="
+            },
+            {
+              "id": "java-conditionals-step-1-bug",
+              "type": "debugging",
+              "question": "One line does another job than the one that keeps yes when the score meets the limit for score holding yes.",
+              "hints": [
+                "Follow the job, which keeps yes when the score meets the limit.",
+                "The comparison is flipped, so a passing score takes the no branch.",
+                "Line 4"
+              ],
+              "explanation": "The comparison is flipped, so a passing score takes the no branch.",
+              "xp_reward": 10,
+              "starter_code": "public class Solution {\n    public static void main(String[] args) {\n        int score = 40;\n        System.out.println(score < 30 ? \"yes\" : \"no\");\n    }\n}\n",
+              "correct_answer": "4"
+            },
+            {
+              "id": "java-conditionals-step-1-predict-2",
+              "type": "output_prediction",
+              "question": "The second display is what prints after the code keeps yes when the score meets the limit for score holding yes.",
+              "hints": [
+                "Follow the job, which keeps yes when the score meets the limit.",
+                "score >= 30 chooses the yes branch at the boundary.",
+                "no"
+              ],
+              "explanation": "score >= 30 chooses the yes branch at the boundary.",
+              "xp_reward": 10,
+              "starter_code": "public class Solution {\n    public static void main(String[] args) {\n        int score = 10;\n        System.out.println(score >= 30 ? \"yes\" : \"no\");\n    }\n}\n",
+              "options": [
+                "yes",
+                "none",
+                "no",
+                "0"
+              ],
+              "correct_answer": "no"
+            },
+            {
+              "id": "java-conditionals-step-1-write",
+              "type": "code",
+              "question": "Supply the blank so the run keeps when the score meets the limit and prints the result for score holding.",
+              "hints": [
+                "Follow the job, which keeps yes when the score meets the limit.",
+                "The printed value is the result after this step keeps yes when the score meets the limit.",
+                "String label = score >= 30 ? \"yes\" : \"no\";"
+              ],
+              "explanation": "The printed value is the result after this step keeps yes when the score meets the limit.",
+              "xp_reward": 10,
+              "starter_code": "public class Solution {\n    public static void main(String[] args) {\n        int score = 40;\n        String label = ___;\n        System.out.println(label);\n    }\n}\n",
+              "solution_code": "public class Solution {\n    public static void main(String[] args) {\n        int score = 40;\n        String label = score >= 30 ? \"yes\" : \"no\";\n        System.out.println(label);\n    }\n}\n",
+              "tests": [
+                {
+                  "name": "java-conditionals-step-1-prints",
+                  "description": "The printed value is the result after this step keeps yes when the score meets t",
+                  "expected_stdout": "yes\n",
+                  "required": true
+                }
+              ]
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "java-conditionals-step-2",
-      "title": "2. Logical Operators (&&, ||, !)",
-      "description": "Finish `canAccessSystem(hasBadge, knowsPassword)` so it returns true only when both values are true. The test checks that `(true, true)` is allowed and `(true, false)` is not.",
+      "title": "Practice Logical Operators",
+      "description": "Finish canAccessSystem(hasBadge, knowsPassword) so it returns true only when both values are true. The test checks that (true, true) is allowed and (true, false) is not.",
       "order": 7,
       "difficulty": "beginner",
       "duration_minutes": 5,
@@ -65,7 +231,7 @@
         "java-variables"
       ],
       "learning_objectives": [
-        "Combine logical operators && and || in Java"
+        "This step requires both comparisons with and, using speed and 50."
       ],
       "starter_code": "public class Solution {\n    public static boolean canAccessSystem(boolean hasBadge, boolean knowsPassword) {\n        // TODO: Return true if hasBadge && knowsPassword\n        return false;\n    }\n}\n",
       "solution_code": "public class Solution {\n    public static boolean canAccessSystem(boolean hasBadge, boolean knowsPassword) {\n        return hasBadge && knowsPassword;\n    }\n}\n",
@@ -86,12 +252,186 @@
         "url": "https://docs.oracle.com/javase/tutorial/java/nutsandbolts/operators.html",
         "license": "Oracle Free Use Terms and Conditions (documentation)"
       },
-      "xp_reward": 10
+      "xp_reward": 10,
+      "player_mode": "micro",
+      "sublessons": [
+        {
+          "id": "java-conditionals-step-2-micro",
+          "title": "Practice Logical Operators",
+          "description": "",
+          "order": 1,
+          "exercises": [
+            {
+              "id": "java-conditionals-step-2-teach",
+              "type": "teach",
+              "question": "This step requires both comparisons with and, using speed and 50.",
+              "hints": [
+                "Follow the job, which requires both comparisons with and.",
+                "&& keeps the value only when both comparisons pass.",
+                "speed >= 30 && speed <= 50"
+              ],
+              "explanation": "This step requires both comparisons with and, using speed and 50.",
+              "xp_reward": 0,
+              "worked_example": "speed >= 30 && speed <= 50"
+            },
+            {
+              "id": "java-conditionals-step-2-mcq",
+              "type": "mcq",
+              "question": "Pick the line that requires both comparisons with and, not a line about something else, for speed and 50.",
+              "hints": [
+                "Follow the job, which requires both comparisons with and.",
+                "&& keeps the value only when both comparisons pass.",
+                "speed >= 30 && speed <= 50"
+              ],
+              "explanation": "&& keeps the value only when both comparisons pass.",
+              "xp_reward": 10,
+              "options": [
+                "speed == 30;",
+                "speed >= 30 && speed <= 50",
+                "return speed;",
+                "speed = 30;"
+              ],
+              "correct_answer": "speed >= 30 && speed <= 50"
+            },
+            {
+              "id": "java-conditionals-step-2-predict",
+              "type": "output_prediction",
+              "question": "The displayed value is what the code prints when it requires both comparisons with and for speed and 50.",
+              "hints": [
+                "Follow the job, which requires both comparisons with and.",
+                "&& keeps the value only when both comparisons pass.",
+                "true"
+              ],
+              "explanation": "&& keeps the value only when both comparisons pass.",
+              "xp_reward": 10,
+              "starter_code": "public class Solution {\n    public static void main(String[] args) {\n        int speed = 40;\n        System.out.println(speed >= 30 && speed <= 50);\n    }\n}\n",
+              "options": [
+                "false",
+                "true",
+                "none",
+                "0"
+              ],
+              "correct_answer": "true"
+            },
+            {
+              "id": "java-conditionals-step-2-order",
+              "type": "ordering",
+              "question": "Place every piece so the result requires both comparisons with and for speed and 50.",
+              "hints": [
+                "Follow the job, which requires both comparisons with and.",
+                "&& keeps the value only when both comparisons pass.",
+                "if (left >= right && count > 0) left++;"
+              ],
+              "explanation": "&& keeps the value only when both comparisons pass.",
+              "xp_reward": 10,
+              "options": [
+                "if",
+                "(left",
+                ">=",
+                "right",
+                "&&",
+                "count",
+                ">",
+                "0)",
+                "left++;",
+                "=="
+              ],
+              "correct_answer": [
+                "if",
+                "(left",
+                ">=",
+                "right",
+                "&&",
+                "count",
+                ">",
+                "0)",
+                "left++;"
+              ]
+            },
+            {
+              "id": "java-conditionals-step-2-fill",
+              "type": "fill_blank",
+              "question": "Drop in the piece that lets the line requires both comparisons with and for speed and 50.",
+              "hints": [
+                "Follow the job, which requires both comparisons with and.",
+                "&& keeps the value only when both comparisons pass.",
+                "&&"
+              ],
+              "explanation": "&& keeps the value only when both comparisons pass.",
+              "xp_reward": 10,
+              "starter_code": "if (left >= right ___ count > 0) left++;",
+              "options": [
+                "||",
+                "&&",
+                "==",
+                "!="
+              ],
+              "correct_answer": "&&"
+            },
+            {
+              "id": "java-conditionals-step-2-bug",
+              "type": "debugging",
+              "question": "The mismatch misses the job, which requires both comparisons with and, for speed and 50.",
+              "hints": [
+                "Follow the job, which requires both comparisons with and.",
+                "Or keeps the row when only one comparison is true.",
+                "Line 4"
+              ],
+              "explanation": "Or keeps the row when only one comparison is true.",
+              "xp_reward": 10,
+              "starter_code": "public class Solution {\n    public static void main(String[] args) {\n        int speed = 40;\n        System.out.println(speed >= 30 || speed <= 50);\n    }\n}\n",
+              "correct_answer": "4"
+            },
+            {
+              "id": "java-conditionals-step-2-predict-2",
+              "type": "output_prediction",
+              "question": "Choose the printed result of the second run that requires both comparisons with and for speed and 50.",
+              "hints": [
+                "Follow the job, which requires both comparisons with and.",
+                "&& keeps the value only when both comparisons pass.",
+                "false"
+              ],
+              "explanation": "&& keeps the value only when both comparisons pass.",
+              "xp_reward": 10,
+              "starter_code": "public class Solution {\n    public static void main(String[] args) {\n        int speed = 10;\n        System.out.println(speed >= 30 && speed <= 50);\n    }\n}\n",
+              "options": [
+                "true",
+                "0",
+                "none",
+                "false"
+              ],
+              "correct_answer": "false"
+            },
+            {
+              "id": "java-conditionals-step-2-write",
+              "type": "code",
+              "question": "Make the program requires both comparisons with and by filling the blank for speed and 50.",
+              "hints": [
+                "Follow the job, which requires both comparisons with and.",
+                "The printed value is the result after this step requires both comparisons with and.",
+                "boolean label = speed >= 30 && speed <= 50;"
+              ],
+              "explanation": "The printed value is the result after this step requires both comparisons with and.",
+              "xp_reward": 10,
+              "starter_code": "public class Solution {\n    public static void main(String[] args) {\n        int speed = 40;\n        boolean label = ___;\n        System.out.println(label);\n    }\n}\n",
+              "solution_code": "public class Solution {\n    public static void main(String[] args) {\n        int speed = 40;\n        boolean label = speed >= 30 && speed <= 50;\n        System.out.println(label);\n    }\n}\n",
+              "tests": [
+                {
+                  "name": "java-conditionals-step-2-prints",
+                  "description": "The printed value is the result after this step requires both comparisons with a",
+                  "expected_stdout": "true\n",
+                  "required": true
+                }
+              ]
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "java-conditionals-01",
-      "title": "3. Speed Limit Monitor (Concept Challenge)",
-      "description": "Finish `getTicketCategory`. Determine fine tier based on driving speed. The test checks that `Solution.getTicketCategory(55, 60` equals `\"NONE\"`; `Solution.getTicketCategory(65, 60` equals `\"WARNING\"`; `Solution.getTicketCategory(80, 60` equals `\"FINE\"`.",
+      "title": "Practice Speed Limit Monitor",
+      "description": "Finish getTicketCategory. Determine fine tier based on driving speed. The test checks that Solution.getTicketCategory(55, 60 equals \"NONE\"; Solution.getTicketCategory(65, 60 equals \"WARNING\"; Solution.getTicketCategory(80, 60 equals \"FINE\".",
       "order": 8,
       "difficulty": "beginner",
       "duration_minutes": 8,
@@ -103,7 +443,7 @@
         "java-variables"
       ],
       "learning_objectives": [
-        "Implement multi-way if-else if-else chain"
+        "This step labels a speed over the limit, using speed holding over."
       ],
       "starter_code": "public class Solution {\n    public static String getTicketCategory(int speed, int speedLimit) {\n        // TODO: Return \"NONE\" if speed <= speedLimit\n        // Return \"WARNING\" if speed <= speedLimit + 10\n        // Return \"FINE\" otherwise\n        return \"\";\n    }\n}\n",
       "solution_code": "public class Solution {\n    public static String getTicketCategory(int speed, int speedLimit) {\n        if (speed <= speedLimit) return \"NONE\";\n        if (speed <= speedLimit + 10) return \"WARNING\";\n        return \"FINE\";\n    }\n}\n",
@@ -124,11 +464,177 @@
         "url": "https://docs.oracle.com/javase/tutorial/java/nutsandbolts/if.html",
         "license": "Oracle Free Use Terms and Conditions (documentation)"
       },
-      "xp_reward": 25
+      "xp_reward": 25,
+      "player_mode": "micro",
+      "sublessons": [
+        {
+          "id": "java-conditionals-01-micro",
+          "title": "Practice Speed Limit Monitor",
+          "description": "",
+          "order": 1,
+          "exercises": [
+            {
+              "id": "java-conditionals-01-teach",
+              "type": "teach",
+              "question": "This step labels a speed over the limit, using speed holding over.",
+              "hints": [
+                "Follow the job, which labels a speed over the limit.",
+                "speed > 55 selects the over branch.",
+                "int speed = 70;"
+              ],
+              "explanation": "This step labels a speed over the limit, using speed holding over.",
+              "xp_reward": 0,
+              "worked_example": "int speed = 70;"
+            },
+            {
+              "id": "java-conditionals-01-mcq",
+              "type": "mcq",
+              "question": "Mark the choice that labels a speed over the limit when the code mentions speed holding over.",
+              "hints": [
+                "Follow the job, which labels a speed over the limit.",
+                "speed > 55 selects the over branch.",
+                "speed > 55 ? \"over\" : \"ok\""
+              ],
+              "explanation": "speed > 55 selects the over branch.",
+              "xp_reward": 10,
+              "options": [
+                "speed == 55;",
+                "return speed;",
+                "speed = 55;",
+                "speed > 55 ? \"over\" : \"ok\""
+              ],
+              "correct_answer": "speed > 55 ? \"over\" : \"ok\""
+            },
+            {
+              "id": "java-conditionals-01-predict",
+              "type": "output_prediction",
+              "question": "After speed holding the code labels a speed the limit, and the correct choice is the printed value.",
+              "hints": [
+                "Follow the job, which Follow the job, which labels a speed the limit.",
+                "speed > 55 selects the over branch.",
+                "over"
+              ],
+              "explanation": "speed > 55 selects the over branch.",
+              "xp_reward": 10,
+              "starter_code": "public class Solution {\n    public static void main(String[] args) {\n        int speed = 70;\n        System.out.println(speed > 55 ? \"over\" : \"ok\");\n    }\n}\n",
+              "options": [
+                "ok",
+                "0",
+                "none",
+                "over"
+              ],
+              "correct_answer": "over"
+            },
+            {
+              "id": "java-conditionals-01-order",
+              "type": "ordering",
+              "question": "The finished line labels a speed over the limit, so place its pieces in order for speed holding over.",
+              "hints": [
+                "Follow the job, which labels a speed over the limit.",
+                "speed > 55 selects the over branch.",
+                "if (left > right) left++;"
+              ],
+              "explanation": "speed > 55 selects the over branch.",
+              "xp_reward": 10,
+              "options": [
+                "if",
+                "(left",
+                ">",
+                "right)",
+                "left++;",
+                "=="
+              ],
+              "correct_answer": [
+                "if",
+                "(left",
+                ">",
+                "right)",
+                "left++;"
+              ]
+            },
+            {
+              "id": "java-conditionals-01-fill",
+              "type": "fill_blank",
+              "question": "Finish the line that labels a speed over the limit by filling the blank for speed holding over.",
+              "hints": [
+                "Follow the job, which labels a speed over the limit.",
+                "speed > 55 selects the over branch.",
+                ">"
+              ],
+              "explanation": "speed > 55 selects the over branch.",
+              "xp_reward": 10,
+              "starter_code": "if (left ___ right) left++;",
+              "options": [
+                "<",
+                "==",
+                "!=",
+                ">"
+              ],
+              "correct_answer": ">"
+            },
+            {
+              "id": "java-conditionals-01-bug",
+              "type": "debugging",
+              "question": "Mark the line that breaks the job, which labels a speed over the limit, for speed holding over.",
+              "hints": [
+                "Follow the job, which labels a speed over the limit.",
+                "The comparison is flipped, so a high speed is labeled ok.",
+                "Line 4"
+              ],
+              "explanation": "The comparison is flipped, so a high speed is labeled ok.",
+              "xp_reward": 10,
+              "starter_code": "public class Solution {\n    public static void main(String[] args) {\n        int speed = 70;\n        System.out.println(speed < 55 ? \"over\" : \"ok\");\n    }\n}\n",
+              "correct_answer": "4"
+            },
+            {
+              "id": "java-conditionals-01-predict-2",
+              "type": "output_prediction",
+              "question": "Follow the second program, which labels a speed over the limit for speed holding over, and choose its output.",
+              "hints": [
+                "Follow the job, which labels a speed over the limit.",
+                "speed > 55 selects the over branch.",
+                "ok"
+              ],
+              "explanation": "speed > 55 selects the over branch.",
+              "xp_reward": 10,
+              "starter_code": "public class Solution {\n    public static void main(String[] args) {\n        int speed = 40;\n        System.out.println(speed > 55 ? \"over\" : \"ok\");\n    }\n}\n",
+              "options": [
+                "none",
+                "over",
+                "ok",
+                "0"
+              ],
+              "correct_answer": "ok"
+            },
+            {
+              "id": "java-conditionals-01-write",
+              "type": "code",
+              "question": "Finish the program that labels a speed the limit by filling the blank for speed holding.",
+              "hints": [
+                "Follow the job, which labels a speed over the limit.",
+                "The printed value is the result after this step labels a speed over the limit.",
+                "String label = speed > 55 ? \"over\" : \"ok\";"
+              ],
+              "explanation": "The printed value is the result after this step labels a speed over the limit.",
+              "xp_reward": 10,
+              "starter_code": "public class Solution {\n    public static void main(String[] args) {\n        int speed = 70;\n        String label = ___;\n        System.out.println(label);\n    }\n}\n",
+              "solution_code": "public class Solution {\n    public static void main(String[] args) {\n        int speed = 70;\n        String label = speed > 55 ? \"over\" : \"ok\";\n        System.out.println(label);\n    }\n}\n",
+              "tests": [
+                {
+                  "name": "java-conditionals-01-prints",
+                  "description": "The printed value is the result after this step labels a speed over the limit.",
+                  "expected_stdout": "over\n",
+                  "required": true
+                }
+              ]
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "java-conditionals-practice-1",
-      "title": "4. Leap Year Checker (Practice)",
+      "title": "Practice Leap Year Checker",
       "description": "Implement isLeapYear(int year): a year is a leap year when it is divisible by 4 but not by 100, unless it is also divisible by 400. The tests require 2000 and 2024 to be leap years and 1900 to be a common year.",
       "order": 9,
       "difficulty": "beginner",
@@ -141,7 +647,7 @@
         "java-variables"
       ],
       "learning_objectives": [
-        "Apply boolean logic to leap year calculations"
+        "This step detects a leap year, using year and 400."
       ],
       "starter_code": "public class Solution {\n    public static boolean isLeapYear(int year) {\n        // TODO: Divisible by 4 AND (not divisible by 100 OR divisible by 400)\n        return false;\n    }\n}\n",
       "solution_code": "public class Solution {\n    public static boolean isLeapYear(int year) {\n        return (year % 4 == 0 && year % 100 != 0) || (year % 400 == 0);\n    }\n}\n",
@@ -162,12 +668,182 @@
         "url": "https://docs.oracle.com/javase/tutorial/java/nutsandbolts/if.html",
         "license": "Oracle Free Use Terms and Conditions (documentation)"
       },
-      "xp_reward": 15
+      "xp_reward": 15,
+      "player_mode": "micro",
+      "sublessons": [
+        {
+          "id": "java-conditionals-practice-1-micro",
+          "title": "Practice Leap Year Checker",
+          "description": "",
+          "order": 1,
+          "exercises": [
+            {
+              "id": "java-conditionals-practice-1-teach",
+              "type": "teach",
+              "question": "This step detects a leap year, using year and 400.",
+              "hints": [
+                "Follow the job, which detects a leap year.",
+                "A leap year is divisible by 4, with the century exception.",
+                "int year = 2024;"
+              ],
+              "explanation": "This step detects a leap year, using year and 400.",
+              "xp_reward": 0,
+              "worked_example": "int year = 2024;"
+            },
+            {
+              "id": "java-conditionals-practice-1-mcq",
+              "type": "mcq",
+              "question": "Mark the choice that detects a leap year when the code mentions year and 400.",
+              "hints": [
+                "Follow the job, which detects a leap year.",
+                "A leap year is divisible by 4, with the century exception.",
+                "year % 4 == 0"
+              ],
+              "explanation": "A leap year is divisible by 4, with the century exception.",
+              "xp_reward": 10,
+              "options": [
+                "year == 2024;",
+                "return year;",
+                "year = 4;",
+                "year % 4 == 0"
+              ],
+              "correct_answer": "year % 4 == 0"
+            },
+            {
+              "id": "java-conditionals-practice-1-predict",
+              "type": "output_prediction",
+              "question": "After year and 400, the code detects a leap year, and the correct choice is the printed value.",
+              "hints": [
+                "Follow the job, which detects a leap year.",
+                "A leap year is divisible by 4, with the century exception.",
+                "true"
+              ],
+              "explanation": "A leap year is divisible by 4, with the century exception.",
+              "xp_reward": 10,
+              "starter_code": "public class Solution {\n    public static void main(String[] args) {\n        int year = 2024;\n        boolean leap = (year % 4 == 0 && year % 100 != 0) || year % 400 == 0;\n        System.out.println(leap);\n    }\n}\n",
+              "options": [
+                "none",
+                "false",
+                "0",
+                "true"
+              ],
+              "correct_answer": "true"
+            },
+            {
+              "id": "java-conditionals-practice-1-order",
+              "type": "ordering",
+              "question": "The finished line detects a leap year, so place its pieces in order for year and 400.",
+              "hints": [
+                "Follow the job, which detects a leap year.",
+                "A leap year is divisible by 4, with the century exception.",
+                "if (left % 4 == 0) left++;"
+              ],
+              "explanation": "A leap year is divisible by 4, with the century exception.",
+              "xp_reward": 10,
+              "options": [
+                "if",
+                "(left",
+                "%",
+                "4",
+                "==",
+                "0)",
+                "left++;",
+                "!="
+              ],
+              "correct_answer": [
+                "if",
+                "(left",
+                "%",
+                "4",
+                "==",
+                "0)",
+                "left++;"
+              ]
+            },
+            {
+              "id": "java-conditionals-practice-1-fill",
+              "type": "fill_blank",
+              "question": "Finish the line that detects a leap year by filling the blank for year and 400.",
+              "hints": [
+                "Follow the job, which detects a leap year.",
+                "A leap year is divisible by 4, with the century exception.",
+                "%"
+              ],
+              "explanation": "A leap year is divisible by 4, with the century exception.",
+              "xp_reward": 10,
+              "starter_code": "int year = 2024; if (year ___ 4 == 0) year++;",
+              "options": [
+                "+",
+                "-",
+                "*",
+                "%"
+              ],
+              "correct_answer": "%"
+            },
+            {
+              "id": "java-conditionals-practice-1-bug",
+              "type": "debugging",
+              "question": "Mark the line that breaks the job, which detects a leap year, for year and.",
+              "hints": [
+                "Follow the job, which detects a leap year.",
+                "The test checks evenness, not the leap-year rule.",
+                "Line 4"
+              ],
+              "explanation": "The test checks evenness, not the leap-year rule.",
+              "xp_reward": 10,
+              "starter_code": "public class Solution {\n    public static void main(String[] args) {\n        int year = 2024;\n        System.out.println(year % 2 == 0);\n    }\n}\n",
+              "correct_answer": "4"
+            },
+            {
+              "id": "java-conditionals-practice-1-predict-2",
+              "type": "output_prediction",
+              "question": "Follow the second program, which detects a leap year for year and 400, and choose its output.",
+              "hints": [
+                "Follow the job, which detects a leap year.",
+                "A leap year is divisible by 4, with the century exception.",
+                "false"
+              ],
+              "explanation": "A leap year is divisible by 4, with the century exception.",
+              "xp_reward": 10,
+              "starter_code": "public class Solution {\n    public static void main(String[] args) {\n        int year = 2023;\n        boolean leap = (year % 4 == 0 && year % 100 != 0) || year % 400 == 0;\n        System.out.println(leap);\n    }\n}\n",
+              "options": [
+                "true",
+                "none",
+                "false",
+                "0"
+              ],
+              "correct_answer": "false"
+            },
+            {
+              "id": "java-conditionals-practice-1-write",
+              "type": "code",
+              "question": "Finish the program that detects a leap year by filling the blank for year and 400.",
+              "hints": [
+                "Follow the job, which detects a leap year.",
+                "The printed value is the result after this step detects a leap year.",
+                "boolean label = (year % 4 == 0 && year % 100 != 0) || year % 400 == 0;"
+              ],
+              "explanation": "The printed value is the result after this step detects a leap year.",
+              "xp_reward": 10,
+              "starter_code": "public class Solution {\n    public static void main(String[] args) {\n        int year = 2024;\n        boolean label = ___;\n        System.out.println(label);\n    }\n}\n",
+              "solution_code": "public class Solution {\n    public static void main(String[] args) {\n        int year = 2024;\n        boolean label = (year % 4 == 0 && year % 100 != 0) || year % 400 == 0;\n        System.out.println(label);\n    }\n}\n",
+              "tests": [
+                {
+                  "name": "java-conditionals-practice-1-prints",
+                  "description": "The printed value is the result after this step detects a leap year.",
+                  "expected_stdout": "true\n",
+                  "required": true
+                }
+              ]
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "java-conditionals-checkpoint",
-      "title": "5. Unit 2 Checkpoint: Conditionals Mastery",
-      "description": "Finish `Solution.maxOfThree` so it returns the largest of `a`, `b`, and `c`. The test checks that `Solution.maxOfThree(3, 9, 5)` equals `9`.",
+      "title": "Practice Unit 2 Checkpoint Conditionals Mastery",
+      "description": "Finish Solution.maxOfThree so it returns the largest of a, b, and c. The test checks that Solution.maxOfThree(3, 9, 5) equals 9.",
       "order": 10,
       "difficulty": "beginner",
       "duration_minutes": 10,
@@ -179,7 +855,7 @@
         "java-variables"
       ],
       "learning_objectives": [
-        "Return the largest of three ints from maxOfThree"
+        "This step accepts either match with or, using gate and 1."
       ],
       "starter_code": "public class Solution {\n    public static int maxOfThree(int a, int b, int c) {\n        // TODO: Return highest of a, b, and c\n        return 0;\n    }\n}\n",
       "solution_code": "public class Solution {\n    public static int maxOfThree(int a, int b, int c) {\n        return Math.max(a, Math.max(b, c));\n    }\n}\n",
@@ -200,7 +876,181 @@
         "url": "https://docs.oracle.com/javase/tutorial/java/nutsandbolts/if.html",
         "license": "Oracle Free Use Terms and Conditions (documentation)"
       },
-      "xp_reward": 40
+      "xp_reward": 40,
+      "player_mode": "micro",
+      "sublessons": [
+        {
+          "id": "java-conditionals-checkpoint-micro",
+          "title": "Practice Unit 2 Checkpoint Conditionals Mastery",
+          "description": "",
+          "order": 1,
+          "exercises": [
+            {
+              "id": "java-conditionals-checkpoint-teach",
+              "type": "teach",
+              "question": "This step accepts either match with or, using gate and 1.",
+              "hints": [
+                "Follow the job, which accepts either match with or.",
+                "|| keeps the row when either comparison matches.",
+                "gate == 0 || gate == 1"
+              ],
+              "explanation": "This step accepts either match with or, using gate and 1.",
+              "xp_reward": 0,
+              "worked_example": "gate == 0 || gate == 1"
+            },
+            {
+              "id": "java-conditionals-checkpoint-mcq",
+              "type": "mcq",
+              "question": "Select the line that accepts either match with or, the one that belongs with gate and 1.",
+              "hints": [
+                "Follow the job, which accepts either match with or.",
+                "|| keeps the row when either comparison matches.",
+                "gate == 0 || gate == 1"
+              ],
+              "explanation": "|| keeps the row when either comparison matches.",
+              "xp_reward": 10,
+              "options": [
+                "return gate;",
+                "gate == 0 || gate == 1",
+                "gate = 1;",
+                "gate == gate;"
+              ],
+              "correct_answer": "gate == 0 || gate == 1"
+            },
+            {
+              "id": "java-conditionals-checkpoint-predict",
+              "type": "output_prediction",
+              "question": "Follow the code that accepts either match with or for gate and 1, then choose the displayed value.",
+              "hints": [
+                "Follow the job, which accepts either match with or.",
+                "|| keeps the row when either comparison matches.",
+                "true"
+              ],
+              "explanation": "|| keeps the row when either comparison matches.",
+              "xp_reward": 10,
+              "starter_code": "public class Solution {\n    public static void main(String[] args) {\n        int gate = 1;\n        System.out.println(gate == 0 || gate == 1);\n    }\n}\n",
+              "options": [
+                "false",
+                "true",
+                "none",
+                "0"
+              ],
+              "correct_answer": "true"
+            },
+            {
+              "id": "java-conditionals-checkpoint-order",
+              "type": "ordering",
+              "question": "Order the pieces so the line accepts either match with or for gate and 1.",
+              "hints": [
+                "Follow the job, which accepts either match with or.",
+                "|| keeps the row when either comparison matches.",
+                "if (left < 0 || right > 0) left++;"
+              ],
+              "explanation": "|| keeps the row when either comparison matches.",
+              "xp_reward": 10,
+              "options": [
+                "if",
+                "(left",
+                "<",
+                "0",
+                "||",
+                "right",
+                ">",
+                "0)",
+                "left++;",
+                "=="
+              ],
+              "correct_answer": [
+                "if",
+                "(left",
+                "<",
+                "0",
+                "||",
+                "right",
+                ">",
+                "0)",
+                "left++;"
+              ]
+            },
+            {
+              "id": "java-conditionals-checkpoint-fill",
+              "type": "fill_blank",
+              "question": "Supply the missing piece so the line accepts either match with or for gate and 1.",
+              "hints": [
+                "Follow the job, which accepts either match with or.",
+                "|| keeps the row when either comparison matches.",
+                "||"
+              ],
+              "explanation": "|| keeps the row when either comparison matches.",
+              "xp_reward": 10,
+              "starter_code": "if (left < 0 ___ right > 0) left++;",
+              "options": [
+                "&&",
+                "||",
+                "==",
+                "!="
+              ],
+              "correct_answer": "||"
+            },
+            {
+              "id": "java-conditionals-checkpoint-bug",
+              "type": "debugging",
+              "question": "The wrong line is the one that misses the job, which accepts either match with or, for gate and 1.",
+              "hints": [
+                "Follow the job, which accepts either match with or.",
+                "And can never be true when the two comparisons disagree.",
+                "Line 4"
+              ],
+              "explanation": "And can never be true when the two comparisons disagree.",
+              "xp_reward": 10,
+              "starter_code": "public class Solution {\n    public static void main(String[] args) {\n        int gate = 1;\n        System.out.println(gate == 0 && gate == 1);\n    }\n}\n",
+              "correct_answer": "4"
+            },
+            {
+              "id": "java-conditionals-checkpoint-predict-2",
+              "type": "output_prediction",
+              "question": "A new input still has code that accepts either match with or for gate and 1, and the correct choice is what it prints.",
+              "hints": [
+                "Follow the job, which accepts either match with or.",
+                "|| keeps the row when either comparison matches.",
+                "false"
+              ],
+              "explanation": "|| keeps the row when either comparison matches.",
+              "xp_reward": 10,
+              "starter_code": "public class Solution {\n    public static void main(String[] args) {\n        int gate = 2;\n        System.out.println(gate == 0 || gate == 1);\n    }\n}\n",
+              "options": [
+                "true",
+                "none",
+                "0",
+                "false"
+              ],
+              "correct_answer": "false"
+            },
+            {
+              "id": "java-conditionals-checkpoint-write",
+              "type": "code",
+              "question": "The blank is the missing piece of the program that accepts either match with or for gate and 1.",
+              "hints": [
+                "Follow the job, which accepts either match with or.",
+                "The printed value is the result after this step accepts either match with or.",
+                "boolean label = gate == 0 || gate == 1;"
+              ],
+              "explanation": "The printed value is the result after this step accepts either match with or.",
+              "xp_reward": 10,
+              "starter_code": "public class Solution {\n    public static void main(String[] args) {\n        int gate = 1;\n        boolean label = ___;\n        System.out.println(label);\n    }\n}\n",
+              "solution_code": "public class Solution {\n    public static void main(String[] args) {\n        int gate = 1;\n        boolean label = gate == 0 || gate == 1;\n        System.out.println(label);\n    }\n}\n",
+              "tests": [
+                {
+                  "name": "java-conditionals-checkpoint-prints",
+                  "description": "The printed value is the result after this step accepts either match with or.",
+                  "expected_stdout": "true\n",
+                  "required": true
+                }
+              ]
+            }
+          ]
+        }
+      ]
     }
   ]
 }

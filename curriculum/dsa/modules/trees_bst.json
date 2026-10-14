@@ -15,8 +15,8 @@
   "lessons": [
     {
       "id": "trees-bst-step-1",
-      "title": "1. Binary Tree Node & Traversal",
-      "description": "Implement inorder traversal returning a list of values. The test checks that `inorder(root)` equals `[1, 2, 3]`.",
+      "title": "Practice Binary Tree Node Traversal",
+      "description": "Implement inorder traversal returning a list of values. The test checks that inorder(root) equals [1, 2, 3].",
       "order": 26,
       "difficulty": "intermediate",
       "duration_minutes": 5,
@@ -30,7 +30,7 @@
         "recursion-binary-search"
       ],
       "learning_objectives": [
-        "Recursively traverse left-root-right"
+        "This step joins the preorder visit, using Node holding a."
       ],
       "starter_code": "class TreeNode:\n    def __init__(self, value, left=None, right=None):\n        self.value = value\n        self.left = left\n        self.right = right\n\ndef inorder(root):\n    # TODO\n    pass\n",
       "solution_code": "class TreeNode:\n    def __init__(self, value, left=None, right=None):\n        self.value = value\n        self.left = left\n        self.right = right\n\ndef inorder(root):\n    if root is None:\n        return []\n    return inorder(root.left) + [root.value] + inorder(root.right)\n",
@@ -51,12 +51,170 @@
         "url": "https://docs.python.org/3/tutorial/controlflow.html#defining-functions",
         "license": "Python documentation license (PSF)"
       },
-      "xp_reward": 10
+      "xp_reward": 10,
+      "player_mode": "micro",
+      "sublessons": [
+        {
+          "id": "trees-bst-step-1-micro",
+          "title": "Practice Binary Tree Node Traversal",
+          "description": "",
+          "order": 1,
+          "exercises": [
+            {
+              "id": "trees-bst-step-1-teach",
+              "type": "teach",
+              "question": "This step joins the preorder visit, using Node holding a.",
+              "hints": [
+                "Follow the job, which joins the preorder visit.",
+                "append records the node before its children.",
+                "order.append(node.value)"
+              ],
+              "explanation": "This step joins the preorder visit, using Node holding a.",
+              "xp_reward": 0,
+              "worked_example": "order.append(node.value)"
+            },
+            {
+              "id": "trees-bst-step-1-mcq",
+              "type": "mcq",
+              "question": "Choose the line that joins the preorder visit, which is the line that fits Node holding a.",
+              "hints": [
+                "Follow the job, which joins the preorder visit.",
+                "append records the node before its children.",
+                "order.append(node.value)"
+              ],
+              "explanation": "append records the node before its children.",
+              "xp_reward": 10,
+              "options": [
+                "node == node",
+                "return node",
+                "order.append(node.value)",
+                "pass"
+              ],
+              "correct_answer": "order.append(node.value)"
+            },
+            {
+              "id": "trees-bst-step-1-predict",
+              "type": "output_prediction",
+              "question": "Read the code that joins the preorder visit for Node holding a, and choose the value it prints.",
+              "hints": [
+                "Follow the job, which joins the preorder visit.",
+                "append records the node before its children.",
+                "abc"
+              ],
+              "explanation": "append records the node before its children.",
+              "xp_reward": 10,
+              "starter_code": "class Node:\n    def __init__(self, value, left=None, right=None):\n        self.value = value\n        self.left = left\n        self.right = right\nroot = Node('a', Node('b'), Node('c'))\norder = []\ndef walk(node):\n    if not node:\n        return\n    order.append(node.value)\n    walk(node.left)\n    walk(node.right)\nwalk(root)\nprint(''.join(order))\n",
+              "options": [
+                "ab",
+                "none",
+                "abc",
+                "0"
+              ],
+              "correct_answer": "abc"
+            },
+            {
+              "id": "trees-bst-step-1-order",
+              "type": "ordering",
+              "question": "Arrange the pieces of the line that joins the preorder visit, left to right, for Node holding a.",
+              "hints": [
+                "Follow the job, which joins the preorder visit.",
+                "append records the node before its children.",
+                "order.append(node.value)"
+              ],
+              "explanation": "append records the node before its children.",
+              "xp_reward": 10,
+              "options": [
+                "order.append(node.value)",
+                "pop"
+              ],
+              "correct_answer": [
+                "order.append(node.value)"
+              ]
+            },
+            {
+              "id": "trees-bst-step-1-fill",
+              "type": "fill_blank",
+              "question": "Fill the blank so the line joins the preorder visit for Node holding a.",
+              "hints": [
+                "Follow the job, which joins the preorder visit.",
+                "append records the node before its children.",
+                "append"
+              ],
+              "explanation": "append records the node before its children.",
+              "xp_reward": 10,
+              "starter_code": "order.___(node.value)\n",
+              "options": [
+                "sort",
+                "clear",
+                "append",
+                "pop"
+              ],
+              "correct_answer": "append"
+            },
+            {
+              "id": "trees-bst-step-1-bug",
+              "type": "debugging",
+              "question": "Find the line that misses the job, which joins the preorder visit, for Node holding a.",
+              "hints": [
+                "Follow the job, which joins the preorder visit.",
+                "The print shows the root and never visits the children.",
+                "Line 5"
+              ],
+              "explanation": "The print shows the root and never visits the children.",
+              "xp_reward": 10,
+              "starter_code": "class Node:\n    def __init__(self, value, left=None, right=None):\n        self.value = value\nroot = Node('a', Node('b'), Node('c'))\nprint(root.value)\n",
+              "correct_answer": "5"
+            },
+            {
+              "id": "trees-bst-step-1-predict-2",
+              "type": "output_prediction",
+              "question": "On the new input, the code still joins the preorder visit for Node holding a, so choose what it prints.",
+              "hints": [
+                "Follow the job, which joins the preorder visit.",
+                "append records the node before its children.",
+                "ab"
+              ],
+              "explanation": "append records the node before its children.",
+              "xp_reward": 10,
+              "starter_code": "class Node:\n    def __init__(self, value, left=None, right=None):\n        self.value = value\n        self.left = left\n        self.right = right\nroot = Node('a', Node('b'))\norder = []\ndef walk(node):\n    if not node:\n        return\n    order.append(node.value)\n    walk(node.left)\n    walk(node.right)\nwalk(root)\nprint(''.join(order))\n",
+              "options": [
+                "abc",
+                "ab",
+                "none",
+                "0"
+              ],
+              "correct_answer": "ab"
+            },
+            {
+              "id": "trees-bst-step-1-write",
+              "type": "code",
+              "question": "Fill the blank so the program joins the preorder visit, and the print shows that result for Node holding a.",
+              "hints": [
+                "Follow the job, which joins the preorder visit.",
+                "The printed value is the result after this step joins the preorder visit.",
+                "label = ''.join(order)"
+              ],
+              "explanation": "The printed value is the result after this step joins the preorder visit.",
+              "xp_reward": 10,
+              "starter_code": "class Node:\n    def __init__(self, value, left=None, right=None):\n        self.value = value\n        self.left = left\n        self.right = right\nroot = Node('a', Node('b'), Node('c'))\norder = []\ndef walk(node):\n    if not node:\n        return\n    order.append(node.value)\n    walk(node.left)\n    walk(node.right)\nwalk(root)\nlabel = ___\nprint(label)\n",
+              "solution_code": "class Node:\n    def __init__(self, value, left=None, right=None):\n        self.value = value\n        self.left = left\n        self.right = right\nroot = Node('a', Node('b'), Node('c'))\norder = []\ndef walk(node):\n    if not node:\n        return\n    order.append(node.value)\n    walk(node.left)\n    walk(node.right)\nwalk(root)\nlabel = ''.join(order)\nprint(label)\n",
+              "tests": [
+                {
+                  "name": "trees-bst-step-1-prints",
+                  "description": "The printed value is the result after this step joins the preorder visit.",
+                  "expected_stdout": "abc\n",
+                  "required": true
+                }
+              ]
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "trees-bst-step-2",
-      "title": "2. BST Insert",
-      "description": "Finish `bst_insert`. Insert values into a binary search tree. The test checks that `bst_insert(root, v).value` equals `5`; `bst_insert(root, v).left.value` equals `3`; `bst_insert(root, v).right.value` equals `7`.",
+      "title": "Practice BST Insert",
+      "description": "Finish bst_insert. Insert values into a binary search tree. The test checks that bst_insert(root, v).value equals 5; bst_insert(root, v).left.value equals 3; bst_insert(root, v).right.value equals 7.",
       "order": 27,
       "difficulty": "intermediate",
       "duration_minutes": 5,
@@ -70,7 +228,7 @@
         "recursion-binary-search"
       ],
       "learning_objectives": [
-        "Maintain BST ordering on insert"
+        "This step reads the left child after inserting, using Node and 7."
       ],
       "starter_code": "class TreeNode:\n    def __init__(self, value, left=None, right=None):\n        self.value = value\n        self.left = left\n        self.right = right\n\ndef bst_insert(root, value):\n    # TODO: insert and return root\n    pass\n",
       "solution_code": "class TreeNode:\n    def __init__(self, value, left=None, right=None):\n        self.value = value\n        self.left = left\n        self.right = right\n\ndef bst_insert(root, value):\n    if root is None:\n        return TreeNode(value)\n    if value < root.value:\n        root.left = bst_insert(root.left, value)\n    else:\n        root.right = bst_insert(root.right, value)\n    return root\n",
@@ -91,12 +249,178 @@
         "url": "https://docs.python.org/3/tutorial/classes.html",
         "license": "Python documentation license (PSF)"
       },
-      "xp_reward": 10
+      "xp_reward": 10,
+      "player_mode": "micro",
+      "sublessons": [
+        {
+          "id": "trees-bst-step-2-micro",
+          "title": "Practice BST Insert",
+          "description": "",
+          "order": 1,
+          "exercises": [
+            {
+              "id": "trees-bst-step-2-teach",
+              "type": "teach",
+              "question": "This step reads the left child after inserting, using Node and 7.",
+              "hints": [
+                "Follow the job, which reads the left child after inserting.",
+                "A smaller value goes to the left child.",
+                "value < node.value"
+              ],
+              "explanation": "This step reads the left child after inserting, using Node and 7.",
+              "xp_reward": 0,
+              "worked_example": "value < node.value"
+            },
+            {
+              "id": "trees-bst-step-2-mcq",
+              "type": "mcq",
+              "question": "The correct line reads the left child after inserting, and it is the line tied to Node and 7.",
+              "hints": [
+                "Follow the job, which reads the left child after inserting.",
+                "A smaller value goes to the left child.",
+                "if value < node.value: pass"
+              ],
+              "explanation": "A smaller value goes to the left child.",
+              "xp_reward": 10,
+              "options": [
+                "value == value",
+                "return node",
+                "pass",
+                "if value < node.value: pass"
+              ],
+              "correct_answer": "if value < node.value: pass"
+            },
+            {
+              "id": "trees-bst-step-2-predict",
+              "type": "output_prediction",
+              "question": "The program reads the left child after inserting with Node and 7, so choose the printed value.",
+              "hints": [
+                "Follow the job, which reads the left child after inserting.",
+                "A smaller value goes to the left child.",
+                "3"
+              ],
+              "explanation": "A smaller value goes to the left child.",
+              "xp_reward": 10,
+              "starter_code": "class Node:\n    def __init__(self, value):\n        self.value = value\n        self.left = None\n        self.right = None\ndef insert(node, value):\n    if node is None:\n        return Node(value)\n    if value < node.value:\n        node.left = insert(node.left, value)\n    else:\n        node.right = insert(node.right, value)\n    return node\nroot = insert(None, 5)\nroot = insert(root, 3)\nroot = insert(root, 7)\nprint(root.left.value)\n",
+              "options": [
+                "0",
+                "3",
+                "1",
+                "none"
+              ],
+              "correct_answer": "3"
+            },
+            {
+              "id": "trees-bst-step-2-order",
+              "type": "ordering",
+              "question": "Build the line that reads the left child after inserting for Node and 7, from the first piece to the last.",
+              "hints": [
+                "Follow the job, which reads the left child after inserting.",
+                "A smaller value goes to the left child.",
+                "if value < node.value: pass"
+              ],
+              "explanation": "A smaller value goes to the left child.",
+              "xp_reward": 10,
+              "options": [
+                "if",
+                "value",
+                "<",
+                "node.value:",
+                "pass",
+                ">"
+              ],
+              "correct_answer": [
+                "if",
+                "value",
+                "<",
+                "node.value:",
+                "pass"
+              ]
+            },
+            {
+              "id": "trees-bst-step-2-fill",
+              "type": "fill_blank",
+              "question": "Replace the blank with the piece that makes the line reads the left child after inserting for Node and 7.",
+              "hints": [
+                "Follow the job, which reads the left child after inserting.",
+                "A smaller value goes to the left child.",
+                "<"
+              ],
+              "explanation": "A smaller value goes to the left child.",
+              "xp_reward": 10,
+              "starter_code": "if value ___ node.value:\n    node.left = node.left\n",
+              "options": [
+                ">",
+                "==",
+                "!=",
+                "<"
+              ],
+              "correct_answer": "<"
+            },
+            {
+              "id": "trees-bst-step-2-bug",
+              "type": "debugging",
+              "question": "Spot the line that fails the job, which reads the left child after inserting, around Node and 7.",
+              "hints": [
+                "Follow the job, which reads the left child after inserting.",
+                "The print shows the root and never inserts a child.",
+                "Line 5"
+              ],
+              "explanation": "The print shows the root and never inserts a child.",
+              "xp_reward": 10,
+              "starter_code": "class Node:\n    def __init__(self, value):\n        self.value = value\nroot = Node(5)\nprint(root.value)\n",
+              "correct_answer": "5"
+            },
+            {
+              "id": "trees-bst-step-2-predict-2",
+              "type": "output_prediction",
+              "question": "The second program reads the left child after inserting for Node and 7, so choose the new printed value.",
+              "hints": [
+                "Follow the job, which reads the left child after inserting.",
+                "A smaller value goes to the left child.",
+                "1"
+              ],
+              "explanation": "A smaller value goes to the left child.",
+              "xp_reward": 10,
+              "starter_code": "class Node:\n    def __init__(self, value):\n        self.value = value\n        self.left = None\n        self.right = None\ndef insert(node, value):\n    if node is None:\n        return Node(value)\n    if value < node.value:\n        node.left = insert(node.left, value)\n    else:\n        node.right = insert(node.right, value)\n    return node\nroot = insert(None, 5)\nroot = insert(root, 1)\nroot = insert(root, 9)\nprint(root.left.value)\n",
+              "options": [
+                "3",
+                "none",
+                "1",
+                "0"
+              ],
+              "correct_answer": "1"
+            },
+            {
+              "id": "trees-bst-step-2-write",
+              "type": "code",
+              "question": "Complete the blank so this program reads the left child after inserting and prints the result for Node and 7.",
+              "hints": [
+                "Follow the job, which reads the left child after inserting.",
+                "The printed value is the result after this step reads the left child after inserting.",
+                "label = root.left.value"
+              ],
+              "explanation": "The printed value is the result after this step reads the left child after inserting.",
+              "xp_reward": 10,
+              "starter_code": "class Node:\n    def __init__(self, value):\n        self.value = value\n        self.left = None\n        self.right = None\ndef insert(node, value):\n    if node is None:\n        return Node(value)\n    if value < node.value:\n        node.left = insert(node.left, value)\n    else:\n        node.right = insert(node.right, value)\n    return node\nroot = insert(None, 5)\nroot = insert(root, 3)\nroot = insert(root, 7)\nlabel = ___\nprint(label)\n",
+              "solution_code": "class Node:\n    def __init__(self, value):\n        self.value = value\n        self.left = None\n        self.right = None\ndef insert(node, value):\n    if node is None:\n        return Node(value)\n    if value < node.value:\n        node.left = insert(node.left, value)\n    else:\n        node.right = insert(node.right, value)\n    return node\nroot = insert(None, 5)\nroot = insert(root, 3)\nroot = insert(root, 7)\nlabel = root.left.value\nprint(label)\n",
+              "tests": [
+                {
+                  "name": "trees-bst-step-2-prints",
+                  "description": "The printed value is the result after this step reads the left child after inser",
+                  "expected_stdout": "3\n",
+                  "required": true
+                }
+              ]
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "trees-bst-01",
-      "title": "3. BST Contains (Concept Challenge)",
-      "description": "BST search challenge: implement bst_contains(root, value). Start at the root; while the current node exists, compare value with cur.value — go right when value is larger, left when smaller, and return True on an exact match. Reaching a None child means the value is not in the tree. Tests: the tree 5(3, 7) contains 7 (True) but not 4 (False). The test checks that `bst_contains(root, 7)` is true; `bst_contains(root, 4)` is false.",
+      "title": "Practice BST Contains",
+      "description": "BST search challenge: implement bst_contains(root, value). Start at the root; while the current node exists, compare value with cur.value — go right when value is larger, left when smaller, and return True on an exact match. Reaching a None child means the value is not in the tree. Tests: the tree 5(3, 7) contains 7 (True) but not 4 (False). The test checks that bst_contains(root, 7) is true; bst_contains(root, 4) is false.",
       "order": 28,
       "difficulty": "intermediate",
       "duration_minutes": 8,
@@ -110,7 +434,7 @@
         "recursion-binary-search"
       ],
       "learning_objectives": [
-        "Search left/right based on comparison"
+        "This step reports whether the tree contains the value, using Node and 7."
       ],
       "starter_code": "class TreeNode:\n    def __init__(self, value, left=None, right=None):\n        self.value = value\n        self.left = left\n        self.right = right\n\ndef bst_contains(root, value):\n    # TODO\n    pass\n",
       "solution_code": "class TreeNode:\n    def __init__(self, value, left=None, right=None):\n        self.value = value\n        self.left = left\n        self.right = right\n\ndef bst_contains(root, value):\n    cur = root\n    while cur:\n        if value == cur.value:\n            return True\n        cur = cur.left if value < cur.value else cur.right\n    return False\n",
@@ -131,12 +455,178 @@
         "url": "https://docs.python.org/3/reference/compound_stmts.html#while",
         "license": "Python documentation license (PSF)"
       },
-      "xp_reward": 25
+      "xp_reward": 25,
+      "player_mode": "micro",
+      "sublessons": [
+        {
+          "id": "trees-bst-01-micro",
+          "title": "Practice BST Contains",
+          "description": "",
+          "order": 1,
+          "exercises": [
+            {
+              "id": "trees-bst-01-teach",
+              "type": "teach",
+              "question": "This step reports whether the tree contains the value, using Node and 7.",
+              "hints": [
+                "Follow the job, which reports whether the tree contains the value.",
+                "Equal values mean the tree contains the target.",
+                "node.value == value"
+              ],
+              "explanation": "This step reports whether the tree contains the value, using Node and 7.",
+              "xp_reward": 0,
+              "worked_example": "node.value == value"
+            },
+            {
+              "id": "trees-bst-01-mcq",
+              "type": "mcq",
+              "question": "A correct choice reports whether the tree contains the value and goes with Node and 7.",
+              "hints": [
+                "Follow the job, which reports whether the tree contains the value.",
+                "Equal values mean the tree contains the target.",
+                "if node.value == value: return 1"
+              ],
+              "explanation": "Equal values mean the tree contains the target.",
+              "xp_reward": 10,
+              "options": [
+                "node == node",
+                "pass",
+                "if node.value == value: return 1",
+                "return node"
+              ],
+              "correct_answer": "if node.value == value: return 1"
+            },
+            {
+              "id": "trees-bst-01-predict",
+              "type": "output_prediction",
+              "question": "Select the output after the code reports whether the tree contains the value, using Node and 7.",
+              "hints": [
+                "Follow the job, which reports whether the tree contains the value.",
+                "Equal values mean the tree contains the target.",
+                "1"
+              ],
+              "explanation": "Equal values mean the tree contains the target.",
+              "xp_reward": 10,
+              "starter_code": "class Node:\n    def __init__(self, value, left=None, right=None):\n        self.value = value\n        self.left = left\n        self.right = right\ndef contains(node, value):\n    if node is None:\n        return 0\n    if node.value == value:\n        return 1\n    if value < node.value:\n        return contains(node.left, value)\n    return contains(node.right, value)\nroot = Node(5, Node(3), Node(7))\nprint(contains(root, 7))\n",
+              "options": [
+                "0",
+                "none",
+                "1",
+                "blank"
+              ],
+              "correct_answer": "1"
+            },
+            {
+              "id": "trees-bst-01-order",
+              "type": "ordering",
+              "question": "Make the line that reports whether the tree contains the value by ordering the pieces for Node and 7.",
+              "hints": [
+                "Follow the job, which reports whether the tree contains the value.",
+                "Equal values mean the tree contains the target.",
+                "def f(): return contains(node.right, value)"
+              ],
+              "explanation": "Equal values mean the tree contains the target.",
+              "xp_reward": 10,
+              "options": [
+                "def",
+                "f():",
+                "return",
+                "contains(node.right,",
+                "value)",
+                "=="
+              ],
+              "correct_answer": [
+                "def",
+                "f():",
+                "return",
+                "contains(node.right,",
+                "value)"
+              ]
+            },
+            {
+              "id": "trees-bst-01-fill",
+              "type": "fill_blank",
+              "question": "Complete the line for Node and 7 so that it reports whether the tree contains the value.",
+              "hints": [
+                "Follow the job, which reports whether the tree contains the value.",
+                "Equal values mean the tree contains the target.",
+                "=="
+              ],
+              "explanation": "Equal values mean the tree contains the target.",
+              "xp_reward": 10,
+              "starter_code": "if node.value ___ value:\n    return 1\n",
+              "options": [
+                "!=",
+                "<",
+                "==",
+                ">"
+              ],
+              "correct_answer": "=="
+            },
+            {
+              "id": "trees-bst-01-bug",
+              "type": "debugging",
+              "question": "Select the line that gets in the way of the job, which reports whether the tree contains the value, for Node and 7.",
+              "hints": [
+                "Follow the job, which reports whether the tree contains the value.",
+                "The print is zero and never looks at the tree.",
+                "Line 5"
+              ],
+              "explanation": "The print is zero and never looks at the tree.",
+              "xp_reward": 10,
+              "starter_code": "class Node:\n    def __init__(self, value):\n        self.value = value\nroot = Node(5)\nprint(0)\n",
+              "correct_answer": "5"
+            },
+            {
+              "id": "trees-bst-01-predict-2",
+              "type": "output_prediction",
+              "question": "With the new data around Node and 7, the code reports whether the tree contains the value, so select the new output.",
+              "hints": [
+                "Follow the job, which reports whether the tree contains the value.",
+                "Equal values mean the tree contains the target.",
+                "0"
+              ],
+              "explanation": "Equal values mean the tree contains the target.",
+              "xp_reward": 10,
+              "starter_code": "class Node:\n    def __init__(self, value, left=None, right=None):\n        self.value = value\n        self.left = left\n        self.right = right\ndef contains(node, value):\n    if node is None:\n        return 0\n    if node.value == value:\n        return 1\n    if value < node.value:\n        return contains(node.left, value)\n    return contains(node.right, value)\nroot = Node(5, Node(3), Node(7))\nprint(contains(root, 4))\n",
+              "options": [
+                "none",
+                "blank",
+                "0",
+                "1"
+              ],
+              "correct_answer": "0"
+            },
+            {
+              "id": "trees-bst-01-write",
+              "type": "code",
+              "question": "The printed result shows up after you fill the blank so the code reports whether the tree contains the value for Node and 7.",
+              "hints": [
+                "Follow the job, which reports whether the tree contains the value.",
+                "The printed value is the result after this step reports whether the tree contains the value.",
+                "label = contains(root, 7)"
+              ],
+              "explanation": "The printed value is the result after this step reports whether the tree contains the value.",
+              "xp_reward": 10,
+              "starter_code": "class Node:\n    def __init__(self, value, left=None, right=None):\n        self.value = value\n        self.left = left\n        self.right = right\ndef contains(node, value):\n    if node is None:\n        return 0\n    if node.value == value:\n        return 1\n    if value < node.value:\n        return contains(node.left, value)\n    return contains(node.right, value)\nroot = Node(5, Node(3), Node(7))\nlabel = ___\nprint(label)\n",
+              "solution_code": "class Node:\n    def __init__(self, value, left=None, right=None):\n        self.value = value\n        self.left = left\n        self.right = right\ndef contains(node, value):\n    if node is None:\n        return 0\n    if node.value == value:\n        return 1\n    if value < node.value:\n        return contains(node.left, value)\n    return contains(node.right, value)\nroot = Node(5, Node(3), Node(7))\nlabel = contains(root, 7)\nprint(label)\n",
+              "tests": [
+                {
+                  "name": "trees-bst-01-prints",
+                  "description": "The printed value is the result after this step reports whether the tree contain",
+                  "expected_stdout": "1\n",
+                  "required": true
+                }
+              ]
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "trees-bst-practice-1",
-      "title": "4. Tree Height (Practice)",
-      "description": "Return the height of a binary tree (empty tree height 0). The test checks that `height(root)` equals `3`; `height(None)` equals `0`.",
+      "title": "Practice Tree Height",
+      "description": "Return the height of a binary tree (empty tree height 0). The test checks that height(root) equals 3; height(None) equals 0.",
       "order": 29,
       "difficulty": "intermediate",
       "duration_minutes": 6,
@@ -150,7 +640,7 @@
         "recursion-binary-search"
       ],
       "learning_objectives": [
-        "Height is 1 + max of children"
+        "This step counts the levels in the tree, using Node holding a."
       ],
       "starter_code": "class TreeNode:\n    def __init__(self, value, left=None, right=None):\n        self.value = value\n        self.left = left\n        self.right = right\n\ndef height(root):\n    # TODO\n    pass\n",
       "solution_code": "class TreeNode:\n    def __init__(self, value, left=None, right=None):\n        self.value = value\n        self.left = left\n        self.right = right\n\ndef height(root):\n    if root is None:\n        return 0\n    return 1 + max(height(root.left), height(root.right))\n",
@@ -171,12 +661,178 @@
         "url": "https://docs.python.org/3/tutorial/controlflow.html#defining-functions",
         "license": "Python documentation license (PSF)"
       },
-      "xp_reward": 15
+      "xp_reward": 15,
+      "player_mode": "micro",
+      "sublessons": [
+        {
+          "id": "trees-bst-practice-1-micro",
+          "title": "Practice Tree Height",
+          "description": "",
+          "order": 1,
+          "exercises": [
+            {
+              "id": "trees-bst-practice-1-teach",
+              "type": "teach",
+              "question": "This step counts the levels in the tree, using Node holding a.",
+              "hints": [
+                "Follow the job, which counts the levels in the tree.",
+                "Height is one plus the taller child.",
+                "1 + max(height(node.left), height(node.right))"
+              ],
+              "explanation": "This step counts the levels in the tree, using Node holding a.",
+              "xp_reward": 0,
+              "worked_example": "1 + max(height(node.left), height(node.right))"
+            },
+            {
+              "id": "trees-bst-practice-1-mcq",
+              "type": "mcq",
+              "question": "A correct choice counts the levels in the tree and goes with Node holding a.",
+              "hints": [
+                "Follow the job, which counts the levels in the tree.",
+                "Height is one plus the taller child.",
+                "return 1 + max(height(node.left), height(node.right))"
+              ],
+              "explanation": "Height is one plus the taller child.",
+              "xp_reward": 10,
+              "options": [
+                "pass",
+                "return node",
+                "node == node",
+                "return 1 + max(height(node.left), height(node.right))"
+              ],
+              "correct_answer": "return 1 + max(height(node.left), height(node.right))"
+            },
+            {
+              "id": "trees-bst-practice-1-predict",
+              "type": "output_prediction",
+              "question": "Select the output after the code counts the levels in the tree, using Node holding a.",
+              "hints": [
+                "Follow the job, which counts the levels in the tree.",
+                "Height is one plus the taller child.",
+                "2"
+              ],
+              "explanation": "Height is one plus the taller child.",
+              "xp_reward": 10,
+              "starter_code": "class Node:\n    def __init__(self, value, left=None, right=None):\n        self.value = value\n        self.left = left\n        self.right = right\ndef height(node):\n    if node is None:\n        return 0\n    return 1 + max(height(node.left), height(node.right))\nroot = Node('a', Node('b'), Node('c'))\nprint(height(root))\n",
+              "options": [
+                "1",
+                "none",
+                "2",
+                "0"
+              ],
+              "correct_answer": "2"
+            },
+            {
+              "id": "trees-bst-practice-1-order",
+              "type": "ordering",
+              "question": "Make the line that counts the levels in the tree by ordering the pieces for Node holding a.",
+              "hints": [
+                "Follow the job, which counts the levels in the tree.",
+                "Height is one plus the taller child.",
+                "def f(): return 1+max(height(node.left), height(node.right))"
+              ],
+              "explanation": "Height is one plus the taller child.",
+              "xp_reward": 10,
+              "options": [
+                "def",
+                "f():",
+                "return",
+                "1+max(height(node.left),",
+                "height(node.right))",
+                "-"
+              ],
+              "correct_answer": [
+                "def",
+                "f():",
+                "return",
+                "1+max(height(node.left),",
+                "height(node.right))"
+              ]
+            },
+            {
+              "id": "trees-bst-practice-1-fill",
+              "type": "fill_blank",
+              "question": "Complete the line for Node holding a so that it counts the levels in the tree.",
+              "hints": [
+                "Follow the job, which counts the levels in the tree.",
+                "Height is one plus the taller child.",
+                "+"
+              ],
+              "explanation": "Height is one plus the taller child.",
+              "xp_reward": 10,
+              "starter_code": "return 1 ___ max(height(node.left), height(node.right))\n",
+              "options": [
+                "-",
+                "*",
+                "+",
+                "=="
+              ],
+              "correct_answer": "+"
+            },
+            {
+              "id": "trees-bst-practice-1-bug",
+              "type": "debugging",
+              "question": "Select the line that gets in the way of the job, which counts the levels in the tree, for Node holding a.",
+              "hints": [
+                "Follow the job, which counts the levels in the tree.",
+                "The print shows the root label instead of the height.",
+                "Line 5"
+              ],
+              "explanation": "The print shows the root label instead of the height.",
+              "xp_reward": 10,
+              "starter_code": "class Node:\n    def __init__(self, value, left=None, right=None):\n        self.value = value\nroot = Node('a', Node('b'))\nprint(root.value)\n",
+              "correct_answer": "5"
+            },
+            {
+              "id": "trees-bst-practice-1-predict-2",
+              "type": "output_prediction",
+              "question": "With the new data around Node holding a, the code counts the levels in the tree, so select the new output.",
+              "hints": [
+                "Follow the job, which counts the levels in the tree.",
+                "Height is one plus the taller child.",
+                "1"
+              ],
+              "explanation": "Height is one plus the taller child.",
+              "xp_reward": 10,
+              "starter_code": "class Node:\n    def __init__(self, value, left=None, right=None):\n        self.value = value\n        self.left = left\n        self.right = right\ndef height(node):\n    if node is None:\n        return 0\n    return 1 + max(height(node.left), height(node.right))\nroot = Node('a')\nprint(height(root))\n",
+              "options": [
+                "2",
+                "1",
+                "none",
+                "0"
+              ],
+              "correct_answer": "1"
+            },
+            {
+              "id": "trees-bst-practice-1-write",
+              "type": "code",
+              "question": "The printed result shows up after you fill the blank so the code counts the levels in the tree for Node holding a.",
+              "hints": [
+                "Follow the job, which counts the levels in the tree.",
+                "The printed value is the result after this step counts the levels in the tree.",
+                "label = height(root)"
+              ],
+              "explanation": "The printed value is the result after this step counts the levels in the tree.",
+              "xp_reward": 10,
+              "starter_code": "class Node:\n    def __init__(self, value, left=None, right=None):\n        self.value = value\n        self.left = left\n        self.right = right\ndef height(node):\n    if node is None:\n        return 0\n    return 1 + max(height(node.left), height(node.right))\nroot = Node('a', Node('b'), Node('c'))\nlabel = ___\nprint(label)\n",
+              "solution_code": "class Node:\n    def __init__(self, value, left=None, right=None):\n        self.value = value\n        self.left = left\n        self.right = right\ndef height(node):\n    if node is None:\n        return 0\n    return 1 + max(height(node.left), height(node.right))\nroot = Node('a', Node('b'), Node('c'))\nlabel = height(root)\nprint(label)\n",
+              "tests": [
+                {
+                  "name": "trees-bst-practice-1-prints",
+                  "description": "The printed value is the result after this step counts the levels in the tree.",
+                  "expected_stdout": "2\n",
+                  "required": true
+                }
+              ]
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "trees-bst-checkpoint",
-      "title": "5. Unit 6 Checkpoint: Trees & BST",
-      "description": "Finish `is_bst`. Validate whether a tree is a BST (strict: left < node < right for all nodes). The test checks that `is_bst(good)` is true; `is_bst(bad)` is false.",
+      "title": "Practice Unit 6 Checkpoint Trees BST",
+      "description": "Finish is_bst. Validate whether a tree is a BST (strict: left < node < right for all nodes). The test checks that is_bst(good) is true; is_bst(bad) is false.",
       "order": 30,
       "difficulty": "intermediate",
       "duration_minutes": 10,
@@ -190,7 +846,7 @@
         "recursion-binary-search"
       ],
       "learning_objectives": [
-        "Track allowed value ranges while recursing"
+        "Using Node holding a, this step counts the nodes in the tree."
       ],
       "starter_code": "class TreeNode:\n    def __init__(self, value, left=None, right=None):\n        self.value = value\n        self.left = left\n        self.right = right\n\ndef is_bst(root):\n    # TODO\n    pass\n",
       "solution_code": "class TreeNode:\n    def __init__(self, value, left=None, right=None):\n        self.value = value\n        self.left = left\n        self.right = right\n\ndef is_bst(root):\n    def helper(node, lo, hi):\n        if node is None:\n            return True\n        if not (lo < node.value < hi):\n            return False\n        return helper(node.left, lo, node.value) and helper(node.right, node.value, hi)\n    return helper(root, float('-inf'), float('inf'))\n",
@@ -211,7 +867,175 @@
         "url": "https://docs.python.org/3/tutorial/controlflow.html#defining-functions",
         "license": "Python documentation license (PSF)"
       },
-      "xp_reward": 40
+      "xp_reward": 40,
+      "player_mode": "micro",
+      "sublessons": [
+        {
+          "id": "trees-bst-checkpoint-micro",
+          "title": "Practice Unit 6 Checkpoint Trees BST",
+          "description": "",
+          "order": 1,
+          "exercises": [
+            {
+              "id": "trees-bst-checkpoint-teach",
+              "type": "teach",
+              "question": "Using Node holding a, this step counts the nodes in the tree.",
+              "hints": [
+                "Follow the job, which counts the nodes in the tree.",
+                "Each node contributes one plus its children.",
+                "1 + count(node.left)"
+              ],
+              "explanation": "Using Node holding a, this step counts the nodes in the tree.",
+              "xp_reward": 0,
+              "worked_example": "1 + count(node.left)"
+            },
+            {
+              "id": "trees-bst-checkpoint-mcq",
+              "type": "mcq",
+              "question": "Pick the line that counts the nodes in the tree, not a line about something else, for Node holding a.",
+              "hints": [
+                "Follow the job, which counts the nodes in the tree.",
+                "Each node contributes one plus its children.",
+                "return 1 + count(node.left) + count(node.right)"
+              ],
+              "explanation": "Each node contributes one plus its children.",
+              "xp_reward": 10,
+              "options": [
+                "node == node",
+                "pass",
+                "return node",
+                "return 1 + count(node.left) + count(node.right)"
+              ],
+              "correct_answer": "return 1 + count(node.left) + count(node.right)"
+            },
+            {
+              "id": "trees-bst-checkpoint-predict",
+              "type": "output_prediction",
+              "question": "The displayed value is what the code prints when it counts the nodes in the tree for Node holding a.",
+              "hints": [
+                "Follow the job, which counts the nodes in the tree.",
+                "Each node contributes one plus its children.",
+                "3"
+              ],
+              "explanation": "Each node contributes one plus its children.",
+              "xp_reward": 10,
+              "starter_code": "class Node:\n    def __init__(self, value, left=None, right=None):\n        self.value = value\n        self.left = left\n        self.right = right\ndef count(node):\n    if node is None:\n        return 0\n    return 1 + count(node.left) + count(node.right)\nroot = Node('a', Node('b'), Node('c'))\nprint(count(root))\n",
+              "options": [
+                "1",
+                "none",
+                "0",
+                "3"
+              ],
+              "correct_answer": "3"
+            },
+            {
+              "id": "trees-bst-checkpoint-order",
+              "type": "ordering",
+              "question": "Place every piece so the result counts the nodes in the tree for Node holding a.",
+              "hints": [
+                "Follow the job, which counts the nodes in the tree.",
+                "Each node contributes one plus its children.",
+                "def f(): return 1+count(node.left) + count(node.right)"
+              ],
+              "explanation": "Each node contributes one plus its children.",
+              "xp_reward": 10,
+              "options": [
+                "def",
+                "f():",
+                "return",
+                "1+count(node.left)",
+                "+",
+                "count(node.right)",
+                "-"
+              ],
+              "correct_answer": [
+                "def",
+                "f():",
+                "return",
+                "1+count(node.left)",
+                "+",
+                "count(node.right)"
+              ]
+            },
+            {
+              "id": "trees-bst-checkpoint-fill",
+              "type": "fill_blank",
+              "question": "Drop in the piece that lets the line counts the nodes in the tree for Node holding a.",
+              "hints": [
+                "Follow the job, which counts the nodes in the tree.",
+                "Each node contributes one plus its children.",
+                "+"
+              ],
+              "explanation": "Each node contributes one plus its children.",
+              "xp_reward": 10,
+              "starter_code": "return 1 ___ count(node.left) + count(node.right)\n",
+              "options": [
+                "-",
+                "==",
+                "*",
+                "+"
+              ],
+              "correct_answer": "+"
+            },
+            {
+              "id": "trees-bst-checkpoint-bug",
+              "type": "debugging",
+              "question": "The mismatch misses the job, which counts the nodes in the tree, for Node holding a.",
+              "hints": [
+                "Follow the job, which counts the nodes in the tree.",
+                "The print shows the label instead of the node count.",
+                "Line 5"
+              ],
+              "explanation": "The print shows the label instead of the node count.",
+              "xp_reward": 10,
+              "starter_code": "class Node:\n    def __init__(self, value):\n        self.value = value\nroot = Node('a')\nprint(root.value)\n",
+              "correct_answer": "5"
+            },
+            {
+              "id": "trees-bst-checkpoint-predict-2",
+              "type": "output_prediction",
+              "question": "Choose the printed result of the second run that counts the nodes in the tree for Node holding a.",
+              "hints": [
+                "Follow the job, which counts the nodes in the tree.",
+                "Each node contributes one plus its children.",
+                "1"
+              ],
+              "explanation": "Each node contributes one plus its children.",
+              "xp_reward": 10,
+              "starter_code": "class Node:\n    def __init__(self, value, left=None, right=None):\n        self.value = value\n        self.left = left\n        self.right = right\ndef count(node):\n    if node is None:\n        return 0\n    return 1 + count(node.left) + count(node.right)\nroot = Node('a')\nprint(count(root))\n",
+              "options": [
+                "3",
+                "0",
+                "1",
+                "none"
+              ],
+              "correct_answer": "1"
+            },
+            {
+              "id": "trees-bst-checkpoint-write",
+              "type": "code",
+              "question": "Make the program counts the nodes in the tree by filling the blank for Node holding a.",
+              "hints": [
+                "Follow the job, which counts the nodes in the tree.",
+                "The printed value is the result after this step counts the nodes in the tree.",
+                "label = count(root)"
+              ],
+              "explanation": "The printed value is the result after this step counts the nodes in the tree.",
+              "xp_reward": 10,
+              "starter_code": "class Node:\n    def __init__(self, value, left=None, right=None):\n        self.value = value\n        self.left = left\n        self.right = right\ndef count(node):\n    if node is None:\n        return 0\n    return 1 + count(node.left) + count(node.right)\nroot = Node('a', Node('b'), Node('c'))\nlabel = ___\nprint(label)\n",
+              "solution_code": "class Node:\n    def __init__(self, value, left=None, right=None):\n        self.value = value\n        self.left = left\n        self.right = right\ndef count(node):\n    if node is None:\n        return 0\n    return 1 + count(node.left) + count(node.right)\nroot = Node('a', Node('b'), Node('c'))\nlabel = count(root)\nprint(label)\n",
+              "tests": [
+                {
+                  "name": "trees-bst-checkpoint-prints",
+                  "description": "The printed value is the result after this step counts the nodes in the tree.",
+                  "expected_stdout": "3\n",
+                  "required": true
+                }
+              ]
+            }
+          ]
+        }
+      ]
     }
   ]
 }

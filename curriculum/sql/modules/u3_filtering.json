@@ -14,8 +14,8 @@
   "lessons": [
     {
       "id": "sql-03",
-      "title": "3. Filtering Records with WHERE",
-      "description": "Query the products whose `price` is greater than 100. The test checks that the prices you return are `299.0`, `350.0`, and `1299.99`.",
+      "title": "Filter Records with WHERE",
+      "description": "Query the products whose price is greater than 100. The test checks that the prices you return are 299.0, 350.0, and 1299.99.",
       "order": 3,
       "difficulty": "beginner",
       "duration_minutes": 5,
@@ -46,51 +46,181 @@
         "license": "Public domain (SQLite documentation)"
       },
       "learning_objectives": [
-        "Filter rows with WHERE and comparison operators",
-        "Match sets and ranges with IN and BETWEEN",
-        "Find text patterns with LIKE"
+        "This step keeps products whose stock is below 20, using name and 20."
       ],
       "xp_reward": 10,
       "sublessons": [
         {
-          "id": "sql-03-match-1-sub",
-          "title": "Match clause to purpose",
+          "id": "sql-03-micro",
+          "title": "Filter Records with WHERE",
+          "description": "",
           "order": 1,
           "exercises": [
             {
-              "id": "sql-03-match-1",
-              "type": "matching",
-              "question": "Match each SQL clause to the job it does in a query.",
-              "pairs": [
-                {
-                  "left": "WHERE",
-                  "right": "keeps only the rows that pass a test"
-                },
-                {
-                  "left": "LIKE",
-                  "right": "matches a text pattern with % and _"
-                },
-                {
-                  "left": "IN",
-                  "right": "matches any value from a listed set"
-                },
-                {
-                  "left": "BETWEEN",
-                  "right": "matches values inside a range"
-                }
+              "id": "sql-03-teach",
+              "type": "teach",
+              "question": "This step keeps products whose stock is below 20, using name and 20.",
+              "hints": [
+                "Follow the job, which keeps products whose stock is below 20.",
+                "WHERE stock < 20 keeps the low-stock names.",
+                "WHERE stock < 20"
               ],
-              "correct_answer": {
-                "WHERE": "keeps only the rows that pass a test",
-                "LIKE": "matches a text pattern with % and _",
-                "IN": "matches any value from a listed set",
-                "BETWEEN": "matches values inside a range"
-              },
-              "explanation": "All four filter rows; they differ in *how* a row is matched — a test, a pattern, a set, or a range.",
-              "xp_reward": 15
+              "explanation": "This step keeps products whose stock is below 20, using name and 20.",
+              "xp_reward": 0,
+              "worked_example": "WHERE stock < 20"
+            },
+            {
+              "id": "sql-03-mcq",
+              "type": "mcq",
+              "question": "Choose the line that keeps products whose stock is below 20, which is the line that fits name and 20.",
+              "hints": [
+                "Follow the job, which keeps products whose stock is below 20.",
+                "WHERE stock < 20 keeps the low-stock names.",
+                "SELECT name FROM products WHERE stock < 20"
+              ],
+              "explanation": "WHERE stock < 20 keeps the low-stock names.",
+              "xp_reward": 10,
+              "options": [
+                "INSERT INTO products",
+                "DROP TABLE products",
+                "SELECT name FROM products WHERE stock < 20",
+                "stock == stock"
+              ],
+              "correct_answer": "SELECT name FROM products WHERE stock < 20"
+            },
+            {
+              "id": "sql-03-predict",
+              "type": "output_prediction",
+              "question": "Read the code that keeps products whose stock is below 20 for name and 20, and choose the value it prints.",
+              "hints": [
+                "Follow the job, which keeps products whose stock is below 20.",
+                "WHERE stock < 20 keeps the low-stock names.",
+                "┌─────────────────┐\n│ name            │\n├─────────────────┤\n│ Ergonomic Chair │\n│ Laptop Pro      │\n│ Monitor 27-inch │\n└─────────────────┘"
+              ],
+              "explanation": "WHERE stock < 20 keeps the low-stock names.",
+              "xp_reward": 10,
+              "starter_code": "SELECT name FROM products WHERE stock < 20 ORDER BY name;\n",
+              "options": [
+                "┌─────────────────────┐\n│ name                │\n├─────────────────────┤\n│ Ergonomic Chair     │\n│ Laptop Pro          │\n│ Mechanical Keyboard │\n│ Monitor 27-inch     │\n└─────────────────────┘",
+                "┌─────────────────┐\n│ name            │\n├─────────────────┤\n│ Ergonomic Chair │\n│ Laptop Pro      │\n│ Monitor 27-inch │\n└─────────────────┘",
+                "0",
+                "none"
+              ],
+              "correct_answer": "┌─────────────────┐\n│ name            │\n├─────────────────┤\n│ Ergonomic Chair │\n│ Laptop Pro      │\n│ Monitor 27-inch │\n└─────────────────┘"
+            },
+            {
+              "id": "sql-03-order",
+              "type": "ordering",
+              "question": "Arrange the pieces of the line that keeps products whose stock is below 20, left to right, for name and 20.",
+              "hints": [
+                "Follow the job, which keeps products whose stock is below 20.",
+                "WHERE stock < 20 keeps the low-stock names.",
+                "SELECT name FROM products WHERE stock < 20"
+              ],
+              "explanation": "WHERE stock < 20 keeps the low-stock names.",
+              "xp_reward": 10,
+              "options": [
+                "SELECT",
+                "name",
+                "FROM",
+                "products",
+                "WHERE",
+                "stock",
+                "<",
+                "20",
+                "DROP"
+              ],
+              "correct_answer": [
+                "SELECT",
+                "name",
+                "FROM",
+                "products",
+                "WHERE",
+                "stock",
+                "<",
+                "20"
+              ]
+            },
+            {
+              "id": "sql-03-fill",
+              "type": "fill_blank",
+              "question": "Fill the blank so the line keeps products whose stock is below 20 for name and 20.",
+              "hints": [
+                "Follow the job, which keeps products whose stock is below 20.",
+                "WHERE stock < 20 keeps the low-stock names.",
+                "<"
+              ],
+              "explanation": "WHERE stock < 20 keeps the low-stock names.",
+              "xp_reward": 10,
+              "starter_code": "SELECT name FROM products WHERE stock ___ 20;",
+              "options": [
+                ">",
+                "<",
+                "=",
+                "!="
+              ],
+              "correct_answer": "<"
+            },
+            {
+              "id": "sql-03-bug",
+              "type": "debugging",
+              "question": "Find the line that misses the job, which keeps products whose stock is below 20, for name and 20.",
+              "hints": [
+                "Follow the job, which keeps products whose stock is below 20.",
+                "The filter keeps high stock instead of low stock.",
+                "Line 1"
+              ],
+              "explanation": "The filter keeps high stock instead of low stock.",
+              "xp_reward": 10,
+              "starter_code": "SELECT name FROM products WHERE stock > 20;",
+              "correct_answer": "1"
+            },
+            {
+              "id": "sql-03-predict-2",
+              "type": "output_prediction",
+              "question": "On the new input, the code still keeps products whose stock is below 20 for name and 20, so choose what it prints.",
+              "hints": [
+                "Follow the job, which keeps products whose stock is below 20.",
+                "WHERE stock < 20 keeps the low-stock names.",
+                "┌─────────────────────┐\n│ name                │\n├─────────────────────┤\n│ Ergonomic Chair     │\n│ Laptop Pro          │\n│ Mechanical Keyboard │\n│ Monitor 27-inch     │\n└─────────────────────┘"
+              ],
+              "explanation": "WHERE stock < 20 keeps the low-stock names.",
+              "xp_reward": 10,
+              "starter_code": "SELECT name FROM products WHERE stock < 50 ORDER BY name;\n",
+              "options": [
+                "┌─────────────────┐\n│ name            │\n├─────────────────┤\n│ Ergonomic Chair │\n│ Laptop Pro      │\n│ Monitor 27-inch │\n└─────────────────┘",
+                "none",
+                "0",
+                "┌─────────────────────┐\n│ name                │\n├─────────────────────┤\n│ Ergonomic Chair     │\n│ Laptop Pro          │\n│ Mechanical Keyboard │\n│ Monitor 27-inch     │\n└─────────────────────┘"
+              ],
+              "correct_answer": "┌─────────────────────┐\n│ name                │\n├─────────────────────┤\n│ Ergonomic Chair     │\n│ Laptop Pro          │\n│ Mechanical Keyboard │\n│ Monitor 27-inch     │\n└─────────────────────┘"
+            },
+            {
+              "id": "sql-03-write",
+              "type": "code",
+              "question": "Fill the blank so the program keeps products whose stock is below 20, and the print shows that result for name and 20.",
+              "hints": [
+                "Follow the job, which keeps products whose stock is below 20.",
+                "The query result is what this step keeps products whose stock is below 20.",
+                "SELECT name FROM products WHERE stock < 20 ORDER BY name;"
+              ],
+              "explanation": "The query result is what this step keeps products whose stock is below 20.",
+              "xp_reward": 10,
+              "starter_code": "SELECT name FROM products WHERE stock ___ 20 ORDER BY name;\n",
+              "solution_code": "SELECT name FROM products WHERE stock < 20 ORDER BY name;\n",
+              "tests": [
+                {
+                  "name": "sql-03-prints",
+                  "description": "The query result is what this step keeps products whose stock is below 20.",
+                  "expected_stdout": "┌─────────────────┐\n│ name            │\n├─────────────────┤\n│ Ergonomic Chair │\n│ Laptop Pro      │\n│ Monitor 27-inch │\n└─────────────────┘",
+                  "required": true
+                }
+              ]
             }
           ]
         }
-      ]
+      ],
+      "player_mode": "micro"
     }
   ]
 }

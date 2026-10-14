@@ -12,8 +12,8 @@
   "lessons": [
     {
       "id": "java-variables-step-1",
-      "title": "1. Hello Java & String Variables",
-      "description": "Welcome to Java! Java is a strongly-typed, object-oriented language. Create a class `Solution` with a static method `getLanguage()` returning \"Java\". The test checks that `Solution.getLanguage(` equals `\"Java\"`.",
+      "title": "Practice Hello Java String Variables",
+      "description": "Welcome to Java! Java is a strongly-typed, object-oriented language. Create a class Solution with a static method getLanguage() returning \"Java\". The test checks that Solution.getLanguage( equals \"Java\".",
       "order": 1,
       "difficulty": "beginner",
       "duration_minutes": 5,
@@ -26,7 +26,7 @@
       ],
       "prerequisites": [],
       "learning_objectives": [
-        "Declare a Java class and return a String literal"
+        "This step stores text in a String variable, using item holding amber."
       ],
       "starter_code": "public class Solution {\n    public static String getLanguage() {\n        // TODO: return the name of the language\n        return null;\n    }\n}\n",
       "solution_code": "public class Solution {\n    public static String getLanguage() {\n        return \"Java\";\n    }\n}\n",
@@ -44,60 +44,163 @@
       },
       "sublessons": [
         {
-          "id": "java-var-sub-1",
-          "title": "Java Basics & String Types",
+          "id": "java-variables-step-1-micro",
+          "title": "Practice Hello Java String Variables",
+          "description": "",
           "order": 1,
           "exercises": [
             {
-              "id": "java-ex-1a",
-              "type": "mcq",
-              "question": "Which keyword sends a value back to the caller of a Java method?",
-              "options": [
-                "yield",
-                "output",
-                "return",
-                "send"
+              "id": "java-variables-step-1-teach",
+              "type": "teach",
+              "question": "This step stores text in a String variable, using item holding amber.",
+              "hints": [
+                "Follow the job, which stores text in a String variable.",
+                "String item = word; stores the text.",
+                "String item = \"amber\";"
               ],
-              "correct_answer": "return",
-              "xp_reward": 10,
-              "explanation": "In Java, the 'return' keyword sends a result back from a method."
+              "explanation": "This step stores text in a String variable, using item holding amber.",
+              "xp_reward": 0,
+              "worked_example": "String item = \"amber\";"
             },
             {
-              "id": "java-ex-1b",
-              "type": "fill_blank",
-              "question": "Complete the return statement so the method gives back the language name:",
-              "starter_code": "return ___;",
-              "blanks": [
-                "\"Java\""
+              "id": "java-variables-step-1-mcq",
+              "type": "mcq",
+              "question": "A correct choice stores text in a String variable and goes with item holding amber.",
+              "hints": [
+                "Follow the job, which stores text in a String variable.",
+                "String item = word; stores the text.",
+                "String item = word;"
+              ],
+              "explanation": "String item = word; stores the text.",
+              "xp_reward": 10,
+              "options": [
+                "return item;",
+                "String item = word;",
+                "System.exit(0);",
+                "item == word;"
+              ],
+              "correct_answer": "String item = word;"
+            },
+            {
+              "id": "java-variables-step-1-predict",
+              "type": "output_prediction",
+              "question": "Select the output after the code stores text in a String variable, using item holding.",
+              "hints": [
+                "Follow the job, which stores text in a String variable.",
+                "String item = word; stores the text.",
+                "amber"
+              ],
+              "explanation": "String item = word; stores the text.",
+              "xp_reward": 10,
+              "starter_code": "public class Solution {\n    public static void main(String[] args) {\n        String item = \"amber\";\n        System.out.println(item);\n    }\n}\n",
+              "options": [
+                "ember",
+                "none",
+                "amber",
+                "0"
+              ],
+              "correct_answer": "amber"
+            },
+            {
+              "id": "java-variables-step-1-order",
+              "type": "ordering",
+              "question": "Make the line that stores text in a String variable by ordering the pieces for item holding amber.",
+              "hints": [
+                "Follow the job, which stores text in a String variable.",
+                "String item = word; stores the text.",
+                "String item = word;"
+              ],
+              "explanation": "String item = word; stores the text.",
+              "xp_reward": 10,
+              "options": [
+                "String",
+                "item",
+                "=",
+                "word;",
+                "=="
               ],
               "correct_answer": [
-                "\"Java\""
-              ],
-              "xp_reward": 10,
-              "explanation": "Java String literals use double quotes, e.g., \"Java\"."
-            }
-          ]
-        },
-        {
-          "id": "java-var-sub-2",
-          "title": "Method Implementation",
-          "order": 2,
-          "exercises": [
+                "String",
+                "item",
+                "=",
+                "word;"
+              ]
+            },
             {
-              "id": "java-ex-2a",
+              "id": "java-variables-step-1-fill",
+              "type": "fill_blank",
+              "question": "Complete the line for item holding amber so that it stores text in a String variable.",
+              "hints": [
+                "Follow the job, which stores text in a String variable.",
+                "String item = word; stores the text.",
+                "word"
+              ],
+              "explanation": "String item = word; stores the text.",
+              "xp_reward": 10,
+              "starter_code": "String item = ___;",
+              "options": [
+                "left",
+                "count",
+                "name",
+                "word"
+              ],
+              "correct_answer": "word"
+            },
+            {
+              "id": "java-variables-step-1-bug",
+              "type": "debugging",
+              "question": "Select the line that gets in the way of the job, which stores text in a String variable, for item holding amber.",
+              "hints": [
+                "Follow the job, which stores text in a String variable.",
+                "The print appends a mark that was not stored in the variable.",
+                "Line 4"
+              ],
+              "explanation": "The print appends a mark that was not stored in the variable.",
+              "xp_reward": 10,
+              "starter_code": "public class Solution {\n    public static void main(String[] args) {\n        String item = \"amber\";\n        System.out.println(item + \"!\");\n    }\n}\n",
+              "correct_answer": "4"
+            },
+            {
+              "id": "java-variables-step-1-predict-2",
+              "type": "output_prediction",
+              "question": "With the new data around item holding amber, the code stores text in a String variable, so select the new output.",
+              "hints": [
+                "Follow the job, which stores text in a String variable.",
+                "String item = word; stores the text.",
+                "ember"
+              ],
+              "explanation": "String item = word; stores the text.",
+              "xp_reward": 10,
+              "starter_code": "public class Solution {\n    public static void main(String[] args) {\n        String item = \"ember\";\n        System.out.println(item);\n    }\n}\n",
+              "options": [
+                "amber",
+                "ember",
+                "none",
+                "0"
+              ],
+              "correct_answer": "ember"
+            },
+            {
+              "id": "java-variables-step-1-write",
               "type": "code",
-              "title": "Implement getLanguage()",
-              "question": "Implement static method getLanguage() returning 'Java'.",
-              "starter_code": "public class Solution {\n    public static String getLanguage() {\n        return \"\";\n    }\n}\n",
-              "solution_code": "public class Solution {\n    public static String getLanguage() {\n        return \"Java\";\n    }\n}\n",
+              "question": "The printed result shows up after you fill the blank so the code stores text in a String variable for item holding.",
+              "hints": [
+                "Follow the job, which stores text in a String variable.",
+                "The printed value is the result after this step stores text in a String variable.",
+                "String label = item;"
+              ],
+              "explanation": "The printed value is the result after this step stores text in a String variable.",
+              "xp_reward": 10,
+              "starter_code": "public class Solution {\n    public static void main(String[] args) {\n        String item = \"amber\";\n        String label = ___;\n        System.out.println(label);\n    }\n}\n",
+              "solution_code": "public class Solution {\n    public static void main(String[] args) {\n        String item = \"amber\";\n        String label = item;\n        System.out.println(label);\n    }\n}\n",
               "tests": [
                 {
-                  "name": "test_get_language",
-                  "test_code": "if (!Solution.getLanguage().equals(\"Java\")) throw new AssertionError();",
+                  "name": "java-variables-step-1-prints",
+                  "description": "The printed value is the result after this step stores text in a String variable",
+                  "expected_stdout": "amber\n",
                   "required": true
                 }
-              ],
-              "xp_reward": 15
+              ]
             }
           ]
         }
@@ -139,12 +242,13 @@
         "url": "https://docs.oracle.com/javase/tutorial/java/javaOO/methods.html",
         "license": "Oracle Free Use Terms and Conditions (documentation)"
       },
-      "xp_reward": 10
+      "xp_reward": 10,
+      "player_mode": "micro"
     },
     {
       "id": "java-variables-step-2",
-      "title": "2. Integers & Arithmetic",
-      "description": "In Java, integers use the `int` primitive type. Create a method `calculateTotal(int price, int quantity)` returning `price * quantity`. The test checks that `Solution.calculateTotal(15, 3)` equals `45`.",
+      "title": "Practice Integers Arithmetic",
+      "description": "In Java, integers use the int primitive type. Create a method calculateTotal(int price, int quantity) returning price * quantity. The test checks that Solution.calculateTotal(15, 3) equals 45.",
       "order": 2,
       "difficulty": "beginner",
       "duration_minutes": 5,
@@ -157,7 +261,7 @@
       ],
       "prerequisites": [],
       "learning_objectives": [
-        "Use primitive int type and arithmetic in Java"
+        "This step stores the sum of two integers, using the value 5."
       ],
       "starter_code": "public class Solution {\n    public static int calculateTotal(int price, int quantity) {\n        // TODO: return the total cost\n        return 0;\n    }\n}\n",
       "solution_code": "public class Solution {\n    public static int calculateTotal(int price, int quantity) {\n        return price * quantity;\n    }\n}\n",
@@ -181,12 +285,180 @@
         "url": "https://docs.oracle.com/javase/tutorial/java/nutsandbolts/variables.html",
         "license": "Oracle Free Use Terms and Conditions (documentation)"
       },
-      "xp_reward": 10
+      "xp_reward": 10,
+      "player_mode": "micro",
+      "sublessons": [
+        {
+          "id": "java-variables-step-2-micro",
+          "title": "Practice Integers Arithmetic",
+          "description": "",
+          "order": 1,
+          "exercises": [
+            {
+              "id": "java-variables-step-2-teach",
+              "type": "teach",
+              "question": "This step stores the sum of two integers, using the value 5.",
+              "hints": [
+                "Follow the job, which stores the sum of two integers.",
+                "int total = left + right; stores the sum.",
+                "int left = 50;"
+              ],
+              "explanation": "This step stores the sum of two integers, using the value 5.",
+              "xp_reward": 0,
+              "worked_example": "int left = 50;"
+            },
+            {
+              "id": "java-variables-step-2-mcq",
+              "type": "mcq",
+              "question": "Choose the line that stores the sum of two integers, which is the line that fits the value 5.",
+              "hints": [
+                "Follow the job, which stores the sum of two integers.",
+                "int total = left + right; stores the sum.",
+                "int total = left + right;"
+              ],
+              "explanation": "int total = left + right; stores the sum.",
+              "xp_reward": 10,
+              "options": [
+                "return left;",
+                "left == right;",
+                "total == left;",
+                "int total = left + right;"
+              ],
+              "correct_answer": "int total = left + right;"
+            },
+            {
+              "id": "java-variables-step-2-predict",
+              "type": "output_prediction",
+              "question": "Read the code that stores the sum of two integers for the value 5, and choose the value it prints.",
+              "hints": [
+                "Follow the job, which stores the sum of two integers.",
+                "int total = left + right; stores the sum.",
+                "55"
+              ],
+              "explanation": "int total = left + right; stores the sum.",
+              "xp_reward": 10,
+              "starter_code": "public class Solution {\n    public static void main(String[] args) {\n        int left = 50;\n        int right = 5;\n        System.out.println(left + right);\n    }\n}\n",
+              "options": [
+                "59",
+                "0",
+                "none",
+                "55"
+              ],
+              "correct_answer": "55"
+            },
+            {
+              "id": "java-variables-step-2-order",
+              "type": "ordering",
+              "question": "Arrange the pieces of the line that stores the sum of two integers, left to right, for the value 5.",
+              "hints": [
+                "Follow the job, which stores the sum of two integers.",
+                "int total = left + right; stores the sum.",
+                "int total = left + right;"
+              ],
+              "explanation": "int total = left + right; stores the sum.",
+              "xp_reward": 10,
+              "options": [
+                "int",
+                "total",
+                "=",
+                "left",
+                "+",
+                "right;",
+                "=="
+              ],
+              "correct_answer": [
+                "int",
+                "total",
+                "=",
+                "left",
+                "+",
+                "right;"
+              ]
+            },
+            {
+              "id": "java-variables-step-2-fill",
+              "type": "fill_blank",
+              "question": "Fill the blank so the line stores the sum of two integers for the value 5.",
+              "hints": [
+                "Follow the job, which stores the sum of two integers.",
+                "int total = left + right; stores the sum.",
+                "+"
+              ],
+              "explanation": "int total = left + right; stores the sum.",
+              "xp_reward": 10,
+              "starter_code": "int total = left ___ right;",
+              "options": [
+                "==",
+                "+",
+                "-",
+                "*"
+              ],
+              "correct_answer": "+"
+            },
+            {
+              "id": "java-variables-step-2-bug",
+              "type": "debugging",
+              "question": "Find the line that misses the job, which stores the sum of two integers, for the value.",
+              "hints": [
+                "Follow the job, which stores the sum of two integers.",
+                "The print subtracts instead of adding.",
+                "Line 5"
+              ],
+              "explanation": "The print subtracts instead of adding.",
+              "xp_reward": 10,
+              "starter_code": "public class Solution {\n    public static void main(String[] args) {\n        int left = 50;\n        int right = 5;\n        System.out.println(left - right);\n    }\n}\n",
+              "correct_answer": "5"
+            },
+            {
+              "id": "java-variables-step-2-predict-2",
+              "type": "output_prediction",
+              "question": "On the new input, the code still stores the sum of two integers for the value 5, so choose what it prints.",
+              "hints": [
+                "Follow the job, which stores the sum of two integers.",
+                "int total = left + right; stores the sum.",
+                "59"
+              ],
+              "explanation": "int total = left + right; stores the sum.",
+              "xp_reward": 10,
+              "starter_code": "public class Solution {\n    public static void main(String[] args) {\n        int left = 50;\n        int right = 9;\n        System.out.println(left + right);\n    }\n}\n",
+              "options": [
+                "55",
+                "0",
+                "59",
+                "none"
+              ],
+              "correct_answer": "59"
+            },
+            {
+              "id": "java-variables-step-2-write",
+              "type": "code",
+              "question": "Fill the blank so the program stores the sum of two integers, and the print shows that result for the value 5.",
+              "hints": [
+                "Follow the job, which stores the sum of two integers.",
+                "The printed value is the result after this step stores the sum of two integers.",
+                "int label = left + right;"
+              ],
+              "explanation": "The printed value is the result after this step stores the sum of two integers.",
+              "xp_reward": 10,
+              "starter_code": "public class Solution {\n    public static void main(String[] args) {\n        int left = 50;\n        int right = 5;\n        int label = ___;\n        System.out.println(label);\n    }\n}\n",
+              "solution_code": "public class Solution {\n    public static void main(String[] args) {\n        int left = 50;\n        int right = 5;\n        int label = left + right;\n        System.out.println(label);\n    }\n}\n",
+              "tests": [
+                {
+                  "name": "java-variables-step-2-prints",
+                  "description": "The printed value is the result after this step stores the sum of two integers.",
+                  "expected_stdout": "55\n",
+                  "required": true
+                }
+              ]
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "java-variables-01",
-      "title": "3. Coffee Shop Order Billing",
-      "description": "Finish `calculateBill`. Calculate total order cost including sales tax: multiply `itemPrice` by `count`, then apply `taxRate` as a fraction. The test checks that `bill` is about `8.80`.",
+      "title": "Practice Coffee Shop Order Billing",
+      "description": "Finish calculateBill. Calculate total order cost including sales tax: multiply itemPrice by count, then apply taxRate as a fraction. The test checks that bill is about 8.80.",
       "order": 3,
       "difficulty": "beginner",
       "duration_minutes": 8,
@@ -199,7 +471,7 @@
       ],
       "prerequisites": [],
       "learning_objectives": [
-        "Combine double primitive math and casting in Java"
+        "This step multiplies price by quantity, using price and 3."
       ],
       "starter_code": "public class Solution {\n    public static double calculateBill(double itemPrice, int count, double taxRate) {\n        // TODO: return the bill total including tax\n        return 0.0;\n    }\n}\n",
       "solution_code": "public class Solution {\n    public static double calculateBill(double itemPrice, int count, double taxRate) {\n        return (itemPrice * count) * (1.0 + taxRate);\n    }\n}\n",
@@ -220,12 +492,180 @@
         "url": "https://docs.oracle.com/javase/tutorial/java/nutsandbolts/operators.html",
         "license": "Oracle Free Use Terms and Conditions (documentation)"
       },
-      "xp_reward": 25
+      "xp_reward": 25,
+      "player_mode": "micro",
+      "sublessons": [
+        {
+          "id": "java-variables-01-micro",
+          "title": "Practice Coffee Shop Order Billing",
+          "description": "",
+          "order": 1,
+          "exercises": [
+            {
+              "id": "java-variables-01-teach",
+              "type": "teach",
+              "question": "This step multiplies price by quantity, using price and 3.",
+              "hints": [
+                "Follow the job, which multiplies price by quantity.",
+                "price * quantity is the bill.",
+                "int price = 48;"
+              ],
+              "explanation": "This step multiplies price by quantity, using price and 3.",
+              "xp_reward": 0,
+              "worked_example": "int price = 48;"
+            },
+            {
+              "id": "java-variables-01-mcq",
+              "type": "mcq",
+              "question": "Pick the line that multiplies price by quantity, not a line about something else, for price and 3.",
+              "hints": [
+                "Follow the job, which multiplies price by quantity.",
+                "price * quantity is the bill.",
+                "int total = price * quantity;"
+              ],
+              "explanation": "price * quantity is the bill.",
+              "xp_reward": 10,
+              "options": [
+                "price == quantity;",
+                "return price;",
+                "int total = price * quantity;",
+                "total == price;"
+              ],
+              "correct_answer": "int total = price * quantity;"
+            },
+            {
+              "id": "java-variables-01-predict",
+              "type": "output_prediction",
+              "question": "The displayed value is what the code prints when it multiplies price by quantity for price and 3.",
+              "hints": [
+                "Follow the job, which multiplies price by quantity.",
+                "price * quantity is the bill.",
+                "144"
+              ],
+              "explanation": "price * quantity is the bill.",
+              "xp_reward": 10,
+              "starter_code": "public class Solution {\n    public static void main(String[] args) {\n        int price = 48;\n        int quantity = 3;\n        System.out.println(price * quantity);\n    }\n}\n",
+              "options": [
+                "0",
+                "192",
+                "none",
+                "144"
+              ],
+              "correct_answer": "144"
+            },
+            {
+              "id": "java-variables-01-order",
+              "type": "ordering",
+              "question": "Place every piece so the result multiplies price by quantity for price and 3.",
+              "hints": [
+                "Follow the job, which multiplies price by quantity.",
+                "price * quantity is the bill.",
+                "int total = left * right;"
+              ],
+              "explanation": "price * quantity is the bill.",
+              "xp_reward": 10,
+              "options": [
+                "int",
+                "total",
+                "=",
+                "left",
+                "*",
+                "right;",
+                "=="
+              ],
+              "correct_answer": [
+                "int",
+                "total",
+                "=",
+                "left",
+                "*",
+                "right;"
+              ]
+            },
+            {
+              "id": "java-variables-01-fill",
+              "type": "fill_blank",
+              "question": "Drop in the piece that lets the line multiplies price by quantity for price and 3.",
+              "hints": [
+                "Follow the job, which multiplies price by quantity.",
+                "price * quantity is the bill.",
+                "*"
+              ],
+              "explanation": "price * quantity is the bill.",
+              "xp_reward": 10,
+              "starter_code": "int total = left ___ right;",
+              "options": [
+                "+",
+                "-",
+                "*",
+                "=="
+              ],
+              "correct_answer": "*"
+            },
+            {
+              "id": "java-variables-01-bug",
+              "type": "debugging",
+              "question": "The mismatch misses the job, which multiplies price by quantity, for price and 3.",
+              "hints": [
+                "Follow the job, which multiplies price by quantity.",
+                "The print adds the quantity instead of multiplying.",
+                "Line 5"
+              ],
+              "explanation": "The print adds the quantity instead of multiplying.",
+              "xp_reward": 10,
+              "starter_code": "public class Solution {\n    public static void main(String[] args) {\n        int price = 48;\n        int quantity = 3;\n        System.out.println(price + quantity);\n    }\n}\n",
+              "correct_answer": "5"
+            },
+            {
+              "id": "java-variables-01-predict-2",
+              "type": "output_prediction",
+              "question": "Choose the printed result of the second run that multiplies price by quantity for price and 3.",
+              "hints": [
+                "Follow the job, which multiplies price by quantity.",
+                "price * quantity is the bill.",
+                "192"
+              ],
+              "explanation": "price * quantity is the bill.",
+              "xp_reward": 10,
+              "starter_code": "public class Solution {\n    public static void main(String[] args) {\n        int price = 48;\n        int quantity = 4;\n        System.out.println(price * quantity);\n    }\n}\n",
+              "options": [
+                "0",
+                "144",
+                "none",
+                "192"
+              ],
+              "correct_answer": "192"
+            },
+            {
+              "id": "java-variables-01-write",
+              "type": "code",
+              "question": "Make the program multiplies price by quantity by filling the blank for price and 3.",
+              "hints": [
+                "Follow the job, which multiplies price by quantity.",
+                "The printed value is the result after this step multiplies price by quantity.",
+                "int label = price * quantity;"
+              ],
+              "explanation": "The printed value is the result after this step multiplies price by quantity.",
+              "xp_reward": 10,
+              "starter_code": "public class Solution {\n    public static void main(String[] args) {\n        int price = 48;\n        int quantity = 3;\n        int label = ___;\n        System.out.println(label);\n    }\n}\n",
+              "solution_code": "public class Solution {\n    public static void main(String[] args) {\n        int price = 48;\n        int quantity = 3;\n        int label = price * quantity;\n        System.out.println(label);\n    }\n}\n",
+              "tests": [
+                {
+                  "name": "java-variables-01-prints",
+                  "description": "The printed value is the result after this step multiplies price by quantity.",
+                  "expected_stdout": "144\n",
+                  "required": true
+                }
+              ]
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "java-variables-practice-1",
-      "title": "4. Temperature Conversion (Practice)",
-      "description": "Finish `fahrenheitToCelsius`. Convert Fahrenheit temperature to Celsius using `(fahrenheit - 32) * 5 / 9`. The test checks that `c` is about `100.0`.",
+      "title": "Practice Temperature Conversion",
+      "description": "Finish fahrenheitToCelsius. Convert Fahrenheit temperature to Celsius using (fahrenheit - 32) * 5 / 9. The test checks that c is about 100.0.",
       "order": 4,
       "difficulty": "beginner",
       "duration_minutes": 6,
@@ -238,7 +678,7 @@
       ],
       "prerequisites": [],
       "learning_objectives": [
-        "Apply formula (F - 32) * 5/9 using doubles"
+        "This step converts Celsius to Fahrenheit with integer math, using celsius and 32."
       ],
       "starter_code": "public class Solution {\n    public static double fahrenheitToCelsius(double fahrenheit) {\n        // TODO: return the temperature in Celsius\n        return 0.0;\n    }\n}\n",
       "solution_code": "public class Solution {\n    public static double fahrenheitToCelsius(double fahrenheit) {\n        return (fahrenheit - 32.0) * 5.0 / 9.0;\n    }\n}\n",
@@ -259,12 +699,188 @@
         "url": "https://docs.oracle.com/javase/tutorial/java/nutsandbolts/operators.html",
         "license": "Oracle Free Use Terms and Conditions (documentation)"
       },
-      "xp_reward": 15
+      "xp_reward": 15,
+      "player_mode": "micro",
+      "sublessons": [
+        {
+          "id": "java-variables-practice-1-micro",
+          "title": "Practice Temperature Conversion",
+          "description": "",
+          "order": 1,
+          "exercises": [
+            {
+              "id": "java-variables-practice-1-teach",
+              "type": "teach",
+              "question": "This step converts Celsius to Fahrenheit with integer math, using celsius and 32.",
+              "hints": [
+                "Follow the job, which converts Celsius to Fahrenheit with integer math.",
+                "(celsius * 9 / 5) + 32 converts the temperature.",
+                "int celsius = 10;"
+              ],
+              "explanation": "This step converts Celsius to Fahrenheit with integer math, using celsius and 32.",
+              "xp_reward": 0,
+              "worked_example": "int celsius = 10;"
+            },
+            {
+              "id": "java-variables-practice-1-mcq",
+              "type": "mcq",
+              "question": "Pick the line that converts Celsius to Fahrenheit with integer math, not a line about something else, for celsius and 32.",
+              "hints": [
+                "Follow the job, which converts Celsius to Fahrenheit with integer math.",
+                "(celsius * 9 / 5) + 32 converts the temperature.",
+                "int fahrenheit = (celsius * 9 / 5) + 32;"
+              ],
+              "explanation": "(celsius * 9 / 5) + 32 converts the temperature.",
+              "xp_reward": 10,
+              "options": [
+                "celsius == 32;",
+                "return celsius;",
+                "int fahrenheit = (celsius * 9 / 5) + 32;",
+                "fahrenheit == celsius;"
+              ],
+              "correct_answer": "int fahrenheit = (celsius * 9 / 5) + 32;"
+            },
+            {
+              "id": "java-variables-practice-1-predict",
+              "type": "output_prediction",
+              "question": "The displayed value is what the code prints when it converts Celsius to Fahrenheit with integer math for celsius and 32.",
+              "hints": [
+                "Follow the job, which converts Celsius to Fahrenheit with integer math.",
+                "(celsius * 9 / 5) + 32 converts the temperature.",
+                "50"
+              ],
+              "explanation": "(celsius * 9 / 5) + 32 converts the temperature.",
+              "xp_reward": 10,
+              "starter_code": "public class Solution {\n    public static void main(String[] args) {\n        int celsius = 10;\n        System.out.println((celsius * 9 / 5) + 32);\n    }\n}\n",
+              "options": [
+                "68",
+                "none",
+                "50",
+                "0"
+              ],
+              "correct_answer": "50"
+            },
+            {
+              "id": "java-variables-practice-1-order",
+              "type": "ordering",
+              "question": "Place every piece so the result converts Celsius to Fahrenheit with integer math for celsius and 32.",
+              "hints": [
+                "Follow the job, which converts Celsius to Fahrenheit with integer math.",
+                "(celsius * 9 / 5) + 32 converts the temperature.",
+                "int fahrenheit = (left * 9 / 5) + 32;"
+              ],
+              "explanation": "(celsius * 9 / 5) + 32 converts the temperature.",
+              "xp_reward": 10,
+              "options": [
+                "int",
+                "fahrenheit",
+                "=",
+                "(left",
+                "*",
+                "9",
+                "/",
+                "5)",
+                "+",
+                "32;",
+                "=="
+              ],
+              "correct_answer": [
+                "int",
+                "fahrenheit",
+                "=",
+                "(left",
+                "*",
+                "9",
+                "/",
+                "5)",
+                "+",
+                "32;"
+              ]
+            },
+            {
+              "id": "java-variables-practice-1-fill",
+              "type": "fill_blank",
+              "question": "Drop in the piece that lets the line converts Celsius to Fahrenheit with integer math for celsius and 32.",
+              "hints": [
+                "Follow the job, which converts Celsius to Fahrenheit with integer math.",
+                "(celsius * 9 / 5) + 32 converts the temperature.",
+                "*"
+              ],
+              "explanation": "(celsius * 9 / 5) + 32 converts the temperature.",
+              "xp_reward": 10,
+              "starter_code": "int fahrenheit = (left ___ 9 / 5) + 32;",
+              "options": [
+                "/",
+                "*",
+                "+",
+                "-"
+              ],
+              "correct_answer": "*"
+            },
+            {
+              "id": "java-variables-practice-1-bug",
+              "type": "debugging",
+              "question": "The mismatch misses the job, which converts Celsius to Fahrenheit with integer math, for celsius and 32.",
+              "hints": [
+                "Follow the job, which converts Celsius to Fahrenheit with integer math.",
+                "The formula adds 9 instead of multiplying by 9.",
+                "Line 4"
+              ],
+              "explanation": "The formula adds 9 instead of multiplying by 9.",
+              "xp_reward": 10,
+              "starter_code": "public class Solution {\n    public static void main(String[] args) {\n        int celsius = 10;\n        System.out.println((celsius + 9 / 5) + 32);\n    }\n}\n",
+              "correct_answer": "4"
+            },
+            {
+              "id": "java-variables-practice-1-predict-2",
+              "type": "output_prediction",
+              "question": "Choose the printed result of the second run that converts Celsius to Fahrenheit with integer math for celsius and 32.",
+              "hints": [
+                "Follow the job, which converts Celsius to Fahrenheit with integer math.",
+                "(celsius * 9 / 5) + 32 converts the temperature.",
+                "68"
+              ],
+              "explanation": "(celsius * 9 / 5) + 32 converts the temperature.",
+              "xp_reward": 10,
+              "starter_code": "public class Solution {\n    public static void main(String[] args) {\n        int celsius = 20;\n        System.out.println((celsius * 9 / 5) + 32);\n    }\n}\n",
+              "options": [
+                "50",
+                "68",
+                "none",
+                "0"
+              ],
+              "correct_answer": "68"
+            },
+            {
+              "id": "java-variables-practice-1-write",
+              "type": "code",
+              "question": "Make the program converts Celsius to Fahrenheit with integer math by filling the blank for celsius and 32.",
+              "hints": [
+                "Follow the job, which converts Celsius to Fahrenheit with integer math.",
+                "The printed value is the result after this step converts Celsius to Fahrenheit with integer math.",
+                "int label = (celsius * 9 / 5) + 32;"
+              ],
+              "explanation": "The printed value is the result after this step converts Celsius to Fahrenheit with integer math.",
+              "xp_reward": 10,
+              "starter_code": "public class Solution {\n    public static void main(String[] args) {\n        int celsius = 10;\n        int label = ___;\n        System.out.println(label);\n    }\n}\n",
+              "solution_code": "public class Solution {\n    public static void main(String[] args) {\n        int celsius = 10;\n        int label = (celsius * 9 / 5) + 32;\n        System.out.println(label);\n    }\n}\n",
+              "tests": [
+                {
+                  "name": "java-variables-practice-1-prints",
+                  "description": "The printed value is the result after this step converts Celsius to Fahrenheit w",
+                  "expected_stdout": "50\n",
+                  "required": true
+                }
+              ]
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "java-variables-checkpoint",
-      "title": "5. Section 1 Checkpoint: Java Foundations Mastery",
-      "description": "Finish `Solution.square` so it returns `n * n`. The test checks that `Solution.square(7)` equals `49`.",
+      "title": "Practice Section 1 Checkpoint Java Foundations",
+      "description": "Finish Solution.square so it returns n * n. The test checks that Solution.square(7) equals 49.",
       "order": 5,
       "difficulty": "beginner",
       "duration_minutes": 10,
@@ -277,7 +893,7 @@
       ],
       "prerequisites": [],
       "learning_objectives": [
-        "Return n squared from Solution.square"
+        "This step stores twice the integer, using the value 2."
       ],
       "starter_code": "public class Solution {\n    public static int square(int n) {\n        // TODO: Return n * n\n        return 0;\n    }\n}\n",
       "solution_code": "public class Solution {\n    public static int square(int n) {\n        return n * n;\n    }\n}\n",
@@ -327,7 +943,175 @@
         "url": "https://docs.oracle.com/javase/tutorial/java/nutsandbolts/operators.html",
         "license": "Oracle Free Use Terms and Conditions (documentation)"
       },
-      "xp_reward": 40
+      "xp_reward": 40,
+      "player_mode": "micro",
+      "sublessons": [
+        {
+          "id": "java-variables-checkpoint-micro",
+          "title": "Practice Section 1 Checkpoint Java Foundations",
+          "description": "",
+          "order": 1,
+          "exercises": [
+            {
+              "id": "java-variables-checkpoint-teach",
+              "type": "teach",
+              "question": "This step stores twice the integer, using the value 2.",
+              "hints": [
+                "Follow the job, which stores twice the integer.",
+                "left * 2 stores twice the value.",
+                "int left = 55;"
+              ],
+              "explanation": "This step stores twice the integer, using the value 2.",
+              "xp_reward": 0,
+              "worked_example": "int left = 55;"
+            },
+            {
+              "id": "java-variables-checkpoint-mcq",
+              "type": "mcq",
+              "question": "The match is the line that stores twice the integer for the value 2.",
+              "hints": [
+                "Follow the job, which stores twice the integer.",
+                "left * 2 stores twice the value.",
+                "int total = left * 2;"
+              ],
+              "explanation": "left * 2 stores twice the value.",
+              "xp_reward": 10,
+              "options": [
+                "left == 2;",
+                "total == left;",
+                "int total = left * 2;",
+                "return left;"
+              ],
+              "correct_answer": "int total = left * 2;"
+            },
+            {
+              "id": "java-variables-checkpoint-predict",
+              "type": "output_prediction",
+              "question": "Work out what is printed when the code stores twice the integer for the value 2.",
+              "hints": [
+                "Follow the job, which stores twice the integer.",
+                "left * 2 stores twice the value.",
+                "110"
+              ],
+              "explanation": "left * 2 stores twice the value.",
+              "xp_reward": 10,
+              "starter_code": "public class Solution {\n    public static void main(String[] args) {\n        int left = 55;\n        System.out.println(left * 2);\n    }\n}\n",
+              "options": [
+                "116",
+                "none",
+                "0",
+                "110"
+              ],
+              "correct_answer": "110"
+            },
+            {
+              "id": "java-variables-checkpoint-order",
+              "type": "ordering",
+              "question": "Rebuild, from the left, the line that stores twice the integer for the value 2.",
+              "hints": [
+                "Follow the job, which stores twice the integer.",
+                "left * 2 stores twice the value.",
+                "int total = left * 2;"
+              ],
+              "explanation": "left * 2 stores twice the value.",
+              "xp_reward": 10,
+              "options": [
+                "int",
+                "total",
+                "=",
+                "left",
+                "*",
+                "2;",
+                "=="
+              ],
+              "correct_answer": [
+                "int",
+                "total",
+                "=",
+                "left",
+                "*",
+                "2;"
+              ]
+            },
+            {
+              "id": "java-variables-checkpoint-fill",
+              "type": "fill_blank",
+              "question": "The completed line stores twice the integer once you fill the blank for the value 2.",
+              "hints": [
+                "Follow the job, which stores twice the integer.",
+                "left * 2 stores twice the value.",
+                "*"
+              ],
+              "explanation": "left * 2 stores twice the value.",
+              "xp_reward": 10,
+              "starter_code": "int total = left ___ 2;",
+              "options": [
+                "+",
+                "*",
+                "==",
+                "-"
+              ],
+              "correct_answer": "*"
+            },
+            {
+              "id": "java-variables-checkpoint-bug",
+              "type": "debugging",
+              "question": "One line does another job than the one that stores twice the integer for the value 2.",
+              "hints": [
+                "Follow the job, which stores twice the integer.",
+                "The print adds two instead of doubling.",
+                "Line 4"
+              ],
+              "explanation": "The print adds two instead of doubling.",
+              "xp_reward": 10,
+              "starter_code": "public class Solution {\n    public static void main(String[] args) {\n        int left = 55;\n        System.out.println(left + 2);\n    }\n}\n",
+              "correct_answer": "4"
+            },
+            {
+              "id": "java-variables-checkpoint-predict-2",
+              "type": "output_prediction",
+              "question": "The second display is what prints after the code stores twice the integer for the value 2.",
+              "hints": [
+                "Follow the job, which stores twice the integer.",
+                "left * 2 stores twice the value.",
+                "116"
+              ],
+              "explanation": "left * 2 stores twice the value.",
+              "xp_reward": 10,
+              "starter_code": "public class Solution {\n    public static void main(String[] args) {\n        int left = 58;\n        System.out.println(left * 2);\n    }\n}\n",
+              "options": [
+                "110",
+                "none",
+                "116",
+                "0"
+              ],
+              "correct_answer": "116"
+            },
+            {
+              "id": "java-variables-checkpoint-write",
+              "type": "code",
+              "question": "Supply the blank so the run stores twice the integer and prints the result for the value 2.",
+              "hints": [
+                "Follow the job, which stores twice the integer.",
+                "The printed value is the result after this step stores twice the integer.",
+                "int label = left * 2;"
+              ],
+              "explanation": "The printed value is the result after this step stores twice the integer.",
+              "xp_reward": 10,
+              "starter_code": "public class Solution {\n    public static void main(String[] args) {\n        int left = 55;\n        int label = ___;\n        System.out.println(label);\n    }\n}\n",
+              "solution_code": "public class Solution {\n    public static void main(String[] args) {\n        int left = 55;\n        int label = left * 2;\n        System.out.println(label);\n    }\n}\n",
+              "tests": [
+                {
+                  "name": "java-variables-checkpoint-prints",
+                  "description": "The printed value is the result after this step stores twice the integer.",
+                  "expected_stdout": "110\n",
+                  "required": true
+                }
+              ]
+            }
+          ]
+        }
+      ]
     }
   ]
 }

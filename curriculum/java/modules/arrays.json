@@ -14,8 +14,8 @@
   "lessons": [
     {
       "id": "java-arrays-step-1",
-      "title": "1. Array Sum & Length",
-      "description": "In Java, arrays have fixed size and a `.length` field. Implement `findSum(int[] numbers)`. The test checks that `Solution.findSum(arr)` equals `60`.",
+      "title": "Practice Array Sum Length",
+      "description": "In Java, arrays have fixed size and a .length field. Implement findSum(int[] numbers). The test checks that Solution.findSum(arr) equals 60.",
       "order": 16,
       "difficulty": "beginner",
       "duration_minutes": 5,
@@ -27,7 +27,7 @@
         "java-loops"
       ],
       "learning_objectives": [
-        "Iterate over Java primitive array elements"
+        "This step adds every value stored in the array, using items and 6."
       ],
       "starter_code": "public class Solution {\n    public static int findSum(int[] numbers) {\n        // TODO: Sum all elements in numbers array\n        return 0;\n    }\n}\n",
       "solution_code": "public class Solution {\n    public static int findSum(int[] numbers) {\n        int sum = 0;\n        for (int num : numbers) {\n            sum += num;\n        }\n        return sum;\n    }\n}\n",
@@ -48,12 +48,178 @@
         "url": "https://docs.oracle.com/javase/tutorial/java/nutsandbolts/arrays.html",
         "license": "Oracle Free Use Terms and Conditions (documentation)"
       },
-      "xp_reward": 10
+      "xp_reward": 10,
+      "player_mode": "micro",
+      "sublessons": [
+        {
+          "id": "java-arrays-step-1-micro",
+          "title": "Practice Array Sum Length",
+          "description": "",
+          "order": 1,
+          "exercises": [
+            {
+              "id": "java-arrays-step-1-teach",
+              "type": "teach",
+              "question": "This step adds every value stored in the array, using items and 6.",
+              "hints": [
+                "Follow the job, which adds every value stored in the array.",
+                "The loop adds each stored value into total.",
+                "int[] items = {2, 4, 6};"
+              ],
+              "explanation": "This step adds every value stored in the array, using items and 6.",
+              "xp_reward": 0,
+              "worked_example": "int[] items = {2, 4, 6};"
+            },
+            {
+              "id": "java-arrays-step-1-mcq",
+              "type": "mcq",
+              "question": "Choose the line that adds every value stored in the array, which is the line that fits items and 6.",
+              "hints": [
+                "Follow the job, which adds every value stored in the array.",
+                "The loop adds each stored value into total.",
+                "for (int item : items) total = total + item;"
+              ],
+              "explanation": "The loop adds each stored value into total.",
+              "xp_reward": 10,
+              "options": [
+                "items == items;",
+                "for (int item : items) total = total + item;",
+                "return items;",
+                "total == item;"
+              ],
+              "correct_answer": "for (int item : items) total = total + item;"
+            },
+            {
+              "id": "java-arrays-step-1-predict",
+              "type": "output_prediction",
+              "question": "Read the code that adds every value stored in the array for items and 6, and choose the value it prints.",
+              "hints": [
+                "Follow the job, which adds every value stored in the array.",
+                "The loop adds each stored value into total.",
+                "12"
+              ],
+              "explanation": "The loop adds each stored value into total.",
+              "xp_reward": 10,
+              "starter_code": "public class Solution {\n    public static void main(String[] args) {\n        int[] items = {2, 4, 6};\n        int total = 0;\n        for (int item : items) total = total + item;\n        System.out.println(total);\n    }\n}\n",
+              "options": [
+                "15",
+                "none",
+                "12",
+                "0"
+              ],
+              "correct_answer": "12"
+            },
+            {
+              "id": "java-arrays-step-1-order",
+              "type": "ordering",
+              "question": "Arrange the pieces of the line that adds every value stored in the array, left to right, for items and 6.",
+              "hints": [
+                "Follow the job, which adds every value stored in the array.",
+                "The loop adds each stored value into total.",
+                "int[] items = {left, right};"
+              ],
+              "explanation": "The loop adds each stored value into total.",
+              "xp_reward": 10,
+              "options": [
+                "int[]",
+                "items",
+                "=",
+                "{left,",
+                "right};",
+                "=="
+              ],
+              "correct_answer": [
+                "int[]",
+                "items",
+                "=",
+                "{left,",
+                "right};"
+              ]
+            },
+            {
+              "id": "java-arrays-step-1-fill",
+              "type": "fill_blank",
+              "question": "Fill the blank so the line adds every value stored in the array for items and 6.",
+              "hints": [
+                "Follow the job, which adds every value stored in the array.",
+                "The loop adds each stored value into total.",
+                "+"
+              ],
+              "explanation": "The loop adds each stored value into total.",
+              "xp_reward": 10,
+              "starter_code": "int[] items = {left, right}; int total = 0; for (int item : items) total = total ___ item;",
+              "options": [
+                "-",
+                "+",
+                "*",
+                "=="
+              ],
+              "correct_answer": "+"
+            },
+            {
+              "id": "java-arrays-step-1-bug",
+              "type": "debugging",
+              "question": "Find the line that misses the job, which adds every value stored in the array, for items and 6.",
+              "hints": [
+                "Follow the job, which adds every value stored in the array.",
+                "The loop subtracts each stored value instead of adding it.",
+                "Line 5"
+              ],
+              "explanation": "The loop subtracts each stored value instead of adding it.",
+              "xp_reward": 10,
+              "starter_code": "public class Solution {\n    public static void main(String[] args) {\n        int[] items = {2, 4, 6};\n        int total = 0;\n        for (int item : items) total = total - item;\n        System.out.println(total);\n    }\n}\n",
+              "correct_answer": "5"
+            },
+            {
+              "id": "java-arrays-step-1-predict-2",
+              "type": "output_prediction",
+              "question": "On the new input, the code still adds every value stored in the array for items and 6, so choose what it prints.",
+              "hints": [
+                "Follow the job, which adds every value stored in the array.",
+                "The loop adds each stored value into total.",
+                "15"
+              ],
+              "explanation": "The loop adds each stored value into total.",
+              "xp_reward": 10,
+              "starter_code": "public class Solution {\n    public static void main(String[] args) {\n        int[] items = {2, 4, 9};\n        int total = 0;\n        for (int item : items) total = total + item;\n        System.out.println(total);\n    }\n}\n",
+              "options": [
+                "12",
+                "none",
+                "0",
+                "15"
+              ],
+              "correct_answer": "15"
+            },
+            {
+              "id": "java-arrays-step-1-write",
+              "type": "code",
+              "question": "Fill the blank so the program adds every value stored in the array, and the print shows that result for items and 6.",
+              "hints": [
+                "Follow the job, which adds every value stored in the array.",
+                "The printed value is the result after this step adds every value stored in the array.",
+                "int label = total;"
+              ],
+              "explanation": "The printed value is the result after this step adds every value stored in the array.",
+              "xp_reward": 10,
+              "starter_code": "public class Solution {\n    public static void main(String[] args) {\n        int[] items = {2, 4, 6};\n        int total = 0;\n        for (int item : items) total = total + item;\n        int label = ___;\n        System.out.println(label);\n    }\n}\n",
+              "solution_code": "public class Solution {\n    public static void main(String[] args) {\n        int[] items = {2, 4, 6};\n        int total = 0;\n        for (int item : items) total = total + item;\n        int label = total;\n        System.out.println(label);\n    }\n}\n",
+              "tests": [
+                {
+                  "name": "java-arrays-step-1-prints",
+                  "description": "The printed value is the result after this step adds every value stored in the a",
+                  "expected_stdout": "12\n",
+                  "required": true
+                }
+              ]
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "java-arrays-step-2",
-      "title": "2. Finding Min & Max",
-      "description": "Finish `findMax`. Find maximum value in a non-empty array. The test checks that `Solution.findMax(arr)` equals `9`.",
+      "title": "Find Min Max",
+      "description": "Finish findMax. Find maximum value in a non-empty array. The test checks that Solution.findMax(arr) equals 9.",
       "order": 17,
       "difficulty": "beginner",
       "duration_minutes": 5,
@@ -65,7 +231,7 @@
         "java-loops"
       ],
       "learning_objectives": [
-        "Track extrema while traversing array"
+        "This step keeps the largest stored value, using items and 2."
       ],
       "starter_code": "public class Solution {\n    public static int findMax(int[] numbers) {\n        // TODO: Return maximum element in numbers\n        return 0;\n    }\n}\n",
       "solution_code": "public class Solution {\n    public static int findMax(int[] numbers) {\n        int max = numbers[0];\n        for (int num : numbers) {\n            if (num > max) max = num;\n        }\n        return max;\n    }\n}\n",
@@ -86,12 +252,178 @@
         "url": "https://docs.oracle.com/javase/tutorial/java/nutsandbolts/arrays.html",
         "license": "Oracle Free Use Terms and Conditions (documentation)"
       },
-      "xp_reward": 10
+      "xp_reward": 10,
+      "player_mode": "micro",
+      "sublessons": [
+        {
+          "id": "java-arrays-step-2-micro",
+          "title": "Find Min Max",
+          "description": "",
+          "order": 1,
+          "exercises": [
+            {
+              "id": "java-arrays-step-2-teach",
+              "type": "teach",
+              "question": "This step keeps the largest stored value, using items and 2.",
+              "hints": [
+                "Follow the job, which keeps the largest stored value.",
+                "A larger item replaces the value being tracked.",
+                "int[] items = {3, 9, 2};"
+              ],
+              "explanation": "This step keeps the largest stored value, using items and 2.",
+              "xp_reward": 0,
+              "worked_example": "int[] items = {3, 9, 2};"
+            },
+            {
+              "id": "java-arrays-step-2-mcq",
+              "type": "mcq",
+              "question": "The correct line keeps the largest stored value, and it is the line tied to items and 2.",
+              "hints": [
+                "Follow the job, which keeps the largest stored value.",
+                "A larger item replaces the value being tracked.",
+                "if (item > best) best = item;"
+              ],
+              "explanation": "A larger item replaces the value being tracked.",
+              "xp_reward": 10,
+              "options": [
+                "item == best;",
+                "return items;",
+                "if (item > best) best = item;",
+                "best == item;"
+              ],
+              "correct_answer": "if (item > best) best = item;"
+            },
+            {
+              "id": "java-arrays-step-2-predict",
+              "type": "output_prediction",
+              "question": "The program keeps the largest stored value with items and 2, so choose the printed value.",
+              "hints": [
+                "Follow the job, which keeps the largest stored value.",
+                "A larger item replaces the value being tracked.",
+                "9"
+              ],
+              "explanation": "A larger item replaces the value being tracked.",
+              "xp_reward": 10,
+              "starter_code": "public class Solution {\n    public static void main(String[] args) {\n        int[] items = {3, 9, 2};\n        int best = items[0];\n        for (int item : items) if (item > best) best = item;\n        System.out.println(best);\n    }\n}\n",
+              "options": [
+                "4",
+                "none",
+                "9",
+                "0"
+              ],
+              "correct_answer": "9"
+            },
+            {
+              "id": "java-arrays-step-2-order",
+              "type": "ordering",
+              "question": "Build the line that keeps the largest stored value for items and 2, from the first piece to the last.",
+              "hints": [
+                "Follow the job, which keeps the largest stored value.",
+                "A larger item replaces the value being tracked.",
+                "if (left > right) left=right;"
+              ],
+              "explanation": "A larger item replaces the value being tracked.",
+              "xp_reward": 10,
+              "options": [
+                "if",
+                "(left",
+                ">",
+                "right)",
+                "left=right;",
+                "=="
+              ],
+              "correct_answer": [
+                "if",
+                "(left",
+                ">",
+                "right)",
+                "left=right;"
+              ]
+            },
+            {
+              "id": "java-arrays-step-2-fill",
+              "type": "fill_blank",
+              "question": "Replace the blank with the piece that makes the line keeps the largest stored value for items and 2.",
+              "hints": [
+                "Follow the job, which keeps the largest stored value.",
+                "A larger item replaces the value being tracked.",
+                ">"
+              ],
+              "explanation": "A larger item replaces the value being tracked.",
+              "xp_reward": 10,
+              "starter_code": "int[] items = {left, right}; int best = items[0]; if (items[1] ___ best) best = items[1];",
+              "options": [
+                "<",
+                "==",
+                ">",
+                "!="
+              ],
+              "correct_answer": ">"
+            },
+            {
+              "id": "java-arrays-step-2-bug",
+              "type": "debugging",
+              "question": "Spot the line that fails the job, which keeps the largest stored value, around items and 2.",
+              "hints": [
+                "Follow the job, which keeps the largest stored value.",
+                "The comparison keeps the smaller value instead of the larger one.",
+                "Line 5"
+              ],
+              "explanation": "The comparison keeps the smaller value instead of the larger one.",
+              "xp_reward": 10,
+              "starter_code": "public class Solution {\n    public static void main(String[] args) {\n        int[] items = {3, 9, 2};\n        int best = items[0];\n        for (int item : items) if (item < best) best = item;\n        System.out.println(best);\n    }\n}\n",
+              "correct_answer": "5"
+            },
+            {
+              "id": "java-arrays-step-2-predict-2",
+              "type": "output_prediction",
+              "question": "The second program keeps the largest stored value for items and 2, so choose the new printed value.",
+              "hints": [
+                "Follow the job, which keeps the largest stored value.",
+                "A larger item replaces the value being tracked.",
+                "4"
+              ],
+              "explanation": "A larger item replaces the value being tracked.",
+              "xp_reward": 10,
+              "starter_code": "public class Solution {\n    public static void main(String[] args) {\n        int[] items = {3, 4, 2};\n        int best = items[0];\n        for (int item : items) if (item > best) best = item;\n        System.out.println(best);\n    }\n}\n",
+              "options": [
+                "9",
+                "4",
+                "none",
+                "0"
+              ],
+              "correct_answer": "4"
+            },
+            {
+              "id": "java-arrays-step-2-write",
+              "type": "code",
+              "question": "Complete the blank so this program keeps the largest stored value and prints the result for items and 2.",
+              "hints": [
+                "Follow the job, which keeps the largest stored value.",
+                "The printed value is the result after this step keeps the largest stored value.",
+                "int label = best;"
+              ],
+              "explanation": "The printed value is the result after this step keeps the largest stored value.",
+              "xp_reward": 10,
+              "starter_code": "public class Solution {\n    public static void main(String[] args) {\n        int[] items = {3, 9, 2};\n        int best = items[0];\n        for (int item : items) if (item > best) best = item;\n        int label = ___;\n        System.out.println(label);\n    }\n}\n",
+              "solution_code": "public class Solution {\n    public static void main(String[] args) {\n        int[] items = {3, 9, 2};\n        int best = items[0];\n        for (int item : items) if (item > best) best = item;\n        int label = best;\n        System.out.println(label);\n    }\n}\n",
+              "tests": [
+                {
+                  "name": "java-arrays-step-2-prints",
+                  "description": "The printed value is the result after this step keeps the largest stored value.",
+                  "expected_stdout": "9\n",
+                  "required": true
+                }
+              ]
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "java-arrays-01",
-      "title": "3. Temperature Sensor Analysis (Concept Challenge)",
-      "description": "Finish `countAboveThreshold`. Calculate average reading and count values above threshold. The test checks that `Solution.countAboveThreshold(r, 25.0)` equals `2`.",
+      "title": "Practice Temperature Sensor Analysis",
+      "description": "Finish countAboveThreshold. Calculate average reading and count values above threshold. The test checks that Solution.countAboveThreshold(r, 25.0) equals 2.",
       "order": 18,
       "difficulty": "beginner",
       "duration_minutes": 8,
@@ -103,7 +435,7 @@
         "java-loops"
       ],
       "learning_objectives": [
-        "Perform statistical array operations in Java"
+        "This step counts values above the sensor limit, using items and 25."
       ],
       "starter_code": "public class Solution {\n    public static int countAboveThreshold(double[] readings, double threshold) {\n        // TODO: Count readings > threshold\n        return 0;\n    }\n}\n",
       "solution_code": "public class Solution {\n    public static int countAboveThreshold(double[] readings, double threshold) {\n        int count = 0;\n        for (double r : readings) {\n            if (r > threshold) count++;\n        }\n        return count;\n    }\n}\n",
@@ -124,11 +456,177 @@
         "url": "https://docs.oracle.com/javase/tutorial/java/nutsandbolts/arrays.html",
         "license": "Oracle Free Use Terms and Conditions (documentation)"
       },
-      "xp_reward": 25
+      "xp_reward": 25,
+      "player_mode": "micro",
+      "sublessons": [
+        {
+          "id": "java-arrays-01-micro",
+          "title": "Practice Temperature Sensor Analysis",
+          "description": "",
+          "order": 1,
+          "exercises": [
+            {
+              "id": "java-arrays-01-teach",
+              "type": "teach",
+              "question": "This step counts values above the sensor limit, using items and 25.",
+              "hints": [
+                "Follow the job, which counts values above the sensor limit.",
+                "A value larger than the limit increments the count.",
+                "int[] items = {10, 30, 40};"
+              ],
+              "explanation": "This step counts values above the sensor limit, using items and 25.",
+              "xp_reward": 0,
+              "worked_example": "int[] items = {10, 30, 40};"
+            },
+            {
+              "id": "java-arrays-01-mcq",
+              "type": "mcq",
+              "question": "A correct choice counts values above the sensor limit and goes with items and 25.",
+              "hints": [
+                "Follow the job, which counts values above the sensor limit.",
+                "A value larger than the limit increments the count.",
+                "if (item > limit) hits++;"
+              ],
+              "explanation": "A value larger than the limit increments the count.",
+              "xp_reward": 10,
+              "options": [
+                "item == limit;",
+                "return items;",
+                "if (item > limit) hits++;",
+                "hits == item;"
+              ],
+              "correct_answer": "if (item > limit) hits++;"
+            },
+            {
+              "id": "java-arrays-01-predict",
+              "type": "output_prediction",
+              "question": "Select the output after the code counts values above the sensor limit, using items and.",
+              "hints": [
+                "Follow the job, which counts values above the sensor limit.",
+                "A value larger than the limit increments the count.",
+                "2"
+              ],
+              "explanation": "A value larger than the limit increments the count.",
+              "xp_reward": 10,
+              "starter_code": "public class Solution {\n    public static void main(String[] args) {\n        int[] items = {10, 30, 40};\n        int limit = 25;\n        int hits = 0;\n        for (int item : items) if (item > limit) hits++;\n        System.out.println(hits);\n    }\n}\n",
+              "options": [
+                "1",
+                "2",
+                "none",
+                "0"
+              ],
+              "correct_answer": "2"
+            },
+            {
+              "id": "java-arrays-01-order",
+              "type": "ordering",
+              "question": "Make the line that counts values above the sensor limit by ordering the pieces for items and 25.",
+              "hints": [
+                "Follow the job, which counts values above the sensor limit.",
+                "A value larger than the limit increments the count.",
+                "if (left > count) left++;"
+              ],
+              "explanation": "A value larger than the limit increments the count.",
+              "xp_reward": 10,
+              "options": [
+                "if",
+                "(left",
+                ">",
+                "count)",
+                "left++;",
+                "=="
+              ],
+              "correct_answer": [
+                "if",
+                "(left",
+                ">",
+                "count)",
+                "left++;"
+              ]
+            },
+            {
+              "id": "java-arrays-01-fill",
+              "type": "fill_blank",
+              "question": "Complete the line for items and 25 so that it counts values above the sensor limit.",
+              "hints": [
+                "Follow the job, which counts values above the sensor limit.",
+                "A value larger than the limit increments the count.",
+                ">"
+              ],
+              "explanation": "A value larger than the limit increments the count.",
+              "xp_reward": 10,
+              "starter_code": "int[] items = {10, 30, 40}; int hits = 0; for (int item : items) if (item ___ 25) hits++;",
+              "options": [
+                "<",
+                ">",
+                "==",
+                "!="
+              ],
+              "correct_answer": ">"
+            },
+            {
+              "id": "java-arrays-01-bug",
+              "type": "debugging",
+              "question": "Select the line that gets in the way of the job, which counts values above the sensor limit, for items and.",
+              "hints": [
+                "Follow the job, which counts values above the sensor limit.",
+                "The comparison counts values under the limit.",
+                "Line 5"
+              ],
+              "explanation": "The comparison counts values under the limit.",
+              "xp_reward": 10,
+              "starter_code": "public class Solution {\n    public static void main(String[] args) {\n        int[] items = {10, 30, 40};\n        int hits = 0;\n        for (int item : items) if (item < 25) hits++;\n        System.out.println(hits);\n    }\n}\n",
+              "correct_answer": "5"
+            },
+            {
+              "id": "java-arrays-01-predict-2",
+              "type": "output_prediction",
+              "question": "With the new data around items and 25, the code counts values above the sensor limit, so select the new output.",
+              "hints": [
+                "Follow the job, which counts values above the sensor limit.",
+                "A value larger than the limit increments the count.",
+                "1"
+              ],
+              "explanation": "A value larger than the limit increments the count.",
+              "xp_reward": 10,
+              "starter_code": "public class Solution {\n    public static void main(String[] args) {\n        int[] items = {10, 30, 40};\n        int limit = 35;\n        int hits = 0;\n        for (int item : items) if (item > limit) hits++;\n        System.out.println(hits);\n    }\n}\n",
+              "options": [
+                "2",
+                "none",
+                "0",
+                "1"
+              ],
+              "correct_answer": "1"
+            },
+            {
+              "id": "java-arrays-01-write",
+              "type": "code",
+              "question": "The printed result shows up after you fill the blank so the code counts values above the sensor limit for items and.",
+              "hints": [
+                "Follow the job, which counts values above the sensor limit.",
+                "The printed value is the result after this step counts values above the sensor limit.",
+                "int label = hits;"
+              ],
+              "explanation": "The printed value is the result after this step counts values above the sensor limit.",
+              "xp_reward": 10,
+              "starter_code": "public class Solution {\n    public static void main(String[] args) {\n        int[] items = {10, 30, 40};\n        int limit = 25;\n        int hits = 0;\n        for (int item : items) if (item > limit) hits++;\n        int label = ___;\n        System.out.println(label);\n    }\n}\n",
+              "solution_code": "public class Solution {\n    public static void main(String[] args) {\n        int[] items = {10, 30, 40};\n        int limit = 25;\n        int hits = 0;\n        for (int item : items) if (item > limit) hits++;\n        int label = hits;\n        System.out.println(label);\n    }\n}\n",
+              "tests": [
+                {
+                  "name": "java-arrays-01-prints",
+                  "description": "The printed value is the result after this step counts values above the sensor l",
+                  "expected_stdout": "2\n",
+                  "required": true
+                }
+              ]
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "java-arrays-practice-1",
-      "title": "4. Array Reversal (Practice)",
+      "title": "Practice Array Reversal",
       "description": "Implement reverse(int[] numbers) so it reverses the array in place — swap elements from both ends while the left index stays below the right index. The test expects {1, 2, 3, 4} to become {4, 3, 2, 1}.",
       "order": 19,
       "difficulty": "beginner",
@@ -141,7 +639,7 @@
         "java-loops"
       ],
       "learning_objectives": [
-        "Swap array elements in-place"
+        "This step prints the value that moved to the front, using items and 4."
       ],
       "starter_code": "public class Solution {\n    public static void reverse(int[] numbers) {\n        // TODO: Reverse numbers in-place\n    }\n}\n",
       "solution_code": "public class Solution {\n    public static void reverse(int[] numbers) {\n        int left = 0, right = numbers.length - 1;\n        while (left < right) {\n            int temp = numbers[left];\n            numbers[left] = numbers[right];\n            numbers[right] = temp;\n            left++;\n            right--;\n        }\n    }\n}\n",
@@ -162,11 +660,175 @@
         "url": "https://docs.oracle.com/javase/tutorial/java/nutsandbolts/arrays.html",
         "license": "Oracle Free Use Terms and Conditions (documentation)"
       },
-      "xp_reward": 15
+      "xp_reward": 15,
+      "player_mode": "micro",
+      "sublessons": [
+        {
+          "id": "java-arrays-practice-1-micro",
+          "title": "Practice Array Reversal",
+          "description": "",
+          "order": 1,
+          "exercises": [
+            {
+              "id": "java-arrays-practice-1-teach",
+              "type": "teach",
+              "question": "This step prints the value that moved to the front, using items and 4.",
+              "hints": [
+                "Follow the job, which prints the value that moved to the front.",
+                "After the swaps the old last value sits at the front.",
+                "int[] items = {1, 2, 3, 4};"
+              ],
+              "explanation": "This step prints the value that moved to the front, using items and 4.",
+              "xp_reward": 0,
+              "worked_example": "int[] items = {1, 2, 3, 4};"
+            },
+            {
+              "id": "java-arrays-practice-1-mcq",
+              "type": "mcq",
+              "question": "A correct choice prints the value that moved to the front and goes with items and 4.",
+              "hints": [
+                "Follow the job, which prints the value that moved to the front.",
+                "After the swaps the old last value sits at the front.",
+                "items[items.length - 1]"
+              ],
+              "explanation": "After the swaps the old last value sits at the front.",
+              "xp_reward": 10,
+              "options": [
+                "items == items;",
+                "items[items.length - 1]",
+                "return items;",
+                "items[0] == 1;"
+              ],
+              "correct_answer": "items[items.length - 1]"
+            },
+            {
+              "id": "java-arrays-practice-1-predict",
+              "type": "output_prediction",
+              "question": "Select the output after the code prints the value that moved to the front, using items and.",
+              "hints": [
+                "Follow the job, which prints the value that moved to the front.",
+                "After the swaps the old last value sits at the front.",
+                "4"
+              ],
+              "explanation": "After the swaps the old last value sits at the front.",
+              "xp_reward": 10,
+              "starter_code": "public class Solution {\n    public static void main(String[] args) {\n        int[] items = {1, 2, 3, 4};\n        int i = 0;\n        int j = items.length - 1;\n        while (i < j) { int temp = items[i]; items[i] = items[j]; items[j] = temp; i++; j--; }\n        System.out.println(items[0]);\n    }\n}\n",
+              "options": [
+                "1",
+                "4",
+                "none",
+                "0"
+              ],
+              "correct_answer": "4"
+            },
+            {
+              "id": "java-arrays-practice-1-order",
+              "type": "ordering",
+              "question": "Make the line that prints the value that moved to the front by ordering the pieces for items and 4.",
+              "hints": [
+                "Follow the job, which prints the value that moved to the front.",
+                "After the swaps the old last value sits at the front.",
+                "int temp=left; left=right; right=temp;"
+              ],
+              "explanation": "After the swaps the old last value sits at the front.",
+              "xp_reward": 10,
+              "options": [
+                "int",
+                "temp=left;",
+                "left=right;",
+                "right=temp;",
+                "=="
+              ],
+              "correct_answer": [
+                "int",
+                "temp=left;",
+                "left=right;",
+                "right=temp;"
+              ]
+            },
+            {
+              "id": "java-arrays-practice-1-fill",
+              "type": "fill_blank",
+              "question": "Complete the line for items and 4 so that it prints the value that moved to the front.",
+              "hints": [
+                "Follow the job, which prints the value that moved to the front.",
+                "After the swaps the old last value sits at the front.",
+                "length"
+              ],
+              "explanation": "After the swaps the old last value sits at the front.",
+              "xp_reward": 10,
+              "starter_code": "int[] items = {1, 2, 3, 4}; int front = items[items.___ - 1];",
+              "options": [
+                "size",
+                "length",
+                "count",
+                "len"
+              ],
+              "correct_answer": "length"
+            },
+            {
+              "id": "java-arrays-practice-1-bug",
+              "type": "debugging",
+              "question": "Select the line that gets in the way of the job, which prints the value that moved to the front, for items and.",
+              "hints": [
+                "Follow the job, which prints the value that moved to the front.",
+                "The print shows the original front and never swaps the ends.",
+                "Line 4"
+              ],
+              "explanation": "The print shows the original front and never swaps the ends.",
+              "xp_reward": 10,
+              "starter_code": "public class Solution {\n    public static void main(String[] args) {\n        int[] items = {1, 2, 3, 4};\n        System.out.println(items[0]);\n    }\n}\n",
+              "correct_answer": "4"
+            },
+            {
+              "id": "java-arrays-practice-1-predict-2",
+              "type": "output_prediction",
+              "question": "With the new data around items and 4, the code prints the value that moved to the front, so select the new output.",
+              "hints": [
+                "Follow the job, which prints the value that moved to the front.",
+                "After the swaps the old last value sits at the front.",
+                "1"
+              ],
+              "explanation": "After the swaps the old last value sits at the front.",
+              "xp_reward": 10,
+              "starter_code": "public class Solution {\n    public static void main(String[] args) {\n        int[] items = {8, 2, 3, 1};\n        int i = 0;\n        int j = items.length - 1;\n        while (i < j) { int temp = items[i]; items[i] = items[j]; items[j] = temp; i++; j--; }\n        System.out.println(items[0]);\n    }\n}\n",
+              "options": [
+                "4",
+                "none",
+                "0",
+                "1"
+              ],
+              "correct_answer": "1"
+            },
+            {
+              "id": "java-arrays-practice-1-write",
+              "type": "code",
+              "question": "The printed result shows up after you fill the blank so the code prints the value that moved to the front for items and.",
+              "hints": [
+                "Follow the job, which prints the value that moved to the front.",
+                "The printed value is the result after this step prints the value that moved to the front.",
+                "int label = items[0];"
+              ],
+              "explanation": "The printed value is the result after this step prints the value that moved to the front.",
+              "xp_reward": 10,
+              "starter_code": "public class Solution {\n    public static void main(String[] args) {\n        int[] items = {1, 2, 3, 4};\n        int i = 0;\n        int j = items.length - 1;\n        while (i < j) { int temp = items[i]; items[i] = items[j]; items[j] = temp; i++; j--; }\n        int label = ___;\n        System.out.println(label);\n    }\n}\n",
+              "solution_code": "public class Solution {\n    public static void main(String[] args) {\n        int[] items = {1, 2, 3, 4};\n        int i = 0;\n        int j = items.length - 1;\n        while (i < j) { int temp = items[i]; items[i] = items[j]; items[j] = temp; i++; j--; }\n        int label = items[0];\n        System.out.println(label);\n    }\n}\n",
+              "tests": [
+                {
+                  "name": "java-arrays-practice-1-prints",
+                  "description": "The printed value is the result after this step prints the value that moved to t",
+                  "expected_stdout": "4\n",
+                  "required": true
+                }
+              ]
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "java-arrays-checkpoint",
-      "title": "5. Unit 4 Checkpoint: Arrays Mastery",
+      "title": "Practice Unit 4 Checkpoint Arrays Mastery",
       "description": "Implement contains(int[] numbers, int target): walk the array (a for-each loop fits nicely) and return true only when target appears. The test expects contains({5, 10, 15}, 10) == true and contains({5, 10, 15}, 99) == false.",
       "order": 20,
       "difficulty": "beginner",
@@ -179,7 +841,7 @@
         "java-loops"
       ],
       "learning_objectives": [
-        "Pass Java arrays checkpoint"
+        "This step reports whether the target is stored, using items and 1."
       ],
       "starter_code": "public class Solution {\n    public static boolean contains(int[] numbers, int target) {\n        // TODO: Return true if target is in numbers\n        return false;\n    }\n}\n",
       "solution_code": "public class Solution {\n    public static boolean contains(int[] numbers, int target) {\n        for (int num : numbers) {\n            if (num == target) return true;\n        }\n        return false;\n    }\n}\n",
@@ -200,7 +862,173 @@
         "url": "https://docs.oracle.com/javase/tutorial/java/nutsandbolts/arrays.html",
         "license": "Oracle Free Use Terms and Conditions (documentation)"
       },
-      "xp_reward": 40
+      "xp_reward": 40,
+      "player_mode": "micro",
+      "sublessons": [
+        {
+          "id": "java-arrays-checkpoint-micro",
+          "title": "Practice Unit 4 Checkpoint Arrays Mastery",
+          "description": "",
+          "order": 1,
+          "exercises": [
+            {
+              "id": "java-arrays-checkpoint-teach",
+              "type": "teach",
+              "question": "This step reports whether the target is stored, using items and 1.",
+              "hints": [
+                "Follow the job, which reports whether the target is stored.",
+                "A matching item sets the flag.",
+                "int[] items = {5, 10, 15};"
+              ],
+              "explanation": "This step reports whether the target is stored, using items and 1.",
+              "xp_reward": 0,
+              "worked_example": "int[] items = {5, 10, 15};"
+            },
+            {
+              "id": "java-arrays-checkpoint-mcq",
+              "type": "mcq",
+              "question": "Pick the line that reports whether the target is stored, not a line about something else, for items and 1.",
+              "hints": [
+                "Follow the job, which reports whether the target is stored.",
+                "A matching item sets the flag.",
+                "if (item == target) found = 1;"
+              ],
+              "explanation": "A matching item sets the flag.",
+              "xp_reward": 10,
+              "options": [
+                "found == 0;",
+                "item == item;",
+                "if (item == target) found = 1;",
+                "return items;"
+              ],
+              "correct_answer": "if (item == target) found = 1;"
+            },
+            {
+              "id": "java-arrays-checkpoint-predict",
+              "type": "output_prediction",
+              "question": "The displayed value is what the code prints when it reports whether the target is stored for items and.",
+              "hints": [
+                "Follow the job, which reports whether the target is stored.",
+                "A matching item sets the flag.",
+                "1"
+              ],
+              "explanation": "A matching item sets the flag.",
+              "xp_reward": 10,
+              "starter_code": "public class Solution {\n    public static void main(String[] args) {\n        int[] items = {5, 10, 15};\n        int target = 10;\n        int found = 0;\n        for (int item : items) if (item == target) found = 1;\n        System.out.println(found);\n    }\n}\n",
+              "options": [
+                "0",
+                "none",
+                "1",
+                "blank"
+              ],
+              "correct_answer": "1"
+            },
+            {
+              "id": "java-arrays-checkpoint-order",
+              "type": "ordering",
+              "question": "Place every piece so the result reports whether the target is stored for items and 1.",
+              "hints": [
+                "Follow the job, which reports whether the target is stored.",
+                "A matching item sets the flag.",
+                "if (left == right) left++;"
+              ],
+              "explanation": "A matching item sets the flag.",
+              "xp_reward": 10,
+              "options": [
+                "if",
+                "(left",
+                "==",
+                "right)",
+                "left++;",
+                "!="
+              ],
+              "correct_answer": [
+                "if",
+                "(left",
+                "==",
+                "right)",
+                "left++;"
+              ]
+            },
+            {
+              "id": "java-arrays-checkpoint-fill",
+              "type": "fill_blank",
+              "question": "Drop in the piece that lets the line reports whether the target is stored for items and 1.",
+              "hints": [
+                "Follow the job, which reports whether the target is stored.",
+                "A matching item sets the flag.",
+                "=="
+              ],
+              "explanation": "A matching item sets the flag.",
+              "xp_reward": 10,
+              "starter_code": "int[] items = {5, 10, 15}; int found = 0; for (int item : items) if (item ___ 10) found = 1;",
+              "options": [
+                ">",
+                "==",
+                "!=",
+                "<"
+              ],
+              "correct_answer": "=="
+            },
+            {
+              "id": "java-arrays-checkpoint-bug",
+              "type": "debugging",
+              "question": "The mismatch misses the job, which reports whether the target is stored, for items and 1.",
+              "hints": [
+                "Follow the job, which reports whether the target is stored.",
+                "The flag stays zero because nothing compares the stored values with the target.",
+                "Line 4"
+              ],
+              "explanation": "The flag stays zero because nothing compares the stored values with the target.",
+              "xp_reward": 10,
+              "starter_code": "public class Solution {\n    public static void main(String[] args) {\n        int[] items = {5, 10, 15};\n        int found = 0;\n        System.out.println(found);\n    }\n}\n",
+              "correct_answer": "4"
+            },
+            {
+              "id": "java-arrays-checkpoint-predict-2",
+              "type": "output_prediction",
+              "question": "Choose the printed result of the second run that reports whether the target is stored for items and 1.",
+              "hints": [
+                "Follow the job, which reports whether the target is stored.",
+                "A matching item sets the flag.",
+                "0"
+              ],
+              "explanation": "A matching item sets the flag.",
+              "xp_reward": 10,
+              "starter_code": "public class Solution {\n    public static void main(String[] args) {\n        int[] items = {5, 10, 15};\n        int target = 99;\n        int found = 0;\n        for (int item : items) if (item == target) found = 1;\n        System.out.println(found);\n    }\n}\n",
+              "options": [
+                "1",
+                "0",
+                "blank",
+                "none"
+              ],
+              "correct_answer": "0"
+            },
+            {
+              "id": "java-arrays-checkpoint-write",
+              "type": "code",
+              "question": "Make the program reports whether the target is stored by filling the blank for items and.",
+              "hints": [
+                "Follow the job, which reports whether the target is stored.",
+                "The printed value is the result after this step reports whether the target is stored.",
+                "int label = found;"
+              ],
+              "explanation": "The printed value is the result after this step reports whether the target is stored.",
+              "xp_reward": 10,
+              "starter_code": "public class Solution {\n    public static void main(String[] args) {\n        int[] items = {5, 10, 15};\n        int target = 10;\n        int found = 0;\n        for (int item : items) if (item == target) found = 1;\n        int label = ___;\n        System.out.println(label);\n    }\n}\n",
+              "solution_code": "public class Solution {\n    public static void main(String[] args) {\n        int[] items = {5, 10, 15};\n        int target = 10;\n        int found = 0;\n        for (int item : items) if (item == target) found = 1;\n        int label = found;\n        System.out.println(label);\n    }\n}\n",
+              "tests": [
+                {
+                  "name": "java-arrays-checkpoint-prints",
+                  "description": "The printed value is the result after this step reports whether the target is st",
+                  "expected_stdout": "1\n",
+                  "required": true
+                }
+              ]
+            }
+          ]
+        }
+      ]
     }
   ]
 }

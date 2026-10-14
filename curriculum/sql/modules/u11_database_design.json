@@ -14,8 +14,8 @@
   "lessons": [
     {
       "id": "sql-11",
-      "title": "11. Primary Keys & Constraints",
-      "description": "Create a table named `projects` with `id INTEGER PRIMARY KEY`, `title TEXT NOT NULL`, and `budget REAL CHECK (budget >= 0)`. The test checks that the table `projects` exists.",
+      "title": "Practice Primary Keys Constraints",
+      "description": "Create a table named projects with id INTEGER PRIMARY KEY, title TEXT NOT NULL, and budget REAL CHECK (budget >= 0). The test checks that the table projects exists.",
       "order": 11,
       "difficulty": "advanced",
       "duration_minutes": 5,
@@ -45,51 +45,181 @@
         "license": "Public domain (SQLite documentation)"
       },
       "learning_objectives": [
-        "Define tables with CREATE TABLE and typed columns",
-        "Guarantee uniqueness with PRIMARY KEY",
-        "Reject bad data with NOT NULL and CHECK constraints"
+        "This step reads the user stored under the primary key, using username and 1."
       ],
       "xp_reward": 10,
       "sublessons": [
         {
-          "id": "sql-11-match-sub",
-          "title": "Match each constraint to what it guarantees",
+          "id": "sql-11-micro",
+          "title": "Practice Primary Keys Constraints",
+          "description": "",
           "order": 1,
           "exercises": [
             {
-              "id": "sql-11-match-1",
-              "type": "matching",
-              "question": "The `projects` table in this lesson declares three constraints and a column type. Match each to what it guarantees.",
-              "pairs": [
-                {
-                  "left": "PRIMARY KEY",
-                  "right": "one row per value, and it is never missing"
-                },
-                {
-                  "left": "NOT NULL",
-                  "right": "the column must be given a value"
-                },
-                {
-                  "left": "CHECK (budget >= 0)",
-                  "right": "rejects a value outside the allowed range"
-                },
-                {
-                  "left": "REAL",
-                  "right": "stores a decimal number, not a whole number"
-                }
+              "id": "sql-11-teach",
+              "type": "teach",
+              "question": "This step reads the user stored under the primary key, using username and 1.",
+              "hints": [
+                "Follow the job, which reads the user stored under the primary key.",
+                "WHERE id = 1 reads the row whose primary key is 1.",
+                "WHERE id = 1"
               ],
-              "correct_answer": {
-                "PRIMARY KEY": "one row per value, and it is never missing",
-                "NOT NULL": "the column must be given a value",
-                "CHECK (budget >= 0)": "rejects a value outside the allowed range",
-                "REAL": "stores a decimal number, not a whole number"
-              },
-              "explanation": "`id INTEGER PRIMARY KEY` both identifies the row and implies it is present; NOT NULL only requires a value; CHECK is the range test; REAL is the floating-point type.",
-              "xp_reward": 10
+              "explanation": "This step reads the user stored under the primary key, using username and 1.",
+              "xp_reward": 0,
+              "worked_example": "WHERE id = 1"
+            },
+            {
+              "id": "sql-11-mcq",
+              "type": "mcq",
+              "question": "A correct choice reads the user stored under the primary key and goes with username and 1.",
+              "hints": [
+                "Follow the job, which reads the user stored under the primary key.",
+                "WHERE id = 1 reads the row whose primary key is 1.",
+                "SELECT username FROM users WHERE id = 1"
+              ],
+              "explanation": "WHERE id = 1 reads the row whose primary key is 1.",
+              "xp_reward": 10,
+              "options": [
+                "INSERT INTO users",
+                "DROP TABLE users",
+                "id == id",
+                "SELECT username FROM users WHERE id = 1"
+              ],
+              "correct_answer": "SELECT username FROM users WHERE id = 1"
+            },
+            {
+              "id": "sql-11-predict",
+              "type": "output_prediction",
+              "question": "Select the output after the code reads the user stored under the primary key, using username and 1.",
+              "hints": [
+                "Follow the job, which reads the user stored under the primary key.",
+                "WHERE id = 1 reads the row whose primary key is 1.",
+                "┌───────────┐\n│ username  │\n├───────────┤\n│ alice_dev │\n└───────────┘"
+              ],
+              "explanation": "WHERE id = 1 reads the row whose primary key is 1.",
+              "xp_reward": 10,
+              "starter_code": "SELECT username FROM users WHERE id = 1;\n",
+              "options": [
+                "┌───────────┐\n│ username  │\n├───────────┤\n│ bob_coder │\n└───────────┘",
+                "0",
+                "none",
+                "┌───────────┐\n│ username  │\n├───────────┤\n│ alice_dev │\n└───────────┘"
+              ],
+              "correct_answer": "┌───────────┐\n│ username  │\n├───────────┤\n│ alice_dev │\n└───────────┘"
+            },
+            {
+              "id": "sql-11-order",
+              "type": "ordering",
+              "question": "Make the line that reads the user stored under the primary key by ordering the pieces for username and 1.",
+              "hints": [
+                "Follow the job, which reads the user stored under the primary key.",
+                "WHERE id = 1 reads the row whose primary key is 1.",
+                "SELECT username FROM users WHERE id = 1"
+              ],
+              "explanation": "WHERE id = 1 reads the row whose primary key is 1.",
+              "xp_reward": 10,
+              "options": [
+                "SELECT",
+                "username",
+                "FROM",
+                "users",
+                "WHERE",
+                "id",
+                "=",
+                "1",
+                "DROP"
+              ],
+              "correct_answer": [
+                "SELECT",
+                "username",
+                "FROM",
+                "users",
+                "WHERE",
+                "id",
+                "=",
+                "1"
+              ]
+            },
+            {
+              "id": "sql-11-fill",
+              "type": "fill_blank",
+              "question": "Complete the line for username and 1 so that it reads the user stored under the primary key.",
+              "hints": [
+                "Follow the job, which reads the user stored under the primary key.",
+                "WHERE id = 1 reads the row whose primary key is 1.",
+                "="
+              ],
+              "explanation": "WHERE id = 1 reads the row whose primary key is 1.",
+              "xp_reward": 10,
+              "starter_code": "SELECT username FROM users WHERE id ___ 1;",
+              "options": [
+                "<",
+                "=",
+                "!=",
+                ">"
+              ],
+              "correct_answer": "="
+            },
+            {
+              "id": "sql-11-bug",
+              "type": "debugging",
+              "question": "Select the line that gets in the way of the job, which reads the user stored under the primary key, for username and.",
+              "hints": [
+                "Follow the job, which reads the user stored under the primary key.",
+                "The lookup uses an id that is not the primary key of a row.",
+                "Line 1"
+              ],
+              "explanation": "The lookup uses an id that is not the primary key of a row.",
+              "xp_reward": 10,
+              "starter_code": "SELECT username FROM users WHERE id = 9;",
+              "correct_answer": "1"
+            },
+            {
+              "id": "sql-11-predict-2",
+              "type": "output_prediction",
+              "question": "With the new data around username and 1, the code reads the user stored under the primary key, so select the new output.",
+              "hints": [
+                "Follow the job, which reads the user stored under the primary key.",
+                "WHERE id = 1 reads the row whose primary key is 1.",
+                "┌───────────┐\n│ username  │\n├───────────┤\n│ bob_coder │\n└───────────┘"
+              ],
+              "explanation": "WHERE id = 1 reads the row whose primary key is 1.",
+              "xp_reward": 10,
+              "starter_code": "SELECT username FROM users WHERE id = 2;\n",
+              "options": [
+                "┌───────────┐\n│ username  │\n├───────────┤\n│ alice_dev │\n└───────────┘",
+                "none",
+                "┌───────────┐\n│ username  │\n├───────────┤\n│ bob_coder │\n└───────────┘",
+                "0"
+              ],
+              "correct_answer": "┌───────────┐\n│ username  │\n├───────────┤\n│ bob_coder │\n└───────────┘"
+            },
+            {
+              "id": "sql-11-write",
+              "type": "code",
+              "question": "The printed result shows up after you fill the blank so the code reads the user stored under the primary key for username and 1.",
+              "hints": [
+                "Follow the job, which reads the user stored under the primary key.",
+                "The query result is what this step reads the user stored under the primary key.",
+                "WHERE id = 1"
+              ],
+              "explanation": "The query result is what this step reads the user stored under the primary key.",
+              "xp_reward": 10,
+              "starter_code": "SELECT username FROM users WHERE id = ___;\n",
+              "solution_code": "SELECT username FROM users WHERE id = 1;\n",
+              "tests": [
+                {
+                  "name": "sql-11-prints",
+                  "description": "The query result is what this step reads the user stored under the primary key.",
+                  "expected_stdout": "┌───────────┐\n│ username  │\n├───────────┤\n│ alice_dev │\n└───────────┘",
+                  "required": true
+                }
+              ]
             }
           ]
         }
-      ]
+      ],
+      "player_mode": "micro"
     }
   ]
 }

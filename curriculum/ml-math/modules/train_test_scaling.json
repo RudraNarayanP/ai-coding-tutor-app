@@ -14,8 +14,8 @@
   "lessons": [
     {
       "id": "split-train-test",
-      "title": "1. Train/Test Split",
-      "description": "Finish `train_test_split(xs, ratio)` so it returns `(train, test)`. The train list is the first `floor(len(xs) * ratio)` items. The test list is the rest. The test checks that `train_test_split([1, 2, 3, 4, 5], 0.6)` equals `([1, 2, 3], [4, 5])`.",
+      "title": "Train Test Split",
+      "description": "Finish train_test_split(xs, ratio) so it returns (train, test). The train list is the first floor(len(xs) * ratio) items. The test list is the rest. The test checks that train_test_split([1, 2, 3, 4, 5], 0.6) equals ([1, 2, 3], [4, 5]).",
       "order": 21,
       "difficulty": "intermediate",
       "duration_minutes": 5,
@@ -27,7 +27,7 @@
       ],
       "prerequisites": [],
       "learning_objectives": [
-        "Split data into train and test"
+        "This step counts the training rows before the cut, using rows and 8."
       ],
       "starter_code": "def train_test_split(xs, ratio):\n    # TODO\n    pass\n",
       "solution_code": "def train_test_split(xs, ratio):\n    n = int(len(xs) * ratio)\n    return xs[:n], xs[n:]\n",
@@ -48,12 +48,174 @@
         "url": "https://scikit-learn.org/stable/modules/cross_validation.html",
         "license": "BSD 3-Clause (scikit-learn documentation)"
       },
-      "xp_reward": 10
+      "xp_reward": 10,
+      "player_mode": "micro",
+      "sublessons": [
+        {
+          "id": "split-train-test-micro",
+          "title": "Train Test Split",
+          "description": "",
+          "order": 1,
+          "exercises": [
+            {
+              "id": "split-train-test-teach",
+              "type": "teach",
+              "question": "This step counts the training rows before the cut, using rows and 8.",
+              "hints": [
+                "Follow the job, which counts the training rows before the cut.",
+                "The slice before the cut is the training set.",
+                "rows[:cut]"
+              ],
+              "explanation": "This step counts the training rows before the cut, using rows and 8.",
+              "xp_reward": 0,
+              "worked_example": "rows[:cut]"
+            },
+            {
+              "id": "split-train-test-mcq",
+              "type": "mcq",
+              "question": "Mark the choice that counts the training rows before the cut when the code mentions rows and 8.",
+              "hints": [
+                "Follow the job, which counts the training rows before the cut.",
+                "The slice before the cut is the training set.",
+                "rows[:cut]"
+              ],
+              "explanation": "The slice before the cut is the training set.",
+              "xp_reward": 10,
+              "options": [
+                "rows == rows",
+                "return rows",
+                "rows[:cut]",
+                "pass"
+              ],
+              "correct_answer": "rows[:cut]"
+            },
+            {
+              "id": "split-train-test-predict",
+              "type": "output_prediction",
+              "question": "After rows and the code counts the training rows before the cut, and the correct choice is the printed value.",
+              "hints": [
+                "Follow the job, which counts the training rows before the cut.",
+                "The slice before the cut is the training set.",
+                "8"
+              ],
+              "explanation": "The slice before the cut is the training set.",
+              "xp_reward": 10,
+              "starter_code": "rows = list(range(10))\ncut = 8\nprint(len(rows[:cut]))\n",
+              "options": [
+                "6",
+                "none",
+                "8",
+                "0"
+              ],
+              "correct_answer": "8"
+            },
+            {
+              "id": "split-train-test-order",
+              "type": "ordering",
+              "question": "The finished line counts the training rows before the cut, so place its pieces in order for rows and 8.",
+              "hints": [
+                "Follow the job, which counts the training rows before the cut.",
+                "The slice before the cut is the training set.",
+                "train = rows[:cut]"
+              ],
+              "explanation": "The slice before the cut is the training set.",
+              "xp_reward": 10,
+              "options": [
+                "train",
+                "=",
+                "rows[:cut]",
+                "=="
+              ],
+              "correct_answer": [
+                "train",
+                "=",
+                "rows[:cut]"
+              ]
+            },
+            {
+              "id": "split-train-test-fill",
+              "type": "fill_blank",
+              "question": "Finish the line that counts the training rows before the cut by filling the blank for rows and 8.",
+              "hints": [
+                "Follow the job, which counts the training rows before the cut.",
+                "The slice before the cut is the training set.",
+                ":"
+              ],
+              "explanation": "The slice before the cut is the training set.",
+              "xp_reward": 10,
+              "starter_code": "train = rows[___cut]\n",
+              "options": [
+                "::",
+                "==",
+                ":",
+                "!="
+              ],
+              "correct_answer": ":"
+            },
+            {
+              "id": "split-train-test-bug",
+              "type": "debugging",
+              "question": "Mark the line that breaks the job, which counts the training rows before the cut, for rows and 8.",
+              "hints": [
+                "Follow the job, which counts the training rows before the cut.",
+                "The print counts every row, including the held-out tail.",
+                "Line 3"
+              ],
+              "explanation": "The print counts every row, including the held-out tail.",
+              "xp_reward": 10,
+              "starter_code": "rows = list(range(10))\ncut = 8\nprint(len(rows))\n",
+              "correct_answer": "3"
+            },
+            {
+              "id": "split-train-test-predict-2",
+              "type": "output_prediction",
+              "question": "Follow the second program, which counts the training rows before the cut for rows and 8, and choose its output.",
+              "hints": [
+                "Follow the job, which counts the training rows before the cut.",
+                "The slice before the cut is the training set.",
+                "6"
+              ],
+              "explanation": "The slice before the cut is the training set.",
+              "xp_reward": 10,
+              "starter_code": "rows = list(range(10))\ncut = 6\nprint(len(rows[:cut]))\n",
+              "options": [
+                "8",
+                "6",
+                "none",
+                "0"
+              ],
+              "correct_answer": "6"
+            },
+            {
+              "id": "split-train-test-write",
+              "type": "code",
+              "question": "Finish the program that counts the training rows before the cut by filling the blank for rows and.",
+              "hints": [
+                "Follow the job, which counts the training rows before the cut.",
+                "The printed value is the result after this step counts the training rows before the cut.",
+                "label = len(rows[:cut])"
+              ],
+              "explanation": "The printed value is the result after this step counts the training rows before the cut.",
+              "xp_reward": 10,
+              "starter_code": "rows = list(range(10))\ncut = 8\nlabel = ___\nprint(label)\n",
+              "solution_code": "rows = list(range(10))\ncut = 8\nlabel = len(rows[:cut])\nprint(label)\n",
+              "tests": [
+                {
+                  "name": "split-train-test-prints",
+                  "description": "The printed value is the result after this step counts the training rows before ",
+                  "expected_stdout": "8\n",
+                  "required": true
+                }
+              ]
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "split-shuffle",
-      "title": "2. Deterministic Shuffle Split",
-      "description": "Implement `shuffle_split(xs, ratio, seed)` using random.Random(seed).shuffle on a copy. The test checks that `len(tr)` equals `2`; `len(te)` equals `2`; `sorted(tr + te)` equals `[1, 2, 3, 4]`.",
+      "title": "Practice Deterministic Shuffle Split",
+      "description": "Implement shuffle_split(xs, ratio, seed) using random.Random(seed).shuffle on a copy. The test checks that len(tr) equals 2; len(te) equals 2; sorted(tr + te) equals [1, 2, 3, 4].",
       "order": 22,
       "difficulty": "intermediate",
       "duration_minutes": 5,
@@ -65,7 +227,7 @@
       ],
       "prerequisites": [],
       "learning_objectives": [
-        "Shuffle before splitting"
+        "This step reads the first row after a fixed shuffle, using rows and 3."
       ],
       "starter_code": "import random\n\ndef shuffle_split(xs, ratio, seed):\n    # TODO\n    pass\n",
       "solution_code": "import random\n\ndef shuffle_split(xs, ratio, seed):\n    items = list(xs)\n    random.Random(seed).shuffle(items)\n    n = int(len(items) * ratio)\n    return items[:n], items[n:]\n",
@@ -86,12 +248,174 @@
         "url": "https://docs.python.org/3/library/random.html",
         "license": "Python documentation license (PSF)"
       },
-      "xp_reward": 10
+      "xp_reward": 10,
+      "player_mode": "micro",
+      "sublessons": [
+        {
+          "id": "split-shuffle-micro",
+          "title": "Practice Deterministic Shuffle Split",
+          "description": "",
+          "order": 1,
+          "exercises": [
+            {
+              "id": "split-shuffle-teach",
+              "type": "teach",
+              "question": "This step reads the first row after a fixed shuffle, using rows and 3.",
+              "hints": [
+                "Follow the job, which reads the first row after a fixed shuffle.",
+                "The first index in the order picks the first shuffled row.",
+                "rows[order[0]]"
+              ],
+              "explanation": "This step reads the first row after a fixed shuffle, using rows and 3.",
+              "xp_reward": 0,
+              "worked_example": "rows[order[0]]"
+            },
+            {
+              "id": "split-shuffle-mcq",
+              "type": "mcq",
+              "question": "Pick the line that reads the first row after a fixed shuffle, not a line about something else, for rows and 3.",
+              "hints": [
+                "Follow the job, which reads the first row after a fixed shuffle.",
+                "The first index in the order picks the first shuffled row.",
+                "rows[order[0]]"
+              ],
+              "explanation": "The first index in the order picks the first shuffled row.",
+              "xp_reward": 10,
+              "options": [
+                "rows == order",
+                "rows[order[0]]",
+                "return rows",
+                "pass"
+              ],
+              "correct_answer": "rows[order[0]]"
+            },
+            {
+              "id": "split-shuffle-predict",
+              "type": "output_prediction",
+              "question": "The displayed value is what the code prints when it reads the first row after a fixed shuffle for rows and 3.",
+              "hints": [
+                "Follow the job, which reads the first row after a fixed shuffle.",
+                "The first index in the order picks the first shuffled row.",
+                "2"
+              ],
+              "explanation": "The first index in the order picks the first shuffled row.",
+              "xp_reward": 10,
+              "starter_code": "rows = [40, 1, 2, 3]\norder = [2, 0, 1, 3]\nprint(rows[order[0]])\n",
+              "options": [
+                "40",
+                "2",
+                "none",
+                "0"
+              ],
+              "correct_answer": "2"
+            },
+            {
+              "id": "split-shuffle-order",
+              "type": "ordering",
+              "question": "Place every piece so the result reads the first row after a fixed shuffle for rows and 3.",
+              "hints": [
+                "Follow the job, which reads the first row after a fixed shuffle.",
+                "The first index in the order picks the first shuffled row.",
+                "picked = rows[order[0]]"
+              ],
+              "explanation": "The first index in the order picks the first shuffled row.",
+              "xp_reward": 10,
+              "options": [
+                "picked",
+                "=",
+                "rows[order[0]]",
+                "=="
+              ],
+              "correct_answer": [
+                "picked",
+                "=",
+                "rows[order[0]]"
+              ]
+            },
+            {
+              "id": "split-shuffle-fill",
+              "type": "fill_blank",
+              "question": "Drop in the piece that lets the line reads the first row after a fixed shuffle for rows and 3.",
+              "hints": [
+                "Follow the job, which reads the first row after a fixed shuffle.",
+                "The first index in the order picks the first shuffled row.",
+                "0"
+              ],
+              "explanation": "The first index in the order picks the first shuffled row.",
+              "xp_reward": 10,
+              "starter_code": "picked = rows[order[___]]\n",
+              "options": [
+                "1",
+                "0",
+                "2",
+                "3"
+              ],
+              "correct_answer": "0"
+            },
+            {
+              "id": "split-shuffle-bug",
+              "type": "debugging",
+              "question": "The mismatch misses the job, which reads the first row after a fixed shuffle, for rows and 3.",
+              "hints": [
+                "Follow the job, which reads the first row after a fixed shuffle.",
+                "The print ignores the shuffle order.",
+                "Line 2"
+              ],
+              "explanation": "The print ignores the shuffle order.",
+              "xp_reward": 10,
+              "starter_code": "rows = [40, 1, 2, 3]\nprint(rows[0])\n",
+              "correct_answer": "2"
+            },
+            {
+              "id": "split-shuffle-predict-2",
+              "type": "output_prediction",
+              "question": "Choose the printed result of the second run that reads the first row after a fixed shuffle for rows and 3.",
+              "hints": [
+                "Follow the job, which reads the first row after a fixed shuffle.",
+                "The first index in the order picks the first shuffled row.",
+                "40"
+              ],
+              "explanation": "The first index in the order picks the first shuffled row.",
+              "xp_reward": 10,
+              "starter_code": "rows = [40, 1, 2, 3]\norder = [0, 1, 2, 3]\nprint(rows[order[0]])\n",
+              "options": [
+                "2",
+                "none",
+                "0",
+                "40"
+              ],
+              "correct_answer": "40"
+            },
+            {
+              "id": "split-shuffle-write",
+              "type": "code",
+              "question": "Make the program reads the first row after a fixed shuffle by filling the blank for rows and 3.",
+              "hints": [
+                "Follow the job, which reads the first row after a fixed shuffle.",
+                "The printed value is the result after this step reads the first row after a fixed shuffle.",
+                "label = rows[order[0]]"
+              ],
+              "explanation": "The printed value is the result after this step reads the first row after a fixed shuffle.",
+              "xp_reward": 10,
+              "starter_code": "rows = [40, 1, 2, 3]\norder = [2, 0, 1, 3]\nlabel = ___\nprint(label)\n",
+              "solution_code": "rows = [40, 1, 2, 3]\norder = [2, 0, 1, 3]\nlabel = rows[order[0]]\nprint(label)\n",
+              "tests": [
+                {
+                  "name": "split-shuffle-prints",
+                  "description": "The printed value is the result after this step reads the first row after a fixe",
+                  "expected_stdout": "2\n",
+                  "required": true
+                }
+              ]
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "scale-minmax",
-      "title": "3. Min-Max Scaling",
-      "description": "Implement `minmax(xs)` scaling to [0,1]. If max==min, return zeros. The test checks that `minmax([0, 5, 10])` equals `[0.0, 0.5, 1.0]`; `minmax([3, 3, 3])` equals `[0.0, 0.0, 0.0]`.",
+      "title": "Practice Min-Max Scaling",
+      "description": "Implement minmax(xs) scaling to [0,1]. If max==min, return zeros. The test checks that minmax([0, 5, 10]) equals [0.0, 0.5, 1.0]; minmax([3, 3, 3]) equals [0.0, 0.0, 0.0].",
       "order": 23,
       "difficulty": "intermediate",
       "duration_minutes": 8,
@@ -103,7 +427,7 @@
       ],
       "prerequisites": [],
       "learning_objectives": [
-        "Apply min-max feature scaling"
+        "This step scales a value between zero and one, using low and 1."
       ],
       "starter_code": "def minmax(xs):\n    # TODO\n    pass\n",
       "solution_code": "def minmax(xs):\n    lo, hi = min(xs), max(xs)\n    if hi == lo:\n        return [0.0 for _ in xs]\n    return [(x - lo) / (hi - lo) for x in xs]\n",
@@ -124,12 +448,178 @@
         "url": "https://scikit-learn.org/stable/modules/preprocessing.html",
         "license": "BSD 3-Clause (scikit-learn documentation)"
       },
-      "xp_reward": 25
+      "xp_reward": 25,
+      "player_mode": "micro",
+      "sublessons": [
+        {
+          "id": "scale-minmax-micro",
+          "title": "Practice Min-Max Scaling",
+          "description": "",
+          "order": 1,
+          "exercises": [
+            {
+              "id": "scale-minmax-teach",
+              "type": "teach",
+              "question": "This step scales a value between zero and one, using low and 1.",
+              "hints": [
+                "Follow the job, which scales a value between zero and one.",
+                "Min-max scaling divides the gap by the full range.",
+                "(value - low) / (high - low)"
+              ],
+              "explanation": "This step scales a value between zero and one, using low and 1.",
+              "xp_reward": 0,
+              "worked_example": "(value - low) / (high - low)"
+            },
+            {
+              "id": "scale-minmax-mcq",
+              "type": "mcq",
+              "question": "A correct choice scales a value between zero and one and goes with low and 1.",
+              "hints": [
+                "Follow the job, which scales a value between zero and one.",
+                "Min-max scaling divides the gap by the full range.",
+                "(value - low) / (high - low)"
+              ],
+              "explanation": "Min-max scaling divides the gap by the full range.",
+              "xp_reward": 10,
+              "options": [
+                "value == low",
+                "(value - low) / (high - low)",
+                "return value",
+                "pass"
+              ],
+              "correct_answer": "(value - low) / (high - low)"
+            },
+            {
+              "id": "scale-minmax-predict",
+              "type": "output_prediction",
+              "question": "Select the output after the code scales a value between zero and one, using low and 1.",
+              "hints": [
+                "Follow the job, which scales a value between zero and one.",
+                "Min-max scaling divides the gap by the full range.",
+                "0.2"
+              ],
+              "explanation": "Min-max scaling divides the gap by the full range.",
+              "xp_reward": 10,
+              "starter_code": "low = 0\nhigh = 10\nvalue = 2\nprint(round((value - low) / (high - low), 1))\n",
+              "options": [
+                "0.4",
+                "0.2",
+                "none",
+                "0"
+              ],
+              "correct_answer": "0.2"
+            },
+            {
+              "id": "scale-minmax-order",
+              "type": "ordering",
+              "question": "Make the line that scales a value between zero and one by ordering the pieces for low and 1.",
+              "hints": [
+                "Follow the job, which scales a value between zero and one.",
+                "Min-max scaling divides the gap by the full range.",
+                "scaled = (value-low) / (high-low)"
+              ],
+              "explanation": "Min-max scaling divides the gap by the full range.",
+              "xp_reward": 10,
+              "options": [
+                "scaled",
+                "=",
+                "(value-low)",
+                "/",
+                "(high-low)",
+                "*"
+              ],
+              "correct_answer": [
+                "scaled",
+                "=",
+                "(value-low)",
+                "/",
+                "(high-low)"
+              ]
+            },
+            {
+              "id": "scale-minmax-fill",
+              "type": "fill_blank",
+              "question": "Complete the line for low and 1 so that it scales a value between zero and one.",
+              "hints": [
+                "Follow the job, which scales a value between zero and one.",
+                "Min-max scaling divides the gap by the full range.",
+                "/"
+              ],
+              "explanation": "Min-max scaling divides the gap by the full range.",
+              "xp_reward": 10,
+              "starter_code": "scaled = (value - low) ___ (high - low)\n",
+              "options": [
+                "*",
+                "/",
+                "+",
+                "-"
+              ],
+              "correct_answer": "/"
+            },
+            {
+              "id": "scale-minmax-bug",
+              "type": "debugging",
+              "question": "Select the line that gets in the way of the job, which scales a value between zero and one, for low and 1.",
+              "hints": [
+                "Follow the job, which scales a value between zero and one.",
+                "The print is the gap and never divides by the range.",
+                "Line 4"
+              ],
+              "explanation": "The print is the gap and never divides by the range.",
+              "xp_reward": 10,
+              "starter_code": "low = 0\nhigh = 10\nvalue = 2\nprint(value - low)\n",
+              "correct_answer": "4"
+            },
+            {
+              "id": "scale-minmax-predict-2",
+              "type": "output_prediction",
+              "question": "With the new data around low and 1, the code scales a value between zero and one, so select the new output.",
+              "hints": [
+                "Follow the job, which scales a value between zero and one.",
+                "Min-max scaling divides the gap by the full range.",
+                "0.4"
+              ],
+              "explanation": "Min-max scaling divides the gap by the full range.",
+              "xp_reward": 10,
+              "starter_code": "low = 0\nhigh = 10\nvalue = 4\nprint(round((value - low) / (high - low), 1))\n",
+              "options": [
+                "0",
+                "0.4",
+                "none",
+                "0.2"
+              ],
+              "correct_answer": "0.4"
+            },
+            {
+              "id": "scale-minmax-write",
+              "type": "code",
+              "question": "The printed result shows up after you fill the blank so the code scales a value between zero and one for low and 1.",
+              "hints": [
+                "Follow the job, which scales a value between zero and one.",
+                "The printed value is the result after this step scales a value between zero and one.",
+                "label = round((value - low) / (high - low), 1)"
+              ],
+              "explanation": "The printed value is the result after this step scales a value between zero and one.",
+              "xp_reward": 10,
+              "starter_code": "low = 0\nhigh = 10\nvalue = 2\nlabel = ___\nprint(label)\n",
+              "solution_code": "low = 0\nhigh = 10\nvalue = 2\nlabel = round((value - low) / (high - low), 1)\nprint(label)\n",
+              "tests": [
+                {
+                  "name": "scale-minmax-prints",
+                  "description": "The printed value is the result after this step scales a value between zero and ",
+                  "expected_stdout": "0.2\n",
+                  "required": true
+                }
+              ]
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "scale-standardize",
-      "title": "4. Standardize (Practice)",
-      "description": "Implement `standardize(xs)` to zero mean / unit variance (population). All zeros if var==0. The test checks that `sum(out)` equals `0.0`; `sum(x * x for x in out) / len(out)` equals `1.0`.",
+      "title": "Practice Standardize",
+      "description": "Implement standardize(xs) to zero mean / unit variance (population). All zeros if var==0. The test checks that sum(out) equals 0.0; sum(x * x for x in out) / len(out) equals 1.0.",
       "order": 24,
       "difficulty": "intermediate",
       "duration_minutes": 6,
@@ -141,7 +631,7 @@
       ],
       "prerequisites": [],
       "learning_objectives": [
-        "Standardize features"
+        "This step divides the gap by the spread, using value and 1."
       ],
       "starter_code": "import math\n\ndef standardize(xs):\n    # TODO\n    pass\n",
       "solution_code": "import math\n\ndef standardize(xs):\n    m = sum(xs) / len(xs)\n    var = sum((x - m) ** 2 for x in xs) / len(xs)\n    if var == 0:\n        return [0.0 for _ in xs]\n    sd = math.sqrt(var)\n    return [(x - m) / sd for x in xs]\n",
@@ -165,37 +655,179 @@
       "xp_reward": 15,
       "sublessons": [
         {
-          "id": "standardize-zero-sub",
-          "title": "Select the all-zero results",
+          "id": "scale-standardize-micro",
+          "title": "Practice Standardize",
+          "description": "",
           "order": 1,
           "exercises": [
             {
-              "id": "standardize-zero-multi-1",
-              "type": "select_multiple",
-              "question": "`standardize(xs)` returns all zeros exactly when the population variance is 0. Select every input that produces an all-zero result.",
+              "id": "scale-standardize-teach",
+              "type": "teach",
+              "question": "This step divides the gap by the spread, using value and 1.",
+              "hints": [
+                "Follow the job, which divides the gap by the spread.",
+                "Standardizing divides the gap from the mean by the spread.",
+                "(value - mean) / spread"
+              ],
+              "explanation": "This step divides the gap by the spread, using value and 1.",
+              "xp_reward": 0,
+              "worked_example": "(value - mean) / spread"
+            },
+            {
+              "id": "scale-standardize-mcq",
+              "type": "mcq",
+              "question": "Pick the line that divides the gap by the spread, not a line about something else, for value and 1.",
+              "hints": [
+                "Follow the job, which divides the gap by the spread.",
+                "Standardizing divides the gap from the mean by the spread.",
+                "(value - mean) / spread"
+              ],
+              "explanation": "Standardizing divides the gap from the mean by the spread.",
+              "xp_reward": 10,
               "options": [
-                "[5, 5, 5]",
-                "[0, 0]",
-                "[7]",
-                "[1, 2, 3]",
-                "[1, 0]"
+                "value == mean",
+                "return value",
+                "pass",
+                "(value - mean) / spread"
+              ],
+              "correct_answer": "(value - mean) / spread"
+            },
+            {
+              "id": "scale-standardize-predict",
+              "type": "output_prediction",
+              "question": "The displayed value is what the code prints when it divides the gap by the spread for value and 1.",
+              "hints": [
+                "Follow the job, which divides the gap by the spread.",
+                "Standardizing divides the gap from the mean by the spread.",
+                "2.4"
+              ],
+              "explanation": "Standardizing divides the gap from the mean by the spread.",
+              "xp_reward": 10,
+              "starter_code": "value = 32\nmean = 20\nspread = 5\nprint(round((value - mean) / spread, 1))\n",
+              "options": [
+                "3.0",
+                "none",
+                "0",
+                "2.4"
+              ],
+              "correct_answer": "2.4"
+            },
+            {
+              "id": "scale-standardize-order",
+              "type": "ordering",
+              "question": "Place every piece so the result divides the gap by the spread for value and 1.",
+              "hints": [
+                "Follow the job, which divides the gap by the spread.",
+                "Standardizing divides the gap from the mean by the spread.",
+                "scaled = (value - mean) / spread"
+              ],
+              "explanation": "Standardizing divides the gap from the mean by the spread.",
+              "xp_reward": 10,
+              "options": [
+                "scaled",
+                "=",
+                "(value",
+                "-",
+                "mean)",
+                "/",
+                "spread",
+                "*"
               ],
               "correct_answer": [
-                "[5, 5, 5]",
-                "[0, 0]",
-                "[7]"
+                "scaled",
+                "=",
+                "(value",
+                "-",
+                "mean)",
+                "/",
+                "spread"
+              ]
+            },
+            {
+              "id": "scale-standardize-fill",
+              "type": "fill_blank",
+              "question": "Drop in the piece that lets the line divides the gap by the spread for value and 1.",
+              "hints": [
+                "Follow the job, which divides the gap by the spread.",
+                "Standardizing divides the gap from the mean by the spread.",
+                "/"
               ],
-              "explanation": "Variance is 0 only when no value differs from the mean: identical values, and any single-element list. [1, 2, 3] and [1, 0] both spread around their mean.",
-              "xp_reward": 10
+              "explanation": "Standardizing divides the gap from the mean by the spread.",
+              "xp_reward": 10,
+              "starter_code": "scaled = (value - mean) ___ spread\n",
+              "options": [
+                "*",
+                "+",
+                "-",
+                "/"
+              ],
+              "correct_answer": "/"
+            },
+            {
+              "id": "scale-standardize-bug",
+              "type": "debugging",
+              "question": "The mismatch misses the job, which divides the gap by the spread, for value and 1.",
+              "hints": [
+                "Follow the job, which divides the gap by the spread.",
+                "The print stops at the gap.",
+                "Line 2"
+              ],
+              "explanation": "The print stops at the gap.",
+              "xp_reward": 10,
+              "starter_code": "value = 32\nprint(value - 20)\n",
+              "correct_answer": "2"
+            },
+            {
+              "id": "scale-standardize-predict-2",
+              "type": "output_prediction",
+              "question": "Choose the printed result of the second run that divides the gap by the spread for value and 1.",
+              "hints": [
+                "Follow the job, which divides the gap by the spread.",
+                "Standardizing divides the gap from the mean by the spread.",
+                "3.0"
+              ],
+              "explanation": "Standardizing divides the gap from the mean by the spread.",
+              "xp_reward": 10,
+              "starter_code": "value = 35\nmean = 20\nspread = 5\nprint(round((value - mean) / spread, 1))\n",
+              "options": [
+                "2.4",
+                "none",
+                "3.0",
+                "0"
+              ],
+              "correct_answer": "3.0"
+            },
+            {
+              "id": "scale-standardize-write",
+              "type": "code",
+              "question": "Make the program divides the gap by the spread by filling the blank for value and 1.",
+              "hints": [
+                "Follow the job, which divides the gap by the spread.",
+                "The printed value is the result after this step divides the gap by the spread.",
+                "label = round((value - mean) / spread, 1)"
+              ],
+              "explanation": "The printed value is the result after this step divides the gap by the spread.",
+              "xp_reward": 10,
+              "starter_code": "value = 32\nmean = 20\nspread = 5\nlabel = ___\nprint(label)\n",
+              "solution_code": "value = 32\nmean = 20\nspread = 5\nlabel = round((value - mean) / spread, 1)\nprint(label)\n",
+              "tests": [
+                {
+                  "name": "scale-standardize-prints",
+                  "description": "The printed value is the result after this step divides the gap by the spread.",
+                  "expected_stdout": "2.4\n",
+                  "required": true
+                }
+              ]
             }
           ]
         }
-      ]
+      ],
+      "player_mode": "micro"
     },
     {
       "id": "scale-checkpoint",
-      "title": "5. Checkpoint: Fit-Transform Scaler",
-      "description": "Implement `fit_minmax(train)` returning (lo, hi) and `transform_minmax(xs, lo, hi)`. The test checks that `(lo, hi)` equals `(0, 10)`; `transform_minmax([5], lo, hi)` equals `[0.5]`.",
+      "title": "Practice Checkpoint Fit-Transform Scaler",
+      "description": "Implement fit_minmax(train) returning (lo, hi) and transform_minmax(xs, lo, hi). The test checks that (lo, hi) equals (0, 10); transform_minmax([5], lo, hi) equals [0.5].",
       "order": 25,
       "difficulty": "intermediate",
       "duration_minutes": 10,
@@ -207,7 +839,7 @@
       ],
       "prerequisites": [],
       "learning_objectives": [
-        "Fit scaler on train only"
+        "This step fits the low and high before scaling, using low and 8."
       ],
       "starter_code": "def fit_minmax(train):\n    # TODO\n    pass\n\ndef transform_minmax(xs, lo, hi):\n    # TODO\n    pass\n",
       "solution_code": "def fit_minmax(train):\n    return min(train), max(train)\n\ndef transform_minmax(xs, lo, hi):\n    if hi == lo:\n        return [0.0 for _ in xs]\n    return [(x - lo) / (hi - lo) for x in xs]\n",
@@ -228,7 +860,169 @@
         "url": "https://scikit-learn.org/stable/modules/preprocessing.html",
         "license": "BSD 3-Clause (scikit-learn documentation)"
       },
-      "xp_reward": 40
+      "xp_reward": 40,
+      "player_mode": "micro",
+      "sublessons": [
+        {
+          "id": "scale-checkpoint-micro",
+          "title": "Practice Checkpoint Fit-Transform Scaler",
+          "description": "",
+          "order": 1,
+          "exercises": [
+            {
+              "id": "scale-checkpoint-teach",
+              "type": "teach",
+              "question": "This step fits the low and high before scaling, using low and 8.",
+              "hints": [
+                "Follow the job, which fits the low and high before scaling.",
+                "The fit stores the smallest training value as the low.",
+                "min(values)"
+              ],
+              "explanation": "This step fits the low and high before scaling, using low and 8.",
+              "xp_reward": 0,
+              "worked_example": "min(values)"
+            },
+            {
+              "id": "scale-checkpoint-mcq",
+              "type": "mcq",
+              "question": "The match is the line that fits the low and high before scaling for low and 8.",
+              "hints": [
+                "Follow the job, which fits the low and high before scaling.",
+                "The fit stores the smallest training value as the low.",
+                "min(values)"
+              ],
+              "explanation": "The fit stores the smallest training value as the low.",
+              "xp_reward": 10,
+              "options": [
+                "values == values",
+                "min(values)",
+                "return values",
+                "pass"
+              ],
+              "correct_answer": "min(values)"
+            },
+            {
+              "id": "scale-checkpoint-predict",
+              "type": "output_prediction",
+              "question": "Work out what is printed when the code fits the low and high before scaling for low and 8.",
+              "hints": [
+                "Follow the job, which fits the low and high before scaling.",
+                "The fit stores the smallest training value as the low.",
+                "0.33"
+              ],
+              "explanation": "The fit stores the smallest training value as the low.",
+              "xp_reward": 10,
+              "starter_code": "values = [2, 4, 8]\nlow = min(values)\nhigh = max(values)\nvalue = 4\nprint(round((value - low) / (high - low), 2))\n",
+              "options": [
+                "0",
+                "0.5",
+                "none",
+                "0.33"
+              ],
+              "correct_answer": "0.33"
+            },
+            {
+              "id": "scale-checkpoint-order",
+              "type": "ordering",
+              "question": "Rebuild, from the left, the line that fits the low and high before scaling for low and 8.",
+              "hints": [
+                "Follow the job, which fits the low and high before scaling.",
+                "The fit stores the smallest training value as the low.",
+                "low = min(values)"
+              ],
+              "explanation": "The fit stores the smallest training value as the low.",
+              "xp_reward": 10,
+              "options": [
+                "low",
+                "=",
+                "min(values)",
+                "max"
+              ],
+              "correct_answer": [
+                "low",
+                "=",
+                "min(values)"
+              ]
+            },
+            {
+              "id": "scale-checkpoint-fill",
+              "type": "fill_blank",
+              "question": "The completed line fits the low and high before scaling once you fill the blank for low and 8.",
+              "hints": [
+                "Follow the job, which fits the low and high before scaling.",
+                "The fit stores the smallest training value as the low.",
+                "min"
+              ],
+              "explanation": "The fit stores the smallest training value as the low.",
+              "xp_reward": 10,
+              "starter_code": "low = ___(values)\n",
+              "options": [
+                "max",
+                "min",
+                "sum",
+                "len"
+              ],
+              "correct_answer": "min"
+            },
+            {
+              "id": "scale-checkpoint-bug",
+              "type": "debugging",
+              "question": "One line does another job than the one that fits the low and high before scaling for low and 8.",
+              "hints": [
+                "Follow the job, which fits the low and high before scaling.",
+                "The print uses a fixed slot instead of the fitted low.",
+                "Line 2"
+              ],
+              "explanation": "The print uses a fixed slot instead of the fitted low.",
+              "xp_reward": 10,
+              "starter_code": "values = [2, 4, 8]\nprint(values[0])\n",
+              "correct_answer": "2"
+            },
+            {
+              "id": "scale-checkpoint-predict-2",
+              "type": "output_prediction",
+              "question": "The second display is what prints after the code fits the low and high before scaling for low and 8.",
+              "hints": [
+                "Follow the job, which fits the low and high before scaling.",
+                "The fit stores the smallest training value as the low.",
+                "0.5"
+              ],
+              "explanation": "The fit stores the smallest training value as the low.",
+              "xp_reward": 10,
+              "starter_code": "values = [0, 4, 8]\nlow = min(values)\nhigh = max(values)\nvalue = 4\nprint(round((value - low) / (high - low), 2))\n",
+              "options": [
+                "0.33",
+                "none",
+                "0",
+                "0.5"
+              ],
+              "correct_answer": "0.5"
+            },
+            {
+              "id": "scale-checkpoint-write",
+              "type": "code",
+              "question": "Supply the blank so the run fits the low and high before scaling and prints the result for low and 8.",
+              "hints": [
+                "Follow the job, which fits the low and high before scaling.",
+                "The printed value is the result after this step fits the low and high before scaling.",
+                "label = round((value - low) / (high - low), 2)"
+              ],
+              "explanation": "The printed value is the result after this step fits the low and high before scaling.",
+              "xp_reward": 10,
+              "starter_code": "values = [2, 4, 8]\nlow = min(values)\nhigh = max(values)\nvalue = 4\nlabel = ___\nprint(label)\n",
+              "solution_code": "values = [2, 4, 8]\nlow = min(values)\nhigh = max(values)\nvalue = 4\nlabel = round((value - low) / (high - low), 2)\nprint(label)\n",
+              "tests": [
+                {
+                  "name": "scale-checkpoint-prints",
+                  "description": "The printed value is the result after this step fits the low and high before sca",
+                  "expected_stdout": "0.33\n",
+                  "required": true
+                }
+              ]
+            }
+          ]
+        }
+      ]
     }
   ]
 }

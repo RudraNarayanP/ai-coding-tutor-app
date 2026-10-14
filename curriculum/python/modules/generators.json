@@ -15,8 +15,8 @@
   "lessons": [
     {
       "id": "generators-step-1",
-      "title": "1. yield Basics",
-      "description": "A generator function uses `yield` to produce values lazily. Implement `count_up(n)` yielding 1..n. The test checks that `list(count_up(3))` equals `[1, 2, 3]`.",
+      "title": "Practice yield Basics",
+      "description": "A generator function uses yield to produce values lazily. Implement count_up(n) yielding 1..n. The test checks that list(count_up(3)) equals [1, 2, 3].",
       "order": 81,
       "difficulty": "intermediate",
       "duration_minutes": 5,
@@ -30,7 +30,7 @@
         "functions"
       ],
       "learning_objectives": [
-        "Write a generator that yields a sequence"
+        "This step adds the yielded steps, using seq and 36."
       ],
       "starter_code": "def count_up(n):\n    # TODO: yield 1, 2, ..., n\n    pass\n",
       "solution_code": "def count_up(n):\n    for i in range(1, n + 1):\n        yield i\n",
@@ -51,12 +51,176 @@
         "url": "https://docs.python.org/3/reference/simple_stmts.html#yield",
         "license": "Python documentation license (PSF)"
       },
-      "xp_reward": 10
+      "xp_reward": 10,
+      "player_mode": "micro",
+      "sublessons": [
+        {
+          "id": "generators-step-1-micro",
+          "title": "Practice yield Basics",
+          "description": "",
+          "order": 1,
+          "exercises": [
+            {
+              "id": "generators-step-1-teach",
+              "type": "teach",
+              "question": "This step adds the yielded steps, using seq and 36.",
+              "hints": [
+                "Follow the job, which adds the yielded steps.",
+                "yield hands each step out one at a time.",
+                "yield step"
+              ],
+              "explanation": "This step adds the yielded steps, using seq and 36.",
+              "xp_reward": 0,
+              "worked_example": "yield step"
+            },
+            {
+              "id": "generators-step-1-mcq",
+              "type": "mcq",
+              "question": "The correct line adds the yielded steps, and it is the line tied to seq and 36.",
+              "hints": [
+                "Follow the job, which adds the yielded steps.",
+                "yield hands each step out one at a time.",
+                "yield step"
+              ],
+              "explanation": "yield hands each step out one at a time.",
+              "xp_reward": 10,
+              "options": [
+                "return step",
+                "yield step",
+                "print(step)",
+                "pass"
+              ],
+              "correct_answer": "yield step"
+            },
+            {
+              "id": "generators-step-1-predict",
+              "type": "output_prediction",
+              "question": "The program adds the yielded steps with seq and 36, so choose the printed value.",
+              "hints": [
+                "Follow the job, which adds the yielded steps.",
+                "yield hands each step out one at a time.",
+                "42"
+              ],
+              "explanation": "yield hands each step out one at a time.",
+              "xp_reward": 10,
+              "starter_code": "def seq(limit):\n    step = 0\n    while step < limit:\n        yield step\n        step = step + 1\nprint(sum(seq(4)) + 36)\n",
+              "options": [
+                "46",
+                "42",
+                "none",
+                "0"
+              ],
+              "correct_answer": "42"
+            },
+            {
+              "id": "generators-step-1-order",
+              "type": "ordering",
+              "question": "Build the line that adds the yielded steps for seq and 36, from the first piece to the last.",
+              "hints": [
+                "Follow the job, which adds the yielded steps.",
+                "def seq(): yield step hands out one step.",
+                "def seq(): yield step"
+              ],
+              "explanation": "def seq(): yield step hands out one step.",
+              "xp_reward": 10,
+              "options": [
+                "def",
+                "seq():",
+                "yield",
+                "step",
+                "return"
+              ],
+              "correct_answer": [
+                "def",
+                "seq():",
+                "yield",
+                "step"
+              ]
+            },
+            {
+              "id": "generators-step-1-fill",
+              "type": "fill_blank",
+              "question": "Replace the blank with the piece that makes the line adds the yielded steps for seq and 36.",
+              "hints": [
+                "Follow the job, which adds the yielded steps.",
+                "Plus moves to the next step.",
+                "+"
+              ],
+              "explanation": "Plus moves to the next step.",
+              "xp_reward": 10,
+              "starter_code": "step = step ___ 1\n",
+              "options": [
+                "-",
+                "+",
+                "*",
+                "=="
+              ],
+              "correct_answer": "+"
+            },
+            {
+              "id": "generators-step-1-bug",
+              "type": "debugging",
+              "question": "Spot the line that fails the job, which adds the yielded steps, around seq and 36.",
+              "hints": [
+                "Follow the job, which adds the yielded steps.",
+                "The function returns one step and then stops.",
+                "Line 4"
+              ],
+              "explanation": "The function returns one step and then stops.",
+              "xp_reward": 10,
+              "starter_code": "def seq(limit):\n    step = 0\n    while step < limit:\n        return step\n        step = step + 1\nprint(sum(seq(4)) + 36)\n",
+              "correct_answer": "4"
+            },
+            {
+              "id": "generators-step-1-predict-2",
+              "type": "output_prediction",
+              "question": "The second program adds the yielded steps for seq and 36, so choose the new printed value.",
+              "hints": [
+                "Follow the job, which adds the yielded steps.",
+                "yield hands each step out one at a time.",
+                "46"
+              ],
+              "explanation": "yield hands each step out one at a time.",
+              "xp_reward": 10,
+              "starter_code": "def seq(limit):\n    step = 0\n    while step < limit:\n        yield step\n        step = step + 1\nprint(sum(seq(5)) + 36)\n",
+              "options": [
+                "42",
+                "none",
+                "0",
+                "46"
+              ],
+              "correct_answer": "46"
+            },
+            {
+              "id": "generators-step-1-write",
+              "type": "code",
+              "question": "Complete the blank so this program adds the yielded steps and prints the result for seq and 36.",
+              "hints": [
+                "Follow the job, which adds the yielded steps.",
+                "The yielded total is what gets printed.",
+                "label = sum(seq(4)) + 36"
+              ],
+              "explanation": "The yielded total is what gets printed.",
+              "xp_reward": 10,
+              "starter_code": "def seq(limit):\n    step = 0\n    while step < limit:\n        yield step\n        step = step + 1\nlabel = ___\nprint(label)\n",
+              "solution_code": "def seq(limit):\n    step = 0\n    while step < limit:\n        yield step\n        step = step + 1\nlabel = sum(seq(4)) + 36\nprint(label)\n",
+              "tests": [
+                {
+                  "name": "generators-step-1-prints",
+                  "description": "The yielded total is what gets printed.",
+                  "expected_stdout": "42\n",
+                  "required": true
+                }
+              ]
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "generators-step-2",
-      "title": "2. Infinite Generators with take",
-      "description": "Implement `take(n, iterable)` that yields the first n items from any iterable. The test checks that `list(take(3, range(10)))` equals `[0, 1, 2]`.",
+      "title": "Practice Infinite Generators with take",
+      "description": "Implement take(n, iterable) that yields the first n items from any iterable. The test checks that list(take(3, range(10))) equals [0, 1, 2].",
       "order": 82,
       "difficulty": "intermediate",
       "duration_minutes": 5,
@@ -70,7 +234,7 @@
         "functions"
       ],
       "learning_objectives": [
-        "Limit an iterable with a generator"
+        "This step adds only the first readings from the source, using take and 45."
       ],
       "starter_code": "def take(n, iterable):\n    # TODO: yield first n items from iterable\n    pass\n",
       "solution_code": "def take(n, iterable):\n    for i, item in enumerate(iterable):\n        if i >= n:\n            break\n        yield item\n",
@@ -91,12 +255,178 @@
         "url": "https://docs.python.org/3/library/itertools.html#itertools.islice",
         "license": "Python documentation license (PSF)"
       },
-      "xp_reward": 10
+      "xp_reward": 10,
+      "player_mode": "micro",
+      "sublessons": [
+        {
+          "id": "generators-step-2-micro",
+          "title": "Practice Infinite Generators with take",
+          "description": "",
+          "order": 1,
+          "exercises": [
+            {
+              "id": "generators-step-2-teach",
+              "type": "teach",
+              "question": "This step adds only the first readings from the source, using take and 45.",
+              "hints": [
+                "Follow the job, which adds only the first readings from the source.",
+                "The generator stops when the limit is reached.",
+                "if count == limit: break"
+              ],
+              "explanation": "This step adds only the first readings from the source, using take and 45.",
+              "xp_reward": 0,
+              "worked_example": "if count == limit: break"
+            },
+            {
+              "id": "generators-step-2-mcq",
+              "type": "mcq",
+              "question": "Keep the choice that adds only the first readings from the source for take and 45.",
+              "hints": [
+                "Follow the job, which adds only the first readings from the source.",
+                "The generator stops when the limit is reached.",
+                "if count == limit: break"
+              ],
+              "explanation": "The generator stops when the limit is reached.",
+              "xp_reward": 10,
+              "options": [
+                "count = limit",
+                "print(item)",
+                "if count == limit: break",
+                "pass"
+              ],
+              "correct_answer": "if count == limit: break"
+            },
+            {
+              "id": "generators-step-2-predict",
+              "type": "output_prediction",
+              "question": "Trace the code that adds only the first readings from the source using take and 45, and select what it displays.",
+              "hints": [
+                "Follow the job, which adds only the first readings from the source.",
+                "The generator stops when the limit is reached.",
+                "75"
+              ],
+              "explanation": "The generator stops when the limit is reached.",
+              "xp_reward": 10,
+              "starter_code": "def take(limit, source):\n    count = 0\n    for item in source:\n        if count == limit:\n            break\n        yield item\n        count = count + 1\nprint(sum(take(2, [36, 39, 45])))\n",
+              "options": [
+                "36",
+                "none",
+                "75",
+                "0"
+              ],
+              "correct_answer": "75"
+            },
+            {
+              "id": "generators-step-2-order",
+              "type": "ordering",
+              "question": "Tap the pieces, in order, of the line that adds only the first readings from the source for take and 45.",
+              "hints": [
+                "Follow the job, which adds only the first readings from the source.",
+                "if count == limit: break stops the walk.",
+                "if count == limit: break"
+              ],
+              "explanation": "if count == limit: break stops the walk.",
+              "xp_reward": 10,
+              "options": [
+                "if",
+                "count",
+                "==",
+                "limit:",
+                "break",
+                "return"
+              ],
+              "correct_answer": [
+                "if",
+                "count",
+                "==",
+                "limit:",
+                "break"
+              ]
+            },
+            {
+              "id": "generators-step-2-fill",
+              "type": "fill_blank",
+              "question": "The blank is the missing piece of the line that adds only the first readings from the source for take and 45.",
+              "hints": [
+                "Follow the job, which adds only the first readings from the source.",
+                "Plus counts one more taken reading.",
+                "+"
+              ],
+              "explanation": "Plus counts one more taken reading.",
+              "xp_reward": 10,
+              "starter_code": "count = count ___ 1\n",
+              "options": [
+                "-",
+                "*",
+                "+",
+                "=="
+              ],
+              "correct_answer": "+"
+            },
+            {
+              "id": "generators-step-2-bug",
+              "type": "debugging",
+              "question": "Choose the line that does another job than the one that adds only the first readings from the source for take and.",
+              "hints": [
+                "Follow the job, which adds only the first readings from the source.",
+                "The stop check matches immediately.",
+                "Line 4"
+              ],
+              "explanation": "The stop check matches immediately.",
+              "xp_reward": 10,
+              "starter_code": "def take(limit, source):\n    count = 0\n    for item in source:\n        if count == 0:\n            break\n        yield item\n        count = count + 1\nprint(sum(take(2, [36, 4])))\n",
+              "correct_answer": "4"
+            },
+            {
+              "id": "generators-step-2-predict-2",
+              "type": "output_prediction",
+              "question": "Trace the second run, which adds only the first readings from the source for take and 45, and select what it displays.",
+              "hints": [
+                "Follow the job, which adds only the first readings from the source.",
+                "The generator stops when the limit is reached.",
+                "36"
+              ],
+              "explanation": "The generator stops when the limit is reached.",
+              "xp_reward": 10,
+              "starter_code": "def take(limit, source):\n    count = 0\n    for item in source:\n        if count == limit:\n            break\n        yield item\n        count = count + 1\nprint(sum(take(1, [36, 39, 45])))\n",
+              "options": [
+                "75",
+                "0",
+                "36",
+                "none"
+              ],
+              "correct_answer": "36"
+            },
+            {
+              "id": "generators-step-2-write",
+              "type": "code",
+              "question": "Type the missing piece so the program adds only the first readings from the source for take and 45 and prints it.",
+              "hints": [
+                "Follow the job, which adds only the first readings from the source.",
+                "The taken total is what gets printed.",
+                "label = sum(take(2, [36, 39, 45]))"
+              ],
+              "explanation": "The taken total is what gets printed.",
+              "xp_reward": 10,
+              "starter_code": "def take(limit, source):\n    count = 0\n    for item in source:\n        if count == limit:\n            break\n        yield item\n        count = count + 1\nlabel = ___\nprint(label)\n",
+              "solution_code": "def take(limit, source):\n    count = 0\n    for item in source:\n        if count == limit:\n            break\n        yield item\n        count = count + 1\nlabel = sum(take(2, [36, 39, 45]))\nprint(label)\n",
+              "tests": [
+                {
+                  "name": "generators-step-2-prints",
+                  "description": "The taken total is what gets printed.",
+                  "expected_stdout": "75\n",
+                  "required": true
+                }
+              ]
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "generators-01",
-      "title": "3. Running Average Stream (Concept Challenge)",
-      "description": "Finish `running_average`. Yield the running average after each number in a sequence. The test checks that `list(running_average([2, 4, 6]))` equals `[2.0, 3.0, 4.0]`.",
+      "title": "Practice Running Average Stream",
+      "description": "Finish running_average. Yield the running average after each number in a sequence. The test checks that list(running_average([2, 4, 6])) equals [2.0, 3.0, 4.0].",
       "order": 83,
       "difficulty": "intermediate",
       "duration_minutes": 8,
@@ -110,7 +440,7 @@
         "functions"
       ],
       "learning_objectives": [
-        "Maintain state across yields"
+        "This step yields the running whole-number average, using averages and 38."
       ],
       "starter_code": "def running_average(nums):\n    # TODO: yield average after each number\n    pass\n",
       "solution_code": "def running_average(nums):\n    total = 0\n    count = 0\n    for x in nums:\n        total += x\n        count += 1\n        yield total / count\n",
@@ -131,12 +461,180 @@
         "url": "https://docs.python.org/3/reference/simple_stmts.html#yield",
         "license": "Python documentation license (PSF)"
       },
-      "xp_reward": 25
+      "xp_reward": 25,
+      "player_mode": "micro",
+      "sublessons": [
+        {
+          "id": "generators-01-micro",
+          "title": "Practice Running Average Stream",
+          "description": "",
+          "order": 1,
+          "exercises": [
+            {
+              "id": "generators-01-teach",
+              "type": "teach",
+              "question": "This step yields the running whole-number average, using averages and 38.",
+              "hints": [
+                "Follow the job, which yields the running whole-number average.",
+                "total // seen is the average so far.",
+                "total // seen"
+              ],
+              "explanation": "This step yields the running whole-number average, using averages and 38.",
+              "xp_reward": 0,
+              "worked_example": "total // seen"
+            },
+            {
+              "id": "generators-01-mcq",
+              "type": "mcq",
+              "question": "Choose the line that yields the running whole-number average, which is the line that fits averages and 38.",
+              "hints": [
+                "Follow the job, which yields the running whole-number average.",
+                "total // seen is the average so far.",
+                "total // seen"
+              ],
+              "explanation": "total // seen is the average so far.",
+              "xp_reward": 10,
+              "options": [
+                "total * seen",
+                "total // seen",
+                "print(total)",
+                "pass"
+              ],
+              "correct_answer": "total // seen"
+            },
+            {
+              "id": "generators-01-predict",
+              "type": "output_prediction",
+              "question": "Read the code that yields the running whole-number average for averages and 38, and choose the value it prints.",
+              "hints": [
+                "Follow the job, which yields the running whole-number average.",
+                "total // seen is the average so far.",
+                "36"
+              ],
+              "explanation": "total // seen is the average so far.",
+              "xp_reward": 10,
+              "starter_code": "def averages(values):\n    total = 0\n    seen = 0\n    for value in values:\n        total = total + value\n        seen = seen + 1\n        yield total // seen\nprint(list(averages([34, 38]))[-1])\n",
+              "options": [
+                "37",
+                "36",
+                "none",
+                "0"
+              ],
+              "correct_answer": "36"
+            },
+            {
+              "id": "generators-01-order",
+              "type": "ordering",
+              "question": "Arrange the pieces of the line that yields the running whole-number average, left to right, for averages and 38.",
+              "hints": [
+                "Follow the job, which yields the running whole-number average.",
+                "yield total // seen hands out the average.",
+                "def gen(): yield total // seen"
+              ],
+              "explanation": "yield total // seen hands out the average.",
+              "xp_reward": 10,
+              "options": [
+                "def",
+                "gen():",
+                "yield",
+                "total",
+                "//",
+                "seen",
+                "return"
+              ],
+              "correct_answer": [
+                "def",
+                "gen():",
+                "yield",
+                "total",
+                "//",
+                "seen"
+              ]
+            },
+            {
+              "id": "generators-01-fill",
+              "type": "fill_blank",
+              "question": "Fill the blank so the line yields the running whole-number average for averages and 38.",
+              "hints": [
+                "Follow the job, which yields the running whole-number average.",
+                "Plus adds the new reading into the running total.",
+                "+"
+              ],
+              "explanation": "Plus adds the new reading into the running total.",
+              "xp_reward": 10,
+              "starter_code": "total = total ___ value\n",
+              "options": [
+                "-",
+                "+",
+                "*",
+                "=="
+              ],
+              "correct_answer": "+"
+            },
+            {
+              "id": "generators-01-bug",
+              "type": "debugging",
+              "question": "Find the line that misses the job, which yields the running whole-number average, for averages and 38.",
+              "hints": [
+                "Follow the job, which yields the running whole-number average.",
+                "The generator multiplies instead of dividing.",
+                "Line 7"
+              ],
+              "explanation": "The generator multiplies instead of dividing.",
+              "xp_reward": 10,
+              "starter_code": "def averages(values):\n    total = 0\n    seen = 0\n    for value in values:\n        total = total + value\n        seen = seen + 1\n        yield total * seen\nprint(list(averages([34]))[-1])\n",
+              "correct_answer": "7"
+            },
+            {
+              "id": "generators-01-predict-2",
+              "type": "output_prediction",
+              "question": "On the new input, the code still yields the running whole-number average for averages and 38, so choose what it prints.",
+              "hints": [
+                "Follow the job, which yields the running whole-number average.",
+                "total // seen is the average so far.",
+                "37"
+              ],
+              "explanation": "total // seen is the average so far.",
+              "xp_reward": 10,
+              "starter_code": "def averages(values):\n    total = 0\n    seen = 0\n    for value in values:\n        total = total + value\n        seen = seen + 1\n        yield total // seen\nprint(list(averages([34, 38, 40]))[-1])\n",
+              "options": [
+                "36",
+                "none",
+                "0",
+                "37"
+              ],
+              "correct_answer": "37"
+            },
+            {
+              "id": "generators-01-write",
+              "type": "code",
+              "question": "Fill the blank so the program yields the running whole-number average, and the print shows that result for averages and 38.",
+              "hints": [
+                "Follow the job, which yields the running whole-number average.",
+                "The latest average is what gets printed.",
+                "label = list(averages([34, 38]))[-1]"
+              ],
+              "explanation": "The latest average is what gets printed.",
+              "xp_reward": 10,
+              "starter_code": "def averages(values):\n    total = 0\n    seen = 0\n    for value in values:\n        total = total + value\n        seen = seen + 1\n        yield total // seen\nlabel = ___\nprint(label)\n",
+              "solution_code": "def averages(values):\n    total = 0\n    seen = 0\n    for value in values:\n        total = total + value\n        seen = seen + 1\n        yield total // seen\nlabel = list(averages([34, 38]))[-1]\nprint(label)\n",
+              "tests": [
+                {
+                  "name": "generators-01-prints",
+                  "description": "The latest average is what gets printed.",
+                  "expected_stdout": "36\n",
+                  "required": true
+                }
+              ]
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "generators-practice-1",
-      "title": "4. Chunked Reader (Practice)",
-      "description": "Yield fixed-size chunks from a list (last chunk may be smaller). The test checks that `list(chunks([1, 2, 3, 4, 5], 2))` equals `[[1, 2], [3, 4], [5]]`.",
+      "title": "Practice Chunked Reader",
+      "description": "Yield fixed-size chunks from a list (last chunk may be smaller). The test checks that list(chunks([1, 2, 3, 4, 5], 2)) equals [[1, 2], [3, 4], [5]].",
       "order": 84,
       "difficulty": "intermediate",
       "duration_minutes": 6,
@@ -150,7 +648,7 @@
         "lists"
       ],
       "learning_objectives": [
-        "Slice an iterable into chunks via yield"
+        "This step adds the first chunk of readings, using chunks and 4."
       ],
       "starter_code": "def chunks(items, size):\n    # TODO: yield successive slices of length size\n    pass\n",
       "solution_code": "def chunks(items, size):\n    for i in range(0, len(items), size):\n        yield items[i:i + size]\n",
@@ -171,12 +669,178 @@
         "url": "https://docs.python.org/3/library/itertools.html#itertools-recipes",
         "license": "Python documentation license (PSF)"
       },
-      "xp_reward": 15
+      "xp_reward": 15,
+      "player_mode": "micro",
+      "sublessons": [
+        {
+          "id": "generators-practice-1-micro",
+          "title": "Practice Chunked Reader",
+          "description": "",
+          "order": 1,
+          "exercises": [
+            {
+              "id": "generators-practice-1-teach",
+              "type": "teach",
+              "question": "This step adds the first chunk of readings, using chunks and 4.",
+              "hints": [
+                "Follow the job, which adds the first chunk of readings.",
+                "The slice takes size readings and then the start moves forward.",
+                "start + size"
+              ],
+              "explanation": "This step adds the first chunk of readings, using chunks and 4.",
+              "xp_reward": 0,
+              "worked_example": "start + size"
+            },
+            {
+              "id": "generators-practice-1-mcq",
+              "type": "mcq",
+              "question": "Choose the line that adds the first chunk of readings, which is the line that fits chunks and 4.",
+              "hints": [
+                "Follow the job, which adds the first chunk of readings.",
+                "The slice takes size readings and then the start moves forward.",
+                "start + size"
+              ],
+              "explanation": "The slice takes size readings and then the start moves forward.",
+              "xp_reward": 10,
+              "options": [
+                "start == size",
+                "start + size",
+                "print(values)",
+                "pass"
+              ],
+              "correct_answer": "start + size"
+            },
+            {
+              "id": "generators-practice-1-predict",
+              "type": "output_prediction",
+              "question": "Read the code that adds the first chunk of readings for chunks and 4, and choose the value it prints.",
+              "hints": [
+                "Follow the job, which adds the first chunk of readings.",
+                "The slice takes size readings and then the start moves forward.",
+                "36"
+              ],
+              "explanation": "The slice takes size readings and then the start moves forward.",
+              "xp_reward": 10,
+              "starter_code": "def chunks(values, size):\n    start = 0\n    while start < len(values):\n        yield values[start:start + size]\n        start = start + size\nprint(sum(list(chunks([34, 2, 3, 4], 2))[0]))\n",
+              "options": [
+                "39",
+                "36",
+                "none",
+                "0"
+              ],
+              "correct_answer": "36"
+            },
+            {
+              "id": "generators-practice-1-order",
+              "type": "ordering",
+              "question": "Arrange the pieces of the line that adds the first chunk of readings, left to right, for chunks and 4.",
+              "hints": [
+                "Follow the job, which adds the first chunk of readings.",
+                "step = start + size is the next chunk boundary.",
+                "step = start + size"
+              ],
+              "explanation": "step = start + size is the next chunk boundary.",
+              "xp_reward": 10,
+              "options": [
+                "step",
+                "=",
+                "start",
+                "+",
+                "size",
+                "-"
+              ],
+              "correct_answer": [
+                "step",
+                "=",
+                "start",
+                "+",
+                "size"
+              ]
+            },
+            {
+              "id": "generators-practice-1-fill",
+              "type": "fill_blank",
+              "question": "Fill the blank so the line adds the first chunk of readings for chunks and 4.",
+              "hints": [
+                "Follow the job, which adds the first chunk of readings.",
+                "Plus moves the start by one chunk.",
+                "+"
+              ],
+              "explanation": "Plus moves the start by one chunk.",
+              "xp_reward": 10,
+              "starter_code": "start = start ___ size\n",
+              "options": [
+                "-",
+                "+",
+                "*",
+                "=="
+              ],
+              "correct_answer": "+"
+            },
+            {
+              "id": "generators-practice-1-bug",
+              "type": "debugging",
+              "question": "Find the line that misses the job, which adds the first chunk of readings, for chunks and 4.",
+              "hints": [
+                "Follow the job, which adds the first chunk of readings.",
+                "The chunk moves backward.",
+                "Line 5"
+              ],
+              "explanation": "The chunk moves backward.",
+              "xp_reward": 10,
+              "starter_code": "def chunks(values, size):\n    start = 0\n    while start < len(values):\n        yield values[start:start + size]\n        start = start - size\nprint(0)\n",
+              "correct_answer": "5"
+            },
+            {
+              "id": "generators-practice-1-predict-2",
+              "type": "output_prediction",
+              "question": "On the new input, the code still adds the first chunk of readings for chunks and 4, so choose what it prints.",
+              "hints": [
+                "Follow the job, which adds the first chunk of readings.",
+                "The slice takes size readings and then the start moves forward.",
+                "39"
+              ],
+              "explanation": "The slice takes size readings and then the start moves forward.",
+              "xp_reward": 10,
+              "starter_code": "def chunks(values, size):\n    start = 0\n    while start < len(values):\n        yield values[start:start + size]\n        start = start + size\nprint(sum(list(chunks([34, 2, 3, 4], 3))[0]))\n",
+              "options": [
+                "36",
+                "none",
+                "0",
+                "39"
+              ],
+              "correct_answer": "39"
+            },
+            {
+              "id": "generators-practice-1-write",
+              "type": "code",
+              "question": "Fill the blank so the program adds the first chunk of readings, and the print shows that result for chunks and 4.",
+              "hints": [
+                "Follow the job, which adds the first chunk of readings.",
+                "The first chunk total is what gets printed.",
+                "label = sum(list(chunks([34, 2, 3, 4], 2))[0])"
+              ],
+              "explanation": "The first chunk total is what gets printed.",
+              "xp_reward": 10,
+              "starter_code": "def chunks(values, size):\n    start = 0\n    while start < len(values):\n        yield values[start:start + size]\n        start = start + size\nlabel = ___\nprint(label)\n",
+              "solution_code": "def chunks(values, size):\n    start = 0\n    while start < len(values):\n        yield values[start:start + size]\n        start = start + size\nlabel = sum(list(chunks([34, 2, 3, 4], 2))[0])\nprint(label)\n",
+              "tests": [
+                {
+                  "name": "generators-practice-1-prints",
+                  "description": "The first chunk total is what gets printed.",
+                  "expected_stdout": "36\n",
+                  "required": true
+                }
+              ]
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "generators-checkpoint",
-      "title": "5. Unit 17 Checkpoint: Generators",
-      "description": "Implement `filter_gen(pred, iterable)` that yields items where pred(item) is true. The test checks that `list(filter_gen(lambda x: x % 2 == 0, [1, 2, 3, 4]))` equals `[2, 4]`.",
+      "title": "Practice Unit 17 Checkpoint Generators",
+      "description": "Implement filter_gen(pred, iterable) that yields items where pred(item) is true. The test checks that list(filter_gen(lambda x: x % 2 == 0, [1, 2, 3, 4])) equals [2, 4].",
       "order": 85,
       "difficulty": "intermediate",
       "duration_minutes": 10,
@@ -190,7 +854,7 @@
         "functions"
       ],
       "learning_objectives": [
-        "Build a filtering generator"
+        "This step adds only the readings above the cutoff, using keep and cut."
       ],
       "starter_code": "def filter_gen(pred, iterable):\n    # TODO: yield items where pred(item) is True\n    pass\n",
       "solution_code": "def filter_gen(pred, iterable):\n    for item in iterable:\n        if pred(item):\n            yield item\n",
@@ -211,7 +875,173 @@
         "url": "https://docs.python.org/3/reference/simple_stmts.html#yield",
         "license": "Python documentation license (PSF)"
       },
-      "xp_reward": 40
+      "xp_reward": 40,
+      "player_mode": "micro",
+      "sublessons": [
+        {
+          "id": "generators-checkpoint-micro",
+          "title": "Practice Unit 17 Checkpoint Generators",
+          "description": "",
+          "order": 1,
+          "exercises": [
+            {
+              "id": "generators-checkpoint-teach",
+              "type": "teach",
+              "question": "This step adds only the readings above the cutoff, using keep and cut.",
+              "hints": [
+                "Follow the job, which adds only the readings above the cutoff.",
+                "yield runs only when the reading is above the cutoff.",
+                "value > cut"
+              ],
+              "explanation": "This step adds only the readings above the cutoff, using keep and cut.",
+              "xp_reward": 0,
+              "worked_example": "value > cut"
+            },
+            {
+              "id": "generators-checkpoint-mcq",
+              "type": "mcq",
+              "question": "A correct choice adds only the readings above the cutoff and goes with keep and 10.",
+              "hints": [
+                "Follow the job, which adds only the readings above the cutoff.",
+                "yield runs only when the reading is above the cutoff.",
+                "value > cut"
+              ],
+              "explanation": "yield runs only when the reading is above the cutoff.",
+              "xp_reward": 10,
+              "options": [
+                "value == cut",
+                "print(value)",
+                "value > cut",
+                "pass"
+              ],
+              "correct_answer": "value > cut"
+            },
+            {
+              "id": "generators-checkpoint-predict",
+              "type": "output_prediction",
+              "question": "Select the output after the code adds only the readings above the cutoff, using keep and 10.",
+              "hints": [
+                "Follow the job, which adds only the readings above the cutoff.",
+                "yield runs only when the reading is above the cutoff.",
+                "87"
+              ],
+              "explanation": "yield runs only when the reading is above the cutoff.",
+              "xp_reward": 10,
+              "starter_code": "def keep(values, cut):\n    for value in values:\n        if value > cut:\n            yield value\nprint(sum(keep([41, 3, 46], 10)))\n",
+              "options": [
+                "none",
+                "0",
+                "46",
+                "87"
+              ],
+              "correct_answer": "87"
+            },
+            {
+              "id": "generators-checkpoint-order",
+              "type": "ordering",
+              "question": "Make the line that adds only the readings above the cutoff by ordering the pieces for keep and 10.",
+              "hints": [
+                "Follow the job, which adds only the readings above the cutoff.",
+                "flag = value > cut is the keep test.",
+                "flag = value > cut"
+              ],
+              "explanation": "flag = value > cut is the keep test.",
+              "xp_reward": 10,
+              "options": [
+                "flag",
+                "=",
+                "value",
+                ">",
+                "cut",
+                "<"
+              ],
+              "correct_answer": [
+                "flag",
+                "=",
+                "value",
+                ">",
+                "cut"
+              ]
+            },
+            {
+              "id": "generators-checkpoint-fill",
+              "type": "fill_blank",
+              "question": "Complete the line for keep and 10 so that it adds only the readings above the cutoff.",
+              "hints": [
+                "Follow the job, which adds only the readings above the cutoff.",
+                "The cutoff keeps the greater readings.",
+                ">"
+              ],
+              "explanation": "The cutoff keeps the greater readings.",
+              "xp_reward": 10,
+              "starter_code": "if value ___ cut:\n    label = 1\n",
+              "options": [
+                "<",
+                "==",
+                ">",
+                "<="
+              ],
+              "correct_answer": ">"
+            },
+            {
+              "id": "generators-checkpoint-bug",
+              "type": "debugging",
+              "question": "Select the line that gets in the way of the job, which adds only the readings above the cutoff, for keep and 10.",
+              "hints": [
+                "Follow the job, which adds only the readings above the cutoff.",
+                "The generator keeps the small readings.",
+                "Line 3"
+              ],
+              "explanation": "The generator keeps the small readings.",
+              "xp_reward": 10,
+              "starter_code": "def keep(values, cut):\n    for value in values:\n        if value < cut:\n            yield value\nprint(sum(keep([41, 3], 10)))\n",
+              "correct_answer": "3"
+            },
+            {
+              "id": "generators-checkpoint-predict-2",
+              "type": "output_prediction",
+              "question": "With the new data around keep and 10, the code adds only the readings above the cutoff, so select the new output.",
+              "hints": [
+                "Follow the job, which adds only the readings above the cutoff.",
+                "yield runs only when the reading is above the cutoff.",
+                "46"
+              ],
+              "explanation": "yield runs only when the reading is above the cutoff.",
+              "xp_reward": 10,
+              "starter_code": "def keep(values, cut):\n    for value in values:\n        if value > cut:\n            yield value\nprint(sum(keep([41, 3, 46], 41)))\n",
+              "options": [
+                "87",
+                "46",
+                "none",
+                "0"
+              ],
+              "correct_answer": "46"
+            },
+            {
+              "id": "generators-checkpoint-write",
+              "type": "code",
+              "question": "The printed result shows up after you fill the blank so the code adds only the readings above the cutoff for keep and 10.",
+              "hints": [
+                "Follow the job, which adds only the readings above the cutoff.",
+                "The kept total is what gets printed.",
+                "label = sum(keep([41, 3, 46], 10))"
+              ],
+              "explanation": "The kept total is what gets printed.",
+              "xp_reward": 10,
+              "starter_code": "def keep(values, cut):\n    for value in values:\n        if value > cut:\n            yield value\nlabel = ___\nprint(label)\n",
+              "solution_code": "def keep(values, cut):\n    for value in values:\n        if value > cut:\n            yield value\nlabel = sum(keep([41, 3, 46], 10))\nprint(label)\n",
+              "tests": [
+                {
+                  "name": "generators-checkpoint-prints",
+                  "description": "The kept total is what gets printed.",
+                  "expected_stdout": "87\n",
+                  "required": true
+                }
+              ]
+            }
+          ]
+        }
+      ]
     }
   ]
 }

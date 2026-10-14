@@ -14,8 +14,8 @@
   "lessons": [
     {
       "id": "ai-prompt-system",
-      "title": "14. Build Chat Messages",
-      "description": "Implement `chat_messages(system, user)` returning list of role/content dicts. The test checks that `chat_messages('sys', 'hi')[0]['role']` equals `'system'`; `chat_messages('sys', 'hi')[1]['content']` equals `'hi'`.",
+      "title": "Build Chat Messages",
+      "description": "Implement chat_messages(system, user) returning list of role/content dicts. The test checks that chat_messages('sys', 'hi')[0]['role'] equals 'system'; chat_messages('sys', 'hi')[1]['content'] equals 'hi'.",
       "order": 14,
       "difficulty": "intermediate",
       "duration_minutes": 5,
@@ -27,7 +27,7 @@
       ],
       "prerequisites": [],
       "learning_objectives": [
-        "Assemble chat message lists"
+        "This step reads the role of the first message, using messages holding role."
       ],
       "starter_code": "def chat_messages(system, user):\n    # TODO\n    pass\n",
       "solution_code": "def chat_messages(system, user):\n    return [{'role': 'system', 'content': system}, {'role': 'user', 'content': user}]\n",
@@ -48,12 +48,174 @@
         "url": "https://developers.openai.com/api/docs/api-reference/chat",
         "license": "OpenAI API documentation (developers.openai.com)"
       },
-      "xp_reward": 10
+      "xp_reward": 10,
+      "player_mode": "micro",
+      "sublessons": [
+        {
+          "id": "ai-prompt-system-micro",
+          "title": "Build Chat Messages",
+          "description": "",
+          "order": 1,
+          "exercises": [
+            {
+              "id": "ai-prompt-system-teach",
+              "type": "teach",
+              "question": "This step reads the role of the first message, using messages holding role.",
+              "hints": [
+                "Follow the job, which reads the role of the first message.",
+                "The role key says who sent the message.",
+                "messages[0]['role']"
+              ],
+              "explanation": "This step reads the role of the first message, using messages holding role.",
+              "xp_reward": 0,
+              "worked_example": "messages[0]['role']"
+            },
+            {
+              "id": "ai-prompt-system-mcq",
+              "type": "mcq",
+              "question": "Select the line that reads the role of the first message, the one that belongs with messages holding role.",
+              "hints": [
+                "Follow the job, which reads the role of the first message.",
+                "The role key says who sent the message.",
+                "messages[0]['role']"
+              ],
+              "explanation": "The role key says who sent the message.",
+              "xp_reward": 10,
+              "options": [
+                "messages == messages",
+                "return messages",
+                "pass",
+                "messages[0]['role']"
+              ],
+              "correct_answer": "messages[0]['role']"
+            },
+            {
+              "id": "ai-prompt-system-predict",
+              "type": "output_prediction",
+              "question": "Follow the code that reads the role of the first message for messages holding role, then choose the displayed value.",
+              "hints": [
+                "Follow the job, which reads the role of the first message.",
+                "The role key says who sent the message.",
+                "system"
+              ],
+              "explanation": "The role key says who sent the message.",
+              "xp_reward": 10,
+              "starter_code": "messages = [{'role': 'system', 'text': 'thyme'}]\nprint(messages[0]['role'])\n",
+              "options": [
+                "user",
+                "none",
+                "0",
+                "system"
+              ],
+              "correct_answer": "system"
+            },
+            {
+              "id": "ai-prompt-system-order",
+              "type": "ordering",
+              "question": "Order the pieces so the line reads the role of the first message for messages holding role.",
+              "hints": [
+                "Follow the job, which reads the role of the first message.",
+                "The role key says who sent the message.",
+                "role = messages[0]['role']"
+              ],
+              "explanation": "The role key says who sent the message.",
+              "xp_reward": 10,
+              "options": [
+                "role",
+                "=",
+                "messages[0]['role']",
+                "=="
+              ],
+              "correct_answer": [
+                "role",
+                "=",
+                "messages[0]['role']"
+              ]
+            },
+            {
+              "id": "ai-prompt-system-fill",
+              "type": "fill_blank",
+              "question": "Supply the missing piece so the line reads the role of the first message for messages holding role.",
+              "hints": [
+                "Follow the job, which reads the role of the first message.",
+                "The role key says who sent the message.",
+                "'role'"
+              ],
+              "explanation": "The role key says who sent the message.",
+              "xp_reward": 10,
+              "starter_code": "role = messages[0][___]\n",
+              "options": [
+                "'text'",
+                "'id'",
+                "'name'",
+                "'role'"
+              ],
+              "correct_answer": "'role'"
+            },
+            {
+              "id": "ai-prompt-system-bug",
+              "type": "debugging",
+              "question": "The wrong line is the one that misses the job, which reads the role of the first message, for messages holding role.",
+              "hints": [
+                "Follow the job, which reads the role of the first message.",
+                "The print shows the text instead of the role.",
+                "Line 2"
+              ],
+              "explanation": "The print shows the text instead of the role.",
+              "xp_reward": 10,
+              "starter_code": "messages = [{'role': 'system', 'text': 'thyme'}]\nprint(messages[0]['text'])\n",
+              "correct_answer": "2"
+            },
+            {
+              "id": "ai-prompt-system-predict-2",
+              "type": "output_prediction",
+              "question": "A new input still has code that reads the role of the first message for messages holding role, and the correct choice is what it prints.",
+              "hints": [
+                "Follow the job, which reads the role of the first message.",
+                "The role key says who sent the message.",
+                "user"
+              ],
+              "explanation": "The role key says who sent the message.",
+              "xp_reward": 10,
+              "starter_code": "messages = [{'role': 'user', 'text': 'thyme'}]\nprint(messages[0]['role'])\n",
+              "options": [
+                "system",
+                "none",
+                "user",
+                "0"
+              ],
+              "correct_answer": "user"
+            },
+            {
+              "id": "ai-prompt-system-write",
+              "type": "code",
+              "question": "The blank is the missing piece of the program that reads the role of the first message for messages holding role.",
+              "hints": [
+                "Follow the job, which reads the role of the first message.",
+                "The printed value is the result after this step reads the role of the first message.",
+                "label = messages[0]['role']"
+              ],
+              "explanation": "The printed value is the result after this step reads the role of the first message.",
+              "xp_reward": 10,
+              "starter_code": "messages = [{'role': 'system', 'text': 'thyme'}]\nlabel = ___\nprint(label)\n",
+              "solution_code": "messages = [{'role': 'system', 'text': 'thyme'}]\nlabel = messages[0]['role']\nprint(label)\n",
+              "tests": [
+                {
+                  "name": "ai-prompt-system-prints",
+                  "description": "The printed value is the result after this step reads the role of the first mess",
+                  "expected_stdout": "system\n",
+                  "required": true
+                }
+              ]
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "ai-prompt-template",
-      "title": "15. Prompt Template",
-      "description": "Implement `render_prompt(template, **kwargs)` using str.format_map. The test checks that `render_prompt('Hello {name}', name='Ada')` equals `'Hello Ada'`.",
+      "title": "Practice Prompt Template",
+      "description": "Implement render_prompt(template, **kwargs) using str.format_map. The test checks that render_prompt('Hello {name}', name='Ada') equals 'Hello Ada'.",
       "order": 15,
       "difficulty": "intermediate",
       "duration_minutes": 5,
@@ -65,7 +227,7 @@
       ],
       "prerequisites": [],
       "learning_objectives": [
-        "Render prompt templates"
+        "This step fills the name into the template, using name holding cedar."
       ],
       "starter_code": "def render_prompt(template, **kwargs):\n    # TODO\n    pass\n",
       "solution_code": "def render_prompt(template, **kwargs):\n    return template.format_map(kwargs)\n",
@@ -86,12 +248,176 @@
         "url": "https://docs.python.org/3/library/stdtypes.html#string-methods",
         "license": "Python documentation license (PSF)"
       },
-      "xp_reward": 10
+      "xp_reward": 10,
+      "player_mode": "micro",
+      "sublessons": [
+        {
+          "id": "ai-prompt-template-micro",
+          "title": "Practice Prompt Template",
+          "description": "",
+          "order": 1,
+          "exercises": [
+            {
+              "id": "ai-prompt-template-teach",
+              "type": "teach",
+              "question": "This step fills the name into the template, using name holding cedar.",
+              "hints": [
+                "Follow the job, which fills the name into the template.",
+                "The template substitutes the name into the sentence.",
+                "f'Hello {name}'"
+              ],
+              "explanation": "This step fills the name into the template, using name holding cedar.",
+              "xp_reward": 0,
+              "worked_example": "f'Hello {name}'"
+            },
+            {
+              "id": "ai-prompt-template-mcq",
+              "type": "mcq",
+              "question": "Keep the choice that fills the name into the template for name holding cedar.",
+              "hints": [
+                "Follow the job, which fills the name into the template.",
+                "The template substitutes the name into the sentence.",
+                "f'Hello {name}'"
+              ],
+              "explanation": "The template substitutes the name into the sentence.",
+              "xp_reward": 10,
+              "options": [
+                "name == name",
+                "return name",
+                "pass",
+                "f'Hello {name}'"
+              ],
+              "correct_answer": "f'Hello {name}'"
+            },
+            {
+              "id": "ai-prompt-template-predict",
+              "type": "output_prediction",
+              "question": "Trace the code that fills the name into the template using name holding cedar, and select what it displays.",
+              "hints": [
+                "Follow the job, which fills the name into the template.",
+                "The template substitutes the name into the sentence.",
+                "Hello cedar"
+              ],
+              "explanation": "The template substitutes the name into the sentence.",
+              "xp_reward": 10,
+              "starter_code": "name = 'cedar'\nprint(f'Hello {name}')\n",
+              "options": [
+                "Hello grove",
+                "none",
+                "0",
+                "Hello cedar"
+              ],
+              "correct_answer": "Hello cedar"
+            },
+            {
+              "id": "ai-prompt-template-order",
+              "type": "ordering",
+              "question": "Tap the pieces, in order, of the line that fills the name into the template for name holding cedar.",
+              "hints": [
+                "Follow the job, which fills the name into the template.",
+                "The template substitutes the name into the sentence.",
+                "text = f'Hello {name}'"
+              ],
+              "explanation": "The template substitutes the name into the sentence.",
+              "xp_reward": 10,
+              "options": [
+                "text",
+                "=",
+                "f'Hello",
+                "{name}'",
+                "+"
+              ],
+              "correct_answer": [
+                "text",
+                "=",
+                "f'Hello",
+                "{name}'"
+              ]
+            },
+            {
+              "id": "ai-prompt-template-fill",
+              "type": "fill_blank",
+              "question": "The blank is the missing piece of the line that fills the name into the template for name holding cedar.",
+              "hints": [
+                "Follow the job, which fills the name into the template.",
+                "The template substitutes the name into the sentence.",
+                "{name}"
+              ],
+              "explanation": "The template substitutes the name into the sentence.",
+              "xp_reward": 10,
+              "starter_code": "text = f'Hello ___'\n",
+              "options": [
+                "{missing}",
+                "{id}",
+                "{role}",
+                "{name}"
+              ],
+              "correct_answer": "{name}"
+            },
+            {
+              "id": "ai-prompt-template-bug",
+              "type": "debugging",
+              "question": "Choose the line that does another job than the one that fills the name into the template for name holding cedar.",
+              "hints": [
+                "Follow the job, which fills the name into the template.",
+                "The print shows the name without the template around it.",
+                "Line 2"
+              ],
+              "explanation": "The print shows the name without the template around it.",
+              "xp_reward": 10,
+              "starter_code": "name = 'cedar'\nprint(name)\n",
+              "correct_answer": "2"
+            },
+            {
+              "id": "ai-prompt-template-predict-2",
+              "type": "output_prediction",
+              "question": "Trace the second run, which fills the name into the template for name holding cedar, and select what it displays.",
+              "hints": [
+                "Follow the job, which fills the name into the template.",
+                "The template substitutes the name into the sentence.",
+                "Hello grove"
+              ],
+              "explanation": "The template substitutes the name into the sentence.",
+              "xp_reward": 10,
+              "starter_code": "name = 'grove'\nprint(f'Hello {name}')\n",
+              "options": [
+                "Hello cedar",
+                "none",
+                "Hello grove",
+                "0"
+              ],
+              "correct_answer": "Hello grove"
+            },
+            {
+              "id": "ai-prompt-template-write",
+              "type": "code",
+              "question": "Type the missing piece so the program fills the name into the template for name holding cedar and prints it.",
+              "hints": [
+                "Follow the job, which fills the name into the template.",
+                "The printed value is the result after this step fills the name into the template.",
+                "label = f'Hello {name}'"
+              ],
+              "explanation": "The printed value is the result after this step fills the name into the template.",
+              "xp_reward": 10,
+              "starter_code": "name = 'cedar'\nlabel = ___\nprint(label)\n",
+              "solution_code": "name = 'cedar'\nlabel = f'Hello {name}'\nprint(label)\n",
+              "tests": [
+                {
+                  "name": "ai-prompt-template-prints",
+                  "description": "The printed value is the result after this step fills the name into the template",
+                  "expected_stdout": "Hello cedar\n",
+                  "required": true
+                }
+              ]
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "ai-prompt-fewshot",
-      "title": "16. Few-Shot Packing",
-      "description": "Implement `few_shot(examples, query)` formatting Input/Output blocks then the query. The test checks that `few_shot([('2+2', '4')], '3+3').endswith('Output:')` is true; `few_shot([('2+2', '4')], '3+3')` contains `'Input: 2+2'`.",
+      "title": "Practice Few-Shot Packing",
+      "description": "Implement few_shot(examples, query) formatting Input/Output blocks then the query. The test checks that few_shot([('2+2', '4')], '3+3').endswith('Output:') is true; few_shot([('2+2', '4')], '3+3') contains 'Input: 2+2'.",
       "order": 16,
       "difficulty": "intermediate",
       "duration_minutes": 8,
@@ -103,7 +429,7 @@
       ],
       "prerequisites": [],
       "learning_objectives": [
-        "Pack few-shot examples into prompts"
+        "This step counts the packed examples, using shots holding kelp."
       ],
       "starter_code": "def few_shot(examples, query):\n    # TODO\n    pass\n",
       "solution_code": "def few_shot(examples, query):\n    blocks = [f'Input: {inp}\\nOutput: {out}' for inp, out in examples]\n    blocks.append(f'Input: {query}\\nOutput:')\n    return '\\n\\n'.join(blocks)\n",
@@ -127,35 +453,173 @@
       "xp_reward": 25,
       "sublessons": [
         {
-          "id": "ai-prompt-fewshot-order-1-sub",
-          "title": "Order the steps",
+          "id": "ai-prompt-fewshot-micro",
+          "title": "Practice Few-Shot Packing",
+          "description": "",
           "order": 1,
           "exercises": [
             {
-              "id": "ai-prompt-fewshot-order-1",
-              "type": "ordering",
-              "question": "Put the steps of `16. Few-Shot Packing` back in order. Each line depends on the one before it.",
+              "id": "ai-prompt-fewshot-teach",
+              "type": "teach",
+              "question": "This step counts the packed examples, using shots holding kelp.",
+              "hints": [
+                "Stay with the step this screen is about.",
+                "The packed list length is the number of examples.",
+                "len(shots)"
+              ],
+              "explanation": "This step counts the packed examples, using shots holding kelp.",
+              "xp_reward": 0,
+              "worked_example": "len(shots)"
+            },
+            {
+              "id": "ai-prompt-fewshot-mcq",
+              "type": "mcq",
+              "question": "Pick the line that counts the packed examples, not a line about something else, for shots holding kelp.",
+              "hints": [
+                "Stay with the step this screen is about.",
+                "The packed list length is the number of examples.",
+                "len(shots)"
+              ],
+              "explanation": "The packed list length is the number of examples.",
+              "xp_reward": 10,
               "options": [
-                "blocks.append(f'Input: {query}\\nOutput:')",
-                "return '\\n\\n'.join(blocks)",
-                "blocks = [f'Input: {inp}\\nOutput: {out}' for inp, out in examples]"
+                "shots == shots",
+                "len(shots)",
+                "return shots",
+                "pass"
+              ],
+              "correct_answer": "len(shots)"
+            },
+            {
+              "id": "ai-prompt-fewshot-predict",
+              "type": "output_prediction",
+              "question": "The displayed value is what the code prints when it counts the packed examples for shots holding kelp.",
+              "hints": [
+                "Stay with the step this screen is about.",
+                "The packed list length is the number of examples.",
+                "2"
+              ],
+              "explanation": "The packed list length is the number of examples.",
+              "xp_reward": 10,
+              "starter_code": "shots = ['kelp', 'olive']\nprint(len(shots))\n",
+              "options": [
+                "3",
+                "2",
+                "none",
+                "0"
+              ],
+              "correct_answer": "2"
+            },
+            {
+              "id": "ai-prompt-fewshot-order",
+              "type": "ordering",
+              "question": "Place every piece so the result counts the packed examples for shots holding kelp.",
+              "hints": [
+                "Stay with the step this screen is about.",
+                "The packed list length is the number of examples.",
+                "shots = ['kelp', 'olive']"
+              ],
+              "explanation": "The packed list length is the number of examples.",
+              "xp_reward": 10,
+              "options": [
+                "shots",
+                "=",
+                "['kelp',",
+                "'olive']",
+                "=="
               ],
               "correct_answer": [
-                "blocks = [f'Input: {inp}\\nOutput: {out}' for inp, out in examples]",
-                "blocks.append(f'Input: {query}\\nOutput:')",
-                "return '\\n\\n'.join(blocks)"
+                "shots",
+                "=",
+                "['kelp',",
+                "'olive']"
+              ]
+            },
+            {
+              "id": "ai-prompt-fewshot-fill",
+              "type": "fill_blank",
+              "question": "Drop in the piece that lets the line counts the packed examples for shots holding kelp.",
+              "hints": [
+                "Stay with the step this screen is about.",
+                "The packed list length is the number of examples.",
+                "len"
               ],
-              "explanation": "The order the solution in “16. Few-Shot Packing” actually runs in.",
-              "xp_reward": 10
+              "explanation": "The packed list length is the number of examples.",
+              "xp_reward": 10,
+              "starter_code": "total = ___(shots)\n",
+              "options": [
+                "sum",
+                "len",
+                "min",
+                "max"
+              ],
+              "correct_answer": "len"
+            },
+            {
+              "id": "ai-prompt-fewshot-bug",
+              "type": "debugging",
+              "question": "The mismatch misses the job, which counts the packed examples, for shots holding kelp.",
+              "hints": [
+                "Stay with the step this screen is about.",
+                "The print shows one example instead of the count.",
+                "Line 2"
+              ],
+              "explanation": "The print shows one example instead of the count.",
+              "xp_reward": 10,
+              "starter_code": "shots = ['kelp', 'olive']\nprint(shots[0])\n",
+              "correct_answer": "2"
+            },
+            {
+              "id": "ai-prompt-fewshot-predict-2",
+              "type": "output_prediction",
+              "question": "Choose the printed result of the second run that counts the packed examples for shots holding kelp.",
+              "hints": [
+                "Stay with the step this screen is about.",
+                "The packed list length is the number of examples.",
+                "3"
+              ],
+              "explanation": "The packed list length is the number of examples.",
+              "xp_reward": 10,
+              "starter_code": "shots = ['kelp', 'olive', 'extra']\nprint(len(shots))\n",
+              "options": [
+                "2",
+                "none",
+                "0",
+                "3"
+              ],
+              "correct_answer": "3"
+            },
+            {
+              "id": "ai-prompt-fewshot-write",
+              "type": "code",
+              "question": "Make the program counts the packed examples by filling the blank for shots holding kelp.",
+              "hints": [
+                "Stay with the step this screen is about.",
+                "The printed value is the result after this step counts the packed examples.",
+                "label = len(shots)"
+              ],
+              "explanation": "The printed value is the result after this step counts the packed examples.",
+              "xp_reward": 10,
+              "starter_code": "shots = ['kelp', 'olive']\nlabel = ___\nprint(label)\n",
+              "solution_code": "shots = ['kelp', 'olive']\nlabel = len(shots)\nprint(label)\n",
+              "tests": [
+                {
+                  "name": "ai-prompt-fewshot-prints",
+                  "description": "The printed value is the result after this step counts the packed examples.",
+                  "expected_stdout": "2\n",
+                  "required": true
+                }
+              ]
             }
           ]
         }
-      ]
+      ],
+      "player_mode": "micro"
     },
     {
       "id": "ai-prompt-json-schema",
-      "title": "17. Ask for JSON (Practice)",
-      "description": "Implement `json_instruction(schema_keys)` telling the model to return JSON with those keys. The test checks that `json_instruction(['name', 'age'])` contains `'name'`; `json_instruction(['name', 'age'])` contains `'age'`; `json_instruction(['name', 'age'])` contains `'JSON'`.",
+      "title": "Ask for JSON",
+      "description": "Implement json_instruction(schema_keys) telling the model to return JSON with those keys. The test checks that json_instruction(['name', 'age']) contains 'name'; json_instruction(['name', 'age']) contains 'age'; json_instruction(['name', 'age']) contains 'JSON'.",
       "order": 17,
       "difficulty": "intermediate",
       "duration_minutes": 6,
@@ -167,7 +631,7 @@
       ],
       "prerequisites": [],
       "learning_objectives": [
-        "Request structured JSON outputs"
+        "This step reads the ok flag from the JSON object, using blob holding ok."
       ],
       "starter_code": "def json_instruction(schema_keys):\n    # TODO\n    pass\n",
       "solution_code": "def json_instruction(schema_keys):\n    keys = ', '.join(schema_keys)\n    return f'Respond with JSON containing keys: {keys}.'\n",
@@ -188,12 +652,174 @@
         "url": "https://docs.python.org/3/library/json.html",
         "license": "Python documentation license (PSF)"
       },
-      "xp_reward": 15
+      "xp_reward": 15,
+      "player_mode": "micro",
+      "sublessons": [
+        {
+          "id": "ai-prompt-json-schema-micro",
+          "title": "Ask for JSON",
+          "description": "",
+          "order": 1,
+          "exercises": [
+            {
+              "id": "ai-prompt-json-schema-teach",
+              "type": "teach",
+              "question": "This step reads the ok flag from the JSON object, using blob holding ok.",
+              "hints": [
+                "Follow the job, which reads the ok flag from the JSON object.",
+                "loads turns the JSON text into a dictionary.",
+                "json.loads(blob)"
+              ],
+              "explanation": "This step reads the ok flag from the JSON object, using blob holding ok.",
+              "xp_reward": 0,
+              "worked_example": "json.loads(blob)"
+            },
+            {
+              "id": "ai-prompt-json-schema-mcq",
+              "type": "mcq",
+              "question": "Pick the line that reads the ok flag from the JSON object, not a line about something else, for blob holding ok.",
+              "hints": [
+                "Follow the job, which reads the ok flag from the JSON object.",
+                "loads turns the JSON text into a dictionary.",
+                "json.loads(blob)"
+              ],
+              "explanation": "loads turns the JSON text into a dictionary.",
+              "xp_reward": 10,
+              "options": [
+                "blob == blob",
+                "return blob",
+                "pass",
+                "json.loads(blob)"
+              ],
+              "correct_answer": "json.loads(blob)"
+            },
+            {
+              "id": "ai-prompt-json-schema-predict",
+              "type": "output_prediction",
+              "question": "The displayed value is what the code prints when it reads the ok flag from the JSON object for blob holding ok.",
+              "hints": [
+                "Follow the job, which reads the ok flag from the JSON object.",
+                "loads turns the JSON text into a dictionary.",
+                "1"
+              ],
+              "explanation": "loads turns the JSON text into a dictionary.",
+              "xp_reward": 10,
+              "starter_code": "import json\nblob = '{\"ok\": 1}'\nprint(json.loads(blob)['ok'])\n",
+              "options": [
+                "0",
+                "none",
+                "blank",
+                "1"
+              ],
+              "correct_answer": "1"
+            },
+            {
+              "id": "ai-prompt-json-schema-order",
+              "type": "ordering",
+              "question": "Place every piece so the result reads the ok flag from the JSON object for blob holding ok.",
+              "hints": [
+                "Follow the job, which reads the ok flag from the JSON object.",
+                "loads turns the JSON text into a dictionary.",
+                "data = json.loads(blob)"
+              ],
+              "explanation": "loads turns the JSON text into a dictionary.",
+              "xp_reward": 10,
+              "options": [
+                "data",
+                "=",
+                "json.loads(blob)",
+                "=="
+              ],
+              "correct_answer": [
+                "data",
+                "=",
+                "json.loads(blob)"
+              ]
+            },
+            {
+              "id": "ai-prompt-json-schema-fill",
+              "type": "fill_blank",
+              "question": "Drop in the piece that lets the line reads the ok flag from the JSON object for blob holding ok.",
+              "hints": [
+                "Follow the job, which reads the ok flag from the JSON object.",
+                "loads turns the JSON text into a dictionary.",
+                "loads"
+              ],
+              "explanation": "loads turns the JSON text into a dictionary.",
+              "xp_reward": 10,
+              "starter_code": "data = json.___(blob)\n",
+              "options": [
+                "dumps",
+                "load",
+                "dump",
+                "loads"
+              ],
+              "correct_answer": "loads"
+            },
+            {
+              "id": "ai-prompt-json-schema-bug",
+              "type": "debugging",
+              "question": "The mismatch misses the job, which reads the ok flag from the JSON object, for blob holding ok.",
+              "hints": [
+                "Follow the job, which reads the ok flag from the JSON object.",
+                "The print shows a character and never parses the object.",
+                "Line 3"
+              ],
+              "explanation": "The print shows a character and never parses the object.",
+              "xp_reward": 10,
+              "starter_code": "import json\nblob = '{\"ok\": 1}'\nprint(blob[0])\n",
+              "correct_answer": "3"
+            },
+            {
+              "id": "ai-prompt-json-schema-predict-2",
+              "type": "output_prediction",
+              "question": "Choose the printed result of the second run that reads the ok flag from the JSON object for blob holding ok.",
+              "hints": [
+                "Follow the job, which reads the ok flag from the JSON object.",
+                "loads turns the JSON text into a dictionary.",
+                "0"
+              ],
+              "explanation": "loads turns the JSON text into a dictionary.",
+              "xp_reward": 10,
+              "starter_code": "import json\nblob = '{\"ok\": 0}'\nprint(json.loads(blob)['ok'])\n",
+              "options": [
+                "1",
+                "none",
+                "0",
+                "blank"
+              ],
+              "correct_answer": "0"
+            },
+            {
+              "id": "ai-prompt-json-schema-write",
+              "type": "code",
+              "question": "Make the program reads the ok flag from the JSON object by filling the blank for blob holding ok.",
+              "hints": [
+                "Follow the job, which reads the ok flag from the JSON object.",
+                "The printed value is the result after this step reads the ok flag from the JSON object.",
+                "label = json.loads(blob)['ok']"
+              ],
+              "explanation": "The printed value is the result after this step reads the ok flag from the JSON object.",
+              "xp_reward": 10,
+              "starter_code": "import json\nblob = '{\"ok\": 1}'\nlabel = ___\nprint(label)\n",
+              "solution_code": "import json\nblob = '{\"ok\": 1}'\nlabel = json.loads(blob)['ok']\nprint(label)\n",
+              "tests": [
+                {
+                  "name": "ai-prompt-json-schema-prints",
+                  "description": "The printed value is the result after this step reads the ok flag from the JSON ",
+                  "expected_stdout": "1\n",
+                  "required": true
+                }
+              ]
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "ai-prompt-checkpoint",
-      "title": "18. Checkpoint: Extract JSON Block",
-      "description": "Finish `extract_json(text)` so it returns the substring from the first `{` through the last `}`. The test puts a small JSON object in the middle of a sentence and checks that you return only that object.",
+      "title": "Practice Checkpoint Extract JSON Block",
+      "description": "Finish extract_json(text) so it returns the substring from the first { through the last }. The test puts a small JSON object in the middle of a sentence and checks that you return only that object.",
       "order": 18,
       "difficulty": "intermediate",
       "duration_minutes": 10,
@@ -205,7 +831,7 @@
       ],
       "prerequisites": [],
       "learning_objectives": [
-        "Extract JSON from model output"
+        "This step reads the ok flag from a JSON block inside text, using text holding note {."
       ],
       "starter_code": "def extract_json(text):\n    # TODO\n    pass\n",
       "solution_code": "def extract_json(text):\n    start = text.find('{')\n    end = text.rfind('}')\n    if start == -1 or end == -1 or end < start:\n        raise ValueError('no json object')\n    return text[start:end + 1]\n",
@@ -226,7 +852,169 @@
         "url": "https://docs.python.org/3/library/stdtypes.html#string-methods",
         "license": "Python documentation license (PSF)"
       },
-      "xp_reward": 40
+      "xp_reward": 40,
+      "player_mode": "micro",
+      "sublessons": [
+        {
+          "id": "ai-prompt-checkpoint-micro",
+          "title": "Practice Checkpoint Extract JSON Block",
+          "description": "",
+          "order": 1,
+          "exercises": [
+            {
+              "id": "ai-prompt-checkpoint-teach",
+              "type": "teach",
+              "question": "This step reads the ok flag from a JSON block inside text, using text holding note {.",
+              "hints": [
+                "Follow the job, which reads the ok flag from a JSON block inside text.",
+                "The slice from the brace through the closing brace is the JSON block.",
+                "text[start:end]"
+              ],
+              "explanation": "This step reads the ok flag from a JSON block inside text, using text holding note {.",
+              "xp_reward": 0,
+              "worked_example": "text[start:end]"
+            },
+            {
+              "id": "ai-prompt-checkpoint-mcq",
+              "type": "mcq",
+              "question": "Pick the line that reads the ok flag from a JSON block inside text, not a line about something else, for text holding note {.",
+              "hints": [
+                "Follow the job, which reads the ok flag from a JSON block inside text.",
+                "The slice from the brace through the closing brace is the JSON block.",
+                "text[start:end]"
+              ],
+              "explanation": "The slice from the brace through the closing brace is the JSON block.",
+              "xp_reward": 10,
+              "options": [
+                "text == text",
+                "return text",
+                "pass",
+                "text[start:end]"
+              ],
+              "correct_answer": "text[start:end]"
+            },
+            {
+              "id": "ai-prompt-checkpoint-predict",
+              "type": "output_prediction",
+              "question": "The displayed value is what the code prints when it reads the ok flag from a JSON block inside text for text holding note {.",
+              "hints": [
+                "Follow the job, which reads the ok flag from a JSON block inside text.",
+                "The slice from the brace through the closing brace is the JSON block.",
+                "1"
+              ],
+              "explanation": "The slice from the brace through the closing brace is the JSON block.",
+              "xp_reward": 10,
+              "starter_code": "import json\ntext = 'note {\"ok\": 1} tail'\nstart = text.index('{')\nend = text.index('}') + 1\nprint(json.loads(text[start:end])['ok'])\n",
+              "options": [
+                "2",
+                "none",
+                "0",
+                "1"
+              ],
+              "correct_answer": "1"
+            },
+            {
+              "id": "ai-prompt-checkpoint-order",
+              "type": "ordering",
+              "question": "Place every piece so the result reads the ok flag from a JSON block inside text for text holding note {.",
+              "hints": [
+                "Follow the job, which reads the ok flag from a JSON block inside text.",
+                "The slice from the brace through the closing brace is the JSON block.",
+                "block = text[start:end]"
+              ],
+              "explanation": "The slice from the brace through the closing brace is the JSON block.",
+              "xp_reward": 10,
+              "options": [
+                "block",
+                "=",
+                "text[start:end]",
+                "=="
+              ],
+              "correct_answer": [
+                "block",
+                "=",
+                "text[start:end]"
+              ]
+            },
+            {
+              "id": "ai-prompt-checkpoint-fill",
+              "type": "fill_blank",
+              "question": "Drop in the piece that lets the line reads the ok flag from a JSON block inside text for text holding note {.",
+              "hints": [
+                "Follow the job, which reads the ok flag from a JSON block inside text.",
+                "The slice from the brace through the closing brace is the JSON block.",
+                "+"
+              ],
+              "explanation": "The slice from the brace through the closing brace is the JSON block.",
+              "xp_reward": 10,
+              "starter_code": "end = text.index('}') ___ 1\n",
+              "options": [
+                "-",
+                "*",
+                "==",
+                "+"
+              ],
+              "correct_answer": "+"
+            },
+            {
+              "id": "ai-prompt-checkpoint-bug",
+              "type": "debugging",
+              "question": "The mismatch misses the job, which reads the ok flag from a JSON block inside text, for text holding note {.",
+              "hints": [
+                "Follow the job, which reads the ok flag from a JSON block inside text.",
+                "The print shows the first character of the note.",
+                "Line 3"
+              ],
+              "explanation": "The print shows the first character of the note.",
+              "xp_reward": 10,
+              "starter_code": "import json\ntext = 'note {\"ok\": 1} tail'\nprint(text[0])\n",
+              "correct_answer": "3"
+            },
+            {
+              "id": "ai-prompt-checkpoint-predict-2",
+              "type": "output_prediction",
+              "question": "Choose the printed result of the second run that reads the ok flag from a JSON block inside text for text holding note {.",
+              "hints": [
+                "Follow the job, which reads the ok flag from a JSON block inside text.",
+                "The slice from the brace through the closing brace is the JSON block.",
+                "2"
+              ],
+              "explanation": "The slice from the brace through the closing brace is the JSON block.",
+              "xp_reward": 10,
+              "starter_code": "import json\ntext = 'note {\"ok\": 2} tail'\nstart = text.index('{')\nend = text.index('}') + 1\nprint(json.loads(text[start:end])['ok'])\n",
+              "options": [
+                "1",
+                "none",
+                "2",
+                "0"
+              ],
+              "correct_answer": "2"
+            },
+            {
+              "id": "ai-prompt-checkpoint-write",
+              "type": "code",
+              "question": "Make the program reads the ok flag from a JSON block inside text by filling the blank for text holding note {.",
+              "hints": [
+                "Follow the job, which reads the ok flag from a JSON block inside text.",
+                "The printed value is the result after this step reads the ok flag from a JSON block inside text.",
+                "label = json.loads(text[start:end])['ok']"
+              ],
+              "explanation": "The printed value is the result after this step reads the ok flag from a JSON block inside text.",
+              "xp_reward": 10,
+              "starter_code": "import json\ntext = 'note {\"ok\": 1} tail'\nstart = text.index('{')\nend = text.index('}') + 1\nlabel = ___\nprint(label)\n",
+              "solution_code": "import json\ntext = 'note {\"ok\": 1} tail'\nstart = text.index('{')\nend = text.index('}') + 1\nlabel = json.loads(text[start:end])['ok']\nprint(label)\n",
+              "tests": [
+                {
+                  "name": "ai-prompt-checkpoint-prints",
+                  "description": "The printed value is the result after this step reads the ok flag from a JSON bl",
+                  "expected_stdout": "1\n",
+                  "required": true
+                }
+              ]
+            }
+          ]
+        }
+      ]
     }
   ]
 }

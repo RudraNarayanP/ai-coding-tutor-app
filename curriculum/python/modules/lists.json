@@ -15,8 +15,8 @@
   "lessons": [
     {
       "id": "lists-step-1",
-      "title": "1. List Creation, Indexing, and `len()`",
-      "description": "Finish `get_first_and_sum(numbers)`. Return a tuple of the first item (`numbers[0]`) and the sum of every item. The test checks that `get_first_and_sum([10, 20, 30])` equals `(10, 60)`.",
+      "title": "Practice List Creation, Indexing, and len",
+      "description": "Finish get_first_and_sum(numbers). Return a tuple of the first item (numbers[0]) and the sum of every item. The test checks that get_first_and_sum([10, 20, 30]) equals (10, 60).",
       "order": 36,
       "difficulty": "beginner",
       "duration_minutes": 5,
@@ -29,7 +29,7 @@
         "strings"
       ],
       "learning_objectives": [
-        "Create lists, access elements by index, and sum totals"
+        "This step scales the base reading by how many items are stored, using items and 8."
       ],
       "starter_code": "def get_first_and_sum(numbers):\n    # TODO: Return tuple (numbers[0], sum(numbers))\n    pass\n",
       "tests": [
@@ -50,12 +50,180 @@
         "url": "https://docs.python.org/3/tutorial/introduction.html#lists",
         "license": "Python documentation license (PSF)"
       },
-      "xp_reward": 10
+      "xp_reward": 10,
+      "player_mode": "micro",
+      "sublessons": [
+        {
+          "id": "lists-step-1-micro",
+          "title": "Practice List Creation, Indexing, and len",
+          "description": "",
+          "order": 1,
+          "exercises": [
+            {
+              "id": "lists-step-1-teach",
+              "type": "teach",
+              "question": "This step scales the base reading by how many items are stored, using items and 8.",
+              "hints": [
+                "Follow the job, which scales the base reading by how many items are stored.",
+                "len(items) is the stored count.",
+                "len(items)"
+              ],
+              "explanation": "This step scales the base reading by how many items are stored, using items and 8.",
+              "xp_reward": 0,
+              "worked_example": "len(items)"
+            },
+            {
+              "id": "lists-step-1-mcq",
+              "type": "mcq",
+              "question": "Pick the line that scales the base reading by how many items are stored, not a line about something else, for items and 8.",
+              "hints": [
+                "Follow the job, which scales the base reading by how many items are stored.",
+                "len(items) is the stored count.",
+                "len(items)"
+              ],
+              "explanation": "len(items) is the stored count.",
+              "xp_reward": 10,
+              "options": [
+                "items[0]",
+                "items + 1",
+                "sum(items)",
+                "len(items)"
+              ],
+              "correct_answer": "len(items)"
+            },
+            {
+              "id": "lists-step-1-predict",
+              "type": "output_prediction",
+              "question": "The displayed value is what the code prints when it scales the base reading by how many items are stored for items and 8.",
+              "hints": [
+                "Follow the job, which scales the base reading by how many items are stored.",
+                "len(items) is the stored count.",
+                "96"
+              ],
+              "explanation": "len(items) is the stored count.",
+              "xp_reward": 10,
+              "starter_code": "items = [32, 4, 8]\nprint(len(items) * 32)\n",
+              "options": [
+                "64",
+                "none",
+                "0",
+                "96"
+              ],
+              "correct_answer": "96"
+            },
+            {
+              "id": "lists-step-1-order",
+              "type": "ordering",
+              "question": "Place every piece so the result scales the base reading by how many items are stored for items and 8.",
+              "hints": [
+                "Follow the job, which scales the base reading by how many items are stored.",
+                "seen = len(items) stores the count.",
+                "seen = len ( items )"
+              ],
+              "explanation": "seen = len(items) stores the count.",
+              "xp_reward": 10,
+              "options": [
+                "seen",
+                "=",
+                "len",
+                "(",
+                "items",
+                ")",
+                "sum"
+              ],
+              "correct_answer": [
+                "seen",
+                "=",
+                "len",
+                "(",
+                "items",
+                ")"
+              ]
+            },
+            {
+              "id": "lists-step-1-fill",
+              "type": "fill_blank",
+              "question": "Drop in the piece that lets the line scales the base reading by how many items are stored for items and 8.",
+              "hints": [
+                "Follow the job, which scales the base reading by how many items are stored.",
+                "The star scales the base reading by the count.",
+                "*"
+              ],
+              "explanation": "The star scales the base reading by the count.",
+              "xp_reward": 10,
+              "starter_code": "shown = seen ___ left\n",
+              "options": [
+                "+",
+                "-",
+                "==",
+                "*"
+              ],
+              "correct_answer": "*"
+            },
+            {
+              "id": "lists-step-1-bug",
+              "type": "debugging",
+              "question": "The mismatch misses the job, which scales the base reading by how many items are stored, for items and 8.",
+              "hints": [
+                "Follow the job, which scales the base reading by how many items are stored.",
+                "The print reads the first slot instead of the count.",
+                "Line 2"
+              ],
+              "explanation": "The print reads the first slot instead of the count.",
+              "xp_reward": 10,
+              "starter_code": "items = [32, 4, 8]\nprint(items[0])\n",
+              "correct_answer": "2"
+            },
+            {
+              "id": "lists-step-1-predict-2",
+              "type": "output_prediction",
+              "question": "Choose the printed result of the second run that scales the base reading by how many items are stored for items and 8.",
+              "hints": [
+                "Follow the job, which scales the base reading by how many items are stored.",
+                "len(items) is the stored count.",
+                "64"
+              ],
+              "explanation": "len(items) is the stored count.",
+              "xp_reward": 10,
+              "starter_code": "items = [32, 4]\nprint(len(items) * 32)\n",
+              "options": [
+                "96",
+                "none",
+                "64",
+                "0"
+              ],
+              "correct_answer": "64"
+            },
+            {
+              "id": "lists-step-1-write",
+              "type": "code",
+              "question": "Make the program scales the base reading by how many items are stored by filling the blank for items and 8.",
+              "hints": [
+                "Follow the job, which scales the base reading by how many items are stored.",
+                "The scaled count is what gets printed.",
+                "label = len(items) * 32"
+              ],
+              "explanation": "The scaled count is what gets printed.",
+              "xp_reward": 10,
+              "starter_code": "items = [32, 4, 8]\nlabel = ___\nprint(label)\n",
+              "solution_code": "items = [32, 4, 8]\nlabel = len(items) * 32\nprint(label)\n",
+              "tests": [
+                {
+                  "name": "lists-step-1-prints",
+                  "description": "The scaled count is what gets printed.",
+                  "expected_stdout": "96\n",
+                  "required": true
+                }
+              ]
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "lists-step-2",
-      "title": "2. List Concatenation & Membership (`in`)",
-      "description": "Finish `combine_and_check(list1, list2, target)`. Join the two lists with `+`, then return whether `target` is in that combined list. `combine_and_check([1, 2], [3, 4], 3)` is true, and the same lists with target `5` are false. The test checks that `combine_and_check([1, 2], [3, 4], 3)` is true; `combine_and_check([1, 2], [3, 4], 5)` is false.",
+      "title": "Practice List Concatenation Membership",
+      "description": "Finish combine_and_check(list1, list2, target). Join the two lists with +, then return whether target is in that combined list. combine_and_check([1, 2], [3, 4], 3) is true, and the same lists with target 5 are false. The test checks that combine_and_check([1, 2], [3, 4], 3) is true; combine_and_check([1, 2], [3, 4], 5) is false.",
       "order": 37,
       "difficulty": "beginner",
       "duration_minutes": 5,
@@ -68,7 +236,7 @@
         "strings"
       ],
       "learning_objectives": [
-        "Combine lists with + and check membership with in"
+        "This step adds the readings from both lists, using sum and 4."
       ],
       "starter_code": "def combine_and_check(list1, list2, target):\n    # TODO: combined = list1 + list2; return target in combined\n    pass\n",
       "tests": [
@@ -89,12 +257,178 @@
         "url": "https://docs.python.org/3/tutorial/introduction.html#lists",
         "license": "Python documentation license (PSF)"
       },
-      "xp_reward": 10
+      "xp_reward": 10,
+      "player_mode": "micro",
+      "sublessons": [
+        {
+          "id": "lists-step-2-micro",
+          "title": "Practice List Concatenation Membership",
+          "description": "",
+          "order": 1,
+          "exercises": [
+            {
+              "id": "lists-step-2-teach",
+              "type": "teach",
+              "question": "This step adds the readings from both lists, using sum and 4.",
+              "hints": [
+                "Follow the job, which adds the readings from both lists.",
+                "left_items + right_items joins the lists.",
+                "left_items + right_items"
+              ],
+              "explanation": "This step adds the readings from both lists, using sum and 4.",
+              "xp_reward": 0,
+              "worked_example": "left_items + right_items"
+            },
+            {
+              "id": "lists-step-2-mcq",
+              "type": "mcq",
+              "question": "A correct choice adds the readings from both lists and goes with sum and 4.",
+              "hints": [
+                "Follow the job, which adds the readings from both lists.",
+                "left_items + right_items joins the lists.",
+                "left_items + right_items"
+              ],
+              "explanation": "left_items + right_items joins the lists.",
+              "xp_reward": 10,
+              "options": [
+                "left_items - right_items",
+                "left_items + right_items",
+                "left_items == right_items",
+                "len(left_items)"
+              ],
+              "correct_answer": "left_items + right_items"
+            },
+            {
+              "id": "lists-step-2-predict",
+              "type": "output_prediction",
+              "question": "Select the output after the code adds the readings from both lists, using sum and 4.",
+              "hints": [
+                "Follow the job, which adds the readings from both lists.",
+                "left_items + right_items joins the lists.",
+                "37"
+              ],
+              "explanation": "left_items + right_items joins the lists.",
+              "xp_reward": 10,
+              "starter_code": "print(sum([33] + [4]))\n",
+              "options": [
+                "41",
+                "37",
+                "none",
+                "0"
+              ],
+              "correct_answer": "37"
+            },
+            {
+              "id": "lists-step-2-order",
+              "type": "ordering",
+              "question": "Make the line that adds the readings from both lists by ordering the pieces for sum and 4.",
+              "hints": [
+                "Follow the job, which adds the readings from both lists.",
+                "joined = left_items + right_items joins the lists.",
+                "joined = left_items + right_items"
+              ],
+              "explanation": "joined = left_items + right_items joins the lists.",
+              "xp_reward": 10,
+              "options": [
+                "joined",
+                "=",
+                "left_items",
+                "+",
+                "right_items",
+                "-"
+              ],
+              "correct_answer": [
+                "joined",
+                "=",
+                "left_items",
+                "+",
+                "right_items"
+              ]
+            },
+            {
+              "id": "lists-step-2-fill",
+              "type": "fill_blank",
+              "question": "Complete the line for sum and 4 so that it adds the readings from both lists.",
+              "hints": [
+                "Follow the job, which adds the readings from both lists.",
+                "Plus joins the two lists.",
+                "+"
+              ],
+              "explanation": "Plus joins the two lists.",
+              "xp_reward": 10,
+              "starter_code": "joined = left_items ___ right_items\n",
+              "options": [
+                "-",
+                "+",
+                "*",
+                "=="
+              ],
+              "correct_answer": "+"
+            },
+            {
+              "id": "lists-step-2-bug",
+              "type": "debugging",
+              "question": "Select the line that gets in the way of the job, which adds the readings from both lists, for sum and 4.",
+              "hints": [
+                "Follow the job, which adds the readings from both lists.",
+                "The second list is empty, so its readings are missing.",
+                "Line 1"
+              ],
+              "explanation": "The second list is empty, so its readings are missing.",
+              "xp_reward": 10,
+              "starter_code": "print(sum([33] + []))\n",
+              "correct_answer": "1"
+            },
+            {
+              "id": "lists-step-2-predict-2",
+              "type": "output_prediction",
+              "question": "With the new data around sum and 4, the code adds the readings from both lists, so select the new output.",
+              "hints": [
+                "Follow the job, which adds the readings from both lists.",
+                "left_items + right_items joins the lists.",
+                "41"
+              ],
+              "explanation": "left_items + right_items joins the lists.",
+              "xp_reward": 10,
+              "starter_code": "print(sum([33] + [4, 4]))\n",
+              "options": [
+                "37",
+                "none",
+                "0",
+                "41"
+              ],
+              "correct_answer": "41"
+            },
+            {
+              "id": "lists-step-2-write",
+              "type": "code",
+              "question": "The printed result shows up after you fill the blank so the code adds the readings from both lists for sum and 4.",
+              "hints": [
+                "Follow the job, which adds the readings from both lists.",
+                "The joined total is what gets printed.",
+                "label = sum(left_items + right_items)"
+              ],
+              "explanation": "The joined total is what gets printed.",
+              "xp_reward": 10,
+              "starter_code": "left_items = [33]\nright_items = [4]\nlabel = ___\nprint(label)\n",
+              "solution_code": "left_items = [33]\nright_items = [4]\nlabel = sum(left_items + right_items)\nprint(label)\n",
+              "tests": [
+                {
+                  "name": "lists-step-2-prints",
+                  "description": "The joined total is what gets printed.",
+                  "expected_stdout": "37\n",
+                  "required": true
+                }
+              ]
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "lists-01",
-      "title": "3. Card Games (Concept Challenge)",
-      "description": "Finish `get_rounds`, `concatenate_rounds`, `list_contains_round`, `card_average` and 3 more. Track playing cards and calculate hand statistics using lists. The test checks that `get_rounds(27)` equals `[27, 28, 29]`; `concatenate_rounds([27, 28], [29, 30])` equals `[27, 28, 29, 30]`; `list_contains_round([27, 28, 29], 29)` equals `True`.",
+      "title": "Practice Card Games",
+      "description": "Finish get_rounds, concatenate_rounds, list_contains_round, card_average and 3 more. Track playing cards and calculate hand statistics using lists. The test checks that get_rounds(27) equals [27, 28, 29]; concatenate_rounds([27, 28], [29, 30]) equals [27, 28, 29, 30]; list_contains_round([27, 28, 29], 29) equals True.",
       "order": 38,
       "difficulty": "beginner",
       "duration_minutes": 8,
@@ -107,9 +441,7 @@
         "strings"
       ],
       "learning_objectives": [
-        "Index and slice lists",
-        "Concatenate lists with +",
-        "Use sum() and len() to calculate averages"
+        "This step adds the readings in the chosen slice, using items and 2."
       ],
       "starter_code": "def get_rounds(number):\n    \"\"\"Return current and next two round numbers.\"\"\"\n    pass\n\ndef concatenate_rounds(rounds_1, rounds_2):\n    \"\"\"Concatenate two round lists.\"\"\"\n    pass\n\ndef list_contains_round(rounds, number):\n    \"\"\"Return True if number is in rounds.\"\"\"\n    pass\n\ndef card_average(hand):\n    \"\"\"Return average card value.\"\"\"\n    pass\n\ndef approx_average_is_average(hand):\n    \"\"\"Return True if first/last average or middle card equals true average.\"\"\"\n    pass\n\ndef average_even_is_average_odd(hand):\n    \"\"\"Return True if even-indexed average equals odd-indexed average.\"\"\"\n    pass\n\ndef maybe_double_last(hand):\n    \"\"\"Double the last card if it is a Jack (11).\"\"\"\n    pass\n",
       "tests": [
@@ -166,12 +498,180 @@
         "license": "MIT"
       },
       "solution_code": "def get_rounds(number):\n    \"\"\"Return current and next two round numbers.\"\"\"\n    return [number, number + 1, number + 2]\n\n\ndef concatenate_rounds(rounds_1, rounds_2):\n    \"\"\"Concatenate two round lists.\"\"\"\n    return rounds_1 + rounds_2\n\n\ndef list_contains_round(rounds, number):\n    \"\"\"Return True if number is in rounds.\"\"\"\n    return number in rounds\n\n\ndef card_average(hand):\n    \"\"\"Return average card value.\"\"\"\n    return sum(hand) / len(hand)\n\n\ndef approx_average_is_average(hand):\n    \"\"\"Return True if first/last average or middle card equals true average.\"\"\"\n    true_avg = card_average(hand)\n    flat_avg = (hand[0] + hand[-1]) / 2\n    median = hand[len(hand) // 2]\n    return true_avg in (flat_avg, median)\n\n\ndef average_even_is_average_odd(hand):\n    \"\"\"Return True if even-indexed average equals odd-indexed average.\"\"\"\n    return card_average(hand[::2]) == card_average(hand[1::2])\n\n\ndef maybe_double_last(hand):\n    \"\"\"Double the last card if it is a Jack (11).\"\"\"\n    if hand[-1] == 11:\n        hand[-1] = 22\n    return hand\n",
-      "xp_reward": 25
+      "xp_reward": 25,
+      "player_mode": "micro",
+      "sublessons": [
+        {
+          "id": "lists-01-micro",
+          "title": "Practice Card Games",
+          "description": "",
+          "order": 1,
+          "exercises": [
+            {
+              "id": "lists-01-teach",
+              "type": "teach",
+              "question": "This step adds the readings in the chosen slice, using items and 2.",
+              "hints": [
+                "Follow the job, which adds the readings in the chosen slice.",
+                "items[0:2] keeps the first two readings.",
+                "items[0:2]"
+              ],
+              "explanation": "This step adds the readings in the chosen slice, using items and 2.",
+              "xp_reward": 0,
+              "worked_example": "items[0:2]"
+            },
+            {
+              "id": "lists-01-mcq",
+              "type": "mcq",
+              "question": "The match is the line that adds the readings in the chosen slice for items and 2.",
+              "hints": [
+                "Follow the job, which adds the readings in the chosen slice.",
+                "items[0:2] keeps the first two readings.",
+                "items[0:2]"
+              ],
+              "explanation": "items[0:2] keeps the first two readings.",
+              "xp_reward": 10,
+              "options": [
+                "items[0]",
+                "len(items)",
+                "items + 1",
+                "items[0:2]"
+              ],
+              "correct_answer": "items[0:2]"
+            },
+            {
+              "id": "lists-01-predict",
+              "type": "output_prediction",
+              "question": "Work out what is printed when the code adds the readings in the chosen slice for items and 2.",
+              "hints": [
+                "Follow the job, which adds the readings in the chosen slice.",
+                "items[0:2] keeps the first two readings.",
+                "35"
+              ],
+              "explanation": "items[0:2] keeps the first two readings.",
+              "xp_reward": 10,
+              "starter_code": "items = [31, 4, 37, 9]\nprint(sum(items[0:2]))\n",
+              "options": [
+                "none",
+                "35",
+                "0",
+                "72"
+              ],
+              "correct_answer": "35"
+            },
+            {
+              "id": "lists-01-order",
+              "type": "ordering",
+              "question": "Rebuild, from the left, the line that adds the readings in the chosen slice for items and 2.",
+              "hints": [
+                "Follow the job, which adds the readings in the chosen slice.",
+                "chunk = items[0:2] keeps the first two readings.",
+                "chunk = items [ 0:2 ]"
+              ],
+              "explanation": "chunk = items[0:2] keeps the first two readings.",
+              "xp_reward": 10,
+              "options": [
+                "chunk",
+                "=",
+                "items",
+                "[",
+                "0:2",
+                "]",
+                "len"
+              ],
+              "correct_answer": [
+                "chunk",
+                "=",
+                "items",
+                "[",
+                "0:2",
+                "]"
+              ]
+            },
+            {
+              "id": "lists-01-fill",
+              "type": "fill_blank",
+              "question": "The completed line adds the readings in the chosen slice once you fill the blank for items and 2.",
+              "hints": [
+                "Follow the job, which adds the readings in the chosen slice.",
+                "The colon separates the start from the stop.",
+                ":"
+              ],
+              "explanation": "The colon separates the start from the stop.",
+              "xp_reward": 10,
+              "starter_code": "chunk = items[0 ___ 2]\n",
+              "options": [
+                ",",
+                "+",
+                "-",
+                ":"
+              ],
+              "correct_answer": ":"
+            },
+            {
+              "id": "lists-01-bug",
+              "type": "debugging",
+              "question": "One line does another job than the one that adds the readings in the chosen slice for items and.",
+              "hints": [
+                "Follow the job, which adds the readings in the chosen slice.",
+                "The slice starts too late.",
+                "Line 2"
+              ],
+              "explanation": "The slice starts too late.",
+              "xp_reward": 10,
+              "starter_code": "items = [31, 4, 37, 9]\nprint(sum(items[2:4]))\n",
+              "correct_answer": "2"
+            },
+            {
+              "id": "lists-01-predict-2",
+              "type": "output_prediction",
+              "question": "The second display is what prints after the code adds the readings in the chosen slice for items and 2.",
+              "hints": [
+                "Follow the job, which adds the readings in the chosen slice.",
+                "items[0:2] keeps the first two readings.",
+                "72"
+              ],
+              "explanation": "items[0:2] keeps the first two readings.",
+              "xp_reward": 10,
+              "starter_code": "items = [31, 4, 37, 9]\nprint(sum(items[0:3]))\n",
+              "options": [
+                "35",
+                "0",
+                "72",
+                "none"
+              ],
+              "correct_answer": "72"
+            },
+            {
+              "id": "lists-01-write",
+              "type": "code",
+              "question": "Supply the blank so the run adds the readings in the chosen slice and prints the result for items and 2.",
+              "hints": [
+                "Follow the job, which adds the readings in the chosen slice.",
+                "The slice total is what gets printed.",
+                "label = sum(items[0:2])"
+              ],
+              "explanation": "The slice total is what gets printed.",
+              "xp_reward": 10,
+              "starter_code": "items = [31, 4, 37, 9]\nlabel = ___\nprint(label)\n",
+              "solution_code": "items = [31, 4, 37, 9]\nlabel = sum(items[0:2])\nprint(label)\n",
+              "tests": [
+                {
+                  "name": "lists-01-prints",
+                  "description": "The slice total is what gets printed.",
+                  "expected_stdout": "35\n",
+                  "required": true
+                }
+              ]
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "lists-practice-1",
-      "title": "4. Inventory Item Counter (Practice)",
-      "description": "Finish `total_weight`. Calculate total weight of items: `sum(weights)`. The test checks that `total_weight([1.5, 2.5, 3.0])` equals `7.0`.",
+      "title": "Practice Inventory Item Counter",
+      "description": "Finish total_weight. Calculate total weight of items: sum(weights). The test checks that total_weight([1.5, 2.5, 3.0]) equals 7.0.",
       "order": 39,
       "difficulty": "beginner",
       "duration_minutes": 6,
@@ -184,7 +684,7 @@
         "strings"
       ],
       "learning_objectives": [
-        "Sum list totals"
+        "This step adds every stored reading, using items and 4."
       ],
       "starter_code": "def total_weight(item_weights):\n    # TODO: return the weight of everything added together\n    pass\n",
       "tests": [
@@ -205,12 +705,178 @@
         "url": "https://docs.python.org/3/tutorial/introduction.html#lists",
         "license": "Python documentation license (PSF)"
       },
-      "xp_reward": 15
+      "xp_reward": 15,
+      "player_mode": "micro",
+      "sublessons": [
+        {
+          "id": "lists-practice-1-micro",
+          "title": "Practice Inventory Item Counter",
+          "description": "",
+          "order": 1,
+          "exercises": [
+            {
+              "id": "lists-practice-1-teach",
+              "type": "teach",
+              "question": "This step adds every stored reading, using items and 4.",
+              "hints": [
+                "Follow the job, which adds every stored reading.",
+                "sum(items) adds the stored readings.",
+                "sum(items)"
+              ],
+              "explanation": "This step adds every stored reading, using items and 4.",
+              "xp_reward": 0,
+              "worked_example": "sum(items)"
+            },
+            {
+              "id": "lists-practice-1-mcq",
+              "type": "mcq",
+              "question": "The match is the line that adds every stored reading for items and 4.",
+              "hints": [
+                "Follow the job, which adds every stored reading.",
+                "sum(items) adds the stored readings.",
+                "sum(items)"
+              ],
+              "explanation": "sum(items) adds the stored readings.",
+              "xp_reward": 10,
+              "options": [
+                "items + 1",
+                "sum(items)",
+                "items[0]",
+                "len(items)"
+              ],
+              "correct_answer": "sum(items)"
+            },
+            {
+              "id": "lists-practice-1-predict",
+              "type": "output_prediction",
+              "question": "Work out what is printed when the code adds every stored reading for items and 4.",
+              "hints": [
+                "Follow the job, which adds every stored reading.",
+                "sum(items) adds the stored readings.",
+                "35"
+              ],
+              "explanation": "sum(items) adds the stored readings.",
+              "xp_reward": 10,
+              "starter_code": "items = [31, 4]\nprint(sum(items))\n",
+              "options": [
+                "41",
+                "none",
+                "35",
+                "0"
+              ],
+              "correct_answer": "35"
+            },
+            {
+              "id": "lists-practice-1-order",
+              "type": "ordering",
+              "question": "Rebuild, from the left, the line that adds every stored reading for items and 4.",
+              "hints": [
+                "Follow the job, which adds every stored reading.",
+                "total = left + right adds the two readings.",
+                "total = left + right"
+              ],
+              "explanation": "total = left + right adds the two readings.",
+              "xp_reward": 10,
+              "options": [
+                "total",
+                "=",
+                "left",
+                "+",
+                "right",
+                "-"
+              ],
+              "correct_answer": [
+                "total",
+                "=",
+                "left",
+                "+",
+                "right"
+              ]
+            },
+            {
+              "id": "lists-practice-1-fill",
+              "type": "fill_blank",
+              "question": "The completed line adds every stored reading once you fill the blank for items and 4.",
+              "hints": [
+                "Follow the job, which adds every stored reading.",
+                "Plus adds the two readings.",
+                "+"
+              ],
+              "explanation": "Plus adds the two readings.",
+              "xp_reward": 10,
+              "starter_code": "total = left ___ right\n",
+              "options": [
+                "-",
+                "*",
+                "==",
+                "+"
+              ],
+              "correct_answer": "+"
+            },
+            {
+              "id": "lists-practice-1-bug",
+              "type": "debugging",
+              "question": "One line does another job than the one that adds every stored reading for items and 4.",
+              "hints": [
+                "Follow the job, which adds every stored reading.",
+                "The print counts the slots instead of adding the readings.",
+                "Line 2"
+              ],
+              "explanation": "The print counts the slots instead of adding the readings.",
+              "xp_reward": 10,
+              "starter_code": "items = [31, 4]\nprint(len(items))\n",
+              "correct_answer": "2"
+            },
+            {
+              "id": "lists-practice-1-predict-2",
+              "type": "output_prediction",
+              "question": "The second display is what prints after the code adds every stored reading for items and 4.",
+              "hints": [
+                "Follow the job, which adds every stored reading.",
+                "sum(items) adds the stored readings.",
+                "41"
+              ],
+              "explanation": "sum(items) adds the stored readings.",
+              "xp_reward": 10,
+              "starter_code": "items = [31, 4, 6]\nprint(sum(items))\n",
+              "options": [
+                "35",
+                "none",
+                "41",
+                "0"
+              ],
+              "correct_answer": "41"
+            },
+            {
+              "id": "lists-practice-1-write",
+              "type": "code",
+              "question": "Supply the blank so the run adds every stored reading and prints the result for items and 4.",
+              "hints": [
+                "Follow the job, which adds every stored reading.",
+                "The stored total is what gets printed.",
+                "label = sum(items)"
+              ],
+              "explanation": "The stored total is what gets printed.",
+              "xp_reward": 10,
+              "starter_code": "items = [31, 4]\nlabel = ___\nprint(label)\n",
+              "solution_code": "items = [31, 4]\nlabel = sum(items)\nprint(label)\n",
+              "tests": [
+                {
+                  "name": "lists-practice-1-prints",
+                  "description": "The stored total is what gets printed.",
+                  "expected_stdout": "35\n",
+                  "required": true
+                }
+              ]
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "lists-checkpoint",
-      "title": "5. Unit 8 Checkpoint: Lists Mastery",
-      "description": "middle_element(lst) must return the middle item of an odd-length list using len(lst) // 2 for the integer middle index. The test checks that `middle_element([10, 20, 30, 40, 50])` equals `30`.",
+      "title": "Practice Unit 8 Checkpoint Lists Mastery",
+      "description": "middle_element(lst) must return the middle item of an odd-length list using len(lst) // 2 for the integer middle index. The test checks that middle_element([10, 20, 30, 40, 50]) equals 30.",
       "order": 40,
       "difficulty": "beginner",
       "duration_minutes": 10,
@@ -223,7 +889,7 @@
         "strings"
       ],
       "learning_objectives": [
-        "Master list indexing and operations"
+        "This step shows the reading in the chosen slot, using items and 1."
       ],
       "starter_code": "def middle_element(lst):\n    # TODO: return the middle item of this odd-length list\n    pass\n",
       "tests": [
@@ -244,7 +910,177 @@
         "url": "https://docs.python.org/3/tutorial/introduction.html#lists",
         "license": "Python documentation license (PSF)"
       },
-      "xp_reward": 40
+      "xp_reward": 40,
+      "player_mode": "micro",
+      "sublessons": [
+        {
+          "id": "lists-checkpoint-micro",
+          "title": "Practice Unit 8 Checkpoint Lists Mastery",
+          "description": "",
+          "order": 1,
+          "exercises": [
+            {
+              "id": "lists-checkpoint-teach",
+              "type": "teach",
+              "question": "This step shows the reading in the chosen slot, using items and 1.",
+              "hints": [
+                "Follow the job, which shows the reading in the chosen slot.",
+                "items[1] is the second slot.",
+                "items[1]"
+              ],
+              "explanation": "This step shows the reading in the chosen slot, using items and 1.",
+              "xp_reward": 0,
+              "worked_example": "items[1]"
+            },
+            {
+              "id": "lists-checkpoint-mcq",
+              "type": "mcq",
+              "question": "Mark the choice that shows the reading in the chosen slot when the code mentions items and 1.",
+              "hints": [
+                "Follow the job, which shows the reading in the chosen slot.",
+                "items[1] is the second slot.",
+                "items[1]"
+              ],
+              "explanation": "items[1] is the second slot.",
+              "xp_reward": 10,
+              "options": [
+                "sum(items)",
+                "items + 1",
+                "items[1]",
+                "len(items)"
+              ],
+              "correct_answer": "items[1]"
+            },
+            {
+              "id": "lists-checkpoint-predict",
+              "type": "output_prediction",
+              "question": "After items and 1, the code shows the reading in the chosen slot, and the correct choice is the printed value.",
+              "hints": [
+                "Follow the job, which shows the reading in the chosen slot.",
+                "items[1] is the second slot.",
+                "38"
+              ],
+              "explanation": "items[1] is the second slot.",
+              "xp_reward": 10,
+              "starter_code": "items = [4, 38, 41]\nprint(items[1])\n",
+              "options": [
+                "41",
+                "38",
+                "none",
+                "0"
+              ],
+              "correct_answer": "38"
+            },
+            {
+              "id": "lists-checkpoint-order",
+              "type": "ordering",
+              "question": "The finished line shows the reading in the chosen slot, so place its pieces in order for items and 1.",
+              "hints": [
+                "Follow the job, which shows the reading in the chosen slot.",
+                "print(items[1]) shows the second slot.",
+                "print ( items [ 1 ] )"
+              ],
+              "explanation": "print(items[1]) shows the second slot.",
+              "xp_reward": 10,
+              "options": [
+                "print",
+                "(",
+                "items",
+                "[",
+                "1",
+                "]",
+                ")",
+                "len"
+              ],
+              "correct_answer": [
+                "print",
+                "(",
+                "items",
+                "[",
+                "1",
+                "]",
+                ")"
+              ]
+            },
+            {
+              "id": "lists-checkpoint-fill",
+              "type": "fill_blank",
+              "question": "Finish the line that shows the reading in the chosen slot by filling the blank for items and 1.",
+              "hints": [
+                "Follow the job, which shows the reading in the chosen slot.",
+                "Plus adds two to the chosen slot.",
+                "+"
+              ],
+              "explanation": "Plus adds two to the chosen slot.",
+              "xp_reward": 10,
+              "starter_code": "shown = items[1] ___ 2\n",
+              "options": [
+                "-",
+                "+",
+                "*",
+                "=="
+              ],
+              "correct_answer": "+"
+            },
+            {
+              "id": "lists-checkpoint-bug",
+              "type": "debugging",
+              "question": "Mark the line that breaks the job, which shows the reading in the chosen slot, for items and 1.",
+              "hints": [
+                "Follow the job, which shows the reading in the chosen slot.",
+                "The slot is past the end of the list.",
+                "Line 2"
+              ],
+              "explanation": "The slot is past the end of the list.",
+              "xp_reward": 10,
+              "starter_code": "items = [4, 38, 41]\nprint(items[9])\n",
+              "correct_answer": "2"
+            },
+            {
+              "id": "lists-checkpoint-predict-2",
+              "type": "output_prediction",
+              "question": "Follow the second program, which shows the reading in the chosen slot for items and 1, and choose its output.",
+              "hints": [
+                "Follow the job, which shows the reading in the chosen slot.",
+                "items[1] is the second slot.",
+                "41"
+              ],
+              "explanation": "items[1] is the second slot.",
+              "xp_reward": 10,
+              "starter_code": "items = [4, 38, 41]\nprint(items[2])\n",
+              "options": [
+                "38",
+                "none",
+                "0",
+                "41"
+              ],
+              "correct_answer": "41"
+            },
+            {
+              "id": "lists-checkpoint-write",
+              "type": "code",
+              "question": "Finish the program that shows the reading in the chosen slot by filling the blank for items and 1.",
+              "hints": [
+                "Follow the job, which shows the reading in the chosen slot.",
+                "The chosen slot is what gets printed.",
+                "label = items[1]"
+              ],
+              "explanation": "The chosen slot is what gets printed.",
+              "xp_reward": 10,
+              "starter_code": "items = [4, 38, 41]\nlabel = ___\nprint(label)\n",
+              "solution_code": "items = [4, 38, 41]\nlabel = items[1]\nprint(label)\n",
+              "tests": [
+                {
+                  "name": "lists-checkpoint-prints",
+                  "description": "The chosen slot is what gets printed.",
+                  "expected_stdout": "38\n",
+                  "required": true
+                }
+              ]
+            }
+          ]
+        }
+      ]
     }
   ]
 }

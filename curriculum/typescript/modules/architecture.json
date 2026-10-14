@@ -14,8 +14,8 @@
   "lessons": [
     {
       "id": "ts-04",
-      "title": "4. Enterprise Application Architecture",
-      "description": "Checkpoint: export interface ApiResponse<T> { data: T; status: number; } and implement the generic function wrapData<T>(data: T): ApiResponse<T> returning { data, status: 200 }. Tests wrap both a number and an object and check status plus data for each. The test checks that `num.status` equals `= 200 || num.data !== 5`; `res.status` equals `= 200 || !res.data.ok`; `num.status` equals `200 || num.data !== 5`.",
+      "title": "Practice Enterprise Application Architecture",
+      "description": "Checkpoint: export interface ApiResponse<T> { data: T; status: number; } and implement the generic function wrapData<T>(data: T): ApiResponse<T> returning { data, status: 200 }. Tests wrap both a number and an object and check status plus data for each. The test checks that num.status equals = 200 || num.data !== 5; res.status equals = 200 || !res.data.ok; num.status equals 200 || num.data !== 5.",
       "order": 4,
       "difficulty": "advanced",
       "duration_minutes": 10,
@@ -41,21 +41,199 @@
         ]
       },
       "learning_objectives": [
-        "Combine interfaces and generics in API types",
-        "Write generic functions with type parameters",
-        "Apply TypeScript foundations under checkpoint conditions"
+        "This step adds a typed price and tax in one function, using total and 5."
       ],
       "source": {
         "name": "TypeScript Handbook — Generics — working with generic classes and functions",
         "url": "https://www.typescriptlang.org/docs/handbook/2/generics.html",
         "license": "CC BY 4.0 (TypeScript documentation)"
       },
-      "xp_reward": 45
+      "xp_reward": 45,
+      "player_mode": "micro",
+      "sublessons": [
+        {
+          "id": "ts-04-micro",
+          "title": "Practice Enterprise Application Architecture",
+          "description": "",
+          "order": 1,
+          "exercises": [
+            {
+              "id": "ts-04-teach",
+              "type": "teach",
+              "question": "This step adds a typed price and tax in one function, using total and 5.",
+              "hints": [
+                "Follow the job, which adds a typed price and tax in one function.",
+                "The function returns price plus tax.",
+                "return price + tax;"
+              ],
+              "explanation": "This step adds a typed price and tax in one function, using total and 5.",
+              "xp_reward": 0,
+              "worked_example": "return price + tax;"
+            },
+            {
+              "id": "ts-04-mcq",
+              "type": "mcq",
+              "question": "Choose the line that adds a typed price and tax in one function, which is the line that fits total and 5.",
+              "hints": [
+                "Follow the job, which adds a typed price and tax in one function.",
+                "The function returns price plus tax.",
+                "return price + tax;"
+              ],
+              "explanation": "The function returns price plus tax.",
+              "xp_reward": 10,
+              "options": [
+                "price == tax;",
+                "console.log(price);",
+                "return price + tax;",
+                "return;"
+              ],
+              "correct_answer": "return price + tax;"
+            },
+            {
+              "id": "ts-04-predict",
+              "type": "output_prediction",
+              "question": "Read the code that adds a typed price and tax in one function for total and 5, and choose the value it prints.",
+              "hints": [
+                "Follow the job, which adds a typed price and tax in one function.",
+                "The function returns price plus tax.",
+                "31"
+              ],
+              "explanation": "The function returns price plus tax.",
+              "xp_reward": 10,
+              "starter_code": "function total(price: number, tax: number): number { return price + tax; }\nconsole.log(total(26, 5));\n",
+              "options": [
+                "35",
+                "none",
+                "31",
+                "0"
+              ],
+              "correct_answer": "31"
+            },
+            {
+              "id": "ts-04-order",
+              "type": "ordering",
+              "question": "Arrange the pieces of the line that adds a typed price and tax in one function, left to right, for total and 5.",
+              "hints": [
+                "Follow the job, which adds a typed price and tax in one function.",
+                "The function returns price plus tax.",
+                "function total(price: number, tax: number): number { return price + tax; }"
+              ],
+              "explanation": "The function returns price plus tax.",
+              "xp_reward": 10,
+              "options": [
+                "function",
+                "total(price:",
+                "number,",
+                "tax:",
+                "number):",
+                "number",
+                "{",
+                "return",
+                "price",
+                "+",
+                "tax;",
+                "}",
+                "=="
+              ],
+              "correct_answer": [
+                "function",
+                "total(price:",
+                "number,",
+                "tax:",
+                "number):",
+                "number",
+                "{",
+                "return",
+                "price",
+                "+",
+                "tax;",
+                "}"
+              ]
+            },
+            {
+              "id": "ts-04-fill",
+              "type": "fill_blank",
+              "question": "Fill the blank so the line adds a typed price and tax in one function for total and 5.",
+              "hints": [
+                "Follow the job, which adds a typed price and tax in one function.",
+                "The function returns price plus tax.",
+                "+"
+              ],
+              "explanation": "The function returns price plus tax.",
+              "xp_reward": 10,
+              "starter_code": "function total(price: number, tax: number): number { return price ___ tax; }\n",
+              "options": [
+                "-",
+                "*",
+                "+",
+                "=="
+              ],
+              "correct_answer": "+"
+            },
+            {
+              "id": "ts-04-bug",
+              "type": "debugging",
+              "question": "Find the line that misses the job, which adds a typed price and tax in one function, for total and 5.",
+              "hints": [
+                "Follow the job, which adds a typed price and tax in one function.",
+                "The function subtracts the tax instead of adding it.",
+                "Line 1"
+              ],
+              "explanation": "The function subtracts the tax instead of adding it.",
+              "xp_reward": 10,
+              "starter_code": "function total(price: number, tax: number): number { return price - tax; }\nconsole.log(total(26, 5));\n",
+              "correct_answer": "1"
+            },
+            {
+              "id": "ts-04-predict-2",
+              "type": "output_prediction",
+              "question": "On the new input, the code still adds a typed price and tax in one function for total and 5, so choose what it prints.",
+              "hints": [
+                "Follow the job, which adds a typed price and tax in one function.",
+                "The function returns price plus tax.",
+                "35"
+              ],
+              "explanation": "The function returns price plus tax.",
+              "xp_reward": 10,
+              "starter_code": "function total(price: number, tax: number): number { return price + tax; }\nconsole.log(total(26, 9));\n",
+              "options": [
+                "31",
+                "35",
+                "none",
+                "0"
+              ],
+              "correct_answer": "35"
+            },
+            {
+              "id": "ts-04-write",
+              "type": "code",
+              "question": "Fill the blank so the program adds a typed price and tax in one function, and the print shows that result for total and 5.",
+              "hints": [
+                "Follow the job, which adds a typed price and tax in one function.",
+                "The printed value is the result after this step adds a typed price and tax in one function.",
+                "const label = total(26, 5);"
+              ],
+              "explanation": "The printed value is the result after this step adds a typed price and tax in one function.",
+              "xp_reward": 10,
+              "starter_code": "function total(price: number, tax: number): number { return price + tax; }\nconst label = ___;\nconsole.log(label);\n",
+              "solution_code": "function total(price: number, tax: number): number { return price + tax; }\nconst label = total(26, 5);\nconsole.log(label);\n",
+              "tests": [
+                {
+                  "name": "ts-04-prints",
+                  "description": "The printed value is the result after this step adds a typed price and tax in on",
+                  "expected_stdout": "31\n",
+                  "required": true
+                }
+              ]
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "ts-07",
-      "title": "7. Readonly Fields in Classes",
-      "description": "Class fields may be prefixed with the readonly modifier, which prevents assignments to the field outside of the constructor. Export a class Server with `readonly port: number` initialized in the constructor and a method portAddress(): string returning `http://localhost:${this.port}`. Tests construct Server(8080) and check both the field and the address. The test checks that `s.port` equals `= 8080`; `s.portAddress()` equals `= 'http://localhost:8080'`; `s.port` equals `8080`.",
+      "title": "Practice Readonly Fields in Classes",
+      "description": "Class fields may be prefixed with the readonly modifier, which prevents assignments to the field outside of the constructor. Export a class Server with readonly port: number initialized in the constructor and a method portAddress(): string returning http://localhost:${this.port}. Tests construct Server(8080) and check both the field and the address. The test checks that s.port equals = 8080; s.portAddress() equals = 'http://localhost:8080'; s.port equals 8080.",
       "order": 7,
       "difficulty": "beginner",
       "duration_minutes": 6,
@@ -68,9 +246,7 @@
       ],
       "prerequisites": [],
       "learning_objectives": [
-        "Mark class fields readonly and initialize them in the constructor",
-        "Expose computed accessors as class methods",
-        "Use template literals inside class methods"
+        "This step reads the readonly item stored by the constructor, using Bag holding flint."
       ],
       "source": {
         "name": "TypeScript Handbook — Classes — readonly modifier: 'prevents assignments to the field outside of the constructor'",
@@ -91,7 +267,169 @@
           "test_readonly_server"
         ]
       },
-      "xp_reward": 15
+      "xp_reward": 15,
+      "player_mode": "micro",
+      "sublessons": [
+        {
+          "id": "ts-07-micro",
+          "title": "Practice Readonly Fields in Classes",
+          "description": "",
+          "order": 1,
+          "exercises": [
+            {
+              "id": "ts-07-teach",
+              "type": "teach",
+              "question": "This step reads the readonly item stored by the constructor, using Bag holding flint.",
+              "hints": [
+                "Follow the job, which reads the readonly item stored by the constructor.",
+                "this.item = item; stores the constructor argument.",
+                "new Bag(\"flint\").item"
+              ],
+              "explanation": "This step reads the readonly item stored by the constructor, using Bag holding flint.",
+              "xp_reward": 0,
+              "worked_example": "new Bag(\"flint\").item"
+            },
+            {
+              "id": "ts-07-mcq",
+              "type": "mcq",
+              "question": "Select the line that reads the readonly item stored by the constructor, the one that belongs with Bag holding flint.",
+              "hints": [
+                "Follow the job, which reads the readonly item stored by the constructor.",
+                "this.item = item; stores the constructor argument.",
+                "this.item = item;"
+              ],
+              "explanation": "this.item = item; stores the constructor argument.",
+              "xp_reward": 10,
+              "options": [
+                "item == item;",
+                "console.log(item);",
+                "return item;",
+                "this.item = item;"
+              ],
+              "correct_answer": "this.item = item;"
+            },
+            {
+              "id": "ts-07-predict",
+              "type": "output_prediction",
+              "question": "Follow the code that reads the readonly item stored by the constructor for Bag holding then choose the displayed value.",
+              "hints": [
+                "Follow the job, which reads the readonly item stored by the constructor.",
+                "this.item = item; stores the constructor argument.",
+                "flint"
+              ],
+              "explanation": "this.item = item; stores the constructor argument.",
+              "xp_reward": 10,
+              "starter_code": "class Bag { readonly item: string; constructor(item: string) { this.item = item; } }\nconsole.log(new Bag(\"flint\").item);\n",
+              "options": [
+                "none",
+                "juniper",
+                "flint",
+                "0"
+              ],
+              "correct_answer": "flint"
+            },
+            {
+              "id": "ts-07-order",
+              "type": "ordering",
+              "question": "Order the pieces so the line reads the readonly item stored by the constructor for Bag holding flint.",
+              "hints": [
+                "Follow the job, which reads the readonly item stored by the constructor.",
+                "this.item = item; stores the constructor argument.",
+                "this.item = item;"
+              ],
+              "explanation": "this.item = item; stores the constructor argument.",
+              "xp_reward": 10,
+              "options": [
+                "this.item",
+                "=",
+                "item;",
+                "=="
+              ],
+              "correct_answer": [
+                "this.item",
+                "=",
+                "item;"
+              ]
+            },
+            {
+              "id": "ts-07-fill",
+              "type": "fill_blank",
+              "question": "Supply the missing piece so the line reads the readonly item stored by the constructor for Bag holding flint.",
+              "hints": [
+                "Follow the job, which reads the readonly item stored by the constructor.",
+                "this.item = item; stores the constructor argument.",
+                "="
+              ],
+              "explanation": "this.item = item; stores the constructor argument.",
+              "xp_reward": 10,
+              "starter_code": "class Bag { item: string; constructor(item: string) { this.item ___ item; } }\n",
+              "options": [
+                "==",
+                "!=",
+                "=",
+                "+"
+              ],
+              "correct_answer": "="
+            },
+            {
+              "id": "ts-07-bug",
+              "type": "debugging",
+              "question": "The wrong line is the one that misses the job, which reads the readonly item stored by the constructor, for Bag holding flint.",
+              "hints": [
+                "Follow the job, which reads the readonly item stored by the constructor.",
+                "The constructor appends a mark the caller did not pass.",
+                "Line 1"
+              ],
+              "explanation": "The constructor appends a mark the caller did not pass.",
+              "xp_reward": 10,
+              "starter_code": "class Bag { item: string; constructor(item: string) { this.item = item + \"!\"; } }\nconsole.log(new Bag(\"flint\").item);\n",
+              "correct_answer": "1"
+            },
+            {
+              "id": "ts-07-predict-2",
+              "type": "output_prediction",
+              "question": "A new input still has code that reads the readonly item stored by the constructor for Bag holding flint, and the correct choice is what it prints.",
+              "hints": [
+                "Follow the job, which reads the readonly item stored by the constructor.",
+                "this.item = item; stores the constructor argument.",
+                "juniper"
+              ],
+              "explanation": "this.item = item; stores the constructor argument.",
+              "xp_reward": 10,
+              "starter_code": "class Bag { readonly item: string; constructor(item: string) { this.item = item; } }\nconsole.log(new Bag(\"juniper\").item);\n",
+              "options": [
+                "flint",
+                "none",
+                "0",
+                "juniper"
+              ],
+              "correct_answer": "juniper"
+            },
+            {
+              "id": "ts-07-write",
+              "type": "code",
+              "question": "The blank is the missing piece of the program that reads the readonly item stored by the constructor for Bag holding.",
+              "hints": [
+                "Follow the job, which reads the readonly item stored by the constructor.",
+                "The printed value is the result after this step reads the readonly item stored by the constructor.",
+                "const label = new Bag(\"flint\").item;"
+              ],
+              "explanation": "The printed value is the result after this step reads the readonly item stored by the constructor.",
+              "xp_reward": 10,
+              "starter_code": "class Bag { readonly item: string; constructor(item: string) { this.item = item; } }\nconst label = ___;\nconsole.log(label);\n",
+              "solution_code": "class Bag { readonly item: string; constructor(item: string) { this.item = item; } }\nconst label = new Bag(\"flint\").item;\nconsole.log(label);\n",
+              "tests": [
+                {
+                  "name": "ts-07-prints",
+                  "description": "The printed value is the result after this step reads the readonly item stored b",
+                  "expected_stdout": "flint\n",
+                  "required": true
+                }
+              ]
+            }
+          ]
+        }
+      ]
     }
   ]
 }

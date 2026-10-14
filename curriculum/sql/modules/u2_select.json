@@ -14,8 +14,8 @@
   "lessons": [
     {
       "id": "sql-02",
-      "title": "2. Selecting Columns & DISTINCT",
-      "description": "Select `name` and `email` from `customers`. Also write a query that uses `DISTINCT` to list the unique countries. The test checks that you get at least 3 rows.",
+      "title": "Select Columns DISTINCT",
+      "description": "Select name and email from customers. Also write a query that uses DISTINCT to list the unique countries. The test checks that you get at least 3 rows.",
       "order": 2,
       "difficulty": "beginner",
       "duration_minutes": 5,
@@ -30,8 +30,7 @@
         "sql-db-basics"
       ],
       "learning_objectives": [
-        "Project only the columns you need instead of SELECT *",
-        "Remove duplicate result rows with DISTINCT"
+        "This step lists each country once, using country and customers."
       ],
       "starter_code": "-- TODO: select each country only once (duplicate rows removed)\nSELECT country FROM customers WHERE 0;\n",
       "solution_code": "SELECT DISTINCT country FROM customers;\n",
@@ -52,7 +51,173 @@
         "url": "https://sqlite.org/lang_select.html",
         "license": "Public domain (SQLite documentation)"
       },
-      "xp_reward": 10
+      "xp_reward": 10,
+      "player_mode": "micro",
+      "sublessons": [
+        {
+          "id": "sql-02-micro",
+          "title": "Select Columns DISTINCT",
+          "description": "",
+          "order": 1,
+          "exercises": [
+            {
+              "id": "sql-02-teach",
+              "type": "teach",
+              "question": "This step lists each country once, using country and customers.",
+              "hints": [
+                "Follow the job, which lists each country once.",
+                "DISTINCT keeps one row for each country.",
+                "SELECT DISTINCT country FROM customers;"
+              ],
+              "explanation": "This step lists each country once, using country and customers.",
+              "xp_reward": 0,
+              "worked_example": "SELECT DISTINCT country FROM customers;"
+            },
+            {
+              "id": "sql-02-mcq",
+              "type": "mcq",
+              "question": "A correct choice lists each country once and goes with country and customers.",
+              "hints": [
+                "Follow the job, which lists each country once.",
+                "DISTINCT keeps one row for each country.",
+                "SELECT DISTINCT country FROM customers"
+              ],
+              "explanation": "DISTINCT keeps one row for each country.",
+              "xp_reward": 10,
+              "options": [
+                "INSERT INTO customers",
+                "DROP TABLE customers",
+                "country == country",
+                "SELECT DISTINCT country FROM customers"
+              ],
+              "correct_answer": "SELECT DISTINCT country FROM customers"
+            },
+            {
+              "id": "sql-02-predict",
+              "type": "output_prediction",
+              "question": "Select the output after the code lists each country once, using country and customers.",
+              "hints": [
+                "Follow the job, which lists each country once.",
+                "DISTINCT keeps one row for each country.",
+                "┌─────────┐\n│ country │\n├─────────┤\n│ Canada  │\n│ UK      │\n│ USA     │\n└─────────┘"
+              ],
+              "explanation": "DISTINCT keeps one row for each country.",
+              "xp_reward": 10,
+              "starter_code": "SELECT DISTINCT country FROM customers ORDER BY country;\n",
+              "options": [
+                "┌─────────────┐\n│ category    │\n├─────────────┤\n│ Electronics │\n│ Furniture   │\n│ Kitchen     │\n└─────────────┘",
+                "none",
+                "0",
+                "┌─────────┐\n│ country │\n├─────────┤\n│ Canada  │\n│ UK      │\n│ USA     │\n└─────────┘"
+              ],
+              "correct_answer": "┌─────────┐\n│ country │\n├─────────┤\n│ Canada  │\n│ UK      │\n│ USA     │\n└─────────┘"
+            },
+            {
+              "id": "sql-02-order",
+              "type": "ordering",
+              "question": "Make the line that lists each country once by ordering the pieces for country and customers.",
+              "hints": [
+                "Follow the job, which lists each country once.",
+                "DISTINCT keeps one row for each country.",
+                "SELECT DISTINCT country FROM customers"
+              ],
+              "explanation": "DISTINCT keeps one row for each country.",
+              "xp_reward": 10,
+              "options": [
+                "SELECT",
+                "DISTINCT",
+                "country",
+                "FROM",
+                "customers",
+                "DROP"
+              ],
+              "correct_answer": [
+                "SELECT",
+                "DISTINCT",
+                "country",
+                "FROM",
+                "customers"
+              ]
+            },
+            {
+              "id": "sql-02-fill",
+              "type": "fill_blank",
+              "question": "Complete the line for country and customers so that it lists each country once.",
+              "hints": [
+                "Follow the job, which lists each country once.",
+                "DISTINCT keeps one row for each country.",
+                "DISTINCT"
+              ],
+              "explanation": "DISTINCT keeps one row for each country.",
+              "xp_reward": 10,
+              "starter_code": "SELECT ___ country FROM customers;",
+              "options": [
+                "ALL",
+                "AS",
+                "FROM",
+                "DISTINCT"
+              ],
+              "correct_answer": "DISTINCT"
+            },
+            {
+              "id": "sql-02-bug",
+              "type": "debugging",
+              "question": "Select the line that gets in the way of the job, which lists each country once, for country and customers.",
+              "hints": [
+                "Follow the job, which lists each country once.",
+                "The query lists every row, so repeated countries stay.",
+                "Line 1"
+              ],
+              "explanation": "The query lists every row, so repeated countries stay.",
+              "xp_reward": 10,
+              "starter_code": "SELECT country FROM customers;",
+              "correct_answer": "1"
+            },
+            {
+              "id": "sql-02-predict-2",
+              "type": "output_prediction",
+              "question": "With the new data around country and customers, the code lists each country once, so select the new output.",
+              "hints": [
+                "Follow the job, which lists each country once.",
+                "DISTINCT keeps one row for each country.",
+                "┌─────────────┐\n│ category    │\n├─────────────┤\n│ Electronics │\n│ Furniture   │\n│ Kitchen     │\n└─────────────┘"
+              ],
+              "explanation": "DISTINCT keeps one row for each country.",
+              "xp_reward": 10,
+              "starter_code": "SELECT DISTINCT category FROM products ORDER BY category;\n",
+              "options": [
+                "┌─────────┐\n│ country │\n├─────────┤\n│ Canada  │\n│ UK      │\n│ USA     │\n└─────────┘",
+                "none",
+                "┌─────────────┐\n│ category    │\n├─────────────┤\n│ Electronics │\n│ Furniture   │\n│ Kitchen     │\n└─────────────┘",
+                "0"
+              ],
+              "correct_answer": "┌─────────────┐\n│ category    │\n├─────────────┤\n│ Electronics │\n│ Furniture   │\n│ Kitchen     │\n└─────────────┘"
+            },
+            {
+              "id": "sql-02-write",
+              "type": "code",
+              "question": "The printed result shows up after you fill the blank so the code lists each country once for country and customers.",
+              "hints": [
+                "Follow the job, which lists each country once.",
+                "The query result is what this step lists each country once.",
+                "SELECT DISTINCT country FROM customers ORDER BY country;"
+              ],
+              "explanation": "The query result is what this step lists each country once.",
+              "xp_reward": 10,
+              "starter_code": "SELECT ___ country FROM customers ORDER BY country;\n",
+              "solution_code": "SELECT DISTINCT country FROM customers ORDER BY country;\n",
+              "tests": [
+                {
+                  "name": "sql-02-prints",
+                  "description": "The query result is what this step lists each country once.",
+                  "expected_stdout": "┌─────────┐\n│ country │\n├─────────┤\n│ Canada  │\n│ UK      │\n│ USA     │\n└─────────┘",
+                  "required": true
+                }
+              ]
+            }
+          ]
+        }
+      ]
     }
   ]
 }

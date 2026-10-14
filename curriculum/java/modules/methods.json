@@ -14,8 +14,8 @@
   "lessons": [
     {
       "id": "java-methods-step-1",
-      "title": "1. Method Overloading",
-      "description": "Java allows multiple methods with the same name if their parameter signatures differ. Implement two `multiply` methods: `multiply(int a, int b)` and `multiply(double a, double b)`. The test checks that `Solution.multiply(2.5, 2.0)` is about `5.0`; `Solution.multiply(3, 4)` equals `12`.",
+      "title": "Practice Method Overloading",
+      "description": "Java allows multiple methods with the same name if their parameter signatures differ. Implement two multiply methods: multiply(int a, int b) and multiply(double a, double b). The test checks that Solution.multiply(2.5, 2.0) is about 5.0; Solution.multiply(3, 4) equals 12.",
       "order": 21,
       "difficulty": "beginner",
       "duration_minutes": 5,
@@ -27,7 +27,7 @@
         "java-arrays"
       ],
       "learning_objectives": [
-        "Overload methods with different parameter types in Java"
+        "This step calls the two-argument add method, using Adder and 5."
       ],
       "starter_code": "public class Solution {\n    public static int multiply(int a, int b) {\n        // TODO: Return a * b\n        return 0;\n    }\n\n    public static double multiply(double a, double b) {\n        // TODO: Return a * b\n        return 0.0;\n    }\n}\n",
       "solution_code": "public class Solution {\n    public static int multiply(int a, int b) {\n        return a * b;\n    }\n\n    public static double multiply(double a, double b) {\n        return a * b;\n    }\n}\n",
@@ -48,12 +48,180 @@
         "url": "https://docs.oracle.com/javase/tutorial/java/javaOO/methods.html",
         "license": "Oracle Free Use Terms and Conditions (documentation)"
       },
-      "xp_reward": 10
+      "xp_reward": 10,
+      "player_mode": "micro",
+      "sublessons": [
+        {
+          "id": "java-methods-step-1-micro",
+          "title": "Practice Method Overloading",
+          "description": "",
+          "order": 1,
+          "exercises": [
+            {
+              "id": "java-methods-step-1-teach",
+              "type": "teach",
+              "question": "This step calls the two-argument add method, using Adder and 5.",
+              "hints": [
+                "Follow the job, which calls the two-argument add method.",
+                "return left + right; is the two-argument method.",
+                "adder.add(52, 5)"
+              ],
+              "explanation": "This step calls the two-argument add method, using Adder and 5.",
+              "xp_reward": 0,
+              "worked_example": "adder.add(52, 5)"
+            },
+            {
+              "id": "java-methods-step-1-mcq",
+              "type": "mcq",
+              "question": "Keep the choice that calls the two-argument add method for Adder and 5.",
+              "hints": [
+                "Follow the job, which calls the two-argument add method.",
+                "return left + right; is the two-argument method.",
+                "return left + right;"
+              ],
+              "explanation": "return left + right; is the two-argument method.",
+              "xp_reward": 10,
+              "options": [
+                "left == right;",
+                "return left + right;",
+                "left = right;",
+                "return;"
+              ],
+              "correct_answer": "return left + right;"
+            },
+            {
+              "id": "java-methods-step-1-predict",
+              "type": "output_prediction",
+              "question": "Trace the code that calls the two-argument add method using Adder and 5, and select what it displays.",
+              "hints": [
+                "Follow the job, which calls the two-argument add method.",
+                "return left + right; is the two-argument method.",
+                "57"
+              ],
+              "explanation": "return left + right; is the two-argument method.",
+              "xp_reward": 10,
+              "starter_code": "public class Solution {\n    public static void main(String[] args) {\n        class Adder { int add(int left, int right) { return left + right; } int add(int left, int right, int extra) { return left + right + extra; } }\n        System.out.println(new Adder().add(52, 5));\n    }\n}\n",
+              "options": [
+                "61",
+                "none",
+                "0",
+                "57"
+              ],
+              "correct_answer": "57"
+            },
+            {
+              "id": "java-methods-step-1-order",
+              "type": "ordering",
+              "question": "Tap the pieces, in order, of the line that calls the two-argument add method for Adder and 5.",
+              "hints": [
+                "Follow the job, which calls the two-argument add method.",
+                "return left + right; is the two-argument method.",
+                "int total = left + right;"
+              ],
+              "explanation": "return left + right; is the two-argument method.",
+              "xp_reward": 10,
+              "options": [
+                "int",
+                "total",
+                "=",
+                "left",
+                "+",
+                "right;",
+                "=="
+              ],
+              "correct_answer": [
+                "int",
+                "total",
+                "=",
+                "left",
+                "+",
+                "right;"
+              ]
+            },
+            {
+              "id": "java-methods-step-1-fill",
+              "type": "fill_blank",
+              "question": "The blank is the missing piece of the line that calls the two-argument add method for Adder and 5.",
+              "hints": [
+                "Follow the job, which calls the two-argument add method.",
+                "return left + right; is the two-argument method.",
+                "+"
+              ],
+              "explanation": "return left + right; is the two-argument method.",
+              "xp_reward": 10,
+              "starter_code": "int total = left ___ right;",
+              "options": [
+                "-",
+                "*",
+                "==",
+                "+"
+              ],
+              "correct_answer": "+"
+            },
+            {
+              "id": "java-methods-step-1-bug",
+              "type": "debugging",
+              "question": "Choose the line that does another job than the one that calls the two-argument add method for Adder and 5.",
+              "hints": [
+                "Follow the job, which calls the two-argument add method.",
+                "The method subtracts instead of adding.",
+                "Line 3"
+              ],
+              "explanation": "The method subtracts instead of adding.",
+              "xp_reward": 10,
+              "starter_code": "public class Solution {\n    public static void main(String[] args) {\n        class Adder { int add(int left, int right) { return left - right; } }\n        System.out.println(new Adder().add(52, 5));\n    }\n}\n",
+              "correct_answer": "3"
+            },
+            {
+              "id": "java-methods-step-1-predict-2",
+              "type": "output_prediction",
+              "question": "Trace the second run, which calls the two-argument add method for Adder and 5, and select what it displays.",
+              "hints": [
+                "Follow the job, which calls the two-argument add method.",
+                "return left + right; is the two-argument method.",
+                "61"
+              ],
+              "explanation": "return left + right; is the two-argument method.",
+              "xp_reward": 10,
+              "starter_code": "public class Solution {\n    public static void main(String[] args) {\n        class Adder { int add(int left, int right) { return left + right; } int add(int left, int right, int extra) { return left + right + extra; } }\n        System.out.println(new Adder().add(52, 5, 4));\n    }\n}\n",
+              "options": [
+                "57",
+                "0",
+                "61",
+                "none"
+              ],
+              "correct_answer": "61"
+            },
+            {
+              "id": "java-methods-step-1-write",
+              "type": "code",
+              "question": "Type the missing piece so the program calls the two-argument add method for Adder and 5 and prints it.",
+              "hints": [
+                "Follow the job, which calls the two-argument add method.",
+                "The printed value is the result after this step calls the two-argument add method.",
+                "int label = adder.add(52, 5);"
+              ],
+              "explanation": "The printed value is the result after this step calls the two-argument add method.",
+              "xp_reward": 10,
+              "starter_code": "public class Solution {\n    public static void main(String[] args) {\n        class Adder { int add(int left, int right) { return left + right; } }\n        Adder adder = new Adder();\n        int label = ___;\n        System.out.println(label);\n    }\n}\n",
+              "solution_code": "public class Solution {\n    public static void main(String[] args) {\n        class Adder { int add(int left, int right) { return left + right; } }\n        Adder adder = new Adder();\n        int label = adder.add(52, 5);\n        System.out.println(label);\n    }\n}\n",
+              "tests": [
+                {
+                  "name": "java-methods-step-1-prints",
+                  "description": "The printed value is the result after this step calls the two-argument add metho",
+                  "expected_stdout": "57\n",
+                  "required": true
+                }
+              ]
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "java-methods-step-2",
-      "title": "2. Helper Methods & Formatting",
-      "description": "Break down problems into small private/public helper methods. Implement `formatName(String firstName, String lastName)` returning the last name, a comma and a space, then the first name. The test checks that `Solution.formatName(\"Grace\", \"Hopper\"` equals `\"Hopper, Grace\"`.",
+      "title": "Practice Helper Methods Formatting",
+      "description": "Break down problems into small private/public helper methods. Implement formatName(String firstName, String lastName) returning the last name, a comma and a space, then the first name. The test checks that Solution.formatName(\"Grace\", \"Hopper\" equals \"Hopper, Grace\".",
       "order": 22,
       "difficulty": "beginner",
       "duration_minutes": 5,
@@ -65,7 +233,7 @@
         "java-arrays"
       ],
       "learning_objectives": [
-        "Format strings with String.format or concatenation in Java"
+        "This step trims text in a helper method, using Clean and tidy."
       ],
       "starter_code": "public class Solution {\n    public static String formatName(String firstName, String lastName) {\n        // TODO: return \"last, first\"\n        return \"\";\n    }\n}\n",
       "solution_code": "public class Solution {\n    public static String formatName(String firstName, String lastName) {\n        return lastName + \", \" + firstName;\n    }\n}\n",
@@ -86,12 +254,176 @@
         "url": "https://docs.oracle.com/javase/tutorial/java/javaOO/methods.html",
         "license": "Oracle Free Use Terms and Conditions (documentation)"
       },
-      "xp_reward": 10
+      "xp_reward": 10,
+      "player_mode": "micro",
+      "sublessons": [
+        {
+          "id": "java-methods-step-2-micro",
+          "title": "Practice Helper Methods Formatting",
+          "description": "",
+          "order": 1,
+          "exercises": [
+            {
+              "id": "java-methods-step-2-teach",
+              "type": "teach",
+              "question": "This step trims text in a helper method, using Clean and tidy.",
+              "hints": [
+                "Follow the job, which trims text in a helper method.",
+                "trim() removes the surrounding spaces.",
+                "raw.trim()"
+              ],
+              "explanation": "This step trims text in a helper method, using Clean and tidy.",
+              "xp_reward": 0,
+              "worked_example": "raw.trim()"
+            },
+            {
+              "id": "java-methods-step-2-mcq",
+              "type": "mcq",
+              "question": "Select the line that trims text in a helper method, the one that belongs with Clean and tidy.",
+              "hints": [
+                "Follow the job, which trims text in a helper method.",
+                "trim() removes the surrounding spaces.",
+                "return raw.trim();"
+              ],
+              "explanation": "trim() removes the surrounding spaces.",
+              "xp_reward": 10,
+              "options": [
+                "raw == raw;",
+                "return raw.trim();",
+                "return;",
+                "raw = raw;"
+              ],
+              "correct_answer": "return raw.trim();"
+            },
+            {
+              "id": "java-methods-step-2-predict",
+              "type": "output_prediction",
+              "question": "Follow the code that trims text in a helper method for Clean and tidy, then choose the displayed value.",
+              "hints": [
+                "Follow the job, which trims text in a helper method.",
+                "trim() removes the surrounding spaces.",
+                "delta"
+              ],
+              "explanation": "trim() removes the surrounding spaces.",
+              "xp_reward": 10,
+              "starter_code": "public class Solution {\n    public static void main(String[] args) {\n        class Clean { String tidy(String raw) { return raw.trim(); } }\n        System.out.println(new Clean().tidy(\"  delta  \"));\n    }\n}\n",
+              "options": [
+                "hazel",
+                "delta",
+                "none",
+                "0"
+              ],
+              "correct_answer": "delta"
+            },
+            {
+              "id": "java-methods-step-2-order",
+              "type": "ordering",
+              "question": "Order the pieces so the line trims text in a helper method for Clean and tidy.",
+              "hints": [
+                "Follow the job, which trims text in a helper method.",
+                "trim() removes the surrounding spaces.",
+                "String tidy = word.trim();"
+              ],
+              "explanation": "trim() removes the surrounding spaces.",
+              "xp_reward": 10,
+              "options": [
+                "String",
+                "tidy",
+                "=",
+                "word.trim();",
+                "=="
+              ],
+              "correct_answer": [
+                "String",
+                "tidy",
+                "=",
+                "word.trim();"
+              ]
+            },
+            {
+              "id": "java-methods-step-2-fill",
+              "type": "fill_blank",
+              "question": "Supply the missing piece so the line trims text in a helper method for Clean and tidy.",
+              "hints": [
+                "Follow the job, which trims text in a helper method.",
+                "trim() removes the surrounding spaces.",
+                "trim()"
+              ],
+              "explanation": "trim() removes the surrounding spaces.",
+              "xp_reward": 10,
+              "starter_code": "String raw = \"  word  \"; String tidy = raw.___;",
+              "options": [
+                "toUpperCase()",
+                "trim()",
+                "toLowerCase()",
+                "concat(word)"
+              ],
+              "correct_answer": "trim()"
+            },
+            {
+              "id": "java-methods-step-2-bug",
+              "type": "debugging",
+              "question": "The wrong line is the one that misses the job, which trims text in a helper method, for Clean and tidy.",
+              "hints": [
+                "Follow the job, which trims text in a helper method.",
+                "The helper returns the raw text without trimming.",
+                "Line 3"
+              ],
+              "explanation": "The helper returns the raw text without trimming.",
+              "xp_reward": 10,
+              "starter_code": "public class Solution {\n    public static void main(String[] args) {\n        class Clean { String tidy(String raw) { return raw; } }\n        System.out.println(new Clean().tidy(\"  delta  \"));\n    }\n}\n",
+              "correct_answer": "3"
+            },
+            {
+              "id": "java-methods-step-2-predict-2",
+              "type": "output_prediction",
+              "question": "A new input still has code that trims text in a helper method for Clean and tidy, and the correct choice is what it prints.",
+              "hints": [
+                "Follow the job, which trims text in a helper method.",
+                "trim() removes the surrounding spaces.",
+                "hazel"
+              ],
+              "explanation": "trim() removes the surrounding spaces.",
+              "xp_reward": 10,
+              "starter_code": "public class Solution {\n    public static void main(String[] args) {\n        class Clean { String tidy(String raw) { return raw.trim(); } }\n        System.out.println(new Clean().tidy(\"  hazel  \"));\n    }\n}\n",
+              "options": [
+                "delta",
+                "none",
+                "0",
+                "hazel"
+              ],
+              "correct_answer": "hazel"
+            },
+            {
+              "id": "java-methods-step-2-write",
+              "type": "code",
+              "question": "The blank is the missing piece of the program that trims text in a helper method for Clean and tidy.",
+              "hints": [
+                "Follow the job, which trims text in a helper method.",
+                "The printed value is the result after this step trims text in a helper method.",
+                "String label = clean.tidy(raw);"
+              ],
+              "explanation": "The printed value is the result after this step trims text in a helper method.",
+              "xp_reward": 10,
+              "starter_code": "public class Solution {\n    public static void main(String[] args) {\n        class Clean { String tidy(String raw) { return raw.trim(); } }\n        Clean clean = new Clean();\n        String raw = \"  delta  \";\n        String label = ___;\n        System.out.println(label);\n    }\n}\n",
+              "solution_code": "public class Solution {\n    public static void main(String[] args) {\n        class Clean { String tidy(String raw) { return raw.trim(); } }\n        Clean clean = new Clean();\n        String raw = \"  delta  \";\n        String label = clean.tidy(raw);\n        System.out.println(label);\n    }\n}\n",
+              "tests": [
+                {
+                  "name": "java-methods-step-2-prints",
+                  "description": "The printed value is the result after this step trims text in a helper method.",
+                  "expected_stdout": "delta\n",
+                  "required": true
+                }
+              ]
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "java-methods-01",
-      "title": "3. Currency Exchange Calculator (Concept Challenge)",
-      "description": "Implement currency exchange conversion: the converted amount is `amount * exchangeRate`. The test checks that `Solution.convert(100.0, 0.85)` is about `85.0`.",
+      "title": "Practice Currency Exchange Calculator",
+      "description": "Implement currency exchange conversion: the converted amount is amount * exchangeRate. The test checks that Solution.convert(100.0, 0.85) is about 85.0.",
       "order": 23,
       "difficulty": "beginner",
       "duration_minutes": 8,
@@ -103,7 +435,7 @@
         "java-arrays"
       ],
       "learning_objectives": [
-        "Build modular conversion methods"
+        "This step converts dollars to cents in a method, using Money and 52."
       ],
       "starter_code": "public class Solution {\n    public static double convert(double amount, double exchangeRate) {\n        // TODO: return the converted amount\n        return 0.0;\n    }\n}\n",
       "solution_code": "public class Solution {\n    public static double convert(double amount, double exchangeRate) {\n        return amount * exchangeRate;\n    }\n}\n",
@@ -124,11 +456,179 @@
         "url": "https://docs.oracle.com/javase/tutorial/java/javaOO/methods.html",
         "license": "Oracle Free Use Terms and Conditions (documentation)"
       },
-      "xp_reward": 25
+      "xp_reward": 25,
+      "player_mode": "micro",
+      "sublessons": [
+        {
+          "id": "java-methods-01-micro",
+          "title": "Practice Currency Exchange Calculator",
+          "description": "",
+          "order": 1,
+          "exercises": [
+            {
+              "id": "java-methods-01-teach",
+              "type": "teach",
+              "question": "This step converts dollars to cents in a method, using Money and 52.",
+              "hints": [
+                "Follow the job, which converts dollars to cents in a method.",
+                "cents multiplies the dollars by 100.",
+                "dollars * 100"
+              ],
+              "explanation": "This step converts dollars to cents in a method, using Money and 52.",
+              "xp_reward": 0,
+              "worked_example": "dollars * 100"
+            },
+            {
+              "id": "java-methods-01-mcq",
+              "type": "mcq",
+              "question": "The correct line converts dollars to cents in a method, and it is the line tied to Money and 52.",
+              "hints": [
+                "Follow the job, which converts dollars to cents in a method.",
+                "cents multiplies the dollars by 100.",
+                "return dollars * 100;"
+              ],
+              "explanation": "cents multiplies the dollars by 100.",
+              "xp_reward": 10,
+              "options": [
+                "dollars = 100;",
+                "return dollars * 100;",
+                "return;",
+                "dollars == 100;"
+              ],
+              "correct_answer": "return dollars * 100;"
+            },
+            {
+              "id": "java-methods-01-predict",
+              "type": "output_prediction",
+              "question": "The program converts dollars to cents in a method with Money and 52, so choose the printed value.",
+              "hints": [
+                "Follow the job, which converts dollars to cents in a method.",
+                "cents multiplies the dollars by 100.",
+                "5200"
+              ],
+              "explanation": "cents multiplies the dollars by 100.",
+              "xp_reward": 10,
+              "starter_code": "public class Solution {\n    public static void main(String[] args) {\n        class Money { int cents(int dollars) { return dollars * 100; } }\n        System.out.println(new Money().cents(52));\n    }\n}\n",
+              "options": [
+                "5500",
+                "none",
+                "0",
+                "5200"
+              ],
+              "correct_answer": "5200"
+            },
+            {
+              "id": "java-methods-01-order",
+              "type": "ordering",
+              "question": "Build the line that converts dollars to cents in a method for Money and 52, from the first piece to the last.",
+              "hints": [
+                "Follow the job, which converts dollars to cents in a method.",
+                "cents multiplies the dollars by 100.",
+                "int cents = left * 100;"
+              ],
+              "explanation": "cents multiplies the dollars by 100.",
+              "xp_reward": 10,
+              "options": [
+                "int",
+                "cents",
+                "=",
+                "left",
+                "*",
+                "100;",
+                "=="
+              ],
+              "correct_answer": [
+                "int",
+                "cents",
+                "=",
+                "left",
+                "*",
+                "100;"
+              ]
+            },
+            {
+              "id": "java-methods-01-fill",
+              "type": "fill_blank",
+              "question": "Replace the blank with the piece that makes the line converts dollars to cents in a method for Money and 52.",
+              "hints": [
+                "Follow the job, which converts dollars to cents in a method.",
+                "cents multiplies the dollars by 100.",
+                "*"
+              ],
+              "explanation": "cents multiplies the dollars by 100.",
+              "xp_reward": 10,
+              "starter_code": "int cents = left ___ 100;",
+              "options": [
+                "+",
+                "-",
+                "/",
+                "*"
+              ],
+              "correct_answer": "*"
+            },
+            {
+              "id": "java-methods-01-bug",
+              "type": "debugging",
+              "question": "Spot the line that fails the job, which converts dollars to cents in a method, around Money and 52.",
+              "hints": [
+                "Follow the job, which converts dollars to cents in a method.",
+                "The method adds 100 instead of multiplying.",
+                "Line 3"
+              ],
+              "explanation": "The method adds 100 instead of multiplying.",
+              "xp_reward": 10,
+              "starter_code": "public class Solution {\n    public static void main(String[] args) {\n        class Money { int cents(int dollars) { return dollars + 100; } }\n        System.out.println(new Money().cents(52));\n    }\n}\n",
+              "correct_answer": "3"
+            },
+            {
+              "id": "java-methods-01-predict-2",
+              "type": "output_prediction",
+              "question": "The second program converts dollars to cents in a method for Money and 52, so choose the new printed value.",
+              "hints": [
+                "Follow the job, which converts dollars to cents in a method.",
+                "cents multiplies the dollars by 100.",
+                "5500"
+              ],
+              "explanation": "cents multiplies the dollars by 100.",
+              "xp_reward": 10,
+              "starter_code": "public class Solution {\n    public static void main(String[] args) {\n        class Money { int cents(int dollars) { return dollars * 100; } }\n        System.out.println(new Money().cents(55));\n    }\n}\n",
+              "options": [
+                "5200",
+                "none",
+                "5500",
+                "0"
+              ],
+              "correct_answer": "5500"
+            },
+            {
+              "id": "java-methods-01-write",
+              "type": "code",
+              "question": "Complete the blank so this program converts dollars to cents in a method and prints the result for Money and 52.",
+              "hints": [
+                "Follow the job, which converts dollars to cents in a method.",
+                "The printed value is the result after this step converts dollars to cents in a method.",
+                "int label = money.cents(52);"
+              ],
+              "explanation": "The printed value is the result after this step converts dollars to cents in a method.",
+              "xp_reward": 10,
+              "starter_code": "public class Solution {\n    public static void main(String[] args) {\n        class Money { int cents(int dollars) { return dollars * 100; } }\n        Money money = new Money();\n        int label = ___;\n        System.out.println(label);\n    }\n}\n",
+              "solution_code": "public class Solution {\n    public static void main(String[] args) {\n        class Money { int cents(int dollars) { return dollars * 100; } }\n        Money money = new Money();\n        int label = money.cents(52);\n        System.out.println(label);\n    }\n}\n",
+              "tests": [
+                {
+                  "name": "java-methods-01-prints",
+                  "description": "The printed value is the result after this step converts dollars to cents in a m",
+                  "expected_stdout": "5200\n",
+                  "required": true
+                }
+              ]
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "java-methods-practice-1",
-      "title": "4. String Sanitization (Practice)",
+      "title": "Practice String Sanitization",
       "description": "Implement sanitize(String input): remove leading/trailing whitespace with trim() and convert to lowercase with toLowerCase() — return \"\" for null input. The test expects sanitize(\"  JAVA  \") to equal \"java\".",
       "order": 24,
       "difficulty": "beginner",
@@ -141,7 +641,7 @@
         "java-arrays"
       ],
       "learning_objectives": [
-        "Use String methods like trim() and toLowerCase()"
+        "This step returns the trimmed label, using raw and birch."
       ],
       "starter_code": "public class Solution {\n    public static String sanitize(String input) {\n        // TODO: Trim whitespace and convert to lowercase\n        return \"\";\n    }\n}\n",
       "solution_code": "public class Solution {\n    public static String sanitize(String input) {\n        if (input == null) return \"\";\n        return input.trim().toLowerCase();\n    }\n}\n",
@@ -162,11 +662,175 @@
         "url": "https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html",
         "license": "Oracle Free Use Terms and Conditions (documentation)"
       },
-      "xp_reward": 15
+      "xp_reward": 15,
+      "player_mode": "micro",
+      "sublessons": [
+        {
+          "id": "java-methods-practice-1-micro",
+          "title": "Practice String Sanitization",
+          "description": "",
+          "order": 1,
+          "exercises": [
+            {
+              "id": "java-methods-practice-1-teach",
+              "type": "teach",
+              "question": "This step returns the trimmed label, using raw and birch.",
+              "hints": [
+                "Follow the job, which returns the trimmed label.",
+                "trim() is the sanitized text.",
+                "raw.trim()"
+              ],
+              "explanation": "This step returns the trimmed label, using raw and birch.",
+              "xp_reward": 0,
+              "worked_example": "raw.trim()"
+            },
+            {
+              "id": "java-methods-practice-1-mcq",
+              "type": "mcq",
+              "question": "The correct line returns the trimmed label, and it is the line tied to raw and birch.",
+              "hints": [
+                "Follow the job, which returns the trimmed label.",
+                "trim() is the sanitized text.",
+                "raw.trim()"
+              ],
+              "explanation": "trim() is the sanitized text.",
+              "xp_reward": 10,
+              "options": [
+                "raw == raw;",
+                "raw = raw;",
+                "return raw;",
+                "raw.trim()"
+              ],
+              "correct_answer": "raw.trim()"
+            },
+            {
+              "id": "java-methods-practice-1-predict",
+              "type": "output_prediction",
+              "question": "The program returns the trimmed label with raw and so choose the printed value.",
+              "hints": [
+                "Follow the job, which returns the trimmed label.",
+                "trim() is the sanitized text.",
+                "birch"
+              ],
+              "explanation": "trim() is the sanitized text.",
+              "xp_reward": 10,
+              "starter_code": "public class Solution {\n    public static void main(String[] args) {\n        String raw = \"  birch  \";\n        System.out.println(raw.trim());\n    }\n}\n",
+              "options": [
+                "flint",
+                "none",
+                "0",
+                "birch"
+              ],
+              "correct_answer": "birch"
+            },
+            {
+              "id": "java-methods-practice-1-order",
+              "type": "ordering",
+              "question": "Build the line that returns the trimmed label for raw and birch, from the first piece to the last.",
+              "hints": [
+                "Follow the job, which returns the trimmed label.",
+                "trim() is the sanitized text.",
+                "String tidy = word.trim();"
+              ],
+              "explanation": "trim() is the sanitized text.",
+              "xp_reward": 10,
+              "options": [
+                "String",
+                "tidy",
+                "=",
+                "word.trim();",
+                "=="
+              ],
+              "correct_answer": [
+                "String",
+                "tidy",
+                "=",
+                "word.trim();"
+              ]
+            },
+            {
+              "id": "java-methods-practice-1-fill",
+              "type": "fill_blank",
+              "question": "Replace the blank with the piece that makes the line returns the trimmed label for raw and birch.",
+              "hints": [
+                "Follow the job, which returns the trimmed label.",
+                "trim() is the sanitized text.",
+                "trim()"
+              ],
+              "explanation": "trim() is the sanitized text.",
+              "xp_reward": 10,
+              "starter_code": "String raw = \"  word  \"; String tidy = raw.___;",
+              "options": [
+                "toUpperCase()",
+                "toLowerCase()",
+                "stripIndent()",
+                "trim()"
+              ],
+              "correct_answer": "trim()"
+            },
+            {
+              "id": "java-methods-practice-1-bug",
+              "type": "debugging",
+              "question": "Spot the line that fails the job, which returns the trimmed label, around raw and birch.",
+              "hints": [
+                "Follow the job, which returns the trimmed label.",
+                "The print shows the spaces the trim was supposed to remove.",
+                "Line 4"
+              ],
+              "explanation": "The print shows the spaces the trim was supposed to remove.",
+              "xp_reward": 10,
+              "starter_code": "public class Solution {\n    public static void main(String[] args) {\n        String raw = \"  birch  \";\n        System.out.println(raw);\n    }\n}\n",
+              "correct_answer": "4"
+            },
+            {
+              "id": "java-methods-practice-1-predict-2",
+              "type": "output_prediction",
+              "question": "The second program returns the trimmed label for raw and birch, so choose the new printed value.",
+              "hints": [
+                "Follow the job, which returns the trimmed label.",
+                "trim() is the sanitized text.",
+                "flint"
+              ],
+              "explanation": "trim() is the sanitized text.",
+              "xp_reward": 10,
+              "starter_code": "public class Solution {\n    public static void main(String[] args) {\n        String raw = \"  flint  \";\n        System.out.println(raw.trim());\n    }\n}\n",
+              "options": [
+                "none",
+                "0",
+                "flint",
+                "birch"
+              ],
+              "correct_answer": "flint"
+            },
+            {
+              "id": "java-methods-practice-1-write",
+              "type": "code",
+              "question": "Complete the blank so this program returns the trimmed label and prints the result for raw and.",
+              "hints": [
+                "Follow the job, which returns the trimmed label.",
+                "The printed value is the result after this step returns the trimmed label.",
+                "String label = raw.trim();"
+              ],
+              "explanation": "The printed value is the result after this step returns the trimmed label.",
+              "xp_reward": 10,
+              "starter_code": "public class Solution {\n    public static void main(String[] args) {\n        String raw = \"  birch  \";\n        String label = ___;\n        System.out.println(label);\n    }\n}\n",
+              "solution_code": "public class Solution {\n    public static void main(String[] args) {\n        String raw = \"  birch  \";\n        String label = raw.trim();\n        System.out.println(label);\n    }\n}\n",
+              "tests": [
+                {
+                  "name": "java-methods-practice-1-prints",
+                  "description": "The printed value is the result after this step returns the trimmed label.",
+                  "expected_stdout": "birch\n",
+                  "required": true
+                }
+              ]
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "java-methods-checkpoint",
-      "title": "5. Unit 5 Checkpoint: Methods Mastery",
+      "title": "Practice Unit 5 Checkpoint Methods Mastery",
       "description": "Implement power(int base, int exponent) returning base raised to exponent as an int — e.g. Math.pow with an int cast, or a multiplying loop. The test expects power(2, 3) == 8.",
       "order": 25,
       "difficulty": "beginner",
@@ -179,7 +843,7 @@
         "java-arrays"
       ],
       "learning_objectives": [
-        "Pass Java methods checkpoint"
+        "This step returns twice the value from a method, using Box and 59."
       ],
       "starter_code": "public class Solution {\n    public static int power(int base, int exponent) {\n        // TODO: Calculate base^exponent\n        return 0;\n    }\n}\n",
       "solution_code": "public class Solution {\n    public static int power(int base, int exponent) {\n        return (int) Math.pow(base, exponent);\n    }\n}\n",
@@ -200,7 +864,175 @@
         "url": "https://docs.oracle.com/javase/tutorial/java/javaOO/methods.html",
         "license": "Oracle Free Use Terms and Conditions (documentation)"
       },
-      "xp_reward": 40
+      "xp_reward": 40,
+      "player_mode": "micro",
+      "sublessons": [
+        {
+          "id": "java-methods-checkpoint-micro",
+          "title": "Practice Unit 5 Checkpoint Methods Mastery",
+          "description": "",
+          "order": 1,
+          "exercises": [
+            {
+              "id": "java-methods-checkpoint-teach",
+              "type": "teach",
+              "question": "This step returns twice the value from a method, using Box and 59.",
+              "hints": [
+                "Follow the job, which returns twice the value from a method.",
+                "scale returns twice the argument.",
+                "value * 2"
+              ],
+              "explanation": "This step returns twice the value from a method, using Box and 59.",
+              "xp_reward": 0,
+              "worked_example": "value * 2"
+            },
+            {
+              "id": "java-methods-checkpoint-mcq",
+              "type": "mcq",
+              "question": "Choose the line that returns twice the value from a method, which is the line that fits Box and 59.",
+              "hints": [
+                "Follow the job, which returns twice the value from a method.",
+                "scale returns twice the argument.",
+                "return value * 2;"
+              ],
+              "explanation": "scale returns twice the argument.",
+              "xp_reward": 10,
+              "options": [
+                "value == 2;",
+                "return value * 2;",
+                "return;",
+                "value = 2;"
+              ],
+              "correct_answer": "return value * 2;"
+            },
+            {
+              "id": "java-methods-checkpoint-predict",
+              "type": "output_prediction",
+              "question": "Read the code that returns twice the value from a method for Box and 59, and choose the value it prints.",
+              "hints": [
+                "Follow the job, which returns twice the value from a method.",
+                "scale returns twice the argument.",
+                "118"
+              ],
+              "explanation": "scale returns twice the argument.",
+              "xp_reward": 10,
+              "starter_code": "public class Solution {\n    public static void main(String[] args) {\n        class Box { int scale(int value) { return value * 2; } }\n        System.out.println(new Box().scale(59));\n    }\n}\n",
+              "options": [
+                "124",
+                "118",
+                "none",
+                "0"
+              ],
+              "correct_answer": "118"
+            },
+            {
+              "id": "java-methods-checkpoint-order",
+              "type": "ordering",
+              "question": "Arrange the pieces of the line that returns twice the value from a method, left to right, for Box and 59.",
+              "hints": [
+                "Follow the job, which returns twice the value from a method.",
+                "scale returns twice the argument.",
+                "int scaled = left * 2;"
+              ],
+              "explanation": "scale returns twice the argument.",
+              "xp_reward": 10,
+              "options": [
+                "int",
+                "scaled",
+                "=",
+                "left",
+                "*",
+                "2;",
+                "=="
+              ],
+              "correct_answer": [
+                "int",
+                "scaled",
+                "=",
+                "left",
+                "*",
+                "2;"
+              ]
+            },
+            {
+              "id": "java-methods-checkpoint-fill",
+              "type": "fill_blank",
+              "question": "Fill the blank so the line returns twice the value from a method for Box and 59.",
+              "hints": [
+                "Follow the job, which returns twice the value from a method.",
+                "scale returns twice the argument.",
+                "*"
+              ],
+              "explanation": "scale returns twice the argument.",
+              "xp_reward": 10,
+              "starter_code": "int scaled = left ___ 2;",
+              "options": [
+                "+",
+                "*",
+                "-",
+                "/"
+              ],
+              "correct_answer": "*"
+            },
+            {
+              "id": "java-methods-checkpoint-bug",
+              "type": "debugging",
+              "question": "Find the line that misses the job, which returns twice the value from a method, for Box and 59.",
+              "hints": [
+                "Follow the job, which returns twice the value from a method.",
+                "The method adds two instead of doubling.",
+                "Line 3"
+              ],
+              "explanation": "The method adds two instead of doubling.",
+              "xp_reward": 10,
+              "starter_code": "public class Solution {\n    public static void main(String[] args) {\n        class Box { int scale(int value) { return value + 2; } }\n        System.out.println(new Box().scale(59));\n    }\n}\n",
+              "correct_answer": "3"
+            },
+            {
+              "id": "java-methods-checkpoint-predict-2",
+              "type": "output_prediction",
+              "question": "On the new input, the code still returns twice the value from a method for Box and 59, so choose what it prints.",
+              "hints": [
+                "Follow the job, which returns twice the value from a method.",
+                "scale returns twice the argument.",
+                "124"
+              ],
+              "explanation": "scale returns twice the argument.",
+              "xp_reward": 10,
+              "starter_code": "public class Solution {\n    public static void main(String[] args) {\n        class Box { int scale(int value) { return value * 2; } }\n        System.out.println(new Box().scale(62));\n    }\n}\n",
+              "options": [
+                "118",
+                "none",
+                "0",
+                "124"
+              ],
+              "correct_answer": "124"
+            },
+            {
+              "id": "java-methods-checkpoint-write",
+              "type": "code",
+              "question": "Fill the blank so the program returns twice the value from a method, and the print shows that result for Box and 59.",
+              "hints": [
+                "Follow the job, which returns twice the value from a method.",
+                "The printed value is the result after this step returns twice the value from a method.",
+                "int label = box.scale(59);"
+              ],
+              "explanation": "The printed value is the result after this step returns twice the value from a method.",
+              "xp_reward": 10,
+              "starter_code": "public class Solution {\n    public static void main(String[] args) {\n        class Box { int scale(int value) { return value * 2; } }\n        Box box = new Box();\n        int label = ___;\n        System.out.println(label);\n    }\n}\n",
+              "solution_code": "public class Solution {\n    public static void main(String[] args) {\n        class Box { int scale(int value) { return value * 2; } }\n        Box box = new Box();\n        int label = box.scale(59);\n        System.out.println(label);\n    }\n}\n",
+              "tests": [
+                {
+                  "name": "java-methods-checkpoint-prints",
+                  "description": "The printed value is the result after this step returns twice the value from a m",
+                  "expected_stdout": "118\n",
+                  "required": true
+                }
+              ]
+            }
+          ]
+        }
+      ]
     }
   ]
 }

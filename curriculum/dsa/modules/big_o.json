@@ -12,8 +12,8 @@
   "lessons": [
     {
       "id": "big-o-step-1",
-      "title": "1. Counting Operations",
-      "description": "Estimate work by counting loop iterations. Implement `linear_sum(n)` that sums 1..n in O(n) with an explicit loop. The test checks that `linear_sum(5)` equals `15`.",
+      "title": "Count Operations",
+      "description": "Estimate work by counting loop iterations. Implement linear_sum(n) that sums 1..n in O(n) with an explicit loop. The test checks that linear_sum(5) equals 15.",
       "order": 1,
       "difficulty": "intermediate",
       "duration_minutes": 5,
@@ -25,7 +25,7 @@
       ],
       "prerequisites": [],
       "learning_objectives": [
-        "Write an O(n) summation loop"
+        "This step counts one step per item, using items and 4."
       ],
       "starter_code": "def linear_sum(n):\n    # TODO: sum 1..n with a loop\n    pass\n",
       "solution_code": "def linear_sum(n):\n    total = 0\n    for i in range(1, n + 1):\n        total += i\n    return total\n",
@@ -49,31 +49,175 @@
       "xp_reward": 10,
       "sublessons": [
         {
-          "id": "big-o-step-1-out-sub",
-          "title": "Predict the output",
+          "id": "big-o-step-1-micro",
+          "title": "Count Operations",
+          "description": "",
           "order": 1,
           "exercises": [
             {
-              "id": "big-o-step-1-out-1",
-              "type": "output_prediction",
-              "question": "What does this program print?\n\n```python\ndef linear_sum(n):\n    total = 0\n    for i in range(1, n + 1):\n        total += i\n    return total\n\nprint(linear_sum(5))\n```",
-              "options": [
-                "21",
-                "15",
-                "10"
+              "id": "big-o-step-1-teach",
+              "type": "teach",
+              "question": "This step counts one step per item, using items and 4.",
+              "hints": [
+                "Follow the job, which counts one step per item.",
+                "steps = steps + 1 counts one operation.",
+                "for item in items:"
               ],
-              "correct_answer": "15",
-              "explanation": "range(1, 6) yields 1, 2, 3, 4 and 5, which add to 15. 10 is what stopping one early (range(1, n)) gives; 21 is what one extra iteration (range(1, n + 2)) gives.",
-              "xp_reward": 10
+              "explanation": "This step counts one step per item, using items and 4.",
+              "xp_reward": 0,
+              "worked_example": "for item in items:"
+            },
+            {
+              "id": "big-o-step-1-mcq",
+              "type": "mcq",
+              "question": "The match is the line that counts one step per item for items and 4.",
+              "hints": [
+                "Follow the job, which counts one step per item.",
+                "steps = steps + 1 counts one operation.",
+                "steps = steps + 1"
+              ],
+              "explanation": "steps = steps + 1 counts one operation.",
+              "xp_reward": 10,
+              "options": [
+                "item == items",
+                "return steps",
+                "steps = steps + 1",
+                "pass"
+              ],
+              "correct_answer": "steps = steps + 1"
+            },
+            {
+              "id": "big-o-step-1-predict",
+              "type": "output_prediction",
+              "question": "Work out what is printed when the code counts one step per item for items and.",
+              "hints": [
+                "Follow the job, which counts one step per item.",
+                "steps = steps + 1 counts one operation.",
+                "4"
+              ],
+              "explanation": "steps = steps + 1 counts one operation.",
+              "xp_reward": 10,
+              "starter_code": "items = [1, 2, 3, 4]\nsteps = 0\nfor item in items:\n    steps = steps + 1\nprint(steps)\n",
+              "options": [
+                "3",
+                "none",
+                "4",
+                "0"
+              ],
+              "correct_answer": "4"
+            },
+            {
+              "id": "big-o-step-1-order",
+              "type": "ordering",
+              "question": "Rebuild, from the left, the line that counts one step per item for items and 4.",
+              "hints": [
+                "Follow the job, which counts one step per item.",
+                "steps = steps + 1 counts one operation.",
+                "for item in items: steps+=1"
+              ],
+              "explanation": "steps = steps + 1 counts one operation.",
+              "xp_reward": 10,
+              "options": [
+                "for",
+                "item",
+                "in",
+                "items:",
+                "steps+=1",
+                "if"
+              ],
+              "correct_answer": [
+                "for",
+                "item",
+                "in",
+                "items:",
+                "steps+=1"
+              ]
+            },
+            {
+              "id": "big-o-step-1-fill",
+              "type": "fill_blank",
+              "question": "The completed line counts one step per item once you fill the blank for items and 4.",
+              "hints": [
+                "Follow the job, which counts one step per item.",
+                "steps = steps + 1 counts one operation.",
+                "+"
+              ],
+              "explanation": "steps = steps + 1 counts one operation.",
+              "xp_reward": 10,
+              "starter_code": "steps = steps ___ 1\n",
+              "options": [
+                "*",
+                "+",
+                "-",
+                "=="
+              ],
+              "correct_answer": "+"
+            },
+            {
+              "id": "big-o-step-1-bug",
+              "type": "debugging",
+              "question": "One line does another job than the one that counts one step per item for items and 4.",
+              "hints": [
+                "Follow the job, which counts one step per item.",
+                "The loop uses of, so it is not a Python walk.",
+                "Line 3"
+              ],
+              "explanation": "The loop uses of, so it is not a Python walk.",
+              "xp_reward": 10,
+              "starter_code": "items = [1, 2, 3, 4]\nsteps = 0\nfor item of items:\n    steps = steps + 1\nprint(steps)\n",
+              "correct_answer": "3"
+            },
+            {
+              "id": "big-o-step-1-predict-2",
+              "type": "output_prediction",
+              "question": "The second display is what prints after the code counts one step per item for items and 4.",
+              "hints": [
+                "Follow the job, which counts one step per item.",
+                "steps = steps + 1 counts one operation.",
+                "3"
+              ],
+              "explanation": "steps = steps + 1 counts one operation.",
+              "xp_reward": 10,
+              "starter_code": "items = [1, 2, 3]\nsteps = 0\nfor item in items:\n    steps = steps + 1\nprint(steps)\n",
+              "options": [
+                "4",
+                "3",
+                "none",
+                "0"
+              ],
+              "correct_answer": "3"
+            },
+            {
+              "id": "big-o-step-1-write",
+              "type": "code",
+              "question": "Supply the blank so the run counts one step per item and prints the result for items and.",
+              "hints": [
+                "Follow the job, which counts one step per item.",
+                "The printed value is the result after this step counts one step per item.",
+                "label = steps"
+              ],
+              "explanation": "The printed value is the result after this step counts one step per item.",
+              "xp_reward": 10,
+              "starter_code": "items = [1, 2, 3, 4]\nsteps = 0\nfor item in items:\n    steps = steps + 1\nlabel = ___\nprint(label)\n",
+              "solution_code": "items = [1, 2, 3, 4]\nsteps = 0\nfor item in items:\n    steps = steps + 1\nlabel = steps\nprint(label)\n",
+              "tests": [
+                {
+                  "name": "big-o-step-1-prints",
+                  "description": "The printed value is the result after this step counts one step per item.",
+                  "expected_stdout": "4\n",
+                  "required": true
+                }
+              ]
             }
           ]
         }
-      ]
+      ],
+      "player_mode": "micro"
     },
     {
       "id": "big-o-step-2",
-      "title": "2. Constant vs Linear Lookup",
-      "description": "Compare list membership (O(n)) vs set membership (O(1) average). Implement `has_in_set(items, target)`. The test checks that `has_in_set([1, 2, 3], 2)` is true; `has_in_set([1, 2, 3], 9)` is false.",
+      "title": "Practice Constant vs Linear Lookup",
+      "description": "Compare list membership (O(n)) vs set membership (O(1) average). Implement has_in_set(items, target). The test checks that has_in_set([1, 2, 3], 2) is true; has_in_set([1, 2, 3], 9) is false.",
       "order": 2,
       "difficulty": "intermediate",
       "duration_minutes": 5,
@@ -85,7 +229,7 @@
       ],
       "prerequisites": [],
       "learning_objectives": [
-        "Use a set for average O(1) membership"
+        "This step reads the first item in one step, using items holding violet."
       ],
       "starter_code": "def has_in_set(items, target):\n    # TODO: return True if target is in set(items)\n    pass\n",
       "solution_code": "def has_in_set(items, target):\n    return target in set(items)\n",
@@ -106,12 +250,174 @@
         "url": "https://docs.python.org/3/library/time-complexity.html",
         "license": "Python documentation license (PSF)"
       },
-      "xp_reward": 10
+      "xp_reward": 10,
+      "player_mode": "micro",
+      "sublessons": [
+        {
+          "id": "big-o-step-2-micro",
+          "title": "Practice Constant vs Linear Lookup",
+          "description": "",
+          "order": 1,
+          "exercises": [
+            {
+              "id": "big-o-step-2-teach",
+              "type": "teach",
+              "question": "This step reads the first item in one step, using items holding violet.",
+              "hints": [
+                "Follow the job, which reads the first item in one step.",
+                "items[0] is a direct read.",
+                "items[0]"
+              ],
+              "explanation": "This step reads the first item in one step, using items holding violet.",
+              "xp_reward": 0,
+              "worked_example": "items[0]"
+            },
+            {
+              "id": "big-o-step-2-mcq",
+              "type": "mcq",
+              "question": "Pick the line that reads the first item in one step, not a line about something else, for items holding violet.",
+              "hints": [
+                "Follow the job, which reads the first item in one step.",
+                "items[0] is a direct read.",
+                "items[0]"
+              ],
+              "explanation": "items[0] is a direct read.",
+              "xp_reward": 10,
+              "options": [
+                "len(items)",
+                "items + items",
+                "item == items",
+                "items[0]"
+              ],
+              "correct_answer": "items[0]"
+            },
+            {
+              "id": "big-o-step-2-predict",
+              "type": "output_prediction",
+              "question": "The displayed value is what the code prints when it reads the first item in one step for items holding.",
+              "hints": [
+                "Follow the job, which reads the first item in one step.",
+                "items[0] is a direct read.",
+                "violet"
+              ],
+              "explanation": "items[0] is a direct read.",
+              "xp_reward": 10,
+              "starter_code": "items = ['violet', 'other', 'third']\nprint(items[0])\n",
+              "options": [
+                "amber",
+                "none",
+                "0",
+                "violet"
+              ],
+              "correct_answer": "violet"
+            },
+            {
+              "id": "big-o-step-2-order",
+              "type": "ordering",
+              "question": "Place every piece so the result reads the first item in one step for items holding violet.",
+              "hints": [
+                "Follow the job, which reads the first item in one step.",
+                "items[0] is a direct read.",
+                "picked = items[0]"
+              ],
+              "explanation": "items[0] is a direct read.",
+              "xp_reward": 10,
+              "options": [
+                "picked",
+                "=",
+                "items[0]",
+                "=="
+              ],
+              "correct_answer": [
+                "picked",
+                "=",
+                "items[0]"
+              ]
+            },
+            {
+              "id": "big-o-step-2-fill",
+              "type": "fill_blank",
+              "question": "Drop in the piece that lets the line reads the first item in one step for items holding violet.",
+              "hints": [
+                "Follow the job, which reads the first item in one step.",
+                "items[0] is a direct read.",
+                "0"
+              ],
+              "explanation": "items[0] is a direct read.",
+              "xp_reward": 10,
+              "starter_code": "picked = items[___]\n",
+              "options": [
+                "1",
+                "2",
+                "3",
+                "0"
+              ],
+              "correct_answer": "0"
+            },
+            {
+              "id": "big-o-step-2-bug",
+              "type": "debugging",
+              "question": "The mismatch misses the job, which reads the first item in one step, for items holding violet.",
+              "hints": [
+                "Follow the job, which reads the first item in one step.",
+                "The read asks for a slot that is not in the list.",
+                "Line 2"
+              ],
+              "explanation": "The read asks for a slot that is not in the list.",
+              "xp_reward": 10,
+              "starter_code": "items = ['violet', 'other']\nprint(items[9])\n",
+              "correct_answer": "2"
+            },
+            {
+              "id": "big-o-step-2-predict-2",
+              "type": "output_prediction",
+              "question": "Choose the printed result of the second run that reads the first item in one step for items holding violet.",
+              "hints": [
+                "Follow the job, which reads the first item in one step.",
+                "items[0] is a direct read.",
+                "amber"
+              ],
+              "explanation": "items[0] is a direct read.",
+              "xp_reward": 10,
+              "starter_code": "items = ['amber', 'other', 'third']\nprint(items[0])\n",
+              "options": [
+                "violet",
+                "amber",
+                "0",
+                "none"
+              ],
+              "correct_answer": "amber"
+            },
+            {
+              "id": "big-o-step-2-write",
+              "type": "code",
+              "question": "Make the program reads the first item in one step by filling the blank for items holding.",
+              "hints": [
+                "Follow the job, which reads the first item in one step.",
+                "The printed value is the result after this step reads the first item in one step.",
+                "label = items[0]"
+              ],
+              "explanation": "The printed value is the result after this step reads the first item in one step.",
+              "xp_reward": 10,
+              "starter_code": "items = ['violet', 'other', 'third']\nlabel = ___\nprint(label)\n",
+              "solution_code": "items = ['violet', 'other', 'third']\nlabel = items[0]\nprint(label)\n",
+              "tests": [
+                {
+                  "name": "big-o-step-2-prints",
+                  "description": "The printed value is the result after this step reads the first item in one step",
+                  "expected_stdout": "violet\n",
+                  "required": true
+                }
+              ]
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "big-o-01",
-      "title": "3. Nested Loops Complexity (Concept Challenge)",
-      "description": "Implement `count_pairs(n)` that counts pairs (i,j) with 0<=i<j<n — classic O(n^2) nested loops — and return the count. The test checks that `count_pairs(4)` equals `6`.",
+      "title": "Practice Nested Loops Complexity",
+      "description": "Implement count_pairs(n) that counts pairs (i,j) with 0<=i<j<n — classic O(n^2) nested loops — and return the count. The test checks that count_pairs(4) equals 6.",
       "order": 3,
       "difficulty": "intermediate",
       "duration_minutes": 8,
@@ -123,7 +429,7 @@
       ],
       "prerequisites": [],
       "learning_objectives": [
-        "Recognize quadratic nested loops"
+        "This step counts the trips of a nested loop, using outer and 1."
       ],
       "starter_code": "def count_pairs(n):\n    # TODO: count pairs i < j\n    pass\n",
       "solution_code": "def count_pairs(n):\n    count = 0\n    for i in range(n):\n        for j in range(i + 1, n):\n            count += 1\n    return count\n",
@@ -144,12 +450,178 @@
         "url": "https://docs.python.org/3/tutorial/controlflow.html#for-statements",
         "license": "Python documentation license (PSF)"
       },
-      "xp_reward": 25
+      "xp_reward": 25,
+      "player_mode": "micro",
+      "sublessons": [
+        {
+          "id": "big-o-01-micro",
+          "title": "Practice Nested Loops Complexity",
+          "description": "",
+          "order": 1,
+          "exercises": [
+            {
+              "id": "big-o-01-teach",
+              "type": "teach",
+              "question": "This step counts the trips of a nested loop, using outer and 1.",
+              "hints": [
+                "Follow the job, which counts the trips of a nested loop.",
+                "Each inner trip adds one to the nested count.",
+                "for inner in range(54):"
+              ],
+              "explanation": "This step counts the trips of a nested loop, using outer and 1.",
+              "xp_reward": 0,
+              "worked_example": "for inner in range(54):"
+            },
+            {
+              "id": "big-o-01-mcq",
+              "type": "mcq",
+              "question": "Mark the choice that counts the trips of a nested loop when the code mentions outer and 1.",
+              "hints": [
+                "Follow the job, which counts the trips of a nested loop.",
+                "Each inner trip adds one to the nested count.",
+                "count = count + 1"
+              ],
+              "explanation": "Each inner trip adds one to the nested count.",
+              "xp_reward": 10,
+              "options": [
+                "outer == inner",
+                "return count",
+                "count = count + 1",
+                "pass"
+              ],
+              "correct_answer": "count = count + 1"
+            },
+            {
+              "id": "big-o-01-predict",
+              "type": "output_prediction",
+              "question": "After outer and 1, the code counts the trips of a nested loop, and the correct choice is the printed value.",
+              "hints": [
+                "Follow the job, which counts the trips of a nested loop.",
+                "Each inner trip adds one to the nested count.",
+                "162"
+              ],
+              "explanation": "Each inner trip adds one to the nested count.",
+              "xp_reward": 10,
+              "starter_code": "count = 0\nfor outer in range(3):\n    for inner in range(54):\n        count = count + 1\nprint(count)\n",
+              "options": [
+                "108",
+                "none",
+                "162",
+                "0"
+              ],
+              "correct_answer": "162"
+            },
+            {
+              "id": "big-o-01-order",
+              "type": "ordering",
+              "question": "The finished line counts the trips of a nested loop, so place its pieces in order for outer and 1.",
+              "hints": [
+                "Follow the job, which counts the trips of a nested loop.",
+                "Each inner trip adds one to the nested count.",
+                "for inner in range(limit): count+=1"
+              ],
+              "explanation": "Each inner trip adds one to the nested count.",
+              "xp_reward": 10,
+              "options": [
+                "for",
+                "inner",
+                "in",
+                "range(limit):",
+                "count+=1",
+                "if"
+              ],
+              "correct_answer": [
+                "for",
+                "inner",
+                "in",
+                "range(limit):",
+                "count+=1"
+              ]
+            },
+            {
+              "id": "big-o-01-fill",
+              "type": "fill_blank",
+              "question": "Finish the line that counts the trips of a nested loop by filling the blank for outer and 1.",
+              "hints": [
+                "Follow the job, which counts the trips of a nested loop.",
+                "Each inner trip adds one to the nested count.",
+                "+"
+              ],
+              "explanation": "Each inner trip adds one to the nested count.",
+              "xp_reward": 10,
+              "starter_code": "count = count ___ 1\n",
+              "options": [
+                "-",
+                "*",
+                "+",
+                "=="
+              ],
+              "correct_answer": "+"
+            },
+            {
+              "id": "big-o-01-bug",
+              "type": "debugging",
+              "question": "Mark the line that breaks the job, which counts the trips of a nested loop, for outer and 1.",
+              "hints": [
+                "Follow the job, which counts the trips of a nested loop.",
+                "The inner loop is missing, so the count is only the outer trips.",
+                "Line 2"
+              ],
+              "explanation": "The inner loop is missing, so the count is only the outer trips.",
+              "xp_reward": 10,
+              "starter_code": "count = 0\nfor outer in range(3):\n    count = count + 1\nprint(count)\n",
+              "correct_answer": "2"
+            },
+            {
+              "id": "big-o-01-predict-2",
+              "type": "output_prediction",
+              "question": "Follow the second program, which counts the trips of a nested loop for outer and 1, and choose its output.",
+              "hints": [
+                "Follow the job, which counts the trips of a nested loop.",
+                "Each inner trip adds one to the nested count.",
+                "108"
+              ],
+              "explanation": "Each inner trip adds one to the nested count.",
+              "xp_reward": 10,
+              "starter_code": "count = 0\nfor outer in range(2):\n    for inner in range(54):\n        count = count + 1\nprint(count)\n",
+              "options": [
+                "162",
+                "108",
+                "none",
+                "0"
+              ],
+              "correct_answer": "108"
+            },
+            {
+              "id": "big-o-01-write",
+              "type": "code",
+              "question": "Finish the program that counts the trips of a nested loop by filling the blank for outer and 1.",
+              "hints": [
+                "Follow the job, which counts the trips of a nested loop.",
+                "The printed value is the result after this step counts the trips of a nested loop.",
+                "label = count"
+              ],
+              "explanation": "The printed value is the result after this step counts the trips of a nested loop.",
+              "xp_reward": 10,
+              "starter_code": "count = 0\nfor outer in range(3):\n    for inner in range(54):\n        count = count + 1\nlabel = ___\nprint(label)\n",
+              "solution_code": "count = 0\nfor outer in range(3):\n    for inner in range(54):\n        count = count + 1\nlabel = count\nprint(label)\n",
+              "tests": [
+                {
+                  "name": "big-o-01-prints",
+                  "description": "The printed value is the result after this step counts the trips of a nested loo",
+                  "expected_stdout": "162\n",
+                  "required": true
+                }
+              ]
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "big-o-practice-1",
-      "title": "4. Early Exit Search (Practice)",
-      "description": "Implement `first_index(items, pred)` returning the first index where pred is true, or -1 — best case O(1). The test checks that `first_index([1, 3, 5], lambda x: x % 2 == 0)` equals `-1`; `first_index([1, 4, 5], lambda x: x % 2 == 0)` equals `1`.",
+      "title": "Practice Early Exit Search",
+      "description": "Implement first_index(items, pred) returning the first index where pred is true, or -1 — best case O(1). The test checks that first_index([1, 3, 5], lambda x: x % 2 == 0) equals -1; first_index([1, 4, 5], lambda x: x % 2 == 0) equals 1.",
       "order": 4,
       "difficulty": "intermediate",
       "duration_minutes": 6,
@@ -161,7 +633,7 @@
       ],
       "prerequisites": [],
       "learning_objectives": [
-        "Stop scanning once a match is found"
+        "This step stops the scan at the first match, using items and 1."
       ],
       "starter_code": "def first_index(items, pred):\n    # TODO: return first i where pred(items[i]) else -1\n    pass\n",
       "solution_code": "def first_index(items, pred):\n    for i, item in enumerate(items):\n        if pred(item):\n            return i\n    return -1\n",
@@ -182,12 +654,178 @@
         "url": "https://docs.python.org/3/library/functions.html#enumerate",
         "license": "Python documentation license (PSF)"
       },
-      "xp_reward": 15
+      "xp_reward": 15,
+      "player_mode": "micro",
+      "sublessons": [
+        {
+          "id": "big-o-practice-1-micro",
+          "title": "Practice Early Exit Search",
+          "description": "",
+          "order": 1,
+          "exercises": [
+            {
+              "id": "big-o-practice-1-teach",
+              "type": "teach",
+              "question": "This step stops the scan at the first match, using items and 1.",
+              "hints": [
+                "Follow the job, which stops the scan at the first match.",
+                "break leaves the scan at the first match.",
+                "if item == 54:"
+              ],
+              "explanation": "This step stops the scan at the first match, using items and 1.",
+              "xp_reward": 0,
+              "worked_example": "if item == 54:"
+            },
+            {
+              "id": "big-o-practice-1-mcq",
+              "type": "mcq",
+              "question": "Mark the choice that stops the scan at the first match when the code mentions items and 1.",
+              "hints": [
+                "Follow the job, which stops the scan at the first match.",
+                "break leaves the scan at the first match.",
+                "if item == target: break"
+              ],
+              "explanation": "break leaves the scan at the first match.",
+              "xp_reward": 10,
+              "options": [
+                "pass",
+                "item == items",
+                "return found",
+                "if item == target: break"
+              ],
+              "correct_answer": "if item == target: break"
+            },
+            {
+              "id": "big-o-practice-1-predict",
+              "type": "output_prediction",
+              "question": "After items and 1, the code stops the scan at the first match, and the correct choice is the printed value.",
+              "hints": [
+                "Follow the job, which stops the scan at the first match.",
+                "break leaves the scan at the first match.",
+                "3"
+              ],
+              "explanation": "break leaves the scan at the first match.",
+              "xp_reward": 10,
+              "starter_code": "items = [2, 4, 54, 9]\nfound = 0\nfor item in items:\n    found = found + 1\n    if item == 54:\n        break\nprint(found)\n",
+              "options": [
+                "1",
+                "none",
+                "3",
+                "0"
+              ],
+              "correct_answer": "3"
+            },
+            {
+              "id": "big-o-practice-1-order",
+              "type": "ordering",
+              "question": "The finished line stops the scan at the first match, so place its pieces in order for items and 1.",
+              "hints": [
+                "Follow the job, which stops the scan at the first match.",
+                "break leaves the scan at the first match.",
+                "if item == target: break"
+              ],
+              "explanation": "break leaves the scan at the first match.",
+              "xp_reward": 10,
+              "options": [
+                "if",
+                "item",
+                "==",
+                "target:",
+                "break",
+                "continue"
+              ],
+              "correct_answer": [
+                "if",
+                "item",
+                "==",
+                "target:",
+                "break"
+              ]
+            },
+            {
+              "id": "big-o-practice-1-fill",
+              "type": "fill_blank",
+              "question": "Finish the line that stops the scan at the first match by filling the blank for items and 1.",
+              "hints": [
+                "Follow the job, which stops the scan at the first match.",
+                "break leaves the scan at the first match.",
+                "=="
+              ],
+              "explanation": "break leaves the scan at the first match.",
+              "xp_reward": 10,
+              "starter_code": "if item ___ 54:\n    found = 1\n",
+              "options": [
+                "!=",
+                ">=",
+                "==",
+                "<"
+              ],
+              "correct_answer": "=="
+            },
+            {
+              "id": "big-o-practice-1-bug",
+              "type": "debugging",
+              "question": "Mark the line that breaks the job, which stops the scan at the first match, for items and 1.",
+              "hints": [
+                "Follow the job, which stops the scan at the first match.",
+                "The loop never breaks, so it counts every item.",
+                "Line 5"
+              ],
+              "explanation": "The loop never breaks, so it counts every item.",
+              "xp_reward": 10,
+              "starter_code": "items = [2, 4, 54, 9]\nfound = 0\nfor item in items:\n    found = found + 1\nprint(found)\n",
+              "correct_answer": "5"
+            },
+            {
+              "id": "big-o-practice-1-predict-2",
+              "type": "output_prediction",
+              "question": "Follow the second program, which stops the scan at the first match for items and and choose its output.",
+              "hints": [
+                "Follow the job, which stops the scan at the first match.",
+                "break leaves the scan at the first match.",
+                "1"
+              ],
+              "explanation": "break leaves the scan at the first match.",
+              "xp_reward": 10,
+              "starter_code": "items = [54, 4, 9]\nfound = 0\nfor item in items:\n    found = found + 1\n    if item == 54:\n        break\nprint(found)\n",
+              "options": [
+                "3",
+                "1",
+                "none",
+                "0"
+              ],
+              "correct_answer": "1"
+            },
+            {
+              "id": "big-o-practice-1-write",
+              "type": "code",
+              "question": "Finish the program that stops the scan at the first match by filling the blank for items and 1.",
+              "hints": [
+                "Follow the job, which stops the scan at the first match.",
+                "The printed value is the result after this step stops the scan at the first match.",
+                "label = found"
+              ],
+              "explanation": "The printed value is the result after this step stops the scan at the first match.",
+              "xp_reward": 10,
+              "starter_code": "items = [2, 4, 54, 9]\nfound = 0\nfor item in items:\n    found = found + 1\n    if item == 54:\n        break\nlabel = ___\nprint(label)\n",
+              "solution_code": "items = [2, 4, 54, 9]\nfound = 0\nfor item in items:\n    found = found + 1\n    if item == 54:\n        break\nlabel = found\nprint(label)\n",
+              "tests": [
+                {
+                  "name": "big-o-practice-1-prints",
+                  "description": "The printed value is the result after this step stops the scan at the first matc",
+                  "expected_stdout": "3\n",
+                  "required": true
+                }
+              ]
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "big-o-checkpoint",
-      "title": "5. Unit 1 Checkpoint: Complexity",
-      "description": "Implement `closed_form_sum(n)` returning n*(n+1)//2 — O(1) arithmetic. The test checks that `closed_form_sum(100)` equals `5050`.",
+      "title": "Practice Unit 1 Checkpoint Complexity",
+      "description": "Implement closed_form_sum(n) returning n*(n+1)//2 — O(1) arithmetic. The test checks that closed_form_sum(100) equals 5050.",
       "order": 5,
       "difficulty": "intermediate",
       "duration_minutes": 10,
@@ -199,7 +837,7 @@
       ],
       "prerequisites": [],
       "learning_objectives": [
-        "Prefer O(1) closed form when available"
+        "This step squares the input to price a nested scan, using ops and 22."
       ],
       "starter_code": "def closed_form_sum(n):\n    # TODO: return n*(n+1)//2\n    pass\n",
       "solution_code": "def closed_form_sum(n):\n    return n * (n + 1) // 2\n",
@@ -220,7 +858,169 @@
         "url": "https://docs.python.org/3/tutorial/introduction.html#numbers",
         "license": "Python documentation license (PSF)"
       },
-      "xp_reward": 40
+      "xp_reward": 40,
+      "player_mode": "micro",
+      "sublessons": [
+        {
+          "id": "big-o-checkpoint-micro",
+          "title": "Practice Unit 1 Checkpoint Complexity",
+          "description": "",
+          "order": 1,
+          "exercises": [
+            {
+              "id": "big-o-checkpoint-teach",
+              "type": "teach",
+              "question": "This step squares the input to price a nested scan, using ops and 22.",
+              "hints": [
+                "Follow the job, which squares the input to price a nested scan.",
+                "limit * limit is the nested cost.",
+                "ops = 22 * 22"
+              ],
+              "explanation": "This step squares the input to price a nested scan, using ops and 22.",
+              "xp_reward": 0,
+              "worked_example": "ops = 22 * 22"
+            },
+            {
+              "id": "big-o-checkpoint-mcq",
+              "type": "mcq",
+              "question": "Select the line that squares the input to price a nested scan, the one that belongs with ops and 22.",
+              "hints": [
+                "Follow the job, which squares the input to price a nested scan.",
+                "limit * limit is the nested cost.",
+                "ops = limit * limit"
+              ],
+              "explanation": "limit * limit is the nested cost.",
+              "xp_reward": 10,
+              "options": [
+                "ops == limit",
+                "return ops",
+                "pass",
+                "ops = limit * limit"
+              ],
+              "correct_answer": "ops = limit * limit"
+            },
+            {
+              "id": "big-o-checkpoint-predict",
+              "type": "output_prediction",
+              "question": "Follow the code that squares the input to price a nested scan for ops and 22, then choose the displayed value.",
+              "hints": [
+                "Follow the job, which squares the input to price a nested scan.",
+                "limit * limit is the nested cost.",
+                "484"
+              ],
+              "explanation": "limit * limit is the nested cost.",
+              "xp_reward": 10,
+              "starter_code": "ops = 22 * 22\nprint(ops)\n",
+              "options": [
+                "506",
+                "none",
+                "0",
+                "484"
+              ],
+              "correct_answer": "484"
+            },
+            {
+              "id": "big-o-checkpoint-order",
+              "type": "ordering",
+              "question": "Order the pieces so the line squares the input to price a nested scan for ops and 22.",
+              "hints": [
+                "Follow the job, which squares the input to price a nested scan.",
+                "limit * limit is the nested cost.",
+                "ops = limit*limit"
+              ],
+              "explanation": "limit * limit is the nested cost.",
+              "xp_reward": 10,
+              "options": [
+                "ops",
+                "=",
+                "limit*limit",
+                "=="
+              ],
+              "correct_answer": [
+                "ops",
+                "=",
+                "limit*limit"
+              ]
+            },
+            {
+              "id": "big-o-checkpoint-fill",
+              "type": "fill_blank",
+              "question": "Supply the missing piece so the line squares the input to price a nested scan for ops and 22.",
+              "hints": [
+                "Follow the job, which squares the input to price a nested scan.",
+                "limit * limit is the nested cost.",
+                "*"
+              ],
+              "explanation": "limit * limit is the nested cost.",
+              "xp_reward": 10,
+              "starter_code": "ops = limit ___ limit\n",
+              "options": [
+                "+",
+                "==",
+                "-",
+                "*"
+              ],
+              "correct_answer": "*"
+            },
+            {
+              "id": "big-o-checkpoint-bug",
+              "type": "debugging",
+              "question": "The wrong line is the one that misses the job, which squares the input to price a nested scan, for ops and 22.",
+              "hints": [
+                "Follow the job, which squares the input to price a nested scan.",
+                "The cost adds the limit instead of squaring it.",
+                "Line 1"
+              ],
+              "explanation": "The cost adds the limit instead of squaring it.",
+              "xp_reward": 10,
+              "starter_code": "ops = 22 + 22\nprint(ops)\n",
+              "correct_answer": "1"
+            },
+            {
+              "id": "big-o-checkpoint-predict-2",
+              "type": "output_prediction",
+              "question": "A new input still has code that squares the input to price a nested scan for ops and 22, and the correct choice is what it prints.",
+              "hints": [
+                "Follow the job, which squares the input to price a nested scan.",
+                "limit * limit is the nested cost.",
+                "506"
+              ],
+              "explanation": "limit * limit is the nested cost.",
+              "xp_reward": 10,
+              "starter_code": "ops = 22 * 23\nprint(ops)\n",
+              "options": [
+                "484",
+                "none",
+                "506",
+                "0"
+              ],
+              "correct_answer": "506"
+            },
+            {
+              "id": "big-o-checkpoint-write",
+              "type": "code",
+              "question": "The blank is the missing piece of the program that squares the input to price a nested scan for ops and 22.",
+              "hints": [
+                "Follow the job, which squares the input to price a nested scan.",
+                "The printed value is the result after this step squares the input to price a nested scan.",
+                "label = ops"
+              ],
+              "explanation": "The printed value is the result after this step squares the input to price a nested scan.",
+              "xp_reward": 10,
+              "starter_code": "ops = 22 * 22\nlabel = ___\nprint(label)\n",
+              "solution_code": "ops = 22 * 22\nlabel = ops\nprint(label)\n",
+              "tests": [
+                {
+                  "name": "big-o-checkpoint-prints",
+                  "description": "The printed value is the result after this step squares the input to price a nes",
+                  "expected_stdout": "484\n",
+                  "required": true
+                }
+              ]
+            }
+          ]
+        }
+      ]
     }
   ]
 }

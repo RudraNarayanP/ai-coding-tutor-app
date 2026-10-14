@@ -14,8 +14,8 @@
   "lessons": [
     {
       "id": "prob-uniform",
-      "title": "1. Uniform Probability",
-      "description": "Implement `uniform_prob(n_favorable, n_total)` returning favorable/total as float. The test checks that `uniform_prob(1, 6)` equals `1/6`; `uniform_prob(0, 10)` equals `0.0`.",
+      "title": "Practice Uniform Probability",
+      "description": "Implement uniform_prob(n_favorable, n_total) returning favorable/total as float. The test checks that uniform_prob(1, 6) equals 1/6; uniform_prob(0, 10) equals 0.0.",
       "order": 6,
       "difficulty": "intermediate",
       "duration_minutes": 5,
@@ -27,7 +27,7 @@
       ],
       "prerequisites": [],
       "learning_objectives": [
-        "Compute classical probability"
+        "This step computes one share of a uniform chance, using faces and 4."
       ],
       "starter_code": "def uniform_prob(n_favorable, n_total):\n    # TODO\n    pass\n",
       "solution_code": "def uniform_prob(n_favorable, n_total):\n    if n_total == 0:\n        raise ValueError('n_total must be > 0')\n    return n_favorable / n_total\n",
@@ -48,12 +48,178 @@
         "url": "https://d2l.ai/chapter_preliminaries/probability.html",
         "license": "Apache 2.0 (Dive into Deep Learning book)"
       },
-      "xp_reward": 10
+      "xp_reward": 10,
+      "player_mode": "micro",
+      "sublessons": [
+        {
+          "id": "prob-uniform-micro",
+          "title": "Practice Uniform Probability",
+          "description": "",
+          "order": 1,
+          "exercises": [
+            {
+              "id": "prob-uniform-teach",
+              "type": "teach",
+              "question": "This step computes one share of a uniform chance, using faces and 4.",
+              "hints": [
+                "Follow the job, which computes one share of a uniform chance.",
+                "One outcome out of every face is 1 divided by the count.",
+                "1 / faces"
+              ],
+              "explanation": "This step computes one share of a uniform chance, using faces and 4.",
+              "xp_reward": 0,
+              "worked_example": "1 / faces"
+            },
+            {
+              "id": "prob-uniform-mcq",
+              "type": "mcq",
+              "question": "Choose the line that computes one share of a uniform chance, which is the line that fits faces and 4.",
+              "hints": [
+                "Follow the job, which computes one share of a uniform chance.",
+                "One outcome out of every face is 1 divided by the count.",
+                "1 / faces"
+              ],
+              "explanation": "One outcome out of every face is 1 divided by the count.",
+              "xp_reward": 10,
+              "options": [
+                "pass",
+                "return faces",
+                "1 / faces",
+                "faces == 1"
+              ],
+              "correct_answer": "1 / faces"
+            },
+            {
+              "id": "prob-uniform-predict",
+              "type": "output_prediction",
+              "question": "Read the code that computes one share of a uniform chance for faces and 4, and choose the value it prints.",
+              "hints": [
+                "Follow the job, which computes one share of a uniform chance.",
+                "One outcome out of every face is 1 divided by the count.",
+                "0.0172"
+              ],
+              "explanation": "One outcome out of every face is 1 divided by the count.",
+              "xp_reward": 10,
+              "starter_code": "faces = 58\nprint(round(1 / faces, 4))\n",
+              "options": [
+                "0.0164",
+                "0.0172",
+                "none",
+                "0"
+              ],
+              "correct_answer": "0.0172"
+            },
+            {
+              "id": "prob-uniform-order",
+              "type": "ordering",
+              "question": "Arrange the pieces of the line that computes one share of a uniform chance, left to right, for faces and 4.",
+              "hints": [
+                "Follow the job, which computes one share of a uniform chance.",
+                "One outcome out of every face is 1 divided by the count.",
+                "chance = 1 / faces"
+              ],
+              "explanation": "One outcome out of every face is 1 divided by the count.",
+              "xp_reward": 10,
+              "options": [
+                "chance",
+                "=",
+                "1",
+                "/",
+                "faces",
+                "*"
+              ],
+              "correct_answer": [
+                "chance",
+                "=",
+                "1",
+                "/",
+                "faces"
+              ]
+            },
+            {
+              "id": "prob-uniform-fill",
+              "type": "fill_blank",
+              "question": "Fill the blank so the line computes one share of a uniform chance for faces and 4.",
+              "hints": [
+                "Follow the job, which computes one share of a uniform chance.",
+                "One outcome out of every face is 1 divided by the count.",
+                "/"
+              ],
+              "explanation": "One outcome out of every face is 1 divided by the count.",
+              "xp_reward": 10,
+              "starter_code": "chance = 1 ___ faces\n",
+              "options": [
+                "*",
+                "+",
+                "/",
+                "-"
+              ],
+              "correct_answer": "/"
+            },
+            {
+              "id": "prob-uniform-bug",
+              "type": "debugging",
+              "question": "Find the line that misses the job, which computes one share of a uniform chance, for faces and 4.",
+              "hints": [
+                "Follow the job, which computes one share of a uniform chance.",
+                "The print shows the count of faces, not one share.",
+                "Line 2"
+              ],
+              "explanation": "The print shows the count of faces, not one share.",
+              "xp_reward": 10,
+              "starter_code": "faces = 58\nprint(faces)\n",
+              "correct_answer": "2"
+            },
+            {
+              "id": "prob-uniform-predict-2",
+              "type": "output_prediction",
+              "question": "On the new input, the code still computes one share of a uniform chance for faces and 4, so choose what it prints.",
+              "hints": [
+                "Follow the job, which computes one share of a uniform chance.",
+                "One outcome out of every face is 1 divided by the count.",
+                "0.0164"
+              ],
+              "explanation": "One outcome out of every face is 1 divided by the count.",
+              "xp_reward": 10,
+              "starter_code": "faces = 61\nprint(round(1 / faces, 4))\n",
+              "options": [
+                "0.0172",
+                "none",
+                "0",
+                "0.0164"
+              ],
+              "correct_answer": "0.0164"
+            },
+            {
+              "id": "prob-uniform-write",
+              "type": "code",
+              "question": "Fill the blank so the program computes one share of a uniform chance, and the print shows that result for faces and 4.",
+              "hints": [
+                "Follow the job, which computes one share of a uniform chance.",
+                "The printed value is the result after this step computes one share of a uniform chance.",
+                "label = round(1 / faces, 4)"
+              ],
+              "explanation": "The printed value is the result after this step computes one share of a uniform chance.",
+              "xp_reward": 10,
+              "starter_code": "faces = 58\nlabel = ___\nprint(label)\n",
+              "solution_code": "faces = 58\nlabel = round(1 / faces, 4)\nprint(label)\n",
+              "tests": [
+                {
+                  "name": "prob-uniform-prints",
+                  "description": "The printed value is the result after this step computes one share of a uniform ",
+                  "expected_stdout": "0.0172\n",
+                  "required": true
+                }
+              ]
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "prob-complement",
-      "title": "2. Complement Rule",
-      "description": "Implement `prob_at_least_one(p_single, n)` = 1 - (1-p)^n for independent trials. The test checks that `prob_at_least_one(0.5, 1)` equals `0.5`; `prob_at_least_one(0.5, 2)` equals `0.75`.",
+      "title": "Practice Complement Rule",
+      "description": "Implement prob_at_least_one(p_single, n) = 1 - (1-p)^n for independent trials. The test checks that prob_at_least_one(0.5, 1) equals 0.5; prob_at_least_one(0.5, 2) equals 0.75.",
       "order": 7,
       "difficulty": "intermediate",
       "duration_minutes": 5,
@@ -65,7 +231,7 @@
       ],
       "prerequisites": [],
       "learning_objectives": [
-        "Apply complement rule"
+        "This step subtracts the chance from one, using chance and 2."
       ],
       "starter_code": "def prob_at_least_one(p_single, n):\n    # TODO\n    pass\n",
       "solution_code": "def prob_at_least_one(p_single, n):\n    return 1.0 - (1.0 - p_single) ** n\n",
@@ -86,12 +252,178 @@
         "url": "https://d2l.ai/chapter_preliminaries/probability.html",
         "license": "Apache 2.0 (Dive into Deep Learning book)"
       },
-      "xp_reward": 10
+      "xp_reward": 10,
+      "player_mode": "micro",
+      "sublessons": [
+        {
+          "id": "prob-complement-micro",
+          "title": "Practice Complement Rule",
+          "description": "",
+          "order": 1,
+          "exercises": [
+            {
+              "id": "prob-complement-teach",
+              "type": "teach",
+              "question": "This step subtracts the chance from one, using chance and 2.",
+              "hints": [
+                "Follow the job, which subtracts the chance from one.",
+                "The complement is one minus the chance.",
+                "1 - chance"
+              ],
+              "explanation": "This step subtracts the chance from one, using chance and 2.",
+              "xp_reward": 0,
+              "worked_example": "1 - chance"
+            },
+            {
+              "id": "prob-complement-mcq",
+              "type": "mcq",
+              "question": "Mark the choice that subtracts the chance from one when the code mentions chance and 2.",
+              "hints": [
+                "Follow the job, which subtracts the chance from one.",
+                "The complement is one minus the chance.",
+                "1 - chance"
+              ],
+              "explanation": "The complement is one minus the chance.",
+              "xp_reward": 10,
+              "options": [
+                "chance == 1",
+                "return chance",
+                "pass",
+                "1 - chance"
+              ],
+              "correct_answer": "1 - chance"
+            },
+            {
+              "id": "prob-complement-predict",
+              "type": "output_prediction",
+              "question": "After chance and 2, the code subtracts the chance from one, and the correct choice is the printed value.",
+              "hints": [
+                "Follow the job, which subtracts the chance from one.",
+                "The complement is one minus the chance.",
+                "0.54"
+              ],
+              "explanation": "The complement is one minus the chance.",
+              "xp_reward": 10,
+              "starter_code": "chance = 46 / 100\nprint(round(1 - chance, 2))\n",
+              "options": [
+                "0.51",
+                "none",
+                "0",
+                "0.54"
+              ],
+              "correct_answer": "0.54"
+            },
+            {
+              "id": "prob-complement-order",
+              "type": "ordering",
+              "question": "The finished line subtracts the chance from one, so place its pieces in order for chance and 2.",
+              "hints": [
+                "Follow the job, which subtracts the chance from one.",
+                "The complement is one minus the chance.",
+                "other = 1 - chance"
+              ],
+              "explanation": "The complement is one minus the chance.",
+              "xp_reward": 10,
+              "options": [
+                "other",
+                "=",
+                "1",
+                "-",
+                "chance",
+                "+"
+              ],
+              "correct_answer": [
+                "other",
+                "=",
+                "1",
+                "-",
+                "chance"
+              ]
+            },
+            {
+              "id": "prob-complement-fill",
+              "type": "fill_blank",
+              "question": "Finish the line that subtracts the chance from one by filling the blank for chance and 2.",
+              "hints": [
+                "Follow the job, which subtracts the chance from one.",
+                "The complement is one minus the chance.",
+                "-"
+              ],
+              "explanation": "The complement is one minus the chance.",
+              "xp_reward": 10,
+              "starter_code": "other = 1 ___ chance\n",
+              "options": [
+                "+",
+                "*",
+                "/",
+                "-"
+              ],
+              "correct_answer": "-"
+            },
+            {
+              "id": "prob-complement-bug",
+              "type": "debugging",
+              "question": "Mark the line that breaks the job, which subtracts the chance from one, for chance and.",
+              "hints": [
+                "Follow the job, which subtracts the chance from one.",
+                "The print repeats the original chance.",
+                "Line 2"
+              ],
+              "explanation": "The print repeats the original chance.",
+              "xp_reward": 10,
+              "starter_code": "chance = 46 / 100\nprint(round(chance, 2))\n",
+              "correct_answer": "2"
+            },
+            {
+              "id": "prob-complement-predict-2",
+              "type": "output_prediction",
+              "question": "Follow the second program, which subtracts the chance from one for chance and 2, and choose its output.",
+              "hints": [
+                "Follow the job, which subtracts the chance from one.",
+                "The complement is one minus the chance.",
+                "0.51"
+              ],
+              "explanation": "The complement is one minus the chance.",
+              "xp_reward": 10,
+              "starter_code": "chance = 49 / 100\nprint(round(1 - chance, 2))\n",
+              "options": [
+                "0.54",
+                "0",
+                "none",
+                "0.51"
+              ],
+              "correct_answer": "0.51"
+            },
+            {
+              "id": "prob-complement-write",
+              "type": "code",
+              "question": "Finish the program that subtracts the chance from one by filling the blank for chance and 2.",
+              "hints": [
+                "Follow the job, which subtracts the chance from one.",
+                "The printed value is the result after this step subtracts the chance from one.",
+                "label = round(1 - chance, 2)"
+              ],
+              "explanation": "The printed value is the result after this step subtracts the chance from one.",
+              "xp_reward": 10,
+              "starter_code": "chance = 46 / 100\nlabel = ___\nprint(label)\n",
+              "solution_code": "chance = 46 / 100\nlabel = round(1 - chance, 2)\nprint(label)\n",
+              "tests": [
+                {
+                  "name": "prob-complement-prints",
+                  "description": "The printed value is the result after this step subtracts the chance from one.",
+                  "expected_stdout": "0.54\n",
+                  "required": true
+                }
+              ]
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "prob-conditional",
-      "title": "3. Conditional Probability",
-      "description": "Implement `conditional(p_a_and_b, p_b)` = P(A∩B)/P(B). The test checks that `conditional(0.1, 0.5)` equals `0.2`.",
+      "title": "Practice Conditional Probability",
+      "description": "Implement conditional(p_a_and_b, p_b) = P(A∩B)/P(B). The test checks that conditional(0.1, 0.5) equals 0.2.",
       "order": 8,
       "difficulty": "intermediate",
       "duration_minutes": 8,
@@ -103,7 +435,7 @@
       ],
       "prerequisites": [],
       "learning_objectives": [
-        "Compute conditional probability"
+        "This step divides the joint count by the given count, using joint and 2."
       ],
       "starter_code": "def conditional(p_a_and_b, p_b):\n    # TODO\n    pass\n",
       "solution_code": "def conditional(p_a_and_b, p_b):\n    if p_b == 0:\n        raise ValueError('P(B) must be > 0')\n    return p_a_and_b / p_b\n",
@@ -124,12 +456,178 @@
         "url": "https://d2l.ai/chapter_preliminaries/probability.html",
         "license": "Apache 2.0 (Dive into Deep Learning book)"
       },
-      "xp_reward": 25
+      "xp_reward": 25,
+      "player_mode": "micro",
+      "sublessons": [
+        {
+          "id": "prob-conditional-micro",
+          "title": "Practice Conditional Probability",
+          "description": "",
+          "order": 1,
+          "exercises": [
+            {
+              "id": "prob-conditional-teach",
+              "type": "teach",
+              "question": "This step divides the joint count by the given count, using joint and 2.",
+              "hints": [
+                "Follow the job, which divides the joint count by the given count.",
+                "Conditional chance is the joint count divided by the given count.",
+                "joint / given"
+              ],
+              "explanation": "This step divides the joint count by the given count, using joint and 2.",
+              "xp_reward": 0,
+              "worked_example": "joint / given"
+            },
+            {
+              "id": "prob-conditional-mcq",
+              "type": "mcq",
+              "question": "Mark the choice that divides the joint count by the given count when the code mentions joint and 2.",
+              "hints": [
+                "Follow the job, which divides the joint count by the given count.",
+                "Conditional chance is the joint count divided by the given count.",
+                "joint / given"
+              ],
+              "explanation": "Conditional chance is the joint count divided by the given count.",
+              "xp_reward": 10,
+              "options": [
+                "return joint",
+                "pass",
+                "joint / given",
+                "joint == given"
+              ],
+              "correct_answer": "joint / given"
+            },
+            {
+              "id": "prob-conditional-predict",
+              "type": "output_prediction",
+              "question": "After joint and 2, the code divides the joint count by the given count, and the correct choice is the printed value.",
+              "hints": [
+                "Follow the job, which divides the joint count by the given count.",
+                "Conditional chance is the joint count divided by the given count.",
+                "0.3"
+              ],
+              "explanation": "Conditional chance is the joint count divided by the given count.",
+              "xp_reward": 10,
+              "starter_code": "joint = 3\ngiven = 10\nprint(round(joint / given, 2))\n",
+              "options": [
+                "0.6",
+                "0",
+                "none",
+                "0.3"
+              ],
+              "correct_answer": "0.3"
+            },
+            {
+              "id": "prob-conditional-order",
+              "type": "ordering",
+              "question": "The finished line divides the joint count by the given count, so place its pieces in order for joint and 2.",
+              "hints": [
+                "Follow the job, which divides the joint count by the given count.",
+                "Conditional chance is the joint count divided by the given count.",
+                "chance = joint / given"
+              ],
+              "explanation": "Conditional chance is the joint count divided by the given count.",
+              "xp_reward": 10,
+              "options": [
+                "chance",
+                "=",
+                "joint",
+                "/",
+                "given",
+                "*"
+              ],
+              "correct_answer": [
+                "chance",
+                "=",
+                "joint",
+                "/",
+                "given"
+              ]
+            },
+            {
+              "id": "prob-conditional-fill",
+              "type": "fill_blank",
+              "question": "Finish the line that divides the joint count by the given count by filling the blank for joint and 2.",
+              "hints": [
+                "Follow the job, which divides the joint count by the given count.",
+                "Conditional chance is the joint count divided by the given count.",
+                "/"
+              ],
+              "explanation": "Conditional chance is the joint count divided by the given count.",
+              "xp_reward": 10,
+              "starter_code": "chance = joint ___ given\n",
+              "options": [
+                "*",
+                "+",
+                "-",
+                "/"
+              ],
+              "correct_answer": "/"
+            },
+            {
+              "id": "prob-conditional-bug",
+              "type": "debugging",
+              "question": "Mark the line that breaks the job, which divides the joint count by the given count, for joint and 2.",
+              "hints": [
+                "Follow the job, which divides the joint count by the given count.",
+                "The line multiplies the counts instead of dividing.",
+                "Line 3"
+              ],
+              "explanation": "The line multiplies the counts instead of dividing.",
+              "xp_reward": 10,
+              "starter_code": "joint = 3\ngiven = 10\nprint(joint * given)\n",
+              "correct_answer": "3"
+            },
+            {
+              "id": "prob-conditional-predict-2",
+              "type": "output_prediction",
+              "question": "Follow the second program, which divides the joint count by the given count for joint and 2, and choose its output.",
+              "hints": [
+                "Follow the job, which divides the joint count by the given count.",
+                "Conditional chance is the joint count divided by the given count.",
+                "0.6"
+              ],
+              "explanation": "Conditional chance is the joint count divided by the given count.",
+              "xp_reward": 10,
+              "starter_code": "joint = 3\ngiven = 5\nprint(round(joint / given, 2))\n",
+              "options": [
+                "none",
+                "0.3",
+                "0.6",
+                "0"
+              ],
+              "correct_answer": "0.6"
+            },
+            {
+              "id": "prob-conditional-write",
+              "type": "code",
+              "question": "Finish the program that divides the joint count by the given count by filling the blank for joint and 2.",
+              "hints": [
+                "Follow the job, which divides the joint count by the given count.",
+                "The printed value is the result after this step divides the joint count by the given count.",
+                "label = round(joint / given, 2)"
+              ],
+              "explanation": "The printed value is the result after this step divides the joint count by the given count.",
+              "xp_reward": 10,
+              "starter_code": "joint = 3\ngiven = 10\nlabel = ___\nprint(label)\n",
+              "solution_code": "joint = 3\ngiven = 10\nlabel = round(joint / given, 2)\nprint(label)\n",
+              "tests": [
+                {
+                  "name": "prob-conditional-prints",
+                  "description": "The printed value is the result after this step divides the joint count by the g",
+                  "expected_stdout": "0.3\n",
+                  "required": true
+                }
+              ]
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "prob-bayes",
-      "title": "4. Bayes Update (Practice)",
-      "description": "Implement `bayes(prior, likelihood, evidence)` = prior*likelihood/evidence. The test checks that `bayes(0.01, 0.9, 0.1)` equals `0.09`.",
+      "title": "Practice Bayes Update",
+      "description": "Implement bayes(prior, likelihood, evidence) = prior*likelihood/evidence. The test checks that bayes(0.01, 0.9, 0.1) equals 0.09.",
       "order": 9,
       "difficulty": "intermediate",
       "duration_minutes": 6,
@@ -141,7 +639,7 @@
       ],
       "prerequisites": [],
       "learning_objectives": [
-        "Apply Bayes rule"
+        "This step weights the prior by the likelihood, using prior and 2."
       ],
       "starter_code": "def bayes(prior, likelihood, evidence):\n    # TODO\n    pass\n",
       "solution_code": "def bayes(prior, likelihood, evidence):\n    return (prior * likelihood) / evidence\n",
@@ -162,12 +660,178 @@
         "url": "https://d2l.ai/chapter_preliminaries/probability.html",
         "license": "Apache 2.0 (Dive into Deep Learning book)"
       },
-      "xp_reward": 15
+      "xp_reward": 15,
+      "player_mode": "micro",
+      "sublessons": [
+        {
+          "id": "prob-bayes-micro",
+          "title": "Practice Bayes Update",
+          "description": "",
+          "order": 1,
+          "exercises": [
+            {
+              "id": "prob-bayes-teach",
+              "type": "teach",
+              "question": "This step weights the prior by the likelihood, using prior and 2.",
+              "hints": [
+                "Follow the job, which weights the prior by the likelihood.",
+                "The numerator is the prior times the likelihood.",
+                "prior * like"
+              ],
+              "explanation": "This step weights the prior by the likelihood, using prior and 2.",
+              "xp_reward": 0,
+              "worked_example": "prior * like"
+            },
+            {
+              "id": "prob-bayes-mcq",
+              "type": "mcq",
+              "question": "Mark the choice that weights the prior by the likelihood when the code mentions prior and 2.",
+              "hints": [
+                "Follow the job, which weights the prior by the likelihood.",
+                "The numerator is the prior times the likelihood.",
+                "prior * like"
+              ],
+              "explanation": "The numerator is the prior times the likelihood.",
+              "xp_reward": 10,
+              "options": [
+                "prior == like",
+                "pass",
+                "prior * like",
+                "return prior"
+              ],
+              "correct_answer": "prior * like"
+            },
+            {
+              "id": "prob-bayes-predict",
+              "type": "output_prediction",
+              "question": "After prior and 2, the code weights the prior by the likelihood, and the correct choice is the printed value.",
+              "hints": [
+                "Follow the job, which weights the prior by the likelihood.",
+                "The numerator is the prior times the likelihood.",
+                "0.8"
+              ],
+              "explanation": "The numerator is the prior times the likelihood.",
+              "xp_reward": 10,
+              "starter_code": "prior = 1\nlike = 4\nopposite = 1\nprint(round((prior * like) / (prior * like + opposite), 2))\n",
+              "options": [
+                "none",
+                "0.25",
+                "0.8",
+                "0"
+              ],
+              "correct_answer": "0.8"
+            },
+            {
+              "id": "prob-bayes-order",
+              "type": "ordering",
+              "question": "The finished line weights the prior by the likelihood, so place its pieces in order for prior and 2.",
+              "hints": [
+                "Follow the job, which weights the prior by the likelihood.",
+                "The numerator is the prior times the likelihood.",
+                "top = prior * like"
+              ],
+              "explanation": "The numerator is the prior times the likelihood.",
+              "xp_reward": 10,
+              "options": [
+                "top",
+                "=",
+                "prior",
+                "*",
+                "like",
+                "+"
+              ],
+              "correct_answer": [
+                "top",
+                "=",
+                "prior",
+                "*",
+                "like"
+              ]
+            },
+            {
+              "id": "prob-bayes-fill",
+              "type": "fill_blank",
+              "question": "Finish the line that weights the prior by the likelihood by filling the blank for prior and 2.",
+              "hints": [
+                "Follow the job, which weights the prior by the likelihood.",
+                "The numerator is the prior times the likelihood.",
+                "*"
+              ],
+              "explanation": "The numerator is the prior times the likelihood.",
+              "xp_reward": 10,
+              "starter_code": "top = prior ___ like\n",
+              "options": [
+                "+",
+                "-",
+                "*",
+                "/"
+              ],
+              "correct_answer": "*"
+            },
+            {
+              "id": "prob-bayes-bug",
+              "type": "debugging",
+              "question": "Mark the line that breaks the job, which weights the prior by the likelihood, for prior and 2.",
+              "hints": [
+                "Follow the job, which weights the prior by the likelihood.",
+                "The line adds the prior and the likelihood.",
+                "Line 3"
+              ],
+              "explanation": "The line adds the prior and the likelihood.",
+              "xp_reward": 10,
+              "starter_code": "prior = 1\nlike = 4\nprint(prior + like)\n",
+              "correct_answer": "3"
+            },
+            {
+              "id": "prob-bayes-predict-2",
+              "type": "output_prediction",
+              "question": "Follow the second program, which weights the prior by the likelihood for prior and 2, and choose its output.",
+              "hints": [
+                "Follow the job, which weights the prior by the likelihood.",
+                "The numerator is the prior times the likelihood.",
+                "0.25"
+              ],
+              "explanation": "The numerator is the prior times the likelihood.",
+              "xp_reward": 10,
+              "starter_code": "prior = 1\nlike = 1\nopposite = 3\nprint(round((prior * like) / (prior * like + opposite), 2))\n",
+              "options": [
+                "0.8",
+                "0.25",
+                "none",
+                "0"
+              ],
+              "correct_answer": "0.25"
+            },
+            {
+              "id": "prob-bayes-write",
+              "type": "code",
+              "question": "Finish the program that weights the prior by the likelihood by filling the blank for prior and 2.",
+              "hints": [
+                "Follow the job, which weights the prior by the likelihood.",
+                "The printed value is the result after this step weights the prior by the likelihood.",
+                "label = round((prior * like) / (prior * like + opposite), 2)"
+              ],
+              "explanation": "The printed value is the result after this step weights the prior by the likelihood.",
+              "xp_reward": 10,
+              "starter_code": "prior = 1\nlike = 4\nopposite = 1\nlabel = ___\nprint(label)\n",
+              "solution_code": "prior = 1\nlike = 4\nopposite = 1\nlabel = round((prior * like) / (prior * like + opposite), 2)\nprint(label)\n",
+              "tests": [
+                {
+                  "name": "prob-bayes-prints",
+                  "description": "The printed value is the result after this step weights the prior by the likelih",
+                  "expected_stdout": "0.8\n",
+                  "required": true
+                }
+              ]
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "prob-checkpoint",
-      "title": "5. Checkpoint: Expected Value",
-      "description": "Implement `expected_value(values, probs)` for discrete outcomes. The test checks that `expected_value([1, 2, 3], [0.2, 0.5, 0.3])` equals `2.1`.",
+      "title": "Practice Checkpoint Expected Value",
+      "description": "Implement expected_value(values, probs) for discrete outcomes. The test checks that expected_value([1, 2, 3], [0.2, 0.5, 0.3]) equals 2.1.",
       "order": 10,
       "difficulty": "intermediate",
       "duration_minutes": 10,
@@ -179,7 +843,7 @@
       ],
       "prerequisites": [],
       "learning_objectives": [
-        "Compute discrete expectation"
+        "This step adds value times chance, using value and 2."
       ],
       "starter_code": "def expected_value(values, probs):\n    # TODO\n    pass\n",
       "solution_code": "def expected_value(values, probs):\n    return sum(v * p for v, p in zip(values, probs))\n",
@@ -200,7 +864,173 @@
         "url": "https://d2l.ai/chapter_preliminaries/probability.html",
         "license": "Apache 2.0 (Dive into Deep Learning book)"
       },
-      "xp_reward": 40
+      "xp_reward": 40,
+      "player_mode": "micro",
+      "sublessons": [
+        {
+          "id": "prob-checkpoint-micro",
+          "title": "Practice Checkpoint Expected Value",
+          "description": "",
+          "order": 1,
+          "exercises": [
+            {
+              "id": "prob-checkpoint-teach",
+              "type": "teach",
+              "question": "This step adds value times chance, using value and 2.",
+              "hints": [
+                "Follow the job, which adds value times chance.",
+                "Expected value adds each value times its chance.",
+                "value * chance"
+              ],
+              "explanation": "This step adds value times chance, using value and 2.",
+              "xp_reward": 0,
+              "worked_example": "value * chance"
+            },
+            {
+              "id": "prob-checkpoint-mcq",
+              "type": "mcq",
+              "question": "Choose the line that adds value times chance, which is the line that fits value and 2.",
+              "hints": [
+                "Follow the job, which adds value times chance.",
+                "Expected value adds each value times its chance.",
+                "value * chance"
+              ],
+              "explanation": "Expected value adds each value times its chance.",
+              "xp_reward": 10,
+              "options": [
+                "value == chance",
+                "return value",
+                "pass",
+                "value * chance"
+              ],
+              "correct_answer": "value * chance"
+            },
+            {
+              "id": "prob-checkpoint-predict",
+              "type": "output_prediction",
+              "question": "Read the code that adds value times chance for value and 2, and choose the value it prints.",
+              "hints": [
+                "Follow the job, which adds value times chance.",
+                "Expected value adds each value times its chance.",
+                "68"
+              ],
+              "explanation": "Expected value adds each value times its chance.",
+              "xp_reward": 10,
+              "starter_code": "value = 34\nchance = 2\nprint(value * chance)\n",
+              "options": [
+                "74",
+                "0",
+                "none",
+                "68"
+              ],
+              "correct_answer": "68"
+            },
+            {
+              "id": "prob-checkpoint-order",
+              "type": "ordering",
+              "question": "Arrange the pieces of the line that adds value times chance, left to right, for value and 2.",
+              "hints": [
+                "Follow the job, which adds value times chance.",
+                "Expected value adds each value times its chance.",
+                "total = value * chance"
+              ],
+              "explanation": "Expected value adds each value times its chance.",
+              "xp_reward": 10,
+              "options": [
+                "total",
+                "=",
+                "value",
+                "*",
+                "chance",
+                "+"
+              ],
+              "correct_answer": [
+                "total",
+                "=",
+                "value",
+                "*",
+                "chance"
+              ]
+            },
+            {
+              "id": "prob-checkpoint-fill",
+              "type": "fill_blank",
+              "question": "Fill the blank so the line adds value times chance for value and 2.",
+              "hints": [
+                "Follow the job, which adds value times chance.",
+                "Expected value adds each value times its chance.",
+                "*"
+              ],
+              "explanation": "Expected value adds each value times its chance.",
+              "xp_reward": 10,
+              "starter_code": "total = value ___ chance\n",
+              "options": [
+                "+",
+                "-",
+                "/",
+                "*"
+              ],
+              "correct_answer": "*"
+            },
+            {
+              "id": "prob-checkpoint-bug",
+              "type": "debugging",
+              "question": "Find the line that misses the job, which adds value times chance, for value and 2.",
+              "hints": [
+                "Follow the job, which adds value times chance.",
+                "The line adds the value and the chance.",
+                "Line 3"
+              ],
+              "explanation": "The line adds the value and the chance.",
+              "xp_reward": 10,
+              "starter_code": "value = 34\nchance = 2\nprint(value + chance)\n",
+              "correct_answer": "3"
+            },
+            {
+              "id": "prob-checkpoint-predict-2",
+              "type": "output_prediction",
+              "question": "On the new input, the code still adds value times chance for value and 2, so choose what it prints.",
+              "hints": [
+                "Follow the job, which adds value times chance.",
+                "Expected value adds each value times its chance.",
+                "74"
+              ],
+              "explanation": "Expected value adds each value times its chance.",
+              "xp_reward": 10,
+              "starter_code": "value = 37\nchance = 2\nprint(value * chance)\n",
+              "options": [
+                "68",
+                "0",
+                "74",
+                "none"
+              ],
+              "correct_answer": "74"
+            },
+            {
+              "id": "prob-checkpoint-write",
+              "type": "code",
+              "question": "Fill the blank so the program adds value times chance, and the print shows that result for value and 2.",
+              "hints": [
+                "Follow the job, which adds value times chance.",
+                "The printed value is the result after this step adds value times chance.",
+                "label = value * chance"
+              ],
+              "explanation": "The printed value is the result after this step adds value times chance.",
+              "xp_reward": 10,
+              "starter_code": "value = 34\nchance = 2\nlabel = ___\nprint(label)\n",
+              "solution_code": "value = 34\nchance = 2\nlabel = value * chance\nprint(label)\n",
+              "tests": [
+                {
+                  "name": "prob-checkpoint-prints",
+                  "description": "The printed value is the result after this step adds value times chance.",
+                  "expected_stdout": "68\n",
+                  "required": true
+                }
+              ]
+            }
+          ]
+        }
+      ]
     }
   ]
 }

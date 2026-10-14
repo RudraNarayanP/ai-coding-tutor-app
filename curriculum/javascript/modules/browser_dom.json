@@ -14,8 +14,8 @@
   "lessons": [
     {
       "id": "js-02",
-      "title": "2. DOM & Event Fundamentals",
-      "description": "The textContent property represents the text content of a DOM node. Implement `createButton(text)` as an arrow function that returns an object modelling a <button> element: { tag: 'button', textContent: text, disabled: false }. Export { createButton }. The test checks all three fields.",
+      "title": "Practice DOM Event Fundamentals",
+      "description": "The textContent property represents the text content of a DOM node. Implement createButton(text) as an arrow function that returns an object modelling a <button> element: { tag: 'button', textContent: text, disabled: false }. Export { createButton }. The test checks all three fields.",
       "order": 2,
       "difficulty": "beginner",
       "duration_minutes": 5,
@@ -40,9 +40,7 @@
         ]
       },
       "learning_objectives": [
-        "Model DOM element state as plain JavaScript objects",
-        "Use textContent as the DOM API defines it",
-        "Return object literals from arrow functions"
+        "This step adds one to the button count when the handler runs, using button and 1."
       ],
       "source": {
         "name": "MDN Web Docs — Node.textContent — 'represents the text content of the node and its descendants'",
@@ -52,25 +50,166 @@
       "xp_reward": 10,
       "sublessons": [
         {
-          "id": "js-02-tf-sub",
-          "title": "Check the idea",
+          "id": "js-02-micro",
+          "title": "Practice DOM Event Fundamentals",
+          "description": "",
           "order": 1,
           "exercises": [
             {
-              "id": "js-02-tf-1",
-              "type": "true_false",
-              "options": [
-                "True",
-                "False"
+              "id": "js-02-teach",
+              "type": "teach",
+              "question": "This step adds one to the button count when the handler runs, using button and 1.",
+              "hints": [
+                "Follow the job, which adds one to the button count when the handler runs.",
+                "button.clicks = button.clicks + 1; records one click.",
+                "onClick(button);"
               ],
-              "question": "In `const createButton = (text) => { tag: 'button' }` the braces hand back that object, so an arrow function never needs parentheses around a returned object literal.",
-              "correct_answer": "False",
-              "explanation": "With braces, `{` opens the function body, so `tag: 'button'` is a labelled statement and the function returns undefined. Wrapping the object in parentheses - `=> ({ tag: 'button' })` - is what makes it the value handed back.",
-              "xp_reward": 10
+              "explanation": "This step adds one to the button count when the handler runs, using button and 1.",
+              "xp_reward": 0,
+              "worked_example": "onClick(button);"
+            },
+            {
+              "id": "js-02-mcq",
+              "type": "mcq",
+              "question": "Mark the choice that adds one to the button count when the handler runs when the code mentions button and 1.",
+              "hints": [
+                "Follow the job, which adds one to the button count when the handler runs.",
+                "button.clicks = button.clicks + 1; records one click.",
+                "button.clicks = button.clicks + 1;"
+              ],
+              "explanation": "button.clicks = button.clicks + 1; records one click.",
+              "xp_reward": 10,
+              "options": [
+                "return button;",
+                "button.clicks == 0;",
+                "console.log(button);",
+                "button.clicks = button.clicks + 1;"
+              ],
+              "correct_answer": "button.clicks = button.clicks + 1;"
+            },
+            {
+              "id": "js-02-predict",
+              "type": "output_prediction",
+              "question": "After button and the code adds one to the button count when the handler runs, and the correct choice is the printed value.",
+              "hints": [
+                "Follow the job, which adds one to the button count when the handler runs.",
+                "button.clicks = button.clicks + 1; records one click.",
+                "1"
+              ],
+              "explanation": "button.clicks = button.clicks + 1; records one click.",
+              "xp_reward": 10,
+              "starter_code": "const button = { clicks: 0 };\nfunction onClick(button) { button.clicks = button.clicks + 1; }\nonClick(button);\nconsole.log(button.clicks);\n",
+              "options": [
+                "none",
+                "2",
+                "1",
+                "0"
+              ],
+              "correct_answer": "1"
+            },
+            {
+              "id": "js-02-order",
+              "type": "ordering",
+              "question": "The finished line adds one to the button count when the handler runs, so place its pieces in order for button and 1.",
+              "hints": [
+                "Follow the job, which adds one to the button count when the handler runs.",
+                "button.clicks = button.clicks + 1; records one click.",
+                "button.clicks = button.clicks+1;"
+              ],
+              "explanation": "button.clicks = button.clicks + 1; records one click.",
+              "xp_reward": 10,
+              "options": [
+                "button.clicks",
+                "=",
+                "button.clicks+1;",
+                "=="
+              ],
+              "correct_answer": [
+                "button.clicks",
+                "=",
+                "button.clicks+1;"
+              ]
+            },
+            {
+              "id": "js-02-fill",
+              "type": "fill_blank",
+              "question": "Finish the line that adds one to the button count when the handler runs by filling the blank for button and 1.",
+              "hints": [
+                "Follow the job, which adds one to the button count when the handler runs.",
+                "button.clicks = button.clicks + 1; records one click.",
+                "+"
+              ],
+              "explanation": "button.clicks = button.clicks + 1; records one click.",
+              "xp_reward": 10,
+              "starter_code": "function onClick(button) { button.clicks = button.clicks ___ 1; }\n",
+              "options": [
+                "-",
+                "==",
+                "+",
+                "*"
+              ],
+              "correct_answer": "+"
+            },
+            {
+              "id": "js-02-bug",
+              "type": "debugging",
+              "question": "Mark the line that breaks the job, which adds one to the button count when the handler runs, for button and 1.",
+              "hints": [
+                "Follow the job, which adds one to the button count when the handler runs.",
+                "The handler subtracts a click instead of recording one.",
+                "Line 2"
+              ],
+              "explanation": "The handler subtracts a click instead of recording one.",
+              "xp_reward": 10,
+              "starter_code": "const button = { clicks: 0 };\nfunction onClick(button) { button.clicks = button.clicks - 1; }\nonClick(button);\nconsole.log(button.clicks);\n",
+              "correct_answer": "2"
+            },
+            {
+              "id": "js-02-predict-2",
+              "type": "output_prediction",
+              "question": "Follow the second program, which adds one to the button count when the handler runs for button and 1, and choose its output.",
+              "hints": [
+                "Follow the job, which adds one to the button count when the handler runs.",
+                "button.clicks = button.clicks + 1; records one click.",
+                "2"
+              ],
+              "explanation": "button.clicks = button.clicks + 1; records one click.",
+              "xp_reward": 10,
+              "starter_code": "const button = { clicks: 0 };\nfunction onClick(button) { button.clicks = button.clicks + 1; }\nonClick(button);\nonClick(button);\nconsole.log(button.clicks);\n",
+              "options": [
+                "1",
+                "2",
+                "none",
+                "0"
+              ],
+              "correct_answer": "2"
+            },
+            {
+              "id": "js-02-write",
+              "type": "code",
+              "question": "Finish the program that adds one to the button count when the handler runs by filling the blank for button and.",
+              "hints": [
+                "Follow the job, which adds one to the button count when the handler runs.",
+                "The printed value is the result after this step adds one to the button count when the handler runs.",
+                "const label = button.clicks;"
+              ],
+              "explanation": "The printed value is the result after this step adds one to the button count when the handler runs.",
+              "xp_reward": 10,
+              "starter_code": "const button = { clicks: 0 };\nfunction onClick(button) { button.clicks = button.clicks + 1; }\nonClick(button);\nconst label = ___;\nconsole.log(label);\n",
+              "solution_code": "const button = { clicks: 0 };\nfunction onClick(button) { button.clicks = button.clicks + 1; }\nonClick(button);\nconst label = button.clicks;\nconsole.log(label);\n",
+              "tests": [
+                {
+                  "name": "js-02-prints",
+                  "description": "The printed value is the result after this step adds one to the button count whe",
+                  "expected_stdout": "1\n",
+                  "required": true
+                }
+              ]
             }
           ]
         }
-      ]
+      ],
+      "player_mode": "micro"
     }
   ]
 }

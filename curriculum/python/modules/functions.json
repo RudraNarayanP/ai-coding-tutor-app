@@ -216,8 +216,8 @@
     },
     {
       "id": "functions-step-2",
-      "title": "2. Function Arguments & Docstrings",
-      "description": "Finish `area_of_rectangle(width, height)` so it returns `width * height`. Keep the docstring: the test also checks that the function has one. `area_of_rectangle(4, 5)` equals `20`.",
+      "title": "Practice Function Arguments Docstrings",
+      "description": "Finish area_of_rectangle(width, height) so it returns width * height. Keep the docstring: the test also checks that the function has one. area_of_rectangle(4, 5) equals 20.",
       "order": 62,
       "difficulty": "intermediate",
       "duration_minutes": 5,
@@ -230,7 +230,7 @@
         "numbers"
       ],
       "learning_objectives": [
-        "Pass multiple parameters and write function docstrings"
+        "This step adds the two arguments and hands the sum back, using total holding Add the two readings."
       ],
       "starter_code": "def area_of_rectangle(width, height):\n    \"\"\"Calculate rectangle area.\"\"\"\n    # TODO: return the area\n    pass\n",
       "tests": [
@@ -251,12 +251,176 @@
         "url": "https://docs.python.org/3/tutorial/controlflow.html#defining-functions",
         "license": "Python documentation license (PSF)"
       },
-      "xp_reward": 10
+      "xp_reward": 10,
+      "player_mode": "micro",
+      "sublessons": [
+        {
+          "id": "functions-step-2-micro",
+          "title": "Practice Function Arguments Docstrings",
+          "description": "",
+          "order": 1,
+          "exercises": [
+            {
+              "id": "functions-step-2-teach",
+              "type": "teach",
+              "question": "This step adds the two arguments and hands the sum back, using total holding Add the two readings.",
+              "hints": [
+                "Follow the job, which adds the two arguments and hands the sum back.",
+                "return left + right hands the sum to the caller.",
+                "return left + right"
+              ],
+              "explanation": "This step adds the two arguments and hands the sum back, using total holding Add the two readings.",
+              "xp_reward": 0,
+              "worked_example": "return left + right"
+            },
+            {
+              "id": "functions-step-2-mcq",
+              "type": "mcq",
+              "question": "The correct line adds the two arguments and hands the sum back, and it is the line tied to total holding Add the two readings.",
+              "hints": [
+                "Follow the job, which adds the two arguments and hands the sum back.",
+                "return left + right hands the sum to the caller.",
+                "return left + right"
+              ],
+              "explanation": "return left + right hands the sum to the caller.",
+              "xp_reward": 10,
+              "options": [
+                "left == right",
+                "pass",
+                "print(left)",
+                "return left + right"
+              ],
+              "correct_answer": "return left + right"
+            },
+            {
+              "id": "functions-step-2-predict",
+              "type": "output_prediction",
+              "question": "The program adds the two arguments and hands the sum back with total holding Add the two readings,, so choose the printed value.",
+              "hints": [
+                "Follow the job, which adds the two arguments and hands the sum back.",
+                "return left + right hands the sum to the caller.",
+                "63"
+              ],
+              "explanation": "return left + right hands the sum to the caller.",
+              "xp_reward": 10,
+              "starter_code": "def total(left, right):\n    \"\"\"Add the two readings.\"\"\"\n    return left + right\nprint(total(59, 4))\n",
+              "options": [
+                "66",
+                "63",
+                "none",
+                "0"
+              ],
+              "correct_answer": "63"
+            },
+            {
+              "id": "functions-step-2-order",
+              "type": "ordering",
+              "question": "Build the line that adds the two arguments and hands the sum back for total holding Add the two readings,, from the first piece to the last.",
+              "hints": [
+                "Follow the job, which adds the two arguments and hands the sum back.",
+                "return left + right hands back the sum.",
+                "return left + right"
+              ],
+              "explanation": "return left + right hands back the sum.",
+              "xp_reward": 10,
+              "options": [
+                "return",
+                "left",
+                "+",
+                "right",
+                "print"
+              ],
+              "correct_answer": [
+                "return",
+                "left",
+                "+",
+                "right"
+              ]
+            },
+            {
+              "id": "functions-step-2-fill",
+              "type": "fill_blank",
+              "question": "Replace the blank with the piece that makes the line adds the two arguments and hands the sum back for total holding Add the two readings.",
+              "hints": [
+                "Follow the job, which adds the two arguments and hands the sum back.",
+                "Plus adds the two arguments.",
+                "+"
+              ],
+              "explanation": "Plus adds the two arguments.",
+              "xp_reward": 10,
+              "starter_code": "return left ___ right\n",
+              "options": [
+                "-",
+                "+",
+                "*",
+                "=="
+              ],
+              "correct_answer": "+"
+            },
+            {
+              "id": "functions-step-2-bug",
+              "type": "debugging",
+              "question": "Spot the line that fails the job, which adds the two arguments and hands the sum back, around total holding Add the two readings.",
+              "hints": [
+                "Follow the job, which adds the two arguments and hands the sum back.",
+                "The function subtracts the arguments.",
+                "Line 3"
+              ],
+              "explanation": "The function subtracts the arguments.",
+              "xp_reward": 10,
+              "starter_code": "def total(left, right):\n    \"\"\"Add the two readings.\"\"\"\n    return left - right\nprint(total(59, 4))\n",
+              "correct_answer": "3"
+            },
+            {
+              "id": "functions-step-2-predict-2",
+              "type": "output_prediction",
+              "question": "The second program adds the two arguments and hands the sum back for total holding Add the two readings,, so choose the new printed value.",
+              "hints": [
+                "Follow the job, which adds the two arguments and hands the sum back.",
+                "return left + right hands the sum to the caller.",
+                "66"
+              ],
+              "explanation": "return left + right hands the sum to the caller.",
+              "xp_reward": 10,
+              "starter_code": "def total(left, right):\n    \"\"\"Add the two readings.\"\"\"\n    return left + right\nprint(total(59, 7))\n",
+              "options": [
+                "63",
+                "none",
+                "0",
+                "66"
+              ],
+              "correct_answer": "66"
+            },
+            {
+              "id": "functions-step-2-write",
+              "type": "code",
+              "question": "Complete the blank so this program adds the two arguments and hands the sum back and prints the result for total holding Add the two readings.",
+              "hints": [
+                "Follow the job, which adds the two arguments and hands the sum back.",
+                "The handed-back sum is what gets printed.",
+                "label = total(59, 4)"
+              ],
+              "explanation": "The handed-back sum is what gets printed.",
+              "xp_reward": 10,
+              "starter_code": "def total(left, right):\n    \"\"\"Add the two readings.\"\"\"\n    return left + right\nlabel = ___\nprint(label)\n",
+              "solution_code": "def total(left, right):\n    \"\"\"Add the two readings.\"\"\"\n    return left + right\nlabel = total(59, 4)\nprint(label)\n",
+              "tests": [
+                {
+                  "name": "functions-step-2-prints",
+                  "description": "The handed-back sum is what gets printed.",
+                  "expected_stdout": "63\n",
+                  "required": true
+                }
+              ]
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "functions-01",
-      "title": "3. Guido's Gorgeous Lasagna (Concept Challenge)",
-      "description": "A lasagna bakes for 40 minutes, and each layer takes 2 minutes to prepare. Set `EXPECTED_BAKE_TIME` to `40`. Finish `bake_time_remaining(elapsed_bake_time)` so it returns the minutes still left in the oven. Finish `preparation_time_in_minutes(number_of_layers)` so it returns `number_of_layers * 2`. Finish `elapsed_time_in_minutes(number_of_layers, elapsed_bake_time)` so it returns preparation time plus the time already baked. Write a docstring on each function. The test checks that `EXPECTED_BAKE_TIME` equals `40`, `bake_time_remaining(1)` equals `39`, `preparation_time_in_minutes(2)` equals `4`, and `elapsed_time_in_minutes(1, 3)` equals `5`.",
+      "title": "Practice Guido's Gorgeous Lasagna",
+      "description": "A lasagna bakes for 40 minutes, and each layer takes 2 minutes to prepare. Set EXPECTED_BAKE_TIME to 40. Finish bake_time_remaining(elapsed_bake_time) so it returns the minutes still left in the oven. Finish preparation_time_in_minutes(number_of_layers) so it returns number_of_layers * 2. Finish elapsed_time_in_minutes(number_of_layers, elapsed_bake_time) so it returns preparation time plus the time already baked. Write a docstring on each function. The test checks that EXPECTED_BAKE_TIME equals 40, bake_time_remaining(1) equals 39, preparation_time_in_minutes(2) equals 4, and elapsed_time_in_minutes(1, 3) equals 5.",
       "order": 63,
       "difficulty": "intermediate",
       "duration_minutes": 8,
@@ -270,9 +434,7 @@
         "conditionals"
       ],
       "learning_objectives": [
-        "Define constants using SCREAMING_SNAKE_CASE",
-        "Write functions with parameters, def, and return",
-        "Add docstrings to every function"
+        "This step adds the two fixed readings, using PREP and 7."
       ],
       "starter_code": "\"\"\"Functions used in preparing Guido's gorgeous lasagna.\n\nLearn about Guido, the creator of the Python language:\nhttps://en.wikipedia.org/wiki/Guido_van_Rossum\n\nThis is a module docstring, used to describe the functionality\nof a module and its functions and/or classes.\n\"\"\"\n\n\n# TODO: define your EXPECTED_BAKE_TIME (required, set to 40) and PREPARATION_TIME (optional, set to 2) constants below.\nEXPECTED_BAKE_TIME = 40\nPREPARATION_TIME = 2\n\n\ndef bake_time_remaining(elapsed_bake_time):\n    \"\"\"Calculate the bake time remaining.\n\n    Parameters:\n        elapsed_bake_time (int): The baking time already elapsed.\n\n    Returns:\n        int: The remaining bake time (in minutes) derived from 'EXPECTED_BAKE_TIME'.\n\n    Function that takes the actual minutes the lasagna has been in the oven as\n    an argument and returns how many minutes the lasagna still needs to bake\n    based on the `EXPECTED_BAKE_TIME`.\n    \"\"\"\n    pass\n\n\n# TODO: Define the 'preparation_time_in_minutes(number_of_layers)' function below.\n\n\n# TODO: Define the 'elapsed_time_in_minutes(number_of_layers, elapsed_bake_time)' function below.\n\n\n# TODO: Remember to add docstrings to all your functions.\n",
       "tests": [
@@ -317,12 +479,178 @@
         "license": "MIT"
       },
       "solution_code": "EXPECTED_BAKE_TIME = 40\nPREPARATION_TIME = 2\n\n\ndef bake_time_remaining(elapsed_bake_time):\n    \"\"\"Calculate the bake time remaining.\n\n    Parameters:\n        elapsed_bake_time (int): The baking time already elapsed.\n\n    Returns:\n        int: Remaining bake time derived from EXPECTED_BAKE_TIME.\n    \"\"\"\n    return EXPECTED_BAKE_TIME - elapsed_bake_time\n\n\ndef preparation_time_in_minutes(number_of_layers):\n    \"\"\"Calculate total preparation time for the given number of layers.\"\"\"\n    return number_of_layers * PREPARATION_TIME\n\n\ndef elapsed_time_in_minutes(number_of_layers, elapsed_bake_time):\n    \"\"\"Return total elapsed time (preparation plus baking).\"\"\"\n    return preparation_time_in_minutes(number_of_layers) + elapsed_bake_time\n",
-      "xp_reward": 25
+      "xp_reward": 25,
+      "player_mode": "micro",
+      "sublessons": [
+        {
+          "id": "functions-01-micro",
+          "title": "Practice Guido's Gorgeous Lasagna",
+          "description": "",
+          "order": 1,
+          "exercises": [
+            {
+              "id": "functions-01-teach",
+              "type": "teach",
+              "question": "This step adds the two fixed readings, using PREP and 7.",
+              "hints": [
+                "Follow the job, which adds the two fixed readings.",
+                "PREP + BAKE is the combined reading.",
+                "PREP + BAKE"
+              ],
+              "explanation": "This step adds the two fixed readings, using PREP and 7.",
+              "xp_reward": 0,
+              "worked_example": "PREP + BAKE"
+            },
+            {
+              "id": "functions-01-mcq",
+              "type": "mcq",
+              "question": "A correct choice adds the two fixed readings and goes with PREP and 7.",
+              "hints": [
+                "Follow the job, which adds the two fixed readings.",
+                "PREP + BAKE is the combined reading.",
+                "PREP + BAKE"
+              ],
+              "explanation": "PREP + BAKE is the combined reading.",
+              "xp_reward": 10,
+              "options": [
+                "PREP == BAKE",
+                "print(PREP)",
+                "pass",
+                "PREP + BAKE"
+              ],
+              "correct_answer": "PREP + BAKE"
+            },
+            {
+              "id": "functions-01-predict",
+              "type": "output_prediction",
+              "question": "Select the output after the code adds the two fixed readings, using PREP and 7.",
+              "hints": [
+                "Follow the job, which adds the two fixed readings.",
+                "PREP + BAKE is the combined reading.",
+                "64"
+              ],
+              "explanation": "PREP + BAKE is the combined reading.",
+              "xp_reward": 10,
+              "starter_code": "PREP = 57\nBAKE = 7\ndef total():\n    return PREP + BAKE\nprint(total())\n",
+              "options": [
+                "0",
+                "none",
+                "64",
+                "68"
+              ],
+              "correct_answer": "64"
+            },
+            {
+              "id": "functions-01-order",
+              "type": "ordering",
+              "question": "Make the line that adds the two fixed readings by ordering the pieces for PREP and 7.",
+              "hints": [
+                "Follow the job, which adds the two fixed readings.",
+                "TOTAL = PREP + BAKE stores the combined reading.",
+                "TOTAL = PREP + BAKE"
+              ],
+              "explanation": "TOTAL = PREP + BAKE stores the combined reading.",
+              "xp_reward": 10,
+              "options": [
+                "TOTAL",
+                "=",
+                "PREP",
+                "+",
+                "BAKE",
+                "=="
+              ],
+              "correct_answer": [
+                "TOTAL",
+                "=",
+                "PREP",
+                "+",
+                "BAKE"
+              ]
+            },
+            {
+              "id": "functions-01-fill",
+              "type": "fill_blank",
+              "question": "Complete the line for PREP and 7 so that it adds the two fixed readings.",
+              "hints": [
+                "Follow the job, which adds the two fixed readings.",
+                "Plus adds the two fixed readings.",
+                "+"
+              ],
+              "explanation": "Plus adds the two fixed readings.",
+              "xp_reward": 10,
+              "starter_code": "return PREP ___ BAKE\n",
+              "options": [
+                "-",
+                "==",
+                "*",
+                "+"
+              ],
+              "correct_answer": "+"
+            },
+            {
+              "id": "functions-01-bug",
+              "type": "debugging",
+              "question": "Select the line that gets in the way of the job, which adds the two fixed readings, for PREP and 7.",
+              "hints": [
+                "Follow the job, which adds the two fixed readings.",
+                "The function subtracts the bake reading.",
+                "Line 4"
+              ],
+              "explanation": "The function subtracts the bake reading.",
+              "xp_reward": 10,
+              "starter_code": "PREP = 57\nBAKE = 7\ndef total():\n    return PREP - BAKE\nprint(total())\n",
+              "correct_answer": "4"
+            },
+            {
+              "id": "functions-01-predict-2",
+              "type": "output_prediction",
+              "question": "With the new data around PREP and 7, the code adds the two fixed readings, so select the new output.",
+              "hints": [
+                "Follow the job, which adds the two fixed readings.",
+                "PREP + BAKE is the combined reading.",
+                "68"
+              ],
+              "explanation": "PREP + BAKE is the combined reading.",
+              "xp_reward": 10,
+              "starter_code": "PREP = 57\nBAKE = 11\ndef total():\n    return PREP + BAKE\nprint(total())\n",
+              "options": [
+                "64",
+                "none",
+                "68",
+                "0"
+              ],
+              "correct_answer": "68"
+            },
+            {
+              "id": "functions-01-write",
+              "type": "code",
+              "question": "The printed result shows up after you fill the blank so the code adds the two fixed readings for PREP and 7.",
+              "hints": [
+                "Follow the job, which adds the two fixed readings.",
+                "The combined reading is what gets printed.",
+                "label = total()"
+              ],
+              "explanation": "The combined reading is what gets printed.",
+              "xp_reward": 10,
+              "starter_code": "PREP = 57\nBAKE = 7\ndef total():\n    return PREP + BAKE\nlabel = ___\nprint(label)\n",
+              "solution_code": "PREP = 57\nBAKE = 7\ndef total():\n    return PREP + BAKE\nlabel = total()\nprint(label)\n",
+              "tests": [
+                {
+                  "name": "functions-01-prints",
+                  "description": "The combined reading is what gets printed.",
+                  "expected_stdout": "64\n",
+                  "required": true
+                }
+              ]
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "functions-practice-1",
-      "title": "4. Recipe Portions Calculator (Practice)",
-      "description": "Finish `scale_recipe`. Calculate scaled recipe quantities: multiply `base_amount` by the ratio of `target_servings` to `base_servings`. The test checks that `scale_recipe(200, 2, 4)` equals `400.0`.",
+      "title": "Practice Recipe Portions Calculator",
+      "description": "Finish scale_recipe. Calculate scaled recipe quantities: multiply base_amount by the ratio of target_servings to base_servings. The test checks that scale_recipe(200, 2, 4) equals 400.0.",
       "order": 64,
       "difficulty": "intermediate",
       "duration_minutes": 6,
@@ -335,7 +663,7 @@
         "numbers"
       ],
       "learning_objectives": [
-        "Define functions for recipe scaling"
+        "This step multiplies the base reading by the portion count, using scale and 2."
       ],
       "starter_code": "def scale_recipe(base_amount, base_servings, target_servings):\n    \"\"\"Return scaled amount for target_servings.\"\"\"\n    # TODO: return the scaled amount\n    pass\n",
       "tests": [
@@ -356,12 +684,176 @@
         "url": "https://docs.python.org/3/tutorial/controlflow.html#defining-functions",
         "license": "Python documentation license (PSF)"
       },
-      "xp_reward": 15
+      "xp_reward": 15,
+      "player_mode": "micro",
+      "sublessons": [
+        {
+          "id": "functions-practice-1-micro",
+          "title": "Practice Recipe Portions Calculator",
+          "description": "",
+          "order": 1,
+          "exercises": [
+            {
+              "id": "functions-practice-1-teach",
+              "type": "teach",
+              "question": "This step multiplies the base reading by the portion count, using scale and 2.",
+              "hints": [
+                "Follow the job, which multiplies the base reading by the portion count.",
+                "value * portions scales the reading.",
+                "value * portions"
+              ],
+              "explanation": "This step multiplies the base reading by the portion count, using scale and 2.",
+              "xp_reward": 0,
+              "worked_example": "value * portions"
+            },
+            {
+              "id": "functions-practice-1-mcq",
+              "type": "mcq",
+              "question": "A correct choice multiplies the base reading by the portion count and goes with scale and 2.",
+              "hints": [
+                "Follow the job, which multiplies the base reading by the portion count.",
+                "value * portions scales the reading.",
+                "value * portions"
+              ],
+              "explanation": "value * portions scales the reading.",
+              "xp_reward": 10,
+              "options": [
+                "value + portions",
+                "print(value)",
+                "value == portions",
+                "value * portions"
+              ],
+              "correct_answer": "value * portions"
+            },
+            {
+              "id": "functions-practice-1-predict",
+              "type": "output_prediction",
+              "question": "Select the output after the code multiplies the base reading by the portion count, using scale and 2.",
+              "hints": [
+                "Follow the job, which multiplies the base reading by the portion count.",
+                "value * portions scales the reading.",
+                "114"
+              ],
+              "explanation": "value * portions scales the reading.",
+              "xp_reward": 10,
+              "starter_code": "def scale(value, portions):\n    return value * portions\nprint(scale(57, 2))\n",
+              "options": [
+                "171",
+                "0",
+                "none",
+                "114"
+              ],
+              "correct_answer": "114"
+            },
+            {
+              "id": "functions-practice-1-order",
+              "type": "ordering",
+              "question": "Make the line that multiplies the base reading by the portion count by ordering the pieces for scale and 2.",
+              "hints": [
+                "Follow the job, which multiplies the base reading by the portion count.",
+                "return value * portions scales the reading.",
+                "return value * portions"
+              ],
+              "explanation": "return value * portions scales the reading.",
+              "xp_reward": 10,
+              "options": [
+                "return",
+                "value",
+                "*",
+                "portions",
+                "+"
+              ],
+              "correct_answer": [
+                "return",
+                "value",
+                "*",
+                "portions"
+              ]
+            },
+            {
+              "id": "functions-practice-1-fill",
+              "type": "fill_blank",
+              "question": "Complete the line for scale and 2 so that it multiplies the base reading by the portion count.",
+              "hints": [
+                "Follow the job, which multiplies the base reading by the portion count.",
+                "The star scales the reading.",
+                "*"
+              ],
+              "explanation": "The star scales the reading.",
+              "xp_reward": 10,
+              "starter_code": "return value ___ portions\n",
+              "options": [
+                "+",
+                "==",
+                "-",
+                "*"
+              ],
+              "correct_answer": "*"
+            },
+            {
+              "id": "functions-practice-1-bug",
+              "type": "debugging",
+              "question": "Select the line that gets in the way of the job, which multiplies the base reading by the portion count, for scale and.",
+              "hints": [
+                "Follow the job, which multiplies the base reading by the portion count.",
+                "The function adds the portion count instead of scaling.",
+                "Line 2"
+              ],
+              "explanation": "The function adds the portion count instead of scaling.",
+              "xp_reward": 10,
+              "starter_code": "def scale(value, portions):\n    return value + portions\nprint(scale(57, 2))\n",
+              "correct_answer": "2"
+            },
+            {
+              "id": "functions-practice-1-predict-2",
+              "type": "output_prediction",
+              "question": "With the new data around scale and 2, the code multiplies the base reading by the portion count, so select the new output.",
+              "hints": [
+                "Follow the job, which multiplies the base reading by the portion count.",
+                "value * portions scales the reading.",
+                "171"
+              ],
+              "explanation": "value * portions scales the reading.",
+              "xp_reward": 10,
+              "starter_code": "def scale(value, portions):\n    return value * portions\nprint(scale(57, 3))\n",
+              "options": [
+                "114",
+                "none",
+                "171",
+                "0"
+              ],
+              "correct_answer": "171"
+            },
+            {
+              "id": "functions-practice-1-write",
+              "type": "code",
+              "question": "The printed result shows up after you fill the blank so the code multiplies the base reading by the portion count for scale and 2.",
+              "hints": [
+                "Follow the job, which multiplies the base reading by the portion count.",
+                "The scaled reading is what gets printed.",
+                "label = scale(57, 2)"
+              ],
+              "explanation": "The scaled reading is what gets printed.",
+              "xp_reward": 10,
+              "starter_code": "def scale(value, portions):\n    return value * portions\nlabel = ___\nprint(label)\n",
+              "solution_code": "def scale(value, portions):\n    return value * portions\nlabel = scale(57, 2)\nprint(label)\n",
+              "tests": [
+                {
+                  "name": "functions-practice-1-prints",
+                  "description": "The scaled reading is what gets printed.",
+                  "expected_stdout": "114\n",
+                  "required": true
+                }
+              ]
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "functions-checkpoint",
-      "title": "5. Unit 13 Checkpoint: Functions Mastery",
-      "description": "Finish `is_even(n)` so it returns `True` when `n` is even and `False` when `n` is odd. The test checks that `is_even(4)` is true; `is_even(5)` is false.",
+      "title": "Practice Unit 13 Checkpoint Functions Mastery",
+      "description": "Finish is_even(n) so it returns True when n is even and False when n is odd. The test checks that is_even(4) is true; is_even(5) is false.",
       "order": 65,
       "difficulty": "intermediate",
       "duration_minutes": 10,
@@ -375,7 +867,7 @@
         "conditionals"
       ],
       "learning_objectives": [
-        "Master function definition and docstrings"
+        "This step adds one serving and includes the note length, using total holding Add one serving."
       ],
       "starter_code": "def is_even(n):\n    \"\"\"Return True if n is even.\"\"\"\n    # TODO: Return n % 2 == 0\n    pass\n",
       "tests": [
@@ -396,7 +888,171 @@
         "url": "https://docs.python.org/3/tutorial/controlflow.html#defining-functions",
         "license": "Python documentation license (PSF)"
       },
-      "xp_reward": 40
+      "xp_reward": 40,
+      "player_mode": "micro",
+      "sublessons": [
+        {
+          "id": "functions-checkpoint-micro",
+          "title": "Practice Unit 13 Checkpoint Functions Mastery",
+          "description": "",
+          "order": 1,
+          "exercises": [
+            {
+              "id": "functions-checkpoint-teach",
+              "type": "teach",
+              "question": "This step adds one serving and includes the note length, using total holding Add one serving.",
+              "hints": [
+                "Follow the job, which adds one serving and includes the note length.",
+                "The docstring is stored on the function and the return adds one.",
+                "return value + 1"
+              ],
+              "explanation": "This step adds one serving and includes the note length, using total holding Add one serving.",
+              "xp_reward": 0,
+              "worked_example": "return value + 1"
+            },
+            {
+              "id": "functions-checkpoint-mcq",
+              "type": "mcq",
+              "question": "Pick the line that adds one serving and includes the note length, not a line about something else, for total holding Add one serving.",
+              "hints": [
+                "Follow the job, which adds one serving and includes the note length.",
+                "The docstring is stored on the function and the return adds one.",
+                "return value + 1"
+              ],
+              "explanation": "The docstring is stored on the function and the return adds one.",
+              "xp_reward": 10,
+              "options": [
+                "value == 1",
+                "print(value)",
+                "return value + 1",
+                "pass"
+              ],
+              "correct_answer": "return value + 1"
+            },
+            {
+              "id": "functions-checkpoint-predict",
+              "type": "output_prediction",
+              "question": "The displayed value is what the code prints when it adds one serving and includes the note length for total holding Add one serving.",
+              "hints": [
+                "Follow the job, which adds one serving and includes the note length.",
+                "The docstring is stored on the function and the return adds one.",
+                "42"
+              ],
+              "explanation": "The docstring is stored on the function and the return adds one.",
+              "xp_reward": 10,
+              "starter_code": "def total(value):\n    \"\"\"Add one serving.\"\"\"\n    return value + 1\nprint(total(25) + len(total.__doc__))\n",
+              "options": [
+                "45",
+                "42",
+                "none",
+                "0"
+              ],
+              "correct_answer": "42"
+            },
+            {
+              "id": "functions-checkpoint-order",
+              "type": "ordering",
+              "question": "Place every piece so the result adds one serving and includes the note length for total holding Add one serving.",
+              "hints": [
+                "Follow the job, which adds one serving and includes the note length.",
+                "return value + 1 adds one serving.",
+                "return value + 1"
+              ],
+              "explanation": "return value + 1 adds one serving.",
+              "xp_reward": 10,
+              "options": [
+                "return",
+                "value",
+                "+",
+                "1",
+                "print"
+              ],
+              "correct_answer": [
+                "return",
+                "value",
+                "+",
+                "1"
+              ]
+            },
+            {
+              "id": "functions-checkpoint-fill",
+              "type": "fill_blank",
+              "question": "Drop in the piece that lets the line adds one serving and includes the note length for total holding Add one serving.",
+              "hints": [
+                "Follow the job, which adds one serving and includes the note length.",
+                "Plus adds one serving.",
+                "+"
+              ],
+              "explanation": "Plus adds one serving.",
+              "xp_reward": 10,
+              "starter_code": "return value ___ 1\n",
+              "options": [
+                "-",
+                "+",
+                "*",
+                "=="
+              ],
+              "correct_answer": "+"
+            },
+            {
+              "id": "functions-checkpoint-bug",
+              "type": "debugging",
+              "question": "The mismatch misses the job, which adds one serving and includes the note length, for total holding Add one serving.",
+              "hints": [
+                "Follow the job, which adds one serving and includes the note length.",
+                "The function subtracts one serving.",
+                "Line 3"
+              ],
+              "explanation": "The function subtracts one serving.",
+              "xp_reward": 10,
+              "starter_code": "def total(value):\n    \"\"\"Add one serving.\"\"\"\n    return value - 1\nprint(total(25))\n",
+              "correct_answer": "3"
+            },
+            {
+              "id": "functions-checkpoint-predict-2",
+              "type": "output_prediction",
+              "question": "Choose the printed result of the second run that adds one serving and includes the note length for total holding Add one serving.",
+              "hints": [
+                "Follow the job, which adds one serving and includes the note length.",
+                "The docstring is stored on the function and the return adds one.",
+                "45"
+              ],
+              "explanation": "The docstring is stored on the function and the return adds one.",
+              "xp_reward": 10,
+              "starter_code": "def total(value):\n    \"\"\"Add one serving.\"\"\"\n    return value + 1\nprint(total(28) + len(total.__doc__))\n",
+              "options": [
+                "42",
+                "none",
+                "0",
+                "45"
+              ],
+              "correct_answer": "45"
+            },
+            {
+              "id": "functions-checkpoint-write",
+              "type": "code",
+              "question": "Make the program adds one serving and includes the note length by filling the blank for total holding Add one serving.",
+              "hints": [
+                "Follow the job, which adds one serving and includes the note length.",
+                "The serving total is what gets printed.",
+                "label = total(25)"
+              ],
+              "explanation": "The serving total is what gets printed.",
+              "xp_reward": 10,
+              "starter_code": "def total(value):\n    \"\"\"Add one serving.\"\"\"\n    return value + 1\nlabel = ___\nprint(label)\n",
+              "solution_code": "def total(value):\n    \"\"\"Add one serving.\"\"\"\n    return value + 1\nlabel = total(25)\nprint(label)\n",
+              "tests": [
+                {
+                  "name": "functions-checkpoint-prints",
+                  "description": "The serving total is what gets printed.",
+                  "expected_stdout": "26\n",
+                  "required": true
+                }
+              ]
+            }
+          ]
+        }
+      ]
     }
   ]
 }

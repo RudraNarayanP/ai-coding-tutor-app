@@ -14,8 +14,8 @@
   "lessons": [
     {
       "id": "py-backend-01",
-      "title": "1. Building REST API Endpoint Response Objects",
-      "description": "Format backend REST API response dictionaries: `make_api_response(data, status)` returns a dict with the status code under `status_code` and the payload under `body`. The test checks that `make_api_response({'msg': 'ok'})['status_code']` equals `200`.",
+      "title": "Build REST API Endpoint Response Objects",
+      "description": "Format backend REST API response dictionaries: make_api_response(data, status) returns a dict with the status code under status_code and the payload under body. The test checks that make_api_response({'msg': 'ok'})['status_code'] equals 200.",
       "order": 107,
       "difficulty": "intermediate",
       "duration_minutes": 5,
@@ -45,11 +45,173 @@
         "license": "Python documentation license (PSF)"
       },
       "learning_objectives": [
-        "Build API response payloads as dictionaries with fixed keys",
-        "Use a default parameter value for optional arguments",
-        "Compose status codes and bodies into a single response object"
+        "This step reads the value stored under status, using payload and 1."
       ],
-      "xp_reward": 10
+      "xp_reward": 10,
+      "player_mode": "micro",
+      "sublessons": [
+        {
+          "id": "py-backend-01-micro",
+          "title": "Build REST API Endpoint Response Objects",
+          "description": "",
+          "order": 1,
+          "exercises": [
+            {
+              "id": "py-backend-01-teach",
+              "type": "teach",
+              "question": "This step reads the value stored under status, using payload and 1.",
+              "hints": [
+                "Follow the job, which reads the value stored under status.",
+                "payload['status'] reads that entry.",
+                "payload['status']"
+              ],
+              "explanation": "This step reads the value stored under status, using payload and 1.",
+              "xp_reward": 0,
+              "worked_example": "payload['status']"
+            },
+            {
+              "id": "py-backend-01-mcq",
+              "type": "mcq",
+              "question": "Mark the choice that reads the value stored under status when the code mentions payload holding status.",
+              "hints": [
+                "Follow the job, which reads the value stored under status.",
+                "payload['status'] reads that entry.",
+                "payload['status']"
+              ],
+              "explanation": "payload['status'] reads that entry.",
+              "xp_reward": 10,
+              "options": [
+                "payload[0]",
+                "len(payload)",
+                "payload['status']",
+                "payload + 1"
+              ],
+              "correct_answer": "payload['status']"
+            },
+            {
+              "id": "py-backend-01-predict",
+              "type": "output_prediction",
+              "question": "After payload holding status, the code reads the value stored under status, and the correct choice is the printed value.",
+              "hints": [
+                "Follow the job, which reads the value stored under status.",
+                "payload['status'] reads that entry.",
+                "22"
+              ],
+              "explanation": "payload['status'] reads that entry.",
+              "xp_reward": 10,
+              "starter_code": "payload = {'status': 22, 'ok': 1}\nprint(payload['status'])\n",
+              "options": [
+                "none",
+                "27",
+                "22",
+                "0"
+              ],
+              "correct_answer": "22"
+            },
+            {
+              "id": "py-backend-01-order",
+              "type": "ordering",
+              "question": "The finished line reads the value stored under status, so place its pieces in order for payload holding status.",
+              "hints": [
+                "Follow the job, which reads the value stored under status.",
+                "payload['status'] reads the stored status.",
+                "payload [ 'status' ]"
+              ],
+              "explanation": "payload['status'] reads the stored status.",
+              "xp_reward": 10,
+              "options": [
+                "payload",
+                "[",
+                "'status'",
+                "]",
+                "len"
+              ],
+              "correct_answer": [
+                "payload",
+                "[",
+                "'status'",
+                "]"
+              ]
+            },
+            {
+              "id": "py-backend-01-fill",
+              "type": "fill_blank",
+              "question": "Finish the line that reads the value stored under status by filling the blank for payload holding status.",
+              "hints": [
+                "Follow the job, which reads the value stored under status.",
+                "The quoted name selects the status entry.",
+                "'status'"
+              ],
+              "explanation": "The quoted name selects the status entry.",
+              "xp_reward": 10,
+              "starter_code": "print(payload[___])\n",
+              "options": [
+                "'missing'",
+                "0",
+                "'status'",
+                "None"
+              ],
+              "correct_answer": "'status'"
+            },
+            {
+              "id": "py-backend-01-bug",
+              "type": "debugging",
+              "question": "Mark the line that breaks the job, which reads the value stored under status, for payload holding status.",
+              "hints": [
+                "Follow the job, which reads the value stored under status.",
+                "The print asks for a name that was never stored.",
+                "Line 2"
+              ],
+              "explanation": "The print asks for a name that was never stored.",
+              "xp_reward": 10,
+              "starter_code": "payload = {'status': 1}\nprint(payload['missing'])\n",
+              "correct_answer": "2"
+            },
+            {
+              "id": "py-backend-01-predict-2",
+              "type": "output_prediction",
+              "question": "Follow the second program, which reads the value stored under status for payload holding status, and choose its output.",
+              "hints": [
+                "Follow the job, which reads the value stored under status.",
+                "payload['status'] reads that entry.",
+                "27"
+              ],
+              "explanation": "payload['status'] reads that entry.",
+              "xp_reward": 10,
+              "starter_code": "payload = {'status': 27, 'ok': 1}\nprint(payload['status'])\n",
+              "options": [
+                "22",
+                "27",
+                "none",
+                "0"
+              ],
+              "correct_answer": "27"
+            },
+            {
+              "id": "py-backend-01-write",
+              "type": "code",
+              "question": "Finish the program that reads the value stored under status by filling the blank for payload holding status.",
+              "hints": [
+                "Follow the job, which reads the value stored under status.",
+                "The stored status is what gets printed.",
+                "label = payload['status']"
+              ],
+              "explanation": "The stored status is what gets printed.",
+              "xp_reward": 10,
+              "starter_code": "payload = {'status': 22, 'ok': 1}\nlabel = ___\nprint(label)\n",
+              "solution_code": "payload = {'status': 22, 'ok': 1}\nlabel = payload['status']\nprint(label)\n",
+              "tests": [
+                {
+                  "name": "py-backend-01-prints",
+                  "description": "The stored status is what gets printed.",
+                  "expected_stdout": "22\n",
+                  "required": true
+                }
+              ]
+            }
+          ]
+        }
+      ]
     }
   ]
 }

@@ -12,8 +12,8 @@
   "lessons": [
     {
       "id": "vectors-dot",
-      "title": "1. Dot Product",
-      "description": "Implement `dot(a, b)` for equal-length lists of numbers. The test checks that `dot([1, 2, 3], [4, 5, 6])` equals `32`; `dot([0, 1], [1, 0])` equals `0`.",
+      "title": "Practice Dot Product",
+      "description": "Implement dot(a, b) for equal-length lists of numbers. The test checks that dot([1, 2, 3], [4, 5, 6]) equals 32; dot([0, 1], [1, 0]) equals 0.",
       "order": 1,
       "difficulty": "intermediate",
       "duration_minutes": 5,
@@ -25,7 +25,7 @@
       ],
       "prerequisites": [],
       "learning_objectives": [
-        "Compute vector dot products"
+        "This step adds the pairwise products, using sum and 37."
       ],
       "starter_code": "def dot(a, b):\n    # TODO: return sum of a[i]*b[i]\n    pass\n",
       "solution_code": "def dot(a, b):\n    return sum(x * y for x, y in zip(a, b))\n",
@@ -46,12 +46,186 @@
         "url": "https://d2l.ai/chapter_preliminaries/linear-algebra.html",
         "license": "Apache 2.0 (Dive into Deep Learning book)"
       },
-      "xp_reward": 10
+      "xp_reward": 10,
+      "player_mode": "micro",
+      "sublessons": [
+        {
+          "id": "vectors-dot-micro",
+          "title": "Practice Dot Product",
+          "description": "",
+          "order": 1,
+          "exercises": [
+            {
+              "id": "vectors-dot-teach",
+              "type": "teach",
+              "question": "This step adds the pairwise products, using sum and 37.",
+              "hints": [
+                "Follow the job, which adds the pairwise products.",
+                "The dot product adds each pair of matching items.",
+                "a * b"
+              ],
+              "explanation": "This step adds the pairwise products, using sum and 37.",
+              "xp_reward": 0,
+              "worked_example": "a * b"
+            },
+            {
+              "id": "vectors-dot-mcq",
+              "type": "mcq",
+              "question": "Keep the choice that adds the pairwise products for sum and 37.",
+              "hints": [
+                "Follow the job, which adds the pairwise products.",
+                "The dot product adds each pair of matching items.",
+                "sum(a * b for a, b in zip(left, right))"
+              ],
+              "explanation": "The dot product adds each pair of matching items.",
+              "xp_reward": 10,
+              "options": [
+                "left == right",
+                "sum(a * b for a, b in zip(left, right))",
+                "return left",
+                "pass"
+              ],
+              "correct_answer": "sum(a * b for a, b in zip(left, right))"
+            },
+            {
+              "id": "vectors-dot-predict",
+              "type": "output_prediction",
+              "question": "Trace the code that adds the pairwise products using sum and 37, and select what it displays.",
+              "hints": [
+                "Follow the job, which adds the pairwise products.",
+                "The dot product adds each pair of matching items.",
+                "125"
+              ],
+              "explanation": "The dot product adds each pair of matching items.",
+              "xp_reward": 10,
+              "starter_code": "left = [1, 2, 3]\nright = [4, 5, 37]\nprint(sum(a * b for a, b in zip(left, right)))\n",
+              "options": [
+                "134",
+                "125",
+                "none",
+                "0"
+              ],
+              "correct_answer": "125"
+            },
+            {
+              "id": "vectors-dot-order",
+              "type": "ordering",
+              "question": "Tap the pieces, in order, of the line that adds the pairwise products for sum and 37.",
+              "hints": [
+                "Follow the job, which adds the pairwise products.",
+                "The dot product adds each pair of matching items.",
+                "total = sum(a*b for a, b in zip(left, right))"
+              ],
+              "explanation": "The dot product adds each pair of matching items.",
+              "xp_reward": 10,
+              "options": [
+                "total",
+                "=",
+                "sum(a*b",
+                "for",
+                "a,",
+                "b",
+                "in",
+                "zip(left,",
+                "right))",
+                "+"
+              ],
+              "correct_answer": [
+                "total",
+                "=",
+                "sum(a*b",
+                "for",
+                "a,",
+                "b",
+                "in",
+                "zip(left,",
+                "right))"
+              ]
+            },
+            {
+              "id": "vectors-dot-fill",
+              "type": "fill_blank",
+              "question": "The blank is the missing piece of the line that adds the pairwise products for sum and 37.",
+              "hints": [
+                "Follow the job, which adds the pairwise products.",
+                "The dot product adds each pair of matching items.",
+                "*"
+              ],
+              "explanation": "The dot product adds each pair of matching items.",
+              "xp_reward": 10,
+              "starter_code": "pair = a ___ b\n",
+              "options": [
+                "+",
+                "*",
+                "-",
+                "=="
+              ],
+              "correct_answer": "*"
+            },
+            {
+              "id": "vectors-dot-bug",
+              "type": "debugging",
+              "question": "Choose the line that does another job than the one that adds the pairwise products for sum and.",
+              "hints": [
+                "Follow the job, which adds the pairwise products.",
+                "The line adds the vectors separately instead of pairing them.",
+                "Line 3"
+              ],
+              "explanation": "The line adds the vectors separately instead of pairing them.",
+              "xp_reward": 10,
+              "starter_code": "left = [1, 2]\nright = [4, 5]\nprint(sum(left) + sum(right))\n",
+              "correct_answer": "3"
+            },
+            {
+              "id": "vectors-dot-predict-2",
+              "type": "output_prediction",
+              "question": "Trace the second run, which adds the pairwise products for sum and 37, and select what it displays.",
+              "hints": [
+                "Follow the job, which adds the pairwise products.",
+                "The dot product adds each pair of matching items.",
+                "134"
+              ],
+              "explanation": "The dot product adds each pair of matching items.",
+              "xp_reward": 10,
+              "starter_code": "left = [1, 2, 3]\nright = [4, 5, 40]\nprint(sum(a * b for a, b in zip(left, right)))\n",
+              "options": [
+                "125",
+                "none",
+                "0",
+                "134"
+              ],
+              "correct_answer": "134"
+            },
+            {
+              "id": "vectors-dot-write",
+              "type": "code",
+              "question": "Type the missing piece so the program adds the pairwise products for sum and 37 and prints it.",
+              "hints": [
+                "Follow the job, which adds the pairwise products.",
+                "The printed value is the result after this step adds the pairwise products.",
+                "label = sum(a * b for a, b in zip(left, right))"
+              ],
+              "explanation": "The printed value is the result after this step adds the pairwise products.",
+              "xp_reward": 10,
+              "starter_code": "left = [1, 2, 3]\nright = [4, 5, 37]\nlabel = ___\nprint(label)\n",
+              "solution_code": "left = [1, 2, 3]\nright = [4, 5, 37]\nlabel = sum(a * b for a, b in zip(left, right))\nprint(label)\n",
+              "tests": [
+                {
+                  "name": "vectors-dot-prints",
+                  "description": "The printed value is the result after this step adds the pairwise products.",
+                  "expected_stdout": "125\n",
+                  "required": true
+                }
+              ]
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "vectors-norm",
-      "title": "2. Euclidean Norm",
-      "description": "Implement `l2_norm(v)` returning sqrt(sum of squares). The test checks that `l2_norm([3, 4])` equals `5.0`; `l2_norm([0, 0, 0])` equals `0.0`.",
+      "title": "Practice Euclidean Norm",
+      "description": "Implement l2_norm(v) returning sqrt(sum of squares). The test checks that l2_norm([3, 4]) equals 5.0; l2_norm([0, 0, 0]) equals 0.0.",
       "order": 2,
       "difficulty": "intermediate",
       "duration_minutes": 5,
@@ -63,7 +237,7 @@
       ],
       "prerequisites": [],
       "learning_objectives": [
-        "Compute L2 norms"
+        "This step computes the length of a 3-4 vector, using math and 4."
       ],
       "starter_code": "import math\n\ndef l2_norm(v):\n    # TODO\n    pass\n",
       "solution_code": "import math\n\ndef l2_norm(v):\n    return math.sqrt(sum(x * x for x in v))\n",
@@ -84,12 +258,174 @@
         "url": "https://d2l.ai/chapter_preliminaries/linear-algebra.html",
         "license": "Apache 2.0 (Dive into Deep Learning book)"
       },
-      "xp_reward": 10
+      "xp_reward": 10,
+      "player_mode": "micro",
+      "sublessons": [
+        {
+          "id": "vectors-norm-micro",
+          "title": "Practice Euclidean Norm",
+          "description": "",
+          "order": 1,
+          "exercises": [
+            {
+              "id": "vectors-norm-teach",
+              "type": "teach",
+              "question": "This step computes the length of a 3-4 vector, using math and 4.",
+              "hints": [
+                "Follow the job, which computes the length of a 3-4 vector.",
+                "The norm is the square root of the summed squares.",
+                "math.sqrt(3 * 3 + 4 * 4)"
+              ],
+              "explanation": "This step computes the length of a 3-4 vector, using math and 4.",
+              "xp_reward": 0,
+              "worked_example": "math.sqrt(3 * 3 + 4 * 4)"
+            },
+            {
+              "id": "vectors-norm-mcq",
+              "type": "mcq",
+              "question": "A correct choice computes the length of a 3-4 vector and goes with math and 4.",
+              "hints": [
+                "Follow the job, which computes the length of a 3-4 vector.",
+                "The norm is the square root of the summed squares.",
+                "math.sqrt(3 * 3 + 4 * 4)"
+              ],
+              "explanation": "The norm is the square root of the summed squares.",
+              "xp_reward": 10,
+              "options": [
+                "3 == 4",
+                "math.sqrt(3 * 3 + 4 * 4)",
+                "return 3",
+                "pass"
+              ],
+              "correct_answer": "math.sqrt(3 * 3 + 4 * 4)"
+            },
+            {
+              "id": "vectors-norm-predict",
+              "type": "output_prediction",
+              "question": "Select the output after the code computes the length of a 3-4 vector, using math and 4.",
+              "hints": [
+                "Follow the job, which computes the length of a 3-4 vector.",
+                "The norm is the square root of the summed squares.",
+                "5"
+              ],
+              "explanation": "The norm is the square root of the summed squares.",
+              "xp_reward": 10,
+              "starter_code": "import math\nprint(int(math.sqrt(3 * 3 + 4 * 4)))\n",
+              "options": [
+                "10",
+                "5",
+                "none",
+                "0"
+              ],
+              "correct_answer": "5"
+            },
+            {
+              "id": "vectors-norm-order",
+              "type": "ordering",
+              "question": "Make the line that computes the length of a 3-4 vector by ordering the pieces for math and 4.",
+              "hints": [
+                "Follow the job, which computes the length of a 3-4 vector.",
+                "The norm is the square root of the summed squares.",
+                "length = int(math.sqrt(3*3+4*4))"
+              ],
+              "explanation": "The norm is the square root of the summed squares.",
+              "xp_reward": 10,
+              "options": [
+                "length",
+                "=",
+                "int(math.sqrt(3*3+4*4))",
+                "-"
+              ],
+              "correct_answer": [
+                "length",
+                "=",
+                "int(math.sqrt(3*3+4*4))"
+              ]
+            },
+            {
+              "id": "vectors-norm-fill",
+              "type": "fill_blank",
+              "question": "Complete the line for math and 4 so that it computes the length of a 3-4 vector.",
+              "hints": [
+                "Follow the job, which computes the length of a 3-4 vector.",
+                "The norm is the square root of the summed squares.",
+                "sqrt"
+              ],
+              "explanation": "The norm is the square root of the summed squares.",
+              "xp_reward": 10,
+              "starter_code": "length = int(math.___(9 + 16))\n",
+              "options": [
+                "floor",
+                "fabs",
+                "ceil",
+                "sqrt"
+              ],
+              "correct_answer": "sqrt"
+            },
+            {
+              "id": "vectors-norm-bug",
+              "type": "debugging",
+              "question": "Select the line that gets in the way of the job, which computes the length of a 3-4 vector, for math and 4.",
+              "hints": [
+                "Follow the job, which computes the length of a 3-4 vector.",
+                "The print adds the sides instead of taking the root of the squares.",
+                "Line 2"
+              ],
+              "explanation": "The print adds the sides instead of taking the root of the squares.",
+              "xp_reward": 10,
+              "starter_code": "import math\nprint(3 + 4)\n",
+              "correct_answer": "2"
+            },
+            {
+              "id": "vectors-norm-predict-2",
+              "type": "output_prediction",
+              "question": "With the new data around math and 4, the code computes the length of a 3-4 vector, so select the new output.",
+              "hints": [
+                "Follow the job, which computes the length of a 3-4 vector.",
+                "The norm is the square root of the summed squares.",
+                "10"
+              ],
+              "explanation": "The norm is the square root of the summed squares.",
+              "xp_reward": 10,
+              "starter_code": "import math\nprint(int(math.sqrt(6 * 6 + 8 * 8)))\n",
+              "options": [
+                "5",
+                "none",
+                "0",
+                "10"
+              ],
+              "correct_answer": "10"
+            },
+            {
+              "id": "vectors-norm-write",
+              "type": "code",
+              "question": "The printed result shows up after you fill the blank so the code computes the length of a 3-4 vector for math and 4.",
+              "hints": [
+                "Follow the job, which computes the length of a 3-4 vector.",
+                "The printed value is the result after this step computes the length of a 3-4 vector.",
+                "label = int(math.sqrt(3 * 3 + 4 * 4))"
+              ],
+              "explanation": "The printed value is the result after this step computes the length of a 3-4 vector.",
+              "xp_reward": 10,
+              "starter_code": "import math\nlabel = ___\nprint(label)\n",
+              "solution_code": "import math\nlabel = int(math.sqrt(3 * 3 + 4 * 4))\nprint(label)\n",
+              "tests": [
+                {
+                  "name": "vectors-norm-prints",
+                  "description": "The printed value is the result after this step computes the length of a 3-4 vec",
+                  "expected_stdout": "5\n",
+                  "required": true
+                }
+              ]
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "matrix-transpose",
-      "title": "3. Matrix Transpose",
-      "description": "Implement `transpose(m)` for a rectangular list-of-lists matrix. The test checks that `transpose([[1, 2, 3], [4, 5, 6]])` equals `[[1, 4], [2, 5], [3, 6]]`.",
+      "title": "Practice Matrix Transpose",
+      "description": "Implement transpose(m) for a rectangular list-of-lists matrix. The test checks that transpose([[1, 2, 3], [4, 5, 6]]) equals [[1, 4], [2, 5], [3, 6]].",
       "order": 3,
       "difficulty": "intermediate",
       "duration_minutes": 8,
@@ -101,7 +437,7 @@
       ],
       "prerequisites": [],
       "learning_objectives": [
-        "Transpose matrices"
+        "This step reads the swapped row and column, using rows and 28."
       ],
       "starter_code": "def transpose(m):\n    # TODO: return rows as columns\n    pass\n",
       "solution_code": "def transpose(m):\n    return [list(row) for row in zip(*m)]\n",
@@ -122,12 +458,180 @@
         "url": "https://d2l.ai/chapter_preliminaries/linear-algebra.html",
         "license": "Apache 2.0 (Dive into Deep Learning book)"
       },
-      "xp_reward": 25
+      "xp_reward": 25,
+      "player_mode": "micro",
+      "sublessons": [
+        {
+          "id": "matrix-transpose-micro",
+          "title": "Practice Matrix Transpose",
+          "description": "",
+          "order": 1,
+          "exercises": [
+            {
+              "id": "matrix-transpose-teach",
+              "type": "teach",
+              "question": "This step reads the swapped row and column, using rows and 28.",
+              "hints": [
+                "Follow the job, which reads the swapped row and column.",
+                "The inner list walks rows for one fixed column.",
+                "rows[r][c]"
+              ],
+              "explanation": "This step reads the swapped row and column, using rows and 28.",
+              "xp_reward": 0,
+              "worked_example": "rows[r][c]"
+            },
+            {
+              "id": "matrix-transpose-mcq",
+              "type": "mcq",
+              "question": "The correct line reads the swapped row and column, and it is the line tied to rows and 28.",
+              "hints": [
+                "Follow the job, which reads the swapped row and column.",
+                "The inner list walks rows for one fixed column.",
+                "[[rows[r][c] for r in range(2)] for c in range(2)]"
+              ],
+              "explanation": "The inner list walks rows for one fixed column.",
+              "xp_reward": 10,
+              "options": [
+                "rows == rows",
+                "return rows",
+                "pass",
+                "[[rows[r][c] for r in range(2)] for c in range(2)]"
+              ],
+              "correct_answer": "[[rows[r][c] for r in range(2)] for c in range(2)]"
+            },
+            {
+              "id": "matrix-transpose-predict",
+              "type": "output_prediction",
+              "question": "The program reads the swapped row and column with rows and so choose the printed value.",
+              "hints": [
+                "Follow the job, which reads the swapped row and column.",
+                "The inner list walks rows for one fixed column.",
+                "28"
+              ],
+              "explanation": "The inner list walks rows for one fixed column.",
+              "xp_reward": 10,
+              "starter_code": "rows = [[1, 2], [3, 28]]\nflipped = [[rows[r][c] for r in range(2)] for c in range(2)]\nprint(flipped[1][1])\n",
+              "options": [
+                "31",
+                "none",
+                "0",
+                "28"
+              ],
+              "correct_answer": "28"
+            },
+            {
+              "id": "matrix-transpose-order",
+              "type": "ordering",
+              "question": "Build the line that reads the swapped row and column for rows and 28, from the first piece to the last.",
+              "hints": [
+                "Follow the job, which reads the swapped row and column.",
+                "The inner list walks rows for one fixed column.",
+                "flipped= [[rows[r][c] for r in range(2)] for c in range(2)]"
+              ],
+              "explanation": "The inner list walks rows for one fixed column.",
+              "xp_reward": 10,
+              "options": [
+                "flipped=",
+                "[[rows[r][c] for r in range(2)]",
+                "for",
+                "c",
+                "in",
+                "range(2)]",
+                "=="
+              ],
+              "correct_answer": [
+                "flipped=",
+                "[[rows[r][c] for r in range(2)]",
+                "for",
+                "c",
+                "in",
+                "range(2)]"
+              ]
+            },
+            {
+              "id": "matrix-transpose-fill",
+              "type": "fill_blank",
+              "question": "Replace the blank with the piece that makes the line reads the swapped row and column for rows and 28.",
+              "hints": [
+                "Follow the job, which reads the swapped row and column.",
+                "The inner list walks rows for one fixed column.",
+                "1"
+              ],
+              "explanation": "The inner list walks rows for one fixed column.",
+              "xp_reward": 10,
+              "starter_code": "seen = rows[___][0]\n",
+              "options": [
+                "0",
+                "2",
+                "3",
+                "1"
+              ],
+              "correct_answer": "1"
+            },
+            {
+              "id": "matrix-transpose-bug",
+              "type": "debugging",
+              "question": "Spot the line that fails the job, which reads the swapped row and column, around rows and.",
+              "hints": [
+                "Follow the job, which reads the swapped row and column.",
+                "The print reads the original corner and never swaps the axes.",
+                "Line 2"
+              ],
+              "explanation": "The print reads the original corner and never swaps the axes.",
+              "xp_reward": 10,
+              "starter_code": "rows = [[1, 2], [3, 28]]\nprint(rows[0][0])\n",
+              "correct_answer": "2"
+            },
+            {
+              "id": "matrix-transpose-predict-2",
+              "type": "output_prediction",
+              "question": "The second program reads the swapped row and column for rows and 28, so choose the new printed value.",
+              "hints": [
+                "Follow the job, which reads the swapped row and column.",
+                "The inner list walks rows for one fixed column.",
+                "31"
+              ],
+              "explanation": "The inner list walks rows for one fixed column.",
+              "xp_reward": 10,
+              "starter_code": "rows = [[1, 2], [3, 31]]\nflipped = [[rows[r][c] for r in range(2)] for c in range(2)]\nprint(flipped[1][1])\n",
+              "options": [
+                "28",
+                "none",
+                "31",
+                "0"
+              ],
+              "correct_answer": "31"
+            },
+            {
+              "id": "matrix-transpose-write",
+              "type": "code",
+              "question": "Complete the blank so this program reads the swapped row and column and prints the result for rows and.",
+              "hints": [
+                "Follow the job, which reads the swapped row and column.",
+                "The printed value is the result after this step reads the swapped row and column.",
+                "label = flipped[1][1]"
+              ],
+              "explanation": "The printed value is the result after this step reads the swapped row and column.",
+              "xp_reward": 10,
+              "starter_code": "rows = [[1, 2], [3, 28]]\nflipped = [[rows[r][c] for r in range(2)] for c in range(2)]\nlabel = ___\nprint(label)\n",
+              "solution_code": "rows = [[1, 2], [3, 28]]\nflipped = [[rows[r][c] for r in range(2)] for c in range(2)]\nlabel = flipped[1][1]\nprint(label)\n",
+              "tests": [
+                {
+                  "name": "matrix-transpose-prints",
+                  "description": "The printed value is the result after this step reads the swapped row and column",
+                  "expected_stdout": "28\n",
+                  "required": true
+                }
+              ]
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "matrix-multiply",
-      "title": "4. Matrix-Vector Multiply",
-      "description": "Implement `matvec(A, x)` multiplying matrix A by vector x. The test checks that `matvec([[1, 2], [3, 4]], [1, 1])` equals `[3, 7]`.",
+      "title": "Practice Matrix-Vector Multiply",
+      "description": "Implement matvec(A, x) multiplying matrix A by vector x. The test checks that matvec([[1, 2], [3, 4]], [1, 1]) equals [3, 7].",
       "order": 4,
       "difficulty": "intermediate",
       "duration_minutes": 6,
@@ -139,7 +643,7 @@
       ],
       "prerequisites": [],
       "learning_objectives": [
-        "Multiply matrix by vector"
+        "This step adds the row-vector products, using row and vec."
       ],
       "starter_code": "def matvec(A, x):\n    # TODO: return A @ x as a list\n    pass\n",
       "solution_code": "def matvec(A, x):\n    return [sum(a * b for a, b in zip(row, x)) for row in A]\n",
@@ -163,40 +667,175 @@
       "xp_reward": 15,
       "sublessons": [
         {
-          "id": "dot-code-sub",
-          "title": "Write the inner product",
+          "id": "matrix-multiply-micro",
+          "title": "Practice Matrix-Vector Multiply",
+          "description": "",
           "order": 1,
           "exercises": [
             {
-              "id": "dot-code-1",
+              "id": "matrix-multiply-teach",
+              "type": "teach",
+              "question": "This step adds the row-vector products, using row and vec.",
+              "hints": [
+                "Follow the job, which adds the row-vector products.",
+                "Each column multiplies, then the products add.",
+                "row[0] * vec[0]"
+              ],
+              "explanation": "This step adds the row-vector products, using row and vec.",
+              "xp_reward": 0,
+              "worked_example": "row[0] * vec[0]"
+            },
+            {
+              "id": "matrix-multiply-mcq",
+              "type": "mcq",
+              "question": "Keep the choice that adds the row-vector products for row and 3.",
+              "hints": [
+                "Follow the job, which adds the row-vector products.",
+                "Each column multiplies, then the products add.",
+                "row[0] * vec[0] + row[1] * vec[1]"
+              ],
+              "explanation": "Each column multiplies, then the products add.",
+              "xp_reward": 10,
+              "options": [
+                "row == vec",
+                "row[0] * vec[0] + row[1] * vec[1]",
+                "return row",
+                "pass"
+              ],
+              "correct_answer": "row[0] * vec[0] + row[1] * vec[1]"
+            },
+            {
+              "id": "matrix-multiply-predict",
+              "type": "output_prediction",
+              "question": "Trace the code that adds the row-vector products using row and 3, and select what it displays.",
+              "hints": [
+                "Follow the job, which adds the row-vector products.",
+                "Each column multiplies, then the products add.",
+                "58"
+              ],
+              "explanation": "Each column multiplies, then the products add.",
+              "xp_reward": 10,
+              "starter_code": "row = [1, 2]\nvec = [52, 3]\nprint(row[0] * vec[0] + row[1] * vec[1])\n",
+              "options": [
+                "61",
+                "58",
+                "none",
+                "0"
+              ],
+              "correct_answer": "58"
+            },
+            {
+              "id": "matrix-multiply-order",
+              "type": "ordering",
+              "question": "Tap the pieces, in order, of the line that adds the row-vector products for row and 3.",
+              "hints": [
+                "Follow the job, which adds the row-vector products.",
+                "Each column multiplies, then the products add.",
+                "total = row[0]*vec[0] + row[1]*vec[1]"
+              ],
+              "explanation": "Each column multiplies, then the products add.",
+              "xp_reward": 10,
+              "options": [
+                "total",
+                "=",
+                "row[0]*vec[0]",
+                "+",
+                "row[1]*vec[1]",
+                "-"
+              ],
+              "correct_answer": [
+                "total",
+                "=",
+                "row[0]*vec[0]",
+                "+",
+                "row[1]*vec[1]"
+              ]
+            },
+            {
+              "id": "matrix-multiply-fill",
+              "type": "fill_blank",
+              "question": "The blank is the missing piece of the line that adds the row-vector products for row and 3.",
+              "hints": [
+                "Follow the job, which adds the row-vector products.",
+                "Each column multiplies, then the products add.",
+                "*"
+              ],
+              "explanation": "Each column multiplies, then the products add.",
+              "xp_reward": 10,
+              "starter_code": "pair = row[0] ___ vec[0]\n",
+              "options": [
+                "+",
+                "*",
+                "-",
+                "=="
+              ],
+              "correct_answer": "*"
+            },
+            {
+              "id": "matrix-multiply-bug",
+              "type": "debugging",
+              "question": "The wrong line is the one that misses the job, which adds the row-vector products, for the snippet.",
+              "hints": [
+                "Follow the job, which adds the row-vector products.",
+                "The print adds one pair and ignores the second column.",
+                "Line 3"
+              ],
+              "explanation": "The print adds one pair and ignores the second column.",
+              "xp_reward": 10,
+              "starter_code": "row = [1, 2]\nvec = [52, 3]\nprint(row[0] + vec[0])\n",
+              "correct_answer": "3"
+            },
+            {
+              "id": "matrix-multiply-predict-2",
+              "type": "output_prediction",
+              "question": "A new input still has code that adds the row-vector products for row and 3, and the correct choice is what it prints.",
+              "hints": [
+                "Follow the job, which adds the row-vector products.",
+                "Each column multiplies, then the products add.",
+                "61"
+              ],
+              "explanation": "Each column multiplies, then the products add.",
+              "xp_reward": 10,
+              "starter_code": "row = [1, 2]\nvec = [55, 3]\nprint(row[0] * vec[0] + row[1] * vec[1])\n",
+              "options": [
+                "58",
+                "0",
+                "none",
+                "61"
+              ],
+              "correct_answer": "61"
+            },
+            {
+              "id": "matrix-multiply-write",
               "type": "code",
-              "question": "Implement `dot(a, b)` returning the sum of the elementwise products of two equal-length sequences - the inner operation `matvec` repeats for every row.",
-              "starter_code": "def dot(a, b):\n    # TODO: multiply matching elements together and add them up\n    return 0\n",
-              "solution_code": "def dot(a, b):\n    return sum(x * y for x, y in zip(a, b))\n",
+              "question": "Type the missing piece so the program adds the row-vector products for row and 3 and prints it.",
+              "hints": [
+                "Follow the job, which adds the row-vector products.",
+                "The printed value is the result after this step adds the row-vector products.",
+                "label = row[0] * vec[0] + row[1] * vec[1]"
+              ],
+              "explanation": "The printed value is the result after this step adds the row-vector products.",
+              "xp_reward": 10,
+              "starter_code": "row = [1, 2]\nvec = [52, 3]\nlabel = ___\nprint(label)\n",
+              "solution_code": "row = [1, 2]\nvec = [52, 3]\nlabel = row[0] * vec[0] + row[1] * vec[1]\nprint(label)\n",
               "tests": [
                 {
-                  "name": "test_dot_basic",
-                  "unittest_code": "def test_dot_basic(self):\n    self.assertEqual(dot([1, 2, 3], [4, 5, 6]), 32)\n"
-                },
-                {
-                  "name": "test_dot_zeros",
-                  "unittest_code": "def test_dot_zeros(self):\n    self.assertEqual(dot([9, 8], [0, 0]), 0)\n"
-                },
-                {
-                  "name": "test_dot_negatives",
-                  "unittest_code": "def test_dot_negatives(self):\n    self.assertEqual(dot([1, -2], [3, 4]), -5)\n"
+                  "name": "matrix-multiply-prints",
+                  "description": "The printed value is the result after this step adds the row-vector products.",
+                  "expected_stdout": "58\n",
+                  "required": true
                 }
-              ],
-              "xp_reward": 15
+              ]
             }
           ]
         }
-      ]
+      ],
+      "player_mode": "micro"
     },
     {
       "id": "vectors-checkpoint",
-      "title": "5. Checkpoint: Cosine Similarity",
-      "description": "Implement `cosine_sim(a, b)` = dot/(||a|| ||b||). Return 0 if either norm is 0. The test checks that `cosine_sim([0, 0], [1, 2])` equals `0.0`; `cosine_sim([1, 0], [1, 0])` equals `1.0`; `cosine_sim([1, 0], [0, 1])` equals `0.0`.",
+      "title": "Practice Checkpoint Cosine Similarity",
+      "description": "Implement cosine_sim(a, b) = dot/(||a|| ||b||). Return 0 if either norm is 0. The test checks that cosine_sim([0, 0], [1, 2]) equals 0.0; cosine_sim([1, 0], [1, 0]) equals 1.0; cosine_sim([1, 0], [0, 1]) equals 0.0.",
       "order": 5,
       "difficulty": "intermediate",
       "duration_minutes": 10,
@@ -208,7 +847,7 @@
       ],
       "prerequisites": [],
       "learning_objectives": [
-        "Compute cosine similarity"
+        "This step reports 1 when two vectors point the same way, using dot and 1."
       ],
       "starter_code": "import math\n\ndef cosine_sim(a, b):\n    # TODO\n    pass\n",
       "solution_code": "import math\n\ndef cosine_sim(a, b):\n    dot = sum(x * y for x, y in zip(a, b))\n    na = math.sqrt(sum(x * x for x in a))\n    nb = math.sqrt(sum(x * x for x in b))\n    if na == 0 or nb == 0:\n        return 0.0\n    return dot / (na * nb)\n",
@@ -229,7 +868,175 @@
         "url": "https://developers.google.com/machine-learning/clustering/dnn-clustering/supervised-similarity",
         "license": "CC BY 4.0 (Google Machine Learning Crash Course)"
       },
-      "xp_reward": 40
+      "xp_reward": 40,
+      "player_mode": "micro",
+      "sublessons": [
+        {
+          "id": "vectors-checkpoint-micro",
+          "title": "Practice Checkpoint Cosine Similarity",
+          "description": "",
+          "order": 1,
+          "exercises": [
+            {
+              "id": "vectors-checkpoint-teach",
+              "type": "teach",
+              "question": "This step reports 1 when two vectors point the same way, using dot and 1.",
+              "hints": [
+                "Follow the job, which reports 1 when two vectors point the same way.",
+                "Same direction gives a positive dot product.",
+                "a[0] * b[0]"
+              ],
+              "explanation": "This step reports 1 when two vectors point the same way, using dot and 1.",
+              "xp_reward": 0,
+              "worked_example": "a[0] * b[0]"
+            },
+            {
+              "id": "vectors-checkpoint-mcq",
+              "type": "mcq",
+              "question": "Select the line that reports 1 when two vectors point the same way, the one that belongs with dot and 1.",
+              "hints": [
+                "Follow the job, which reports 1 when two vectors point the same way.",
+                "Same direction gives a positive dot product.",
+                "a[0] * b[0] + a[1] * b[1]"
+              ],
+              "explanation": "Same direction gives a positive dot product.",
+              "xp_reward": 10,
+              "options": [
+                "a == b",
+                "return a",
+                "pass",
+                "a[0] * b[0] + a[1] * b[1]"
+              ],
+              "correct_answer": "a[0] * b[0] + a[1] * b[1]"
+            },
+            {
+              "id": "vectors-checkpoint-predict",
+              "type": "output_prediction",
+              "question": "Follow the code that reports when two vectors point the same way for dot and then choose the displayed value.",
+              "hints": [
+                "Follow the job, which Follow the job, which reports when two vectors point the same way.",
+                "Same direction gives a positive dot product.",
+                "1"
+              ],
+              "explanation": "Same direction gives a positive dot product.",
+              "xp_reward": 10,
+              "starter_code": "def dot(a, b):\n    return a[0] * b[0] + a[1] * b[1]\nprint(dot([1, 0], [1, 0]))\n",
+              "options": [
+                "0",
+                "none",
+                "blank",
+                "1"
+              ],
+              "correct_answer": "1"
+            },
+            {
+              "id": "vectors-checkpoint-order",
+              "type": "ordering",
+              "question": "Order the pieces so the line reports 1 when two vectors point the same way for dot and 1.",
+              "hints": [
+                "Follow the job, which reports 1 when two vectors point the same way.",
+                "Same direction gives a positive dot product.",
+                "def f(): return a[0]*b[0] + a[1]*b[1]"
+              ],
+              "explanation": "Same direction gives a positive dot product.",
+              "xp_reward": 10,
+              "options": [
+                "def",
+                "f():",
+                "return",
+                "a[0]*b[0]",
+                "+",
+                "a[1]*b[1]",
+                "-"
+              ],
+              "correct_answer": [
+                "def",
+                "f():",
+                "return",
+                "a[0]*b[0]",
+                "+",
+                "a[1]*b[1]"
+              ]
+            },
+            {
+              "id": "vectors-checkpoint-fill",
+              "type": "fill_blank",
+              "question": "Supply the missing piece so the line reports 1 when two vectors point the same way for dot and 1.",
+              "hints": [
+                "Follow the job, which reports 1 when two vectors point the same way.",
+                "Same direction gives a positive dot product.",
+                "*"
+              ],
+              "explanation": "Same direction gives a positive dot product.",
+              "xp_reward": 10,
+              "starter_code": "pair = a[0] ___ b[0]\n",
+              "options": [
+                "+",
+                "-",
+                "==",
+                "*"
+              ],
+              "correct_answer": "*"
+            },
+            {
+              "id": "vectors-checkpoint-bug",
+              "type": "debugging",
+              "question": "The wrong line is the one that misses the job, which reports 1 when two vectors point the same way, for dot and 1.",
+              "hints": [
+                "Follow the job, which reports 1 when two vectors point the same way.",
+                "The function adds the first items and ignores the second axis.",
+                "Line 2"
+              ],
+              "explanation": "The function adds the first items and ignores the second axis.",
+              "xp_reward": 10,
+              "starter_code": "def dot(a, b):\n    return a[0] + b[0]\nprint(dot([1, 0], [0, 1]))\n",
+              "correct_answer": "2"
+            },
+            {
+              "id": "vectors-checkpoint-predict-2",
+              "type": "output_prediction",
+              "question": "A new input still has code that reports 1 when two vectors point the same way for dot and 1, and the correct choice is what it prints.",
+              "hints": [
+                "Follow the job, which reports 1 when two vectors point the same way.",
+                "Same direction gives a positive dot product.",
+                "0"
+              ],
+              "explanation": "Same direction gives a positive dot product.",
+              "xp_reward": 10,
+              "starter_code": "def dot(a, b):\n    return a[0] * b[0] + a[1] * b[1]\nprint(dot([1, 0], [0, 1]))\n",
+              "options": [
+                "1",
+                "none",
+                "0",
+                "blank"
+              ],
+              "correct_answer": "0"
+            },
+            {
+              "id": "vectors-checkpoint-write",
+              "type": "code",
+              "question": "The blank is the missing piece of the program that reports when two vectors point the same way for dot and.",
+              "hints": [
+                "Follow the job, which reports 1 when two vectors point the same way.",
+                "The printed value is the result after this step reports 1 when two vectors point the same way.",
+                "label = dot([1, 0], [1, 0])"
+              ],
+              "explanation": "The printed value is the result after this step reports 1 when two vectors point the same way.",
+              "xp_reward": 10,
+              "starter_code": "def dot(a, b):\n    return a[0] * b[0] + a[1] * b[1]\nlabel = ___\nprint(label)\n",
+              "solution_code": "def dot(a, b):\n    return a[0] * b[0] + a[1] * b[1]\nlabel = dot([1, 0], [1, 0])\nprint(label)\n",
+              "tests": [
+                {
+                  "name": "vectors-checkpoint-prints",
+                  "description": "The printed value is the result after this step reports 1 when two vectors point",
+                  "expected_stdout": "1\n",
+                  "required": true
+                }
+              ]
+            }
+          ]
+        }
+      ]
     }
   ]
 }

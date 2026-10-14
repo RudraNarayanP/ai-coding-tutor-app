@@ -14,8 +14,8 @@
   "lessons": [
     {
       "id": "sql-13",
-      "title": "13. Views & Indexes",
-      "description": "Create a view `active_users` that selects `username` and `email` from `users` where `role` is not `guest`. Also create an index on `users(email)`. The test checks that the view returns at least 4 rows.",
+      "title": "Practice Views Indexes",
+      "description": "Create a view active_users that selects username and email from users where role is not guest. Also create an index on users(email). The test checks that the view returns at least 4 rows.",
       "order": 13,
       "difficulty": "advanced",
       "duration_minutes": 5,
@@ -45,10 +45,181 @@
         "license": "Public domain (SQLite documentation)"
       },
       "learning_objectives": [
-        "Store a query as a reusable view with CREATE VIEW",
-        "Speed up lookups with CREATE INDEX on frequently queried columns"
+        "This step reads names through a view, using CREATE holding Kitchen."
       ],
-      "xp_reward": 10
+      "xp_reward": 10,
+      "player_mode": "micro",
+      "sublessons": [
+        {
+          "id": "sql-13-micro",
+          "title": "Practice Views Indexes",
+          "description": "",
+          "order": 1,
+          "exercises": [
+            {
+              "id": "sql-13-teach",
+              "type": "teach",
+              "question": "This step reads names through a view, using CREATE holding Kitchen.",
+              "hints": [
+                "Follow the job, which reads names through a view.",
+                "CREATE VIEW stores the select, and reading the view runs it.",
+                "CREATE VIEW kitchen AS SELECT name FROM products"
+              ],
+              "explanation": "This step reads names through a view, using CREATE holding Kitchen.",
+              "xp_reward": 0,
+              "worked_example": "CREATE VIEW kitchen AS SELECT name FROM products"
+            },
+            {
+              "id": "sql-13-mcq",
+              "type": "mcq",
+              "question": "The correct line reads names through a view, and it is the line tied to CREATE holding Kitchen.",
+              "hints": [
+                "Follow the job, which reads names through a view.",
+                "CREATE VIEW stores the select, and reading the view runs it.",
+                "CREATE VIEW kitchen AS SELECT name FROM products"
+              ],
+              "explanation": "CREATE VIEW stores the select, and reading the view runs it.",
+              "xp_reward": 10,
+              "options": [
+                "DROP TABLE products",
+                "INSERT INTO products",
+                "CREATE VIEW kitchen AS SELECT name FROM products",
+                "name == name"
+              ],
+              "correct_answer": "CREATE VIEW kitchen AS SELECT name FROM products"
+            },
+            {
+              "id": "sql-13-predict",
+              "type": "output_prediction",
+              "question": "The program reads names through a view with CREATE holding Kitchen, so choose the printed value.",
+              "hints": [
+                "Follow the job, which reads names through a view.",
+                "CREATE VIEW stores the select, and reading the view runs it.",
+                "┌────────────┐\n│ name       │\n├────────────┤\n│ Coffee Mug │\n└────────────┘"
+              ],
+              "explanation": "CREATE VIEW stores the select, and reading the view runs it.",
+              "xp_reward": 10,
+              "starter_code": "CREATE VIEW kitchen AS SELECT name FROM products WHERE category = 'Kitchen';\nSELECT name FROM kitchen;\n",
+              "options": [
+                "┌─────────────────────┐\n│ name                │\n├─────────────────────┤\n│ Laptop Pro          │\n│ Mechanical Keyboard │\n│ Monitor 27-inch     │\n└─────────────────────┘",
+                "none",
+                "┌────────────┐\n│ name       │\n├────────────┤\n│ Coffee Mug │\n└────────────┘",
+                "0"
+              ],
+              "correct_answer": "┌────────────┐\n│ name       │\n├────────────┤\n│ Coffee Mug │\n└────────────┘"
+            },
+            {
+              "id": "sql-13-order",
+              "type": "ordering",
+              "question": "Build the line that reads names through a view for CREATE holding Kitchen, from the first piece to the last.",
+              "hints": [
+                "Follow the job, which reads names through a view.",
+                "CREATE VIEW stores the select, and reading the view runs it.",
+                "CREATE VIEW kitchen AS SELECT name FROM products"
+              ],
+              "explanation": "CREATE VIEW stores the select, and reading the view runs it.",
+              "xp_reward": 10,
+              "options": [
+                "CREATE",
+                "VIEW",
+                "kitchen",
+                "AS",
+                "SELECT",
+                "name",
+                "FROM",
+                "products",
+                "DROP"
+              ],
+              "correct_answer": [
+                "CREATE",
+                "VIEW",
+                "kitchen",
+                "AS",
+                "SELECT",
+                "name",
+                "FROM",
+                "products"
+              ]
+            },
+            {
+              "id": "sql-13-fill",
+              "type": "fill_blank",
+              "question": "Replace the blank with the piece that makes the line reads names through a view for CREATE holding Kitchen.",
+              "hints": [
+                "Follow the job, which reads names through a view.",
+                "CREATE VIEW stores the select, and reading the view runs it.",
+                "AS"
+              ],
+              "explanation": "CREATE VIEW stores the select, and reading the view runs it.",
+              "xp_reward": 10,
+              "starter_code": "CREATE VIEW kitchen ___ SELECT name FROM products WHERE category = 'Kitchen';",
+              "options": [
+                "WHERE",
+                "SET",
+                "AS",
+                "FROM"
+              ],
+              "correct_answer": "AS"
+            },
+            {
+              "id": "sql-13-bug",
+              "type": "debugging",
+              "question": "Spot the line that fails the job, which reads names through a view, around CREATE holding Kitchen.",
+              "hints": [
+                "Follow the job, which reads names through a view.",
+                "The view filters a category that has no products.",
+                "Line 1"
+              ],
+              "explanation": "The view filters a category that has no products.",
+              "xp_reward": 10,
+              "starter_code": "CREATE VIEW kitchen AS SELECT name FROM products WHERE category = 'Missing';\nSELECT name FROM kitchen;",
+              "correct_answer": "1"
+            },
+            {
+              "id": "sql-13-predict-2",
+              "type": "output_prediction",
+              "question": "The second program reads names through a view for CREATE holding Kitchen, so choose the new printed value.",
+              "hints": [
+                "Follow the job, which reads names through a view.",
+                "CREATE VIEW stores the select, and reading the view runs it.",
+                "┌─────────────────────┐\n│ name                │\n├─────────────────────┤\n│ Laptop Pro          │\n│ Mechanical Keyboard │\n│ Monitor 27-inch     │\n└─────────────────────┘"
+              ],
+              "explanation": "CREATE VIEW stores the select, and reading the view runs it.",
+              "xp_reward": 10,
+              "starter_code": "CREATE VIEW gear AS SELECT name FROM products WHERE category = 'Electronics' ORDER BY name;\nSELECT name FROM gear;\n",
+              "options": [
+                "┌────────────┐\n│ name       │\n├────────────┤\n│ Coffee Mug │\n└────────────┘",
+                "┌─────────────────────┐\n│ name                │\n├─────────────────────┤\n│ Laptop Pro          │\n│ Mechanical Keyboard │\n│ Monitor 27-inch     │\n└─────────────────────┘",
+                "0",
+                "none"
+              ],
+              "correct_answer": "┌─────────────────────┐\n│ name                │\n├─────────────────────┤\n│ Laptop Pro          │\n│ Mechanical Keyboard │\n│ Monitor 27-inch     │\n└─────────────────────┘"
+            },
+            {
+              "id": "sql-13-write",
+              "type": "code",
+              "question": "Complete the blank so this program reads names through a view and prints the result for CREATE holding Kitchen.",
+              "hints": [
+                "Follow the job, which reads names through a view.",
+                "The query result is what this step reads names through a view.",
+                "SELECT name FROM products"
+              ],
+              "explanation": "The query result is what this step reads names through a view.",
+              "xp_reward": 10,
+              "starter_code": "CREATE VIEW kitchen AS SELECT ___ FROM products WHERE category = 'Kitchen';\nSELECT name FROM kitchen;\n",
+              "solution_code": "CREATE VIEW kitchen AS SELECT name FROM products WHERE category = 'Kitchen';\nSELECT name FROM kitchen;\n",
+              "tests": [
+                {
+                  "name": "sql-13-prints",
+                  "description": "The query result is what this step reads names through a view.",
+                  "expected_stdout": "┌────────────┐\n│ name       │\n├────────────┤\n│ Coffee Mug │\n└────────────┘",
+                  "required": true
+                }
+              ]
+            }
+          ]
+        }
+      ]
     }
   ]
 }

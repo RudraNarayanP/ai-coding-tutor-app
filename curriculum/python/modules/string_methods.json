@@ -14,8 +14,8 @@
   "lessons": [
     {
       "id": "string-methods-step-1",
-      "title": "1. Case Transformation & Checking Endings",
-      "description": "Finish two functions. String methods return a new string. `make_loud(s)` returns `s` in capitals (`\"hello\"` becomes `\"HELLO\"`). `is_question(s)` returns true when the string ends with `?` (`\"Ready?\"` is true, `\"Ready.\"` is false). The test checks that `make_loud(\"hello\")` equals `\"HELLO\"`; `is_question(\"Ready?\")` is true; `is_question(\"Ready.\")` is false.",
+      "title": "Practice Case Transformation Checking Endings",
+      "description": "Finish two functions. String methods return a new string. make_loud(s) returns s in capitals (\"hello\" becomes \"HELLO\"). is_question(s) returns true when the string ends with ? (\"Ready?\" is true, \"Ready.\" is false). The test checks that make_loud(\"hello\") equals \"HELLO\"; is_question(\"Ready?\") is true; is_question(\"Ready.\") is false.",
       "order": 31,
       "difficulty": "beginner",
       "duration_minutes": 5,
@@ -27,7 +27,7 @@
         "strings"
       ],
       "learning_objectives": [
-        "Transform string case and test endings"
+        "This step shows the reading in uppercase, using text holding yarrow."
       ],
       "starter_code": "def make_loud(s):\n    # TODO: return s in capital letters\n    pass\n\ndef is_question(s):\n    # TODO: return True when s ends with a question mark\n    pass\n",
       "tests": [
@@ -48,12 +48,178 @@
         "url": "https://docs.python.org/3/library/stdtypes.html#string-methods",
         "license": "Python documentation license (PSF)"
       },
-      "xp_reward": 10
+      "xp_reward": 10,
+      "player_mode": "micro",
+      "sublessons": [
+        {
+          "id": "string-methods-step-1-micro",
+          "title": "Practice Case Transformation Checking Endings",
+          "description": "",
+          "order": 1,
+          "exercises": [
+            {
+              "id": "string-methods-step-1-teach",
+              "type": "teach",
+              "question": "This step shows the reading in uppercase, using text holding yarrow.",
+              "hints": [
+                "Follow the job, which shows the reading in uppercase.",
+                "upper() changes every letter to uppercase.",
+                "text.upper()"
+              ],
+              "explanation": "This step shows the reading in uppercase, using text holding yarrow.",
+              "xp_reward": 0,
+              "worked_example": "text.upper()"
+            },
+            {
+              "id": "string-methods-step-1-mcq",
+              "type": "mcq",
+              "question": "A correct choice shows the reading in uppercase and goes with text holding yarrow.",
+              "hints": [
+                "Follow the job, which shows the reading in uppercase.",
+                "upper() changes every letter to uppercase.",
+                "text.upper()"
+              ],
+              "explanation": "upper() changes every letter to uppercase.",
+              "xp_reward": 10,
+              "options": [
+                "text.lower()",
+                "len(text)",
+                "text.upper()",
+                "text == text"
+              ],
+              "correct_answer": "text.upper()"
+            },
+            {
+              "id": "string-methods-step-1-predict",
+              "type": "output_prediction",
+              "question": "Select the output after the code shows the reading in uppercase, using text holding yarrow.",
+              "hints": [
+                "Follow the job, which shows the reading in uppercase.",
+                "upper() changes every letter to uppercase.",
+                "YARROWING"
+              ],
+              "explanation": "upper() changes every letter to uppercase.",
+              "xp_reward": 10,
+              "starter_code": "text = 'yarrow' + 'ing'\nprint(text.upper())\n",
+              "options": [
+                "YARROWED",
+                "none",
+                "YARROWING",
+                "0"
+              ],
+              "correct_answer": "YARROWING"
+            },
+            {
+              "id": "string-methods-step-1-order",
+              "type": "ordering",
+              "question": "Make the line that shows the reading in uppercase by ordering the pieces for text holding yarrow.",
+              "hints": [
+                "Follow the job, which shows the reading in uppercase.",
+                "shouted = text.upper() stores the uppercase reading.",
+                "shouted = text.upper ( )"
+              ],
+              "explanation": "shouted = text.upper() stores the uppercase reading.",
+              "xp_reward": 10,
+              "options": [
+                "shouted",
+                "=",
+                "text.upper",
+                "(",
+                ")",
+                "lower"
+              ],
+              "correct_answer": [
+                "shouted",
+                "=",
+                "text.upper",
+                "(",
+                ")"
+              ]
+            },
+            {
+              "id": "string-methods-step-1-fill",
+              "type": "fill_blank",
+              "question": "Complete the line for text holding yarrow so that it shows the reading in uppercase.",
+              "hints": [
+                "Follow the job, which shows the reading in uppercase.",
+                "Plus adds one to the size.",
+                "+"
+              ],
+              "explanation": "Plus adds one to the size.",
+              "xp_reward": 10,
+              "starter_code": "shown = size ___ 1\n",
+              "options": [
+                "-",
+                "*",
+                "+",
+                "=="
+              ],
+              "correct_answer": "+"
+            },
+            {
+              "id": "string-methods-step-1-bug",
+              "type": "debugging",
+              "question": "Select the line that gets in the way of the job, which shows the reading in uppercase, for text holding yarrow.",
+              "hints": [
+                "Follow the job, which shows the reading in uppercase.",
+                "The print uses lowercase.",
+                "Line 2"
+              ],
+              "explanation": "The print uses lowercase.",
+              "xp_reward": 10,
+              "starter_code": "text = 'yarrow' + 'ing'\nprint(text.lower())\n",
+              "correct_answer": "2"
+            },
+            {
+              "id": "string-methods-step-1-predict-2",
+              "type": "output_prediction",
+              "question": "With the new data around text holding yarrow, the code shows the reading in uppercase, so select the new output.",
+              "hints": [
+                "Follow the job, which shows the reading in uppercase.",
+                "upper() changes every letter to uppercase.",
+                "YARROWED"
+              ],
+              "explanation": "upper() changes every letter to uppercase.",
+              "xp_reward": 10,
+              "starter_code": "text = 'yarrow' + 'ed'\nprint(text.upper())\n",
+              "options": [
+                "YARROWING",
+                "YARROWED",
+                "none",
+                "0"
+              ],
+              "correct_answer": "YARROWED"
+            },
+            {
+              "id": "string-methods-step-1-write",
+              "type": "code",
+              "question": "The printed result shows up after you fill the blank so the code shows the reading in uppercase for text holding yarrow.",
+              "hints": [
+                "Follow the job, which shows the reading in uppercase.",
+                "The uppercase reading is what gets printed.",
+                "label = text.upper()"
+              ],
+              "explanation": "The uppercase reading is what gets printed.",
+              "xp_reward": 10,
+              "starter_code": "text = 'yarrow' + 'ing'\nlabel = ___\nprint(label)\n",
+              "solution_code": "text = 'yarrow' + 'ing'\nlabel = text.upper()\nprint(label)\n",
+              "tests": [
+                {
+                  "name": "string-methods-step-1-prints",
+                  "description": "The uppercase reading is what gets printed.",
+                  "expected_stdout": "YARROWING\n",
+                  "required": true
+                }
+              ]
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "string-methods-step-2",
-      "title": "2. Trimming & Replacing Text",
-      "description": "Finish `clean_and_censor(text, word, mask)`. Trim spaces from both ends, then replace `word` with `mask`. `clean_and_censor(\" bad words \", \"bad\", \"***\")` equals `\"*** words\"`. The test checks that `clean_and_censor(\" bad words \", \"bad\", \"***\")` equals `\"*** words\"`.",
+      "title": "Practice Trimming Replacing Text",
+      "description": "Finish clean_and_censor(text, word, mask). Trim spaces from both ends, then replace word with mask. clean_and_censor(\" bad words \", \"bad\", \"***\") equals \"*** words\". The test checks that clean_and_censor(\" bad words \", \"bad\", \"***\") equals \"*** words\".",
       "order": 32,
       "difficulty": "beginner",
       "duration_minutes": 5,
@@ -65,7 +231,7 @@
         "strings"
       ],
       "learning_objectives": [
-        "Clean strings using strip() and replace()"
+        "This step swaps the mark at the end of the reading, using text holding zircon."
       ],
       "starter_code": "def clean_and_censor(s, word, mask):\n    # TODO: trim the ends, then swap word for mask\n    pass\n",
       "tests": [
@@ -86,12 +252,184 @@
         "url": "https://docs.python.org/3/library/stdtypes.html#string-methods",
         "license": "Python documentation license (PSF)"
       },
-      "xp_reward": 10
+      "xp_reward": 10,
+      "player_mode": "micro",
+      "sublessons": [
+        {
+          "id": "string-methods-step-2-micro",
+          "title": "Practice Trimming Replacing Text",
+          "description": "",
+          "order": 1,
+          "exercises": [
+            {
+              "id": "string-methods-step-2-teach",
+              "type": "teach",
+              "question": "This step swaps the mark at the end of the reading, using text holding zircon.",
+              "hints": [
+                "Follow the job, which swaps the mark at the end of the reading.",
+                "replace swaps one mark for another.",
+                "text.replace('!', '?')"
+              ],
+              "explanation": "This step swaps the mark at the end of the reading, using text holding zircon.",
+              "xp_reward": 0,
+              "worked_example": "text.replace('!', '?')"
+            },
+            {
+              "id": "string-methods-step-2-mcq",
+              "type": "mcq",
+              "question": "Choose the line that swaps the mark at the end of the reading, which is the line that fits text holding zircon.",
+              "hints": [
+                "Follow the job, which swaps the mark at the end of the reading.",
+                "replace swaps one mark for another.",
+                "text.replace('!', '?')"
+              ],
+              "explanation": "replace swaps one mark for another.",
+              "xp_reward": 10,
+              "options": [
+                "text.upper()",
+                "len(text)",
+                "text == '!'",
+                "text.replace('!', '?')"
+              ],
+              "correct_answer": "text.replace('!', '?')"
+            },
+            {
+              "id": "string-methods-step-2-predict",
+              "type": "output_prediction",
+              "question": "Read the code that swaps the mark at the end of the reading for text holding zircon, and choose the value it prints.",
+              "hints": [
+                "Follow the job, which swaps the mark at the end of the reading.",
+                "replace swaps one mark for another.",
+                "zircon?"
+              ],
+              "explanation": "replace swaps one mark for another.",
+              "xp_reward": 10,
+              "starter_code": "text = 'zircon' + '!'\nprint(text.replace('!', '?'))\n",
+              "options": [
+                "zircon.",
+                "none",
+                "0",
+                "zircon?"
+              ],
+              "correct_answer": "zircon?"
+            },
+            {
+              "id": "string-methods-step-2-order",
+              "type": "ordering",
+              "question": "Arrange the pieces of the line that swaps the mark at the end of the reading, left to right, for text holding zircon.",
+              "hints": [
+                "Follow the job, which swaps the mark at the end of the reading.",
+                "text.replace('!', '?') swaps the mark.",
+                "clean = text.replace ( '!' , '?' )"
+              ],
+              "explanation": "text.replace('!', '?') swaps the mark.",
+              "xp_reward": 10,
+              "options": [
+                "clean",
+                "=",
+                "text.replace",
+                "(",
+                "'!'",
+                ",",
+                "'?'",
+                ")",
+                "upper"
+              ],
+              "correct_answer": [
+                "clean",
+                "=",
+                "text.replace",
+                "(",
+                "'!'",
+                ",",
+                "'?'",
+                ")"
+              ]
+            },
+            {
+              "id": "string-methods-step-2-fill",
+              "type": "fill_blank",
+              "question": "Fill the blank so the line swaps the mark at the end of the reading for text holding zircon.",
+              "hints": [
+                "Follow the job, which swaps the mark at the end of the reading.",
+                "The question mark is the replacement.",
+                "'?'"
+              ],
+              "explanation": "The question mark is the replacement.",
+              "xp_reward": 10,
+              "starter_code": "clean = text.replace('!', ___)\n",
+              "options": [
+                "'!'",
+                "''",
+                "'x'",
+                "'?'"
+              ],
+              "correct_answer": "'?'"
+            },
+            {
+              "id": "string-methods-step-2-bug",
+              "type": "debugging",
+              "question": "Find the line that misses the job, which swaps the mark at the end of the reading, for text holding zircon.",
+              "hints": [
+                "Follow the job, which swaps the mark at the end of the reading.",
+                "The search mark is not in the reading, so nothing changes.",
+                "Line 2"
+              ],
+              "explanation": "The search mark is not in the reading, so nothing changes.",
+              "xp_reward": 10,
+              "starter_code": "text = 'zircon' + '!'\nprint(text.replace('x', '?'))\n",
+              "correct_answer": "2"
+            },
+            {
+              "id": "string-methods-step-2-predict-2",
+              "type": "output_prediction",
+              "question": "On the new input, the code still swaps the mark at the end of the reading for text holding zircon, so choose what it prints.",
+              "hints": [
+                "Follow the job, which swaps the mark at the end of the reading.",
+                "replace swaps one mark for another.",
+                "zircon."
+              ],
+              "explanation": "replace swaps one mark for another.",
+              "xp_reward": 10,
+              "starter_code": "text = 'zircon' + '!'\nprint(text.replace('!', '.'))\n",
+              "options": [
+                "zircon?",
+                "none",
+                "zircon.",
+                "0"
+              ],
+              "correct_answer": "zircon."
+            },
+            {
+              "id": "string-methods-step-2-write",
+              "type": "code",
+              "question": "Fill the blank so the program swaps the mark at the end of the reading, and the print shows that result for text holding zircon.",
+              "hints": [
+                "Follow the job, which swaps the mark at the end of the reading.",
+                "The swapped reading is what gets printed.",
+                "label = text.replace('!', '?')"
+              ],
+              "explanation": "The swapped reading is what gets printed.",
+              "xp_reward": 10,
+              "starter_code": "text = 'zircon' + '!'\nlabel = ___\nprint(label)\n",
+              "solution_code": "text = 'zircon' + '!'\nlabel = text.replace('!', '?')\nprint(label)\n",
+              "tests": [
+                {
+                  "name": "string-methods-step-2-prints",
+                  "description": "The swapped reading is what gets printed.",
+                  "expected_stdout": "zircon?\n",
+                  "required": true
+                }
+              ]
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "string-methods-01",
-      "title": "3. Little Sister's Essay (Concept Challenge)",
-      "description": "Finish `capitalize_title`, `check_sentence_ending`, `clean_up_spacing`, `replace_word_choice`. Clean and format essay text using built-in string methods. The test checks that `capitalize_title('fish be with YOU')` equals `'Fish Be With You'`; `check_sentence_ending('Snails are slow.')` equals `True`; `check_sentence_ending('Snails are slow')` equals `False`.",
+      "title": "Practice Little Sister's Essay",
+      "description": "Finish capitalize_title, check_sentence_ending, clean_up_spacing, replace_word_choice. Clean and format essay text using built-in string methods. The test checks that capitalize_title('fish be with YOU') equals 'Fish Be With You'; check_sentence_ending('Snails are slow.') equals True; check_sentence_ending('Snails are slow') equals False.",
       "order": 33,
       "difficulty": "beginner",
       "duration_minutes": 8,
@@ -103,9 +441,7 @@
         "strings"
       ],
       "learning_objectives": [
-        "Use .title(), .endswith(), .strip(), and .replace()",
-        "Clean up user text input and fix spacing issues",
-        "Perform exact substring replacements"
+        "This step trims, swaps the mark, then shows uppercase, using text holding hazel."
       ],
       "starter_code": "def capitalize_title(title):\n    \"\"\"Return title in title case.\"\"\"\n    pass\n\ndef check_sentence_ending(sentence):\n    \"\"\"Return True if sentence ends with a period.\"\"\"\n    pass\n\ndef clean_up_spacing(sentence):\n    \"\"\"Strip leading and trailing whitespace.\"\"\"\n    pass\n\ndef replace_word_choice(sentence, old_word, new_word):\n    \"\"\"Replace old_word with new_word in sentence.\"\"\"\n    pass\n",
       "tests": [
@@ -144,12 +480,178 @@
         "license": "MIT"
       },
       "solution_code": "def capitalize_title(title):\n    \"\"\"Return title in title case.\"\"\"\n    return title.title()\n\n\ndef check_sentence_ending(sentence):\n    \"\"\"Return True if sentence ends with a period.\"\"\"\n    return sentence.endswith('.')\n\n\ndef clean_up_spacing(sentence):\n    \"\"\"Strip leading and trailing whitespace.\"\"\"\n    return sentence.strip()\n\n\ndef replace_word_choice(sentence, old_word, new_word):\n    \"\"\"Replace old_word with new_word in sentence.\"\"\"\n    return sentence.replace(old_word, new_word)\n",
-      "xp_reward": 25
+      "xp_reward": 25,
+      "player_mode": "micro",
+      "sublessons": [
+        {
+          "id": "string-methods-01-micro",
+          "title": "Practice Little Sister's Essay",
+          "description": "",
+          "order": 1,
+          "exercises": [
+            {
+              "id": "string-methods-01-teach",
+              "type": "teach",
+              "question": "This step trims, swaps the mark, then shows uppercase, using text holding hazel.",
+              "hints": [
+                "Follow the job, which trims, swaps the mark, then shows uppercase.",
+                "The methods run from left to right.",
+                "text.strip().replace('!', '?').upper()"
+              ],
+              "explanation": "This step trims, swaps the mark, then shows uppercase, using text holding hazel.",
+              "xp_reward": 0,
+              "worked_example": "text.strip().replace('!', '?').upper()"
+            },
+            {
+              "id": "string-methods-01-mcq",
+              "type": "mcq",
+              "question": "Pick the line that trims, swaps the mark, then shows uppercase, not a line about something else, for text holding hazel.",
+              "hints": [
+                "Follow the job, which trims, swaps the mark, then shows uppercase.",
+                "The methods run from left to right.",
+                "text.strip().replace('!', '?').upper()"
+              ],
+              "explanation": "The methods run from left to right.",
+              "xp_reward": 10,
+              "options": [
+                "text.upper().strip()",
+                "len(text)",
+                "text.strip().replace('!', '?').upper()",
+                "text == text"
+              ],
+              "correct_answer": "text.strip().replace('!', '?').upper()"
+            },
+            {
+              "id": "string-methods-01-predict",
+              "type": "output_prediction",
+              "question": "The displayed value is what the code prints when it trims, swaps the mark, then shows uppercase for text holding hazel.",
+              "hints": [
+                "Follow the job, which trims, swaps the mark, then shows uppercase.",
+                "The methods run from left to right.",
+                "HAZEL?"
+              ],
+              "explanation": "The methods run from left to right.",
+              "xp_reward": 10,
+              "starter_code": "text = '  ' + 'hazel' + '!'\nprint(text.strip().replace('!', '?').upper())\n",
+              "options": [
+                "none",
+                "HAZEL?",
+                "HAZEL.",
+                "0"
+              ],
+              "correct_answer": "HAZEL?"
+            },
+            {
+              "id": "string-methods-01-order",
+              "type": "ordering",
+              "question": "Place every piece so the result trims, swaps the mark, then shows uppercase for text holding hazel.",
+              "hints": [
+                "Follow the job, which trims, swaps the mark, then shows uppercase.",
+                "text.strip() removes the outer spaces first.",
+                "clean = text.strip ( )"
+              ],
+              "explanation": "text.strip() removes the outer spaces first.",
+              "xp_reward": 10,
+              "options": [
+                "clean",
+                "=",
+                "text.strip",
+                "(",
+                ")",
+                "upper"
+              ],
+              "correct_answer": [
+                "clean",
+                "=",
+                "text.strip",
+                "(",
+                ")"
+              ]
+            },
+            {
+              "id": "string-methods-01-fill",
+              "type": "fill_blank",
+              "question": "Drop in the piece that lets the line trims, swaps the mark, then shows uppercase for text holding hazel.",
+              "hints": [
+                "Follow the job, which trims, swaps the mark, then shows uppercase.",
+                "Plus adds one to the size.",
+                "+"
+              ],
+              "explanation": "Plus adds one to the size.",
+              "xp_reward": 10,
+              "starter_code": "shown = size ___ 1\n",
+              "options": [
+                "-",
+                "*",
+                "+",
+                "=="
+              ],
+              "correct_answer": "+"
+            },
+            {
+              "id": "string-methods-01-bug",
+              "type": "debugging",
+              "question": "The mismatch misses the job, which trims, swaps the mark, then shows uppercase, for text holding hazel.",
+              "hints": [
+                "Follow the job, which trims, swaps the mark, then shows uppercase.",
+                "The spaces are never trimmed.",
+                "Line 2"
+              ],
+              "explanation": "The spaces are never trimmed.",
+              "xp_reward": 10,
+              "starter_code": "text = '  ' + 'hazel' + '!'\nprint(text.replace('!', '?').upper())\n",
+              "correct_answer": "2"
+            },
+            {
+              "id": "string-methods-01-predict-2",
+              "type": "output_prediction",
+              "question": "Choose the printed result of the second run that trims, swaps the mark, then shows uppercase for text holding.",
+              "hints": [
+                "Follow the job, which trims, swaps the mark, then shows uppercase.",
+                "The methods run from left to right.",
+                "HAZEL."
+              ],
+              "explanation": "The methods run from left to right.",
+              "xp_reward": 10,
+              "starter_code": "text = '  ' + 'hazel' + '!'\nprint(text.strip().replace('!', '.').upper())\n",
+              "options": [
+                "HAZEL?",
+                "HAZEL.",
+                "none",
+                "0"
+              ],
+              "correct_answer": "HAZEL."
+            },
+            {
+              "id": "string-methods-01-write",
+              "type": "code",
+              "question": "Make the program trims, swaps the mark, then shows uppercase by filling the blank for text holding hazel.",
+              "hints": [
+                "Follow the job, which trims, swaps the mark, then shows uppercase.",
+                "The cleaned reading is what gets printed.",
+                "label = text.strip().replace('!', '?').upper()"
+              ],
+              "explanation": "The cleaned reading is what gets printed.",
+              "xp_reward": 10,
+              "starter_code": "text = '  ' + 'hazel' + '!'\nlabel = ___\nprint(label)\n",
+              "solution_code": "text = '  ' + 'hazel' + '!'\nlabel = text.strip().replace('!', '?').upper()\nprint(label)\n",
+              "tests": [
+                {
+                  "name": "string-methods-01-prints",
+                  "description": "The cleaned reading is what gets printed.",
+                  "expected_stdout": "HAZEL?\n",
+                  "required": true
+                }
+              ]
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "string-methods-practice-1",
-      "title": "4. Form Field Sanitizer (Practice)",
-      "description": "Finish `sanitize_email`. Sanitize user input: lowercased and whitespace-trimmed. The test checks that `sanitize_email(\" User@Example.COM \")` equals `\"user@example.com\"`.",
+      "title": "Practice Form Field Sanitizer",
+      "description": "Finish sanitize_email. Sanitize user input: lowercased and whitespace-trimmed. The test checks that sanitize_email(\" User@Example.COM \") equals \"user@example.com\".",
       "order": 34,
       "difficulty": "beginner",
       "duration_minutes": 6,
@@ -161,7 +663,7 @@
         "strings"
       ],
       "learning_objectives": [
-        "Sanitize inputs using chained string methods"
+        "This step shows the reading without the outer spaces, using text holding willow."
       ],
       "starter_code": "def sanitize_email(raw_email):\n    # TODO: return the address trimmed and in lower case\n    pass\n",
       "tests": [
@@ -182,12 +684,178 @@
         "url": "https://docs.python.org/3/library/stdtypes.html#string-methods",
         "license": "Python documentation license (PSF)"
       },
-      "xp_reward": 15
+      "xp_reward": 15,
+      "player_mode": "micro",
+      "sublessons": [
+        {
+          "id": "string-methods-practice-1-micro",
+          "title": "Practice Form Field Sanitizer",
+          "description": "",
+          "order": 1,
+          "exercises": [
+            {
+              "id": "string-methods-practice-1-teach",
+              "type": "teach",
+              "question": "This step shows the reading without the outer spaces, using text holding willow.",
+              "hints": [
+                "Follow the job, which shows the reading without the outer spaces.",
+                "strip() removes spaces from both ends.",
+                "text.strip()"
+              ],
+              "explanation": "This step shows the reading without the outer spaces, using text holding willow.",
+              "xp_reward": 0,
+              "worked_example": "text.strip()"
+            },
+            {
+              "id": "string-methods-practice-1-mcq",
+              "type": "mcq",
+              "question": "Pick the line that shows the reading without the outer spaces, not a line about something else, for text holding willow.",
+              "hints": [
+                "Follow the job, which shows the reading without the outer spaces.",
+                "strip() removes spaces from both ends.",
+                "text.strip()"
+              ],
+              "explanation": "strip() removes spaces from both ends.",
+              "xp_reward": 10,
+              "options": [
+                "text.upper()",
+                "len(text)",
+                "text.strip()",
+                "text == text"
+              ],
+              "correct_answer": "text.strip()"
+            },
+            {
+              "id": "string-methods-practice-1-predict",
+              "type": "output_prediction",
+              "question": "The displayed value is what the code prints when it shows the reading without the outer spaces for text holding.",
+              "hints": [
+                "Follow the job, which shows the reading without the outer spaces.",
+                "strip() removes spaces from both ends.",
+                "willow"
+              ],
+              "explanation": "strip() removes spaces from both ends.",
+              "xp_reward": 10,
+              "starter_code": "text = '  ' + 'willow'\nprint(text.strip())\n",
+              "options": [
+                "willows",
+                "none",
+                "willow",
+                "0"
+              ],
+              "correct_answer": "willow"
+            },
+            {
+              "id": "string-methods-practice-1-order",
+              "type": "ordering",
+              "question": "Place every piece so the result shows the reading without the outer spaces for text holding willow.",
+              "hints": [
+                "Follow the job, which shows the reading without the outer spaces.",
+                "clean = text.strip() stores the trimmed reading.",
+                "clean = text.strip ( )"
+              ],
+              "explanation": "clean = text.strip() stores the trimmed reading.",
+              "xp_reward": 10,
+              "options": [
+                "clean",
+                "=",
+                "text.strip",
+                "(",
+                ")",
+                "upper"
+              ],
+              "correct_answer": [
+                "clean",
+                "=",
+                "text.strip",
+                "(",
+                ")"
+              ]
+            },
+            {
+              "id": "string-methods-practice-1-fill",
+              "type": "fill_blank",
+              "question": "Drop in the piece that lets the line shows the reading without the outer spaces for text holding willow.",
+              "hints": [
+                "Follow the job, which shows the reading without the outer spaces.",
+                "Plus adds one to the size.",
+                "+"
+              ],
+              "explanation": "Plus adds one to the size.",
+              "xp_reward": 10,
+              "starter_code": "shown = size ___ 1\n",
+              "options": [
+                "==",
+                "-",
+                "+",
+                "*"
+              ],
+              "correct_answer": "+"
+            },
+            {
+              "id": "string-methods-practice-1-bug",
+              "type": "debugging",
+              "question": "The mismatch misses the job, which shows the reading without the outer spaces, for text holding willow.",
+              "hints": [
+                "Follow the job, which shows the reading without the outer spaces.",
+                "The print changes case and leaves the spaces.",
+                "Line 2"
+              ],
+              "explanation": "The print changes case and leaves the spaces.",
+              "xp_reward": 10,
+              "starter_code": "text = '  ' + 'willow'\nprint(text.upper())\n",
+              "correct_answer": "2"
+            },
+            {
+              "id": "string-methods-practice-1-predict-2",
+              "type": "output_prediction",
+              "question": "Choose the printed result of the second run that shows the reading without the outer spaces for text holding willow.",
+              "hints": [
+                "Follow the job, which shows the reading without the outer spaces.",
+                "strip() removes spaces from both ends.",
+                "willows"
+              ],
+              "explanation": "strip() removes spaces from both ends.",
+              "xp_reward": 10,
+              "starter_code": "text = '  ' + 'willow' + 's'\nprint(text.strip())\n",
+              "options": [
+                "willow",
+                "willows",
+                "none",
+                "0"
+              ],
+              "correct_answer": "willows"
+            },
+            {
+              "id": "string-methods-practice-1-write",
+              "type": "code",
+              "question": "Make the program shows the reading without the outer spaces by filling the blank for text holding.",
+              "hints": [
+                "Follow the job, which shows the reading without the outer spaces.",
+                "The trimmed reading is what gets printed.",
+                "label = text.strip()"
+              ],
+              "explanation": "The trimmed reading is what gets printed.",
+              "xp_reward": 10,
+              "starter_code": "text = '  ' + 'willow'\nlabel = ___\nprint(label)\n",
+              "solution_code": "text = '  ' + 'willow'\nlabel = text.strip()\nprint(label)\n",
+              "tests": [
+                {
+                  "name": "string-methods-practice-1-prints",
+                  "description": "The trimmed reading is what gets printed.",
+                  "expected_stdout": "willow\n",
+                  "required": true
+                }
+              ]
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "string-methods-checkpoint",
-      "title": "5. Unit 7 Checkpoint: String Methods Mastery",
-      "description": "hashtagify(word) must turn any raw word into a hashtag: strip surrounding whitespace, lowercase it, and prefix it with \"#\" (e.g. ' Python ' -> '#python'). The test checks that `hashtagify(\" Python \")` equals `\"#python\"`.",
+      "title": "Practice Unit 7 Checkpoint String Methods",
+      "description": "hashtagify(word) must turn any raw word into a hashtag: strip surrounding whitespace, lowercase it, and prefix it with \"#\" (e.g. ' Python ' -> '#python'). The test checks that hashtagify(\" Python \") equals \"#python\".",
       "order": 35,
       "difficulty": "beginner",
       "duration_minutes": 10,
@@ -199,7 +867,7 @@
         "strings"
       ],
       "learning_objectives": [
-        "Complete string methods check"
+        "This step keeps the reading when it ends with the mark, using text holding zircon."
       ],
       "starter_code": "def hashtagify(word):\n    # TODO: return the word dressed up as a hashtag\n    pass\n",
       "tests": [
@@ -220,7 +888,175 @@
         "url": "https://docs.python.org/3/library/stdtypes.html#string-methods",
         "license": "Python documentation license (PSF)"
       },
-      "xp_reward": 40
+      "xp_reward": 40,
+      "player_mode": "micro",
+      "sublessons": [
+        {
+          "id": "string-methods-checkpoint-micro",
+          "title": "Practice Unit 7 Checkpoint String Methods",
+          "description": "",
+          "order": 1,
+          "exercises": [
+            {
+              "id": "string-methods-checkpoint-teach",
+              "type": "teach",
+              "question": "This step keeps the reading when it ends with the mark, using text holding zircon.",
+              "hints": [
+                "Follow the job, which keeps the reading when it ends with the mark.",
+                "endswith asks whether the mark is at the end.",
+                "text.endswith('ing')"
+              ],
+              "explanation": "This step keeps the reading when it ends with the mark, using text holding zircon.",
+              "xp_reward": 0,
+              "worked_example": "text.endswith('ing')"
+            },
+            {
+              "id": "string-methods-checkpoint-mcq",
+              "type": "mcq",
+              "question": "The match is the line that keeps the reading when it ends with the mark for text holding zircon.",
+              "hints": [
+                "Follow the job, which keeps the reading when it ends with the mark.",
+                "endswith asks whether the mark is at the end.",
+                "text.endswith('ing')"
+              ],
+              "explanation": "endswith asks whether the mark is at the end.",
+              "xp_reward": 10,
+              "options": [
+                "text.startswith('ing')",
+                "len(text)",
+                "text == text",
+                "text.endswith('ing')"
+              ],
+              "correct_answer": "text.endswith('ing')"
+            },
+            {
+              "id": "string-methods-checkpoint-predict",
+              "type": "output_prediction",
+              "question": "Work out what is printed when the code keeps the reading when it ends with the mark for text holding zircon.",
+              "hints": [
+                "Follow the job, which keeps the reading when it ends with the mark.",
+                "endswith asks whether the mark is at the end.",
+                "zirconing"
+              ],
+              "explanation": "endswith asks whether the mark is at the end.",
+              "xp_reward": 10,
+              "starter_code": "text = 'zircon' + 'ing'\nprint(text if text.endswith('ing') else text + '?')\n",
+              "options": [
+                "zirconing?",
+                "none",
+                "0",
+                "zirconing"
+              ],
+              "correct_answer": "zirconing"
+            },
+            {
+              "id": "string-methods-checkpoint-order",
+              "type": "ordering",
+              "question": "Rebuild, from the left, the line that keeps the reading when it ends with the mark for text holding zircon.",
+              "hints": [
+                "Follow the job, which keeps the reading when it ends with the mark.",
+                "text.endswith('ing') checks the ending.",
+                "flag = text.endswith ( 'ing' )"
+              ],
+              "explanation": "text.endswith('ing') checks the ending.",
+              "xp_reward": 10,
+              "options": [
+                "flag",
+                "=",
+                "text.endswith",
+                "(",
+                "'ing'",
+                ")",
+                "upper"
+              ],
+              "correct_answer": [
+                "flag",
+                "=",
+                "text.endswith",
+                "(",
+                "'ing'",
+                ")"
+              ]
+            },
+            {
+              "id": "string-methods-checkpoint-fill",
+              "type": "fill_blank",
+              "question": "The completed line keeps the reading when it ends with the mark once you fill the blank for text holding zircon.",
+              "hints": [
+                "Follow the job, which keeps the reading when it ends with the mark.",
+                "Plus adds one to the size.",
+                "+"
+              ],
+              "explanation": "Plus adds one to the size.",
+              "xp_reward": 10,
+              "starter_code": "shown = size ___ 1\n",
+              "options": [
+                "-",
+                "*",
+                "==",
+                "+"
+              ],
+              "correct_answer": "+"
+            },
+            {
+              "id": "string-methods-checkpoint-bug",
+              "type": "debugging",
+              "question": "One line does another job than the one that keeps the reading when it ends with the mark for text holding zircon.",
+              "hints": [
+                "Follow the job, which keeps the reading when it ends with the mark.",
+                "The check looks at the start instead of the end.",
+                "Line 2"
+              ],
+              "explanation": "The check looks at the start instead of the end.",
+              "xp_reward": 10,
+              "starter_code": "text = 'zircon' + 'ing'\nprint(text if text.startswith('ing') else text + '?')\n",
+              "correct_answer": "2"
+            },
+            {
+              "id": "string-methods-checkpoint-predict-2",
+              "type": "output_prediction",
+              "question": "The second display is what prints after the code keeps the reading when it ends with the mark for text holding zircon.",
+              "hints": [
+                "Follow the job, which keeps the reading when it ends with the mark.",
+                "endswith asks whether the mark is at the end.",
+                "zirconing?"
+              ],
+              "explanation": "endswith asks whether the mark is at the end.",
+              "xp_reward": 10,
+              "starter_code": "text = 'zircon' + 'ing'\nprint(text if text.endswith('xyz') else text + '?')\n",
+              "options": [
+                "0",
+                "zirconing",
+                "none",
+                "zirconing?"
+              ],
+              "correct_answer": "zirconing?"
+            },
+            {
+              "id": "string-methods-checkpoint-write",
+              "type": "code",
+              "question": "Supply the blank so the run keeps the reading when it ends with the mark and prints the result for text holding zircon.",
+              "hints": [
+                "Follow the job, which keeps the reading when it ends with the mark.",
+                "The ending check is what gets printed.",
+                "label = text if text.endswith('ing') else text + '?'"
+              ],
+              "explanation": "The ending check is what gets printed.",
+              "xp_reward": 10,
+              "starter_code": "text = 'zircon' + 'ing'\nlabel = ___\nprint(label)\n",
+              "solution_code": "text = 'zircon' + 'ing'\nlabel = text if text.endswith('ing') else text + '?'\nprint(label)\n",
+              "tests": [
+                {
+                  "name": "string-methods-checkpoint-prints",
+                  "description": "The ending check is what gets printed.",
+                  "expected_stdout": "zirconing\n",
+                  "required": true
+                }
+              ]
+            }
+          ]
+        }
+      ]
     }
   ]
 }

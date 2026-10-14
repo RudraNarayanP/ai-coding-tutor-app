@@ -14,8 +14,8 @@
   "lessons": [
     {
       "id": "sql-07",
-      "title": "7. GROUP BY & HAVING",
-      "description": "Group `orders` by `customer_id`. Select `customer_id` and `COUNT(*)` as `order_count`, and keep groups where `order_count` is greater than 1. The test checks that the rows are `(1, 3)` and `(2, 2)`.",
+      "title": "GROUP BY HAVING",
+      "description": "Group orders by customer_id. Select customer_id and COUNT(*) as order_count, and keep groups where order_count is greater than 1. The test checks that the rows are (1, 3) and (2, 2).",
       "order": 7,
       "difficulty": "intermediate",
       "duration_minutes": 5,
@@ -46,10 +46,185 @@
         "license": "Public domain (SQLite documentation)"
       },
       "learning_objectives": [
-        "Collapse rows into groups with GROUP BY",
-        "Filter groups after aggregation with HAVING"
+        "This step counts products in each category, using category and total."
       ],
-      "xp_reward": 10
+      "xp_reward": 10,
+      "player_mode": "micro",
+      "sublessons": [
+        {
+          "id": "sql-07-micro",
+          "title": "GROUP BY HAVING",
+          "description": "",
+          "order": 1,
+          "exercises": [
+            {
+              "id": "sql-07-teach",
+              "type": "teach",
+              "question": "This step counts products in each category, using category and total.",
+              "hints": [
+                "Follow the job, which counts products in each category.",
+                "GROUP BY category makes one count per category.",
+                "GROUP BY category"
+              ],
+              "explanation": "This step counts products in each category, using category and total.",
+              "xp_reward": 0,
+              "worked_example": "GROUP BY category"
+            },
+            {
+              "id": "sql-07-mcq",
+              "type": "mcq",
+              "question": "Mark the choice that counts products in each category when the code mentions category and total.",
+              "hints": [
+                "Follow the job, which counts products in each category.",
+                "GROUP BY category makes one count per category.",
+                "SELECT category, COUNT(*) AS total FROM products GROUP BY category"
+              ],
+              "explanation": "GROUP BY category makes one count per category.",
+              "xp_reward": 10,
+              "options": [
+                "INSERT INTO products",
+                "DROP TABLE products",
+                "SELECT category, COUNT(*) AS total FROM products GROUP BY category",
+                "category == category"
+              ],
+              "correct_answer": "SELECT category, COUNT(*) AS total FROM products GROUP BY category"
+            },
+            {
+              "id": "sql-07-predict",
+              "type": "output_prediction",
+              "question": "After category and total, the code counts products in each category, and the correct choice is the printed value.",
+              "hints": [
+                "Follow the job, which counts products in each category.",
+                "GROUP BY category makes one count per category.",
+                "┌─────────────┬───────┐\n│ category    │ total │\n├─────────────┼───────┤\n│ Electronics │ 3     │\n│ Furniture   │ 1     │\n│ Kitchen     │ 1     │\n└─────────────┴───────┘"
+              ],
+              "explanation": "GROUP BY category makes one count per category.",
+              "xp_reward": 10,
+              "starter_code": "SELECT category, COUNT(*) AS total FROM products GROUP BY category ORDER BY category;\n",
+              "options": [
+                "┌─────────────┬───────┐\n│ department  │ total │\n├─────────────┼───────┤\n│ Engineering │ 2     │\n│ Legal       │ 1     │\n│ Marketing   │ 1     │\n│ Security    │ 1     │\n└─────────────┴───────┘",
+                "0",
+                "┌─────────────┬───────┐\n│ category    │ total │\n├─────────────┼───────┤\n│ Electronics │ 3     │\n│ Furniture   │ 1     │\n│ Kitchen     │ 1     │\n└─────────────┴───────┘",
+                "none"
+              ],
+              "correct_answer": "┌─────────────┬───────┐\n│ category    │ total │\n├─────────────┼───────┤\n│ Electronics │ 3     │\n│ Furniture   │ 1     │\n│ Kitchen     │ 1     │\n└─────────────┴───────┘"
+            },
+            {
+              "id": "sql-07-order",
+              "type": "ordering",
+              "question": "The finished line counts products in each category, so place its pieces in order for category and total.",
+              "hints": [
+                "Follow the job, which counts products in each category.",
+                "GROUP BY category makes one count per category.",
+                "SELECT category, COUNT(*) AS total FROM products GROUP BY category"
+              ],
+              "explanation": "GROUP BY category makes one count per category.",
+              "xp_reward": 10,
+              "options": [
+                "SELECT",
+                "category,",
+                "COUNT(*)",
+                "AS",
+                "total",
+                "FROM",
+                "products",
+                "GROUP",
+                "BY",
+                "category",
+                "DROP"
+              ],
+              "correct_answer": [
+                "SELECT",
+                "category,",
+                "COUNT(*)",
+                "AS",
+                "total",
+                "FROM",
+                "products",
+                "GROUP",
+                "BY",
+                "category"
+              ]
+            },
+            {
+              "id": "sql-07-fill",
+              "type": "fill_blank",
+              "question": "Finish the line that counts products in each by filling the blank for and total.",
+              "hints": [
+                "Follow the job, which Follow the job, which counts products in each.",
+                "GROUP BY category makes one count per category.",
+                "category"
+              ],
+              "explanation": "GROUP BY category makes one count per category.",
+              "xp_reward": 10,
+              "starter_code": "SELECT category, COUNT(*) AS total FROM products GROUP BY ___;",
+              "options": [
+                "price",
+                "stock",
+                "name",
+                "category"
+              ],
+              "correct_answer": "category"
+            },
+            {
+              "id": "sql-07-bug",
+              "type": "debugging",
+              "question": "Mark the line that breaks the job, which counts products in each category, for category and total.",
+              "hints": [
+                "Follow the job, which counts products in each category.",
+                "Without GROUP BY the count is one row for the whole table.",
+                "Line 1"
+              ],
+              "explanation": "Without GROUP BY the count is one row for the whole table.",
+              "xp_reward": 10,
+              "starter_code": "SELECT category, COUNT(*) AS total FROM products;",
+              "correct_answer": "1"
+            },
+            {
+              "id": "sql-07-predict-2",
+              "type": "output_prediction",
+              "question": "Follow the second program, which counts products in each category for category and total, and choose its output.",
+              "hints": [
+                "Follow the job, which counts products in each category.",
+                "GROUP BY category makes one count per category.",
+                "┌─────────────┬───────┐\n│ department  │ total │\n├─────────────┼───────┤\n│ Engineering │ 2     │\n│ Legal       │ 1     │\n│ Marketing   │ 1     │\n│ Security    │ 1     │\n└─────────────┴───────┘"
+              ],
+              "explanation": "GROUP BY category makes one count per category.",
+              "xp_reward": 10,
+              "starter_code": "SELECT department, COUNT(*) AS total FROM employees GROUP BY department ORDER BY department;\n",
+              "options": [
+                "┌─────────────┬───────┐\n│ category    │ total │\n├─────────────┼───────┤\n│ Electronics │ 3     │\n│ Furniture   │ 1     │\n│ Kitchen     │ 1     │\n└─────────────┴───────┘",
+                "┌─────────────┬───────┐\n│ department  │ total │\n├─────────────┼───────┤\n│ Engineering │ 2     │\n│ Legal       │ 1     │\n│ Marketing   │ 1     │\n│ Security    │ 1     │\n└─────────────┴───────┘",
+                "none",
+                "0"
+              ],
+              "correct_answer": "┌─────────────┬───────┐\n│ department  │ total │\n├─────────────┼───────┤\n│ Engineering │ 2     │\n│ Legal       │ 1     │\n│ Marketing   │ 1     │\n│ Security    │ 1     │\n└─────────────┴───────┘"
+            },
+            {
+              "id": "sql-07-write",
+              "type": "code",
+              "question": "Finish the program that counts products in each category by filling the blank for category and total.",
+              "hints": [
+                "Follow the job, which Follow the job, which counts products in each.",
+                "The query result is what this step counts products in each category.",
+                "GROUP BY category"
+              ],
+              "explanation": "The query result is what this step counts products in each category.",
+              "xp_reward": 10,
+              "starter_code": "SELECT category, COUNT(*) AS total FROM products GROUP BY ___ ORDER BY category;\n",
+              "solution_code": "SELECT category, COUNT(*) AS total FROM products GROUP BY (category) ORDER BY category;\n",
+              "tests": [
+                {
+                  "name": "sql-07-prints",
+                  "description": "The query result is what this step counts products in each category.",
+                  "expected_stdout": "┌─────────────┬───────┐\n│ category    │ total │\n├─────────────┼───────┤\n│ Electronics │ 3     │\n│ Furniture   │ 1     │\n│ Kitchen     │ 1     │\n└─────────────┴───────┘",
+                  "required": true
+                }
+              ]
+            }
+          ]
+        }
+      ]
     }
   ]
 }

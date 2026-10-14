@@ -14,8 +14,8 @@
   "lessons": [
     {
       "id": "java-loops-step-1",
-      "title": "1. For Loops & Summation",
-      "description": "Java `for` loops iterate over a range. Implement `sumUpTo(int n)` returning 1 + 2 + ... + n. The test checks that `Solution.sumUpTo(5)` equals `15`.",
+      "title": "Practice For Loops Summation",
+      "description": "Java for loops iterate over a range. Implement sumUpTo(int n) returning 1 + 2 + ... + n. The test checks that Solution.sumUpTo(5) equals 15.",
       "order": 11,
       "difficulty": "beginner",
       "duration_minutes": 5,
@@ -27,7 +27,7 @@
         "java-conditionals"
       ],
       "learning_objectives": [
-        "Use standard for loop syntax in Java"
+        "This step adds every step of a for loop, using total and 4."
       ],
       "starter_code": "public class Solution {\n    public static int sumUpTo(int n) {\n        // TODO: Calculate sum from 1 to n\n        return 0;\n    }\n}\n",
       "solution_code": "public class Solution {\n    public static int sumUpTo(int n) {\n        int sum = 0;\n        for (int i = 1; i <= n; i++) {\n            sum += i;\n        }\n        return sum;\n    }\n}\n",
@@ -48,12 +48,184 @@
         "url": "https://docs.oracle.com/javase/tutorial/java/nutsandbolts/for.html",
         "license": "Oracle Free Use Terms and Conditions (documentation)"
       },
-      "xp_reward": 10
+      "xp_reward": 10,
+      "player_mode": "micro",
+      "sublessons": [
+        {
+          "id": "java-loops-step-1-micro",
+          "title": "Practice For Loops Summation",
+          "description": "",
+          "order": 1,
+          "exercises": [
+            {
+              "id": "java-loops-step-1-teach",
+              "type": "teach",
+              "question": "This step adds every step of a for loop, using total and 4.",
+              "hints": [
+                "Follow the job, which adds every step of a for loop.",
+                "The for loop visits each step and adds it.",
+                "for (int step = 1; step <= 4; step++)"
+              ],
+              "explanation": "This step adds every step of a for loop, using total and 4.",
+              "xp_reward": 0,
+              "worked_example": "for (int step = 1; step <= 4; step++)"
+            },
+            {
+              "id": "java-loops-step-1-mcq",
+              "type": "mcq",
+              "question": "Select the line that adds every step of a for loop, the one that belongs with total and 4.",
+              "hints": [
+                "Follow the job, which adds every step of a for loop.",
+                "The for loop visits each step and adds it.",
+                "for (int step = 1; step <= 4; step++)"
+              ],
+              "explanation": "The for loop visits each step and adds it.",
+              "xp_reward": 10,
+              "options": [
+                "step == 4;",
+                "for (int step = 1; step <= 4; step++)",
+                "total == step;",
+                "return total;"
+              ],
+              "correct_answer": "for (int step = 1; step <= 4; step++)"
+            },
+            {
+              "id": "java-loops-step-1-predict",
+              "type": "output_prediction",
+              "question": "Follow the code that adds every step of a for loop for total and 4, then choose the displayed value.",
+              "hints": [
+                "Follow the job, which adds every step of a for loop.",
+                "The for loop visits each step and adds it.",
+                "10"
+              ],
+              "explanation": "The for loop visits each step and adds it.",
+              "xp_reward": 10,
+              "starter_code": "public class Solution {\n    public static void main(String[] args) {\n        int total = 0;\n        for (int step = 1; step <= 4; step++) total = total + step;\n        System.out.println(total);\n    }\n}\n",
+              "options": [
+                "15",
+                "none",
+                "10",
+                "0"
+              ],
+              "correct_answer": "10"
+            },
+            {
+              "id": "java-loops-step-1-order",
+              "type": "ordering",
+              "question": "Order the pieces so the line adds every step of a for loop for total and 4.",
+              "hints": [
+                "Follow the job, which adds every step of a for loop.",
+                "The for loop visits each step and adds it.",
+                "for (int step = 0; step<count; ++step) {}"
+              ],
+              "explanation": "The for loop visits each step and adds it.",
+              "xp_reward": 10,
+              "options": [
+                "for",
+                "(int",
+                "step",
+                "=",
+                "0;",
+                "step<count;",
+                "++step)",
+                "{}",
+                "=="
+              ],
+              "correct_answer": [
+                "for",
+                "(int",
+                "step",
+                "=",
+                "0;",
+                "step<count;",
+                "++step)",
+                "{}"
+              ]
+            },
+            {
+              "id": "java-loops-step-1-fill",
+              "type": "fill_blank",
+              "question": "Supply the missing piece so the line adds every step of a for loop for total and 4.",
+              "hints": [
+                "Follow the job, which adds every step of a for loop.",
+                "The for loop visits each step and adds it.",
+                "+"
+              ],
+              "explanation": "The for loop visits each step and adds it.",
+              "xp_reward": 10,
+              "starter_code": "int total = 0; for (int step = 1; step <= 4; step++) total = total ___ step;",
+              "options": [
+                "-",
+                "*",
+                "+",
+                "=="
+              ],
+              "correct_answer": "+"
+            },
+            {
+              "id": "java-loops-step-1-bug",
+              "type": "debugging",
+              "question": "The wrong line is the one that misses the job, which adds every step of a for loop, for total and.",
+              "hints": [
+                "Follow the job, which adds every step of a for loop.",
+                "The loop subtracts each step instead of adding it.",
+                "Line 4"
+              ],
+              "explanation": "The loop subtracts each step instead of adding it.",
+              "xp_reward": 10,
+              "starter_code": "public class Solution {\n    public static void main(String[] args) {\n        int total = 0;\n        for (int step = 1; step <= 4; step++) total = total - step;\n        System.out.println(total);\n    }\n}\n",
+              "correct_answer": "4"
+            },
+            {
+              "id": "java-loops-step-1-predict-2",
+              "type": "output_prediction",
+              "question": "A new input still has code that adds every step of a for loop for total and 4, and the correct choice is what it prints.",
+              "hints": [
+                "Follow the job, which adds every step of a for loop.",
+                "The for loop visits each step and adds it.",
+                "15"
+              ],
+              "explanation": "The for loop visits each step and adds it.",
+              "xp_reward": 10,
+              "starter_code": "public class Solution {\n    public static void main(String[] args) {\n        int total = 0;\n        for (int step = 1; step <= 5; step++) total = total + step;\n        System.out.println(total);\n    }\n}\n",
+              "options": [
+                "10",
+                "15",
+                "none",
+                "0"
+              ],
+              "correct_answer": "15"
+            },
+            {
+              "id": "java-loops-step-1-write",
+              "type": "code",
+              "question": "The blank is the missing piece of the program that adds every step of a for loop for total and 4.",
+              "hints": [
+                "Follow the job, which adds every step of a for loop.",
+                "The printed value is the result after this step adds every step of a for loop.",
+                "int label = total;"
+              ],
+              "explanation": "The printed value is the result after this step adds every step of a for loop.",
+              "xp_reward": 10,
+              "starter_code": "public class Solution {\n    public static void main(String[] args) {\n        int total = 0;\n        for (int step = 1; step <= 4; step++) total = total + step;\n        int label = ___;\n        System.out.println(label);\n    }\n}\n",
+              "solution_code": "public class Solution {\n    public static void main(String[] args) {\n        int total = 0;\n        for (int step = 1; step <= 4; step++) total = total + step;\n        int label = total;\n        System.out.println(label);\n    }\n}\n",
+              "tests": [
+                {
+                  "name": "java-loops-step-1-prints",
+                  "description": "The printed value is the result after this step adds every step of a for loop.",
+                  "expected_stdout": "10\n",
+                  "required": true
+                }
+              ]
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "java-loops-step-2",
-      "title": "2. While Loops",
-      "description": "Java `while` loops execute while a condition is true. Implement `countDigits(int number)`. The test checks that `Solution.countDigits(12345)` equals `5`.",
+      "title": "Practice While Loops",
+      "description": "Java while loops execute while a condition is true. Implement countDigits(int number). The test checks that Solution.countDigits(12345) equals 5.",
       "order": 12,
       "difficulty": "beginner",
       "duration_minutes": 5,
@@ -65,7 +237,7 @@
         "java-conditionals"
       ],
       "learning_objectives": [
-        "Use while loops for conditional iteration"
+        "This step counts trips of a while loop, using seen and 1."
       ],
       "starter_code": "public class Solution {\n    public static int countDigits(int number) {\n        if (number == 0) return 1;\n        int count = 0;\n        int n = Math.abs(number);\n        // TODO: Use while loop dividing n by 10\n        return count;\n    }\n}\n",
       "solution_code": "public class Solution {\n    public static int countDigits(int number) {\n        if (number == 0) return 1;\n        int count = 0;\n        int n = Math.abs(number);\n        while (n > 0) {\n            n /= 10;\n            count++;\n        }\n        return count;\n    }\n}\n",
@@ -86,11 +258,177 @@
         "url": "https://docs.oracle.com/javase/tutorial/java/nutsandbolts/while.html",
         "license": "Oracle Free Use Terms and Conditions (documentation)"
       },
-      "xp_reward": 10
+      "xp_reward": 10,
+      "player_mode": "micro",
+      "sublessons": [
+        {
+          "id": "java-loops-step-2-micro",
+          "title": "Practice While Loops",
+          "description": "",
+          "order": 1,
+          "exercises": [
+            {
+              "id": "java-loops-step-2-teach",
+              "type": "teach",
+              "question": "This step counts trips of a while loop, using seen and 1.",
+              "hints": [
+                "Follow the job, which counts trips of a while loop.",
+                "while keeps going until the counter reaches the limit.",
+                "while (seen < 3)"
+              ],
+              "explanation": "This step counts trips of a while loop, using seen and 1.",
+              "xp_reward": 0,
+              "worked_example": "while (seen < 3)"
+            },
+            {
+              "id": "java-loops-step-2-mcq",
+              "type": "mcq",
+              "question": "Mark the choice that counts trips of a while loop when the code mentions seen and 1.",
+              "hints": [
+                "Follow the job, which counts trips of a while loop.",
+                "while keeps going until the counter reaches the limit.",
+                "while (seen < 3)"
+              ],
+              "explanation": "while keeps going until the counter reaches the limit.",
+              "xp_reward": 10,
+              "options": [
+                "seen == 3;",
+                "return trips;",
+                "trips == seen;",
+                "while (seen < 3)"
+              ],
+              "correct_answer": "while (seen < 3)"
+            },
+            {
+              "id": "java-loops-step-2-predict",
+              "type": "output_prediction",
+              "question": "After seen and 1, the code counts trips of a while loop, and the correct choice is the printed value.",
+              "hints": [
+                "Follow the job, which counts trips of a while loop.",
+                "while keeps going until the counter reaches the limit.",
+                "3"
+              ],
+              "explanation": "while keeps going until the counter reaches the limit.",
+              "xp_reward": 10,
+              "starter_code": "public class Solution {\n    public static void main(String[] args) {\n        int seen = 0;\n        int trips = 0;\n        while (seen < 3) { trips = trips + 1; seen++; }\n        System.out.println(trips);\n    }\n}\n",
+              "options": [
+                "5",
+                "none",
+                "0",
+                "3"
+              ],
+              "correct_answer": "3"
+            },
+            {
+              "id": "java-loops-step-2-order",
+              "type": "ordering",
+              "question": "The finished line counts trips of a while loop, so place its pieces in order for seen and 1.",
+              "hints": [
+                "Follow the job, which counts trips of a while loop.",
+                "while keeps going until the counter reaches the limit.",
+                "while (left < right) left++;"
+              ],
+              "explanation": "while keeps going until the counter reaches the limit.",
+              "xp_reward": 10,
+              "options": [
+                "while",
+                "(left",
+                "<",
+                "right)",
+                "left++;",
+                "=="
+              ],
+              "correct_answer": [
+                "while",
+                "(left",
+                "<",
+                "right)",
+                "left++;"
+              ]
+            },
+            {
+              "id": "java-loops-step-2-fill",
+              "type": "fill_blank",
+              "question": "Finish the line that counts trips of a while loop by filling the blank for seen and 1.",
+              "hints": [
+                "Follow the job, which counts trips of a while loop.",
+                "while keeps going until the counter reaches the limit.",
+                "<"
+              ],
+              "explanation": "while keeps going until the counter reaches the limit.",
+              "xp_reward": 10,
+              "starter_code": "while (left ___ right) left++;",
+              "options": [
+                ">",
+                "==",
+                "!=",
+                "<"
+              ],
+              "correct_answer": "<"
+            },
+            {
+              "id": "java-loops-step-2-bug",
+              "type": "debugging",
+              "question": "Mark the line that breaks the job, which counts trips of a while loop, for seen and 1.",
+              "hints": [
+                "Follow the job, which counts trips of a while loop.",
+                "The loop subtracts a trip instead of counting one.",
+                "Line 5"
+              ],
+              "explanation": "The loop subtracts a trip instead of counting one.",
+              "xp_reward": 10,
+              "starter_code": "public class Solution {\n    public static void main(String[] args) {\n        int seen = 0;\n        int trips = 0;\n        while (seen < 3) { trips = trips - 1; seen++; }\n        System.out.println(trips);\n    }\n}\n",
+              "correct_answer": "5"
+            },
+            {
+              "id": "java-loops-step-2-predict-2",
+              "type": "output_prediction",
+              "question": "Follow the second program, which counts trips of a while loop for seen and 1, and choose its output.",
+              "hints": [
+                "Follow the job, which counts trips of a while loop.",
+                "while keeps going until the counter reaches the limit.",
+                "5"
+              ],
+              "explanation": "while keeps going until the counter reaches the limit.",
+              "xp_reward": 10,
+              "starter_code": "public class Solution {\n    public static void main(String[] args) {\n        int seen = 0;\n        int trips = 0;\n        while (seen < 5) { trips = trips + 1; seen++; }\n        System.out.println(trips);\n    }\n}\n",
+              "options": [
+                "3",
+                "none",
+                "5",
+                "0"
+              ],
+              "correct_answer": "5"
+            },
+            {
+              "id": "java-loops-step-2-write",
+              "type": "code",
+              "question": "Finish the program that counts trips of a while loop by filling the blank for seen and 1.",
+              "hints": [
+                "Follow the job, which counts trips of a while loop.",
+                "The printed value is the result after this step counts trips of a while loop.",
+                "int label = trips;"
+              ],
+              "explanation": "The printed value is the result after this step counts trips of a while loop.",
+              "xp_reward": 10,
+              "starter_code": "public class Solution {\n    public static void main(String[] args) {\n        int seen = 0;\n        int trips = 0;\n        while (seen < 3) { trips = trips + 1; seen++; }\n        int label = ___;\n        System.out.println(label);\n    }\n}\n",
+              "solution_code": "public class Solution {\n    public static void main(String[] args) {\n        int seen = 0;\n        int trips = 0;\n        while (seen < 3) { trips = trips + 1; seen++; }\n        int label = trips;\n        System.out.println(label);\n    }\n}\n",
+              "tests": [
+                {
+                  "name": "java-loops-step-2-prints",
+                  "description": "The printed value is the result after this step counts trips of a while loop.",
+                  "expected_stdout": "3\n",
+                  "required": true
+                }
+              ]
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "java-loops-01",
-      "title": "3. Factorial Calculator (Concept Challenge)",
+      "title": "Practice Factorial Calculator",
       "description": "Implement factorial(int n) returning n! as a long, using a loop over 1..n. Remember 0! == 1 — the tests check factorial(5) == 120 and factorial(0) == 1.",
       "order": 13,
       "difficulty": "beginner",
@@ -103,7 +441,7 @@
         "java-conditionals"
       ],
       "learning_objectives": [
-        "Implement factorial product accumulation"
+        "This step multiplies the factorial in a loop, using n and 1."
       ],
       "starter_code": "public class Solution {\n    public static long factorial(int n) {\n        // TODO: Return n!\n        return 1;\n    }\n}\n",
       "solution_code": "public class Solution {\n    public static long factorial(int n) {\n        long result = 1;\n        for (int i = 1; i <= n; i++) {\n            result *= i;\n        }\n        return result;\n    }\n}\n",
@@ -124,11 +462,183 @@
         "url": "https://docs.oracle.com/javase/tutorial/java/nutsandbolts/for.html",
         "license": "Oracle Free Use Terms and Conditions (documentation)"
       },
-      "xp_reward": 25
+      "xp_reward": 25,
+      "player_mode": "micro",
+      "sublessons": [
+        {
+          "id": "java-loops-01-micro",
+          "title": "Practice Factorial Calculator",
+          "description": "",
+          "order": 1,
+          "exercises": [
+            {
+              "id": "java-loops-01-teach",
+              "type": "teach",
+              "question": "This step multiplies the factorial in a loop, using n and 1.",
+              "hints": [
+                "Follow the job, which multiplies the factorial in a loop.",
+                "Multiplying total by each step builds the factorial.",
+                "total = total * step;"
+              ],
+              "explanation": "This step multiplies the factorial in a loop, using n and 1.",
+              "xp_reward": 0,
+              "worked_example": "total = total * step;"
+            },
+            {
+              "id": "java-loops-01-mcq",
+              "type": "mcq",
+              "question": "Keep the choice that multiplies the factorial in a loop for n and 1.",
+              "hints": [
+                "Follow the job, which multiplies the factorial in a loop.",
+                "Multiplying total by each step builds the factorial.",
+                "total = total * step;"
+              ],
+              "explanation": "Multiplying total by each step builds the factorial.",
+              "xp_reward": 10,
+              "options": [
+                "total == step;",
+                "return total;",
+                "total = total * step;",
+                "n == 4;"
+              ],
+              "correct_answer": "total = total * step;"
+            },
+            {
+              "id": "java-loops-01-predict",
+              "type": "output_prediction",
+              "question": "Trace the code that multiplies the factorial in a loop using n and 1, and select what it displays.",
+              "hints": [
+                "Follow the job, which multiplies the factorial in a loop.",
+                "Multiplying total by each step builds the factorial.",
+                "24"
+              ],
+              "explanation": "Multiplying total by each step builds the factorial.",
+              "xp_reward": 10,
+              "starter_code": "public class Solution {\n    public static void main(String[] args) {\n        int n = 4;\n        int total = 1;\n        for (int step = 1; step <= n; step++) total = total * step;\n        System.out.println(total);\n    }\n}\n",
+              "options": [
+                "120",
+                "none",
+                "24",
+                "0"
+              ],
+              "correct_answer": "24"
+            },
+            {
+              "id": "java-loops-01-order",
+              "type": "ordering",
+              "question": "Tap the pieces, in order, of the line that multiplies the factorial in a loop for n and 1.",
+              "hints": [
+                "Follow the job, which multiplies the factorial in a loop.",
+                "Multiplying total by each step builds the factorial.",
+                "for (int step = 1; step<count; ++step) {}"
+              ],
+              "explanation": "Multiplying total by each step builds the factorial.",
+              "xp_reward": 10,
+              "options": [
+                "for",
+                "(int",
+                "step",
+                "=",
+                "1;",
+                "step<count;",
+                "++step)",
+                "{}",
+                "=="
+              ],
+              "correct_answer": [
+                "for",
+                "(int",
+                "step",
+                "=",
+                "1;",
+                "step<count;",
+                "++step)",
+                "{}"
+              ]
+            },
+            {
+              "id": "java-loops-01-fill",
+              "type": "fill_blank",
+              "question": "The blank is the missing piece of the line that multiplies the factorial in a loop for n and 1.",
+              "hints": [
+                "Follow the job, which multiplies the factorial in a loop.",
+                "Multiplying total by each step builds the factorial.",
+                "*"
+              ],
+              "explanation": "Multiplying total by each step builds the factorial.",
+              "xp_reward": 10,
+              "starter_code": "int total = 1; int step = 2; total = total ___ step;",
+              "options": [
+                "+",
+                "-",
+                "*",
+                "=="
+              ],
+              "correct_answer": "*"
+            },
+            {
+              "id": "java-loops-01-bug",
+              "type": "debugging",
+              "question": "Choose the line that does another job than the one that multiplies the factorial in a loop for n and 1.",
+              "hints": [
+                "Follow the job, which multiplies the factorial in a loop.",
+                "The loop adds the step instead of multiplying the running product.",
+                "Line 5"
+              ],
+              "explanation": "The loop adds the step instead of multiplying the running product.",
+              "xp_reward": 10,
+              "starter_code": "public class Solution {\n    public static void main(String[] args) {\n        int n = 4;\n        int total = 1;\n        for (int step = 1; step <= n; step++) total = total + step;\n        System.out.println(total);\n    }\n}\n",
+              "correct_answer": "5"
+            },
+            {
+              "id": "java-loops-01-predict-2",
+              "type": "output_prediction",
+              "question": "Trace the second run, which multiplies the factorial in a loop for n and 1, and select what it displays.",
+              "hints": [
+                "Follow the job, which multiplies the factorial in a loop.",
+                "Multiplying total by each step builds the factorial.",
+                "120"
+              ],
+              "explanation": "Multiplying total by each step builds the factorial.",
+              "xp_reward": 10,
+              "starter_code": "public class Solution {\n    public static void main(String[] args) {\n        int n = 5;\n        int total = 1;\n        for (int step = 1; step <= n; step++) total = total * step;\n        System.out.println(total);\n    }\n}\n",
+              "options": [
+                "24",
+                "120",
+                "none",
+                "0"
+              ],
+              "correct_answer": "120"
+            },
+            {
+              "id": "java-loops-01-write",
+              "type": "code",
+              "question": "Type the missing piece so the program multiplies the factorial in a loop for n and 1 and prints it.",
+              "hints": [
+                "Follow the job, which multiplies the factorial in a loop.",
+                "The printed value is the result after this step multiplies the factorial in a loop.",
+                "int label = total;"
+              ],
+              "explanation": "The printed value is the result after this step multiplies the factorial in a loop.",
+              "xp_reward": 10,
+              "starter_code": "public class Solution {\n    public static void main(String[] args) {\n        int n = 4;\n        int total = 1;\n        for (int step = 1; step <= n; step++) total = total * step;\n        int label = ___;\n        System.out.println(label);\n    }\n}\n",
+              "solution_code": "public class Solution {\n    public static void main(String[] args) {\n        int n = 4;\n        int total = 1;\n        for (int step = 1; step <= n; step++) total = total * step;\n        int label = total;\n        System.out.println(label);\n    }\n}\n",
+              "tests": [
+                {
+                  "name": "java-loops-01-prints",
+                  "description": "The printed value is the result after this step multiplies the factorial in a lo",
+                  "expected_stdout": "24\n",
+                  "required": true
+                }
+              ]
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "java-loops-practice-1",
-      "title": "4. Prime Number Checker (Practice)",
+      "title": "Practice Prime Number Checker",
       "description": "Implement isPrime(int n): values <= 1 are not prime. Trial-divide by every integer from 2 while i * i <= n; if any divides n evenly it is composite. The tests check 13 is prime and 12 is not.",
       "order": 14,
       "difficulty": "beginner",
@@ -141,7 +651,7 @@
         "java-conditionals"
       ],
       "learning_objectives": [
-        "Implement primality loop test in Java"
+        "This step counts factors of a number, using n and 1."
       ],
       "starter_code": "public class Solution {\n    public static boolean isPrime(int n) {\n        if (n <= 1) return false;\n        // TODO: Loop from 2 up to sqrt(n)\n        return true;\n    }\n}\n",
       "solution_code": "public class Solution {\n    public static boolean isPrime(int n) {\n        if (n <= 1) return false;\n        for (int i = 2; i * i <= n; i++) {\n            if (n % i == 0) return false;\n        }\n        return true;\n    }\n}\n",
@@ -162,11 +672,183 @@
         "url": "https://docs.oracle.com/javase/tutorial/java/nutsandbolts/for.html",
         "license": "Oracle Free Use Terms and Conditions (documentation)"
       },
-      "xp_reward": 15
+      "xp_reward": 15,
+      "player_mode": "micro",
+      "sublessons": [
+        {
+          "id": "java-loops-practice-1-micro",
+          "title": "Practice Prime Number Checker",
+          "description": "",
+          "order": 1,
+          "exercises": [
+            {
+              "id": "java-loops-practice-1-teach",
+              "type": "teach",
+              "question": "This step counts factors of a number, using n and 1.",
+              "hints": [
+                "Follow the job, which counts factors of a number.",
+                "A factor divides the number with no remainder.",
+                "n % step == 0"
+              ],
+              "explanation": "This step counts factors of a number, using n and 1.",
+              "xp_reward": 0,
+              "worked_example": "n % step == 0"
+            },
+            {
+              "id": "java-loops-practice-1-mcq",
+              "type": "mcq",
+              "question": "Keep the choice that counts factors of a number for n and 1.",
+              "hints": [
+                "Follow the job, which counts factors of a number.",
+                "A factor divides the number with no remainder.",
+                "if (n % step == 0) factors++;"
+              ],
+              "explanation": "A factor divides the number with no remainder.",
+              "xp_reward": 10,
+              "options": [
+                "n == 7;",
+                "return factors;",
+                "if (n % step == 0) factors++;",
+                "step == n;"
+              ],
+              "correct_answer": "if (n % step == 0) factors++;"
+            },
+            {
+              "id": "java-loops-practice-1-predict",
+              "type": "output_prediction",
+              "question": "Trace the code that counts factors of a number using n and 1, and select what it displays.",
+              "hints": [
+                "Follow the job, which counts factors of a number.",
+                "A factor divides the number with no remainder.",
+                "2"
+              ],
+              "explanation": "A factor divides the number with no remainder.",
+              "xp_reward": 10,
+              "starter_code": "public class Solution {\n    public static void main(String[] args) {\n        int n = 7;\n        int factors = 0;\n        for (int step = 1; step <= n; step++) if (n % step == 0) factors++;\n        System.out.println(factors);\n    }\n}\n",
+              "options": [
+                "0",
+                "3",
+                "none",
+                "2"
+              ],
+              "correct_answer": "2"
+            },
+            {
+              "id": "java-loops-practice-1-order",
+              "type": "ordering",
+              "question": "Tap the pieces, in order, of the line that counts factors of a number for n and 1.",
+              "hints": [
+                "Follow the job, which counts factors of a number.",
+                "A factor divides the number with no remainder.",
+                "for (int step = 1; step<=count; ++step) {}"
+              ],
+              "explanation": "A factor divides the number with no remainder.",
+              "xp_reward": 10,
+              "options": [
+                "for",
+                "(int",
+                "step",
+                "=",
+                "1;",
+                "step<=count;",
+                "++step)",
+                "{}",
+                "=="
+              ],
+              "correct_answer": [
+                "for",
+                "(int",
+                "step",
+                "=",
+                "1;",
+                "step<=count;",
+                "++step)",
+                "{}"
+              ]
+            },
+            {
+              "id": "java-loops-practice-1-fill",
+              "type": "fill_blank",
+              "question": "The blank is the missing piece of the line that counts factors of a number for n and 1.",
+              "hints": [
+                "Follow the job, which counts factors of a number.",
+                "A factor divides the number with no remainder.",
+                "%"
+              ],
+              "explanation": "A factor divides the number with no remainder.",
+              "xp_reward": 10,
+              "starter_code": "int n = 7; int step = 1; int factors = 0; if (n ___ step == 0) factors++;",
+              "options": [
+                "+",
+                "-",
+                "%",
+                "*"
+              ],
+              "correct_answer": "%"
+            },
+            {
+              "id": "java-loops-practice-1-bug",
+              "type": "debugging",
+              "question": "Choose the line that does another job than the one that counts factors of a number for n and 1.",
+              "hints": [
+                "Follow the job, which counts factors of a number.",
+                "The test looks for a remainder of 1, so factors are missed.",
+                "Line 5"
+              ],
+              "explanation": "The test looks for a remainder of 1, so factors are missed.",
+              "xp_reward": 10,
+              "starter_code": "public class Solution {\n    public static void main(String[] args) {\n        int n = 7;\n        int factors = 0;\n        for (int step = 1; step <= n; step++) if (n % step == 1) factors++;\n        System.out.println(factors);\n    }\n}\n",
+              "correct_answer": "5"
+            },
+            {
+              "id": "java-loops-practice-1-predict-2",
+              "type": "output_prediction",
+              "question": "Trace the second run, which counts factors of a number for n and 1, and select what it displays.",
+              "hints": [
+                "Follow the job, which counts factors of a number.",
+                "A factor divides the number with no remainder.",
+                "3"
+              ],
+              "explanation": "A factor divides the number with no remainder.",
+              "xp_reward": 10,
+              "starter_code": "public class Solution {\n    public static void main(String[] args) {\n        int n = 9;\n        int factors = 0;\n        for (int step = 1; step <= n; step++) if (n % step == 0) factors++;\n        System.out.println(factors);\n    }\n}\n",
+              "options": [
+                "2",
+                "3",
+                "none",
+                "0"
+              ],
+              "correct_answer": "3"
+            },
+            {
+              "id": "java-loops-practice-1-write",
+              "type": "code",
+              "question": "Type the missing piece so the program counts factors of a number for n and 1 and prints it.",
+              "hints": [
+                "Follow the job, which counts factors of a number.",
+                "The printed value is the result after this step counts factors of a number.",
+                "int label = factors;"
+              ],
+              "explanation": "The printed value is the result after this step counts factors of a number.",
+              "xp_reward": 10,
+              "starter_code": "public class Solution {\n    public static void main(String[] args) {\n        int n = 7;\n        int factors = 0;\n        for (int step = 1; step <= n; step++) if (n % step == 0) factors++;\n        int label = ___;\n        System.out.println(label);\n    }\n}\n",
+              "solution_code": "public class Solution {\n    public static void main(String[] args) {\n        int n = 7;\n        int factors = 0;\n        for (int step = 1; step <= n; step++) if (n % step == 0) factors++;\n        int label = factors;\n        System.out.println(label);\n    }\n}\n",
+              "tests": [
+                {
+                  "name": "java-loops-practice-1-prints",
+                  "description": "The printed value is the result after this step counts factors of a number.",
+                  "expected_stdout": "2\n",
+                  "required": true
+                }
+              ]
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "java-loops-checkpoint",
-      "title": "5. Unit 3 Checkpoint: Loops Mastery",
+      "title": "Practice Unit 3 Checkpoint Loops Mastery",
       "description": "Implement countEvensInRange(int start, int end): loop from start to end inclusive and count the even numbers (i % 2 == 0). The test expects 5 evens in the range 1..10.",
       "order": 15,
       "difficulty": "beginner",
@@ -179,7 +861,7 @@
         "java-conditionals"
       ],
       "learning_objectives": [
-        "Pass Java loops checkpoint"
+        "This step counts how many times a for loop runs, using total and 1."
       ],
       "starter_code": "public class Solution {\n    public static int countEvensInRange(int start, int end) {\n        // TODO: Count even numbers from start to end inclusive\n        return 0;\n    }\n}\n",
       "solution_code": "public class Solution {\n    public static int countEvensInRange(int start, int end) {\n        int count = 0;\n        for (int i = start; i <= end; i++) {\n            if (i % 2 == 0) count++;\n        }\n        return count;\n    }\n}\n",
@@ -200,7 +882,179 @@
         "url": "https://docs.oracle.com/javase/tutorial/java/nutsandbolts/for.html",
         "license": "Oracle Free Use Terms and Conditions (documentation)"
       },
-      "xp_reward": 40
+      "xp_reward": 40,
+      "player_mode": "micro",
+      "sublessons": [
+        {
+          "id": "java-loops-checkpoint-micro",
+          "title": "Practice Unit 3 Checkpoint Loops Mastery",
+          "description": "",
+          "order": 1,
+          "exercises": [
+            {
+              "id": "java-loops-checkpoint-teach",
+              "type": "teach",
+              "question": "This step counts how many times a for loop runs, using total and 1.",
+              "hints": [
+                "Follow the job, which counts how many times a for loop runs.",
+                "Each trip of the loop adds one to the count.",
+                "total = total + 1"
+              ],
+              "explanation": "This step counts how many times a for loop runs, using total and 1.",
+              "xp_reward": 0,
+              "worked_example": "total = total + 1"
+            },
+            {
+              "id": "java-loops-checkpoint-mcq",
+              "type": "mcq",
+              "question": "The correct line counts how many times a for loop runs, and it is the line tied to total and 1.",
+              "hints": [
+                "Follow the job, which counts how many times a for loop runs.",
+                "Each trip of the loop adds one to the count.",
+                "for (int step = 0; step < 4; step++)"
+              ],
+              "explanation": "Each trip of the loop adds one to the count.",
+              "xp_reward": 10,
+              "options": [
+                "step == 4;",
+                "return total;",
+                "total == step;",
+                "for (int step = 0; step < 4; step++)"
+              ],
+              "correct_answer": "for (int step = 0; step < 4; step++)"
+            },
+            {
+              "id": "java-loops-checkpoint-predict",
+              "type": "output_prediction",
+              "question": "The program counts how many times a for loop runs with total and 1, so choose the printed value.",
+              "hints": [
+                "Follow the job, which counts how many times a for loop runs.",
+                "Each trip of the loop adds one to the count.",
+                "4"
+              ],
+              "explanation": "Each trip of the loop adds one to the count.",
+              "xp_reward": 10,
+              "starter_code": "public class Solution {\n    public static void main(String[] args) {\n        int total = 0;\n        for (int step = 0; step < 4; step++) total = total + 1;\n        System.out.println(total);\n    }\n}\n",
+              "options": [
+                "6",
+                "none",
+                "0",
+                "4"
+              ],
+              "correct_answer": "4"
+            },
+            {
+              "id": "java-loops-checkpoint-order",
+              "type": "ordering",
+              "question": "Build the line that counts how many times a for loop runs for total and 1, from the first piece to the last.",
+              "hints": [
+                "Follow the job, which counts how many times a for loop runs.",
+                "Each trip of the loop adds one to the count.",
+                "for (int step = 0; step<count; ++step) {}"
+              ],
+              "explanation": "Each trip of the loop adds one to the count.",
+              "xp_reward": 10,
+              "options": [
+                "for",
+                "(int",
+                "step",
+                "=",
+                "0;",
+                "step<count;",
+                "++step)",
+                "{}",
+                "=="
+              ],
+              "correct_answer": [
+                "for",
+                "(int",
+                "step",
+                "=",
+                "0;",
+                "step<count;",
+                "++step)",
+                "{}"
+              ]
+            },
+            {
+              "id": "java-loops-checkpoint-fill",
+              "type": "fill_blank",
+              "question": "Replace the blank with the piece that makes the line counts how many times a for loop runs for total and 1.",
+              "hints": [
+                "Follow the job, which counts how many times a for loop runs.",
+                "Each trip of the loop adds one to the count.",
+                "+"
+              ],
+              "explanation": "Each trip of the loop adds one to the count.",
+              "xp_reward": 10,
+              "starter_code": "int total = 0; for (int step = 0; step < 4; step++) total = total ___ 1;",
+              "options": [
+                "-",
+                "*",
+                "==",
+                "+"
+              ],
+              "correct_answer": "+"
+            },
+            {
+              "id": "java-loops-checkpoint-bug",
+              "type": "debugging",
+              "question": "Spot the line that fails the job, which counts how many times a for loop runs, around total and 1.",
+              "hints": [
+                "Follow the job, which counts how many times a for loop runs.",
+                "The loop adds two per trip instead of one.",
+                "Line 4"
+              ],
+              "explanation": "The loop adds two per trip instead of one.",
+              "xp_reward": 10,
+              "starter_code": "public class Solution {\n    public static void main(String[] args) {\n        int total = 0;\n        for (int step = 0; step < 4; step++) total = total + 2;\n        System.out.println(total);\n    }\n}\n",
+              "correct_answer": "4"
+            },
+            {
+              "id": "java-loops-checkpoint-predict-2",
+              "type": "output_prediction",
+              "question": "The second program counts how many times a for loop runs for total and 1, so choose the new printed value.",
+              "hints": [
+                "Follow the job, which counts how many times a for loop runs.",
+                "Each trip of the loop adds one to the count.",
+                "6"
+              ],
+              "explanation": "Each trip of the loop adds one to the count.",
+              "xp_reward": 10,
+              "starter_code": "public class Solution {\n    public static void main(String[] args) {\n        int total = 0;\n        for (int step = 0; step < 6; step++) total = total + 1;\n        System.out.println(total);\n    }\n}\n",
+              "options": [
+                "none",
+                "6",
+                "4",
+                "0"
+              ],
+              "correct_answer": "6"
+            },
+            {
+              "id": "java-loops-checkpoint-write",
+              "type": "code",
+              "question": "Complete the blank so this program counts how many times a for loop runs and prints the result for total and 1.",
+              "hints": [
+                "Follow the job, which counts how many times a for loop runs.",
+                "The printed value is the result after this step counts how many times a for loop runs.",
+                "int label = total;"
+              ],
+              "explanation": "The printed value is the result after this step counts how many times a for loop runs.",
+              "xp_reward": 10,
+              "starter_code": "public class Solution {\n    public static void main(String[] args) {\n        int total = 0;\n        for (int step = 0; step < 4; step++) total = total + 1;\n        int label = ___;\n        System.out.println(label);\n    }\n}\n",
+              "solution_code": "public class Solution {\n    public static void main(String[] args) {\n        int total = 0;\n        for (int step = 0; step < 4; step++) total = total + 1;\n        int label = total;\n        System.out.println(label);\n    }\n}\n",
+              "tests": [
+                {
+                  "name": "java-loops-checkpoint-prints",
+                  "description": "The printed value is the result after this step counts how many times a for loop",
+                  "expected_stdout": "4\n",
+                  "required": true
+                }
+              ]
+            }
+          ]
+        }
+      ]
     }
   ]
 }

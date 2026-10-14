@@ -12,8 +12,8 @@
   "lessons": [
     {
       "id": "fs-url-join",
-      "title": "1. Join URL Paths",
-      "description": "Implement `join_url(base, path)` avoiding double/missing slashes. The test checks that `join_url('https://api.com/', '/v1/users')` equals `'https://api.com/v1/users'`; `join_url('https://api.com', 'v1')` equals `'https://api.com/v1'`.",
+      "title": "Join URL Paths",
+      "description": "Implement join_url(base, path) avoiding double/missing slashes. The test checks that join_url('https://api.com/', '/v1/users') equals 'https://api.com/v1/users'; join_url('https://api.com', 'v1') equals 'https://api.com/v1'.",
       "order": 1,
       "difficulty": "intermediate",
       "duration_minutes": 5,
@@ -25,7 +25,7 @@
       ],
       "prerequisites": [],
       "learning_objectives": [
-        "Build API URLs safely"
+        "This step counts the slashes in the joined path, using parts holding api."
       ],
       "starter_code": "def join_url(base, path):\n    # TODO\n    pass\n",
       "solution_code": "def join_url(base, path):\n    return base.rstrip('/') + '/' + path.lstrip('/')\n",
@@ -46,12 +46,174 @@
         "url": "https://docs.python.org/3/library/stdtypes.html#string-methods",
         "license": "Python documentation license (PSF)"
       },
-      "xp_reward": 10
+      "xp_reward": 10,
+      "player_mode": "micro",
+      "sublessons": [
+        {
+          "id": "fs-url-join-micro",
+          "title": "Join URL Paths",
+          "description": "",
+          "order": 1,
+          "exercises": [
+            {
+              "id": "fs-url-join-teach",
+              "type": "teach",
+              "question": "This step counts the slashes in the joined path, using parts holding api.",
+              "hints": [
+                "Follow the job, which counts the slashes in the joined path.",
+                "join puts a slash between the path parts.",
+                "'/'.join(parts)"
+              ],
+              "explanation": "This step counts the slashes in the joined path, using parts holding api.",
+              "xp_reward": 0,
+              "worked_example": "'/'.join(parts)"
+            },
+            {
+              "id": "fs-url-join-mcq",
+              "type": "mcq",
+              "question": "Pick the line that counts the slashes in the joined path, not a line about something else, for parts holding api.",
+              "hints": [
+                "Follow the job, which counts the slashes in the joined path.",
+                "join puts a slash between the path parts.",
+                "'/'.join(parts)"
+              ],
+              "explanation": "join puts a slash between the path parts.",
+              "xp_reward": 10,
+              "options": [
+                "parts == parts",
+                "return parts",
+                "'/'.join(parts)",
+                "pass"
+              ],
+              "correct_answer": "'/'.join(parts)"
+            },
+            {
+              "id": "fs-url-join-predict",
+              "type": "output_prediction",
+              "question": "The displayed value is what the code prints when it counts the slashes in the joined path for parts holding api.",
+              "hints": [
+                "Follow the job, which counts the slashes in the joined path.",
+                "join puts a slash between the path parts.",
+                "2"
+              ],
+              "explanation": "join puts a slash between the path parts.",
+              "xp_reward": 10,
+              "starter_code": "parts = ['api', 'v1', 'delta']\nprint('/'.join(parts).count('/'))\n",
+              "options": [
+                "1",
+                "none",
+                "2",
+                "0"
+              ],
+              "correct_answer": "2"
+            },
+            {
+              "id": "fs-url-join-order",
+              "type": "ordering",
+              "question": "Place every piece so the result counts the slashes in the joined path for parts holding api.",
+              "hints": [
+                "Follow the job, which counts the slashes in the joined path.",
+                "join puts a slash between the path parts.",
+                "path = '/'.join(parts)"
+              ],
+              "explanation": "join puts a slash between the path parts.",
+              "xp_reward": 10,
+              "options": [
+                "path",
+                "=",
+                "'/'.join(parts)",
+                "+"
+              ],
+              "correct_answer": [
+                "path",
+                "=",
+                "'/'.join(parts)"
+              ]
+            },
+            {
+              "id": "fs-url-join-fill",
+              "type": "fill_blank",
+              "question": "Drop in the piece that lets the line counts the slashes in the joined path for parts holding api.",
+              "hints": [
+                "Follow the job, which counts the slashes in the joined path.",
+                "join puts a slash between the path parts.",
+                "'/'"
+              ],
+              "explanation": "join puts a slash between the path parts.",
+              "xp_reward": 10,
+              "starter_code": "path = ___ .join(parts)\n",
+              "options": [
+                "','",
+                "'-'",
+                "'/'",
+                "''"
+              ],
+              "correct_answer": "'/'"
+            },
+            {
+              "id": "fs-url-join-bug",
+              "type": "debugging",
+              "question": "The mismatch misses the job, which counts the slashes in the joined path, for parts holding api.",
+              "hints": [
+                "Follow the job, which counts the slashes in the joined path.",
+                "The print counts parts and never joins them.",
+                "Line 2"
+              ],
+              "explanation": "The print counts parts and never joins them.",
+              "xp_reward": 10,
+              "starter_code": "parts = ['api', 'delta']\nprint(len(parts))\n",
+              "correct_answer": "2"
+            },
+            {
+              "id": "fs-url-join-predict-2",
+              "type": "output_prediction",
+              "question": "Choose the printed result of the second run that counts the slashes in the joined path for parts holding api.",
+              "hints": [
+                "Follow the job, which counts the slashes in the joined path.",
+                "join puts a slash between the path parts.",
+                "1"
+              ],
+              "explanation": "join puts a slash between the path parts.",
+              "xp_reward": 10,
+              "starter_code": "parts = ['api', 'delta']\nprint('/'.join(parts).count('/'))\n",
+              "options": [
+                "2",
+                "1",
+                "none",
+                "0"
+              ],
+              "correct_answer": "1"
+            },
+            {
+              "id": "fs-url-join-write",
+              "type": "code",
+              "question": "Make the program counts the slashes in the joined path by filling the blank for parts holding api.",
+              "hints": [
+                "Follow the job, which counts the slashes in the joined path.",
+                "The printed value is the result after this step counts the slashes in the joined path.",
+                "label = '/'.join(parts).count('/')"
+              ],
+              "explanation": "The printed value is the result after this step counts the slashes in the joined path.",
+              "xp_reward": 10,
+              "starter_code": "parts = ['api', 'v1', 'delta']\nlabel = ___\nprint(label)\n",
+              "solution_code": "parts = ['api', 'v1', 'delta']\nlabel = '/'.join(parts).count('/')\nprint(label)\n",
+              "tests": [
+                {
+                  "name": "fs-url-join-prints",
+                  "description": "The printed value is the result after this step counts the slashes in the joined",
+                  "expected_stdout": "2\n",
+                  "required": true
+                }
+              ]
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "fs-query-string",
-      "title": "2. Encode Query String",
-      "description": "Implement `query_string(params)` as sorted k=v pairs with urllib.parse.quote. The test checks that `query_string({'b': 2, 'a': 1})` equals `'a=1&b=2'`.",
+      "title": "Encode Query String",
+      "description": "Implement query_string(params) as sorted k=v pairs with urllib.parse.quote. The test checks that query_string({'b': 2, 'a': 1}) equals 'a=1&b=2'.",
       "order": 2,
       "difficulty": "intermediate",
       "duration_minutes": 5,
@@ -63,7 +225,7 @@
       ],
       "prerequisites": [],
       "learning_objectives": [
-        "Encode query parameters"
+        "This step counts the keys in the query string, using urllib holding q."
       ],
       "starter_code": "from urllib.parse import quote\n\ndef query_string(params):\n    # TODO\n    pass\n",
       "solution_code": "from urllib.parse import quote\n\ndef query_string(params):\n    parts = []\n    for k in sorted(params):\n        parts.append(quote(str(k), safe='') + '=' + quote(str(params[k]), safe=''))\n    return '&'.join(parts)\n",
@@ -84,12 +246,174 @@
         "url": "https://docs.python.org/3/library/urllib.parse.html",
         "license": "Python documentation license (PSF)"
       },
-      "xp_reward": 10
+      "xp_reward": 10,
+      "player_mode": "micro",
+      "sublessons": [
+        {
+          "id": "fs-query-string-micro",
+          "title": "Encode Query String",
+          "description": "",
+          "order": 1,
+          "exercises": [
+            {
+              "id": "fs-query-string-teach",
+              "type": "teach",
+              "question": "This step counts the keys in the query string, using urllib holding q.",
+              "hints": [
+                "Follow the job, which counts the keys in the query string.",
+                "urlencode turns the pairs into a query string.",
+                "urlencode(pairs)"
+              ],
+              "explanation": "This step counts the keys in the query string, using urllib holding q.",
+              "xp_reward": 0,
+              "worked_example": "urlencode(pairs)"
+            },
+            {
+              "id": "fs-query-string-mcq",
+              "type": "mcq",
+              "question": "Choose the line that counts the keys in the query string, which is the line that fits urllib holding q.",
+              "hints": [
+                "Follow the job, which counts the keys in the query string.",
+                "urlencode turns the pairs into a query string.",
+                "urlencode(pairs)"
+              ],
+              "explanation": "urlencode turns the pairs into a query string.",
+              "xp_reward": 10,
+              "options": [
+                "pairs == pairs",
+                "return pairs",
+                "urlencode(pairs)",
+                "pass"
+              ],
+              "correct_answer": "urlencode(pairs)"
+            },
+            {
+              "id": "fs-query-string-predict",
+              "type": "output_prediction",
+              "question": "Read the code that counts the keys in the query string for urllib holding q, and choose the value it prints.",
+              "hints": [
+                "Follow the job, which counts the keys in the query string.",
+                "urlencode turns the pairs into a query string.",
+                "1"
+              ],
+              "explanation": "urlencode turns the pairs into a query string.",
+              "xp_reward": 10,
+              "starter_code": "from urllib.parse import urlencode\npairs = {'q': 'linen'}\nprint(urlencode(pairs).count('='))\n",
+              "options": [
+                "2",
+                "1",
+                "none",
+                "0"
+              ],
+              "correct_answer": "1"
+            },
+            {
+              "id": "fs-query-string-order",
+              "type": "ordering",
+              "question": "Arrange the pieces of the line that counts the keys in the query string, left to right, for urllib holding q.",
+              "hints": [
+                "Follow the job, which counts the keys in the query string.",
+                "urlencode turns the pairs into a query string.",
+                "text = urlencode(pairs)"
+              ],
+              "explanation": "urlencode turns the pairs into a query string.",
+              "xp_reward": 10,
+              "options": [
+                "text",
+                "=",
+                "urlencode(pairs)",
+                "=="
+              ],
+              "correct_answer": [
+                "text",
+                "=",
+                "urlencode(pairs)"
+              ]
+            },
+            {
+              "id": "fs-query-string-fill",
+              "type": "fill_blank",
+              "question": "Fill the blank so the line counts the keys in the query string for urllib holding q.",
+              "hints": [
+                "Follow the job, which counts the keys in the query string.",
+                "urlencode turns the pairs into a query string.",
+                "urlencode"
+              ],
+              "explanation": "urlencode turns the pairs into a query string.",
+              "xp_reward": 10,
+              "starter_code": "text = ___(pairs)\n",
+              "options": [
+                "len",
+                "urlencode",
+                "str",
+                "list"
+              ],
+              "correct_answer": "urlencode"
+            },
+            {
+              "id": "fs-query-string-bug",
+              "type": "debugging",
+              "question": "Find the line that misses the job, which counts the keys in the query string, for urllib holding q.",
+              "hints": [
+                "Follow the job, which counts the keys in the query string.",
+                "The print counts the dictionary before encoding.",
+                "Line 3"
+              ],
+              "explanation": "The print counts the dictionary before encoding.",
+              "xp_reward": 10,
+              "starter_code": "from urllib.parse import urlencode\npairs = {'q': 'linen'}\nprint(len(pairs))\n",
+              "correct_answer": "3"
+            },
+            {
+              "id": "fs-query-string-predict-2",
+              "type": "output_prediction",
+              "question": "On the new input, the code still counts the keys in the query string for urllib holding q, so choose what it prints.",
+              "hints": [
+                "Follow the job, which counts the keys in the query string.",
+                "urlencode turns the pairs into a query string.",
+                "2"
+              ],
+              "explanation": "urlencode turns the pairs into a query string.",
+              "xp_reward": 10,
+              "starter_code": "from urllib.parse import urlencode\npairs = {'q': 'linen', 'page': '2'}\nprint(urlencode(pairs).count('='))\n",
+              "options": [
+                "1",
+                "none",
+                "0",
+                "2"
+              ],
+              "correct_answer": "2"
+            },
+            {
+              "id": "fs-query-string-write",
+              "type": "code",
+              "question": "Fill the blank so the program counts the keys in the query string, and the print shows that result for urllib holding q.",
+              "hints": [
+                "Follow the job, which counts the keys in the query string.",
+                "The printed value is the result after this step counts the keys in the query string.",
+                "label = urlencode(pairs).count('=')"
+              ],
+              "explanation": "The printed value is the result after this step counts the keys in the query string.",
+              "xp_reward": 10,
+              "starter_code": "from urllib.parse import urlencode\npairs = {'q': 'linen'}\nlabel = ___\nprint(label)\n",
+              "solution_code": "from urllib.parse import urlencode\npairs = {'q': 'linen'}\nlabel = urlencode(pairs).count('=')\nprint(label)\n",
+              "tests": [
+                {
+                  "name": "fs-query-string-prints",
+                  "description": "The printed value is the result after this step counts the keys in the query str",
+                  "expected_stdout": "1\n",
+                  "required": true
+                }
+              ]
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "fs-parse-json",
-      "title": "3. Parse JSON Response",
-      "description": "Implement `parse_json_response(body, status)` returning dict; raise ValueError if status>=400. The test checks that `parse_json_response('{\"ok\": true}', 200)` equals `{'ok': True}`; invalid input raises `ValueError`.",
+      "title": "Parse JSON Response",
+      "description": "Implement parse_json_response(body, status) returning dict; raise ValueError if status>=400. The test checks that parse_json_response('{\"ok\": true}', 200) equals {'ok': True}; invalid input raises ValueError.",
       "order": 3,
       "difficulty": "intermediate",
       "duration_minutes": 8,
@@ -101,7 +425,7 @@
       ],
       "prerequisites": [],
       "learning_objectives": [
-        "Parse JSON HTTP responses"
+        "This step reads the ok field from the response, using raw holding ok."
       ],
       "starter_code": "import json\n\ndef parse_json_response(body, status):\n    # TODO\n    pass\n",
       "solution_code": "import json\n\ndef parse_json_response(body, status):\n    if status >= 400:\n        raise ValueError('http ' + str(status))\n    return json.loads(body)\n",
@@ -122,12 +446,174 @@
         "url": "https://developer.mozilla.org/en-US/docs/Web/HTTP/Reference/Status",
         "license": "CC0 1.0 Universal (MDN Web Docs)"
       },
-      "xp_reward": 25
+      "xp_reward": 25,
+      "player_mode": "micro",
+      "sublessons": [
+        {
+          "id": "fs-parse-json-micro",
+          "title": "Parse JSON Response",
+          "description": "",
+          "order": 1,
+          "exercises": [
+            {
+              "id": "fs-parse-json-teach",
+              "type": "teach",
+              "question": "This step reads the ok field from the response, using raw holding ok.",
+              "hints": [
+                "Follow the job, which reads the ok field from the response.",
+                "loads turns the response text into a dictionary.",
+                "json.loads(raw)"
+              ],
+              "explanation": "This step reads the ok field from the response, using raw holding ok.",
+              "xp_reward": 0,
+              "worked_example": "json.loads(raw)"
+            },
+            {
+              "id": "fs-parse-json-mcq",
+              "type": "mcq",
+              "question": "Choose the line that reads the ok field from the response, which is the line that fits raw holding ok.",
+              "hints": [
+                "Follow the job, which reads the ok field from the response.",
+                "loads turns the response text into a dictionary.",
+                "json.loads(raw)"
+              ],
+              "explanation": "loads turns the response text into a dictionary.",
+              "xp_reward": 10,
+              "options": [
+                "raw == raw",
+                "pass",
+                "json.loads(raw)",
+                "return raw"
+              ],
+              "correct_answer": "json.loads(raw)"
+            },
+            {
+              "id": "fs-parse-json-predict",
+              "type": "output_prediction",
+              "question": "Read the code that reads the ok field from the response for raw holding ok, and choose the value it prints.",
+              "hints": [
+                "Follow the job, which reads the ok field from the response.",
+                "loads turns the response text into a dictionary.",
+                "59"
+              ],
+              "explanation": "loads turns the response text into a dictionary.",
+              "xp_reward": 10,
+              "starter_code": "import json\nraw = '{\"ok\": 59}'\nprint(json.loads(raw)['ok'])\n",
+              "options": [
+                "62",
+                "59",
+                "none",
+                "0"
+              ],
+              "correct_answer": "59"
+            },
+            {
+              "id": "fs-parse-json-order",
+              "type": "ordering",
+              "question": "Arrange the pieces of the line that reads the ok field from the response, left to right, for raw holding ok.",
+              "hints": [
+                "Follow the job, which reads the ok field from the response.",
+                "loads turns the response text into a dictionary.",
+                "data = json.loads(raw)"
+              ],
+              "explanation": "loads turns the response text into a dictionary.",
+              "xp_reward": 10,
+              "options": [
+                "data",
+                "=",
+                "json.loads(raw)",
+                "=="
+              ],
+              "correct_answer": [
+                "data",
+                "=",
+                "json.loads(raw)"
+              ]
+            },
+            {
+              "id": "fs-parse-json-fill",
+              "type": "fill_blank",
+              "question": "Fill the blank so the line reads the ok field from the response for raw holding ok.",
+              "hints": [
+                "Follow the job, which reads the ok field from the response.",
+                "loads turns the response text into a dictionary.",
+                "loads"
+              ],
+              "explanation": "loads turns the response text into a dictionary.",
+              "xp_reward": 10,
+              "starter_code": "data = json.___(raw)\n",
+              "options": [
+                "dumps",
+                "load",
+                "loads",
+                "dump"
+              ],
+              "correct_answer": "loads"
+            },
+            {
+              "id": "fs-parse-json-bug",
+              "type": "debugging",
+              "question": "Find the line that misses the job, which reads the ok field from the response, for raw holding ok.",
+              "hints": [
+                "Follow the job, which reads the ok field from the response.",
+                "The print shows a brace and never parses the response.",
+                "Line 3"
+              ],
+              "explanation": "The print shows a brace and never parses the response.",
+              "xp_reward": 10,
+              "starter_code": "import json\nraw = '{\"ok\": 59}'\nprint(raw[0])\n",
+              "correct_answer": "3"
+            },
+            {
+              "id": "fs-parse-json-predict-2",
+              "type": "output_prediction",
+              "question": "On the new input, the code still reads the ok field from the response for raw holding ok, so choose what it prints.",
+              "hints": [
+                "Follow the job, which reads the ok field from the response.",
+                "loads turns the response text into a dictionary.",
+                "62"
+              ],
+              "explanation": "loads turns the response text into a dictionary.",
+              "xp_reward": 10,
+              "starter_code": "import json\nraw = '{\"ok\": 62}'\nprint(json.loads(raw)['ok'])\n",
+              "options": [
+                "59",
+                "62",
+                "none",
+                "0"
+              ],
+              "correct_answer": "62"
+            },
+            {
+              "id": "fs-parse-json-write",
+              "type": "code",
+              "question": "Fill the blank so the program reads the ok field from the response, and the print shows that result for raw holding ok.",
+              "hints": [
+                "Follow the job, which reads the ok field from the response.",
+                "The printed value is the result after this step reads the ok field from the response.",
+                "label = json.loads(raw)['ok']"
+              ],
+              "explanation": "The printed value is the result after this step reads the ok field from the response.",
+              "xp_reward": 10,
+              "starter_code": "import json\nraw = '{\"ok\": 59}'\nlabel = ___\nprint(label)\n",
+              "solution_code": "import json\nraw = '{\"ok\": 59}'\nlabel = json.loads(raw)['ok']\nprint(label)\n",
+              "tests": [
+                {
+                  "name": "fs-parse-json-prints",
+                  "description": "The printed value is the result after this step reads the ok field from the resp",
+                  "expected_stdout": "59\n",
+                  "required": true
+                }
+              ]
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "fs-headers",
-      "title": "4. Merge Headers (Practice)",
-      "description": "Implement `merge_headers(base, extra)` — extra wins on conflicts. The test checks that `merge_headers({'A': '1'}, {'A': '2', 'B': '3'})` equals `{'A': '2', 'B': '3'}`.",
+      "title": "Merge Headers",
+      "description": "Implement merge_headers(base, extra) — extra wins on conflicts. The test checks that merge_headers({'A': '1'}, {'A': '2', 'B': '3'}) equals {'A': '2', 'B': '3'}.",
       "order": 4,
       "difficulty": "intermediate",
       "duration_minutes": 6,
@@ -139,7 +625,7 @@
       ],
       "prerequisites": [],
       "learning_objectives": [
-        "Merge HTTP headers"
+        "This step counts the headers after the merge, using base holding Accept."
       ],
       "starter_code": "def merge_headers(base, extra):\n    # TODO\n    pass\n",
       "solution_code": "def merge_headers(base, extra):\n    out = dict(base)\n    out.update(extra)\n    return out\n",
@@ -163,35 +649,173 @@
       "xp_reward": 15,
       "sublessons": [
         {
-          "id": "fs-headers-order-1-sub",
-          "title": "Order the steps",
+          "id": "fs-headers-micro",
+          "title": "Merge Headers",
+          "description": "",
           "order": 1,
           "exercises": [
             {
-              "id": "fs-headers-order-1",
-              "type": "ordering",
-              "question": "Put the steps of `4. Merge Headers (Practice)` back in order. Each line depends on the one before it.",
+              "id": "fs-headers-teach",
+              "type": "teach",
+              "question": "This step counts the headers after the merge, using base holding Accept.",
+              "hints": [
+                "Follow the job, which counts the headers after the merge.",
+                "Spreading both dictionaries merges the headers.",
+                "{**base, **extra}"
+              ],
+              "explanation": "This step counts the headers after the merge, using base holding Accept.",
+              "xp_reward": 0,
+              "worked_example": "{**base, **extra}"
+            },
+            {
+              "id": "fs-headers-mcq",
+              "type": "mcq",
+              "question": "Keep the choice that counts the headers after the merge for base holding Accept.",
+              "hints": [
+                "Follow the job, which counts the headers after the merge.",
+                "Spreading both dictionaries merges the headers.",
+                "{**base, **extra}"
+              ],
+              "explanation": "Spreading both dictionaries merges the headers.",
+              "xp_reward": 10,
               "options": [
-                "out.update(extra)",
-                "return out",
-                "out = dict(base)"
+                "base == extra",
+                "return base",
+                "{**base, **extra}",
+                "pass"
+              ],
+              "correct_answer": "{**base, **extra}"
+            },
+            {
+              "id": "fs-headers-predict",
+              "type": "output_prediction",
+              "question": "Trace the code that counts the headers after the merge using base holding Accept, and select what it displays.",
+              "hints": [
+                "Follow the job, which counts the headers after the merge.",
+                "Spreading both dictionaries merges the headers.",
+                "2"
+              ],
+              "explanation": "Spreading both dictionaries merges the headers.",
+              "xp_reward": 10,
+              "starter_code": "base = {'Accept': 'json'}\nextra = {'Auth': 'thyme'}\nmerged = {**base, **extra}\nprint(len(merged))\n",
+              "options": [
+                "1",
+                "none",
+                "2",
+                "0"
+              ],
+              "correct_answer": "2"
+            },
+            {
+              "id": "fs-headers-order",
+              "type": "ordering",
+              "question": "Tap the pieces, in order, of the line that counts the headers after the merge for base holding Accept.",
+              "hints": [
+                "Follow the job, which counts the headers after the merge.",
+                "Spreading both dictionaries merges the headers.",
+                "merged = {**base, **extra}"
+              ],
+              "explanation": "Spreading both dictionaries merges the headers.",
+              "xp_reward": 10,
+              "options": [
+                "merged",
+                "=",
+                "{**base,",
+                "**extra}",
+                "=="
               ],
               "correct_answer": [
-                "out = dict(base)",
-                "out.update(extra)",
-                "return out"
+                "merged",
+                "=",
+                "{**base,",
+                "**extra}"
+              ]
+            },
+            {
+              "id": "fs-headers-fill",
+              "type": "fill_blank",
+              "question": "The blank is the missing piece of the line that counts the headers after the merge for base holding Accept.",
+              "hints": [
+                "Follow the job, which counts the headers after the merge.",
+                "Spreading both dictionaries merges the headers.",
+                "**"
               ],
-              "explanation": "The order the solution in “4. Merge Headers (Practice)” actually runs in.",
-              "xp_reward": 10
+              "explanation": "Spreading both dictionaries merges the headers.",
+              "xp_reward": 10,
+              "starter_code": "merged = {**base, ___extra}\n",
+              "options": [
+                "*",
+                "+",
+                "**",
+                "-"
+              ],
+              "correct_answer": "**"
+            },
+            {
+              "id": "fs-headers-bug",
+              "type": "debugging",
+              "question": "Choose the line that does another job than the one that counts the headers after the merge for base holding Accept.",
+              "hints": [
+                "Follow the job, which counts the headers after the merge.",
+                "The print counts the original headers and ignores the extra ones.",
+                "Line 3"
+              ],
+              "explanation": "The print counts the original headers and ignores the extra ones.",
+              "xp_reward": 10,
+              "starter_code": "base = {'Accept': 'json'}\nextra = {'Auth': 'thyme'}\nprint(len(base))\n",
+              "correct_answer": "3"
+            },
+            {
+              "id": "fs-headers-predict-2",
+              "type": "output_prediction",
+              "question": "Trace the second run, which counts the headers after the merge for base holding Accept, and select what it displays.",
+              "hints": [
+                "Follow the job, which counts the headers after the merge.",
+                "Spreading both dictionaries merges the headers.",
+                "1"
+              ],
+              "explanation": "Spreading both dictionaries merges the headers.",
+              "xp_reward": 10,
+              "starter_code": "base = {'Accept': 'json'}\nextra = {}\nmerged = {**base, **extra}\nprint(len(merged))\n",
+              "options": [
+                "2",
+                "1",
+                "none",
+                "0"
+              ],
+              "correct_answer": "1"
+            },
+            {
+              "id": "fs-headers-write",
+              "type": "code",
+              "question": "Type the missing piece so the program counts the headers after the merge for base holding Accept and prints it.",
+              "hints": [
+                "Follow the job, which counts the headers after the merge.",
+                "The printed value is the result after this step counts the headers after the merge.",
+                "label = len(merged)"
+              ],
+              "explanation": "The printed value is the result after this step counts the headers after the merge.",
+              "xp_reward": 10,
+              "starter_code": "base = {'Accept': 'json'}\nextra = {'Auth': 'thyme'}\nmerged = {**base, **extra}\nlabel = ___\nprint(label)\n",
+              "solution_code": "base = {'Accept': 'json'}\nextra = {'Auth': 'thyme'}\nmerged = {**base, **extra}\nlabel = len(merged)\nprint(label)\n",
+              "tests": [
+                {
+                  "name": "fs-headers-prints",
+                  "description": "The printed value is the result after this step counts the headers after the mer",
+                  "expected_stdout": "2\n",
+                  "required": true
+                }
+              ]
             }
           ]
         }
-      ]
+      ],
+      "player_mode": "micro"
     },
     {
       "id": "fs-http-checkpoint",
-      "title": "5. Checkpoint: Build Request",
-      "description": "Implement `build_request(method, url, headers=None, json_body=None)` returning method/url/headers/body. The test checks that `build_request('post', '/x', json_body={'a': 1})['method']` equals `'POST'`; `build_request('post', '/x', json_body={'a': 1})['headers']['Content-Type']` contains `'application/json'`; `build_request('post', '/x', json_body={'a': 1})['body']` contains `'\"a\"'`.",
+      "title": "Practice Checkpoint Build Request",
+      "description": "Implement build_request(method, url, headers=None, json_body=None) returning method/url/headers/body. The test checks that build_request('post', '/x', json_body={'a': 1})['method'] equals 'POST'; build_request('post', '/x', json_body={'a': 1})['headers']['Content-Type'] contains 'application/json'; build_request('post', '/x', json_body={'a': 1})['body'] contains '\"a\"'.",
       "order": 5,
       "difficulty": "intermediate",
       "duration_minutes": 10,
@@ -203,7 +827,7 @@
       ],
       "prerequisites": [],
       "learning_objectives": [
-        "Assemble HTTP request objects"
+        "This step reads the method on the request, using req holding method."
       ],
       "starter_code": "import json\n\ndef build_request(method, url, headers=None, json_body=None):\n    # TODO\n    pass\n",
       "solution_code": "import json\n\ndef build_request(method, url, headers=None, json_body=None):\n    hdrs = dict(headers or {})\n    body = None\n    if json_body is not None:\n        body = json.dumps(json_body)\n        hdrs.setdefault('Content-Type', 'application/json')\n    return {'method': method.upper(), 'url': url, 'headers': hdrs, 'body': body}\n",
@@ -224,7 +848,169 @@
         "url": "https://docs.python.org/3/library/json.html",
         "license": "Python documentation license (PSF)"
       },
-      "xp_reward": 40
+      "xp_reward": 40,
+      "player_mode": "micro",
+      "sublessons": [
+        {
+          "id": "fs-http-checkpoint-micro",
+          "title": "Practice Checkpoint Build Request",
+          "description": "",
+          "order": 1,
+          "exercises": [
+            {
+              "id": "fs-http-checkpoint-teach",
+              "type": "teach",
+              "question": "This step reads the method on the request, using req holding method.",
+              "hints": [
+                "Follow the job, which reads the method on the request.",
+                "The method field says how the request is sent.",
+                "req['method']"
+              ],
+              "explanation": "This step reads the method on the request, using req holding method.",
+              "xp_reward": 0,
+              "worked_example": "req['method']"
+            },
+            {
+              "id": "fs-http-checkpoint-mcq",
+              "type": "mcq",
+              "question": "Select the line that reads the method on the request, the one that belongs with req holding method.",
+              "hints": [
+                "Follow the job, which reads the method on the request.",
+                "The method field says how the request is sent.",
+                "req['method']"
+              ],
+              "explanation": "The method field says how the request is sent.",
+              "xp_reward": 10,
+              "options": [
+                "req == req",
+                "return req",
+                "req['method']",
+                "pass"
+              ],
+              "correct_answer": "req['method']"
+            },
+            {
+              "id": "fs-http-checkpoint-predict",
+              "type": "output_prediction",
+              "question": "Follow the code that reads the method on the request for req holding method, then choose the displayed value.",
+              "hints": [
+                "Follow the job, which reads the method on the request.",
+                "The method field says how the request is sent.",
+                "GET"
+              ],
+              "explanation": "The method field says how the request is sent.",
+              "xp_reward": 10,
+              "starter_code": "req = {'method': 'GET', 'path': '/thyme'}\nprint(req['method'])\n",
+              "options": [
+                "POST",
+                "none",
+                "GET",
+                "0"
+              ],
+              "correct_answer": "GET"
+            },
+            {
+              "id": "fs-http-checkpoint-order",
+              "type": "ordering",
+              "question": "Order the pieces so the line reads the method on the request for req holding method.",
+              "hints": [
+                "Follow the job, which reads the method on the request.",
+                "The method field says how the request is sent.",
+                "method = req['method']"
+              ],
+              "explanation": "The method field says how the request is sent.",
+              "xp_reward": 10,
+              "options": [
+                "method",
+                "=",
+                "req['method']",
+                "=="
+              ],
+              "correct_answer": [
+                "method",
+                "=",
+                "req['method']"
+              ]
+            },
+            {
+              "id": "fs-http-checkpoint-fill",
+              "type": "fill_blank",
+              "question": "Supply the missing piece so the line reads the method on the request for req holding method.",
+              "hints": [
+                "Follow the job, which reads the method on the request.",
+                "The method field says how the request is sent.",
+                "'method'"
+              ],
+              "explanation": "The method field says how the request is sent.",
+              "xp_reward": 10,
+              "starter_code": "method = req[___]\n",
+              "options": [
+                "'path'",
+                "'ok'",
+                "'method'",
+                "'id'"
+              ],
+              "correct_answer": "'method'"
+            },
+            {
+              "id": "fs-http-checkpoint-bug",
+              "type": "debugging",
+              "question": "The wrong line is the one that misses the job, which reads the method on the request, for req holding method.",
+              "hints": [
+                "Follow the job, which reads the method on the request.",
+                "The print shows the path instead of the method.",
+                "Line 2"
+              ],
+              "explanation": "The print shows the path instead of the method.",
+              "xp_reward": 10,
+              "starter_code": "req = {'method': 'GET', 'path': '/thyme'}\nprint(req['path'])\n",
+              "correct_answer": "2"
+            },
+            {
+              "id": "fs-http-checkpoint-predict-2",
+              "type": "output_prediction",
+              "question": "A new input still has code that reads the method on the request for req holding method, and the correct choice is what it prints.",
+              "hints": [
+                "Follow the job, which reads the method on the request.",
+                "The method field says how the request is sent.",
+                "POST"
+              ],
+              "explanation": "The method field says how the request is sent.",
+              "xp_reward": 10,
+              "starter_code": "req = {'method': 'POST', 'path': '/thyme'}\nprint(req['method'])\n",
+              "options": [
+                "GET",
+                "POST",
+                "none",
+                "0"
+              ],
+              "correct_answer": "POST"
+            },
+            {
+              "id": "fs-http-checkpoint-write",
+              "type": "code",
+              "question": "The blank is the missing piece of the program that reads the method on the request for req holding method.",
+              "hints": [
+                "Follow the job, which reads the method on the request.",
+                "The printed value is the result after this step reads the method on the request.",
+                "label = req['method']"
+              ],
+              "explanation": "The printed value is the result after this step reads the method on the request.",
+              "xp_reward": 10,
+              "starter_code": "req = {'method': 'GET', 'path': '/thyme'}\nlabel = ___\nprint(label)\n",
+              "solution_code": "req = {'method': 'GET', 'path': '/thyme'}\nlabel = req['method']\nprint(label)\n",
+              "tests": [
+                {
+                  "name": "fs-http-checkpoint-prints",
+                  "description": "The printed value is the result after this step reads the method on the request.",
+                  "expected_stdout": "GET\n",
+                  "required": true
+                }
+              ]
+            }
+          ]
+        }
+      ]
     }
   ]
 }

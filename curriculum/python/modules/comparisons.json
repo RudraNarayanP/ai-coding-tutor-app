@@ -16,8 +16,8 @@
   "lessons": [
     {
       "id": "comparisons-step-1",
-      "title": "1. Relational Operators",
-      "description": "Python provides comparison operators: `==` (equal), `!=` (not equal), `<`, `>`, `<=`, `>=`. Write `is_equal(a, b)` and `is_greater(a, b)`. The test checks that `is_equal(5, 5)` is true; `is_greater(10, 3)` is true; `is_equal(5, 6)` is false.",
+      "title": "Practice Relational Operators",
+      "description": "Python provides comparison operators: == (equal), != (not equal), <, >, <=, >=. Write is_equal(a, b) and is_greater(a, b). The test checks that is_equal(5, 5) is true; is_greater(10, 3) is true; is_equal(5, 6) is false.",
       "order": 21,
       "difficulty": "beginner",
       "duration_minutes": 5,
@@ -30,7 +30,7 @@
         "conditionals"
       ],
       "learning_objectives": [
-        "Compare values using ==, !=, <, >"
+        "This step keeps twice the score when it reaches the limit, using the name score."
       ],
       "starter_code": "def is_equal(a, b):\n    # TODO: Return a == b\n    pass\n\ndef is_greater(a, b):\n    # TODO: Return a > b\n    pass\n",
       "tests": [
@@ -54,49 +54,175 @@
       "xp_reward": 10,
       "sublessons": [
         {
-          "id": "compare-ops-sub",
-          "title": "Match the operator",
+          "id": "comparisons-step-1-micro",
+          "title": "Practice Relational Operators",
+          "description": "",
           "order": 1,
           "exercises": [
             {
-              "id": "compare-ops-match-1",
-              "type": "matching",
-              "question": "Match each comparison operator to the question it asks.",
-              "pairs": [
-                {
-                  "left": "a == b",
-                  "right": "do the two values hold the same content?"
-                },
-                {
-                  "left": "a != b",
-                  "right": "are the two values different?"
-                },
-                {
-                  "left": "a > b",
-                  "right": "is a strictly larger than b?"
-                },
-                {
-                  "left": "a <= b",
-                  "right": "is a no more than b?"
-                }
+              "id": "comparisons-step-1-teach",
+              "type": "teach",
+              "question": "This step keeps twice the score when it reaches the limit, using the name score.",
+              "hints": [
+                "Follow the job, which keeps twice the score when it reaches the limit.",
+                "score >= limit includes the boundary.",
+                "score >= 15"
               ],
-              "correct_answer": {
-                "a == b": "do the two values hold the same content?",
-                "a != b": "are the two values different?",
-                "a > b": "is a strictly larger than b?",
-                "a <= b": "is a no more than b?"
-              },
-              "explanation": "`==` and `=` are not the same thing: one compares, the other assigns.",
-              "xp_reward": 10
+              "explanation": "This step keeps twice the score when it reaches the limit, using the name score.",
+              "xp_reward": 0,
+              "worked_example": "score >= 15"
+            },
+            {
+              "id": "comparisons-step-1-mcq",
+              "type": "mcq",
+              "question": "The match is the line that keeps twice the score when it reaches the limit for score and 15.",
+              "hints": [
+                "Follow the job, which keeps twice the score when it reaches the limit.",
+                "score >= limit includes the boundary.",
+                "score >= 15"
+              ],
+              "explanation": "score >= limit includes the boundary.",
+              "xp_reward": 10,
+              "options": [
+                "score == 0",
+                "print(score)",
+                "score >= 15",
+                "score = limit"
+              ],
+              "correct_answer": "score >= 15"
+            },
+            {
+              "id": "comparisons-step-1-predict",
+              "type": "output_prediction",
+              "question": "Work out what is printed when the code keeps twice the score when it reaches the limit for score and 15.",
+              "hints": [
+                "Follow the job, which keeps twice the score when it reaches the limit.",
+                "score >= limit includes the boundary.",
+                "62"
+              ],
+              "explanation": "score >= limit includes the boundary.",
+              "xp_reward": 10,
+              "starter_code": "score = 31\nprint(score * 2 if score >= 15 else score)\n",
+              "options": [
+                "14",
+                "none",
+                "0",
+                "62"
+              ],
+              "correct_answer": "62"
+            },
+            {
+              "id": "comparisons-step-1-order",
+              "type": "ordering",
+              "question": "Rebuild, from the left, the line that keeps twice the score when it reaches the limit for score and 15.",
+              "hints": [
+                "Follow the job, which keeps twice the score when it reaches the limit.",
+                "if score >= limit: is the boundary check.",
+                "if score >= limit: pass"
+              ],
+              "explanation": "if score >= limit: is the boundary check.",
+              "xp_reward": 10,
+              "options": [
+                "if",
+                "score",
+                ">=",
+                "limit:",
+                "pass",
+                "=="
+              ],
+              "correct_answer": [
+                "if",
+                "score",
+                ">=",
+                "limit:",
+                "pass"
+              ]
+            },
+            {
+              "id": "comparisons-step-1-fill",
+              "type": "fill_blank",
+              "question": "The completed line keeps twice the score when it reaches the limit once you fill the blank for score and 15.",
+              "hints": [
+                "Follow the job, which keeps twice the score when it reaches the limit.",
+                "The boundary check includes the limit itself.",
+                ">="
+              ],
+              "explanation": "The boundary check includes the limit itself.",
+              "xp_reward": 10,
+              "starter_code": "if score ___ limit:\n    label = 1\n",
+              "options": [
+                ">",
+                "==",
+                "<",
+                ">="
+              ],
+              "correct_answer": ">="
+            },
+            {
+              "id": "comparisons-step-1-bug",
+              "type": "debugging",
+              "question": "One line does another job than the one that keeps twice the score when it reaches the limit for score and 15.",
+              "hints": [
+                "Follow the job, which keeps twice the score when it reaches the limit.",
+                "The branch compares with zero instead of the limit.",
+                "Line 2"
+              ],
+              "explanation": "The branch compares with zero instead of the limit.",
+              "xp_reward": 10,
+              "starter_code": "score = 31\nif score == 0:\n    score = 1\nprint(score)\n",
+              "correct_answer": "2"
+            },
+            {
+              "id": "comparisons-step-1-predict-2",
+              "type": "output_prediction",
+              "question": "The second display is what prints after the code keeps twice the score when it reaches the limit for score and 15.",
+              "hints": [
+                "Follow the job, which keeps twice the score when it reaches the limit.",
+                "score >= limit includes the boundary.",
+                "14"
+              ],
+              "explanation": "score >= limit includes the boundary.",
+              "xp_reward": 10,
+              "starter_code": "score = 14\nprint(score * 2 if score >= 15 else score)\n",
+              "options": [
+                "62",
+                "none",
+                "14",
+                "0"
+              ],
+              "correct_answer": "14"
+            },
+            {
+              "id": "comparisons-step-1-write",
+              "type": "code",
+              "question": "Supply the blank so the run keeps twice the score when it reaches the limit and prints the result for score and 15.",
+              "hints": [
+                "Follow the job, which keeps twice the score when it reaches the limit.",
+                "The boundary result is what gets printed.",
+                "label = score * 2 if score >= 15 else score"
+              ],
+              "explanation": "The boundary result is what gets printed.",
+              "xp_reward": 10,
+              "starter_code": "score = 31\nlabel = ___\nprint(label)\n",
+              "solution_code": "score = 31\nlabel = score * 2 if score >= 15 else score\nprint(label)\n",
+              "tests": [
+                {
+                  "name": "comparisons-step-1-prints",
+                  "description": "The boundary result is what gets printed.",
+                  "expected_stdout": "62\n",
+                  "required": true
+                }
+              ]
             }
           ]
         }
-      ]
+      ],
+      "player_mode": "micro"
     },
     {
       "id": "comparisons-step-2",
-      "title": "2. Chained Comparisons",
-      "description": "Python allows chaining comparisons like `min_val <= x <= max_val`. Write `in_range(x, low, high)`. The test checks that `in_range(5, 1, 10)` is true; `in_range(1, 1, 10)` is true; `in_range(0, 1, 10)` is false.",
+      "title": "Practice Chained Comparisons",
+      "description": "Python allows chaining comparisons like min_val <= x <= max_val. Write in_range(x, low, high). The test checks that in_range(5, 1, 10) is true; in_range(1, 1, 10) is true; in_range(0, 1, 10) is false.",
       "order": 22,
       "difficulty": "beginner",
       "duration_minutes": 5,
@@ -109,7 +235,7 @@
         "conditionals"
       ],
       "learning_objectives": [
-        "Chain comparisons concisely"
+        "This step keeps the score only when it sits between the two bounds, using score and 7."
       ],
       "starter_code": "def in_range(x, low, high):\n    # TODO: Return True if low <= x <= high\n    pass\n",
       "tests": [
@@ -130,12 +256,178 @@
         "url": "https://docs.python.org/3/reference/expressions.html#comparisons",
         "license": "Python documentation license (PSF)"
       },
-      "xp_reward": 10
+      "xp_reward": 10,
+      "player_mode": "micro",
+      "sublessons": [
+        {
+          "id": "comparisons-step-2-micro",
+          "title": "Practice Chained Comparisons",
+          "description": "",
+          "order": 1,
+          "exercises": [
+            {
+              "id": "comparisons-step-2-teach",
+              "type": "teach",
+              "question": "This step keeps the score only when it sits between the two bounds, using score and 7.",
+              "hints": [
+                "Follow the job, which keeps the score only when it sits between the two bounds.",
+                "15 < score < 80 is one chained comparison.",
+                "15 < score < 80"
+              ],
+              "explanation": "This step keeps the score only when it sits between the two bounds, using score and 7.",
+              "xp_reward": 0,
+              "worked_example": "15 < score < 80"
+            },
+            {
+              "id": "comparisons-step-2-mcq",
+              "type": "mcq",
+              "question": "Pick the line that keeps the score only when it sits between the two bounds, not a line about something else, for score and 7.",
+              "hints": [
+                "Follow the job, which keeps the score only when it sits between the two bounds.",
+                "15 < score < 80 is one chained comparison.",
+                "15 < score < 80"
+              ],
+              "explanation": "15 < score < 80 is one chained comparison.",
+              "xp_reward": 10,
+              "options": [
+                "score = 15",
+                "15 < score < 80",
+                "score == 80",
+                "print(score)"
+              ],
+              "correct_answer": "15 < score < 80"
+            },
+            {
+              "id": "comparisons-step-2-predict",
+              "type": "output_prediction",
+              "question": "The displayed value is what the code prints when it keeps the score only when it sits between the two bounds for score and 7.",
+              "hints": [
+                "Follow the job, which keeps the score only when it sits between the two bounds.",
+                "15 < score < 80 is one chained comparison.",
+                "132"
+              ],
+              "explanation": "15 < score < 80 is one chained comparison.",
+              "xp_reward": 10,
+              "starter_code": "score = 32\nprint(score + 100 if 15 < score < 80 else 7)\n",
+              "options": [
+                "7",
+                "132",
+                "none",
+                "0"
+              ],
+              "correct_answer": "132"
+            },
+            {
+              "id": "comparisons-step-2-order",
+              "type": "ordering",
+              "question": "Place every piece so the result keeps the score only when it sits between the two bounds for score and 7.",
+              "hints": [
+                "Follow the job, which keeps the score only when it sits between the two bounds.",
+                "if low < score: opens the range check.",
+                "if low < score: pass"
+              ],
+              "explanation": "if low < score: opens the range check.",
+              "xp_reward": 10,
+              "options": [
+                "if",
+                "low",
+                "<",
+                "score:",
+                "pass",
+                "=="
+              ],
+              "correct_answer": [
+                "if",
+                "low",
+                "<",
+                "score:",
+                "pass"
+              ]
+            },
+            {
+              "id": "comparisons-step-2-fill",
+              "type": "fill_blank",
+              "question": "Drop in the piece that lets the line keeps the score only when it sits between the two bounds for score and 7.",
+              "hints": [
+                "Follow the job, which keeps the score only when it sits between the two bounds.",
+                "The second symbol finishes the chain.",
+                "<"
+              ],
+              "explanation": "The second symbol finishes the chain.",
+              "xp_reward": 10,
+              "starter_code": "if low < score ___ high:\n    label = 1\n",
+              "options": [
+                ">",
+                "<",
+                "==",
+                "="
+              ],
+              "correct_answer": "<"
+            },
+            {
+              "id": "comparisons-step-2-bug",
+              "type": "debugging",
+              "question": "The mismatch misses the job, which keeps the score only when it sits between the two bounds, for score and 7.",
+              "hints": [
+                "Follow the job, which keeps the score only when it sits between the two bounds.",
+                "The branch checks equality instead of the range.",
+                "Line 2"
+              ],
+              "explanation": "The branch checks equality instead of the range.",
+              "xp_reward": 10,
+              "starter_code": "score = 32\nif score == 15:\n    score = 1\nprint(score)\n",
+              "correct_answer": "2"
+            },
+            {
+              "id": "comparisons-step-2-predict-2",
+              "type": "output_prediction",
+              "question": "Choose the printed result of the second run that keeps the score only when it sits between the two bounds for score and.",
+              "hints": [
+                "Follow the job, which keeps the score only when it sits between the two bounds.",
+                "15 < score < 80 is one chained comparison.",
+                "7"
+              ],
+              "explanation": "15 < score < 80 is one chained comparison.",
+              "xp_reward": 10,
+              "starter_code": "score = 3\nprint(score + 100 if 15 < score < 80 else 7)\n",
+              "options": [
+                "132",
+                "none",
+                "0",
+                "7"
+              ],
+              "correct_answer": "7"
+            },
+            {
+              "id": "comparisons-step-2-write",
+              "type": "code",
+              "question": "Make the program keeps the score only when it sits between the two bounds by filling the blank for score and 7.",
+              "hints": [
+                "Follow the job, which keeps the score only when it sits between the two bounds.",
+                "The range result is what gets printed.",
+                "label = score + 100 if 15 < score < 80 else 7"
+              ],
+              "explanation": "The range result is what gets printed.",
+              "xp_reward": 10,
+              "starter_code": "score = 32\nlabel = ___\nprint(label)\n",
+              "solution_code": "score = 32\nlabel = score + 100 if 15 < score < 80 else 7\nprint(label)\n",
+              "tests": [
+                {
+                  "name": "comparisons-step-2-prints",
+                  "description": "The range result is what gets printed.",
+                  "expected_stdout": "132\n",
+                  "required": true
+                }
+              ]
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "comparisons-01",
-      "title": "3. Black Jack (Concept Challenge)",
-      "description": "Finish `value_of_card`, `higher_card`, `value_of_ace`, `is_blackjack` and 2 more. Implement Black Jack card counting rules using relational comparisons. The test checks that `value_of_card('K')` equals `10`; `value_of_card('7')` equals `7`; `higher_card('A', '10')` equals `'10'`.",
+      "title": "Practice Black Jack",
+      "description": "Finish value_of_card, higher_card, value_of_ace, is_blackjack and 2 more. Implement Black Jack card counting rules using relational comparisons. The test checks that value_of_card('K') equals 10; value_of_card('7') equals 7; higher_card('A', '10') equals '10'.",
       "order": 23,
       "difficulty": "beginner",
       "duration_minutes": 8,
@@ -149,9 +441,7 @@
         "conditionals"
       ],
       "learning_objectives": [
-        "Use equality == and inequality operators !=, <, >, <=, >=",
-        "Chain comparison expressions",
-        "Model value rules and edge cases with comparison expressions"
+        "This step doubles the card when it matches the target, using card and 2."
       ],
       "starter_code": "def value_of_card(card):\n    \"\"\"Return numeric value of a card.\"\"\"\n    pass\n\ndef higher_card(card_one, card_two):\n    \"\"\"Return the higher card, or both as a tuple if equal.\"\"\"\n    pass\n\ndef value_of_ace(card_one, card_two):\n    \"\"\"Return 11 if safe, else 1.\"\"\"\n    pass\n\ndef is_blackjack(card_one, card_two):\n    \"\"\"Return True if hand totals 21 with an ace and a 10-value card.\"\"\"\n    pass\n\ndef can_split_pairs(card_one, card_two):\n    \"\"\"Return True if cards have equal value.\"\"\"\n    pass\n\ndef can_double_down(card_one, card_two):\n    \"\"\"Return True if hand totals 9, 10, or 11.\"\"\"\n    pass\n",
       "tests": [
@@ -202,12 +492,178 @@
         "license": "MIT"
       },
       "solution_code": "FACE_CARDS = {'K', 'Q', 'J'}\n\n\ndef value_of_card(card):\n    \"\"\"Return numeric value of a card.\"\"\"\n    if card in FACE_CARDS:\n        return 10\n    if card == \"A\":\n        return 1\n    return int(card)\n\n\ndef higher_card(card_one, card_two):\n    \"\"\"Return the higher card, or both as a tuple if equal.\"\"\"\n    v1, v2 = value_of_card(card_one), value_of_card(card_two)\n    if v1 > v2:\n        return card_one\n    if v2 > v1:\n        return card_two\n    return (card_one, card_two)\n\n\ndef value_of_ace(card_one, card_two):\n    \"\"\"Return 11 if safe, else 1.\"\"\"\n    total = value_of_card(card_one) + value_of_card(card_two)\n    if card_one == \"A\":\n        total += 10\n    if card_two == \"A\":\n        total += 10\n    return 11 if total + 11 <= 21 else 1\n\n\ndef is_blackjack(card_one, card_two):\n    \"\"\"Return True if hand totals 21 with an ace and a 10-value card.\"\"\"\n    cards = (card_one, card_two)\n    return 'A' in cards and any(value_of_card(c) == 10 for c in cards)\n\n\ndef can_split_pairs(card_one, card_two):\n    \"\"\"Return True if cards have equal value.\"\"\"\n    return value_of_card(card_one) == value_of_card(card_two)\n\n\ndef can_double_down(card_one, card_two):\n    \"\"\"Return True if hand totals 9, 10, or 11.\"\"\"\n    return value_of_card(card_one) + value_of_card(card_two) in (9, 10, 11)\n",
-      "xp_reward": 25
+      "xp_reward": 25,
+      "player_mode": "micro",
+      "sublessons": [
+        {
+          "id": "comparisons-01-micro",
+          "title": "Practice Black Jack",
+          "description": "",
+          "order": 1,
+          "exercises": [
+            {
+              "id": "comparisons-01-teach",
+              "type": "teach",
+              "question": "This step doubles the card when it matches the target, using card and 2.",
+              "hints": [
+                "Follow the job, which doubles the card when it matches the target.",
+                "card == target is the match.",
+                "card == target"
+              ],
+              "explanation": "This step doubles the card when it matches the target, using card and 2.",
+              "xp_reward": 0,
+              "worked_example": "card == target"
+            },
+            {
+              "id": "comparisons-01-mcq",
+              "type": "mcq",
+              "question": "Mark the choice that doubles the card when it matches the target when the code mentions card and 2.",
+              "hints": [
+                "Follow the job, which doubles the card when it matches the target.",
+                "card == target is the match.",
+                "card == target"
+              ],
+              "explanation": "card == target is the match.",
+              "xp_reward": 10,
+              "options": [
+                "card = target",
+                "card != target",
+                "print(card)",
+                "card == target"
+              ],
+              "correct_answer": "card == target"
+            },
+            {
+              "id": "comparisons-01-predict",
+              "type": "output_prediction",
+              "question": "After card and 2, the code doubles the card when it matches the target, and the correct choice is the printed value.",
+              "hints": [
+                "Follow the job, which doubles the card when it matches the target.",
+                "card == target is the match.",
+                "60"
+              ],
+              "explanation": "card == target is the match.",
+              "xp_reward": 10,
+              "starter_code": "card = 30\ntarget = 30\nprint(card * 2 if card == target else card)\n",
+              "options": [
+                "30",
+                "none",
+                "0",
+                "60"
+              ],
+              "correct_answer": "60"
+            },
+            {
+              "id": "comparisons-01-order",
+              "type": "ordering",
+              "question": "The finished line doubles the card when it matches the target, so place its pieces in order for card and 2.",
+              "hints": [
+                "Follow the job, which doubles the card when it matches the target.",
+                "if card == target: is the match.",
+                "if card == target: pass"
+              ],
+              "explanation": "if card == target: is the match.",
+              "xp_reward": 10,
+              "options": [
+                "if",
+                "card",
+                "==",
+                "target:",
+                "pass",
+                "="
+              ],
+              "correct_answer": [
+                "if",
+                "card",
+                "==",
+                "target:",
+                "pass"
+              ]
+            },
+            {
+              "id": "comparisons-01-fill",
+              "type": "fill_blank",
+              "question": "Finish the line that doubles the card when it matches the target by filling the blank for card and 2.",
+              "hints": [
+                "Follow the job, which doubles the card when it matches the target.",
+                "Two equals signs ask whether the values match.",
+                "=="
+              ],
+              "explanation": "Two equals signs ask whether the values match.",
+              "xp_reward": 10,
+              "starter_code": "if card ___ target:\n    label = 1\n",
+              "options": [
+                "=",
+                "!=",
+                "<",
+                "=="
+              ],
+              "correct_answer": "=="
+            },
+            {
+              "id": "comparisons-01-bug",
+              "type": "debugging",
+              "question": "Mark the line that breaks the job, which doubles the card when it matches the target, for card and 2.",
+              "hints": [
+                "Follow the job, which doubles the card when it matches the target.",
+                "The branch keeps the mismatch instead of the match.",
+                "Line 3"
+              ],
+              "explanation": "The branch keeps the mismatch instead of the match.",
+              "xp_reward": 10,
+              "starter_code": "card = 30\ntarget = 30\nprint(card * 2 if card != target else card)\n",
+              "correct_answer": "3"
+            },
+            {
+              "id": "comparisons-01-predict-2",
+              "type": "output_prediction",
+              "question": "Follow the second program, which doubles the card when it matches the target for card and 2, and choose its output.",
+              "hints": [
+                "Follow the job, which doubles the card when it matches the target.",
+                "card == target is the match.",
+                "30"
+              ],
+              "explanation": "card == target is the match.",
+              "xp_reward": 10,
+              "starter_code": "card = 30\ntarget = 31\nprint(card * 2 if card == target else card)\n",
+              "options": [
+                "60",
+                "none",
+                "30",
+                "0"
+              ],
+              "correct_answer": "30"
+            },
+            {
+              "id": "comparisons-01-write",
+              "type": "code",
+              "question": "Finish the program that doubles the card when it matches the target by filling the blank for card and 2.",
+              "hints": [
+                "Follow the job, which doubles the card when it matches the target.",
+                "The match result is what gets printed.",
+                "label = card * 2 if card == target else card"
+              ],
+              "explanation": "The match result is what gets printed.",
+              "xp_reward": 10,
+              "starter_code": "card = 30\ntarget = 30\nlabel = ___\nprint(label)\n",
+              "solution_code": "card = 30\ntarget = 30\nlabel = card * 2 if card == target else card\nprint(label)\n",
+              "tests": [
+                {
+                  "name": "comparisons-01-prints",
+                  "description": "The match result is what gets printed.",
+                  "expected_stdout": "60\n",
+                  "required": true
+                }
+              ]
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "comparisons-practice-1",
-      "title": "4. Rollercoaster Entry Check (Practice)",
-      "description": "Finish `can_ride`. Determine if a person can ride a rollercoaster: `age >= 10` and `height_cm >= 130`. The test checks that `can_ride(12, 140)` is true; `can_ride(8, 140)` is false; `can_ride(12, 120)` is false.",
+      "title": "Practice Rollercoaster Entry Check",
+      "description": "Finish can_ride. Determine if a person can ride a rollercoaster: age >= 10 and height_cm >= 130. The test checks that can_ride(12, 140) is true; can_ride(8, 140) is false; can_ride(12, 120) is false.",
       "order": 24,
       "difficulty": "beginner",
       "duration_minutes": 6,
@@ -220,7 +676,7 @@
         "conditionals"
       ],
       "learning_objectives": [
-        "Apply multiple relational comparisons"
+        "Using score and 15, this step keeps twice the score when it reaches the limit."
       ],
       "starter_code": "def can_ride(age, height_cm):\n    # TODO: Return True if age >= 10 AND height_cm >= 130\n    pass\n",
       "tests": [
@@ -241,12 +697,178 @@
         "url": "https://docs.python.org/3/reference/expressions.html#comparisons",
         "license": "Python documentation license (PSF)"
       },
-      "xp_reward": 15
+      "xp_reward": 15,
+      "player_mode": "micro",
+      "sublessons": [
+        {
+          "id": "comparisons-practice-1-micro",
+          "title": "Practice Rollercoaster Entry Check",
+          "description": "",
+          "order": 1,
+          "exercises": [
+            {
+              "id": "comparisons-practice-1-teach",
+              "type": "teach",
+              "question": "Using score and 15, this step keeps twice the score when it reaches the limit.",
+              "hints": [
+                "Follow the job, which keeps twice the score when it reaches the limit.",
+                "score >= limit includes the boundary.",
+                "score >= 15"
+              ],
+              "explanation": "Using score and 15, this step keeps twice the score when it reaches the limit.",
+              "xp_reward": 0,
+              "worked_example": "score >= 15"
+            },
+            {
+              "id": "comparisons-practice-1-mcq",
+              "type": "mcq",
+              "question": "A correct choice keeps twice the score when it reaches the limit and goes with score and 15.",
+              "hints": [
+                "Follow the job, which keeps twice the score when it reaches the limit.",
+                "score >= limit includes the boundary.",
+                "score >= 15"
+              ],
+              "explanation": "score >= limit includes the boundary.",
+              "xp_reward": 10,
+              "options": [
+                "score = limit",
+                "score == 0",
+                "print(score)",
+                "score >= 15"
+              ],
+              "correct_answer": "score >= 15"
+            },
+            {
+              "id": "comparisons-practice-1-predict",
+              "type": "output_prediction",
+              "question": "Select the output after the code keeps twice the score when it reaches the limit, using score and 15.",
+              "hints": [
+                "Follow the job, which keeps twice the score when it reaches the limit.",
+                "score >= limit includes the boundary.",
+                "66"
+              ],
+              "explanation": "score >= limit includes the boundary.",
+              "xp_reward": 10,
+              "starter_code": "score = 33\nprint(score * 2 if score >= 15 else score)\n",
+              "options": [
+                "14",
+                "none",
+                "0",
+                "66"
+              ],
+              "correct_answer": "66"
+            },
+            {
+              "id": "comparisons-practice-1-order",
+              "type": "ordering",
+              "question": "Make the line that keeps twice the score when it reaches the limit by ordering the pieces for score and 15.",
+              "hints": [
+                "Follow the job, which keeps twice the score when it reaches the limit.",
+                "if score >= limit: is the boundary check.",
+                "if score >= limit: pass"
+              ],
+              "explanation": "if score >= limit: is the boundary check.",
+              "xp_reward": 10,
+              "options": [
+                "if",
+                "score",
+                ">=",
+                "limit:",
+                "pass",
+                "=="
+              ],
+              "correct_answer": [
+                "if",
+                "score",
+                ">=",
+                "limit:",
+                "pass"
+              ]
+            },
+            {
+              "id": "comparisons-practice-1-fill",
+              "type": "fill_blank",
+              "question": "Complete the line for score and 15 so that it keeps twice the score when it reaches the limit.",
+              "hints": [
+                "Follow the job, which keeps twice the score when it reaches the limit.",
+                "The boundary check includes the limit itself.",
+                ">="
+              ],
+              "explanation": "The boundary check includes the limit itself.",
+              "xp_reward": 10,
+              "starter_code": "if score ___ limit:\n    label = 1\n",
+              "options": [
+                ">",
+                "<",
+                "==",
+                ">="
+              ],
+              "correct_answer": ">="
+            },
+            {
+              "id": "comparisons-practice-1-bug",
+              "type": "debugging",
+              "question": "Select the line that gets in the way of the job, which keeps twice the score when it reaches the limit, for score and 15.",
+              "hints": [
+                "Follow the job, which keeps twice the score when it reaches the limit.",
+                "The branch compares with zero instead of the limit.",
+                "Line 2"
+              ],
+              "explanation": "The branch compares with zero instead of the limit.",
+              "xp_reward": 10,
+              "starter_code": "score = 33\nif score == 0:\n    score = 1\nprint(score)\n",
+              "correct_answer": "2"
+            },
+            {
+              "id": "comparisons-practice-1-predict-2",
+              "type": "output_prediction",
+              "question": "With the new data around score and 15, the code keeps twice the score when it reaches the limit, so select the new output.",
+              "hints": [
+                "Follow the job, which keeps twice the score when it reaches the limit.",
+                "score >= limit includes the boundary.",
+                "14"
+              ],
+              "explanation": "score >= limit includes the boundary.",
+              "xp_reward": 10,
+              "starter_code": "score = 14\nprint(score * 2 if score >= 15 else score)\n",
+              "options": [
+                "66",
+                "none",
+                "14",
+                "0"
+              ],
+              "correct_answer": "14"
+            },
+            {
+              "id": "comparisons-practice-1-write",
+              "type": "code",
+              "question": "The printed result shows up after you fill the blank so the code keeps twice the score when it reaches the limit for score and 15.",
+              "hints": [
+                "Follow the job, which keeps twice the score when it reaches the limit.",
+                "The boundary result is what gets printed.",
+                "label = score * 2 if score >= 15 else score"
+              ],
+              "explanation": "The boundary result is what gets printed.",
+              "xp_reward": 10,
+              "starter_code": "score = 33\nlabel = ___\nprint(label)\n",
+              "solution_code": "score = 33\nlabel = score * 2 if score >= 15 else score\nprint(label)\n",
+              "tests": [
+                {
+                  "name": "comparisons-practice-1-prints",
+                  "description": "The boundary result is what gets printed.",
+                  "expected_stdout": "66\n",
+                  "required": true
+                }
+              ]
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "comparisons-checkpoint",
-      "title": "5. Unit 5 Checkpoint: Comparisons Mastery",
-      "description": "compare_scores(score_a, score_b) must return \"A\" when score_a is greater, \"B\" when score_b is greater, and \"Tie\" when both are equal — practicing comparison operators and if/elif/else. The test checks that `compare_scores(10, 5)` equals `\"A\"`; `compare_scores(5, 10)` equals `\"B\"`; `compare_scores(7, 7)` equals `\"Tie\"`.",
+      "title": "Practice Unit 5 Checkpoint Comparisons Mastery",
+      "description": "compare_scores(score_a, score_b) must return \"A\" when score_a is greater, \"B\" when score_b is greater, and \"Tie\" when both are equal — practicing comparison operators and if/elif/else. The test checks that compare_scores(10, 5) equals \"A\"; compare_scores(5, 10) equals \"B\"; compare_scores(7, 7) equals \"Tie\".",
       "order": 25,
       "difficulty": "beginner",
       "duration_minutes": 10,
@@ -259,7 +881,7 @@
         "conditionals"
       ],
       "learning_objectives": [
-        "Master relational comparison logic"
+        "This step adds the two readings when they differ, using the value 39."
       ],
       "starter_code": "def compare_scores(score_a, score_b):\n    # TODO: Return \"A\" if score_a > score_b, \"B\" if score_b > score_a, else \"Tie\"\n    pass\n",
       "tests": [
@@ -280,7 +902,173 @@
         "url": "https://docs.python.org/3/reference/expressions.html#comparisons",
         "license": "Python documentation license (PSF)"
       },
-      "xp_reward": 40
+      "xp_reward": 40,
+      "player_mode": "micro",
+      "sublessons": [
+        {
+          "id": "comparisons-checkpoint-micro",
+          "title": "Practice Unit 5 Checkpoint Comparisons Mastery",
+          "description": "",
+          "order": 1,
+          "exercises": [
+            {
+              "id": "comparisons-checkpoint-teach",
+              "type": "teach",
+              "question": "This step adds the two readings when they differ, using the value 39.",
+              "hints": [
+                "Follow the job, which adds the two readings when they differ.",
+                "left != right is the difference check.",
+                "left != right"
+              ],
+              "explanation": "This step adds the two readings when they differ, using the value 39.",
+              "xp_reward": 0,
+              "worked_example": "left != right"
+            },
+            {
+              "id": "comparisons-checkpoint-mcq",
+              "type": "mcq",
+              "question": "Select the line that adds the two readings when they differ, the one that belongs with the value 39.",
+              "hints": [
+                "Follow the job, which adds the two readings when they differ.",
+                "left != right is the difference check.",
+                "left != right"
+              ],
+              "explanation": "left != right is the difference check.",
+              "xp_reward": 10,
+              "options": [
+                "left = right",
+                "left != right",
+                "print(left)",
+                "left == right"
+              ],
+              "correct_answer": "left != right"
+            },
+            {
+              "id": "comparisons-checkpoint-predict",
+              "type": "output_prediction",
+              "question": "Follow the code that adds the two readings when they differ for the value 39, then choose the displayed value.",
+              "hints": [
+                "Follow the job, which adds the two readings when they differ.",
+                "left != right is the difference check.",
+                "76"
+              ],
+              "explanation": "left != right is the difference check.",
+              "xp_reward": 10,
+              "starter_code": "left = 37\nright = 39\nprint(left + right if left != right else left)\n",
+              "options": [
+                "37",
+                "76",
+                "none",
+                "0"
+              ],
+              "correct_answer": "76"
+            },
+            {
+              "id": "comparisons-checkpoint-order",
+              "type": "ordering",
+              "question": "Order the pieces so the line adds the two readings when they differ for the value 39.",
+              "hints": [
+                "Follow the job, which adds the two readings when they differ.",
+                "if left != right: keeps the unequal case.",
+                "if left != right: pass"
+              ],
+              "explanation": "if left != right: keeps the unequal case.",
+              "xp_reward": 10,
+              "options": [
+                "if",
+                "left",
+                "!=",
+                "right:",
+                "pass",
+                "=="
+              ],
+              "correct_answer": [
+                "if",
+                "left",
+                "!=",
+                "right:",
+                "pass"
+              ]
+            },
+            {
+              "id": "comparisons-checkpoint-fill",
+              "type": "fill_blank",
+              "question": "Supply the missing piece so the line adds the two readings when they differ for the value 39.",
+              "hints": [
+                "Follow the job, which adds the two readings when they differ.",
+                "The exclamation form asks whether the values differ.",
+                "!="
+              ],
+              "explanation": "The exclamation form asks whether the values differ.",
+              "xp_reward": 10,
+              "starter_code": "if left ___ right:\n    label = 1\n",
+              "options": [
+                "==",
+                "!=",
+                "=",
+                "<"
+              ],
+              "correct_answer": "!="
+            },
+            {
+              "id": "comparisons-checkpoint-bug",
+              "type": "debugging",
+              "question": "The wrong line is the one that misses the job, which adds the two readings when they differ, for the value.",
+              "hints": [
+                "Follow the job, which adds the two readings when they differ.",
+                "The branch keeps the equal case.",
+                "Line 3"
+              ],
+              "explanation": "The branch keeps the equal case.",
+              "xp_reward": 10,
+              "starter_code": "left = 37\nright = 39\nprint(left + right if left == right else 0)\n",
+              "correct_answer": "3"
+            },
+            {
+              "id": "comparisons-checkpoint-predict-2",
+              "type": "output_prediction",
+              "question": "A new input still has code that adds the two readings when they differ for the value 39, and the correct choice is what it prints.",
+              "hints": [
+                "Follow the job, which adds the two readings when they differ.",
+                "left != right is the difference check.",
+                "37"
+              ],
+              "explanation": "left != right is the difference check.",
+              "xp_reward": 10,
+              "starter_code": "left = 37\nright = 37\nprint(left + right if left != right else left)\n",
+              "options": [
+                "none",
+                "76",
+                "0",
+                "37"
+              ],
+              "correct_answer": "37"
+            },
+            {
+              "id": "comparisons-checkpoint-write",
+              "type": "code",
+              "question": "The blank is the missing piece of the program that adds the two readings when they differ for the value 39.",
+              "hints": [
+                "Follow the job, which adds the two readings when they differ.",
+                "The unequal sum is what gets printed.",
+                "label = left + right if left != right else left"
+              ],
+              "explanation": "The unequal sum is what gets printed.",
+              "xp_reward": 10,
+              "starter_code": "left = 37\nright = 39\nlabel = ___\nprint(label)\n",
+              "solution_code": "left = 37\nright = 39\nlabel = left + right if left != right else left\nprint(label)\n",
+              "tests": [
+                {
+                  "name": "comparisons-checkpoint-prints",
+                  "description": "The unequal sum is what gets printed.",
+                  "expected_stdout": "76\n",
+                  "required": true
+                }
+              ]
+            }
+          ]
+        }
+      ]
     }
   ]
 }

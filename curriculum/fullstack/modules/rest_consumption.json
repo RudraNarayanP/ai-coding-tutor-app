@@ -14,8 +14,8 @@
   "lessons": [
     {
       "id": "fs-rest-get",
-      "title": "1. REST Resource Path",
-      "description": "Implement `resource_path(collection, id=None)` e.g. '/users' or '/users/3'. The test checks that `resource_path('users')` equals `'/users'`; `resource_path('/users/', 3)` equals `'/users/3'`.",
+      "title": "Practice REST Resource Path",
+      "description": "Implement resource_path(collection, id=None) e.g. '/users' or '/users/3'. The test checks that resource_path('users') equals '/users'; resource_path('/users/', 3) equals '/users/3'.",
       "order": 6,
       "difficulty": "intermediate",
       "duration_minutes": 5,
@@ -27,7 +27,7 @@
       ],
       "prerequisites": [],
       "learning_objectives": [
-        "Build REST resource paths"
+        "This step builds the resource path, using item and 44."
       ],
       "starter_code": "def resource_path(collection, id=None):\n    # TODO\n    pass\n",
       "solution_code": "def resource_path(collection, id=None):\n    base = '/' + collection.strip('/')\n    if id is None:\n        return base\n    return base + '/' + str(id)\n",
@@ -48,12 +48,174 @@
         "url": "https://developer.mozilla.org/en-US/docs/Glossary/REST",
         "license": "CC0 1.0 Universal (MDN Web Docs)"
       },
-      "xp_reward": 10
+      "xp_reward": 10,
+      "player_mode": "micro",
+      "sublessons": [
+        {
+          "id": "fs-rest-get-micro",
+          "title": "Practice REST Resource Path",
+          "description": "",
+          "order": 1,
+          "exercises": [
+            {
+              "id": "fs-rest-get-teach",
+              "type": "teach",
+              "question": "This step builds the resource path, using item and 44.",
+              "hints": [
+                "Follow the job, which builds the resource path.",
+                "The path starts with /items/ and then the id.",
+                "f'/items/{item}'"
+              ],
+              "explanation": "This step builds the resource path, using item and 44.",
+              "xp_reward": 0,
+              "worked_example": "f'/items/{item}'"
+            },
+            {
+              "id": "fs-rest-get-mcq",
+              "type": "mcq",
+              "question": "The correct line builds the resource path, and it is the line tied to item and 44.",
+              "hints": [
+                "Follow the job, which builds the resource path.",
+                "The path starts with /items/ and then the id.",
+                "f'/items/{item}'"
+              ],
+              "explanation": "The path starts with /items/ and then the id.",
+              "xp_reward": 10,
+              "options": [
+                "item == item",
+                "return item",
+                "pass",
+                "f'/items/{item}'"
+              ],
+              "correct_answer": "f'/items/{item}'"
+            },
+            {
+              "id": "fs-rest-get-predict",
+              "type": "output_prediction",
+              "question": "The program builds the resource path with item and 44, so choose the printed value.",
+              "hints": [
+                "Follow the job, which builds the resource path.",
+                "The path starts with /items/ and then the id.",
+                "/items/44"
+              ],
+              "explanation": "The path starts with /items/ and then the id.",
+              "xp_reward": 10,
+              "starter_code": "item = 44\nprint(f'/items/{item}')\n",
+              "options": [
+                "/items/47",
+                "none",
+                "0",
+                "/items/44"
+              ],
+              "correct_answer": "/items/44"
+            },
+            {
+              "id": "fs-rest-get-order",
+              "type": "ordering",
+              "question": "Build the line that builds the resource path for item and 44, from the first piece to the last.",
+              "hints": [
+                "Follow the job, which builds the resource path.",
+                "The path starts with /items/ and then the id.",
+                "path = f'/items/{item}'"
+              ],
+              "explanation": "The path starts with /items/ and then the id.",
+              "xp_reward": 10,
+              "options": [
+                "path",
+                "=",
+                "f'/items/{item}'",
+                "+"
+              ],
+              "correct_answer": [
+                "path",
+                "=",
+                "f'/items/{item}'"
+              ]
+            },
+            {
+              "id": "fs-rest-get-fill",
+              "type": "fill_blank",
+              "question": "Replace the blank with the piece that makes the line builds the resource path for item and 44.",
+              "hints": [
+                "Follow the job, which builds the resource path.",
+                "The path starts with /items/ and then the id.",
+                "{item}"
+              ],
+              "explanation": "The path starts with /items/ and then the id.",
+              "xp_reward": 10,
+              "starter_code": "path = f'/items/___'\n",
+              "options": [
+                "{id}",
+                "{ok}",
+                "44",
+                "{item}"
+              ],
+              "correct_answer": "{item}"
+            },
+            {
+              "id": "fs-rest-get-bug",
+              "type": "debugging",
+              "question": "Spot the line that fails the job, which builds the resource path, around item and 44.",
+              "hints": [
+                "Follow the job, which builds the resource path.",
+                "The print shows the id without the resource path.",
+                "Line 2"
+              ],
+              "explanation": "The print shows the id without the resource path.",
+              "xp_reward": 10,
+              "starter_code": "item = 44\nprint(item)\n",
+              "correct_answer": "2"
+            },
+            {
+              "id": "fs-rest-get-predict-2",
+              "type": "output_prediction",
+              "question": "The second program builds the resource path for item and 44, so choose the new printed value.",
+              "hints": [
+                "Follow the job, which builds the resource path.",
+                "The path starts with /items/ and then the id.",
+                "/items/47"
+              ],
+              "explanation": "The path starts with /items/ and then the id.",
+              "xp_reward": 10,
+              "starter_code": "item = 47\nprint(f'/items/{item}')\n",
+              "options": [
+                "/items/44",
+                "/items/47",
+                "none",
+                "0"
+              ],
+              "correct_answer": "/items/47"
+            },
+            {
+              "id": "fs-rest-get-write",
+              "type": "code",
+              "question": "Complete the blank so this program builds the resource path and prints the result for item and 44.",
+              "hints": [
+                "Follow the job, which builds the resource path.",
+                "The printed value is the result after this step builds the resource path.",
+                "label = f'/items/{item}'"
+              ],
+              "explanation": "The printed value is the result after this step builds the resource path.",
+              "xp_reward": 10,
+              "starter_code": "item = 44\nlabel = ___\nprint(label)\n",
+              "solution_code": "item = 44\nlabel = f'/items/{item}'\nprint(label)\n",
+              "tests": [
+                {
+                  "name": "fs-rest-get-prints",
+                  "description": "The printed value is the result after this step builds the resource path.",
+                  "expected_stdout": "/items/44\n",
+                  "required": true
+                }
+              ]
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "fs-rest-page",
-      "title": "2. Pagination Params",
-      "description": "Implement `page_params(page, page_size)` returning limit/offset. The test checks that `page_params(3, 10)` equals `{'limit': 10, 'offset': 20}`.",
+      "title": "Practice Pagination Params",
+      "description": "Implement page_params(page, page_size) returning limit/offset. The test checks that page_params(3, 10) equals {'limit': 10, 'offset': 20}.",
       "order": 7,
       "difficulty": "intermediate",
       "duration_minutes": 5,
@@ -65,7 +227,7 @@
       ],
       "prerequisites": [],
       "learning_objectives": [
-        "Compute offset pagination"
+        "This step computes the offset for a page, using page and 1."
       ],
       "starter_code": "def page_params(page, page_size):\n    # TODO\n    pass\n",
       "solution_code": "def page_params(page, page_size):\n    return {'limit': page_size, 'offset': (page - 1) * page_size}\n",
@@ -86,12 +248,182 @@
         "url": "https://fastapi.tiangolo.com/tutorial/query-params/",
         "license": "MIT (FastAPI documentation)"
       },
-      "xp_reward": 10
+      "xp_reward": 10,
+      "player_mode": "micro",
+      "sublessons": [
+        {
+          "id": "fs-rest-page-micro",
+          "title": "Practice Pagination Params",
+          "description": "",
+          "order": 1,
+          "exercises": [
+            {
+              "id": "fs-rest-page-teach",
+              "type": "teach",
+              "question": "This step computes the offset for a page, using page and 1.",
+              "hints": [
+                "Follow the job, which computes the offset for a page.",
+                "The offset is the previous pages times the page size.",
+                "(page - 1) * size"
+              ],
+              "explanation": "This step computes the offset for a page, using page and 1.",
+              "xp_reward": 0,
+              "worked_example": "(page - 1) * size"
+            },
+            {
+              "id": "fs-rest-page-mcq",
+              "type": "mcq",
+              "question": "Pick the line that computes the offset for a page, not a line about something else, for page and 1.",
+              "hints": [
+                "Follow the job, which computes the offset for a page.",
+                "The offset is the previous pages times the page size.",
+                "(page - 1) * size"
+              ],
+              "explanation": "The offset is the previous pages times the page size.",
+              "xp_reward": 10,
+              "options": [
+                "page == size",
+                "return page",
+                "pass",
+                "(page - 1) * size"
+              ],
+              "correct_answer": "(page - 1) * size"
+            },
+            {
+              "id": "fs-rest-page-predict",
+              "type": "output_prediction",
+              "question": "The displayed value is what the code prints when it computes the offset for a page for page and 1.",
+              "hints": [
+                "Follow the job, which computes the offset for a page.",
+                "The offset is the previous pages times the page size.",
+                "10"
+              ],
+              "explanation": "The offset is the previous pages times the page size.",
+              "xp_reward": 10,
+              "starter_code": "page = 2\nsize = 10\nprint((page - 1) * size)\n",
+              "options": [
+                "20",
+                "none",
+                "0",
+                "10"
+              ],
+              "correct_answer": "10"
+            },
+            {
+              "id": "fs-rest-page-order",
+              "type": "ordering",
+              "question": "Place every piece so the result computes the offset for a page for page and 1.",
+              "hints": [
+                "Follow the job, which computes the offset for a page.",
+                "The offset is the previous pages times the page size.",
+                "offset = (page - 1) * size"
+              ],
+              "explanation": "The offset is the previous pages times the page size.",
+              "xp_reward": 10,
+              "options": [
+                "offset",
+                "=",
+                "(page",
+                "-",
+                "1)",
+                "*",
+                "size",
+                "+"
+              ],
+              "correct_answer": [
+                "offset",
+                "=",
+                "(page",
+                "-",
+                "1)",
+                "*",
+                "size"
+              ]
+            },
+            {
+              "id": "fs-rest-page-fill",
+              "type": "fill_blank",
+              "question": "Drop in the piece that lets the line computes the offset for a page for page and 1.",
+              "hints": [
+                "Follow the job, which computes the offset for a page.",
+                "The offset is the previous pages times the page size.",
+                "*"
+              ],
+              "explanation": "The offset is the previous pages times the page size.",
+              "xp_reward": 10,
+              "starter_code": "offset = (page - 1) ___ size\n",
+              "options": [
+                "-",
+                "/",
+                "+",
+                "*"
+              ],
+              "correct_answer": "*"
+            },
+            {
+              "id": "fs-rest-page-bug",
+              "type": "debugging",
+              "question": "The mismatch misses the job, which computes the offset for a page, for page and 1.",
+              "hints": [
+                "Follow the job, which computes the offset for a page.",
+                "The print skips the minus one, so page 2 starts too late.",
+                "Line 3"
+              ],
+              "explanation": "The print skips the minus one, so page 2 starts too late.",
+              "xp_reward": 10,
+              "starter_code": "page = 2\nsize = 10\nprint(page * size)\n",
+              "correct_answer": "3"
+            },
+            {
+              "id": "fs-rest-page-predict-2",
+              "type": "output_prediction",
+              "question": "Choose the printed result of the second run that computes the offset for a page for page and 1.",
+              "hints": [
+                "Follow the job, which computes the offset for a page.",
+                "The offset is the previous pages times the page size.",
+                "20"
+              ],
+              "explanation": "The offset is the previous pages times the page size.",
+              "xp_reward": 10,
+              "starter_code": "page = 3\nsize = 10\nprint((page - 1) * size)\n",
+              "options": [
+                "10",
+                "none",
+                "20",
+                "0"
+              ],
+              "correct_answer": "20"
+            },
+            {
+              "id": "fs-rest-page-write",
+              "type": "code",
+              "question": "Make the program computes the offset for a page by filling the blank for page and 1.",
+              "hints": [
+                "Follow the job, which computes the offset for a page.",
+                "The printed value is the result after this step computes the offset for a page.",
+                "label = (page - 1) * size"
+              ],
+              "explanation": "The printed value is the result after this step computes the offset for a page.",
+              "xp_reward": 10,
+              "starter_code": "page = 2\nsize = 10\nlabel = ___\nprint(label)\n",
+              "solution_code": "page = 2\nsize = 10\nlabel = (page - 1) * size\nprint(label)\n",
+              "tests": [
+                {
+                  "name": "fs-rest-page-prints",
+                  "description": "The printed value is the result after this step computes the offset for a page.",
+                  "expected_stdout": "10\n",
+                  "required": true
+                }
+              ]
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "fs-rest-filter",
-      "title": "3. Filter Client Collection",
-      "description": "Implement `filter_items(items, **criteria)` keeping dicts matching all criteria. The test checks that `filter_items(items, ok=True)` equals `[{'id': 1, 'ok': True}]`.",
+      "title": "Filter Client Collection",
+      "description": "Implement filter_items(items, **criteria) keeping dicts matching all criteria. The test checks that filter_items(items, ok=True) equals [{'id': 1, 'ok': True}].",
       "order": 8,
       "difficulty": "intermediate",
       "duration_minutes": 8,
@@ -103,7 +435,7 @@
       ],
       "prerequisites": [],
       "learning_objectives": [
-        "Filter API result collections"
+        "This step counts the rows that are on, using rows holding id."
       ],
       "starter_code": "def filter_items(items, **criteria):\n    # TODO\n    pass\n",
       "solution_code": "def filter_items(items, **criteria):\n    return [it for it in items if all(it.get(k) == v for k, v in criteria.items())]\n",
@@ -124,12 +456,174 @@
         "url": "https://docs.python.org/3/tutorial/datastructures.html#list-comprehensions",
         "license": "Python documentation license (PSF)"
       },
-      "xp_reward": 25
+      "xp_reward": 25,
+      "player_mode": "micro",
+      "sublessons": [
+        {
+          "id": "fs-rest-filter-micro",
+          "title": "Filter Client Collection",
+          "description": "",
+          "order": 1,
+          "exercises": [
+            {
+              "id": "fs-rest-filter-teach",
+              "type": "teach",
+              "question": "This step counts the rows that are on, using rows holding id.",
+              "hints": [
+                "Follow the job, which counts the rows that are on.",
+                "The filter keeps rows whose on flag is true.",
+                "row['on']"
+              ],
+              "explanation": "This step counts the rows that are on, using rows holding id.",
+              "xp_reward": 0,
+              "worked_example": "row['on']"
+            },
+            {
+              "id": "fs-rest-filter-mcq",
+              "type": "mcq",
+              "question": "A correct choice counts the rows that are on and goes with rows holding id.",
+              "hints": [
+                "Follow the job, which counts the rows that are on.",
+                "The filter keeps rows whose on flag is true.",
+                "row['on']"
+              ],
+              "explanation": "The filter keeps rows whose on flag is true.",
+              "xp_reward": 10,
+              "options": [
+                "row == row",
+                "return rows",
+                "row['on']",
+                "pass"
+              ],
+              "correct_answer": "row['on']"
+            },
+            {
+              "id": "fs-rest-filter-predict",
+              "type": "output_prediction",
+              "question": "Select the output after the code counts the rows that are on, using rows holding id.",
+              "hints": [
+                "Follow the job, which counts the rows that are on.",
+                "The filter keeps rows whose on flag is true.",
+                "1"
+              ],
+              "explanation": "The filter keeps rows whose on flag is true.",
+              "xp_reward": 10,
+              "starter_code": "rows = [{'id': 1, 'on': True}, {'id': 2, 'on': False}]\nprint(sum(1 for row in rows if row['on']))\n",
+              "options": [
+                "none",
+                "0",
+                "2",
+                "1"
+              ],
+              "correct_answer": "1"
+            },
+            {
+              "id": "fs-rest-filter-order",
+              "type": "ordering",
+              "question": "Make the line that counts the rows that are on by ordering the pieces for rows holding id.",
+              "hints": [
+                "Follow the job, which counts the rows that are on.",
+                "The filter keeps rows whose on flag is true.",
+                "if row['on']: pass"
+              ],
+              "explanation": "The filter keeps rows whose on flag is true.",
+              "xp_reward": 10,
+              "options": [
+                "if",
+                "row['on']:",
+                "pass",
+                "not"
+              ],
+              "correct_answer": [
+                "if",
+                "row['on']:",
+                "pass"
+              ]
+            },
+            {
+              "id": "fs-rest-filter-fill",
+              "type": "fill_blank",
+              "question": "Complete the line for rows holding id so that it counts the rows that are on.",
+              "hints": [
+                "Follow the job, which counts the rows that are on.",
+                "The filter keeps rows whose on flag is true.",
+                "'on'"
+              ],
+              "explanation": "The filter keeps rows whose on flag is true.",
+              "xp_reward": 10,
+              "starter_code": "if row[___]:\n    kept = 1\n",
+              "options": [
+                "'id'",
+                "'name'",
+                "'on'",
+                "'ok'"
+              ],
+              "correct_answer": "'on'"
+            },
+            {
+              "id": "fs-rest-filter-bug",
+              "type": "debugging",
+              "question": "Select the line that gets in the way of the job, which counts the rows that are on, for rows holding id.",
+              "hints": [
+                "Follow the job, which counts the rows that are on.",
+                "The print counts every row, including the ones that are off.",
+                "Line 2"
+              ],
+              "explanation": "The print counts every row, including the ones that are off.",
+              "xp_reward": 10,
+              "starter_code": "rows = [{'on': True}, {'on': False}]\nprint(len(rows))\n",
+              "correct_answer": "2"
+            },
+            {
+              "id": "fs-rest-filter-predict-2",
+              "type": "output_prediction",
+              "question": "With the new data around rows holding id, the code counts the rows that are on, so select the new output.",
+              "hints": [
+                "Follow the job, which counts the rows that are on.",
+                "The filter keeps rows whose on flag is true.",
+                "2"
+              ],
+              "explanation": "The filter keeps rows whose on flag is true.",
+              "xp_reward": 10,
+              "starter_code": "rows = [{'id': 1, 'on': True}, {'id': 2, 'on': True}]\nprint(sum(1 for row in rows if row['on']))\n",
+              "options": [
+                "1",
+                "2",
+                "none",
+                "0"
+              ],
+              "correct_answer": "2"
+            },
+            {
+              "id": "fs-rest-filter-write",
+              "type": "code",
+              "question": "The printed result shows up after you fill the blank so the code counts the rows that are on for rows holding id.",
+              "hints": [
+                "Follow the job, which counts the rows that are on.",
+                "The printed value is the result after this step counts the rows that are on.",
+                "label = sum(1 for row in rows if row['on'])"
+              ],
+              "explanation": "The printed value is the result after this step counts the rows that are on.",
+              "xp_reward": 10,
+              "starter_code": "rows = [{'id': 1, 'on': True}, {'id': 2, 'on': False}]\nlabel = ___\nprint(label)\n",
+              "solution_code": "rows = [{'id': 1, 'on': True}, {'id': 2, 'on': False}]\nlabel = sum(1 for row in rows if row['on'])\nprint(label)\n",
+              "tests": [
+                {
+                  "name": "fs-rest-filter-prints",
+                  "description": "The printed value is the result after this step counts the rows that are on.",
+                  "expected_stdout": "1\n",
+                  "required": true
+                }
+              ]
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "fs-rest-idempotent",
-      "title": "4. Idempotent Key (Practice)",
-      "description": "Implement `idempotency_key(method, path, body)` as method|path|body_or_empty. The test checks that `idempotency_key('post', '/x', None)` equals `'POST|/x|'`.",
+      "title": "Practice Idempotent Key",
+      "description": "Implement idempotency_key(method, path, body) as method|path|body_or_empty. The test checks that idempotency_key('post', '/x', None) equals 'POST|/x|'.",
       "order": 9,
       "difficulty": "intermediate",
       "duration_minutes": 6,
@@ -141,7 +635,7 @@
       ],
       "prerequisites": [],
       "learning_objectives": [
-        "Form idempotency keys"
+        "This step skips a key that was already seen, using seen holding kelp."
       ],
       "starter_code": "def idempotency_key(method, path, body):\n    # TODO\n    pass\n",
       "solution_code": "def idempotency_key(method, path, body):\n    return method.upper() + '|' + path + '|' + (body or '')\n",
@@ -162,12 +656,178 @@
         "url": "https://developer.mozilla.org/en-US/docs/Glossary/Idempotent",
         "license": "CC0 1.0 Universal (MDN Web Docs)"
       },
-      "xp_reward": 15
+      "xp_reward": 15,
+      "player_mode": "micro",
+      "sublessons": [
+        {
+          "id": "fs-rest-idempotent-micro",
+          "title": "Practice Idempotent Key",
+          "description": "",
+          "order": 1,
+          "exercises": [
+            {
+              "id": "fs-rest-idempotent-teach",
+              "type": "teach",
+              "question": "This step skips a key that was already seen, using seen holding kelp.",
+              "hints": [
+                "Follow the job, which skips a key that was already seen.",
+                "A key already in the set is a duplicate and should be skipped.",
+                "key in seen"
+              ],
+              "explanation": "This step skips a key that was already seen, using seen holding kelp.",
+              "xp_reward": 0,
+              "worked_example": "key in seen"
+            },
+            {
+              "id": "fs-rest-idempotent-mcq",
+              "type": "mcq",
+              "question": "Keep the choice that skips a key that was already seen for seen holding kelp.",
+              "hints": [
+                "Follow the job, which skips a key that was already seen.",
+                "A key already in the set is a duplicate and should be skipped.",
+                "key in seen"
+              ],
+              "explanation": "A key already in the set is a duplicate and should be skipped.",
+              "xp_reward": 10,
+              "options": [
+                "seen == seen",
+                "return seen",
+                "key in seen",
+                "pass"
+              ],
+              "correct_answer": "key in seen"
+            },
+            {
+              "id": "fs-rest-idempotent-predict",
+              "type": "output_prediction",
+              "question": "Trace the code that a key that was already seen using seen holding kelp, and select what it displays.",
+              "hints": [
+                "Follow the job, which Follow the job, which a key that was already seen.",
+                "A key already in the set is a duplicate and should be skipped.",
+                "skip"
+              ],
+              "explanation": "A key already in the set is a duplicate and should be skipped.",
+              "xp_reward": 10,
+              "starter_code": "seen = {'kelp'}\nprint('skip' if 'kelp' in seen else 'run')\n",
+              "options": [
+                "run",
+                "none",
+                "skip",
+                "0"
+              ],
+              "correct_answer": "skip"
+            },
+            {
+              "id": "fs-rest-idempotent-order",
+              "type": "ordering",
+              "question": "Tap the pieces, in order, of the line that skips a key that was already seen for seen holding kelp.",
+              "hints": [
+                "Follow the job, which skips a key that was already seen.",
+                "A key already in the set is a duplicate and should be skipped.",
+                "if key in seen: pass"
+              ],
+              "explanation": "A key already in the set is a duplicate and should be skipped.",
+              "xp_reward": 10,
+              "options": [
+                "if",
+                "key",
+                "in",
+                "seen:",
+                "pass",
+                "not"
+              ],
+              "correct_answer": [
+                "if",
+                "key",
+                "in",
+                "seen:",
+                "pass"
+              ]
+            },
+            {
+              "id": "fs-rest-idempotent-fill",
+              "type": "fill_blank",
+              "question": "The blank is the piece of the that skips a key that was already seen for seen kelp.",
+              "hints": [
+                "Follow the job, which skips a key that was already seen.",
+                "A key already in the set is a duplicate and should be skipped.",
+                "in"
+              ],
+              "explanation": "A key already in the set is a duplicate and should be skipped.",
+              "xp_reward": 10,
+              "starter_code": "if key ___ seen:\n    choice = 'skip'\n",
+              "options": [
+                "not",
+                "!=",
+                "in",
+                "=="
+              ],
+              "correct_answer": "in"
+            },
+            {
+              "id": "fs-rest-idempotent-bug",
+              "type": "debugging",
+              "question": "Choose the line that does another job than the one that skips a key that was already seen for seen holding kelp.",
+              "hints": [
+                "Follow the job, which skips a key that was already seen.",
+                "The print says run for a key that was already stored.",
+                "Line 2"
+              ],
+              "explanation": "The print says run for a key that was already stored.",
+              "xp_reward": 10,
+              "starter_code": "seen = {'kelp'}\nprint('run')\n",
+              "correct_answer": "2"
+            },
+            {
+              "id": "fs-rest-idempotent-predict-2",
+              "type": "output_prediction",
+              "question": "Trace the second which skips a key that was already seen for seen holding kelp, and select what it displays.",
+              "hints": [
+                "Follow the job, which skips a key that was already seen.",
+                "A key already in the set is a duplicate and should be skipped.",
+                "run"
+              ],
+              "explanation": "A key already in the set is a duplicate and should be skipped.",
+              "xp_reward": 10,
+              "starter_code": "seen = {'kelp'}\nprint('skip' if 'olive' in seen else 'run')\n",
+              "options": [
+                "skip",
+                "run",
+                "none",
+                "0"
+              ],
+              "correct_answer": "run"
+            },
+            {
+              "id": "fs-rest-idempotent-write",
+              "type": "code",
+              "question": "Type the missing piece so the program a key that was already seen for seen holding kelp and prints it.",
+              "hints": [
+                "Follow the job, which skips a key that was already seen.",
+                "The printed value is the result after this step skips a key that was already seen.",
+                "label = 'skip' if 'kelp' in seen else 'run'"
+              ],
+              "explanation": "The printed value is the result after this step skips a key that was already seen.",
+              "xp_reward": 10,
+              "starter_code": "seen = {'kelp'}\nlabel = ___\nprint(label)\n",
+              "solution_code": "seen = {'kelp'}\nlabel = 'skip' if 'kelp' in seen else 'run'\nprint(label)\n",
+              "tests": [
+                {
+                  "name": "fs-rest-idempotent-prints",
+                  "description": "The printed value is the result after this step skips a key that was already see",
+                  "expected_stdout": "skip\n",
+                  "required": true
+                }
+              ]
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "fs-rest-checkpoint",
-      "title": "5. Checkpoint: Status Category",
-      "description": "Implement `status_category(code)` returning success/redirect/client_error/server_error/other. The test checks that `status_category(201)` equals `'success'`; `status_category(404)` equals `'client_error'`; `status_category(503)` equals `'server_error'`.",
+      "title": "Practice Checkpoint Status Category",
+      "description": "Implement status_category(code) returning success/redirect/client_error/server_error/other. The test checks that status_category(201) equals 'success'; status_category(404) equals 'client_error'; status_category(503) equals 'server_error'.",
       "order": 10,
       "difficulty": "intermediate",
       "duration_minutes": 10,
@@ -179,7 +839,7 @@
       ],
       "prerequisites": [],
       "learning_objectives": [
-        "Categorize HTTP status codes"
+        "This step labels a status code by its class, using code holding ok."
       ],
       "starter_code": "def status_category(code):\n    # TODO\n    pass\n",
       "solution_code": "def status_category(code):\n    if 200 <= code < 300:\n        return 'success'\n    if 300 <= code < 400:\n        return 'redirect'\n    if 400 <= code < 500:\n        return 'client_error'\n    if 500 <= code < 600:\n        return 'server_error'\n    return 'other'\n",
@@ -200,7 +860,177 @@
         "url": "https://developer.mozilla.org/en-US/docs/Web/HTTP/Reference/Status",
         "license": "CC0 1.0 Universal (MDN Web Docs)"
       },
-      "xp_reward": 40
+      "xp_reward": 40,
+      "player_mode": "micro",
+      "sublessons": [
+        {
+          "id": "fs-rest-checkpoint-micro",
+          "title": "Practice Checkpoint Status Category",
+          "description": "",
+          "order": 1,
+          "exercises": [
+            {
+              "id": "fs-rest-checkpoint-teach",
+              "type": "teach",
+              "question": "This step labels a status code by its class, using code holding ok.",
+              "hints": [
+                "Follow the job, which labels a status code by its class.",
+                "Codes from 200 up to but not including 300 are successes.",
+                "200 <= code < 300"
+              ],
+              "explanation": "This step labels a status code by its class, using code holding ok.",
+              "xp_reward": 0,
+              "worked_example": "200 <= code < 300"
+            },
+            {
+              "id": "fs-rest-checkpoint-mcq",
+              "type": "mcq",
+              "question": "The correct line labels a status code by its class, and it is the line tied to code holding ok.",
+              "hints": [
+                "Follow the job, which labels a status code by its class.",
+                "Codes from 200 up to but not including 300 are successes.",
+                "200 <= code < 300"
+              ],
+              "explanation": "Codes from 200 up to but not including 300 are successes.",
+              "xp_reward": 10,
+              "options": [
+                "code == 200",
+                "return code",
+                "pass",
+                "200 <= code < 300"
+              ],
+              "correct_answer": "200 <= code < 300"
+            },
+            {
+              "id": "fs-rest-checkpoint-predict",
+              "type": "output_prediction",
+              "question": "The program labels a status code by its class with code holding so choose the printed value.",
+              "hints": [
+                "Follow the job, which labels a status code by its class.",
+                "Codes from 200 up to but not including 300 are successes.",
+                "ok"
+              ],
+              "explanation": "Codes from 200 up to but not including 300 are successes.",
+              "xp_reward": 10,
+              "starter_code": "code = 200\nprint('ok' if 200 <= code < 300 else 'err')\n",
+              "options": [
+                "err",
+                "none",
+                "0",
+                "ok"
+              ],
+              "correct_answer": "ok"
+            },
+            {
+              "id": "fs-rest-checkpoint-order",
+              "type": "ordering",
+              "question": "Build the line that labels a status code by its class for code holding ok, from the first piece to the last.",
+              "hints": [
+                "Follow the job, which labels a status code by its class.",
+                "Codes from 200 up to but not including 300 are successes.",
+                "if 200 <= code < 300: pass"
+              ],
+              "explanation": "Codes from 200 up to but not including 300 are successes.",
+              "xp_reward": 10,
+              "options": [
+                "if",
+                "200",
+                "<=",
+                "code",
+                "<",
+                "300:",
+                "pass",
+                ">"
+              ],
+              "correct_answer": [
+                "if",
+                "200",
+                "<=",
+                "code",
+                "<",
+                "300:",
+                "pass"
+              ]
+            },
+            {
+              "id": "fs-rest-checkpoint-fill",
+              "type": "fill_blank",
+              "question": "Replace the blank with the piece that makes the line labels a status code by its class for code holding ok.",
+              "hints": [
+                "Follow the job, which labels a status code by its class.",
+                "Codes from 200 up to but not including 300 are successes.",
+                "<="
+              ],
+              "explanation": "Codes from 200 up to but not including 300 are successes.",
+              "xp_reward": 10,
+              "starter_code": "label = 'ok' if 200 ___ code < 300 else 'err'\n",
+              "options": [
+                "==",
+                "!=",
+                "<=",
+                ">="
+              ],
+              "correct_answer": "<="
+            },
+            {
+              "id": "fs-rest-checkpoint-bug",
+              "type": "debugging",
+              "question": "Spot the line that fails the job, which labels a status code by its class, around code holding ok.",
+              "hints": [
+                "Follow the job, which labels a status code by its class.",
+                "The print says err for a success code.",
+                "Line 2"
+              ],
+              "explanation": "The print says err for a success code.",
+              "xp_reward": 10,
+              "starter_code": "code = 200\nprint('err')\n",
+              "correct_answer": "2"
+            },
+            {
+              "id": "fs-rest-checkpoint-predict-2",
+              "type": "output_prediction",
+              "question": "The second program labels a status code by its class for code holding ok, so choose the new printed value.",
+              "hints": [
+                "Follow the job, which labels a status code by its class.",
+                "Codes from 200 up to but not including 300 are successes.",
+                "err"
+              ],
+              "explanation": "Codes from 200 up to but not including 300 are successes.",
+              "xp_reward": 10,
+              "starter_code": "code = 404\nprint('ok' if 200 <= code < 300 else 'err')\n",
+              "options": [
+                "ok",
+                "none",
+                "err",
+                "0"
+              ],
+              "correct_answer": "err"
+            },
+            {
+              "id": "fs-rest-checkpoint-write",
+              "type": "code",
+              "question": "Complete the blank so this program labels a status code by its class and prints the result for code holding.",
+              "hints": [
+                "Follow the job, which labels a status code by its class.",
+                "The printed value is the result after this step labels a status code by its class.",
+                "label = 'ok' if 200 <= code < 300 else 'err'"
+              ],
+              "explanation": "The printed value is the result after this step labels a status code by its class.",
+              "xp_reward": 10,
+              "starter_code": "code = 200\nlabel = ___\nprint(label)\n",
+              "solution_code": "code = 200\nlabel = 'ok' if 200 <= code < 300 else 'err'\nprint(label)\n",
+              "tests": [
+                {
+                  "name": "fs-rest-checkpoint-prints",
+                  "description": "The printed value is the result after this step labels a status code by its clas",
+                  "expected_stdout": "ok\n",
+                  "required": true
+                }
+              ]
+            }
+          ]
+        }
+      ]
     }
   ]
 }

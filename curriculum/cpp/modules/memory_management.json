@@ -14,8 +14,8 @@
   "lessons": [
     {
       "id": "cpp-mem-01",
-      "title": "1. Smart Pointers & RAII",
-      "description": "Use `std::unique_ptr` and RAII patterns for automated memory management. Implement `makeHeapInt(int value)` returning a `std::unique_ptr<int>` that owns a heap-allocated copy of `value`; prefer the `std::make_unique` factory. The test checks that `!ptr || *ptr` equals `42`.",
+      "title": "Practice Smart Pointers RAII",
+      "description": "Use std::unique_ptr and RAII patterns for automated memory management. Implement makeHeapInt(int value) returning a std::unique_ptr<int> that owns a heap-allocated copy of value; prefer the std::make_unique factory. The test checks that !ptr || *ptr equals 42.",
       "order": 32,
       "difficulty": "advanced",
       "duration_minutes": 5,
@@ -45,11 +45,173 @@
         "license": "CC BY-SA 4.0 (cppreference.com)"
       },
       "learning_objectives": [
-        "Explain RAII: std::unique_ptr disposes its object when it goes out of scope",
-        "Allocate a managed heap object with std::make_unique<T>(value)",
-        "Dereference a std::unique_ptr with * like a raw pointer"
+        "This step owns an integer with a unique pointer, using auto and 39."
       ],
-      "xp_reward": 10
+      "xp_reward": 10,
+      "player_mode": "micro",
+      "sublessons": [
+        {
+          "id": "cpp-mem-01-micro",
+          "title": "Practice Smart Pointers RAII",
+          "description": "",
+          "order": 1,
+          "exercises": [
+            {
+              "id": "cpp-mem-01-teach",
+              "type": "teach",
+              "question": "This step owns an integer with a unique pointer, using auto and 39.",
+              "hints": [
+                "Follow the job, which owns an integer with a unique pointer.",
+                "make_unique owns the integer, and *bag reads it.",
+                "std::make_unique<int>(39)"
+              ],
+              "explanation": "This step owns an integer with a unique pointer, using auto and 39.",
+              "xp_reward": 0,
+              "worked_example": "std::make_unique<int>(39)"
+            },
+            {
+              "id": "cpp-mem-01-mcq",
+              "type": "mcq",
+              "question": "The match is the line that owns an integer with a unique pointer for auto and 39.",
+              "hints": [
+                "Follow the job, which owns an integer with a unique pointer.",
+                "make_unique owns the integer, and *bag reads it.",
+                "std::make_unique<int>(value)"
+              ],
+              "explanation": "make_unique owns the integer, and *bag reads it.",
+              "xp_reward": 10,
+              "options": [
+                "bag == bag;",
+                "return;",
+                "std::make_unique<int>(value)",
+                "bag = bag;"
+              ],
+              "correct_answer": "std::make_unique<int>(value)"
+            },
+            {
+              "id": "cpp-mem-01-predict",
+              "type": "output_prediction",
+              "question": "Work out what is printed when the code owns an integer with a unique pointer for auto and.",
+              "hints": [
+                "Follow the job, which owns an integer with a unique pointer.",
+                "make_unique owns the integer, and *bag reads it.",
+                "39"
+              ],
+              "explanation": "make_unique owns the integer, and *bag reads it.",
+              "xp_reward": 10,
+              "starter_code": "#include <iostream>\n#include <string>\n#include <vector>\n#include <algorithm>\n#include <memory>\nint main() {\n    auto bag = std::make_unique<int>(39);\n    std::cout << *bag << std::endl;\n    return 0;\n}\n",
+              "options": [
+                "42",
+                "none",
+                "39",
+                "0"
+              ],
+              "correct_answer": "39"
+            },
+            {
+              "id": "cpp-mem-01-order",
+              "type": "ordering",
+              "question": "Rebuild, from the left, the line that owns an integer with a unique pointer for auto and 39.",
+              "hints": [
+                "Follow the job, which owns an integer with a unique pointer.",
+                "make_unique owns the integer, and *bag reads it.",
+                "auto bag = std::make_unique<int>(left);"
+              ],
+              "explanation": "make_unique owns the integer, and *bag reads it.",
+              "xp_reward": 10,
+              "options": [
+                "auto",
+                "bag",
+                "=",
+                "std::make_unique<int>(left);",
+                "new"
+              ],
+              "correct_answer": [
+                "auto",
+                "bag",
+                "=",
+                "std::make_unique<int>(left);"
+              ]
+            },
+            {
+              "id": "cpp-mem-01-fill",
+              "type": "fill_blank",
+              "question": "The completed line owns an integer with a unique pointer once you fill the blank for auto and 39.",
+              "hints": [
+                "Follow the job, which owns an integer with a unique pointer.",
+                "make_unique owns the integer, and *bag reads it.",
+                "left"
+              ],
+              "explanation": "make_unique owns the integer, and *bag reads it.",
+              "xp_reward": 10,
+              "starter_code": "auto bag = std::make_unique<int>(___);",
+              "options": [
+                "right",
+                "count",
+                "left",
+                "0"
+              ],
+              "correct_answer": "left"
+            },
+            {
+              "id": "cpp-mem-01-bug",
+              "type": "debugging",
+              "question": "One line does another job than the one that owns an integer with a unique pointer for auto and 39.",
+              "hints": [
+                "Follow the job, which owns an integer with a unique pointer.",
+                "The print writes the pointer instead of the owned integer.",
+                "Line 8"
+              ],
+              "explanation": "The print writes the pointer instead of the owned integer.",
+              "xp_reward": 10,
+              "starter_code": "#include <iostream>\n#include <string>\n#include <vector>\n#include <algorithm>\n#include <memory>\nint main() {\n    auto bag = std::make_unique<int>(39);\n    std::cout << bag << std::endl;\n    return 0;\n}\n",
+              "correct_answer": "8"
+            },
+            {
+              "id": "cpp-mem-01-predict-2",
+              "type": "output_prediction",
+              "question": "The second display is what prints after the code owns an integer with a unique pointer for auto and 39.",
+              "hints": [
+                "Follow the job, which owns an integer with a unique pointer.",
+                "make_unique owns the integer, and *bag reads it.",
+                "42"
+              ],
+              "explanation": "make_unique owns the integer, and *bag reads it.",
+              "xp_reward": 10,
+              "starter_code": "#include <iostream>\n#include <string>\n#include <vector>\n#include <algorithm>\n#include <memory>\nint main() {\n    auto bag = std::make_unique<int>(42);\n    std::cout << *bag << std::endl;\n    return 0;\n}\n",
+              "options": [
+                "39",
+                "42",
+                "none",
+                "0"
+              ],
+              "correct_answer": "42"
+            },
+            {
+              "id": "cpp-mem-01-write",
+              "type": "code",
+              "question": "Supply the blank so the run owns an integer with a unique pointer and prints the result for auto and.",
+              "hints": [
+                "Follow the job, which owns an integer with a unique pointer.",
+                "The printed value is the result after this step owns an integer with a unique pointer.",
+                "int label = *bag;"
+              ],
+              "explanation": "The printed value is the result after this step owns an integer with a unique pointer.",
+              "xp_reward": 10,
+              "starter_code": "#include <iostream>\n#include <string>\n#include <vector>\n#include <algorithm>\n#include <memory>\nint main() {\n    auto bag = std::make_unique<int>(39);\n    int label = ___;\n    std::cout << label << std::endl;\n    return 0;\n}\n",
+              "solution_code": "#include <iostream>\n#include <string>\n#include <vector>\n#include <algorithm>\n#include <memory>\nint main() {\n    auto bag = std::make_unique<int>(39);\n    int label = *bag;\n    std::cout << label << std::endl;\n    return 0;\n}\n",
+              "tests": [
+                {
+                  "name": "cpp-mem-01-prints",
+                  "description": "The printed value is the result after this step owns an integer with a unique po",
+                  "expected_stdout": "39\n",
+                  "required": true
+                }
+              ]
+            }
+          ]
+        }
+      ]
     }
   ]
 }

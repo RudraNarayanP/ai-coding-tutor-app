@@ -14,7 +14,7 @@
   "lessons": [
     {
       "id": "ts-02",
-      "title": "2. Interfaces & Union Narrowing",
+      "title": "Practice Interfaces Union Narrowing",
       "description": "Interfaces describe object shapes, and TypeScript treats a comparison like typeof input === 'number' as a type guard that narrows a union. Keep the exported User interface and implement getId(input: number | User): number: return input directly for numbers, or input.id for User objects. The test checks both union cases.",
       "order": 2,
       "difficulty": "intermediate",
@@ -40,9 +40,7 @@
         ]
       },
       "learning_objectives": [
-        "Declare object shapes with interfaces",
-        "Narrow union types with typeof type guards",
-        "Write functions over number | object unions"
+        "This step keeps the string branch after a union check, using labelOf holding string."
       ],
       "source": {
         "name": "TypeScript Handbook — Narrowing — typeof type guards",
@@ -52,35 +50,174 @@
       "xp_reward": 10,
       "sublessons": [
         {
-          "id": "ts-narrow-code-sub",
-          "title": "Write the type guard",
+          "id": "ts-02-micro",
+          "title": "Practice Interfaces Union Narrowing",
+          "description": "",
           "order": 1,
           "exercises": [
             {
-              "id": "ts-narrow-code-1",
+              "id": "ts-02-teach",
+              "type": "teach",
+              "question": "This step keeps the string branch after a union check, using labelOf holding string.",
+              "hints": [
+                "Follow the job, which keeps the string branch after a union check.",
+                "typeof value === \"string\" keeps the text branch.",
+                "labelOf(\"zircon\")"
+              ],
+              "explanation": "This step keeps the string branch after a union check, using labelOf holding string.",
+              "xp_reward": 0,
+              "worked_example": "labelOf(\"zircon\")"
+            },
+            {
+              "id": "ts-02-mcq",
+              "type": "mcq",
+              "question": "Pick the line that keeps the string branch after a union check, not a line about something else, for labelOf holding string.",
+              "hints": [
+                "Follow the job, which keeps the string branch after a union check.",
+                "typeof value === \"string\" keeps the text branch.",
+                "if (typeof value === \"string\") return value;"
+              ],
+              "explanation": "typeof value === \"string\" keeps the text branch.",
+              "xp_reward": 10,
+              "options": [
+                "value == value;",
+                "console.log(value);",
+                "return;",
+                "if (typeof value === \"string\") return value;"
+              ],
+              "correct_answer": "if (typeof value === \"string\") return value;"
+            },
+            {
+              "id": "ts-02-predict",
+              "type": "output_prediction",
+              "question": "The displayed value is what the code prints when it keeps the string branch after a union check for labelOf holding string.",
+              "hints": [
+                "Follow the job, which keeps the string branch after a union check.",
+                "typeof value === \"string\" keeps the text branch.",
+                "zircon"
+              ],
+              "explanation": "typeof value === \"string\" keeps the text branch.",
+              "xp_reward": 10,
+              "starter_code": "function labelOf(value: string | number): string { if (typeof value === \"string\") return value; return \"num\"; }\nconsole.log(labelOf(\"zircon\"));\n",
+              "options": [
+                "num",
+                "none",
+                "0",
+                "zircon"
+              ],
+              "correct_answer": "zircon"
+            },
+            {
+              "id": "ts-02-order",
+              "type": "ordering",
+              "question": "Place every piece so the result keeps the string branch after a union check for labelOf holding string.",
+              "hints": [
+                "Follow the job, which keeps the string branch after a union check.",
+                "typeof value === \"string\" keeps the text branch.",
+                "function f() { if (typeof value === \"string\") return value; }"
+              ],
+              "explanation": "typeof value === \"string\" keeps the text branch.",
+              "xp_reward": 10,
+              "options": [
+                "function",
+                "f()",
+                "{",
+                "if (typeof value === \"string\")",
+                "return",
+                "value;",
+                "}",
+                "!="
+              ],
+              "correct_answer": [
+                "function",
+                "f()",
+                "{",
+                "if (typeof value === \"string\")",
+                "return",
+                "value;",
+                "}"
+              ]
+            },
+            {
+              "id": "ts-02-fill",
+              "type": "fill_blank",
+              "question": "Drop in the piece that lets the line keeps the string branch after a union check for labelOf holding string.",
+              "hints": [
+                "Follow the job, which keeps the string branch after a union check.",
+                "typeof value === \"string\" keeps the text branch.",
+                "==="
+              ],
+              "explanation": "typeof value === \"string\" keeps the text branch.",
+              "xp_reward": 10,
+              "starter_code": "function labelOf(value: string | number): string { if (typeof value ___ \"string\") return value; return \"num\"; }\n",
+              "options": [
+                "!==",
+                ">=",
+                "<",
+                "==="
+              ],
+              "correct_answer": "==="
+            },
+            {
+              "id": "ts-02-bug",
+              "type": "debugging",
+              "question": "The mismatch misses the job, which keeps the string branch after a union check, for labelOf holding string.",
+              "hints": [
+                "Follow the job, which keeps the string branch after a union check.",
+                "The guard is flipped, so a string takes the other branch.",
+                "Line 1"
+              ],
+              "explanation": "The guard is flipped, so a string takes the other branch.",
+              "xp_reward": 10,
+              "starter_code": "function labelOf(value: string | number): string { if (typeof value !== \"string\") return value; return \"num\"; }\nconsole.log(labelOf(\"zircon\"));\n",
+              "correct_answer": "1"
+            },
+            {
+              "id": "ts-02-predict-2",
+              "type": "output_prediction",
+              "question": "Choose the printed result of the second run that keeps the string branch after a union check for labelOf holding string.",
+              "hints": [
+                "Follow the job, which keeps the string branch after a union check.",
+                "typeof value === \"string\" keeps the text branch.",
+                "num"
+              ],
+              "explanation": "typeof value === \"string\" keeps the text branch.",
+              "xp_reward": 10,
+              "starter_code": "function labelOf(value: string | number): string { if (typeof value === \"string\") return value; return \"num\"; }\nconsole.log(labelOf(24));\n",
+              "options": [
+                "zircon",
+                "none",
+                "num",
+                "0"
+              ],
+              "correct_answer": "num"
+            },
+            {
+              "id": "ts-02-write",
               "type": "code",
-              "question": "Implement the exported `describe(input: number | string): string` so it returns 'number' for a number and 'string' for a string, using a `typeof` check to narrow the union.",
-              "starter_code": "export function describe(input: number | string): string {\n    // TODO: narrow the union before choosing a label\n    return '';\n}\n",
-              "solution_code": "export function describe(input: number | string): string {\n    return typeof input === 'number' ? 'number' : 'string';\n}\n",
+              "question": "Make the program keeps the string branch after a union check by filling the blank for labelOf holding string.",
+              "hints": [
+                "Follow the job, which keeps the string branch after a union check.",
+                "The printed value is the result after this step keeps the string branch after a union check.",
+                "const label = labelOf(\"zircon\");"
+              ],
+              "explanation": "The printed value is the result after this step keeps the string branch after a union check.",
+              "xp_reward": 10,
+              "starter_code": "function labelOf(value: string | number): string { if (typeof value === \"string\") return value; return \"num\"; }\nconst label = ___;\nconsole.log(label);\n",
+              "solution_code": "function labelOf(value: string | number): string { if (typeof value === \"string\") return value; return \"num\"; }\nconst label = labelOf(\"zircon\");\nconsole.log(label);\n",
               "tests": [
                 {
-                  "name": "test_describe_number",
-                  "test_code": "if (solution.describe(7) !== 'number') throw new Error('number case failed');"
-                },
-                {
-                  "name": "test_describe_string",
-                  "test_code": "if (solution.describe('seven') !== 'string') throw new Error('string case failed');"
-                },
-                {
-                  "name": "test_describe_zero",
-                  "test_code": "if (solution.describe(0) !== 'number') throw new Error('zero case failed');"
+                  "name": "ts-02-prints",
+                  "description": "The printed value is the result after this step keeps the string branch after a ",
+                  "expected_stdout": "zircon\n",
+                  "required": true
                 }
-              ],
-              "xp_reward": 15
+              ]
             }
           ]
         }
-      ]
+      ],
+      "player_mode": "micro"
     }
   ]
 }

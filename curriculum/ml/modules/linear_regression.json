@@ -12,8 +12,8 @@
   "lessons": [
     {
       "id": "linreg-predict",
-      "title": "1. Linear Prediction",
-      "description": "Implement `predict(x, w, b)` = w*x + b for scalars. The test checks that `predict(2, 3, 1)` equals `7`.",
+      "title": "Practice Linear Prediction",
+      "description": "Implement predict(x, w, b) = w*x + b for scalars. The test checks that predict(2, 3, 1) equals 7.",
       "order": 1,
       "difficulty": "intermediate",
       "duration_minutes": 5,
@@ -25,7 +25,7 @@
       ],
       "prerequisites": [],
       "learning_objectives": [
-        "Compute linear predictions"
+        "This step computes intercept plus slope times x, using x and 1."
       ],
       "starter_code": "def predict(x, w, b):\n    # TODO\n    pass\n",
       "solution_code": "def predict(x, w, b):\n    return w * x + b\n",
@@ -46,12 +46,182 @@
         "url": "https://developers.google.com/machine-learning/crash-course/linear-regression",
         "license": "CC BY 4.0 (Google Machine Learning Crash Course)"
       },
-      "xp_reward": 10
+      "xp_reward": 10,
+      "player_mode": "micro",
+      "sublessons": [
+        {
+          "id": "linreg-predict-micro",
+          "title": "Practice Linear Prediction",
+          "description": "",
+          "order": 1,
+          "exercises": [
+            {
+              "id": "linreg-predict-teach",
+              "type": "teach",
+              "question": "This step computes intercept plus slope times x, using x and 1.",
+              "hints": [
+                "Follow the job, which computes intercept plus slope times x.",
+                "The line is intercept plus slope times x.",
+                "2 * x + 1"
+              ],
+              "explanation": "This step computes intercept plus slope times x, using x and 1.",
+              "xp_reward": 0,
+              "worked_example": "2 * x + 1"
+            },
+            {
+              "id": "linreg-predict-mcq",
+              "type": "mcq",
+              "question": "The correct line computes intercept plus slope times x, and it is the line tied to x and 1.",
+              "hints": [
+                "Follow the job, which computes intercept plus slope times x.",
+                "The line is intercept plus slope times x.",
+                "2 * x + 1"
+              ],
+              "explanation": "The line is intercept plus slope times x.",
+              "xp_reward": 10,
+              "options": [
+                "x == 1",
+                "return x",
+                "pass",
+                "2 * x + 1"
+              ],
+              "correct_answer": "2 * x + 1"
+            },
+            {
+              "id": "linreg-predict-predict",
+              "type": "output_prediction",
+              "question": "The program computes intercept plus slope times x with x and 1, so choose the printed value.",
+              "hints": [
+                "Follow the job, which computes intercept plus slope times x.",
+                "The line is intercept plus slope times x.",
+                "87"
+              ],
+              "explanation": "The line is intercept plus slope times x.",
+              "xp_reward": 10,
+              "starter_code": "x = 43\nprint(2 * x + 1)\n",
+              "options": [
+                "93",
+                "none",
+                "0",
+                "87"
+              ],
+              "correct_answer": "87"
+            },
+            {
+              "id": "linreg-predict-order",
+              "type": "ordering",
+              "question": "Build the line that computes intercept plus slope times x for x and 1, from the first piece to the last.",
+              "hints": [
+                "Follow the job, which computes intercept plus slope times x.",
+                "The line is intercept plus slope times x.",
+                "y = 2 * x + 1"
+              ],
+              "explanation": "The line is intercept plus slope times x.",
+              "xp_reward": 10,
+              "options": [
+                "y",
+                "=",
+                "2",
+                "*",
+                "x",
+                "+",
+                "1",
+                "-"
+              ],
+              "correct_answer": [
+                "y",
+                "=",
+                "2",
+                "*",
+                "x",
+                "+",
+                "1"
+              ]
+            },
+            {
+              "id": "linreg-predict-fill",
+              "type": "fill_blank",
+              "question": "Replace the blank with the piece that makes the line computes intercept plus slope times x for x and 1.",
+              "hints": [
+                "Follow the job, which computes intercept plus slope times x.",
+                "The line is intercept plus slope times x.",
+                "*"
+              ],
+              "explanation": "The line is intercept plus slope times x.",
+              "xp_reward": 10,
+              "starter_code": "y = 2 ___ x + 1\n",
+              "options": [
+                "+",
+                "-",
+                "/",
+                "*"
+              ],
+              "correct_answer": "*"
+            },
+            {
+              "id": "linreg-predict-bug",
+              "type": "debugging",
+              "question": "Spot the line that fails the job, which computes intercept plus slope times x, around x and 1.",
+              "hints": [
+                "Follow the job, which computes intercept plus slope times x.",
+                "The print adds one and never multiplies by the slope.",
+                "Line 2"
+              ],
+              "explanation": "The print adds one and never multiplies by the slope.",
+              "xp_reward": 10,
+              "starter_code": "x = 43\nprint(x + 1)\n",
+              "correct_answer": "2"
+            },
+            {
+              "id": "linreg-predict-predict-2",
+              "type": "output_prediction",
+              "question": "The second program computes intercept plus slope times x for x and 1, so choose the new printed value.",
+              "hints": [
+                "Follow the job, which computes intercept plus slope times x.",
+                "The line is intercept plus slope times x.",
+                "93"
+              ],
+              "explanation": "The line is intercept plus slope times x.",
+              "xp_reward": 10,
+              "starter_code": "x = 46\nprint(2 * x + 1)\n",
+              "options": [
+                "87",
+                "none",
+                "93",
+                "0"
+              ],
+              "correct_answer": "93"
+            },
+            {
+              "id": "linreg-predict-write",
+              "type": "code",
+              "question": "Complete the blank so this program computes intercept plus slope times x and prints the result for x and 1.",
+              "hints": [
+                "Follow the job, which computes intercept plus slope times x.",
+                "The printed value is the result after this step computes intercept plus slope times x.",
+                "label = 2 * x + 1"
+              ],
+              "explanation": "The printed value is the result after this step computes intercept plus slope times x.",
+              "xp_reward": 10,
+              "starter_code": "x = 43\nlabel = ___\nprint(label)\n",
+              "solution_code": "x = 43\nlabel = 2 * x + 1\nprint(label)\n",
+              "tests": [
+                {
+                  "name": "linreg-predict-prints",
+                  "description": "The printed value is the result after this step computes intercept plus slope ti",
+                  "expected_stdout": "87\n",
+                  "required": true
+                }
+              ]
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "linreg-mse",
-      "title": "2. Mean Squared Error",
-      "description": "Implement `mse(y_true, y_pred)` returning the mean of the squared residuals (mean squared error). The test checks mse([1, 2], [1, 4]) == 2.0.",
+      "title": "Practice Mean Squared Error",
+      "description": "Implement mse(y_true, y_pred) returning the mean of the squared residuals (mean squared error). The test checks mse([1, 2], [1, 4]) == 2.0.",
       "order": 2,
       "difficulty": "intermediate",
       "duration_minutes": 5,
@@ -63,7 +233,7 @@
       ],
       "prerequisites": [],
       "learning_objectives": [
-        "Compute MSE loss"
+        "This step averages the squared errors, using errors and 3."
       ],
       "starter_code": "def mse(y_true, y_pred):\n    # TODO\n    pass\n",
       "solution_code": "def mse(y_true, y_pred):\n    n = len(y_true)\n    return sum((a - b) ** 2 for a, b in zip(y_true, y_pred)) / n\n",
@@ -84,12 +254,180 @@
         "url": "https://scikit-learn.org/stable/modules/model_evaluation.html",
         "license": "BSD 3-Clause (scikit-learn documentation)"
       },
-      "xp_reward": 10
+      "xp_reward": 10,
+      "player_mode": "micro",
+      "sublessons": [
+        {
+          "id": "linreg-mse-micro",
+          "title": "Practice Mean Squared Error",
+          "description": "",
+          "order": 1,
+          "exercises": [
+            {
+              "id": "linreg-mse-teach",
+              "type": "teach",
+              "question": "This step averages the squared errors, using errors and 3.",
+              "hints": [
+                "Follow the job, which averages the squared errors.",
+                "Mean squared error averages the squared gaps.",
+                "item * item"
+              ],
+              "explanation": "This step averages the squared errors, using errors and 3.",
+              "xp_reward": 0,
+              "worked_example": "item * item"
+            },
+            {
+              "id": "linreg-mse-mcq",
+              "type": "mcq",
+              "question": "Select the line that averages the squared errors, the one that belongs with errors and 3.",
+              "hints": [
+                "Follow the job, which averages the squared errors.",
+                "Mean squared error averages the squared gaps.",
+                "item * item"
+              ],
+              "explanation": "Mean squared error averages the squared gaps.",
+              "xp_reward": 10,
+              "options": [
+                "item == item",
+                "item * item",
+                "return errors",
+                "pass"
+              ],
+              "correct_answer": "item * item"
+            },
+            {
+              "id": "linreg-mse-predict",
+              "type": "output_prediction",
+              "question": "Follow the code that averages the squared errors for errors and 3, then choose the displayed value.",
+              "hints": [
+                "Follow the job, which averages the squared errors.",
+                "Mean squared error averages the squared gaps.",
+                "5"
+              ],
+              "explanation": "Mean squared error averages the squared gaps.",
+              "xp_reward": 10,
+              "starter_code": "errors = [1, 3]\nprint(sum(item * item for item in errors) // len(errors))\n",
+              "options": [
+                "10",
+                "5",
+                "none",
+                "0"
+              ],
+              "correct_answer": "5"
+            },
+            {
+              "id": "linreg-mse-order",
+              "type": "ordering",
+              "question": "Order the pieces so the line averages the squared errors for errors and 3.",
+              "hints": [
+                "Follow the job, which averages the squared errors.",
+                "Mean squared error averages the squared gaps.",
+                "loss= sum(item*item for err in errors)//len(errors)"
+              ],
+              "explanation": "Mean squared error averages the squared gaps.",
+              "xp_reward": 10,
+              "options": [
+                "loss=",
+                "sum(item*item",
+                "for",
+                "err",
+                "in",
+                "errors)//len(errors)",
+                "+"
+              ],
+              "correct_answer": [
+                "loss=",
+                "sum(item*item",
+                "for",
+                "err",
+                "in",
+                "errors)//len(errors)"
+              ]
+            },
+            {
+              "id": "linreg-mse-fill",
+              "type": "fill_blank",
+              "question": "Supply the missing piece so the line averages the squared errors for errors and 3.",
+              "hints": [
+                "Follow the job, which averages the squared errors.",
+                "Mean squared error averages the squared gaps.",
+                "*"
+              ],
+              "explanation": "Mean squared error averages the squared gaps.",
+              "xp_reward": 10,
+              "starter_code": "square = item ___ item\n",
+              "options": [
+                "+",
+                "*",
+                "-",
+                "/"
+              ],
+              "correct_answer": "*"
+            },
+            {
+              "id": "linreg-mse-bug",
+              "type": "debugging",
+              "question": "The wrong line is the one that misses the job, which averages the squared errors, for errors and 3.",
+              "hints": [
+                "Follow the job, which averages the squared errors.",
+                "The average uses raw errors, so the signs are not squared away.",
+                "Line 2"
+              ],
+              "explanation": "The average uses raw errors, so the signs are not squared away.",
+              "xp_reward": 10,
+              "starter_code": "errors = [1, 3]\nprint(sum(errors) // len(errors))\n",
+              "correct_answer": "2"
+            },
+            {
+              "id": "linreg-mse-predict-2",
+              "type": "output_prediction",
+              "question": "A new input still has code that averages the squared errors for errors and 3, and the correct choice is what it prints.",
+              "hints": [
+                "Follow the job, which averages the squared errors.",
+                "Mean squared error averages the squared gaps.",
+                "10"
+              ],
+              "explanation": "Mean squared error averages the squared gaps.",
+              "xp_reward": 10,
+              "starter_code": "errors = [2, 4]\nprint(sum(item * item for item in errors) // len(errors))\n",
+              "options": [
+                "5",
+                "none",
+                "0",
+                "10"
+              ],
+              "correct_answer": "10"
+            },
+            {
+              "id": "linreg-mse-write",
+              "type": "code",
+              "question": "The blank is the missing piece of the program that averages the squared errors for errors and 3.",
+              "hints": [
+                "Follow the job, which averages the squared errors.",
+                "The printed value is the result after this step averages the squared errors.",
+                "label = sum(item * item for item in errors) // len(errors)"
+              ],
+              "explanation": "The printed value is the result after this step averages the squared errors.",
+              "xp_reward": 10,
+              "starter_code": "errors = [1, 3]\nlabel = ___\nprint(label)\n",
+              "solution_code": "errors = [1, 3]\nlabel = sum(item * item for item in errors) // len(errors)\nprint(label)\n",
+              "tests": [
+                {
+                  "name": "linreg-mse-prints",
+                  "description": "The printed value is the result after this step averages the squared errors.",
+                  "expected_stdout": "5\n",
+                  "required": true
+                }
+              ]
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "linreg-gd-step",
-      "title": "3. Gradient Descent Step",
-      "description": "Finish `gd_step(xs, ys, w, b, lr)` so it takes one gradient step for `y ≈ w*x + b` and returns `(w_new, b_new)`. The test checks that `gd_step([1.0], [2.0], 0.0, 0.0, 0.1)` is about `(0.4, 0.4)`.",
+      "title": "Practice Gradient Descent Step",
+      "description": "Finish gd_step(xs, ys, w, b, lr) so it takes one gradient step for y ≈ w*x + b and returns (w_new, b_new). The test checks that gd_step([1.0], [2.0], 0.0, 0.0, 0.1) is about (0.4, 0.4).",
       "order": 3,
       "difficulty": "intermediate",
       "duration_minutes": 8,
@@ -101,7 +439,7 @@
       ],
       "prerequisites": [],
       "learning_objectives": [
-        "Take one GD step for linear regression"
+        "This step steps the weight against the gradient, using weight and 1."
       ],
       "starter_code": "def gd_step(xs, ys, w, b, lr):\n    # TODO\n    pass\n",
       "solution_code": "def gd_step(xs, ys, w, b, lr):\n    n = len(xs)\n    dw = sum((w * x + b - y) * x for x, y in zip(xs, ys)) * 2 / n\n    db = sum((w * x + b - y) for x, y in zip(xs, ys)) * 2 / n\n    return w - lr * dw, b - lr * db\n",
@@ -122,12 +460,182 @@
         "url": "https://developers.google.com/machine-learning/crash-course/linear-regression/gradient-descent",
         "license": "CC BY 4.0 (Google Machine Learning Crash Course)"
       },
-      "xp_reward": 25
+      "xp_reward": 25,
+      "player_mode": "micro",
+      "sublessons": [
+        {
+          "id": "linreg-gd-step-micro",
+          "title": "Practice Gradient Descent Step",
+          "description": "",
+          "order": 1,
+          "exercises": [
+            {
+              "id": "linreg-gd-step-teach",
+              "type": "teach",
+              "question": "This step steps the weight against the gradient, using weight and 1.",
+              "hints": [
+                "Follow the job, which steps the weight against the gradient.",
+                "Gradient descent subtracts the rate times the gradient.",
+                "weight - rate * grad"
+              ],
+              "explanation": "This step steps the weight against the gradient, using weight and 1.",
+              "xp_reward": 0,
+              "worked_example": "weight - rate * grad"
+            },
+            {
+              "id": "linreg-gd-step-mcq",
+              "type": "mcq",
+              "question": "Keep the choice that steps the weight against the gradient for weight and 1.",
+              "hints": [
+                "Follow the job, which steps the weight against the gradient.",
+                "Gradient descent subtracts the rate times the gradient.",
+                "weight - rate * grad"
+              ],
+              "explanation": "Gradient descent subtracts the rate times the gradient.",
+              "xp_reward": 10,
+              "options": [
+                "return weight",
+                "weight == grad",
+                "weight - rate * grad",
+                "pass"
+              ],
+              "correct_answer": "weight - rate * grad"
+            },
+            {
+              "id": "linreg-gd-step-predict",
+              "type": "output_prediction",
+              "question": "Trace the code that steps the weight against the gradient using weight and 1, and select what it displays.",
+              "hints": [
+                "Follow the job, which steps the weight against the gradient.",
+                "Gradient descent subtracts the rate times the gradient.",
+                "8"
+              ],
+              "explanation": "Gradient descent subtracts the rate times the gradient.",
+              "xp_reward": 10,
+              "starter_code": "weight = 10\ngrad = 2\nrate = 1\nprint(weight - rate * grad)\n",
+              "options": [
+                "6",
+                "none",
+                "8",
+                "0"
+              ],
+              "correct_answer": "8"
+            },
+            {
+              "id": "linreg-gd-step-order",
+              "type": "ordering",
+              "question": "Tap the pieces, in order, of the line that steps the weight against the gradient for weight and 1.",
+              "hints": [
+                "Follow the job, which steps the weight against the gradient.",
+                "Gradient descent subtracts the rate times the gradient.",
+                "next = weight - rate * grad"
+              ],
+              "explanation": "Gradient descent subtracts the rate times the gradient.",
+              "xp_reward": 10,
+              "options": [
+                "next",
+                "=",
+                "weight",
+                "-",
+                "rate",
+                "*",
+                "grad",
+                "+"
+              ],
+              "correct_answer": [
+                "next",
+                "=",
+                "weight",
+                "-",
+                "rate",
+                "*",
+                "grad"
+              ]
+            },
+            {
+              "id": "linreg-gd-step-fill",
+              "type": "fill_blank",
+              "question": "The blank is the missing piece of the line that steps the weight against the gradient for weight and 1.",
+              "hints": [
+                "Follow the job, which steps the weight against the gradient.",
+                "Gradient descent subtracts the rate times the gradient.",
+                "-"
+              ],
+              "explanation": "Gradient descent subtracts the rate times the gradient.",
+              "xp_reward": 10,
+              "starter_code": "next = weight ___ rate * grad\n",
+              "options": [
+                "+",
+                "*",
+                "-",
+                "/"
+              ],
+              "correct_answer": "-"
+            },
+            {
+              "id": "linreg-gd-step-bug",
+              "type": "debugging",
+              "question": "Choose the line that does another job than the one that steps the weight against the gradient for weight and 1.",
+              "hints": [
+                "Follow the job, which steps the weight against the gradient.",
+                "The step adds the gradient and walks uphill.",
+                "Line 3"
+              ],
+              "explanation": "The step adds the gradient and walks uphill.",
+              "xp_reward": 10,
+              "starter_code": "weight = 10\ngrad = 2\nprint(weight + 2)\n",
+              "correct_answer": "3"
+            },
+            {
+              "id": "linreg-gd-step-predict-2",
+              "type": "output_prediction",
+              "question": "Trace the second run, which steps the weight against the gradient for weight and 1, and select what it displays.",
+              "hints": [
+                "Follow the job, which steps the weight against the gradient.",
+                "Gradient descent subtracts the rate times the gradient.",
+                "6"
+              ],
+              "explanation": "Gradient descent subtracts the rate times the gradient.",
+              "xp_reward": 10,
+              "starter_code": "weight = 10\ngrad = 2\nrate = 2\nprint(weight - rate * grad)\n",
+              "options": [
+                "8",
+                "6",
+                "none",
+                "0"
+              ],
+              "correct_answer": "6"
+            },
+            {
+              "id": "linreg-gd-step-write",
+              "type": "code",
+              "question": "Type the missing piece so the program steps the weight against the gradient for weight and 1 and prints it.",
+              "hints": [
+                "Follow the job, which steps the weight against the gradient.",
+                "The printed value is the result after this step steps the weight against the gradient.",
+                "label = weight - rate * grad"
+              ],
+              "explanation": "The printed value is the result after this step steps the weight against the gradient.",
+              "xp_reward": 10,
+              "starter_code": "weight = 10\ngrad = 2\nrate = 1\nlabel = ___\nprint(label)\n",
+              "solution_code": "weight = 10\ngrad = 2\nrate = 1\nlabel = weight - rate * grad\nprint(label)\n",
+              "tests": [
+                {
+                  "name": "linreg-gd-step-prints",
+                  "description": "The printed value is the result after this step steps the weight against the gra",
+                  "expected_stdout": "8\n",
+                  "required": true
+                }
+              ]
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "linreg-closed-form",
-      "title": "4. Closed-Form Slope (Practice)",
-      "description": "Implement `fit_slope(xs, ys)` for y=w*x (no intercept): w = sum(x*y)/sum(x*x). The test checks that `fit_slope([1, 2, 3], [2, 4, 6])` equals `2.0`.",
+      "title": "Practice Closed-Form Slope",
+      "description": "Implement fit_slope(xs, ys) for y=w*x (no intercept): w = sum(x*y)/sum(x*x). The test checks that fit_slope([1, 2, 3], [2, 4, 6]) equals 2.0.",
       "order": 4,
       "difficulty": "intermediate",
       "duration_minutes": 6,
@@ -139,7 +647,7 @@
       ],
       "prerequisites": [],
       "learning_objectives": [
-        "Fit slope via normal equation"
+        "This step reads the slope between two points, using rise and 1."
       ],
       "starter_code": "def fit_slope(xs, ys):\n    # TODO\n    pass\n",
       "solution_code": "def fit_slope(xs, ys):\n    return sum(x * y for x, y in zip(xs, ys)) / sum(x * x for x in xs)\n",
@@ -160,12 +668,178 @@
         "url": "https://developers.google.com/machine-learning/crash-course/linear-regression",
         "license": "CC BY 4.0 (Google Machine Learning Crash Course)"
       },
-      "xp_reward": 15
+      "xp_reward": 15,
+      "player_mode": "micro",
+      "sublessons": [
+        {
+          "id": "linreg-closed-form-micro",
+          "title": "Practice Closed-Form Slope",
+          "description": "",
+          "order": 1,
+          "exercises": [
+            {
+              "id": "linreg-closed-form-teach",
+              "type": "teach",
+              "question": "This step reads the slope between two points, using rise and 1.",
+              "hints": [
+                "Follow the job, which reads the slope between two points.",
+                "Slope is the rise divided by the run.",
+                "rise // run"
+              ],
+              "explanation": "This step reads the slope between two points, using rise and 1.",
+              "xp_reward": 0,
+              "worked_example": "rise // run"
+            },
+            {
+              "id": "linreg-closed-form-mcq",
+              "type": "mcq",
+              "question": "The correct line reads the slope between two points, and it is the line tied to rise and 1.",
+              "hints": [
+                "Follow the job, which reads the slope between two points.",
+                "Slope is the rise divided by the run.",
+                "rise // run"
+              ],
+              "explanation": "Slope is the rise divided by the run.",
+              "xp_reward": 10,
+              "options": [
+                "rise == run",
+                "return rise",
+                "rise // run",
+                "pass"
+              ],
+              "correct_answer": "rise // run"
+            },
+            {
+              "id": "linreg-closed-form-predict",
+              "type": "output_prediction",
+              "question": "The program reads the slope between two points with rise and 1, so choose the printed value.",
+              "hints": [
+                "Follow the job, which reads the slope between two points.",
+                "Slope is the rise divided by the run.",
+                "3"
+              ],
+              "explanation": "Slope is the rise divided by the run.",
+              "xp_reward": 10,
+              "starter_code": "rise = (51 + 3) - 51\nrun = 1\nprint(rise // run)\n",
+              "options": [
+                "none",
+                "5",
+                "3",
+                "0"
+              ],
+              "correct_answer": "3"
+            },
+            {
+              "id": "linreg-closed-form-order",
+              "type": "ordering",
+              "question": "Build the line that reads the slope between two points for rise and 1, from the first piece to the last.",
+              "hints": [
+                "Follow the job, which reads the slope between two points.",
+                "Slope is the rise divided by the run.",
+                "slope = rise // run"
+              ],
+              "explanation": "Slope is the rise divided by the run.",
+              "xp_reward": 10,
+              "options": [
+                "slope",
+                "=",
+                "rise",
+                "//",
+                "run",
+                "/"
+              ],
+              "correct_answer": [
+                "slope",
+                "=",
+                "rise",
+                "//",
+                "run"
+              ]
+            },
+            {
+              "id": "linreg-closed-form-fill",
+              "type": "fill_blank",
+              "question": "Replace the blank with the piece that makes the line reads the slope between two points for rise and 1.",
+              "hints": [
+                "Follow the job, which reads the slope between two points.",
+                "Slope is the rise divided by the run.",
+                "//"
+              ],
+              "explanation": "Slope is the rise divided by the run.",
+              "xp_reward": 10,
+              "starter_code": "slope = rise ___ run\n",
+              "options": [
+                "/",
+                "%",
+                "//",
+                "*"
+              ],
+              "correct_answer": "//"
+            },
+            {
+              "id": "linreg-closed-form-bug",
+              "type": "debugging",
+              "question": "Spot the line that fails the job, which reads the slope between two points, around rise and 1.",
+              "hints": [
+                "Follow the job, which reads the slope between two points.",
+                "The print changes the rise and never divides by the run.",
+                "Line 2"
+              ],
+              "explanation": "The print changes the rise and never divides by the run.",
+              "xp_reward": 10,
+              "starter_code": "rise = 3\nprint(rise + 1)\n",
+              "correct_answer": "2"
+            },
+            {
+              "id": "linreg-closed-form-predict-2",
+              "type": "output_prediction",
+              "question": "The second program reads the slope between two points for rise and 1, so choose the new printed value.",
+              "hints": [
+                "Follow the job, which reads the slope between two points.",
+                "Slope is the rise divided by the run.",
+                "5"
+              ],
+              "explanation": "Slope is the rise divided by the run.",
+              "xp_reward": 10,
+              "starter_code": "rise = (51 + 5) - 51\nrun = 1\nprint(rise // run)\n",
+              "options": [
+                "3",
+                "5",
+                "none",
+                "0"
+              ],
+              "correct_answer": "5"
+            },
+            {
+              "id": "linreg-closed-form-write",
+              "type": "code",
+              "question": "Complete the blank so this program reads the slope between two points and prints the result for rise and 1.",
+              "hints": [
+                "Follow the job, which reads the slope between two points.",
+                "The printed value is the result after this step reads the slope between two points.",
+                "label = rise // run"
+              ],
+              "explanation": "The printed value is the result after this step reads the slope between two points.",
+              "xp_reward": 10,
+              "starter_code": "rise = (51 + 3) - 51\nrun = 1\nlabel = ___\nprint(label)\n",
+              "solution_code": "rise = (51 + 3) - 51\nrun = 1\nlabel = rise // run\nprint(label)\n",
+              "tests": [
+                {
+                  "name": "linreg-closed-form-prints",
+                  "description": "The printed value is the result after this step reads the slope between two poin",
+                  "expected_stdout": "3\n",
+                  "required": true
+                }
+              ]
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "linreg-checkpoint",
-      "title": "5. Checkpoint: R² Score",
-      "description": "Implement `r2(y_true, y_pred)`. Return 0 if total sum of squares is 0. The test checks that `r2([1, 2, 3], [1, 2, 3])` equals `1.0`; `r2([1, 2, 3], [2, 2, 2])` equals `0.0`.",
+      "title": "Practice Checkpoint R Score",
+      "description": "Implement r2(y_true, y_pred). Return 0 if total sum of squares is 0. The test checks that r2([1, 2, 3], [1, 2, 3]) equals 1.0; r2([1, 2, 3], [2, 2, 2]) equals 0.0.",
       "order": 5,
       "difficulty": "intermediate",
       "duration_minutes": 10,
@@ -177,7 +851,7 @@
       ],
       "prerequisites": [],
       "learning_objectives": [
-        "Evaluate with R-squared"
+        "This step computes one minus the leftover share, using ss_res and 1."
       ],
       "starter_code": "def r2(y_true, y_pred):\n    # TODO\n    pass\n",
       "solution_code": "def r2(y_true, y_pred):\n    mean_y = sum(y_true) / len(y_true)\n    ss_tot = sum((y - mean_y) ** 2 for y in y_true)\n    ss_res = sum((a - b) ** 2 for a, b in zip(y_true, y_pred))\n    if ss_tot == 0:\n        return 0.0\n    return 1 - ss_res / ss_tot\n",
@@ -198,7 +872,177 @@
         "url": "https://developers.google.com/machine-learning/glossary/metrics",
         "license": "CC BY 4.0 (Google Machine Learning Crash Course)"
       },
-      "xp_reward": 40
+      "xp_reward": 40,
+      "player_mode": "micro",
+      "sublessons": [
+        {
+          "id": "linreg-checkpoint-micro",
+          "title": "Practice Checkpoint R Score",
+          "description": "",
+          "order": 1,
+          "exercises": [
+            {
+              "id": "linreg-checkpoint-teach",
+              "type": "teach",
+              "question": "This step computes one minus the leftover share, using ss_res and 1.",
+              "hints": [
+                "Follow the job, which computes one minus the leftover share.",
+                "R squared is one minus leftover over total.",
+                "1 - ss_res / ss_tot"
+              ],
+              "explanation": "This step computes one minus the leftover share, using ss_res and 1.",
+              "xp_reward": 0,
+              "worked_example": "1 - ss_res / ss_tot"
+            },
+            {
+              "id": "linreg-checkpoint-mcq",
+              "type": "mcq",
+              "question": "Pick the line that computes one minus the leftover share, not a line about something else, for ss_res and 1.",
+              "hints": [
+                "Follow the job, which computes one minus the leftover share.",
+                "R squared is one minus leftover over total.",
+                "1 - ss_res / ss_tot"
+              ],
+              "explanation": "R squared is one minus leftover over total.",
+              "xp_reward": 10,
+              "options": [
+                "ss_res == ss_tot",
+                "return ss_res",
+                "1 - ss_res / ss_tot",
+                "pass"
+              ],
+              "correct_answer": "1 - ss_res / ss_tot"
+            },
+            {
+              "id": "linreg-checkpoint-predict",
+              "type": "output_prediction",
+              "question": "The displayed value is what the code prints when it computes one minus the leftover share for ss_res and 1.",
+              "hints": [
+                "Follow the job, which computes one minus the leftover share.",
+                "R squared is one minus leftover over total.",
+                "0.75"
+              ],
+              "explanation": "R squared is one minus leftover over total.",
+              "xp_reward": 10,
+              "starter_code": "ss_res = 2\nss_tot = 8\nprint(round(1 - ss_res / ss_tot, 2))\n",
+              "options": [
+                "0.5",
+                "none",
+                "0.75",
+                "0"
+              ],
+              "correct_answer": "0.75"
+            },
+            {
+              "id": "linreg-checkpoint-order",
+              "type": "ordering",
+              "question": "Place every piece so the result computes one minus the leftover share for ss_res and 1.",
+              "hints": [
+                "Follow the job, which computes one minus the leftover share.",
+                "R squared is one minus leftover over total.",
+                "score = 1 - ss_res / ss_tot"
+              ],
+              "explanation": "R squared is one minus leftover over total.",
+              "xp_reward": 10,
+              "options": [
+                "score",
+                "=",
+                "1",
+                "-",
+                "ss_res",
+                "/",
+                "ss_tot",
+                "+"
+              ],
+              "correct_answer": [
+                "score",
+                "=",
+                "1",
+                "-",
+                "ss_res",
+                "/",
+                "ss_tot"
+              ]
+            },
+            {
+              "id": "linreg-checkpoint-fill",
+              "type": "fill_blank",
+              "question": "Drop in the piece that lets the line computes one minus the leftover share for ss_res and 1.",
+              "hints": [
+                "Follow the job, which computes one minus the leftover share.",
+                "R squared is one minus leftover over total.",
+                "-"
+              ],
+              "explanation": "R squared is one minus leftover over total.",
+              "xp_reward": 10,
+              "starter_code": "score = 1 ___ ss_res / ss_tot\n",
+              "options": [
+                "/",
+                "+",
+                "*",
+                "-"
+              ],
+              "correct_answer": "-"
+            },
+            {
+              "id": "linreg-checkpoint-bug",
+              "type": "debugging",
+              "question": "The mismatch misses the job, which computes one minus the leftover share, for ss_res and 1.",
+              "hints": [
+                "Follow the job, which computes one minus the leftover share.",
+                "The print is the leftover share, not one minus that share.",
+                "Line 3"
+              ],
+              "explanation": "The print is the leftover share, not one minus that share.",
+              "xp_reward": 10,
+              "starter_code": "ss_res = 2\nss_tot = 8\nprint(ss_res / ss_tot)\n",
+              "correct_answer": "3"
+            },
+            {
+              "id": "linreg-checkpoint-predict-2",
+              "type": "output_prediction",
+              "question": "Choose the printed result of the second run that computes one minus the leftover share for ss_res and 1.",
+              "hints": [
+                "Follow the job, which computes one minus the leftover share.",
+                "R squared is one minus leftover over total.",
+                "0.5"
+              ],
+              "explanation": "R squared is one minus leftover over total.",
+              "xp_reward": 10,
+              "starter_code": "ss_res = 4\nss_tot = 8\nprint(round(1 - ss_res / ss_tot, 2))\n",
+              "options": [
+                "0",
+                "0.5",
+                "0.75",
+                "none"
+              ],
+              "correct_answer": "0.5"
+            },
+            {
+              "id": "linreg-checkpoint-write",
+              "type": "code",
+              "question": "Make the program computes one minus the leftover share by filling the blank for ss_res and 1.",
+              "hints": [
+                "Follow the job, which computes one minus the leftover share.",
+                "The printed value is the result after this step computes one minus the leftover share.",
+                "label = round(1 - ss_res / ss_tot, 2)"
+              ],
+              "explanation": "The printed value is the result after this step computes one minus the leftover share.",
+              "xp_reward": 10,
+              "starter_code": "ss_res = 2\nss_tot = 8\nlabel = ___\nprint(label)\n",
+              "solution_code": "ss_res = 2\nss_tot = 8\nlabel = round(1 - ss_res / ss_tot, 2)\nprint(label)\n",
+              "tests": [
+                {
+                  "name": "linreg-checkpoint-prints",
+                  "description": "The printed value is the result after this step computes one minus the leftover ",
+                  "expected_stdout": "0.75\n",
+                  "required": true
+                }
+              ]
+            }
+          ]
+        }
+      ]
     }
   ]
 }

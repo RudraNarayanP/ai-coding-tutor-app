@@ -45,6 +45,9 @@ PY = sys.executable
 LOCAL_LANGS = {
     "python", "py", "sql", "javascript", "typescript",
     "dsa", "ml", "ml-math", "ai", "fullstack",
+    # javac and g++ on the host are the real compilers. Docker is optional.
+    # A missing compiler is still a failed parse or a failed run, never a pass.
+    "java", "cpp", "c++",
 }
 DOCKER_IMAGE = "patchwork-sandbox:local"
 
@@ -102,18 +105,49 @@ def _joined_key(answer) -> str:
     return str(answer)
 
 
+def _strip_types(code: str) -> tuple[bool, str]:
+    """Strip TypeScript types with Node, then leave JavaScript for ``node --check``.
+
+    ``node --check --experimental-strip-types`` does not strip. The runner loads
+    ``.ts`` files with the same stripper, so the gate has to strip first or every
+    real TypeScript snippet is reported as a syntax error.
+    """
+    proc = subprocess.run(
+        [
+            "node", "--input-type=module", "-e",
+            "import { stripTypeScriptTypes } from 'node:module';"
+            "import fs from 'node:fs';"
+            "process.stdout.write(stripTypeScriptTypes(fs.readFileSync(0, 'utf8')));",
+        ],
+        input=code, capture_output=True, text=True, timeout=20,
+    )
+    if proc.returncode != 0:
+        detail = (proc.stderr or proc.stdout or "type strip failed").strip().splitlines()
+        return False, detail[-1][:240] if detail else "type strip failed"
+    return True, proc.stdout
+
+
 def _node_parses(code: str, language: str) -> tuple[bool, str]:
-    """Parse a JS or TS snippet with node. TypeScript uses the same checker."""
+    """Parse a JS or TS snippet with node --check.
+
+    TypeScript is stripped with Node's type stripper first. ``node --check``
+    then parses the JavaScript the runtime will actually execute.
+    """
     import tempfile
 
-    suffix = ".ts" if language in {"typescript", "ts"} else ".js"
-    flags = ["--experimental-strip-types"] if suffix == ".ts" else []
+    source = code if code.endswith("\n") else code + "\n"
+    suffix = ".js"
+    if language in {"typescript", "ts"}:
+        ok, stripped = _strip_types(source)
+        if not ok:
+            return False, stripped
+        source = stripped if stripped.endswith("\n") else stripped + "\n"
     try:
         with tempfile.TemporaryDirectory(prefix="pw_parse_") as folder:
             path = Path(folder) / f"snippet{suffix}"
-            path.write_text(code if code.endswith("\n") else code + "\n", encoding="utf-8")
+            path.write_text(source, encoding="utf-8")
             proc = subprocess.run(
-                ["node", "--check", *flags, str(path)],
+                ["node", "--check", str(path)],
                 capture_output=True, text=True, timeout=20,
             )
     except FileNotFoundError:
@@ -141,6 +175,70 @@ def _sql_parses(code: str) -> tuple[bool, str]:
     return True, ""
 
 
+def _compile_native(code: str, language: str) -> tuple[bool, str]:
+    """Syntax-check Java or C++ with the host compiler.
+
+    A fragment is wrapped in a main that already declares a few names, so an
+    ordering line such as ``int total = left + right;`` is checked for real.
+    A complete program is compiled as written. Compiler failure is a failure.
+    """
+    lang = language.lower()
+    try:
+        with tempfile.TemporaryDirectory(prefix="pw_parse_") as folder:
+            root = Path(folder)
+            if lang == "java":
+                if re.search(r"\bclass\s+\w+", code):
+                    src = code if code.endswith("\n") else code + "\n"
+                else:
+                    src = (
+                        "import java.util.*;\n"
+                        "public class Snippet {\n"
+                        "  public static void main(String[] args) {\n"
+                        "    int left = 2;\n"
+                        "    int right = 3;\n"
+                        "    int count = 4;\n"
+                        "    String name = \"ada\";\n"
+                        "    String word = \"ada\";\n"
+                        f"    {code}\n"
+                        "  }\n"
+                        "}\n"
+                    )
+                match = re.search(r"(?:public\s+)?class\s+(\w+)", src)
+                name = match.group(1) if match else "Snippet"
+                path = root / f"{name}.java"
+                path.write_text(src, encoding="utf-8")
+                proc = subprocess.run(
+                    ["javac", str(path)], capture_output=True, text=True, timeout=20,
+                )
+            else:
+                if re.search(r"\bmain\s*\(", code):
+                    src = code if code.endswith("\n") else code + "\n"
+                else:
+                    src = (
+                        "#include <iostream>\n#include <string>\n#include <vector>\n"
+                        "#include <algorithm>\n#include <memory>\n"
+                        "int main() {\n"
+                        "  int left = 2;\n  int right = 3;\n  int count = 4;\n"
+                        "  std::string name = \"ada\";\n  std::string word = \"ada\";\n"
+                        f"  {code}\n"
+                        "  return 0;\n}\n"
+                    )
+                path = root / "snippet.cpp"
+                path.write_text(src, encoding="utf-8")
+                proc = subprocess.run(
+                    ["g++", "-std=c++20", "-fsyntax-only", str(path)],
+                    capture_output=True, text=True, timeout=20,
+                )
+    except FileNotFoundError:
+        return False, "compiler is not installed"
+    except subprocess.TimeoutExpired:
+        return False, "compiler timed out"
+    if proc.returncode != 0:
+        detail = (proc.stderr or proc.stdout or "syntax error").strip().splitlines()
+        return False, detail[-1][:240] if detail else "syntax error"
+    return True, ""
+
+
 def program_parses(language: str, code: str) -> tuple[bool, str]:
     lang = (language or "").lower()
     if lang in {"python", "py", "dsa", "ml", "ml-math", "ai", "fullstack"}:
@@ -153,6 +251,10 @@ def program_parses(language: str, code: str) -> tuple[bool, str]:
         return _node_parses(code, lang)
     if lang in {"sql", "sqlite"}:
         return _sql_parses(code)
+    if lang == "java":
+        return _compile_native(code, "java")
+    if lang in {"cpp", "c++"}:
+        return _compile_native(code, "cpp")
     return False, f"no parser wired for {language}"
 
 

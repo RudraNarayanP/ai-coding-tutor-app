@@ -12,8 +12,8 @@
   "lessons": [
     {
       "id": "ai-01",
-      "title": "1. Building Model API Request Payloads",
-      "description": "Chat completion requests send a 'model' and a 'messages' array — 'a list of messages comprising the conversation so far' — where each message is a dict with 'role' and 'content'. Implement build_chat_payload(model, system_prompt, user_prompt) so it returns json.dumps of {\"model\": ..., \"messages\": [system, user]}. Tests parse the JSON and check the model name and that there are 2 messages. The test checks that `json.loads(build_chat_payload('gpt-4o-mini', 'sys', 'usr'))['model']` equals `'gpt-4o-mini'`; `len(res['messages'])` equals `2`.",
+      "title": "Build Model API Request Payloads",
+      "description": "Chat completion requests send a 'model' and a 'messages' array — 'a list of messages comprising the conversation so far' — where each message is a dict with 'role' and 'content'. Implement build_chat_payload(model, system_prompt, user_prompt) so it returns json.dumps of {\"model\": ..., \"messages\": [system, user]}. Tests parse the JSON and check the model name and that there are 2 messages. The test checks that json.loads(build_chat_payload('gpt-4o-mini', 'sys', 'usr'))['model'] equals 'gpt-4o-mini'; len(res['messages']) equals 2.",
       "order": 1,
       "difficulty": "intermediate",
       "duration_minutes": 5,
@@ -44,33 +44,171 @@
         "license": "OpenAI API documentation (developers.openai.com)"
       },
       "learning_objectives": [
-        "Build chat completion request payloads with model and messages",
-        "Encode role/content message dicts for system and user turns",
-        "Serialize requests with json.dumps"
+        "This step reads the token count stored on the payload, using payload holding model."
       ],
       "xp_reward": 10,
       "sublessons": [
         {
-          "id": "ai-01-tf-1-sub",
-          "title": "Reading a request payload",
+          "id": "ai-01-micro",
+          "title": "Build Model API Request Payloads",
+          "description": "",
           "order": 1,
           "exercises": [
             {
-              "id": "ai-01-tf-1",
-              "type": "true_false",
-              "question": "In a chat-completion request, every entry in the `messages` array carries both a `role` and a `content`.",
-              "micro_explanation": "The API needs to know who said each line, not just the text.",
-              "correct_answer": "True",
-              "explanation": "Each message names its author through `role` (system, user or assistant) and carries the text for that turn in `content`.",
+              "id": "ai-01-teach",
+              "type": "teach",
+              "question": "This step reads the token count stored on the payload, using payload holding model.",
+              "hints": [
+                "Follow the job, which reads the token count stored on the payload.",
+                "The n field is the requested token count.",
+                "payload['n']"
+              ],
+              "explanation": "This step reads the token count stored on the payload, using payload holding model.",
+              "xp_reward": 0,
+              "worked_example": "payload['n']"
+            },
+            {
+              "id": "ai-01-mcq",
+              "type": "mcq",
+              "question": "Choose the line that reads the token count stored on the payload, which is the line that fits payload holding model.",
+              "hints": [
+                "Follow the job, which reads the token count stored on the payload.",
+                "The n field is the requested token count.",
+                "payload['n']"
+              ],
+              "explanation": "The n field is the requested token count.",
               "xp_reward": 10,
               "options": [
-                "True",
-                "False"
+                "payload == payload",
+                "return payload",
+                "pass",
+                "payload['n']"
+              ],
+              "correct_answer": "payload['n']"
+            },
+            {
+              "id": "ai-01-predict",
+              "type": "output_prediction",
+              "question": "Read the code that reads the token count stored on the payload for payload holding model, and choose the value it prints.",
+              "hints": [
+                "Follow the job, which reads the token count stored on the payload.",
+                "The n field is the requested token count.",
+                "35"
+              ],
+              "explanation": "The n field is the requested token count.",
+              "xp_reward": 10,
+              "starter_code": "payload = {'model': 'thyme', 'n': 35}\nprint(payload['n'])\n",
+              "options": [
+                "38",
+                "none",
+                "0",
+                "35"
+              ],
+              "correct_answer": "35"
+            },
+            {
+              "id": "ai-01-order",
+              "type": "ordering",
+              "question": "Arrange the pieces of the line that reads the token count stored on the payload, left to right, for payload holding model.",
+              "hints": [
+                "Follow the job, which reads the token count stored on the payload.",
+                "The n field is the requested token count.",
+                "n = payload['n']"
+              ],
+              "explanation": "The n field is the requested token count.",
+              "xp_reward": 10,
+              "options": [
+                "n",
+                "=",
+                "payload['n']",
+                "=="
+              ],
+              "correct_answer": [
+                "n",
+                "=",
+                "payload['n']"
+              ]
+            },
+            {
+              "id": "ai-01-fill",
+              "type": "fill_blank",
+              "question": "Fill the blank so the line reads the token count stored on the payload for payload holding model.",
+              "hints": [
+                "Follow the job, which reads the token count stored on the payload.",
+                "The n field is the requested token count.",
+                "'n'"
+              ],
+              "explanation": "The n field is the requested token count.",
+              "xp_reward": 10,
+              "starter_code": "seen = payload[___]\n",
+              "options": [
+                "'id'",
+                "'model'",
+                "'ok'",
+                "'n'"
+              ],
+              "correct_answer": "'n'"
+            },
+            {
+              "id": "ai-01-bug",
+              "type": "debugging",
+              "question": "Find the line that misses the job, which reads the token count stored on the payload, for payload holding model.",
+              "hints": [
+                "Follow the job, which reads the token count stored on the payload.",
+                "The print reads the model name instead of the token count.",
+                "Line 2"
+              ],
+              "explanation": "The print reads the model name instead of the token count.",
+              "xp_reward": 10,
+              "starter_code": "payload = {'model': 'thyme', 'n': 35}\nprint(payload['model'])\n",
+              "correct_answer": "2"
+            },
+            {
+              "id": "ai-01-predict-2",
+              "type": "output_prediction",
+              "question": "On the new input, the code still reads the token count stored on the payload for payload holding model, so choose what it prints.",
+              "hints": [
+                "Follow the job, which reads the token count stored on the payload.",
+                "The n field is the requested token count.",
+                "38"
+              ],
+              "explanation": "The n field is the requested token count.",
+              "xp_reward": 10,
+              "starter_code": "payload = {'model': 'thyme', 'n': 38}\nprint(payload['n'])\n",
+              "options": [
+                "35",
+                "none",
+                "38",
+                "0"
+              ],
+              "correct_answer": "38"
+            },
+            {
+              "id": "ai-01-write",
+              "type": "code",
+              "question": "Fill the blank so the program reads the token count stored on the payload, and the print shows that result for payload holding model.",
+              "hints": [
+                "Follow the job, which reads the token count stored on the payload.",
+                "The printed value is the result after this step reads the token count stored on the payload.",
+                "label = payload['n']"
+              ],
+              "explanation": "The printed value is the result after this step reads the token count stored on the payload.",
+              "xp_reward": 10,
+              "starter_code": "payload = {'model': 'thyme', 'n': 35}\nlabel = ___\nprint(label)\n",
+              "solution_code": "payload = {'model': 'thyme', 'n': 35}\nlabel = payload['n']\nprint(label)\n",
+              "tests": [
+                {
+                  "name": "ai-01-prints",
+                  "description": "The printed value is the result after this step reads the token count stored on ",
+                  "expected_stdout": "35\n",
+                  "required": true
+                }
               ]
             }
           ]
         }
-      ]
+      ],
+      "player_mode": "micro"
     }
   ]
 }

@@ -15,8 +15,8 @@
   "lessons": [
     {
       "id": "type-hints-dataclasses-step-1",
-      "title": "1. Function Type Hints",
-      "description": "Annotate parameters and return types. Implement `add(a: int, b: int) -> int`. The test checks that `add(2, 3)` equals `5`.",
+      "title": "Practice Function Type Hints",
+      "description": "Annotate parameters and return types. Implement add(a: int, b: int) -> int. The test checks that add(2, 3) equals 5.",
       "order": 96,
       "difficulty": "intermediate",
       "duration_minutes": 5,
@@ -30,7 +30,7 @@
         "functions"
       ],
       "learning_objectives": [
-        "Add basic type annotations"
+        "This step adds two and hands back an integer, using score and 44."
       ],
       "starter_code": "def add(a: int, b: int) -> int:\n    # TODO: return a + b\n    pass\n",
       "solution_code": "def add(a: int, b: int) -> int:\n    return a + b\n",
@@ -51,12 +51,182 @@
         "url": "https://docs.python.org/3/library/typing.html",
         "license": "Python documentation license (PSF)"
       },
-      "xp_reward": 10
+      "xp_reward": 10,
+      "player_mode": "micro",
+      "sublessons": [
+        {
+          "id": "type-hints-dataclasses-step-1-micro",
+          "title": "Practice Function Type Hints",
+          "description": "",
+          "order": 1,
+          "exercises": [
+            {
+              "id": "type-hints-dataclasses-step-1-teach",
+              "type": "teach",
+              "question": "This step adds two and hands back an integer, using score and 44.",
+              "hints": [
+                "Follow the job, which adds two and hands back an integer.",
+                "The annotation says the argument and the result are integers.",
+                "def score(value: int) -> int"
+              ],
+              "explanation": "This step adds two and hands back an integer, using score and 44.",
+              "xp_reward": 0,
+              "worked_example": "def score(value: int) -> int"
+            },
+            {
+              "id": "type-hints-dataclasses-step-1-mcq",
+              "type": "mcq",
+              "question": "The correct line adds two and hands back an integer, and it is the line tied to score and 44.",
+              "hints": [
+                "Follow the job, which adds two and hands back an integer.",
+                "The annotation says the argument and the result are integers.",
+                "def score(value: int) -> int"
+              ],
+              "explanation": "The annotation says the argument and the result are integers.",
+              "xp_reward": 10,
+              "options": [
+                "value == int",
+                "print(value)",
+                "def score(value: int) -> int",
+                "pass"
+              ],
+              "correct_answer": "def score(value: int) -> int"
+            },
+            {
+              "id": "type-hints-dataclasses-step-1-predict",
+              "type": "output_prediction",
+              "question": "The program adds two and hands back an integer with score and 44, so choose the printed value.",
+              "hints": [
+                "Follow the job, which adds two and hands back an integer.",
+                "The annotation says the argument and the result are integers.",
+                "46"
+              ],
+              "explanation": "The annotation says the argument and the result are integers.",
+              "xp_reward": 10,
+              "starter_code": "def score(value: int) -> int:\n    return value + 2\nprint(score(44))\n",
+              "options": [
+                "49",
+                "none",
+                "46",
+                "0"
+              ],
+              "correct_answer": "46"
+            },
+            {
+              "id": "type-hints-dataclasses-step-1-order",
+              "type": "ordering",
+              "question": "Build the line that adds two and hands back an integer for score and 44, from the first piece to the last.",
+              "hints": [
+                "Follow the job, which adds two and hands back an integer.",
+                "The annotation marks an integer argument and result.",
+                "def score(value: int) -> int: return value"
+              ],
+              "explanation": "The annotation marks an integer argument and result.",
+              "xp_reward": 10,
+              "options": [
+                "def",
+                "score(value:",
+                "int)",
+                "->",
+                "int:",
+                "return",
+                "value",
+                "str"
+              ],
+              "correct_answer": [
+                "def",
+                "score(value:",
+                "int)",
+                "->",
+                "int:",
+                "return",
+                "value"
+              ]
+            },
+            {
+              "id": "type-hints-dataclasses-step-1-fill",
+              "type": "fill_blank",
+              "question": "Replace the blank with the piece that makes the line adds two and hands back an integer for score and 44.",
+              "hints": [
+                "Follow the job, which adds two and hands back an integer.",
+                "Plus adds two.",
+                "+"
+              ],
+              "explanation": "Plus adds two.",
+              "xp_reward": 10,
+              "starter_code": "return value ___ 2\n",
+              "options": [
+                "-",
+                "*",
+                "+",
+                "=="
+              ],
+              "correct_answer": "+"
+            },
+            {
+              "id": "type-hints-dataclasses-step-1-bug",
+              "type": "debugging",
+              "question": "Spot the line that fails the job, which adds two and hands back an integer, around score and 44.",
+              "hints": [
+                "Follow the job, which adds two and hands back an integer.",
+                "The function subtracts two.",
+                "Line 2"
+              ],
+              "explanation": "The function subtracts two.",
+              "xp_reward": 10,
+              "starter_code": "def score(value: int) -> int:\n    return value - 2\nprint(score(44))\n",
+              "correct_answer": "2"
+            },
+            {
+              "id": "type-hints-dataclasses-step-1-predict-2",
+              "type": "output_prediction",
+              "question": "The second program adds two and hands back an integer for score and 44, so choose the new printed value.",
+              "hints": [
+                "Follow the job, which adds two and hands back an integer.",
+                "The annotation says the argument and the result are integers.",
+                "49"
+              ],
+              "explanation": "The annotation says the argument and the result are integers.",
+              "xp_reward": 10,
+              "starter_code": "def score(value: int) -> int:\n    return value + 2\nprint(score(47))\n",
+              "options": [
+                "46",
+                "49",
+                "none",
+                "0"
+              ],
+              "correct_answer": "49"
+            },
+            {
+              "id": "type-hints-dataclasses-step-1-write",
+              "type": "code",
+              "question": "Complete the blank so this program adds two and hands back an integer and prints the result for score and 44.",
+              "hints": [
+                "Follow the job, which adds two and hands back an integer.",
+                "The annotated result is what gets printed.",
+                "label = score(44)"
+              ],
+              "explanation": "The annotated result is what gets printed.",
+              "xp_reward": 10,
+              "starter_code": "def score(value: int) -> int:\n    return value + 2\nlabel = ___\nprint(label)\n",
+              "solution_code": "def score(value: int) -> int:\n    return value + 2\nlabel = score(44)\nprint(label)\n",
+              "tests": [
+                {
+                  "name": "type-hints-dataclasses-step-1-prints",
+                  "description": "The annotated result is what gets printed.",
+                  "expected_stdout": "46\n",
+                  "required": true
+                }
+              ]
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "type-hints-dataclasses-step-2",
-      "title": "2. Dataclass Basics",
-      "description": "Use `@dataclass` to define `Point` with x and y floats and a `magnitude` method. The test checks that `Point(3, 4).magnitude()` equals `5.0`.",
+      "title": "Practice Dataclass Basics",
+      "description": "Use @dataclass to define Point with x and y floats and a magnitude method. The test checks that Point(3, 4).magnitude() equals 5.0.",
       "order": 97,
       "difficulty": "intermediate",
       "duration_minutes": 5,
@@ -70,7 +240,7 @@
         "classes"
       ],
       "learning_objectives": [
-        "Define a dataclass with a method"
+        "This step shows one field of the new point, using dataclasses and dataclass."
       ],
       "starter_code": "from dataclasses import dataclass\nimport math\n\n@dataclass\nclass Point:\n    x: float\n    y: float\n\n    def magnitude(self) -> float:\n        # TODO: return sqrt(x^2 + y^2)\n        pass\n",
       "solution_code": "from dataclasses import dataclass\nimport math\n\n@dataclass\nclass Point:\n    x: float\n    y: float\n\n    def magnitude(self) -> float:\n        return math.sqrt(self.x * self.x + self.y * self.y)\n",
@@ -91,12 +261,184 @@
         "url": "https://docs.python.org/3/library/dataclasses.html",
         "license": "Python documentation license (PSF)"
       },
-      "xp_reward": 10
+      "xp_reward": 10,
+      "player_mode": "micro",
+      "sublessons": [
+        {
+          "id": "type-hints-dataclasses-step-2-micro",
+          "title": "Practice Dataclass Basics",
+          "description": "",
+          "order": 1,
+          "exercises": [
+            {
+              "id": "type-hints-dataclasses-step-2-teach",
+              "type": "teach",
+              "question": "This step shows one field of the new point, using dataclasses and dataclass.",
+              "hints": [
+                "Follow the job, which shows one field of the new point.",
+                "Point(x, y) stores both fields.",
+                "Point(x, y).x"
+              ],
+              "explanation": "This step shows one field of the new point, using dataclasses and dataclass.",
+              "xp_reward": 0,
+              "worked_example": "Point(x, y).x"
+            },
+            {
+              "id": "type-hints-dataclasses-step-2-mcq",
+              "type": "mcq",
+              "question": "Keep the choice that shows one field of the new point for dataclasses and 1.",
+              "hints": [
+                "Follow the job, which shows one field of the new point.",
+                "Point(x, y) stores both fields.",
+                "Point(x, y).x"
+              ],
+              "explanation": "Point(x, y) stores both fields.",
+              "xp_reward": 10,
+              "options": [
+                "Point == x",
+                "print(Point)",
+                "pass",
+                "Point(x, y).x"
+              ],
+              "correct_answer": "Point(x, y).x"
+            },
+            {
+              "id": "type-hints-dataclasses-step-2-predict",
+              "type": "output_prediction",
+              "question": "Trace the code that shows one field of the new point using dataclasses and 1, and select what it displays.",
+              "hints": [
+                "Follow the job, which shows one field of the new point.",
+                "Point(x, y) stores both fields.",
+                "45"
+              ],
+              "explanation": "Point(x, y) stores both fields.",
+              "xp_reward": 10,
+              "starter_code": "from dataclasses import dataclass\n@dataclass\nclass Point:\n    x: int\n    y: int\nprint(Point(44, 4).x + 1)\n",
+              "options": [
+                "none",
+                "5",
+                "0",
+                "45"
+              ],
+              "correct_answer": "45"
+            },
+            {
+              "id": "type-hints-dataclasses-step-2-order",
+              "type": "ordering",
+              "question": "Tap the pieces, in order, of the line that shows one field of the new point for dataclasses and 1.",
+              "hints": [
+                "Follow the job, which shows one field of the new point.",
+                "point = Point(left, right) builds the point.",
+                "point = Point ( left , right )"
+              ],
+              "explanation": "point = Point(left, right) builds the point.",
+              "xp_reward": 10,
+              "options": [
+                "point",
+                "=",
+                "Point",
+                "(",
+                "left",
+                ",",
+                "right",
+                ")",
+                "=="
+              ],
+              "correct_answer": [
+                "point",
+                "=",
+                "Point",
+                "(",
+                "left",
+                ",",
+                "right",
+                ")"
+              ]
+            },
+            {
+              "id": "type-hints-dataclasses-step-2-fill",
+              "type": "fill_blank",
+              "question": "The blank is the missing piece of the line that shows one field of the new point for dataclasses and 1.",
+              "hints": [
+                "Follow the job, which shows one field of the new point.",
+                "Plus adds one to the field.",
+                "+"
+              ],
+              "explanation": "Plus adds one to the field.",
+              "xp_reward": 10,
+              "starter_code": "shown = point.x ___ 1\n",
+              "options": [
+                "-",
+                "*",
+                "==",
+                "+"
+              ],
+              "correct_answer": "+"
+            },
+            {
+              "id": "type-hints-dataclasses-step-2-bug",
+              "type": "debugging",
+              "question": "Choose the line that does another job than the one that shows one field of the new point for dataclasses and 1.",
+              "hints": [
+                "Follow the job, which shows one field of the new point.",
+                "The print subtracts one from the field.",
+                "Line 6"
+              ],
+              "explanation": "The print subtracts one from the field.",
+              "xp_reward": 10,
+              "starter_code": "from dataclasses import dataclass\n@dataclass\nclass Point:\n    x: int\n    y: int\nprint(Point(44, 4).x - 1)\n",
+              "correct_answer": "6"
+            },
+            {
+              "id": "type-hints-dataclasses-step-2-predict-2",
+              "type": "output_prediction",
+              "question": "Trace the second run, which shows one field of the new point for dataclasses and 1, and select what it displays.",
+              "hints": [
+                "Follow the job, which shows one field of the new point.",
+                "Point(x, y) stores both fields.",
+                "5"
+              ],
+              "explanation": "Point(x, y) stores both fields.",
+              "xp_reward": 10,
+              "starter_code": "from dataclasses import dataclass\n@dataclass\nclass Point:\n    x: int\n    y: int\nprint(Point(44, 4).y + 1)\n",
+              "options": [
+                "45",
+                "none",
+                "5",
+                "0"
+              ],
+              "correct_answer": "5"
+            },
+            {
+              "id": "type-hints-dataclasses-step-2-write",
+              "type": "code",
+              "question": "Type the missing piece so the program shows one field of the new point for dataclasses and 1 and prints it.",
+              "hints": [
+                "Follow the job, which shows one field of the new point.",
+                "The field plus one is what gets printed.",
+                "label = point.x + 1"
+              ],
+              "explanation": "The field plus one is what gets printed.",
+              "xp_reward": 10,
+              "starter_code": "from dataclasses import dataclass\n@dataclass\nclass Point:\n    x: int\n    y: int\npoint = Point(44, 4)\nlabel = ___\nprint(label)\n",
+              "solution_code": "from dataclasses import dataclass\n@dataclass\nclass Point:\n    x: int\n    y: int\npoint = Point(44, 4)\nlabel = point.x + 1\nprint(label)\n",
+              "tests": [
+                {
+                  "name": "type-hints-dataclasses-step-2-prints",
+                  "description": "The field plus one is what gets printed.",
+                  "expected_stdout": "45\n",
+                  "required": true
+                }
+              ]
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "type-hints-dataclasses-01",
-      "title": "3. Frozen Dataclass Config (Concept Challenge)",
-      "description": "Finish `with_port`. Create an immutable `Config` dataclass and a helper that updates via `dataclasses.replace`. The test checks that `with_port(c, 8080).port` equals `8080`; `Config('localhost').port` equals `80`.",
+      "title": "Practice Frozen Dataclass Config",
+      "description": "Finish with_port. Create an immutable Config dataclass and a helper that updates via dataclasses.replace. The test checks that with_port(c, 8080).port equals 8080; Config('localhost').port equals 80.",
       "order": 98,
       "difficulty": "intermediate",
       "duration_minutes": 8,
@@ -110,7 +452,7 @@
         "classes"
       ],
       "learning_objectives": [
-        "Use frozen=True and replace()"
+        "This step shows the port on a new config, using dataclasses and 43."
       ],
       "starter_code": "from dataclasses import dataclass, replace\n\n@dataclass(frozen=True)\nclass Config:\n    host: str\n    port: int = 80\n\ndef with_port(cfg: Config, port: int) -> Config:\n    # TODO: return a new Config that uses the given port\n    pass\n",
       "solution_code": "from dataclasses import dataclass, replace\n\n@dataclass(frozen=True)\nclass Config:\n    host: str\n    port: int = 80\n\ndef with_port(cfg: Config, port: int) -> Config:\n    return replace(cfg, port=port)\n",
@@ -131,12 +473,184 @@
         "url": "https://docs.python.org/3/library/dataclasses.html",
         "license": "Python documentation license (PSF)"
       },
-      "xp_reward": 25
+      "xp_reward": 25,
+      "player_mode": "micro",
+      "sublessons": [
+        {
+          "id": "type-hints-dataclasses-01-micro",
+          "title": "Practice Frozen Dataclass Config",
+          "description": "",
+          "order": 1,
+          "exercises": [
+            {
+              "id": "type-hints-dataclasses-01-teach",
+              "type": "teach",
+              "question": "This step shows the port on a new config, using dataclasses and 43.",
+              "hints": [
+                "Follow the job, which shows the port on a new config.",
+                "replace builds a new frozen config instead of editing the old one.",
+                "replace(self, port=self.port + 1)"
+              ],
+              "explanation": "This step shows the port on a new config, using dataclasses and 43.",
+              "xp_reward": 0,
+              "worked_example": "replace(self, port=self.port + 1)"
+            },
+            {
+              "id": "type-hints-dataclasses-01-mcq",
+              "type": "mcq",
+              "question": "Choose the line that shows the port on a new config, which is the line that fits dataclasses and 43.",
+              "hints": [
+                "Follow the job, which shows the port on a new config.",
+                "replace builds a new frozen config instead of editing the old one.",
+                "replace(self, port=self.port + 1)"
+              ],
+              "explanation": "replace builds a new frozen config instead of editing the old one.",
+              "xp_reward": 10,
+              "options": [
+                "self.port = 1",
+                "print(self)",
+                "replace(self, port=self.port + 1)",
+                "pass"
+              ],
+              "correct_answer": "replace(self, port=self.port + 1)"
+            },
+            {
+              "id": "type-hints-dataclasses-01-predict",
+              "type": "output_prediction",
+              "question": "Read the code that shows the port on a new config for dataclasses and 43, and choose the value it prints.",
+              "hints": [
+                "Follow the job, which shows the port on a new config.",
+                "replace builds a new frozen config instead of editing the old one.",
+                "44"
+              ],
+              "explanation": "replace builds a new frozen config instead of editing the old one.",
+              "xp_reward": 10,
+              "starter_code": "from dataclasses import dataclass, replace\n@dataclass(frozen=True)\nclass Config:\n    port: int\n    def moved(self):\n        return replace(self, port=self.port + 1)\nprint(Config(43).moved().port)\n",
+              "options": [
+                "47",
+                "0",
+                "44",
+                "none"
+              ],
+              "correct_answer": "44"
+            },
+            {
+              "id": "type-hints-dataclasses-01-order",
+              "type": "ordering",
+              "question": "Arrange the pieces of the line that shows the port on a new config, left to right, for dataclasses and 43.",
+              "hints": [
+                "Follow the job, which shows the port on a new config.",
+                "replace builds a new config.",
+                "updated = replace ( self , port=1 )"
+              ],
+              "explanation": "replace builds a new config.",
+              "xp_reward": 10,
+              "options": [
+                "updated",
+                "=",
+                "replace",
+                "(",
+                "self",
+                ",",
+                "port=1",
+                ")",
+                "=="
+              ],
+              "correct_answer": [
+                "updated",
+                "=",
+                "replace",
+                "(",
+                "self",
+                ",",
+                "port=1",
+                ")"
+              ]
+            },
+            {
+              "id": "type-hints-dataclasses-01-fill",
+              "type": "fill_blank",
+              "question": "Fill the blank so the line shows the port on a new config for dataclasses and 43.",
+              "hints": [
+                "Follow the job, which shows the port on a new config.",
+                "Plus moves the port up by one.",
+                "+"
+              ],
+              "explanation": "Plus moves the port up by one.",
+              "xp_reward": 10,
+              "starter_code": "return replace(self, port=self.port ___ 1)\n",
+              "options": [
+                "-",
+                "*",
+                "+",
+                "=="
+              ],
+              "correct_answer": "+"
+            },
+            {
+              "id": "type-hints-dataclasses-01-bug",
+              "type": "debugging",
+              "question": "Find the line that misses the job, which shows the port on a new config, for dataclasses and 43.",
+              "hints": [
+                "Follow the job, which shows the port on a new config.",
+                "The new config moves the port down.",
+                "Line 6"
+              ],
+              "explanation": "The new config moves the port down.",
+              "xp_reward": 10,
+              "starter_code": "from dataclasses import dataclass, replace\n@dataclass(frozen=True)\nclass Config:\n    port: int\n    def moved(self):\n        return replace(self, port=self.port - 1)\nprint(Config(43).moved().port)\n",
+              "correct_answer": "6"
+            },
+            {
+              "id": "type-hints-dataclasses-01-predict-2",
+              "type": "output_prediction",
+              "question": "On the new input, the code still shows the port on a new config for dataclasses and 43, so choose what it prints.",
+              "hints": [
+                "Follow the job, which shows the port on a new config.",
+                "replace builds a new frozen config instead of editing the old one.",
+                "47"
+              ],
+              "explanation": "replace builds a new frozen config instead of editing the old one.",
+              "xp_reward": 10,
+              "starter_code": "from dataclasses import dataclass, replace\n@dataclass(frozen=True)\nclass Config:\n    port: int\n    def moved(self):\n        return replace(self, port=self.port + 1)\nprint(Config(46).moved().port)\n",
+              "options": [
+                "44",
+                "47",
+                "none",
+                "0"
+              ],
+              "correct_answer": "47"
+            },
+            {
+              "id": "type-hints-dataclasses-01-write",
+              "type": "code",
+              "question": "Fill the blank so the program shows the port on a new config, and the print shows that result for dataclasses and 43.",
+              "hints": [
+                "Follow the job, which shows the port on a new config.",
+                "The new port is what gets printed.",
+                "label = Config(43).moved().port"
+              ],
+              "explanation": "The new port is what gets printed.",
+              "xp_reward": 10,
+              "starter_code": "from dataclasses import dataclass, replace\n@dataclass(frozen=True)\nclass Config:\n    port: int\n    def moved(self):\n        return replace(self, port=self.port + 1)\nlabel = ___\nprint(label)\n",
+              "solution_code": "from dataclasses import dataclass, replace\n@dataclass(frozen=True)\nclass Config:\n    port: int\n    def moved(self):\n        return replace(self, port=self.port + 1)\nlabel = Config(43).moved().port\nprint(label)\n",
+              "tests": [
+                {
+                  "name": "type-hints-dataclasses-01-prints",
+                  "description": "The new port is what gets printed.",
+                  "expected_stdout": "44\n",
+                  "required": true
+                }
+              ]
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "type-hints-dataclasses-practice-1",
-      "title": "4. Typed Optional Defaults (Practice)",
-      "description": "Implement `greet(name: str, title: str | None = None) -> str`. The test checks that `greet('Ada')` equals `'Ada'`; `greet('Ada', 'Dr')` equals `'Dr Ada'`.",
+      "title": "Practice Typed Optional Defaults",
+      "description": "Implement greet(name: str, title: str | None = None) -> str. The test checks that greet('Ada') equals 'Ada'; greet('Ada', 'Dr') equals 'Dr Ada'.",
       "order": 99,
       "difficulty": "intermediate",
       "duration_minutes": 6,
@@ -150,7 +664,7 @@
         "functions"
       ],
       "learning_objectives": [
-        "Use Optional / union types in annotations"
+        "This step uses the fallback when the argument is missing, using label and 43."
       ],
       "starter_code": "def greet(name: str, title: str | None = None) -> str:\n    # TODO: if title: return f'{title} {name}' else return name\n    pass\n",
       "solution_code": "def greet(name: str, title: str | None = None) -> str:\n    if title:\n        return f'{title} {name}'\n    return name\n",
@@ -171,12 +685,182 @@
         "url": "https://docs.python.org/3/library/typing.html",
         "license": "Python documentation license (PSF)"
       },
-      "xp_reward": 15
+      "xp_reward": 15,
+      "player_mode": "micro",
+      "sublessons": [
+        {
+          "id": "type-hints-dataclasses-practice-1-micro",
+          "title": "Practice Typed Optional Defaults",
+          "description": "",
+          "order": 1,
+          "exercises": [
+            {
+              "id": "type-hints-dataclasses-practice-1-teach",
+              "type": "teach",
+              "question": "This step uses the fallback when the argument is missing, using label and 43.",
+              "hints": [
+                "Follow the job, which uses the fallback when the argument is missing.",
+                "None selects the fallback integer.",
+                "value: int | None"
+              ],
+              "explanation": "This step uses the fallback when the argument is missing, using label and 43.",
+              "xp_reward": 0,
+              "worked_example": "value: int | None"
+            },
+            {
+              "id": "type-hints-dataclasses-practice-1-mcq",
+              "type": "mcq",
+              "question": "Choose the line that uses the fallback when the argument is missing, which is the line that fits label and 43.",
+              "hints": [
+                "Follow the job, which uses the fallback when the argument is missing.",
+                "None selects the fallback integer.",
+                "value: int | None"
+              ],
+              "explanation": "None selects the fallback integer.",
+              "xp_reward": 10,
+              "options": [
+                "value == None",
+                "print(value)",
+                "value: int | None",
+                "value = None"
+              ],
+              "correct_answer": "value: int | None"
+            },
+            {
+              "id": "type-hints-dataclasses-practice-1-predict",
+              "type": "output_prediction",
+              "question": "Read the code that uses the fallback when the argument is missing for label and and choose the value it prints.",
+              "hints": [
+                "Follow the job, which uses the fallback when the argument is missing.",
+                "None selects the fallback integer.",
+                "43"
+              ],
+              "explanation": "None selects the fallback integer.",
+              "xp_reward": 10,
+              "starter_code": "def label(value: int | None = None) -> int:\n    if value is None:\n        return 43\n    return value\nprint(label(None))\n",
+              "options": [
+                "47",
+                "none",
+                "43",
+                "0"
+              ],
+              "correct_answer": "43"
+            },
+            {
+              "id": "type-hints-dataclasses-practice-1-order",
+              "type": "ordering",
+              "question": "Arrange the pieces of the line that uses the fallback when the argument is missing, left to right, for label and 43.",
+              "hints": [
+                "Follow the job, which uses the fallback when the argument is missing.",
+                "The annotation allows an integer result.",
+                "def label(value: int) -> int: return value"
+              ],
+              "explanation": "The annotation allows an integer result.",
+              "xp_reward": 10,
+              "options": [
+                "def",
+                "label(value:",
+                "int)",
+                "->",
+                "int:",
+                "return",
+                "value",
+                "str"
+              ],
+              "correct_answer": [
+                "def",
+                "label(value:",
+                "int)",
+                "->",
+                "int:",
+                "return",
+                "value"
+              ]
+            },
+            {
+              "id": "type-hints-dataclasses-practice-1-fill",
+              "type": "fill_blank",
+              "question": "Fill the blank so the line uses the fallback when the argument is missing for label and 43.",
+              "hints": [
+                "Follow the job, which uses the fallback when the argument is missing.",
+                "Plus builds the other reading.",
+                "+"
+              ],
+              "explanation": "Plus builds the other reading.",
+              "xp_reward": 10,
+              "starter_code": "shown = 43 ___ 4\n",
+              "options": [
+                "-",
+                "*",
+                "+",
+                "=="
+              ],
+              "correct_answer": "+"
+            },
+            {
+              "id": "type-hints-dataclasses-practice-1-bug",
+              "type": "debugging",
+              "question": "Find the line that misses the job, which uses the fallback when the argument is missing, for label and 43.",
+              "hints": [
+                "Follow the job, which uses the fallback when the argument is missing.",
+                "The fallback check does not recognize a missing argument.",
+                "Line 2"
+              ],
+              "explanation": "The fallback check does not recognize a missing argument.",
+              "xp_reward": 10,
+              "starter_code": "def label(value: int | None = None) -> int:\n    if value == 1:\n        return 43\n    return value\nprint(label(None))\n",
+              "correct_answer": "2"
+            },
+            {
+              "id": "type-hints-dataclasses-practice-1-predict-2",
+              "type": "output_prediction",
+              "question": "On the new input, the code still uses the fallback when the argument is missing for label and 43, so choose what it prints.",
+              "hints": [
+                "Follow the job, which uses the fallback when the argument is missing.",
+                "None selects the fallback integer.",
+                "47"
+              ],
+              "explanation": "None selects the fallback integer.",
+              "xp_reward": 10,
+              "starter_code": "def label(value: int | None = None) -> int:\n    if value is None:\n        return 43\n    return value\nprint(label(47))\n",
+              "options": [
+                "43",
+                "47",
+                "none",
+                "0"
+              ],
+              "correct_answer": "47"
+            },
+            {
+              "id": "type-hints-dataclasses-practice-1-write",
+              "type": "code",
+              "question": "Fill the blank so the program uses the fallback when the argument is missing, and the print shows that result for label and.",
+              "hints": [
+                "Follow the job, which uses the fallback when the argument is missing.",
+                "The fallback integer is what gets printed.",
+                "label_out = label(None)"
+              ],
+              "explanation": "The fallback integer is what gets printed.",
+              "xp_reward": 10,
+              "starter_code": "def label(value: int | None = None) -> int:\n    if value is None:\n        return 43\n    return value\nlabel_out = ___\nprint(label_out)\n",
+              "solution_code": "def label(value: int | None = None) -> int:\n    if value is None:\n        return 43\n    return value\nlabel_out = label(None)\nprint(label_out)\n",
+              "tests": [
+                {
+                  "name": "type-hints-dataclasses-practice-1-prints",
+                  "description": "The fallback integer is what gets printed.",
+                  "expected_stdout": "43\n",
+                  "required": true
+                }
+              ]
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "type-hints-dataclasses-checkpoint",
-      "title": "5. Unit 20 Checkpoint: Types & Dataclasses",
-      "description": "Define `@dataclass` `Pair` with a generic-feeling `swap` method returning a new Pair. The test checks that `(p.left, p.right)` equals `('b', 'a')`.",
+      "title": "Practice Unit 20 Checkpoint Types Dataclasses",
+      "description": "Define @dataclass Pair with a generic-feeling swap method returning a new Pair. The test checks that (p.left, p.right) equals ('b', 'a').",
       "order": 100,
       "difficulty": "intermediate",
       "duration_minutes": 10,
@@ -190,7 +874,7 @@
         "classes"
       ],
       "learning_objectives": [
-        "Return a new dataclass instance from a method"
+        "Using dataclasses and 1, this step shows one field of the new point."
       ],
       "starter_code": "from dataclasses import dataclass\n\n@dataclass\nclass Pair:\n    left: str\n    right: str\n\n    def swap(self) -> 'Pair':\n        # TODO: return a Pair with the two sides exchanged\n        pass\n",
       "solution_code": "from dataclasses import dataclass\n\n@dataclass\nclass Pair:\n    left: str\n    right: str\n\n    def swap(self) -> 'Pair':\n        return Pair(self.right, self.left)\n",
@@ -211,7 +895,179 @@
         "url": "https://docs.python.org/3/library/dataclasses.html",
         "license": "Python documentation license (PSF)"
       },
-      "xp_reward": 40
+      "xp_reward": 40,
+      "player_mode": "micro",
+      "sublessons": [
+        {
+          "id": "type-hints-dataclasses-checkpoint-micro",
+          "title": "Practice Unit 20 Checkpoint Types Dataclasses",
+          "description": "",
+          "order": 1,
+          "exercises": [
+            {
+              "id": "type-hints-dataclasses-checkpoint-teach",
+              "type": "teach",
+              "question": "Using dataclasses and 1, this step shows one field of the new point.",
+              "hints": [
+                "Follow the job, which shows one field of the new point.",
+                "Point(x, y) stores both fields.",
+                "Point(x, y).x"
+              ],
+              "explanation": "Using dataclasses and 1, this step shows one field of the new point.",
+              "xp_reward": 0,
+              "worked_example": "Point(x, y).x"
+            },
+            {
+              "id": "type-hints-dataclasses-checkpoint-mcq",
+              "type": "mcq",
+              "question": "Select the line that shows one field of the new point, the one that belongs with dataclasses and dataclass.",
+              "hints": [
+                "Follow the job, which shows one field of the new point.",
+                "Point(x, y) stores both fields.",
+                "Point(x, y).x"
+              ],
+              "explanation": "Point(x, y) stores both fields.",
+              "xp_reward": 10,
+              "options": [
+                "Point == x",
+                "print(Point)",
+                "pass",
+                "Point(x, y).x"
+              ],
+              "correct_answer": "Point(x, y).x"
+            },
+            {
+              "id": "type-hints-dataclasses-checkpoint-predict",
+              "type": "output_prediction",
+              "question": "Follow the code that shows one field of the new point for dataclasses and dataclass, then choose the displayed value.",
+              "hints": [
+                "Follow the job, which shows one field of the new point.",
+                "Point(x, y) stores both fields.",
+                "53"
+              ],
+              "explanation": "Point(x, y) stores both fields.",
+              "xp_reward": 10,
+              "starter_code": "from dataclasses import dataclass\n@dataclass\nclass Point:\n    x: int\n    y: int\nprint(Point(52, 5).x + 1)\n",
+              "options": [
+                "6",
+                "none",
+                "0",
+                "53"
+              ],
+              "correct_answer": "53"
+            },
+            {
+              "id": "type-hints-dataclasses-checkpoint-order",
+              "type": "ordering",
+              "question": "Order the pieces so the line shows one field of the new point for dataclasses and dataclass.",
+              "hints": [
+                "Follow the job, which shows one field of the new point.",
+                "point = Point(left, right) builds the point.",
+                "point = Point ( left , right )"
+              ],
+              "explanation": "point = Point(left, right) builds the point.",
+              "xp_reward": 10,
+              "options": [
+                "point",
+                "=",
+                "Point",
+                "(",
+                "left",
+                ",",
+                "right",
+                ")",
+                "=="
+              ],
+              "correct_answer": [
+                "point",
+                "=",
+                "Point",
+                "(",
+                "left",
+                ",",
+                "right",
+                ")"
+              ]
+            },
+            {
+              "id": "type-hints-dataclasses-checkpoint-fill",
+              "type": "fill_blank",
+              "question": "Supply the missing piece so the line shows one field of the new point for dataclasses and dataclass.",
+              "hints": [
+                "Follow the job, which shows one field of the new point.",
+                "Plus adds one to the field.",
+                "+"
+              ],
+              "explanation": "Plus adds one to the field.",
+              "xp_reward": 10,
+              "starter_code": "shown = point.x ___ 1\n",
+              "options": [
+                "==",
+                "+",
+                "*",
+                "-"
+              ],
+              "correct_answer": "+"
+            },
+            {
+              "id": "type-hints-dataclasses-checkpoint-bug",
+              "type": "debugging",
+              "question": "The wrong line is the one that misses the job, which shows one field of the new point, for dataclasses and dataclass.",
+              "hints": [
+                "Follow the job, which shows one field of the new point.",
+                "The print subtracts one from the field.",
+                "Line 6"
+              ],
+              "explanation": "The print subtracts one from the field.",
+              "xp_reward": 10,
+              "starter_code": "from dataclasses import dataclass\n@dataclass\nclass Point:\n    x: int\n    y: int\nprint(Point(52, 5).x - 1)\n",
+              "correct_answer": "6"
+            },
+            {
+              "id": "type-hints-dataclasses-checkpoint-predict-2",
+              "type": "output_prediction",
+              "question": "A new input still has code that shows one field of the new point for dataclasses and dataclass, and the correct choice is what it prints.",
+              "hints": [
+                "Follow the job, which shows one field of the new point.",
+                "Point(x, y) stores both fields.",
+                "6"
+              ],
+              "explanation": "Point(x, y) stores both fields.",
+              "xp_reward": 10,
+              "starter_code": "from dataclasses import dataclass\n@dataclass\nclass Point:\n    x: int\n    y: int\nprint(Point(52, 5).y + 1)\n",
+              "options": [
+                "53",
+                "none",
+                "6",
+                "0"
+              ],
+              "correct_answer": "6"
+            },
+            {
+              "id": "type-hints-dataclasses-checkpoint-write",
+              "type": "code",
+              "question": "Finish the program that shows one field of the new point by filling the blank for dataclasses and dataclass.",
+              "hints": [
+                "Follow the job, which shows one field of the new point.",
+                "The field plus one is what gets printed.",
+                "label = point.x + 1"
+              ],
+              "explanation": "The field plus one is what gets printed.",
+              "xp_reward": 10,
+              "starter_code": "from dataclasses import dataclass\n@dataclass\nclass Point:\n    x: int\n    y: int\npoint = Point(52, 5)\nlabel = ___\nprint(label)\n",
+              "solution_code": "from dataclasses import dataclass\n@dataclass\nclass Point:\n    x: int\n    y: int\npoint = Point(52, 5)\nlabel = point.x + 1\nprint(label)\n",
+              "tests": [
+                {
+                  "name": "type-hints-dataclasses-checkpoint-prints",
+                  "description": "The field plus one is what gets printed.",
+                  "expected_stdout": "53\n",
+                  "required": true
+                }
+              ]
+            }
+          ]
+        }
+      ]
     }
   ]
 }

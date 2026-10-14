@@ -14,7 +14,7 @@
   "lessons": [
     {
       "id": "ai-03",
-      "title": "3. Storing AI Conversations & RAG Context in SQL",
+      "title": "Store AI Conversations RAG Context in",
       "description": "RAG evaluation starts by logging conversations as structured rows (later stored in a table). Implement format_conversation_log(user_id, prompt, response) returning a dict with keys 'user_id', 'prompt', 'response' and a cheap 'tokens' estimate: len(prompt.split()) + len(response.split()). Tests check the user id and that tokens > 0 for a real exchange.",
       "order": 3,
       "difficulty": "advanced",
@@ -46,11 +46,179 @@
         "license": "Python documentation license (PSF)"
       },
       "learning_objectives": [
-        "Shape conversation logs as dict rows ready for a database insert",
-        "Estimate token counts with a whitespace heuristic",
-        "Understand that RAG evaluation needs stored prompts and outputs"
+        "This step reads the note stored in the table, using conn holding violet."
       ],
-      "xp_reward": 45
+      "xp_reward": 45,
+      "player_mode": "micro",
+      "sublessons": [
+        {
+          "id": "ai-03-micro",
+          "title": "Store AI Conversations RAG Context in",
+          "description": "",
+          "order": 1,
+          "exercises": [
+            {
+              "id": "ai-03-teach",
+              "type": "teach",
+              "question": "This step reads the note stored in the table, using conn holding violet.",
+              "hints": [
+                "Follow the job, which reads the note stored in the table.",
+                "The select reads the body stored under that id.",
+                "SELECT body FROM notes"
+              ],
+              "explanation": "This step reads the note stored in the table, using conn holding violet.",
+              "xp_reward": 0,
+              "worked_example": "SELECT body FROM notes"
+            },
+            {
+              "id": "ai-03-mcq",
+              "type": "mcq",
+              "question": "Keep the choice that reads the note stored in the table for conn holding violet.",
+              "hints": [
+                "Follow the job, which reads the note stored in the table.",
+                "The select reads the body stored under that id.",
+                "SELECT body FROM notes WHERE id = 1"
+              ],
+              "explanation": "The select reads the body stored under that id.",
+              "xp_reward": 10,
+              "options": [
+                "return notes",
+                "notes == notes",
+                "pass",
+                "SELECT body FROM notes WHERE id = 1"
+              ],
+              "correct_answer": "SELECT body FROM notes WHERE id = 1"
+            },
+            {
+              "id": "ai-03-predict",
+              "type": "output_prediction",
+              "question": "Trace the code that reads the note stored in the table using conn holding and select what it displays.",
+              "hints": [
+                "Follow the job, which reads the note stored in the table.",
+                "The select reads the body stored under that id.",
+                "violet"
+              ],
+              "explanation": "The select reads the body stored under that id.",
+              "xp_reward": 10,
+              "starter_code": "import sqlite3\nconn = sqlite3.connect(':memory:')\nconn.execute('CREATE TABLE notes (id INTEGER, body TEXT)')\nconn.execute('INSERT INTO notes VALUES (1, ?)', ('violet',))\nprint(conn.execute('SELECT body FROM notes WHERE id = 1').fetchone()[0])\n",
+              "options": [
+                "amber",
+                "none",
+                "violet",
+                "0"
+              ],
+              "correct_answer": "violet"
+            },
+            {
+              "id": "ai-03-order",
+              "type": "ordering",
+              "question": "Tap the pieces, in order, of the line that reads the note stored in the table for conn holding violet.",
+              "hints": [
+                "Follow the job, which reads the note stored in the table.",
+                "The select reads the body stored under that id.",
+                "conn.execute('INSERT INTO notes VALUES (1, ?)', (body,))"
+              ],
+              "explanation": "The select reads the body stored under that id.",
+              "xp_reward": 10,
+              "options": [
+                "conn.execute('INSERT",
+                "INTO",
+                "notes",
+                "VALUES",
+                "(1,",
+                "?)',",
+                "(body,))",
+                "=="
+              ],
+              "correct_answer": [
+                "conn.execute('INSERT",
+                "INTO",
+                "notes",
+                "VALUES",
+                "(1,",
+                "?)',",
+                "(body,))"
+              ]
+            },
+            {
+              "id": "ai-03-fill",
+              "type": "fill_blank",
+              "question": "The blank is the missing piece of the line that reads the note stored in the table for conn holding violet.",
+              "hints": [
+                "Follow the job, which reads the note stored in the table.",
+                "The select reads the body stored under that id.",
+                "="
+              ],
+              "explanation": "The select reads the body stored under that id.",
+              "xp_reward": 10,
+              "starter_code": "row = conn.execute('SELECT body FROM notes WHERE id ___ 1').fetchone()\n",
+              "options": [
+                "!=",
+                ">",
+                "=",
+                "<"
+              ],
+              "correct_answer": "="
+            },
+            {
+              "id": "ai-03-bug",
+              "type": "debugging",
+              "question": "Choose the line that does another job than the one that reads the note stored in the table for conn holding violet.",
+              "hints": [
+                "Follow the job, which reads the note stored in the table.",
+                "The print is zero and never reads the stored note.",
+                "Line 4"
+              ],
+              "explanation": "The print is zero and never reads the stored note.",
+              "xp_reward": 10,
+              "starter_code": "import sqlite3\nconn = sqlite3.connect(':memory:')\nconn.execute('CREATE TABLE notes (id INTEGER, body TEXT)')\nprint(0)\n",
+              "correct_answer": "4"
+            },
+            {
+              "id": "ai-03-predict-2",
+              "type": "output_prediction",
+              "question": "Trace the second run, which reads the note stored in the table for conn holding violet, and select what it displays.",
+              "hints": [
+                "Follow the job, which reads the note stored in the table.",
+                "The select reads the body stored under that id.",
+                "amber"
+              ],
+              "explanation": "The select reads the body stored under that id.",
+              "xp_reward": 10,
+              "starter_code": "import sqlite3\nconn = sqlite3.connect(':memory:')\nconn.execute('CREATE TABLE notes (id INTEGER, body TEXT)')\nconn.execute('INSERT INTO notes VALUES (1, ?)', ('amber',))\nprint(conn.execute('SELECT body FROM notes WHERE id = 1').fetchone()[0])\n",
+              "options": [
+                "violet",
+                "amber",
+                "none",
+                "0"
+              ],
+              "correct_answer": "amber"
+            },
+            {
+              "id": "ai-03-write",
+              "type": "code",
+              "question": "Type the missing piece so the program reads the note stored in the table for conn holding and prints it.",
+              "hints": [
+                "Follow the job, which reads the note stored in the table.",
+                "The printed value is the result after this step reads the note stored in the table.",
+                "label = conn.execute('SELECT body FROM notes WHERE id = 1').fetchone()[0]"
+              ],
+              "explanation": "The printed value is the result after this step reads the note stored in the table.",
+              "xp_reward": 10,
+              "starter_code": "import sqlite3\nconn = sqlite3.connect(':memory:')\nconn.execute('CREATE TABLE notes (id INTEGER, body TEXT)')\nconn.execute('INSERT INTO notes VALUES (1, ?)', ('violet',))\nlabel = ___\nprint(label)\n",
+              "solution_code": "import sqlite3\nconn = sqlite3.connect(':memory:')\nconn.execute('CREATE TABLE notes (id INTEGER, body TEXT)')\nconn.execute('INSERT INTO notes VALUES (1, ?)', ('violet',))\nlabel = conn.execute('SELECT body FROM notes WHERE id = 1').fetchone()[0]\nprint(label)\n",
+              "tests": [
+                {
+                  "name": "ai-03-prints",
+                  "description": "The printed value is the result after this step reads the note stored in the tab",
+                  "expected_stdout": "violet\n",
+                  "required": true
+                }
+              ]
+            }
+          ]
+        }
+      ]
     }
   ]
 }

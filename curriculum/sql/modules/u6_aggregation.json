@@ -14,8 +14,8 @@
   "lessons": [
     {
       "id": "sql-06",
-      "title": "6. Aggregate Functions",
-      "description": "From `orders`, select `SUM(total_amount)` as the total revenue and `AVG(total_amount)` as the average order value. The test checks that the query returns one row and the total is greater than 0.",
+      "title": "Practice Aggregate Functions",
+      "description": "From orders, select SUM(total_amount) as the total revenue and AVG(total_amount) as the average order value. The test checks that the query returns one row and the total is greater than 0.",
       "order": 6,
       "difficulty": "intermediate",
       "duration_minutes": 5,
@@ -45,10 +45,177 @@
         "license": "Public domain (SQLite documentation)"
       },
       "learning_objectives": [
-        "Summarize a whole table with SUM(), AVG() and COUNT()",
-        "Give aggregate results readable names with AS aliases"
+        "This step counts the product rows, using total and products."
       ],
-      "xp_reward": 10
+      "xp_reward": 10,
+      "player_mode": "micro",
+      "sublessons": [
+        {
+          "id": "sql-06-micro",
+          "title": "Practice Aggregate Functions",
+          "description": "",
+          "order": 1,
+          "exercises": [
+            {
+              "id": "sql-06-teach",
+              "type": "teach",
+              "question": "This step counts the product rows, using total and products.",
+              "hints": [
+                "Follow the job, which counts the product rows.",
+                "COUNT(*) counts the rows in products.",
+                "SELECT COUNT(*) AS total FROM products;"
+              ],
+              "explanation": "This step counts the product rows, using total and products.",
+              "xp_reward": 0,
+              "worked_example": "SELECT COUNT(*) AS total FROM products;"
+            },
+            {
+              "id": "sql-06-mcq",
+              "type": "mcq",
+              "question": "Select the line that counts the product rows, the one that belongs with total and products.",
+              "hints": [
+                "Follow the job, which counts the product rows.",
+                "COUNT(*) counts the rows in products.",
+                "SELECT COUNT(*) AS total FROM products"
+              ],
+              "explanation": "COUNT(*) counts the rows in products.",
+              "xp_reward": 10,
+              "options": [
+                "INSERT INTO products",
+                "SELECT COUNT(*) AS total FROM products",
+                "total == total",
+                "DROP TABLE products"
+              ],
+              "correct_answer": "SELECT COUNT(*) AS total FROM products"
+            },
+            {
+              "id": "sql-06-predict",
+              "type": "output_prediction",
+              "question": "Follow the code that counts the product rows for total and products, then choose the displayed value.",
+              "hints": [
+                "Follow the job, which counts the product rows.",
+                "COUNT(*) counts the rows in products.",
+                "┌───────┐\n│ total │\n├───────┤\n│ 5     │\n└───────┘"
+              ],
+              "explanation": "COUNT(*) counts the rows in products.",
+              "xp_reward": 10,
+              "starter_code": "SELECT COUNT(*) AS total FROM products;\n",
+              "options": [
+                "┌───────┐\n│ total │\n├───────┤\n│ 4     │\n└───────┘",
+                "┌───────┐\n│ total │\n├───────┤\n│ 5     │\n└───────┘",
+                "none",
+                "0"
+              ],
+              "correct_answer": "┌───────┐\n│ total │\n├───────┤\n│ 5     │\n└───────┘"
+            },
+            {
+              "id": "sql-06-order",
+              "type": "ordering",
+              "question": "Order the pieces so the line counts the product rows for total and products.",
+              "hints": [
+                "Follow the job, which counts the product rows.",
+                "COUNT(*) counts the rows in products.",
+                "SELECT COUNT(*) AS total FROM products"
+              ],
+              "explanation": "COUNT(*) counts the rows in products.",
+              "xp_reward": 10,
+              "options": [
+                "SELECT",
+                "COUNT(*)",
+                "AS",
+                "total",
+                "FROM",
+                "products",
+                "DROP"
+              ],
+              "correct_answer": [
+                "SELECT",
+                "COUNT(*)",
+                "AS",
+                "total",
+                "FROM",
+                "products"
+              ]
+            },
+            {
+              "id": "sql-06-fill",
+              "type": "fill_blank",
+              "question": "Supply the missing piece so the line counts the product rows for total and products.",
+              "hints": [
+                "Follow the job, which counts the product rows.",
+                "COUNT(*) counts the rows in products.",
+                "COUNT(*)"
+              ],
+              "explanation": "COUNT(*) counts the rows in products.",
+              "xp_reward": 10,
+              "starter_code": "SELECT ___ AS total FROM products;",
+              "options": [
+                "SUM(name)",
+                "COUNT(*)",
+                "AVG(name)",
+                "MIN(name)"
+              ],
+              "correct_answer": "COUNT(*)"
+            },
+            {
+              "id": "sql-06-bug",
+              "type": "debugging",
+              "question": "The wrong line is the one that misses the job, which counts the product rows, for total and products.",
+              "hints": [
+                "Follow the job, which counts the product rows.",
+                "The count reads customers instead of products.",
+                "Line 1"
+              ],
+              "explanation": "The count reads customers instead of products.",
+              "xp_reward": 10,
+              "starter_code": "SELECT COUNT(*) AS total FROM customers;",
+              "correct_answer": "1"
+            },
+            {
+              "id": "sql-06-predict-2",
+              "type": "output_prediction",
+              "question": "A new input still has code that counts the product rows for total and products, and the correct choice is what it prints.",
+              "hints": [
+                "Follow the job, which counts the product rows.",
+                "COUNT(*) counts the rows in products.",
+                "┌───────┐\n│ total │\n├───────┤\n│ 4     │\n└───────┘"
+              ],
+              "explanation": "COUNT(*) counts the rows in products.",
+              "xp_reward": 10,
+              "starter_code": "SELECT COUNT(*) AS total FROM customers;\n",
+              "options": [
+                "┌───────┐\n│ total │\n├───────┤\n│ 5     │\n└───────┘",
+                "none",
+                "0",
+                "┌───────┐\n│ total │\n├───────┤\n│ 4     │\n└───────┘"
+              ],
+              "correct_answer": "┌───────┐\n│ total │\n├───────┤\n│ 4     │\n└───────┘"
+            },
+            {
+              "id": "sql-06-write",
+              "type": "code",
+              "question": "The blank is the missing piece of the program that counts the product rows for total and products.",
+              "hints": [
+                "Follow the job, which counts the product rows.",
+                "The query result is what this step counts the product rows.",
+                "SELECT COUNT(*) AS total FROM products;"
+              ],
+              "explanation": "The query result is what this step counts the product rows.",
+              "xp_reward": 10,
+              "starter_code": "SELECT ___ AS total FROM products;\n",
+              "solution_code": "SELECT COUNT(*) AS total FROM products;\n",
+              "tests": [
+                {
+                  "name": "sql-06-prints",
+                  "description": "The query result is what this step counts the product rows.",
+                  "expected_stdout": "┌───────┐\n│ total │\n├───────┤\n│ 5     │\n└───────┘",
+                  "required": true
+                }
+              ]
+            }
+          ]
+        }
+      ]
     }
   ]
 }

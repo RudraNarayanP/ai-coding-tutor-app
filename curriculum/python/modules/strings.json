@@ -15,8 +15,8 @@
   "lessons": [
     {
       "id": "strings-step-1",
-      "title": "1. String Concatenation & Indexing",
-      "description": "Finish two functions. `combine(a, b)` joins the strings with `+` (`combine(\"py\", \"thon\")` is `\"python\"`). `get_first_and_last(s)` returns the first character plus the last character (`get_first_and_last(\"hello\")` is `\"ho\"`). The test checks that `combine(\"py\", \"thon\")` equals `\"python\"`; `get_first_and_last(\"hello\")` equals `\"ho\"`.",
+      "title": "Practice String Concatenation Indexing",
+      "description": "Finish two functions. combine(a, b) joins the strings with + (combine(\"py\", \"thon\") is \"python\"). get_first_and_last(s) returns the first character plus the last character (get_first_and_last(\"hello\") is \"ho\"). The test checks that combine(\"py\", \"thon\") equals \"python\"; get_first_and_last(\"hello\") equals \"ho\".",
       "order": 26,
       "difficulty": "beginner",
       "duration_minutes": 5,
@@ -28,7 +28,7 @@
         "variables"
       ],
       "learning_objectives": [
-        "Concatenate strings and index single characters"
+        "This step joins the reading and the mark, using the name maple."
       ],
       "starter_code": "def combine(a, b):\n    # TODO: Return a + b\n    pass\n\ndef get_first_and_last(s):\n    # TODO: Return string with first and last character of s, e.g. s[0] + s[-1]\n    pass\n",
       "tests": [
@@ -49,12 +49,178 @@
         "url": "https://docs.python.org/3/tutorial/introduction.html#strings",
         "license": "Python documentation license (PSF)"
       },
-      "xp_reward": 10
+      "xp_reward": 10,
+      "player_mode": "micro",
+      "sublessons": [
+        {
+          "id": "strings-step-1-micro",
+          "title": "Practice String Concatenation Indexing",
+          "description": "",
+          "order": 1,
+          "exercises": [
+            {
+              "id": "strings-step-1-teach",
+              "type": "teach",
+              "question": "This step joins the reading and the mark, using the name maple.",
+              "hints": [
+                "Follow the job, which joins the reading and the mark.",
+                "left + right joins the two pieces.",
+                "left + right"
+              ],
+              "explanation": "This step joins the reading and the mark, using the name maple.",
+              "xp_reward": 0,
+              "worked_example": "left + right"
+            },
+            {
+              "id": "strings-step-1-mcq",
+              "type": "mcq",
+              "question": "The correct line joins the reading and the mark, and it is the line tied to maple holding maple.",
+              "hints": [
+                "Follow the job, which joins the reading and the mark.",
+                "left + right joins the two pieces.",
+                "left + right"
+              ],
+              "explanation": "left + right joins the two pieces.",
+              "xp_reward": 10,
+              "options": [
+                "left - right",
+                "len(left)",
+                "left == right",
+                "left + right"
+              ],
+              "correct_answer": "left + right"
+            },
+            {
+              "id": "strings-step-1-predict",
+              "type": "output_prediction",
+              "question": "The program joins the reading and the mark with maple holding maple, so choose the printed value.",
+              "hints": [
+                "Follow the job, which joins the reading and the mark.",
+                "left + right joins the two pieces.",
+                "maple!"
+              ],
+              "explanation": "left + right joins the two pieces.",
+              "xp_reward": 10,
+              "starter_code": "left = 'maple'\nright = '!'\nprint(left + right)\n",
+              "options": [
+                "maple?",
+                "none",
+                "0",
+                "maple!"
+              ],
+              "correct_answer": "maple!"
+            },
+            {
+              "id": "strings-step-1-order",
+              "type": "ordering",
+              "question": "Build the line that joins the reading and the mark for maple holding maple, from the first piece to the last.",
+              "hints": [
+                "Follow the job, which joins the reading and the mark.",
+                "joined = left + right joins the text.",
+                "joined = left + right"
+              ],
+              "explanation": "joined = left + right joins the text.",
+              "xp_reward": 10,
+              "options": [
+                "joined",
+                "=",
+                "left",
+                "+",
+                "right",
+                "-"
+              ],
+              "correct_answer": [
+                "joined",
+                "=",
+                "left",
+                "+",
+                "right"
+              ]
+            },
+            {
+              "id": "strings-step-1-fill",
+              "type": "fill_blank",
+              "question": "Replace the blank with the piece that makes the line joins the reading and the mark for maple holding maple.",
+              "hints": [
+                "Follow the job, which joins the reading and the mark.",
+                "Plus joins the two pieces.",
+                "+"
+              ],
+              "explanation": "Plus joins the two pieces.",
+              "xp_reward": 10,
+              "starter_code": "joined = left ___ right\n",
+              "options": [
+                "-",
+                "*",
+                "==",
+                "+"
+              ],
+              "correct_answer": "+"
+            },
+            {
+              "id": "strings-step-1-bug",
+              "type": "debugging",
+              "question": "Spot the line that fails the job, which joins the reading and the mark, around maple holding maple.",
+              "hints": [
+                "Follow the job, which joins the reading and the mark.",
+                "The mark is never joined.",
+                "Line 3"
+              ],
+              "explanation": "The mark is never joined.",
+              "xp_reward": 10,
+              "starter_code": "left = 'maple'\nright = '!'\nprint(left)\n",
+              "correct_answer": "3"
+            },
+            {
+              "id": "strings-step-1-predict-2",
+              "type": "output_prediction",
+              "question": "The second program joins the reading and the mark for maple holding maple, so choose the new printed value.",
+              "hints": [
+                "Follow the job, which joins the reading and the mark.",
+                "left + right joins the two pieces.",
+                "maple?"
+              ],
+              "explanation": "left + right joins the two pieces.",
+              "xp_reward": 10,
+              "starter_code": "left = 'maple'\nright = '?'\nprint(left + right)\n",
+              "options": [
+                "maple!",
+                "none",
+                "maple?",
+                "0"
+              ],
+              "correct_answer": "maple?"
+            },
+            {
+              "id": "strings-step-1-write",
+              "type": "code",
+              "question": "Complete the blank so this program joins the reading and the mark and prints the result for maple holding maple.",
+              "hints": [
+                "Follow the job, which joins the reading and the mark.",
+                "The joined text is what gets printed.",
+                "label = left + right"
+              ],
+              "explanation": "The joined text is what gets printed.",
+              "xp_reward": 10,
+              "starter_code": "left = 'maple'\nright = '!'\nlabel = ___\nprint(label)\n",
+              "solution_code": "left = 'maple'\nright = '!'\nlabel = left + right\nprint(label)\n",
+              "tests": [
+                {
+                  "name": "strings-step-1-prints",
+                  "description": "The joined text is what gets printed.",
+                  "expected_stdout": "maple!\n",
+                  "required": true
+                }
+              ]
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "strings-step-2",
-      "title": "2. String Slicing",
-      "description": "Finish two slicing functions. `drop_last_char(s)` returns everything except the last character (`\"code!\"` becomes `\"code\"`). `get_prefix(s, n)` returns the first `n` characters (`get_prefix(\"patchwork\", 5)` is `\"patch\"`). The test checks that `drop_last_char(\"code!\")` equals `\"code\"`; `get_prefix(\"patchwork\", 5)` equals `\"patch\"`.",
+      "title": "Practice String Slicing",
+      "description": "Finish two slicing functions. drop_last_char(s) returns everything except the last character (\"code!\" becomes \"code\"). get_prefix(s, n) returns the first n characters (get_prefix(\"patchwork\", 5) is \"patch\"). The test checks that drop_last_char(\"code!\") equals \"code\"; get_prefix(\"patchwork\", 5) equals \"patch\".",
       "order": 27,
       "difficulty": "beginner",
       "duration_minutes": 5,
@@ -66,7 +232,7 @@
         "variables"
       ],
       "learning_objectives": [
-        "Extract substrings with slicing [start:end]"
+        "This step shows the opening letters of the reading, using text holding maple."
       ],
       "starter_code": "def drop_last_char(s):\n    # TODO: Return s[:-1]\n    pass\n\ndef get_prefix(s, n):\n    # TODO: Return first n characters s[:n]\n    pass\n",
       "tests": [
@@ -87,12 +253,180 @@
         "url": "https://docs.python.org/3/tutorial/introduction.html#strings",
         "license": "Python documentation license (PSF)"
       },
-      "xp_reward": 10
+      "xp_reward": 10,
+      "player_mode": "micro",
+      "sublessons": [
+        {
+          "id": "strings-step-2-micro",
+          "title": "Practice String Slicing",
+          "description": "",
+          "order": 1,
+          "exercises": [
+            {
+              "id": "strings-step-2-teach",
+              "type": "teach",
+              "question": "This step shows the opening letters of the reading, using text holding maple.",
+              "hints": [
+                "Follow the job, which shows the opening letters of the reading.",
+                "text[:3] keeps the first three letters.",
+                "text[:3]"
+              ],
+              "explanation": "This step shows the opening letters of the reading, using text holding maple.",
+              "xp_reward": 0,
+              "worked_example": "text[:3]"
+            },
+            {
+              "id": "strings-step-2-mcq",
+              "type": "mcq",
+              "question": "Keep the choice that shows the opening letters of the reading for text holding maple.",
+              "hints": [
+                "Follow the job, which shows the opening letters of the reading.",
+                "text[:3] keeps the first three letters.",
+                "text[:3]"
+              ],
+              "explanation": "text[:3] keeps the first three letters.",
+              "xp_reward": 10,
+              "options": [
+                "text[0]",
+                "text[:3]",
+                "len(text)",
+                "text + text"
+              ],
+              "correct_answer": "text[:3]"
+            },
+            {
+              "id": "strings-step-2-predict",
+              "type": "output_prediction",
+              "question": "Trace the code that shows the opening letters of the reading using text holding and select what it displays.",
+              "hints": [
+                "Follow the job, which shows the opening letters of the reading.",
+                "text[:3] keeps the first three letters.",
+                "map"
+              ],
+              "explanation": "text[:3] keeps the first three letters.",
+              "xp_reward": 10,
+              "starter_code": "text = 'maple' + 'stone'\nprint(text[:3])\n",
+              "options": [
+                "none",
+                "0",
+                "map",
+                "mapl"
+              ],
+              "correct_answer": "map"
+            },
+            {
+              "id": "strings-step-2-order",
+              "type": "ordering",
+              "question": "Tap the pieces, in order, of the line that shows the opening letters of the reading for text holding maple.",
+              "hints": [
+                "Follow the job, which shows the opening letters of the reading.",
+                "chunk = text[:3] keeps the opening letters.",
+                "chunk = text [ :3 ]"
+              ],
+              "explanation": "chunk = text[:3] keeps the opening letters.",
+              "xp_reward": 10,
+              "options": [
+                "chunk",
+                "=",
+                "text",
+                "[",
+                ":3",
+                "]",
+                "len"
+              ],
+              "correct_answer": [
+                "chunk",
+                "=",
+                "text",
+                "[",
+                ":3",
+                "]"
+              ]
+            },
+            {
+              "id": "strings-step-2-fill",
+              "type": "fill_blank",
+              "question": "The blank is the missing piece of the line that shows the opening letters of the reading for text holding maple.",
+              "hints": [
+                "Follow the job, which shows the opening letters of the reading.",
+                "The colon starts the slice from the beginning.",
+                ":"
+              ],
+              "explanation": "The colon starts the slice from the beginning.",
+              "xp_reward": 10,
+              "starter_code": "chunk = text[___3]\n",
+              "options": [
+                ",",
+                ":",
+                "+",
+                "-"
+              ],
+              "correct_answer": ":"
+            },
+            {
+              "id": "strings-step-2-bug",
+              "type": "debugging",
+              "question": "Choose the line that does another job than the one that shows the opening letters of the reading for text holding maple.",
+              "hints": [
+                "Follow the job, which shows the opening letters of the reading.",
+                "The slice drops the opening letters.",
+                "Line 2"
+              ],
+              "explanation": "The slice drops the opening letters.",
+              "xp_reward": 10,
+              "starter_code": "text = 'maple' + 'stone'\nprint(text[3:])\n",
+              "correct_answer": "2"
+            },
+            {
+              "id": "strings-step-2-predict-2",
+              "type": "output_prediction",
+              "question": "Trace the second run, which shows the opening letters of the reading for text holding and select what it displays.",
+              "hints": [
+                "Follow the job, which shows the opening letters of the reading.",
+                "text[:3] keeps the first three letters.",
+                "mapl"
+              ],
+              "explanation": "text[:3] keeps the first three letters.",
+              "xp_reward": 10,
+              "starter_code": "text = 'maple' + 'stone'\nprint(text[:4])\n",
+              "options": [
+                "map",
+                "none",
+                "0",
+                "mapl"
+              ],
+              "correct_answer": "mapl"
+            },
+            {
+              "id": "strings-step-2-write",
+              "type": "code",
+              "question": "Type the missing piece so the program shows the opening letters of the reading for text holding and prints it.",
+              "hints": [
+                "Follow the job, which shows the opening letters of the reading.",
+                "The opening letters are what get printed.",
+                "label = text[:3]"
+              ],
+              "explanation": "The opening letters are what get printed.",
+              "xp_reward": 10,
+              "starter_code": "text = 'maple' + 'stone'\nlabel = ___\nprint(label)\n",
+              "solution_code": "text = 'maple' + 'stone'\nlabel = text[:3]\nprint(label)\n",
+              "tests": [
+                {
+                  "name": "strings-step-2-prints",
+                  "description": "The opening letters are what get printed.",
+                  "expected_stdout": "map\n",
+                  "required": true
+                }
+              ]
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "strings-01",
-      "title": "3. Little Sister's Vocabulary (Concept Challenge)",
-      "description": "Finish `add_prefix_un`, `make_word_groups`, `remove_suffix_ness`, `adjective_to_verb`. Transform words using string concatenation, indexing, slicing, and joining. The test checks that `add_prefix_un('happy')` equals `'unhappy'`; `make_word_groups(['en', 'close', 'joy', 'tire'])` equals `'en :: enclose :: enjoy :: entire'`; `remove_suffix_ness('heaviness')` equals `'heavy'`.",
+      "title": "Practice Little Sister's Vocabulary",
+      "description": "Finish add_prefix_un, make_word_groups, remove_suffix_ness, adjective_to_verb. Transform words using string concatenation, indexing, slicing, and joining. The test checks that add_prefix_un('happy') equals 'unhappy'; make_word_groups(['en', 'close', 'joy', 'tire']) equals 'en :: enclose :: enjoy :: entire'; remove_suffix_ness('heaviness') equals 'heavy'.",
       "order": 28,
       "difficulty": "beginner",
       "duration_minutes": 8,
@@ -105,9 +439,7 @@
         "conditionals"
       ],
       "learning_objectives": [
-        "Concatenate strings with +",
-        "Index and slice strings with positive and negative indices",
-        "Transform root words with prefixes and suffixes"
+        "Using violet holding violet, this step joins the reading and the mark."
       ],
       "starter_code": "def add_prefix_un(word):\n    \"\"\"Return word with 'un' prefix.\"\"\"\n    pass\n\ndef make_word_groups(vocab_words):\n    \"\"\"Return prefix and prefixed words joined by ' :: '.\"\"\"\n    pass\n\ndef remove_suffix_ness(word):\n    \"\"\"Remove -ness suffix, fixing iness -> y spelling.\"\"\"\n    pass\n\ndef adjective_to_verb(sentence, index):\n    \"\"\"Return the word at index with -en appended, removing trailing punctuation.\"\"\"\n    pass\n",
       "tests": [
@@ -146,12 +478,178 @@
         "license": "MIT"
       },
       "solution_code": "def add_prefix_un(word):\n    \"\"\"Return word with 'un' prefix.\"\"\"\n    return 'un' + word\n\n\ndef make_word_groups(vocab_words):\n    \"\"\"Return prefix and prefixed words joined by ' :: '.\"\"\"\n    prefix = vocab_words[0]\n    return ' :: '.join([prefix] + [prefix + w for w in vocab_words[1:]])\n\n\ndef remove_suffix_ness(word):\n    \"\"\"Remove -ness suffix, fixing iness -> y spelling.\"\"\"\n    root = word[:-4]\n    if root.endswith('i'):\n        return root[:-1] + 'y'\n    return root\n\n\ndef adjective_to_verb(sentence, index):\n    \"\"\"Return the word at index with -en appended, removing trailing punctuation.\"\"\"\n    word = sentence.split()[index]\n    return word.rstrip('.') + 'en'\n",
-      "xp_reward": 25
+      "xp_reward": 25,
+      "player_mode": "micro",
+      "sublessons": [
+        {
+          "id": "strings-01-micro",
+          "title": "Practice Little Sister's Vocabulary",
+          "description": "",
+          "order": 1,
+          "exercises": [
+            {
+              "id": "strings-01-teach",
+              "type": "teach",
+              "question": "Using violet holding violet, this step joins the reading and the mark.",
+              "hints": [
+                "Follow the job, which joins the reading and the mark.",
+                "left + right joins the two pieces.",
+                "left + right"
+              ],
+              "explanation": "Using violet holding violet, this step joins the reading and the mark.",
+              "xp_reward": 0,
+              "worked_example": "left + right"
+            },
+            {
+              "id": "strings-01-mcq",
+              "type": "mcq",
+              "question": "Select the line that joins the reading and the mark, the one that belongs with violet holding violet.",
+              "hints": [
+                "Follow the job, which joins the reading and the mark.",
+                "left + right joins the two pieces.",
+                "left + right"
+              ],
+              "explanation": "left + right joins the two pieces.",
+              "xp_reward": 10,
+              "options": [
+                "left == right",
+                "left - right",
+                "left + right",
+                "len(left)"
+              ],
+              "correct_answer": "left + right"
+            },
+            {
+              "id": "strings-01-predict",
+              "type": "output_prediction",
+              "question": "Follow the code that joins the reading and the mark for violet holding violet, then choose the displayed value.",
+              "hints": [
+                "Follow the job, which joins the reading and the mark.",
+                "left + right joins the two pieces.",
+                "violet#"
+              ],
+              "explanation": "left + right joins the two pieces.",
+              "xp_reward": 10,
+              "starter_code": "left = 'violet'\nright = '#'\nprint(left + right)\n",
+              "options": [
+                "violet*",
+                "none",
+                "0",
+                "violet#"
+              ],
+              "correct_answer": "violet#"
+            },
+            {
+              "id": "strings-01-order",
+              "type": "ordering",
+              "question": "Order the pieces so the line joins the reading and the mark for violet holding violet.",
+              "hints": [
+                "Follow the job, which joins the reading and the mark.",
+                "joined = left + right joins the text.",
+                "joined = left + right"
+              ],
+              "explanation": "joined = left + right joins the text.",
+              "xp_reward": 10,
+              "options": [
+                "joined",
+                "=",
+                "left",
+                "+",
+                "right",
+                "-"
+              ],
+              "correct_answer": [
+                "joined",
+                "=",
+                "left",
+                "+",
+                "right"
+              ]
+            },
+            {
+              "id": "strings-01-fill",
+              "type": "fill_blank",
+              "question": "Supply the missing piece so the line joins the reading and the mark for violet holding violet.",
+              "hints": [
+                "Follow the job, which joins the reading and the mark.",
+                "Plus joins the two pieces.",
+                "+"
+              ],
+              "explanation": "Plus joins the two pieces.",
+              "xp_reward": 10,
+              "starter_code": "joined = left ___ right\n",
+              "options": [
+                "-",
+                "*",
+                "==",
+                "+"
+              ],
+              "correct_answer": "+"
+            },
+            {
+              "id": "strings-01-bug",
+              "type": "debugging",
+              "question": "The wrong line is the one that misses the job, which joins the reading and the mark, for violet holding violet.",
+              "hints": [
+                "Follow the job, which joins the reading and the mark.",
+                "The mark is never joined.",
+                "Line 3"
+              ],
+              "explanation": "The mark is never joined.",
+              "xp_reward": 10,
+              "starter_code": "left = 'violet'\nright = '#'\nprint(left)\n",
+              "correct_answer": "3"
+            },
+            {
+              "id": "strings-01-predict-2",
+              "type": "output_prediction",
+              "question": "A new input still has code that joins the reading and the mark for violet holding violet, and the correct choice is what it prints.",
+              "hints": [
+                "Follow the job, which joins the reading and the mark.",
+                "left + right joins the two pieces.",
+                "violet*"
+              ],
+              "explanation": "left + right joins the two pieces.",
+              "xp_reward": 10,
+              "starter_code": "left = 'violet'\nright = '*'\nprint(left + right)\n",
+              "options": [
+                "violet#",
+                "0",
+                "violet*",
+                "none"
+              ],
+              "correct_answer": "violet*"
+            },
+            {
+              "id": "strings-01-write",
+              "type": "code",
+              "question": "The blank is the missing piece of the program that joins the reading and the mark for violet holding violet.",
+              "hints": [
+                "Follow the job, which joins the reading and the mark.",
+                "The joined text is what gets printed.",
+                "label = left + right"
+              ],
+              "explanation": "The joined text is what gets printed.",
+              "xp_reward": 10,
+              "starter_code": "left = 'violet'\nright = '#'\nlabel = ___\nprint(label)\n",
+              "solution_code": "left = 'violet'\nright = '#'\nlabel = left + right\nprint(label)\n",
+              "tests": [
+                {
+                  "name": "strings-01-prints",
+                  "description": "The joined text is what gets printed.",
+                  "expected_stdout": "violet#\n",
+                  "required": true
+                }
+              ]
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "strings-practice-1",
-      "title": "4. ID Badge Formatter (Practice)",
-      "description": "Finish `format_badge`. Format user details into an ID badge string: `\"ID: \" + name.upper() + \" (\" + role + \")\"`. The test checks that `format_badge(\"Alice\", \"Admin\")` equals `\"ID: Alice (Admin)\"`.",
+      "title": "Practice ID Badge Formatter",
+      "description": "Finish format_badge. Format user details into an ID badge string: \"ID: \" + name.upper() + \" (\" + role + \")\". The test checks that format_badge(\"Alice\", \"Admin\") equals \"ID: Alice (Admin)\".",
       "order": 29,
       "difficulty": "beginner",
       "duration_minutes": 6,
@@ -163,7 +661,7 @@
         "variables"
       ],
       "learning_objectives": [
-        "Combine string building techniques"
+        "This step joins the parts with the separator, using parts holding linen."
       ],
       "starter_code": "def format_badge(name, role):\n    # TODO: return the badge text for this name and role\n    pass\n",
       "tests": [
@@ -184,12 +682,184 @@
         "url": "https://docs.python.org/3/tutorial/introduction.html#strings",
         "license": "Python documentation license (PSF)"
       },
-      "xp_reward": 15
+      "xp_reward": 15,
+      "player_mode": "micro",
+      "sublessons": [
+        {
+          "id": "strings-practice-1-micro",
+          "title": "Practice ID Badge Formatter",
+          "description": "",
+          "order": 1,
+          "exercises": [
+            {
+              "id": "strings-practice-1-teach",
+              "type": "teach",
+              "question": "This step joins the parts with the separator, using parts holding linen.",
+              "hints": [
+                "Follow the job, which joins the parts with the separator.",
+                "join places the separator between the parts.",
+                "'-'.join(parts)"
+              ],
+              "explanation": "This step joins the parts with the separator, using parts holding linen.",
+              "xp_reward": 0,
+              "worked_example": "'-'.join(parts)"
+            },
+            {
+              "id": "strings-practice-1-mcq",
+              "type": "mcq",
+              "question": "Choose the line that joins the parts with the separator, which is the line that fits parts holding linen.",
+              "hints": [
+                "Follow the job, which joins the parts with the separator.",
+                "join places the separator between the parts.",
+                "'-'.join(parts)"
+              ],
+              "explanation": "join places the separator between the parts.",
+              "xp_reward": 10,
+              "options": [
+                "parts[0]",
+                "len(parts)",
+                "parts + parts",
+                "'-'.join(parts)"
+              ],
+              "correct_answer": "'-'.join(parts)"
+            },
+            {
+              "id": "strings-practice-1-predict",
+              "type": "output_prediction",
+              "question": "Read the code that joins the parts with the separator for parts holding linen, and choose the value it prints.",
+              "hints": [
+                "Follow the job, which joins the parts with the separator.",
+                "join places the separator between the parts.",
+                "linen-id"
+              ],
+              "explanation": "join places the separator between the parts.",
+              "xp_reward": 10,
+              "starter_code": "parts = ['linen', 'id']\nprint('-'.join(parts))\n",
+              "options": [
+                "linen/id",
+                "none",
+                "0",
+                "linen-id"
+              ],
+              "correct_answer": "linen-id"
+            },
+            {
+              "id": "strings-practice-1-order",
+              "type": "ordering",
+              "question": "Arrange the pieces of the line that joins the parts with the separator, left to right, for parts holding linen.",
+              "hints": [
+                "Follow the job, which joins the parts with the separator.",
+                "'-'.join(parts) places the dash between the parts.",
+                "joined = '-' . join ( parts )"
+              ],
+              "explanation": "'-'.join(parts) places the dash between the parts.",
+              "xp_reward": 10,
+              "options": [
+                "joined",
+                "=",
+                "'-'",
+                ".",
+                "join",
+                "(",
+                "parts",
+                ")",
+                "split"
+              ],
+              "correct_answer": [
+                "joined",
+                "=",
+                "'-'",
+                ".",
+                "join",
+                "(",
+                "parts",
+                ")"
+              ]
+            },
+            {
+              "id": "strings-practice-1-fill",
+              "type": "fill_blank",
+              "question": "Fill the blank so the line joins the parts with the separator for parts holding linen.",
+              "hints": [
+                "Follow the job, which joins the parts with the separator.",
+                "Plus is the other way to join two pieces.",
+                "+"
+              ],
+              "explanation": "Plus is the other way to join two pieces.",
+              "xp_reward": 10,
+              "starter_code": "joined = left ___ right\n",
+              "options": [
+                "-",
+                "*",
+                "==",
+                "+"
+              ],
+              "correct_answer": "+"
+            },
+            {
+              "id": "strings-practice-1-bug",
+              "type": "debugging",
+              "question": "Find the line that misses the job, which joins the parts with the separator, for parts holding linen.",
+              "hints": [
+                "Follow the job, which joins the parts with the separator.",
+                "The separator is empty, so the parts are stuck together.",
+                "Line 2"
+              ],
+              "explanation": "The separator is empty, so the parts are stuck together.",
+              "xp_reward": 10,
+              "starter_code": "parts = ['linen', 'id']\nprint(''.join(parts))\n",
+              "correct_answer": "2"
+            },
+            {
+              "id": "strings-practice-1-predict-2",
+              "type": "output_prediction",
+              "question": "On the new input, the code still joins the parts with the separator for parts holding linen, so choose what it prints.",
+              "hints": [
+                "Follow the job, which joins the parts with the separator.",
+                "join places the separator between the parts.",
+                "linen/id"
+              ],
+              "explanation": "join places the separator between the parts.",
+              "xp_reward": 10,
+              "starter_code": "parts = ['linen', 'id']\nprint('/'.join(parts))\n",
+              "options": [
+                "linen-id",
+                "none",
+                "linen/id",
+                "0"
+              ],
+              "correct_answer": "linen/id"
+            },
+            {
+              "id": "strings-practice-1-write",
+              "type": "code",
+              "question": "Fill the blank so the program joins the parts with the separator, and the print shows that result for parts holding linen.",
+              "hints": [
+                "Follow the job, which joins the parts with the separator.",
+                "The joined parts are what get printed.",
+                "label = '-'.join(parts)"
+              ],
+              "explanation": "The joined parts are what get printed.",
+              "xp_reward": 10,
+              "starter_code": "parts = ['linen', 'id']\nlabel = ___\nprint(label)\n",
+              "solution_code": "parts = ['linen', 'id']\nlabel = '-'.join(parts)\nprint(label)\n",
+              "tests": [
+                {
+                  "name": "strings-practice-1-prints",
+                  "description": "The joined parts are what get printed.",
+                  "expected_stdout": "linen-id\n",
+                  "required": true
+                }
+              ]
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "strings-checkpoint",
-      "title": "5. Unit 6 Checkpoint: Strings Mastery",
-      "description": "wrap_string(s, char) must surround s with char on both sides, returning char + s + char using string concatenation. The test checks that `wrap_string(\"test\", \"*\")` equals `\"*test*\"`.",
+      "title": "Practice Unit 6 Checkpoint Strings Mastery",
+      "description": "wrap_string(s, char) must surround s with char on both sides, returning char + s + char using string concatenation. The test checks that wrap_string(\"test\", \"*\") equals \"*test*\".",
       "order": 30,
       "difficulty": "beginner",
       "duration_minutes": 10,
@@ -201,7 +871,7 @@
         "variables"
       ],
       "learning_objectives": [
-        "Master string slicing and building"
+        "This step adds the base reading to the slot where the mark sits, using text holding maple."
       ],
       "starter_code": "def wrap_string(s, char):\n    # TODO: return s with char on both sides\n    pass\n",
       "tests": [
@@ -222,7 +892,175 @@
         "url": "https://docs.python.org/3/tutorial/introduction.html#strings",
         "license": "Python documentation license (PSF)"
       },
-      "xp_reward": 40
+      "xp_reward": 40,
+      "player_mode": "micro",
+      "sublessons": [
+        {
+          "id": "strings-checkpoint-micro",
+          "title": "Practice Unit 6 Checkpoint Strings Mastery",
+          "description": "",
+          "order": 1,
+          "exercises": [
+            {
+              "id": "strings-checkpoint-teach",
+              "type": "teach",
+              "question": "This step adds the base reading to the slot where the mark sits, using text holding maple.",
+              "hints": [
+                "Follow the job, which adds the base reading to the slot where the mark sits.",
+                "index finds the slot of the mark.",
+                "text.index('!')"
+              ],
+              "explanation": "This step adds the base reading to the slot where the mark sits, using text holding maple.",
+              "xp_reward": 0,
+              "worked_example": "text.index('!')"
+            },
+            {
+              "id": "strings-checkpoint-mcq",
+              "type": "mcq",
+              "question": "A correct choice adds the base reading to the slot where the mark sits and goes with text holding maple.",
+              "hints": [
+                "Follow the job, which adds the base reading to the slot where the mark sits.",
+                "index finds the slot of the mark.",
+                "text.index('!')"
+              ],
+              "explanation": "index finds the slot of the mark.",
+              "xp_reward": 10,
+              "options": [
+                "text[0]",
+                "text.index('!')",
+                "text + '!'",
+                "len(text)"
+              ],
+              "correct_answer": "text.index('!')"
+            },
+            {
+              "id": "strings-checkpoint-predict",
+              "type": "output_prediction",
+              "question": "Select the output after the code adds the base reading to the slot where the mark sits, using text holding maple.",
+              "hints": [
+                "Follow the job, which adds the base reading to the slot where the mark sits.",
+                "index finds the slot of the mark.",
+                "63"
+              ],
+              "explanation": "index finds the slot of the mark.",
+              "xp_reward": 10,
+              "starter_code": "text = 'maple' + '!'\nprint(text.index('!') + 58)\n",
+              "options": [
+                "58",
+                "63",
+                "none",
+                "0"
+              ],
+              "correct_answer": "63"
+            },
+            {
+              "id": "strings-checkpoint-order",
+              "type": "ordering",
+              "question": "Make the line that adds the base reading to the slot where the mark sits by ordering the pieces for text holding maple.",
+              "hints": [
+                "Follow the job, which adds the base reading to the slot where the mark sits.",
+                "text.index('!') finds the mark.",
+                "slot = text.index ( '!' )"
+              ],
+              "explanation": "text.index('!') finds the mark.",
+              "xp_reward": 10,
+              "options": [
+                "slot",
+                "=",
+                "text.index",
+                "(",
+                "'!'",
+                ")",
+                "len"
+              ],
+              "correct_answer": [
+                "slot",
+                "=",
+                "text.index",
+                "(",
+                "'!'",
+                ")"
+              ]
+            },
+            {
+              "id": "strings-checkpoint-fill",
+              "type": "fill_blank",
+              "question": "Complete the line for text holding maple so that it adds the base reading to the slot where the mark sits.",
+              "hints": [
+                "Follow the job, which adds the base reading to the slot where the mark sits.",
+                "Plus adds the base reading to the slot.",
+                "+"
+              ],
+              "explanation": "Plus adds the base reading to the slot.",
+              "xp_reward": 10,
+              "starter_code": "shown = slot ___ left\n",
+              "options": [
+                "-",
+                "+",
+                "*",
+                "=="
+              ],
+              "correct_answer": "+"
+            },
+            {
+              "id": "strings-checkpoint-bug",
+              "type": "debugging",
+              "question": "Select the line that gets in the way of the job, which adds the base reading to the slot where the mark sits, for text holding maple.",
+              "hints": [
+                "Follow the job, which adds the base reading to the slot where the mark sits.",
+                "The mark being sought is not in the reading.",
+                "Line 2"
+              ],
+              "explanation": "The mark being sought is not in the reading.",
+              "xp_reward": 10,
+              "starter_code": "text = 'maple' + '!'\nprint(text.index('?') + 58)\n",
+              "correct_answer": "2"
+            },
+            {
+              "id": "strings-checkpoint-predict-2",
+              "type": "output_prediction",
+              "question": "With the new data around text holding maple, the code adds the base reading to the slot where the mark sits, so select the new output.",
+              "hints": [
+                "Follow the job, which adds the base reading to the slot where the mark sits.",
+                "index finds the slot of the mark.",
+                "58"
+              ],
+              "explanation": "index finds the slot of the mark.",
+              "xp_reward": 10,
+              "starter_code": "text = 'maple' + '!'\nprint(text.index('m') + 58)\n",
+              "options": [
+                "63",
+                "none",
+                "0",
+                "58"
+              ],
+              "correct_answer": "58"
+            },
+            {
+              "id": "strings-checkpoint-write",
+              "type": "code",
+              "question": "The printed result shows up after you fill the blank so the code adds the base reading to the slot where the mark sits for text holding maple.",
+              "hints": [
+                "Follow the job, which adds the base reading to the slot where the mark sits.",
+                "The slot plus the base reading is what gets printed.",
+                "label = text.index('!') + 58"
+              ],
+              "explanation": "The slot plus the base reading is what gets printed.",
+              "xp_reward": 10,
+              "starter_code": "text = 'maple' + '!'\nlabel = ___\nprint(label)\n",
+              "solution_code": "text = 'maple' + '!'\nlabel = text.index('!') + 58\nprint(label)\n",
+              "tests": [
+                {
+                  "name": "strings-checkpoint-prints",
+                  "description": "The slot plus the base reading is what gets printed.",
+                  "expected_stdout": "63\n",
+                  "required": true
+                }
+              ]
+            }
+          ]
+        }
+      ]
     }
   ]
 }

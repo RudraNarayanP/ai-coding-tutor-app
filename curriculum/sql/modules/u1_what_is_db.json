@@ -12,8 +12,8 @@
   "lessons": [
     {
       "id": "sql-01",
-      "title": "1. Database Exploration",
-      "description": "Query every column from the `customers` table. The test checks that the result has at least 4 rows and that the first column is `id`.",
+      "title": "Practice Database Exploration",
+      "description": "Query every column from the customers table. The test checks that the result has at least 4 rows and that the first column is id.",
       "order": 1,
       "difficulty": "beginner",
       "duration_minutes": 5,
@@ -26,8 +26,7 @@
       ],
       "prerequisites": [],
       "learning_objectives": [
-        "Understand tables, rows, and columns",
-        "Execute simple database exploration queries"
+        "This step counts the seeded tables, using total holding table."
       ],
       "starter_code": "-- TODO: select every column from the customers table\nSELECT id FROM customers WHERE 0;\n",
       "solution_code": "SELECT * FROM customers;\n",
@@ -45,35 +44,166 @@
       },
       "sublessons": [
         {
-          "id": "sql-sub-1a",
-          "title": "Data vs Database",
+          "id": "sql-01-micro",
+          "title": "Practice Database Exploration",
+          "description": "",
           "order": 1,
           "exercises": [
             {
-              "id": "sql-ex-1a",
-              "type": "mcq",
-              "question": "What is a row in a relational database table?",
-              "options": [
-                "A database server",
-                "A single record / entry",
-                "An index key",
-                "A column name"
+              "id": "sql-01-teach",
+              "type": "teach",
+              "question": "This step counts the seeded tables, using total holding table.",
+              "hints": [
+                "Follow the job, which counts the seeded tables.",
+                "COUNT(*) over sqlite_master where type is table counts the tables.",
+                "SELECT COUNT(*) AS total FROM sqlite_master WHERE type = 'table';"
               ],
-              "correct_answer": "A single record / entry",
-              "xp_reward": 10,
-              "explanation": "In relational databases, each row represents an individual record."
+              "explanation": "This step counts the seeded tables, using total holding table.",
+              "xp_reward": 0,
+              "worked_example": "SELECT COUNT(*) AS total FROM sqlite_master WHERE type = 'table';"
             },
             {
-              "id": "sql-ex-1b",
-              "type": "fill_blank",
-              "question": "Fill in the SQL keyword that retrieves data from a table: ___ * FROM customers;",
-              "correct_answer": [
-                "SELECT"
+              "id": "sql-01-mcq",
+              "type": "mcq",
+              "question": "Pick the line that counts the seeded tables, not a line about something else, for total holding table.",
+              "hints": [
+                "Follow the job, which counts the seeded tables.",
+                "COUNT(*) over sqlite_master where type is table counts the tables.",
+                "SELECT COUNT(*) AS total FROM sqlite_master"
               ],
+              "explanation": "COUNT(*) over sqlite_master where type is table counts the tables.",
               "xp_reward": 10,
-              "explanation": "SELECT is used to query data from tables.",
-              "blanks": [
-                "SELECT"
+              "options": [
+                "INSERT INTO sqlite_master",
+                "DROP TABLE sqlite_master",
+                "SELECT COUNT(*) AS total FROM sqlite_master",
+                "total == total"
+              ],
+              "correct_answer": "SELECT COUNT(*) AS total FROM sqlite_master"
+            },
+            {
+              "id": "sql-01-predict",
+              "type": "output_prediction",
+              "question": "The displayed value is what the code prints when it counts the seeded tables for total holding table.",
+              "hints": [
+                "Follow the job, which counts the seeded tables.",
+                "COUNT(*) over sqlite_master where type is table counts the tables.",
+                "┌───────┐\n│ total │\n├───────┤\n│ 7     │\n└───────┘"
+              ],
+              "explanation": "COUNT(*) over sqlite_master where type is table counts the tables.",
+              "xp_reward": 10,
+              "starter_code": "SELECT COUNT(*) AS total FROM sqlite_master WHERE type = 'table';\n",
+              "options": [
+                "┌───────┐\n│ total │\n├───────┤\n│ 0     │\n└───────┘",
+                "none",
+                "┌───────┐\n│ total │\n├───────┤\n│ 7     │\n└───────┘",
+                "0"
+              ],
+              "correct_answer": "┌───────┐\n│ total │\n├───────┤\n│ 7     │\n└───────┘"
+            },
+            {
+              "id": "sql-01-order",
+              "type": "ordering",
+              "question": "Place every piece so the result counts the seeded tables for total holding table.",
+              "hints": [
+                "Follow the job, which counts the seeded tables.",
+                "COUNT(*) over sqlite_master where type is table counts the tables.",
+                "SELECT COUNT(*) AS total FROM sqlite_master"
+              ],
+              "explanation": "COUNT(*) over sqlite_master where type is table counts the tables.",
+              "xp_reward": 10,
+              "options": [
+                "SELECT",
+                "COUNT(*)",
+                "AS",
+                "total",
+                "FROM",
+                "sqlite_master",
+                "DROP"
+              ],
+              "correct_answer": [
+                "SELECT",
+                "COUNT(*)",
+                "AS",
+                "total",
+                "FROM",
+                "sqlite_master"
+              ]
+            },
+            {
+              "id": "sql-01-fill",
+              "type": "fill_blank",
+              "question": "Drop in the piece that lets the line counts the seeded tables for total holding table.",
+              "hints": [
+                "Follow the job, which counts the seeded tables.",
+                "COUNT(*) over sqlite_master where type is table counts the tables.",
+                "="
+              ],
+              "explanation": "COUNT(*) over sqlite_master where type is table counts the tables.",
+              "xp_reward": 10,
+              "starter_code": "SELECT COUNT(*) AS total FROM sqlite_master WHERE type ___ 'table';",
+              "options": [
+                "<",
+                "!=",
+                ">",
+                "="
+              ],
+              "correct_answer": "="
+            },
+            {
+              "id": "sql-01-bug",
+              "type": "debugging",
+              "question": "The mismatch misses the job, which counts the seeded tables, for total holding table.",
+              "hints": [
+                "Follow the job, which counts the seeded tables.",
+                "The filter counts views instead of tables.",
+                "Line 1"
+              ],
+              "explanation": "The filter counts views instead of tables.",
+              "xp_reward": 10,
+              "starter_code": "SELECT COUNT(*) AS total FROM sqlite_master WHERE type = 'view';",
+              "correct_answer": "1"
+            },
+            {
+              "id": "sql-01-predict-2",
+              "type": "output_prediction",
+              "question": "Choose the printed result of the second run that counts the seeded tables for total holding table.",
+              "hints": [
+                "Follow the job, which counts the seeded tables.",
+                "COUNT(*) over sqlite_master where type is table counts the tables.",
+                "┌───────┐\n│ total │\n├───────┤\n│ 0     │\n└───────┘"
+              ],
+              "explanation": "COUNT(*) over sqlite_master where type is table counts the tables.",
+              "xp_reward": 10,
+              "starter_code": "SELECT COUNT(*) AS total FROM sqlite_master WHERE type = 'view';\n",
+              "options": [
+                "┌───────┐\n│ total │\n├───────┤\n│ 7     │\n└───────┘",
+                "┌───────┐\n│ total │\n├───────┤\n│ 0     │\n└───────┘",
+                "none",
+                "0"
+              ],
+              "correct_answer": "┌───────┐\n│ total │\n├───────┤\n│ 0     │\n└───────┘"
+            },
+            {
+              "id": "sql-01-write",
+              "type": "code",
+              "question": "Make the program counts the seeded tables by filling the blank for total holding table.",
+              "hints": [
+                "Follow the job, which counts the seeded tables.",
+                "The query result is what this step counts the seeded tables.",
+                "SELECT COUNT(*) AS total FROM sqlite_master WHERE type = 'table';"
+              ],
+              "explanation": "The query result is what this step counts the seeded tables.",
+              "xp_reward": 10,
+              "starter_code": "SELECT ___ AS total FROM sqlite_master WHERE type = 'table';\n",
+              "solution_code": "SELECT COUNT(*) AS total FROM sqlite_master WHERE type = 'table';\n",
+              "tests": [
+                {
+                  "name": "sql-01-prints",
+                  "description": "The query result is what this step counts the seeded tables.",
+                  "expected_stdout": "┌───────┐\n│ total │\n├───────┤\n│ 7     │\n└───────┘",
+                  "required": true
+                }
               ]
             }
           ]
@@ -100,7 +230,8 @@
         "url": "https://sqlite.org/lang_select.html",
         "license": "Public domain (SQLite documentation)"
       },
-      "xp_reward": 10
+      "xp_reward": 10,
+      "player_mode": "micro"
     }
   ]
 }

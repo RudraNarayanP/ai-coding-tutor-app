@@ -14,8 +14,8 @@
   "lessons": [
     {
       "id": "sql-16",
-      "title": "16. SQL Mastery Exam",
-      "description": "Left-join `customers` to `orders` and count each customer's orders, including customers with none. Select `c.name` and `COUNT(o.id)` as `total_orders`, grouped by customer name. The test checks that you return at least 4 rows.",
+      "title": "Practice SQL Mastery Exam",
+      "description": "Left-join customers to orders and count each customer's orders, including customers with none. Select c.name and COUNT(o.id) as total_orders, grouped by customer name. The test checks that you return at least 4 rows.",
       "order": 16,
       "difficulty": "advanced",
       "duration_minutes": 10,
@@ -75,10 +75,185 @@
         "license": "Public domain (SQLite documentation)"
       },
       "learning_objectives": [
-        "Combine filtering, joining, grouping and aggregation under exam conditions",
-        "Keep counting customers with zero orders via LEFT JOIN"
+        "This step counts customers in one country, using total holding USA."
       ],
-      "xp_reward": 45
+      "xp_reward": 45,
+      "player_mode": "micro",
+      "sublessons": [
+        {
+          "id": "sql-16-micro",
+          "title": "Practice SQL Mastery Exam",
+          "description": "",
+          "order": 1,
+          "exercises": [
+            {
+              "id": "sql-16-teach",
+              "type": "teach",
+              "question": "This step counts customers in one country, using total holding USA.",
+              "hints": [
+                "Follow the job, which counts customers in one country.",
+                "WHERE country = 'USA' counts that group.",
+                "WHERE country = 'USA'"
+              ],
+              "explanation": "This step counts customers in one country, using total holding USA.",
+              "xp_reward": 0,
+              "worked_example": "WHERE country = 'USA'"
+            },
+            {
+              "id": "sql-16-mcq",
+              "type": "mcq",
+              "question": "Mark the choice that counts customers in one country when the code mentions total holding USA.",
+              "hints": [
+                "Follow the job, which counts customers in one country.",
+                "WHERE country = 'USA' counts that group.",
+                "SELECT COUNT(*) AS total FROM customers WHERE country = 'USA'"
+              ],
+              "explanation": "WHERE country = 'USA' counts that group.",
+              "xp_reward": 10,
+              "options": [
+                "DROP TABLE customers",
+                "INSERT INTO customers",
+                "SELECT COUNT(*) AS total FROM customers WHERE country = 'USA'",
+                "country == country"
+              ],
+              "correct_answer": "SELECT COUNT(*) AS total FROM customers WHERE country = 'USA'"
+            },
+            {
+              "id": "sql-16-predict",
+              "type": "output_prediction",
+              "question": "After total holding USA, the code counts customers in one country, and the correct choice is the printed value.",
+              "hints": [
+                "Follow the job, which counts customers in one country.",
+                "WHERE country = 'USA' counts that group.",
+                "┌───────┐\n│ total │\n├───────┤\n│ 2     │\n└───────┘"
+              ],
+              "explanation": "WHERE country = 'USA' counts that group.",
+              "xp_reward": 10,
+              "starter_code": "SELECT COUNT(*) AS total FROM customers WHERE country = 'USA';\n",
+              "options": [
+                "┌───────┐\n│ total │\n├───────┤\n│ 1     │\n└───────┘",
+                "none",
+                "┌───────┐\n│ total │\n├───────┤\n│ 2     │\n└───────┘",
+                "0"
+              ],
+              "correct_answer": "┌───────┐\n│ total │\n├───────┤\n│ 2     │\n└───────┘"
+            },
+            {
+              "id": "sql-16-order",
+              "type": "ordering",
+              "question": "The finished line counts customers in one country, so place its pieces in order for total holding USA.",
+              "hints": [
+                "Follow the job, which counts customers in one country.",
+                "WHERE country = 'USA' counts that group.",
+                "SELECT COUNT(*) AS total FROM customers WHERE country = 'USA'"
+              ],
+              "explanation": "WHERE country = 'USA' counts that group.",
+              "xp_reward": 10,
+              "options": [
+                "SELECT",
+                "COUNT(*)",
+                "AS",
+                "total",
+                "FROM",
+                "customers",
+                "WHERE",
+                "country",
+                "=",
+                "'USA'",
+                "DROP"
+              ],
+              "correct_answer": [
+                "SELECT",
+                "COUNT(*)",
+                "AS",
+                "total",
+                "FROM",
+                "customers",
+                "WHERE",
+                "country",
+                "=",
+                "'USA'"
+              ]
+            },
+            {
+              "id": "sql-16-fill",
+              "type": "fill_blank",
+              "question": "Finish the line that counts customers in one country by filling the blank for total holding USA.",
+              "hints": [
+                "Follow the job, which counts customers in one country.",
+                "WHERE country = 'USA' counts that group.",
+                "="
+              ],
+              "explanation": "WHERE country = 'USA' counts that group.",
+              "xp_reward": 10,
+              "starter_code": "SELECT COUNT(*) AS total FROM customers WHERE country ___ 'USA';",
+              "options": [
+                "!=",
+                ">",
+                "=",
+                "<"
+              ],
+              "correct_answer": "="
+            },
+            {
+              "id": "sql-16-bug",
+              "type": "debugging",
+              "question": "Mark the line that breaks the job, which counts customers in one country, for total holding USA.",
+              "hints": [
+                "Follow the job, which counts customers in one country.",
+                "The filter names a country that is not in the table.",
+                "Line 1"
+              ],
+              "explanation": "The filter names a country that is not in the table.",
+              "xp_reward": 10,
+              "starter_code": "SELECT COUNT(*) AS total FROM customers WHERE country = 'Mars';",
+              "correct_answer": "1"
+            },
+            {
+              "id": "sql-16-predict-2",
+              "type": "output_prediction",
+              "question": "Follow the second program, which counts customers in one country for total holding USA, and choose its output.",
+              "hints": [
+                "Follow the job, which counts customers in one country.",
+                "WHERE country = 'USA' counts that group.",
+                "┌───────┐\n│ total │\n├───────┤\n│ 1     │\n└───────┘"
+              ],
+              "explanation": "WHERE country = 'USA' counts that group.",
+              "xp_reward": 10,
+              "starter_code": "SELECT COUNT(*) AS total FROM customers WHERE country = 'Canada';\n",
+              "options": [
+                "┌───────┐\n│ total │\n├───────┤\n│ 2     │\n└───────┘",
+                "┌───────┐\n│ total │\n├───────┤\n│ 1     │\n└───────┘",
+                "0",
+                "none"
+              ],
+              "correct_answer": "┌───────┐\n│ total │\n├───────┤\n│ 1     │\n└───────┘"
+            },
+            {
+              "id": "sql-16-write",
+              "type": "code",
+              "question": "Finish the program that counts customers in one country by filling the blank for total holding USA.",
+              "hints": [
+                "Follow the job, which counts customers in one country.",
+                "The query result is what this step counts customers in one country.",
+                "WHERE country = 'USA'"
+              ],
+              "explanation": "The query result is what this step counts customers in one country.",
+              "xp_reward": 10,
+              "starter_code": "SELECT COUNT(*) AS total FROM customers WHERE country = ___;\n",
+              "solution_code": "SELECT COUNT(*) AS total FROM customers WHERE country = ('USA');\n",
+              "tests": [
+                {
+                  "name": "sql-16-prints",
+                  "description": "The query result is what this step counts customers in one country.",
+                  "expected_stdout": "┌───────┐\n│ total │\n├───────┤\n│ 2     │\n└───────┘",
+                  "required": true
+                }
+              ]
+            }
+          ]
+        }
+      ]
     }
   ]
 }
