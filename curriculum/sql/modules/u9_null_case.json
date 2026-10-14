@@ -45,7 +45,7 @@
         "license": "Public domain (SQLite documentation)"
       },
       "learning_objectives": [
-        "Depot potters recount crates before dawn, and handle missing data NULL is not a value but a marker for 'no data'."
+        "This step labels a salary with CASE, using salary holding high."
       ],
       "xp_reward": 10,
       "player_mode": "micro",
@@ -59,23 +59,23 @@
             {
               "id": "sql-09-teach",
               "type": "teach",
-              "question": "Depot potters recount crates before dawn, and handle missing data NULL is not a value but a marker for 'no data'.",
+              "question": "This step labels a salary with CASE, using salary holding high.",
               "hints": [
-                "Read the one job this step is practicing.",
-                "The example is about NULL CASE Statements.",
+                "Follow the job, which labels a salary with CASE.",
+                "CASE picks high when the salary is at least 100000.",
                 "CASE WHEN salary >= 100000 THEN 'high' ELSE 'mid' END"
               ],
-              "explanation": "Depot potters recount crates before dawn, and handle missing data NULL is not a value but a marker for 'no data'.",
+              "explanation": "This step labels a salary with CASE, using salary holding high.",
               "xp_reward": 0,
               "worked_example": "CASE WHEN salary >= 100000 THEN 'high' ELSE 'mid' END"
             },
             {
               "id": "sql-09-mcq",
               "type": "mcq",
-              "question": "Depot potters recount crates before dawn. For handle missing data NULL is not a value but a marker for 'no data', which line labels a salary with CASE?",
+              "question": "Pick the line that labels a salary with CASE, not a line about something else, for salary holding high.",
               "hints": [
-                "Compare each line with the example.",
-                "One line matches the example.",
+                "Follow the job, which labels a salary with CASE.",
+                "CASE picks high when the salary is at least 100000.",
                 "CASE WHEN salary >= 100000 THEN 'high' ELSE 'mid' END"
               ],
               "explanation": "CASE picks high when the salary is at least 100000.",
@@ -91,13 +91,13 @@
             {
               "id": "sql-09-predict",
               "type": "output_prediction",
-              "question": "Depot potters recount crates before dawn. For handle missing data NULL is not a value but a marker for 'no data', what value is displayed?",
+              "question": "The displayed value is what the code prints when it labels a salary with CASE for salary holding high.",
               "hints": [
-                "Run the example in your head from the top.",
-                "The last line is what gets displayed.",
+                "Follow the job, which labels a salary with CASE.",
+                "CASE picks high when the salary is at least 100000.",
                 "┌──────┐\n│ band │\n├──────┤\n│ high │\n└──────┘"
               ],
-              "explanation": "The NULL CASE Statements program displays that value.",
+              "explanation": "CASE picks high when the salary is at least 100000.",
               "xp_reward": 10,
               "starter_code": "SELECT CASE WHEN salary >= 100000 THEN 'high' ELSE 'mid' END AS band FROM employees WHERE id = 2;\n",
               "options": [
@@ -111,10 +111,10 @@
             {
               "id": "sql-09-order",
               "type": "ordering",
-              "question": "Depot potters recount crates before dawn. For handle missing data NULL is not a value but a marker for 'no data', build the line that labels a salary with CASE.",
+              "question": "Place every piece so the result labels a salary with CASE for salary holding high.",
               "hints": [
-                "Start at the left of the example.",
-                "Keep the example order.",
+                "Follow the job, which labels a salary with CASE.",
+                "CASE picks high when the salary is at least 100000.",
                 "SELECT CASE WHEN salary >= 100000 THEN 'high' ELSE 'mid' END"
               ],
               "explanation": "CASE picks high when the salary is at least 100000.",
@@ -150,10 +150,10 @@
             {
               "id": "sql-09-fill",
               "type": "fill_blank",
-              "question": "Depot potters recount crates before dawn. For handle missing data NULL is not a value but a marker for 'no data', fill the blank so the line labels a salary with CASE.",
+              "question": "Drop in the piece that lets the line labels a salary with CASE for salary holding high.",
               "hints": [
-                "The blank is the missing piece of the example.",
-                "The example uses that piece.",
+                "Follow the job, which labels a salary with CASE.",
+                "CASE picks high when the salary is at least 100000.",
                 ">="
               ],
               "explanation": "CASE picks high when the salary is at least 100000.",
@@ -170,10 +170,10 @@
             {
               "id": "sql-09-bug",
               "type": "debugging",
-              "question": "Depot potters recount crates before dawn. For handle missing data NULL is not a value but a marker for 'no data', which line does a different job than the example?",
+              "question": "The mismatch misses the job, which labels a salary with CASE, for salary holding high.",
               "hints": [
-                "The other lines match the example.",
-                "One line is the odd one.",
+                "Follow the job, which labels a salary with CASE.",
+                "The high branch is labeled low.",
                 "Line 1"
               ],
               "explanation": "The high branch is labeled low.",
@@ -184,13 +184,13 @@
             {
               "id": "sql-09-predict-2",
               "type": "output_prediction",
-              "question": "Depot potters recount crates before dawn. For handle missing data NULL is not a value but a marker for 'no data', what does the second run display?",
+              "question": "Choose the printed result of the second run that labels a salary with CASE for salary holding high.",
               "hints": [
-                "Apply the same steps to the new value.",
-                "The display comes from the last line.",
+                "Follow the job, which labels a salary with CASE.",
+                "CASE picks high when the salary is at least 100000.",
                 "┌──────┐\n│ band │\n├──────┤\n│ mid  │\n└──────┘"
               ],
-              "explanation": "The second NULL CASE Statements program displays that value.",
+              "explanation": "CASE picks high when the salary is at least 100000.",
               "xp_reward": 10,
               "starter_code": "SELECT CASE WHEN salary >= 100000 THEN 'high' ELSE 'mid' END AS band FROM employees WHERE id = 3;\n",
               "options": [
@@ -204,10 +204,10 @@
             {
               "id": "sql-09-write",
               "type": "code",
-              "question": "Depot potters recount crates before dawn. For handle missing data NULL is not a value but a marker for 'no data', fill the blank so the program prints the result.",
+              "question": "Make the program labels a salary with CASE by filling the blank for salary holding high.",
               "hints": [
-                "The blank is the missing piece.",
-                "Print the value that piece produces.",
+                "Follow the job, which labels a salary with CASE.",
+                "The query result is what this step labels a salary with CASE.",
                 "THEN 'high'"
               ],
               "explanation": "The query result is what this step labels a salary with CASE.",

@@ -27,7 +27,7 @@
         "cpp-loops"
       ],
       "learning_objectives": [
-        "Ridge potters recount crates before dawn, and use C reference parameters to mutate values."
+        "This step updates a value through a reference, using value and 1."
       ],
       "starter_code": "void swap_ints(int& a, int& b) {\n    // TODO: Swap values of a and b using references\n}\n",
       "solution_code": "void swap_ints(int& a, int& b) {\n    int temp = a;\n    a = b;\n    b = temp;\n}\n",
@@ -60,23 +60,23 @@
             {
               "id": "cpp-functions-step-1-teach",
               "type": "teach",
-              "question": "Ridge potters recount crates before dawn, and use C reference parameters to mutate values.",
+              "question": "This step updates a value through a reference, using value and 1.",
               "hints": [
-                "Read the one job this step is practicing.",
-                "The example is about Pass-by-Reference.",
+                "Follow the job, which updates a value through a reference.",
+                "A reference names the same integer, so the increment shows up.",
                 "int& alias = value;"
               ],
-              "explanation": "Ridge potters recount crates before dawn, and use C reference parameters to mutate values.",
+              "explanation": "This step updates a value through a reference, using value and 1.",
               "xp_reward": 0,
               "worked_example": "int& alias = value;"
             },
             {
               "id": "cpp-functions-step-1-mcq",
               "type": "mcq",
-              "question": "Ridge potters recount crates before dawn. For use C reference parameters to mutate values, which line updates a value through a reference?",
+              "question": "Choose the line that updates a value through a reference, which is the line that fits value and 1.",
               "hints": [
-                "Compare each line with the example.",
-                "One line matches the example.",
+                "Follow the job, which updates a value through a reference.",
+                "A reference names the same integer, so the increment shows up.",
                 "int& alias = value;"
               ],
               "explanation": "A reference names the same integer, so the increment shows up.",
@@ -92,13 +92,13 @@
             {
               "id": "cpp-functions-step-1-predict",
               "type": "output_prediction",
-              "question": "Ridge potters recount crates before dawn. For use C reference parameters to mutate values, what value is displayed?",
+              "question": "Read the code that updates a value through a reference for value and 1, and choose the value it prints.",
               "hints": [
-                "Run the example in your head from the top.",
-                "The last line is what gets displayed.",
+                "Follow the job, which updates a value through a reference.",
+                "A reference names the same integer, so the increment shows up.",
                 "27"
               ],
-              "explanation": "The Pass-by-Reference program displays that value.",
+              "explanation": "A reference names the same integer, so the increment shows up.",
               "xp_reward": 10,
               "starter_code": "#include <iostream>\n#include <string>\n#include <vector>\n#include <algorithm>\n#include <memory>\nint main() {\n    int value = 26;\n    int& alias = value;\n    alias = alias + 1;\n    std::cout << value << std::endl;\n    return 0;\n}\n",
               "options": [
@@ -112,10 +112,10 @@
             {
               "id": "cpp-functions-step-1-order",
               "type": "ordering",
-              "question": "Ridge potters recount crates before dawn. For use C reference parameters to mutate values, build the line that updates a value through a reference.",
+              "question": "Arrange the pieces of the line that updates a value through a reference, left to right, for value and 1.",
               "hints": [
-                "Start at the left of the example.",
-                "Keep the example order.",
+                "Follow the job, which updates a value through a reference.",
+                "A reference names the same integer, so the increment shows up.",
                 "int& alias = left;"
               ],
               "explanation": "A reference names the same integer, so the increment shows up.",
@@ -137,10 +137,10 @@
             {
               "id": "cpp-functions-step-1-fill",
               "type": "fill_blank",
-              "question": "Ridge potters recount crates before dawn. For use C reference parameters to mutate values, fill the blank so the line updates a value through a reference.",
+              "question": "Fill the blank so the line updates a value through a reference for value and 1.",
               "hints": [
-                "The blank is the missing piece of the example.",
-                "The example uses that piece.",
+                "Follow the job, which updates a value through a reference.",
+                "A reference names the same integer, so the increment shows up.",
                 "left"
               ],
               "explanation": "A reference names the same integer, so the increment shows up.",
@@ -157,10 +157,10 @@
             {
               "id": "cpp-functions-step-1-bug",
               "type": "debugging",
-              "question": "Ridge potters recount crates before dawn. For use C reference parameters to mutate values, which line does a different job than the example?",
+              "question": "Find the line that misses the job, which updates a value through a reference, for value and 1.",
               "hints": [
-                "The other lines match the example.",
-                "One line is the odd one.",
+                "Follow the job, which updates a value through a reference.",
+                "The copy does not update the original value.",
                 "Line 8"
               ],
               "explanation": "The copy does not update the original value.",
@@ -171,13 +171,13 @@
             {
               "id": "cpp-functions-step-1-predict-2",
               "type": "output_prediction",
-              "question": "Ridge potters recount crates before dawn. For use C reference parameters to mutate values, what does the second run display?",
+              "question": "On the new input, the code still updates a value through a reference for value and 1, so choose what it prints.",
               "hints": [
-                "Apply the same steps to the new value.",
-                "The display comes from the last line.",
+                "Follow the job, which updates a value through a reference.",
+                "A reference names the same integer, so the increment shows up.",
                 "30"
               ],
-              "explanation": "The second Pass-by-Reference program displays that value.",
+              "explanation": "A reference names the same integer, so the increment shows up.",
               "xp_reward": 10,
               "starter_code": "#include <iostream>\n#include <string>\n#include <vector>\n#include <algorithm>\n#include <memory>\nint main() {\n    int value = 29;\n    int& alias = value;\n    alias = alias + 1;\n    std::cout << value << std::endl;\n    return 0;\n}\n",
               "options": [
@@ -191,10 +191,10 @@
             {
               "id": "cpp-functions-step-1-write",
               "type": "code",
-              "question": "Ridge potters recount crates before dawn. For use C reference parameters to mutate values, fill the blank so the program prints the result.",
+              "question": "Fill the blank so the program updates a value through a reference, and the print shows that result for value and 1.",
               "hints": [
-                "The blank is the missing piece.",
-                "Print the value that piece produces.",
+                "Follow the job, which updates a value through a reference.",
+                "The printed value is the result after this step updates a value through a reference.",
                 "int label = value;"
               ],
               "explanation": "The printed value is the result after this step updates a value through a reference.",
@@ -229,7 +229,7 @@
         "cpp-loops"
       ],
       "learning_objectives": [
-        "Cove potters recount crates before dawn, and pass parameters by const std string in C."
+        "This step reads a value through a const reference, using auto and 27."
       ],
       "starter_code": "#include <string>\n\nstd::string greeting(const std::string& name) {\n    // TODO: return the greeting for this name\n    return \"\";\n}\n",
       "solution_code": "#include <string>\n\nstd::string greeting(const std::string& name) {\n    return \"Hello, \" + name + \"!\";\n}\n",
@@ -261,23 +261,23 @@
             {
               "id": "cpp-functions-step-2-teach",
               "type": "teach",
-              "question": "Cove potters recount crates before dawn, and pass parameters by const std string in C.",
+              "question": "This step reads a value through a const reference, using auto and 27.",
               "hints": [
-                "Read the one job this step is practicing.",
-                "The example is about Const References.",
+                "Follow the job, which reads a value through a const reference.",
+                "A const reference can be read and cannot be reassigned.",
                 "const int& value"
               ],
-              "explanation": "Cove potters recount crates before dawn, and pass parameters by const std string in C.",
+              "explanation": "This step reads a value through a const reference, using auto and 27.",
               "xp_reward": 0,
               "worked_example": "const int& value"
             },
             {
               "id": "cpp-functions-step-2-mcq",
               "type": "mcq",
-              "question": "Cove potters recount crates before dawn. For pass parameters by const std string in C, which line reads a value through a const reference?",
+              "question": "The correct line reads a value through a const reference, and it is the line tied to auto and 27.",
               "hints": [
-                "Compare each line with the example.",
-                "One line matches the example.",
+                "Follow the job, which reads a value through a const reference.",
+                "A const reference can be read and cannot be reassigned.",
                 "const int& value"
               ],
               "explanation": "A const reference can be read and cannot be reassigned.",
@@ -293,13 +293,13 @@
             {
               "id": "cpp-functions-step-2-predict",
               "type": "output_prediction",
-              "question": "Cove potters recount crates before dawn. For pass parameters by const std string in C, what value is displayed?",
+              "question": "The program reads a value through a const reference with auto and 27, so choose the printed value.",
               "hints": [
-                "Run the example in your head from the top.",
-                "The last line is what gets displayed.",
+                "Follow the job, which reads a value through a const reference.",
+                "A const reference can be read and cannot be reassigned.",
                 "28"
               ],
-              "explanation": "The Const References program displays that value.",
+              "explanation": "A const reference can be read and cannot be reassigned.",
               "xp_reward": 10,
               "starter_code": "#include <iostream>\n#include <string>\n#include <vector>\n#include <algorithm>\n#include <memory>\nint main() {\n    auto read = [](const int& value) { return value + 1; };\n    std::cout << read(27) << std::endl;\n    return 0;\n}\n",
               "options": [
@@ -313,10 +313,10 @@
             {
               "id": "cpp-functions-step-2-order",
               "type": "ordering",
-              "question": "Cove potters recount crates before dawn. For pass parameters by const std string in C, build the line that reads a value through a const reference.",
+              "question": "Build the line that reads a value through a const reference for auto and 27, from the first piece to the last.",
               "hints": [
-                "Start at the left of the example.",
-                "Keep the example order.",
+                "Follow the job, which reads a value through a const reference.",
+                "A const reference can be read and cannot be reassigned.",
                 "const int& alias = left;"
               ],
               "explanation": "A const reference can be read and cannot be reassigned.",
@@ -340,10 +340,10 @@
             {
               "id": "cpp-functions-step-2-fill",
               "type": "fill_blank",
-              "question": "Cove potters recount crates before dawn. For pass parameters by const std string in C, fill the blank so the line reads a value through a const reference.",
+              "question": "Replace the blank with the piece that makes the line reads a value through a const reference for auto and 27.",
               "hints": [
-                "The blank is the missing piece of the example.",
-                "The example uses that piece.",
+                "Follow the job, which reads a value through a const reference.",
+                "A const reference can be read and cannot be reassigned.",
                 "left"
               ],
               "explanation": "A const reference can be read and cannot be reassigned.",
@@ -360,10 +360,10 @@
             {
               "id": "cpp-functions-step-2-bug",
               "type": "debugging",
-              "question": "Cove potters recount crates before dawn. For pass parameters by const std string in C, which line does a different job than the example?",
+              "question": "Spot the line that fails the job, which reads a value through a const reference, around auto and.",
               "hints": [
-                "The other lines match the example.",
-                "One line is the odd one.",
+                "Follow the job, which reads a value through a const reference.",
+                "The function subtracts one instead of adding one.",
                 "Line 7"
               ],
               "explanation": "The function subtracts one instead of adding one.",
@@ -374,13 +374,13 @@
             {
               "id": "cpp-functions-step-2-predict-2",
               "type": "output_prediction",
-              "question": "Cove potters recount crates before dawn. For pass parameters by const std string in C, what does the second run display?",
+              "question": "The second program reads a value through a const reference for auto and 27, so choose the new printed value.",
               "hints": [
-                "Apply the same steps to the new value.",
-                "The display comes from the last line.",
+                "Follow the job, which reads a value through a const reference.",
+                "A const reference can be read and cannot be reassigned.",
                 "31"
               ],
-              "explanation": "The second Const References program displays that value.",
+              "explanation": "A const reference can be read and cannot be reassigned.",
               "xp_reward": 10,
               "starter_code": "#include <iostream>\n#include <string>\n#include <vector>\n#include <algorithm>\n#include <memory>\nint main() {\n    auto read = [](const int& value) { return value + 1; };\n    std::cout << read(30) << std::endl;\n    return 0;\n}\n",
               "options": [
@@ -394,10 +394,10 @@
             {
               "id": "cpp-functions-step-2-write",
               "type": "code",
-              "question": "Cove potters recount crates before dawn. For pass parameters by const std string in C, fill the blank so the program prints the result.",
+              "question": "Complete the blank so this program reads a value through a const reference and prints the result for auto and 27.",
               "hints": [
-                "The blank is the missing piece.",
-                "Print the value that piece produces.",
+                "Follow the job, which reads a value through a const reference.",
+                "The printed value is the result after this step reads a value through a const reference.",
                 "int label = read(27);"
               ],
               "explanation": "The printed value is the result after this step reads a value through a const reference.",
@@ -433,7 +433,7 @@
         "cpp-loops"
       ],
       "learning_objectives": [
-        "Plaza potters recount crates before dawn, and clamp values in-place using reference parameters."
+        "This step clamps a value into a range, using value and 10."
       ],
       "starter_code": "void clamp(double& val, double min_val, double max_val) {\n    // TODO: If val < min_val, val = min_val; if val > max_val, val = max_val\n}\n",
       "solution_code": "void clamp(double& val, double min_val, double max_val) {\n    if (val < min_val) val = min_val;\n    else if (val > max_val) val = max_val;\n}\n",
@@ -466,23 +466,23 @@
             {
               "id": "cpp-functions-01-teach",
               "type": "teach",
-              "question": "Plaza potters recount crates before dawn, and clamp values in-place using reference parameters.",
+              "question": "This step clamps a value into a range, using value and 10.",
               "hints": [
-                "Read the one job this step is practicing.",
-                "The example is about In-Place Range Clamping.",
+                "Follow the job, which clamps a value into a range.",
+                "Values above the top become the top.",
                 "if (value > 10) value = 10;"
               ],
-              "explanation": "Plaza potters recount crates before dawn, and clamp values in-place using reference parameters.",
+              "explanation": "This step clamps a value into a range, using value and 10.",
               "xp_reward": 0,
               "worked_example": "if (value > 10) value = 10;"
             },
             {
               "id": "cpp-functions-01-mcq",
               "type": "mcq",
-              "question": "Plaza potters recount crates before dawn. For clamp values in-place using reference parameters, which line clamps a value into a range?",
+              "question": "A correct choice clamps a value into a range and goes with value and 10.",
               "hints": [
-                "Compare each line with the example.",
-                "One line matches the example.",
+                "Follow the job, which clamps a value into a range.",
+                "Values above the top become the top.",
                 "if (value > 10) value = 10;"
               ],
               "explanation": "Values above the top become the top.",
@@ -498,13 +498,13 @@
             {
               "id": "cpp-functions-01-predict",
               "type": "output_prediction",
-              "question": "Plaza potters recount crates before dawn. For clamp values in-place using reference parameters, what value is displayed?",
+              "question": "Select the output after the code clamps a value into a range, using value and.",
               "hints": [
-                "Run the example in your head from the top.",
-                "The last line is what gets displayed.",
+                "Follow the job, which clamps a value into a range.",
+                "Values above the top become the top.",
                 "10"
               ],
-              "explanation": "The In-Place Range Clamping program displays that value.",
+              "explanation": "Values above the top become the top.",
               "xp_reward": 10,
               "starter_code": "#include <iostream>\n#include <string>\n#include <vector>\n#include <algorithm>\n#include <memory>\nint main() {\n    int value = 40;\n    if (value < 0) value = 0;\n    if (value > 10) value = 10;\n    std::cout << value << std::endl;\n    return 0;\n}\n",
               "options": [
@@ -518,10 +518,10 @@
             {
               "id": "cpp-functions-01-order",
               "type": "ordering",
-              "question": "Plaza potters recount crates before dawn. For clamp values in-place using reference parameters, build the line that clamps a value into a range.",
+              "question": "Make the line that clamps a value into a range by ordering the pieces for value and 10.",
               "hints": [
-                "Start at the left of the example.",
-                "Keep the example order.",
+                "Follow the job, which clamps a value into a range.",
+                "Values above the top become the top.",
                 "if (left > right) left = right;"
               ],
               "explanation": "Values above the top become the top.",
@@ -549,10 +549,10 @@
             {
               "id": "cpp-functions-01-fill",
               "type": "fill_blank",
-              "question": "Plaza potters recount crates before dawn. For clamp values in-place using reference parameters, fill the blank so the line clamps a value into a range.",
+              "question": "Complete the line for value and 10 so that it clamps a value into a range.",
               "hints": [
-                "The blank is the missing piece of the example.",
-                "The example uses that piece.",
+                "Follow the job, which clamps a value into a range.",
+                "Values above the top become the top.",
                 "="
               ],
               "explanation": "Values above the top become the top.",
@@ -569,10 +569,10 @@
             {
               "id": "cpp-functions-01-bug",
               "type": "debugging",
-              "question": "Plaza potters recount crates before dawn. For clamp values in-place using reference parameters, which line does a different job than the example?",
+              "question": "Select the line that gets in the way of the job, which clamps a value into a range, for value and 10.",
               "hints": [
-                "The other lines match the example.",
-                "One line is the odd one.",
+                "Follow the job, which clamps a value into a range.",
+                "The high clamp stores zero instead of the top of the range.",
                 "Line 8"
               ],
               "explanation": "The high clamp stores zero instead of the top of the range.",
@@ -583,13 +583,13 @@
             {
               "id": "cpp-functions-01-predict-2",
               "type": "output_prediction",
-              "question": "Plaza potters recount crates before dawn. For clamp values in-place using reference parameters, what does the second run display?",
+              "question": "With the new data around value and 10, the code clamps a value into a range, so select the new output.",
               "hints": [
-                "Apply the same steps to the new value.",
-                "The display comes from the last line.",
+                "Follow the job, which clamps a value into a range.",
+                "Values above the top become the top.",
                 "4"
               ],
-              "explanation": "The second In-Place Range Clamping program displays that value.",
+              "explanation": "Values above the top become the top.",
               "xp_reward": 10,
               "starter_code": "#include <iostream>\n#include <string>\n#include <vector>\n#include <algorithm>\n#include <memory>\nint main() {\n    int value = 4;\n    if (value < 0) value = 0;\n    if (value > 10) value = 10;\n    std::cout << value << std::endl;\n    return 0;\n}\n",
               "options": [
@@ -603,10 +603,10 @@
             {
               "id": "cpp-functions-01-write",
               "type": "code",
-              "question": "Plaza potters recount crates before dawn. For clamp values in-place using reference parameters, fill the blank so the program prints the result.",
+              "question": "The printed result shows up after you fill the blank so the code clamps a value into a range for value and.",
               "hints": [
-                "The blank is the missing piece.",
-                "Print the value that piece produces.",
+                "Follow the job, which clamps a value into a range.",
+                "The printed value is the result after this step clamps a value into a range.",
                 "int label = value;"
               ],
               "explanation": "The printed value is the result after this step clamps a value into a range.",
@@ -641,7 +641,7 @@
         "cpp-loops"
       ],
       "learning_objectives": [
-        "Marsh potters recount crates before dawn, and mutate reference parameter in C."
+        "This step adds one to the integer, using value and 1."
       ],
       "starter_code": "void increment(int& value, int amount = 1) {\n    // TODO: Add amount to value\n}\n",
       "solution_code": "void increment(int& value, int amount = 1) {\n    value += amount;\n}\n",
@@ -674,23 +674,23 @@
             {
               "id": "cpp-functions-practice-1-teach",
               "type": "teach",
-              "question": "Marsh potters recount crates before dawn, and mutate reference parameter in C.",
+              "question": "This step adds one to the integer, using value and 1.",
               "hints": [
-                "Read the one job this step is practicing.",
-                "The example is about Value Incrementer.",
+                "Follow the job, which adds one to the integer.",
+                "value = value + 1; is the increment.",
                 "value = value + 1;"
               ],
-              "explanation": "Marsh potters recount crates before dawn, and mutate reference parameter in C.",
+              "explanation": "This step adds one to the integer, using value and 1.",
               "xp_reward": 0,
               "worked_example": "value = value + 1;"
             },
             {
               "id": "cpp-functions-practice-1-mcq",
               "type": "mcq",
-              "question": "Marsh potters recount crates before dawn. For mutate reference parameter in C, which line adds one to the integer?",
+              "question": "A correct choice adds one to the integer and goes with value and 1.",
               "hints": [
-                "Compare each line with the example.",
-                "One line matches the example.",
+                "Follow the job, which adds one to the integer.",
+                "value = value + 1; is the increment.",
                 "value = value + 1;"
               ],
               "explanation": "value = value + 1; is the increment.",
@@ -706,13 +706,13 @@
             {
               "id": "cpp-functions-practice-1-predict",
               "type": "output_prediction",
-              "question": "Marsh potters recount crates before dawn. For mutate reference parameter in C, what value is displayed?",
+              "question": "Select the output after the code adds one to the integer, using value and 1.",
               "hints": [
-                "Run the example in your head from the top.",
-                "The last line is what gets displayed.",
+                "Follow the job, which adds one to the integer.",
+                "value = value + 1; is the increment.",
                 "26"
               ],
-              "explanation": "The Value Incrementer program displays that value.",
+              "explanation": "value = value + 1; is the increment.",
               "xp_reward": 10,
               "starter_code": "#include <iostream>\n#include <string>\n#include <vector>\n#include <algorithm>\n#include <memory>\nint main() {\n    int value = 25;\n    value = value + 1;\n    std::cout << value << std::endl;\n    return 0;\n}\n",
               "options": [
@@ -726,10 +726,10 @@
             {
               "id": "cpp-functions-practice-1-order",
               "type": "ordering",
-              "question": "Marsh potters recount crates before dawn. For mutate reference parameter in C, build the line that adds one to the integer.",
+              "question": "Make the line that adds one to the integer by ordering the pieces for value and 1.",
               "hints": [
-                "Start at the left of the example.",
-                "Keep the example order.",
+                "Follow the job, which adds one to the integer.",
+                "value = value + 1; is the increment.",
                 "int next = left + 1;"
               ],
               "explanation": "value = value + 1; is the increment.",
@@ -755,10 +755,10 @@
             {
               "id": "cpp-functions-practice-1-fill",
               "type": "fill_blank",
-              "question": "Marsh potters recount crates before dawn. For mutate reference parameter in C, fill the blank so the line adds one to the integer.",
+              "question": "Complete the line for value and 1 so that it adds one to the integer.",
               "hints": [
-                "The blank is the missing piece of the example.",
-                "The example uses that piece.",
+                "Follow the job, which adds one to the integer.",
+                "value = value + 1; is the increment.",
                 "+"
               ],
               "explanation": "value = value + 1; is the increment.",
@@ -775,10 +775,10 @@
             {
               "id": "cpp-functions-practice-1-bug",
               "type": "debugging",
-              "question": "Marsh potters recount crates before dawn. For mutate reference parameter in C, which line does a different job than the example?",
+              "question": "Select the line that gets in the way of the job, which adds one to the integer, for value and 1.",
               "hints": [
-                "The other lines match the example.",
-                "One line is the odd one.",
+                "Follow the job, which adds one to the integer.",
+                "The update subtracts one.",
                 "Line 8"
               ],
               "explanation": "The update subtracts one.",
@@ -789,13 +789,13 @@
             {
               "id": "cpp-functions-practice-1-predict-2",
               "type": "output_prediction",
-              "question": "Marsh potters recount crates before dawn. For mutate reference parameter in C, what does the second run display?",
+              "question": "With the new data around value and 1, the code adds one to the integer, so select the new output.",
               "hints": [
-                "Apply the same steps to the new value.",
-                "The display comes from the last line.",
+                "Follow the job, which adds one to the integer.",
+                "value = value + 1; is the increment.",
                 "29"
               ],
-              "explanation": "The second Value Incrementer program displays that value.",
+              "explanation": "value = value + 1; is the increment.",
               "xp_reward": 10,
               "starter_code": "#include <iostream>\n#include <string>\n#include <vector>\n#include <algorithm>\n#include <memory>\nint main() {\n    int value = 28;\n    value = value + 1;\n    std::cout << value << std::endl;\n    return 0;\n}\n",
               "options": [
@@ -809,10 +809,10 @@
             {
               "id": "cpp-functions-practice-1-write",
               "type": "code",
-              "question": "Marsh potters recount crates before dawn. For mutate reference parameter in C, fill the blank so the program prints the result.",
+              "question": "The printed result shows up after you fill the blank so the code adds one to the integer for value and 1.",
               "hints": [
-                "The blank is the missing piece.",
-                "Print the value that piece produces.",
+                "Follow the job, which adds one to the integer.",
+                "The printed value is the result after this step adds one to the integer.",
                 "int label = value;"
               ],
               "explanation": "The printed value is the result after this step adds one to the integer.",
@@ -847,7 +847,7 @@
         "cpp-loops"
       ],
       "learning_objectives": [
-        "Harbor pickers recount crates before dawn, and return twice an int from double value."
+        "This step adds two integers in a lambda, using auto and 5."
       ],
       "starter_code": "int double_value(int n) {\n    // TODO: Return n * 2\n    return 0;\n}\n",
       "solution_code": "int double_value(int n) {\n    return n * 2;\n}\n",
@@ -880,23 +880,23 @@
             {
               "id": "cpp-functions-checkpoint-teach",
               "type": "teach",
-              "question": "Harbor pickers recount crates before dawn, and return twice an int from double value.",
+              "question": "This step adds two integers in a lambda, using auto and 5.",
               "hints": [
-                "Read the one job this step is practicing.",
-                "The example is about Unit 4 Checkpoint C Functions Mastery.",
+                "Follow the job, which adds two integers in a lambda.",
+                "The lambda returns the sum.",
                 "return left + right;"
               ],
-              "explanation": "Harbor pickers recount crates before dawn, and return twice an int from double value.",
+              "explanation": "This step adds two integers in a lambda, using auto and 5.",
               "xp_reward": 0,
               "worked_example": "return left + right;"
             },
             {
               "id": "cpp-functions-checkpoint-mcq",
               "type": "mcq",
-              "question": "Harbor pickers recount crates before dawn. For return twice an int from double value, which line adds two integers in a lambda?",
+              "question": "Pick the line that adds two integers in a lambda, not a line about something else, for auto and 5.",
               "hints": [
-                "Compare each line with the example.",
-                "One line matches the example.",
+                "Follow the job, which adds two integers in a lambda.",
+                "The lambda returns the sum.",
                 "return left + right;"
               ],
               "explanation": "The lambda returns the sum.",
@@ -912,13 +912,13 @@
             {
               "id": "cpp-functions-checkpoint-predict",
               "type": "output_prediction",
-              "question": "Harbor pickers recount crates before dawn. For return twice an int from double value, what value is displayed?",
+              "question": "The displayed value is what the code prints when it adds two integers in a lambda for auto and 5.",
               "hints": [
-                "Run the example in your head from the top.",
-                "The last line is what gets displayed.",
+                "Follow the job, which adds two integers in a lambda.",
+                "The lambda returns the sum.",
                 "37"
               ],
-              "explanation": "The Unit 4 Checkpoint C Functions Mastery program displays that value.",
+              "explanation": "The lambda returns the sum.",
               "xp_reward": 10,
               "starter_code": "#include <iostream>\n#include <string>\n#include <vector>\n#include <algorithm>\n#include <memory>\nint main() {\n    auto add = [](int left, int right) { return left + right; };\n    std::cout << add(32, 5) << std::endl;\n    return 0;\n}\n",
               "options": [
@@ -932,10 +932,10 @@
             {
               "id": "cpp-functions-checkpoint-order",
               "type": "ordering",
-              "question": "Harbor pickers recount crates before dawn. For return twice an int from double value, build the line that adds two integers in a lambda.",
+              "question": "Place every piece so the result adds two integers in a lambda for auto and 5.",
               "hints": [
-                "Start at the left of the example.",
-                "Keep the example order.",
+                "Follow the job, which adds two integers in a lambda.",
+                "The lambda returns the sum.",
                 "int total = left + right;"
               ],
               "explanation": "The lambda returns the sum.",
@@ -961,10 +961,10 @@
             {
               "id": "cpp-functions-checkpoint-fill",
               "type": "fill_blank",
-              "question": "Harbor pickers recount crates before dawn. For return twice an int from double value, fill the blank so the line adds two integers in a lambda.",
+              "question": "Drop in the piece that lets the line adds two integers in a lambda for auto and 5.",
               "hints": [
-                "The blank is the missing piece of the example.",
-                "The example uses that piece.",
+                "Follow the job, which adds two integers in a lambda.",
+                "The lambda returns the sum.",
                 "+"
               ],
               "explanation": "The lambda returns the sum.",
@@ -981,10 +981,10 @@
             {
               "id": "cpp-functions-checkpoint-bug",
               "type": "debugging",
-              "question": "Harbor pickers recount crates before dawn. For return twice an int from double value, which line does a different job than the example?",
+              "question": "The mismatch misses the job, which adds two integers in a lambda, for auto and 5.",
               "hints": [
-                "The other lines match the example.",
-                "One line is the odd one.",
+                "Follow the job, which adds two integers in a lambda.",
+                "The lambda subtracts.",
                 "Line 7"
               ],
               "explanation": "The lambda subtracts.",
@@ -995,13 +995,13 @@
             {
               "id": "cpp-functions-checkpoint-predict-2",
               "type": "output_prediction",
-              "question": "Harbor pickers recount crates before dawn. For return twice an int from double value, what does the second run display?",
+              "question": "Choose the printed result of the second run that adds two integers in a lambda for auto and 5.",
               "hints": [
-                "Apply the same steps to the new value.",
-                "The display comes from the last line.",
+                "Follow the job, which adds two integers in a lambda.",
+                "The lambda returns the sum.",
                 "41"
               ],
-              "explanation": "The second Unit 4 Checkpoint C Functions Mastery program displays that value.",
+              "explanation": "The lambda returns the sum.",
               "xp_reward": 10,
               "starter_code": "#include <iostream>\n#include <string>\n#include <vector>\n#include <algorithm>\n#include <memory>\nint main() {\n    auto add = [](int left, int right) { return left + right; };\n    std::cout << add(32, 9) << std::endl;\n    return 0;\n}\n",
               "options": [
@@ -1015,10 +1015,10 @@
             {
               "id": "cpp-functions-checkpoint-write",
               "type": "code",
-              "question": "Harbor pickers recount crates before dawn. For return twice an int from double value, fill the blank so the program prints the result.",
+              "question": "Make the program adds two integers in a lambda by filling the blank for auto and 5.",
               "hints": [
-                "The blank is the missing piece.",
-                "Print the value that piece produces.",
+                "Follow the job, which adds two integers in a lambda.",
+                "The printed value is the result after this step adds two integers in a lambda.",
                 "int label = add(32, 5);"
               ],
               "explanation": "The printed value is the result after this step adds two integers in a lambda.",

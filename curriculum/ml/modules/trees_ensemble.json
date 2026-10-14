@@ -27,7 +27,7 @@
       ],
       "prerequisites": [],
       "learning_objectives": [
-        "Harbor pickers recount crates before dawn, and predict with a decision stump."
+        "This step labels values at or above the stump cutoff, using value holding yes."
       ],
       "starter_code": "def stump_predict(x, threshold):\n    # TODO\n    pass\n",
       "solution_code": "def stump_predict(x, threshold):\n    return 1 if x >= threshold else 0\n",
@@ -60,23 +60,23 @@
             {
               "id": "tree-stump-teach",
               "type": "teach",
-              "question": "Harbor pickers recount crates before dawn, and predict with a decision stump.",
+              "question": "This step labels values at or above the stump cutoff, using value holding yes.",
               "hints": [
-                "Read the one job this step is practicing.",
-                "The example is about Decision Stump.",
+                "Follow the job, which labels values at or above the stump cutoff.",
+                "The stump sends values of at least 30 to yes.",
                 "value >= 30"
               ],
-              "explanation": "Harbor pickers recount crates before dawn, and predict with a decision stump.",
+              "explanation": "This step labels values at or above the stump cutoff, using value holding yes.",
               "xp_reward": 0,
               "worked_example": "value >= 30"
             },
             {
               "id": "tree-stump-mcq",
               "type": "mcq",
-              "question": "Harbor pickers recount crates before dawn. For predict with a decision stump, which line labels values at or above the stump cutoff?",
+              "question": "Pick the line that labels values at or above the stump cutoff, not a line about something else, for value holding yes.",
               "hints": [
-                "Compare each line with the example.",
-                "One line matches the example.",
+                "Follow the job, which labels values at or above the stump cutoff.",
+                "The stump sends values of at least 30 to yes.",
                 "value >= 30"
               ],
               "explanation": "The stump sends values of at least 30 to yes.",
@@ -92,13 +92,13 @@
             {
               "id": "tree-stump-predict",
               "type": "output_prediction",
-              "question": "Harbor pickers recount crates before dawn. For predict with a decision stump, what value is displayed?",
+              "question": "The displayed value is what the code prints when it labels values at or above the stump cutoff for value holding.",
               "hints": [
-                "Run the example in your head from the top.",
-                "The last line is what gets displayed.",
+                "Follow the job, which labels values at or above the stump cutoff.",
+                "The stump sends values of at least 30 to yes.",
                 "yes"
               ],
-              "explanation": "The Decision Stump program displays that value.",
+              "explanation": "The stump sends values of at least 30 to yes.",
               "xp_reward": 10,
               "starter_code": "value = 40\nprint('yes' if value >= 30 else 'no')\n",
               "options": [
@@ -112,10 +112,10 @@
             {
               "id": "tree-stump-order",
               "type": "ordering",
-              "question": "Harbor pickers recount crates before dawn. For predict with a decision stump, build the line that labels values at or above the stump cutoff.",
+              "question": "Place every piece so the result labels values at or above the stump cutoff for value holding yes.",
               "hints": [
-                "Start at the left of the example.",
-                "Keep the example order.",
+                "Follow the job, which labels values at or above the stump cutoff.",
+                "The stump sends values of at least 30 to yes.",
                 "if value >= 30: pass"
               ],
               "explanation": "The stump sends values of at least 30 to yes.",
@@ -139,10 +139,10 @@
             {
               "id": "tree-stump-fill",
               "type": "fill_blank",
-              "question": "Harbor pickers recount crates before dawn. For predict with a decision stump, fill the blank so the line labels values at or above the stump cutoff.",
+              "question": "Drop in the piece that lets the line labels values at or above the stump cutoff for value holding yes.",
               "hints": [
-                "The blank is the missing piece of the example.",
-                "The example uses that piece.",
+                "Follow the job, which labels values at or above the stump cutoff.",
+                "The stump sends values of at least 30 to yes.",
                 ">="
               ],
               "explanation": "The stump sends values of at least 30 to yes.",
@@ -159,10 +159,10 @@
             {
               "id": "tree-stump-bug",
               "type": "debugging",
-              "question": "Harbor pickers recount crates before dawn. For predict with a decision stump, which line does a different job than the example?",
+              "question": "The mismatch misses the job, which labels values at or above the stump cutoff, for value holding yes.",
               "hints": [
-                "The other lines match the example.",
-                "One line is the odd one.",
+                "Follow the job, which labels values at or above the stump cutoff.",
+                "The print says no for a value that clears the stump.",
                 "Line 2"
               ],
               "explanation": "The print says no for a value that clears the stump.",
@@ -173,13 +173,13 @@
             {
               "id": "tree-stump-predict-2",
               "type": "output_prediction",
-              "question": "Harbor pickers recount crates before dawn. For predict with a decision stump, what does the second run display?",
+              "question": "Choose the printed result of the second run that labels values at or above the stump cutoff for value holding yes.",
               "hints": [
-                "Apply the same steps to the new value.",
-                "The display comes from the last line.",
+                "Follow the job, which labels values at or above the stump cutoff.",
+                "The stump sends values of at least 30 to yes.",
                 "no"
               ],
-              "explanation": "The second Decision Stump program displays that value.",
+              "explanation": "The stump sends values of at least 30 to yes.",
               "xp_reward": 10,
               "starter_code": "value = 10\nprint('yes' if value >= 30 else 'no')\n",
               "options": [
@@ -193,10 +193,10 @@
             {
               "id": "tree-stump-write",
               "type": "code",
-              "question": "Harbor pickers recount crates before dawn. For predict with a decision stump, fill the blank so the program prints the result.",
+              "question": "Make the program labels values at or above the stump cutoff by filling the blank for value holding.",
               "hints": [
-                "The blank is the missing piece.",
-                "Print the value that piece produces.",
+                "Follow the job, which labels values at or above the stump cutoff.",
+                "The printed value is the result after this step labels values at or above the stump cutoff.",
                 "label = 'yes' if value >= 30 else 'no'"
               ],
               "explanation": "The printed value is the result after this step labels values at or above the stump cutoff.",
@@ -231,7 +231,7 @@
       ],
       "prerequisites": [],
       "learning_objectives": [
-        "Mesa pickers recount crates before dawn, and compute Gini impurity."
+        "This step scores a balanced split as impure, using yes and 1."
       ],
       "starter_code": "def gini(labels):\n    # TODO\n    pass\n",
       "solution_code": "def gini(labels):\n    n = len(labels)\n    if n == 0:\n        return 0.0\n    counts = {}\n    for lab in labels:\n        counts[lab] = counts.get(lab, 0) + 1\n    return 1.0 - sum((c / n) ** 2 for c in counts.values())\n",
@@ -264,23 +264,23 @@
             {
               "id": "tree-gini-teach",
               "type": "teach",
-              "question": "Mesa pickers recount crates before dawn, and compute Gini impurity.",
+              "question": "This step scores a balanced split as impure, using yes and 1.",
               "hints": [
-                "Read the one job this step is practicing.",
-                "The example is about Gini Impurity.",
+                "Follow the job, which scores a balanced split as impure.",
+                "Gini impurity is one minus the squared shares.",
                 "1 - (share ** 2)"
               ],
-              "explanation": "Mesa pickers recount crates before dawn, and compute Gini impurity.",
+              "explanation": "This step scores a balanced split as impure, using yes and 1.",
               "xp_reward": 0,
               "worked_example": "1 - (share ** 2)"
             },
             {
               "id": "tree-gini-mcq",
               "type": "mcq",
-              "question": "Mesa pickers recount crates before dawn. For compute Gini impurity, which line scores a balanced split as impure?",
+              "question": "Mark the choice that scores a balanced split as impure when the code mentions yes and 1.",
               "hints": [
-                "Compare each line with the example.",
-                "One line matches the example.",
+                "Follow the job, which scores a balanced split as impure.",
+                "Gini impurity is one minus the squared shares.",
                 "1 - (share ** 2)"
               ],
               "explanation": "Gini impurity is one minus the squared shares.",
@@ -296,13 +296,13 @@
             {
               "id": "tree-gini-predict",
               "type": "output_prediction",
-              "question": "Mesa pickers recount crates before dawn. For compute Gini impurity, what value is displayed?",
+              "question": "After yes and 1, the code scores a balanced split as impure, and the correct choice is the printed value.",
               "hints": [
-                "Run the example in your head from the top.",
-                "The last line is what gets displayed.",
+                "Follow the job, which scores a balanced split as impure.",
+                "Gini impurity is one minus the squared shares.",
                 "0.5"
               ],
-              "explanation": "The Gini Impurity program displays that value.",
+              "explanation": "Gini impurity is one minus the squared shares.",
               "xp_reward": 10,
               "starter_code": "yes = 2\ntotal = 4\nshare = yes / total\nprint(round(1 - (share ** 2 + (1 - share) ** 2), 2))\n",
               "options": [
@@ -316,10 +316,10 @@
             {
               "id": "tree-gini-order",
               "type": "ordering",
-              "question": "Mesa pickers recount crates before dawn. For compute Gini impurity, build the line that scores a balanced split as impure.",
+              "question": "The finished line scores a balanced split as impure, so place its pieces in order for yes and 1.",
               "hints": [
-                "Start at the left of the example.",
-                "Keep the example order.",
+                "Follow the job, which scores a balanced split as impure.",
+                "Gini impurity is one minus the squared shares.",
                 "impurity = 1 - (share ** 2)"
               ],
               "explanation": "Gini impurity is one minus the squared shares.",
@@ -347,10 +347,10 @@
             {
               "id": "tree-gini-fill",
               "type": "fill_blank",
-              "question": "Mesa pickers recount crates before dawn. For compute Gini impurity, fill the blank so the line scores a balanced split as impure.",
+              "question": "Finish the line that scores a balanced split as impure by filling the blank for yes and 1.",
               "hints": [
-                "The blank is the missing piece of the example.",
-                "The example uses that piece.",
+                "Follow the job, which scores a balanced split as impure.",
+                "Gini impurity is one minus the squared shares.",
                 "-"
               ],
               "explanation": "Gini impurity is one minus the squared shares.",
@@ -367,10 +367,10 @@
             {
               "id": "tree-gini-bug",
               "type": "debugging",
-              "question": "Mesa pickers recount crates before dawn. For compute Gini impurity, which line does a different job than the example?",
+              "question": "Mark the line that breaks the job, which scores a balanced split as impure, for yes and 1.",
               "hints": [
-                "The other lines match the example.",
-                "One line is the odd one.",
+                "Follow the job, which scores a balanced split as impure.",
+                "The print is the share, not the impurity of that share.",
                 "Line 3"
               ],
               "explanation": "The print is the share, not the impurity of that share.",
@@ -381,13 +381,13 @@
             {
               "id": "tree-gini-predict-2",
               "type": "output_prediction",
-              "question": "Mesa pickers recount crates before dawn. For compute Gini impurity, what does the second run display?",
+              "question": "Follow the second program, which scores a balanced split as impure for yes and 1, and choose its output.",
               "hints": [
-                "Apply the same steps to the new value.",
-                "The display comes from the last line.",
+                "Follow the job, which scores a balanced split as impure.",
+                "Gini impurity is one minus the squared shares.",
                 "0.0"
               ],
-              "explanation": "The second Gini Impurity program displays that value.",
+              "explanation": "Gini impurity is one minus the squared shares.",
               "xp_reward": 10,
               "starter_code": "yes = 4\ntotal = 4\nshare = yes / total\nprint(round(1 - (share ** 2 + (1 - share) ** 2), 2))\n",
               "options": [
@@ -401,10 +401,10 @@
             {
               "id": "tree-gini-write",
               "type": "code",
-              "question": "Mesa pickers recount crates before dawn. For compute Gini impurity, fill the blank so the program prints the result.",
+              "question": "Finish the program that scores a balanced split as impure by filling the blank for yes and 1.",
               "hints": [
-                "The blank is the missing piece.",
-                "Print the value that piece produces.",
+                "Follow the job, which scores a balanced split as impure.",
+                "The printed value is the result after this step scores a balanced split as impure.",
                 "label = round(1 - (share ** 2 + (1 - share) ** 2), 2)"
               ],
               "explanation": "The printed value is the result after this step scores a balanced split as impure.",
@@ -439,7 +439,7 @@
       ],
       "prerequisites": [],
       "learning_objectives": [
-        "Orchard pickers recount crates before dawn, and find best stump threshold."
+        "This step picks the index of the smallest gap, using gaps and index."
       ],
       "starter_code": "def best_split(xs, labels):\n    # TODO\n    pass\n",
       "solution_code": "def best_split(xs, labels):\n    def _gini(labs):\n        n = len(labs)\n        if n == 0:\n            return 0.0\n        counts = {}\n        for lab in labs:\n            counts[lab] = counts.get(lab, 0) + 1\n        return 1.0 - sum((c / n) ** 2 for c in counts.values())\n    best_t, best_g = xs[0], float('inf')\n    for t in sorted(set(xs)):\n        left = [lab for x, lab in zip(xs, labels) if x < t]\n        right = [lab for x, lab in zip(xs, labels) if x >= t]\n        if not left or not right:\n            continue\n        g = (len(left) * _gini(left) + len(right) * _gini(right)) / len(labels)\n        if g < best_g:\n            best_g, best_t = g, t\n    return best_t\n",
@@ -472,23 +472,23 @@
             {
               "id": "tree-best-split-teach",
               "type": "teach",
-              "question": "Orchard pickers recount crates before dawn, and find best stump threshold.",
+              "question": "This step picks the index of the smallest gap, using gaps and index.",
               "hints": [
-                "Read the one job this step is practicing.",
-                "The example is about Best Threshold Split.",
+                "Follow the job, which picks the index of the smallest gap.",
+                "The best split is the index of the smallest gap.",
                 "min(gaps)"
               ],
-              "explanation": "Orchard pickers recount crates before dawn, and find best stump threshold.",
+              "explanation": "This step picks the index of the smallest gap, using gaps and index.",
               "xp_reward": 0,
               "worked_example": "min(gaps)"
             },
             {
               "id": "tree-best-split-mcq",
               "type": "mcq",
-              "question": "Orchard pickers recount crates before dawn. For find best stump threshold, which line picks the index of the smallest gap?",
+              "question": "The match is the line that picks the index of the smallest gap for gaps and 4.",
               "hints": [
-                "Compare each line with the example.",
-                "One line matches the example.",
+                "Follow the job, which picks the index of the smallest gap.",
+                "The best split is the index of the smallest gap.",
                 "gaps.index(min(gaps))"
               ],
               "explanation": "The best split is the index of the smallest gap.",
@@ -504,13 +504,13 @@
             {
               "id": "tree-best-split-predict",
               "type": "output_prediction",
-              "question": "Orchard pickers recount crates before dawn. For find best stump threshold, what value is displayed?",
+              "question": "Work out what is printed when the code picks the index of the smallest gap for gaps and 4.",
               "hints": [
-                "Run the example in your head from the top.",
-                "The last line is what gets displayed.",
+                "Follow the job, which picks the index of the smallest gap.",
+                "The best split is the index of the smallest gap.",
                 "1"
               ],
-              "explanation": "The Best Threshold Split program displays that value.",
+              "explanation": "The best split is the index of the smallest gap.",
               "xp_reward": 10,
               "starter_code": "gaps = [3, 1, 4]\nprint(gaps.index(min(gaps)))\n",
               "options": [
@@ -524,10 +524,10 @@
             {
               "id": "tree-best-split-order",
               "type": "ordering",
-              "question": "Orchard pickers recount crates before dawn. For find best stump threshold, build the line that picks the index of the smallest gap.",
+              "question": "Rebuild, from the left, the line that picks the index of the smallest gap for gaps and 4.",
               "hints": [
-                "Start at the left of the example.",
-                "Keep the example order.",
+                "Follow the job, which picks the index of the smallest gap.",
+                "The best split is the index of the smallest gap.",
                 "picked = gaps.index(min(gaps))"
               ],
               "explanation": "The best split is the index of the smallest gap.",
@@ -547,10 +547,10 @@
             {
               "id": "tree-best-split-fill",
               "type": "fill_blank",
-              "question": "Orchard pickers recount crates before dawn. For find best stump threshold, fill the blank so the line picks the index of the smallest gap.",
+              "question": "The completed line picks the index of the smallest gap once you fill the blank for gaps and 4.",
               "hints": [
-                "The blank is the missing piece of the example.",
-                "The example uses that piece.",
+                "Follow the job, which picks the index of the smallest gap.",
+                "The best split is the index of the smallest gap.",
                 "min"
               ],
               "explanation": "The best split is the index of the smallest gap.",
@@ -567,10 +567,10 @@
             {
               "id": "tree-best-split-bug",
               "type": "debugging",
-              "question": "Orchard pickers recount crates before dawn. For find best stump threshold, which line does a different job than the example?",
+              "question": "One line does another job than the one that picks the index of the smallest gap for gaps and 4.",
               "hints": [
-                "The other lines match the example.",
-                "One line is the odd one.",
+                "Follow the job, which picks the index of the smallest gap.",
+                "The print takes the first gap instead of the smallest.",
                 "Line 2"
               ],
               "explanation": "The print takes the first gap instead of the smallest.",
@@ -581,13 +581,13 @@
             {
               "id": "tree-best-split-predict-2",
               "type": "output_prediction",
-              "question": "Orchard pickers recount crates before dawn. For find best stump threshold, what does the second run display?",
+              "question": "The second display is what prints after the code picks the index of the smallest gap for gaps and 4.",
               "hints": [
-                "Apply the same steps to the new value.",
-                "The display comes from the last line.",
+                "Follow the job, which picks the index of the smallest gap.",
+                "The best split is the index of the smallest gap.",
                 "2"
               ],
-              "explanation": "The second Best Threshold Split program displays that value.",
+              "explanation": "The best split is the index of the smallest gap.",
               "xp_reward": 10,
               "starter_code": "gaps = [3, 4, 2]\nprint(gaps.index(min(gaps)))\n",
               "options": [
@@ -601,10 +601,10 @@
             {
               "id": "tree-best-split-write",
               "type": "code",
-              "question": "Orchard pickers recount crates before dawn. For find best stump threshold, fill the blank so the program prints the result.",
+              "question": "Supply the blank so the run picks the index of the smallest gap and prints the result for gaps and 4.",
               "hints": [
-                "The blank is the missing piece.",
-                "Print the value that piece produces.",
+                "Follow the job, which picks the index of the smallest gap.",
+                "The printed value is the result after this step picks the index of the smallest gap.",
                 "label = gaps.index(min(gaps))"
               ],
               "explanation": "The printed value is the result after this step picks the index of the smallest gap.",
@@ -639,7 +639,7 @@
       ],
       "prerequisites": [],
       "learning_objectives": [
-        "Quarry pickers recount crates before dawn, and ensemble via majority vote."
+        "This step takes the majority vote, using votes and 2."
       ],
       "starter_code": "from collections import Counter\n\ndef majority_vote(pred_lists):\n    # TODO\n    pass\n",
       "solution_code": "from collections import Counter\n\ndef majority_vote(pred_lists):\n    n = len(pred_lists[0])\n    out = []\n    for i in range(n):\n        votes = [plist[i] for plist in pred_lists]\n        counts = Counter(votes)\n        best = max(counts.values())\n        out.append(min(v for v, c in counts.items() if c == best))\n    return out\n",
@@ -672,23 +672,23 @@
             {
               "id": "tree-bagging-teach",
               "type": "teach",
-              "question": "Quarry pickers recount crates before dawn, and ensemble via majority vote.",
+              "question": "This step takes the majority vote, using votes and 2.",
               "hints": [
-                "Read the one job this step is practicing.",
-                "The example is about Majority Vote Ensemble.",
+                "Follow the job, which takes the majority vote.",
+                "The majority is the label with more than half the votes.",
                 "sum(votes) * 2 > len(votes)"
               ],
-              "explanation": "Quarry pickers recount crates before dawn, and ensemble via majority vote.",
+              "explanation": "This step takes the majority vote, using votes and 2.",
               "xp_reward": 0,
               "worked_example": "sum(votes) * 2 > len(votes)"
             },
             {
               "id": "tree-bagging-mcq",
               "type": "mcq",
-              "question": "Quarry pickers recount crates before dawn. For ensemble via majority vote, which line takes the majority vote?",
+              "question": "Mark the choice that takes the majority vote when the code mentions votes and 2.",
               "hints": [
-                "Compare each line with the example.",
-                "One line matches the example.",
+                "Follow the job, which takes the majority vote.",
+                "The majority is the label with more than half the votes.",
                 "sum(votes) * 2 > len(votes)"
               ],
               "explanation": "The majority is the label with more than half the votes.",
@@ -704,13 +704,13 @@
             {
               "id": "tree-bagging-predict",
               "type": "output_prediction",
-              "question": "Quarry pickers recount crates before dawn. For ensemble via majority vote, what value is displayed?",
+              "question": "After votes and 2, the code takes the majority vote, and the correct choice is the printed value.",
               "hints": [
-                "Run the example in your head from the top.",
-                "The last line is what gets displayed.",
+                "Follow the job, which takes the majority vote.",
+                "The majority is the label with more than half the votes.",
                 "1"
               ],
-              "explanation": "The Majority Vote Ensemble program displays that value.",
+              "explanation": "The majority is the label with more than half the votes.",
               "xp_reward": 10,
               "starter_code": "votes = [1, 1, 0]\nprint(1 if sum(votes) * 2 > len(votes) else 0)\n",
               "options": [
@@ -724,10 +724,10 @@
             {
               "id": "tree-bagging-order",
               "type": "ordering",
-              "question": "Quarry pickers recount crates before dawn. For ensemble via majority vote, build the line that takes the majority vote.",
+              "question": "The finished line takes the majority vote, so place its pieces in order for votes and 2.",
               "hints": [
-                "Start at the left of the example.",
-                "Keep the example order.",
+                "Follow the job, which takes the majority vote.",
+                "The majority is the label with more than half the votes.",
                 "if sum(votes) * 2 > len(votes): pass"
               ],
               "explanation": "The majority is the label with more than half the votes.",
@@ -755,10 +755,10 @@
             {
               "id": "tree-bagging-fill",
               "type": "fill_blank",
-              "question": "Quarry pickers recount crates before dawn. For ensemble via majority vote, fill the blank so the line takes the majority vote.",
+              "question": "Finish the line that takes the majority vote by filling the blank for votes and 2.",
               "hints": [
-                "The blank is the missing piece of the example.",
-                "The example uses that piece.",
+                "Follow the job, which takes the majority vote.",
+                "The majority is the label with more than half the votes.",
                 ">"
               ],
               "explanation": "The majority is the label with more than half the votes.",
@@ -775,10 +775,10 @@
             {
               "id": "tree-bagging-bug",
               "type": "debugging",
-              "question": "Quarry pickers recount crates before dawn. For ensemble via majority vote, which line does a different job than the example?",
+              "question": "Mark the line that breaks the job, which takes the majority vote, for votes and.",
               "hints": [
-                "The other lines match the example.",
-                "One line is the odd one.",
+                "Follow the job, which takes the majority vote.",
+                "The print takes one vote and ignores the rest.",
                 "Line 2"
               ],
               "explanation": "The print takes one vote and ignores the rest.",
@@ -789,13 +789,13 @@
             {
               "id": "tree-bagging-predict-2",
               "type": "output_prediction",
-              "question": "Quarry pickers recount crates before dawn. For ensemble via majority vote, what does the second run display?",
+              "question": "Follow the second program, which takes the majority vote for votes and 2, and choose its output.",
               "hints": [
-                "Apply the same steps to the new value.",
-                "The display comes from the last line.",
+                "Follow the job, which takes the majority vote.",
+                "The majority is the label with more than half the votes.",
                 "0"
               ],
-              "explanation": "The second Majority Vote Ensemble program displays that value.",
+              "explanation": "The majority is the label with more than half the votes.",
               "xp_reward": 10,
               "starter_code": "votes = [0, 0, 1]\nprint(1 if sum(votes) * 2 > len(votes) else 0)\n",
               "options": [
@@ -809,10 +809,10 @@
             {
               "id": "tree-bagging-write",
               "type": "code",
-              "question": "Quarry pickers recount crates before dawn. For ensemble via majority vote, fill the blank so the program prints the result.",
+              "question": "Finish the program that takes the majority vote by filling the blank for votes and 2.",
               "hints": [
-                "The blank is the missing piece.",
-                "Print the value that piece produces.",
+                "Follow the job, which takes the majority vote.",
+                "The printed value is the result after this step takes the majority vote.",
                 "label = 1 if sum(votes) * 2 > len(votes) else 0"
               ],
               "explanation": "The printed value is the result after this step takes the majority vote.",
@@ -847,7 +847,7 @@
       ],
       "prerequisites": [],
       "learning_objectives": [
-        "Attic pickers recount crates before dawn, and apply tree stopping rules."
+        "This step caps the depth at the limit, using depth and 3."
       ],
       "starter_code": "def should_stop(depth, max_depth, labels):\n    # TODO\n    pass\n",
       "solution_code": "def should_stop(depth, max_depth, labels):\n    return depth >= max_depth or len(set(labels)) <= 1\n",
@@ -880,23 +880,23 @@
             {
               "id": "tree-checkpoint-teach",
               "type": "teach",
-              "question": "Attic pickers recount crates before dawn, and apply tree stopping rules.",
+              "question": "This step caps the depth at the limit, using depth and 3.",
               "hints": [
-                "Read the one job this step is practicing.",
-                "The example is about Checkpoint Tree Depth Limit.",
+                "Follow the job, which caps the depth at the limit.",
+                "A depth past the limit is replaced by the limit.",
                 "depth > limit"
               ],
-              "explanation": "Attic pickers recount crates before dawn, and apply tree stopping rules.",
+              "explanation": "This step caps the depth at the limit, using depth and 3.",
               "xp_reward": 0,
               "worked_example": "depth > limit"
             },
             {
               "id": "tree-checkpoint-mcq",
               "type": "mcq",
-              "question": "Attic pickers recount crates before dawn. For apply tree stopping rules, which line caps the depth at the limit?",
+              "question": "The match is the line that caps the depth at the limit for depth and 3.",
               "hints": [
-                "Compare each line with the example.",
-                "One line matches the example.",
+                "Follow the job, which caps the depth at the limit.",
+                "A depth past the limit is replaced by the limit.",
                 "limit if depth > limit else depth"
               ],
               "explanation": "A depth past the limit is replaced by the limit.",
@@ -912,13 +912,13 @@
             {
               "id": "tree-checkpoint-predict",
               "type": "output_prediction",
-              "question": "Attic pickers recount crates before dawn. For apply tree stopping rules, what value is displayed?",
+              "question": "Work out what is printed when the code caps the depth at the limit for depth and.",
               "hints": [
-                "Run the example in your head from the top.",
-                "The last line is what gets displayed.",
+                "Follow the job, which caps the depth at the limit.",
+                "A depth past the limit is replaced by the limit.",
                 "3"
               ],
-              "explanation": "The Checkpoint Tree Depth Limit program displays that value.",
+              "explanation": "A depth past the limit is replaced by the limit.",
               "xp_reward": 10,
               "starter_code": "depth = 31\nlimit = 3\nprint(limit if depth > limit else depth)\n",
               "options": [
@@ -932,10 +932,10 @@
             {
               "id": "tree-checkpoint-order",
               "type": "ordering",
-              "question": "Attic pickers recount crates before dawn. For apply tree stopping rules, build the line that caps the depth at the limit.",
+              "question": "Rebuild, from the left, the line that caps the depth at the limit for depth and 3.",
               "hints": [
-                "Start at the left of the example.",
-                "Keep the example order.",
+                "Follow the job, which caps the depth at the limit.",
+                "A depth past the limit is replaced by the limit.",
                 "kept = limit if depth>limit else depth"
               ],
               "explanation": "A depth past the limit is replaced by the limit.",
@@ -963,10 +963,10 @@
             {
               "id": "tree-checkpoint-fill",
               "type": "fill_blank",
-              "question": "Attic pickers recount crates before dawn. For apply tree stopping rules, fill the blank so the line caps the depth at the limit.",
+              "question": "The completed line caps the depth at the limit once you fill the blank for depth and 3.",
               "hints": [
-                "The blank is the missing piece of the example.",
-                "The example uses that piece.",
+                "Follow the job, which caps the depth at the limit.",
+                "A depth past the limit is replaced by the limit.",
                 ">"
               ],
               "explanation": "A depth past the limit is replaced by the limit.",
@@ -983,10 +983,10 @@
             {
               "id": "tree-checkpoint-bug",
               "type": "debugging",
-              "question": "Attic pickers recount crates before dawn. For apply tree stopping rules, which line does a different job than the example?",
+              "question": "One line does another job than the one that caps the depth at the limit for depth and.",
               "hints": [
-                "The other lines match the example.",
-                "One line is the odd one.",
+                "Follow the job, which caps the depth at the limit.",
+                "The print keeps the raw depth and never applies the cap.",
                 "Line 3"
               ],
               "explanation": "The print keeps the raw depth and never applies the cap.",
@@ -997,13 +997,13 @@
             {
               "id": "tree-checkpoint-predict-2",
               "type": "output_prediction",
-              "question": "Attic pickers recount crates before dawn. For apply tree stopping rules, what does the second run display?",
+              "question": "The second display is what prints after the code caps the depth at the limit for depth and 3.",
               "hints": [
-                "Apply the same steps to the new value.",
-                "The display comes from the last line.",
+                "Follow the job, which caps the depth at the limit.",
+                "A depth past the limit is replaced by the limit.",
                 "2"
               ],
-              "explanation": "The second Checkpoint Tree Depth Limit program displays that value.",
+              "explanation": "A depth past the limit is replaced by the limit.",
               "xp_reward": 10,
               "starter_code": "depth = 2\nlimit = 3\nprint(limit if depth > limit else depth)\n",
               "options": [
@@ -1017,10 +1017,10 @@
             {
               "id": "tree-checkpoint-write",
               "type": "code",
-              "question": "Attic pickers recount crates before dawn. For apply tree stopping rules, fill the blank so the program prints the result.",
+              "question": "Supply the blank so the run caps the depth at the limit and prints the result for depth and.",
               "hints": [
-                "The blank is the missing piece.",
-                "Print the value that piece produces.",
+                "Follow the job, which caps the depth at the limit.",
+                "The printed value is the result after this step caps the depth at the limit.",
                 "label = limit if depth > limit else depth"
               ],
               "explanation": "The printed value is the result after this step caps the depth at the limit.",

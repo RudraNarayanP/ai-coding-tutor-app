@@ -27,7 +27,7 @@
       ],
       "prerequisites": [],
       "learning_objectives": [
-        "Depot potters recount crates before dawn, and split data into train and test."
+        "This step counts the training rows before the cut, using rows and 8."
       ],
       "starter_code": "def train_test_split(xs, ratio):\n    # TODO\n    pass\n",
       "solution_code": "def train_test_split(xs, ratio):\n    n = int(len(xs) * ratio)\n    return xs[:n], xs[n:]\n",
@@ -60,23 +60,23 @@
             {
               "id": "split-train-test-teach",
               "type": "teach",
-              "question": "Depot potters recount crates before dawn, and split data into train and test.",
+              "question": "This step counts the training rows before the cut, using rows and 8.",
               "hints": [
-                "Read the one job this step is practicing.",
-                "The example is about Train Test Split.",
+                "Follow the job, which counts the training rows before the cut.",
+                "The slice before the cut is the training set.",
                 "rows[:cut]"
               ],
-              "explanation": "Depot potters recount crates before dawn, and split data into train and test.",
+              "explanation": "This step counts the training rows before the cut, using rows and 8.",
               "xp_reward": 0,
               "worked_example": "rows[:cut]"
             },
             {
               "id": "split-train-test-mcq",
               "type": "mcq",
-              "question": "Depot potters recount crates before dawn. For split data into train and test, which line counts the training rows before the cut?",
+              "question": "Mark the choice that counts the training rows before the cut when the code mentions rows and 8.",
               "hints": [
-                "Compare each line with the example.",
-                "One line matches the example.",
+                "Follow the job, which counts the training rows before the cut.",
+                "The slice before the cut is the training set.",
                 "rows[:cut]"
               ],
               "explanation": "The slice before the cut is the training set.",
@@ -92,13 +92,13 @@
             {
               "id": "split-train-test-predict",
               "type": "output_prediction",
-              "question": "Depot potters recount crates before dawn. For split data into train and test, what value is displayed?",
+              "question": "After rows and the code counts the training rows before the cut, and the correct choice is the printed value.",
               "hints": [
-                "Run the example in your head from the top.",
-                "The last line is what gets displayed.",
+                "Follow the job, which counts the training rows before the cut.",
+                "The slice before the cut is the training set.",
                 "8"
               ],
-              "explanation": "The Train Test Split program displays that value.",
+              "explanation": "The slice before the cut is the training set.",
               "xp_reward": 10,
               "starter_code": "rows = list(range(10))\ncut = 8\nprint(len(rows[:cut]))\n",
               "options": [
@@ -112,10 +112,10 @@
             {
               "id": "split-train-test-order",
               "type": "ordering",
-              "question": "Depot potters recount crates before dawn. For split data into train and test, build the line that counts the training rows before the cut.",
+              "question": "The finished line counts the training rows before the cut, so place its pieces in order for rows and 8.",
               "hints": [
-                "Start at the left of the example.",
-                "Keep the example order.",
+                "Follow the job, which counts the training rows before the cut.",
+                "The slice before the cut is the training set.",
                 "train = rows[:cut]"
               ],
               "explanation": "The slice before the cut is the training set.",
@@ -135,10 +135,10 @@
             {
               "id": "split-train-test-fill",
               "type": "fill_blank",
-              "question": "Depot potters recount crates before dawn. For split data into train and test, fill the blank so the line counts the training rows before the cut.",
+              "question": "Finish the line that counts the training rows before the cut by filling the blank for rows and 8.",
               "hints": [
-                "The blank is the missing piece of the example.",
-                "The example uses that piece.",
+                "Follow the job, which counts the training rows before the cut.",
+                "The slice before the cut is the training set.",
                 ":"
               ],
               "explanation": "The slice before the cut is the training set.",
@@ -155,10 +155,10 @@
             {
               "id": "split-train-test-bug",
               "type": "debugging",
-              "question": "Depot potters recount crates before dawn. For split data into train and test, which line does a different job than the example?",
+              "question": "Mark the line that breaks the job, which counts the training rows before the cut, for rows and 8.",
               "hints": [
-                "The other lines match the example.",
-                "One line is the odd one.",
+                "Follow the job, which counts the training rows before the cut.",
+                "The print counts every row, including the held-out tail.",
                 "Line 3"
               ],
               "explanation": "The print counts every row, including the held-out tail.",
@@ -169,13 +169,13 @@
             {
               "id": "split-train-test-predict-2",
               "type": "output_prediction",
-              "question": "Depot potters recount crates before dawn. For split data into train and test, what does the second run display?",
+              "question": "Follow the second program, which counts the training rows before the cut for rows and 8, and choose its output.",
               "hints": [
-                "Apply the same steps to the new value.",
-                "The display comes from the last line.",
+                "Follow the job, which counts the training rows before the cut.",
+                "The slice before the cut is the training set.",
                 "6"
               ],
-              "explanation": "The second Train Test Split program displays that value.",
+              "explanation": "The slice before the cut is the training set.",
               "xp_reward": 10,
               "starter_code": "rows = list(range(10))\ncut = 6\nprint(len(rows[:cut]))\n",
               "options": [
@@ -189,10 +189,10 @@
             {
               "id": "split-train-test-write",
               "type": "code",
-              "question": "Depot potters recount crates before dawn. For split data into train and test, fill the blank so the program prints the result.",
+              "question": "Finish the program that counts the training rows before the cut by filling the blank for rows and.",
               "hints": [
-                "The blank is the missing piece.",
-                "Print the value that piece produces.",
+                "Follow the job, which counts the training rows before the cut.",
+                "The printed value is the result after this step counts the training rows before the cut.",
                 "label = len(rows[:cut])"
               ],
               "explanation": "The printed value is the result after this step counts the training rows before the cut.",
@@ -227,7 +227,7 @@
       ],
       "prerequisites": [],
       "learning_objectives": [
-        "Ridge potters recount crates before dawn, and shuffle before splitting."
+        "This step reads the first row after a fixed shuffle, using rows and 3."
       ],
       "starter_code": "import random\n\ndef shuffle_split(xs, ratio, seed):\n    # TODO\n    pass\n",
       "solution_code": "import random\n\ndef shuffle_split(xs, ratio, seed):\n    items = list(xs)\n    random.Random(seed).shuffle(items)\n    n = int(len(items) * ratio)\n    return items[:n], items[n:]\n",
@@ -260,23 +260,23 @@
             {
               "id": "split-shuffle-teach",
               "type": "teach",
-              "question": "Ridge potters recount crates before dawn, and shuffle before splitting.",
+              "question": "This step reads the first row after a fixed shuffle, using rows and 3.",
               "hints": [
-                "Read the one job this step is practicing.",
-                "The example is about Deterministic Shuffle Split.",
+                "Follow the job, which reads the first row after a fixed shuffle.",
+                "The first index in the order picks the first shuffled row.",
                 "rows[order[0]]"
               ],
-              "explanation": "Ridge potters recount crates before dawn, and shuffle before splitting.",
+              "explanation": "This step reads the first row after a fixed shuffle, using rows and 3.",
               "xp_reward": 0,
               "worked_example": "rows[order[0]]"
             },
             {
               "id": "split-shuffle-mcq",
               "type": "mcq",
-              "question": "Ridge potters recount crates before dawn. For shuffle before splitting, which line reads the first row after a fixed shuffle?",
+              "question": "Pick the line that reads the first row after a fixed shuffle, not a line about something else, for rows and 3.",
               "hints": [
-                "Compare each line with the example.",
-                "One line matches the example.",
+                "Follow the job, which reads the first row after a fixed shuffle.",
+                "The first index in the order picks the first shuffled row.",
                 "rows[order[0]]"
               ],
               "explanation": "The first index in the order picks the first shuffled row.",
@@ -292,13 +292,13 @@
             {
               "id": "split-shuffle-predict",
               "type": "output_prediction",
-              "question": "Ridge potters recount crates before dawn. For shuffle before splitting, what value is displayed?",
+              "question": "The displayed value is what the code prints when it reads the first row after a fixed shuffle for rows and 3.",
               "hints": [
-                "Run the example in your head from the top.",
-                "The last line is what gets displayed.",
+                "Follow the job, which reads the first row after a fixed shuffle.",
+                "The first index in the order picks the first shuffled row.",
                 "2"
               ],
-              "explanation": "The Deterministic Shuffle Split program displays that value.",
+              "explanation": "The first index in the order picks the first shuffled row.",
               "xp_reward": 10,
               "starter_code": "rows = [40, 1, 2, 3]\norder = [2, 0, 1, 3]\nprint(rows[order[0]])\n",
               "options": [
@@ -312,10 +312,10 @@
             {
               "id": "split-shuffle-order",
               "type": "ordering",
-              "question": "Ridge potters recount crates before dawn. For shuffle before splitting, build the line that reads the first row after a fixed shuffle.",
+              "question": "Place every piece so the result reads the first row after a fixed shuffle for rows and 3.",
               "hints": [
-                "Start at the left of the example.",
-                "Keep the example order.",
+                "Follow the job, which reads the first row after a fixed shuffle.",
+                "The first index in the order picks the first shuffled row.",
                 "picked = rows[order[0]]"
               ],
               "explanation": "The first index in the order picks the first shuffled row.",
@@ -335,10 +335,10 @@
             {
               "id": "split-shuffle-fill",
               "type": "fill_blank",
-              "question": "Ridge potters recount crates before dawn. For shuffle before splitting, fill the blank so the line reads the first row after a fixed shuffle.",
+              "question": "Drop in the piece that lets the line reads the first row after a fixed shuffle for rows and 3.",
               "hints": [
-                "The blank is the missing piece of the example.",
-                "The example uses that piece.",
+                "Follow the job, which reads the first row after a fixed shuffle.",
+                "The first index in the order picks the first shuffled row.",
                 "0"
               ],
               "explanation": "The first index in the order picks the first shuffled row.",
@@ -355,10 +355,10 @@
             {
               "id": "split-shuffle-bug",
               "type": "debugging",
-              "question": "Ridge potters recount crates before dawn. For shuffle before splitting, which line does a different job than the example?",
+              "question": "The mismatch misses the job, which reads the first row after a fixed shuffle, for rows and 3.",
               "hints": [
-                "The other lines match the example.",
-                "One line is the odd one.",
+                "Follow the job, which reads the first row after a fixed shuffle.",
+                "The print ignores the shuffle order.",
                 "Line 2"
               ],
               "explanation": "The print ignores the shuffle order.",
@@ -369,13 +369,13 @@
             {
               "id": "split-shuffle-predict-2",
               "type": "output_prediction",
-              "question": "Ridge potters recount crates before dawn. For shuffle before splitting, what does the second run display?",
+              "question": "Choose the printed result of the second run that reads the first row after a fixed shuffle for rows and 3.",
               "hints": [
-                "Apply the same steps to the new value.",
-                "The display comes from the last line.",
+                "Follow the job, which reads the first row after a fixed shuffle.",
+                "The first index in the order picks the first shuffled row.",
                 "40"
               ],
-              "explanation": "The second Deterministic Shuffle Split program displays that value.",
+              "explanation": "The first index in the order picks the first shuffled row.",
               "xp_reward": 10,
               "starter_code": "rows = [40, 1, 2, 3]\norder = [0, 1, 2, 3]\nprint(rows[order[0]])\n",
               "options": [
@@ -389,10 +389,10 @@
             {
               "id": "split-shuffle-write",
               "type": "code",
-              "question": "Ridge potters recount crates before dawn. For shuffle before splitting, fill the blank so the program prints the result.",
+              "question": "Make the program reads the first row after a fixed shuffle by filling the blank for rows and 3.",
               "hints": [
-                "The blank is the missing piece.",
-                "Print the value that piece produces.",
+                "Follow the job, which reads the first row after a fixed shuffle.",
+                "The printed value is the result after this step reads the first row after a fixed shuffle.",
                 "label = rows[order[0]]"
               ],
               "explanation": "The printed value is the result after this step reads the first row after a fixed shuffle.",
@@ -427,7 +427,7 @@
       ],
       "prerequisites": [],
       "learning_objectives": [
-        "Cove potters recount crates before dawn, and apply min-max feature scaling."
+        "This step scales a value between zero and one, using low and 1."
       ],
       "starter_code": "def minmax(xs):\n    # TODO\n    pass\n",
       "solution_code": "def minmax(xs):\n    lo, hi = min(xs), max(xs)\n    if hi == lo:\n        return [0.0 for _ in xs]\n    return [(x - lo) / (hi - lo) for x in xs]\n",
@@ -460,23 +460,23 @@
             {
               "id": "scale-minmax-teach",
               "type": "teach",
-              "question": "Cove potters recount crates before dawn, and apply min-max feature scaling.",
+              "question": "This step scales a value between zero and one, using low and 1.",
               "hints": [
-                "Read the one job this step is practicing.",
-                "The example is about Min-Max Scaling.",
+                "Follow the job, which scales a value between zero and one.",
+                "Min-max scaling divides the gap by the full range.",
                 "(value - low) / (high - low)"
               ],
-              "explanation": "Cove potters recount crates before dawn, and apply min-max feature scaling.",
+              "explanation": "This step scales a value between zero and one, using low and 1.",
               "xp_reward": 0,
               "worked_example": "(value - low) / (high - low)"
             },
             {
               "id": "scale-minmax-mcq",
               "type": "mcq",
-              "question": "Cove potters recount crates before dawn. For apply min-max feature scaling, which line scales a value between zero and one?",
+              "question": "A correct choice scales a value between zero and one and goes with low and 1.",
               "hints": [
-                "Compare each line with the example.",
-                "One line matches the example.",
+                "Follow the job, which scales a value between zero and one.",
+                "Min-max scaling divides the gap by the full range.",
                 "(value - low) / (high - low)"
               ],
               "explanation": "Min-max scaling divides the gap by the full range.",
@@ -492,13 +492,13 @@
             {
               "id": "scale-minmax-predict",
               "type": "output_prediction",
-              "question": "Cove potters recount crates before dawn. For apply min-max feature scaling, what value is displayed?",
+              "question": "Select the output after the code scales a value between zero and one, using low and 1.",
               "hints": [
-                "Run the example in your head from the top.",
-                "The last line is what gets displayed.",
+                "Follow the job, which scales a value between zero and one.",
+                "Min-max scaling divides the gap by the full range.",
                 "0.2"
               ],
-              "explanation": "The Min-Max Scaling program displays that value.",
+              "explanation": "Min-max scaling divides the gap by the full range.",
               "xp_reward": 10,
               "starter_code": "low = 0\nhigh = 10\nvalue = 2\nprint(round((value - low) / (high - low), 1))\n",
               "options": [
@@ -512,10 +512,10 @@
             {
               "id": "scale-minmax-order",
               "type": "ordering",
-              "question": "Cove potters recount crates before dawn. For apply min-max feature scaling, build the line that scales a value between zero and one.",
+              "question": "Make the line that scales a value between zero and one by ordering the pieces for low and 1.",
               "hints": [
-                "Start at the left of the example.",
-                "Keep the example order.",
+                "Follow the job, which scales a value between zero and one.",
+                "Min-max scaling divides the gap by the full range.",
                 "scaled = (value-low) / (high-low)"
               ],
               "explanation": "Min-max scaling divides the gap by the full range.",
@@ -539,10 +539,10 @@
             {
               "id": "scale-minmax-fill",
               "type": "fill_blank",
-              "question": "Cove potters recount crates before dawn. For apply min-max feature scaling, fill the blank so the line scales a value between zero and one.",
+              "question": "Complete the line for low and 1 so that it scales a value between zero and one.",
               "hints": [
-                "The blank is the missing piece of the example.",
-                "The example uses that piece.",
+                "Follow the job, which scales a value between zero and one.",
+                "Min-max scaling divides the gap by the full range.",
                 "/"
               ],
               "explanation": "Min-max scaling divides the gap by the full range.",
@@ -559,10 +559,10 @@
             {
               "id": "scale-minmax-bug",
               "type": "debugging",
-              "question": "Cove potters recount crates before dawn. For apply min-max feature scaling, which line does a different job than the example?",
+              "question": "Select the line that gets in the way of the job, which scales a value between zero and one, for low and 1.",
               "hints": [
-                "The other lines match the example.",
-                "One line is the odd one.",
+                "Follow the job, which scales a value between zero and one.",
+                "The print is the gap and never divides by the range.",
                 "Line 4"
               ],
               "explanation": "The print is the gap and never divides by the range.",
@@ -573,13 +573,13 @@
             {
               "id": "scale-minmax-predict-2",
               "type": "output_prediction",
-              "question": "Cove potters recount crates before dawn. For apply min-max feature scaling, what does the second run display?",
+              "question": "With the new data around low and 1, the code scales a value between zero and one, so select the new output.",
               "hints": [
-                "Apply the same steps to the new value.",
-                "The display comes from the last line.",
+                "Follow the job, which scales a value between zero and one.",
+                "Min-max scaling divides the gap by the full range.",
                 "0.4"
               ],
-              "explanation": "The second Min-Max Scaling program displays that value.",
+              "explanation": "Min-max scaling divides the gap by the full range.",
               "xp_reward": 10,
               "starter_code": "low = 0\nhigh = 10\nvalue = 4\nprint(round((value - low) / (high - low), 1))\n",
               "options": [
@@ -593,10 +593,10 @@
             {
               "id": "scale-minmax-write",
               "type": "code",
-              "question": "Cove potters recount crates before dawn. For apply min-max feature scaling, fill the blank so the program prints the result.",
+              "question": "The printed result shows up after you fill the blank so the code scales a value between zero and one for low and 1.",
               "hints": [
-                "The blank is the missing piece.",
-                "Print the value that piece produces.",
+                "Follow the job, which scales a value between zero and one.",
+                "The printed value is the result after this step scales a value between zero and one.",
                 "label = round((value - low) / (high - low), 1)"
               ],
               "explanation": "The printed value is the result after this step scales a value between zero and one.",
@@ -631,7 +631,7 @@
       ],
       "prerequisites": [],
       "learning_objectives": [
-        "Plaza potters recount crates before dawn, and standardize features."
+        "This step divides the gap by the spread, using value and 1."
       ],
       "starter_code": "import math\n\ndef standardize(xs):\n    # TODO\n    pass\n",
       "solution_code": "import math\n\ndef standardize(xs):\n    m = sum(xs) / len(xs)\n    var = sum((x - m) ** 2 for x in xs) / len(xs)\n    if var == 0:\n        return [0.0 for _ in xs]\n    sd = math.sqrt(var)\n    return [(x - m) / sd for x in xs]\n",
@@ -663,23 +663,23 @@
             {
               "id": "scale-standardize-teach",
               "type": "teach",
-              "question": "Plaza potters recount crates before dawn, and standardize features.",
+              "question": "This step divides the gap by the spread, using value and 1.",
               "hints": [
-                "Read the one job this step is practicing.",
-                "The example is about Standardize.",
+                "Follow the job, which divides the gap by the spread.",
+                "Standardizing divides the gap from the mean by the spread.",
                 "(value - mean) / spread"
               ],
-              "explanation": "Plaza potters recount crates before dawn, and standardize features.",
+              "explanation": "This step divides the gap by the spread, using value and 1.",
               "xp_reward": 0,
               "worked_example": "(value - mean) / spread"
             },
             {
               "id": "scale-standardize-mcq",
               "type": "mcq",
-              "question": "Plaza potters recount crates before dawn. For standardize features, which line divides the gap by the spread?",
+              "question": "Pick the line that divides the gap by the spread, not a line about something else, for value and 1.",
               "hints": [
-                "Compare each line with the example.",
-                "One line matches the example.",
+                "Follow the job, which divides the gap by the spread.",
+                "Standardizing divides the gap from the mean by the spread.",
                 "(value - mean) / spread"
               ],
               "explanation": "Standardizing divides the gap from the mean by the spread.",
@@ -695,13 +695,13 @@
             {
               "id": "scale-standardize-predict",
               "type": "output_prediction",
-              "question": "Plaza potters recount crates before dawn. For standardize features, what value is displayed?",
+              "question": "The displayed value is what the code prints when it divides the gap by the spread for value and 1.",
               "hints": [
-                "Run the example in your head from the top.",
-                "The last line is what gets displayed.",
+                "Follow the job, which divides the gap by the spread.",
+                "Standardizing divides the gap from the mean by the spread.",
                 "2.4"
               ],
-              "explanation": "The Standardize program displays that value.",
+              "explanation": "Standardizing divides the gap from the mean by the spread.",
               "xp_reward": 10,
               "starter_code": "value = 32\nmean = 20\nspread = 5\nprint(round((value - mean) / spread, 1))\n",
               "options": [
@@ -715,10 +715,10 @@
             {
               "id": "scale-standardize-order",
               "type": "ordering",
-              "question": "Plaza potters recount crates before dawn. For standardize features, build the line that divides the gap by the spread.",
+              "question": "Place every piece so the result divides the gap by the spread for value and 1.",
               "hints": [
-                "Start at the left of the example.",
-                "Keep the example order.",
+                "Follow the job, which divides the gap by the spread.",
+                "Standardizing divides the gap from the mean by the spread.",
                 "scaled = (value - mean) / spread"
               ],
               "explanation": "Standardizing divides the gap from the mean by the spread.",
@@ -746,10 +746,10 @@
             {
               "id": "scale-standardize-fill",
               "type": "fill_blank",
-              "question": "Plaza potters recount crates before dawn. For standardize features, fill the blank so the line divides the gap by the spread.",
+              "question": "Drop in the piece that lets the line divides the gap by the spread for value and 1.",
               "hints": [
-                "The blank is the missing piece of the example.",
-                "The example uses that piece.",
+                "Follow the job, which divides the gap by the spread.",
+                "Standardizing divides the gap from the mean by the spread.",
                 "/"
               ],
               "explanation": "Standardizing divides the gap from the mean by the spread.",
@@ -766,10 +766,10 @@
             {
               "id": "scale-standardize-bug",
               "type": "debugging",
-              "question": "Plaza potters recount crates before dawn. For standardize features, which line does a different job than the example, using hazel?",
+              "question": "The mismatch misses the job, which divides the gap by the spread, for value and 1.",
               "hints": [
-                "The other lines match the example.",
-                "One line is the odd one.",
+                "Follow the job, which divides the gap by the spread.",
+                "The print stops at the gap.",
                 "Line 2"
               ],
               "explanation": "The print stops at the gap.",
@@ -780,13 +780,13 @@
             {
               "id": "scale-standardize-predict-2",
               "type": "output_prediction",
-              "question": "Plaza potters recount crates before dawn. For standardize features, what does the second run display, using maple?",
+              "question": "Choose the printed result of the second run that divides the gap by the spread for value and 1.",
               "hints": [
-                "Apply the same steps to the new value.",
-                "The display comes from the last line.",
+                "Follow the job, which divides the gap by the spread.",
+                "Standardizing divides the gap from the mean by the spread.",
                 "3.0"
               ],
-              "explanation": "The second Standardize program displays that value.",
+              "explanation": "Standardizing divides the gap from the mean by the spread.",
               "xp_reward": 10,
               "starter_code": "value = 35\nmean = 20\nspread = 5\nprint(round((value - mean) / spread, 1))\n",
               "options": [
@@ -800,10 +800,10 @@
             {
               "id": "scale-standardize-write",
               "type": "code",
-              "question": "Plaza potters recount crates before dawn. For standardize features, fill the blank so the program prints the result, using ridge.",
+              "question": "Make the program divides the gap by the spread by filling the blank for value and 1.",
               "hints": [
-                "The blank is the missing piece.",
-                "Print the value that piece produces.",
+                "Follow the job, which divides the gap by the spread.",
+                "The printed value is the result after this step divides the gap by the spread.",
                 "label = round((value - mean) / spread, 1)"
               ],
               "explanation": "The printed value is the result after this step divides the gap by the spread.",
@@ -839,7 +839,7 @@
       ],
       "prerequisites": [],
       "learning_objectives": [
-        "Marsh potters recount crates before dawn, and fit scaler on train only."
+        "This step fits the low and high before scaling, using low and 8."
       ],
       "starter_code": "def fit_minmax(train):\n    # TODO\n    pass\n\ndef transform_minmax(xs, lo, hi):\n    # TODO\n    pass\n",
       "solution_code": "def fit_minmax(train):\n    return min(train), max(train)\n\ndef transform_minmax(xs, lo, hi):\n    if hi == lo:\n        return [0.0 for _ in xs]\n    return [(x - lo) / (hi - lo) for x in xs]\n",
@@ -872,23 +872,23 @@
             {
               "id": "scale-checkpoint-teach",
               "type": "teach",
-              "question": "Marsh potters recount crates before dawn, and fit scaler on train only.",
+              "question": "This step fits the low and high before scaling, using low and 8.",
               "hints": [
-                "Read the one job this step is practicing.",
-                "The example is about Checkpoint Fit-Transform Scaler.",
+                "Follow the job, which fits the low and high before scaling.",
+                "The fit stores the smallest training value as the low.",
                 "min(values)"
               ],
-              "explanation": "Marsh potters recount crates before dawn, and fit scaler on train only.",
+              "explanation": "This step fits the low and high before scaling, using low and 8.",
               "xp_reward": 0,
               "worked_example": "min(values)"
             },
             {
               "id": "scale-checkpoint-mcq",
               "type": "mcq",
-              "question": "Marsh potters recount crates before dawn. For fit scaler on train only, which line fits the low and high before scaling?",
+              "question": "The match is the line that fits the low and high before scaling for low and 8.",
               "hints": [
-                "Compare each line with the example.",
-                "One line matches the example.",
+                "Follow the job, which fits the low and high before scaling.",
+                "The fit stores the smallest training value as the low.",
                 "min(values)"
               ],
               "explanation": "The fit stores the smallest training value as the low.",
@@ -904,13 +904,13 @@
             {
               "id": "scale-checkpoint-predict",
               "type": "output_prediction",
-              "question": "Marsh potters recount crates before dawn. For fit scaler on train only, what value is displayed?",
+              "question": "Work out what is printed when the code fits the low and high before scaling for low and 8.",
               "hints": [
-                "Run the example in your head from the top.",
-                "The last line is what gets displayed.",
+                "Follow the job, which fits the low and high before scaling.",
+                "The fit stores the smallest training value as the low.",
                 "0.33"
               ],
-              "explanation": "The Checkpoint Fit-Transform Scaler program displays that value.",
+              "explanation": "The fit stores the smallest training value as the low.",
               "xp_reward": 10,
               "starter_code": "values = [2, 4, 8]\nlow = min(values)\nhigh = max(values)\nvalue = 4\nprint(round((value - low) / (high - low), 2))\n",
               "options": [
@@ -924,10 +924,10 @@
             {
               "id": "scale-checkpoint-order",
               "type": "ordering",
-              "question": "Marsh potters recount crates before dawn. For fit scaler on train only, build the line that fits the low and high before scaling.",
+              "question": "Rebuild, from the left, the line that fits the low and high before scaling for low and 8.",
               "hints": [
-                "Start at the left of the example.",
-                "Keep the example order.",
+                "Follow the job, which fits the low and high before scaling.",
+                "The fit stores the smallest training value as the low.",
                 "low = min(values)"
               ],
               "explanation": "The fit stores the smallest training value as the low.",
@@ -947,10 +947,10 @@
             {
               "id": "scale-checkpoint-fill",
               "type": "fill_blank",
-              "question": "Marsh potters recount crates before dawn. For fit scaler on train only, fill the blank so the line fits the low and high before scaling.",
+              "question": "The completed line fits the low and high before scaling once you fill the blank for low and 8.",
               "hints": [
-                "The blank is the missing piece of the example.",
-                "The example uses that piece.",
+                "Follow the job, which fits the low and high before scaling.",
+                "The fit stores the smallest training value as the low.",
                 "min"
               ],
               "explanation": "The fit stores the smallest training value as the low.",
@@ -967,10 +967,10 @@
             {
               "id": "scale-checkpoint-bug",
               "type": "debugging",
-              "question": "Marsh potters recount crates before dawn. For fit scaler on train only, which line does a different job than the example?",
+              "question": "One line does another job than the one that fits the low and high before scaling for low and 8.",
               "hints": [
-                "The other lines match the example.",
-                "One line is the odd one.",
+                "Follow the job, which fits the low and high before scaling.",
+                "The print uses a fixed slot instead of the fitted low.",
                 "Line 2"
               ],
               "explanation": "The print uses a fixed slot instead of the fitted low.",
@@ -981,13 +981,13 @@
             {
               "id": "scale-checkpoint-predict-2",
               "type": "output_prediction",
-              "question": "Marsh potters recount crates before dawn. For fit scaler on train only, what does the second run display?",
+              "question": "The second display is what prints after the code fits the low and high before scaling for low and 8.",
               "hints": [
-                "Apply the same steps to the new value.",
-                "The display comes from the last line.",
+                "Follow the job, which fits the low and high before scaling.",
+                "The fit stores the smallest training value as the low.",
                 "0.5"
               ],
-              "explanation": "The second Checkpoint Fit-Transform Scaler program displays that value.",
+              "explanation": "The fit stores the smallest training value as the low.",
               "xp_reward": 10,
               "starter_code": "values = [0, 4, 8]\nlow = min(values)\nhigh = max(values)\nvalue = 4\nprint(round((value - low) / (high - low), 2))\n",
               "options": [
@@ -1001,10 +1001,10 @@
             {
               "id": "scale-checkpoint-write",
               "type": "code",
-              "question": "Marsh potters recount crates before dawn. For fit scaler on train only, fill the blank so the program prints the result.",
+              "question": "Supply the blank so the run fits the low and high before scaling and prints the result for low and 8.",
               "hints": [
-                "The blank is the missing piece.",
-                "Print the value that piece produces.",
+                "Follow the job, which fits the low and high before scaling.",
+                "The printed value is the result after this step fits the low and high before scaling.",
                 "label = round((value - low) / (high - low), 2)"
               ],
               "explanation": "The printed value is the result after this step fits the low and high before scaling.",

@@ -27,7 +27,7 @@
       ],
       "prerequisites": [],
       "learning_objectives": [
-        "Depot clerks recount crates before dawn, and assemble chat message lists."
+        "This step reads the role of the first message, using messages holding role."
       ],
       "starter_code": "def chat_messages(system, user):\n    # TODO\n    pass\n",
       "solution_code": "def chat_messages(system, user):\n    return [{'role': 'system', 'content': system}, {'role': 'user', 'content': user}]\n",
@@ -60,23 +60,23 @@
             {
               "id": "ai-prompt-system-teach",
               "type": "teach",
-              "question": "Depot clerks recount crates before dawn, and assemble chat message lists.",
+              "question": "This step reads the role of the first message, using messages holding role.",
               "hints": [
-                "Read the one job this step is practicing.",
-                "The example is about Build Chat Messages.",
+                "Follow the job, which reads the role of the first message.",
+                "The role key says who sent the message.",
                 "messages[0]['role']"
               ],
-              "explanation": "Depot clerks recount crates before dawn, and assemble chat message lists.",
+              "explanation": "This step reads the role of the first message, using messages holding role.",
               "xp_reward": 0,
               "worked_example": "messages[0]['role']"
             },
             {
               "id": "ai-prompt-system-mcq",
               "type": "mcq",
-              "question": "Depot clerks recount crates before dawn. For assemble chat message lists, which line reads the role of the first message?",
+              "question": "Select the line that reads the role of the first message, the one that belongs with messages holding role.",
               "hints": [
-                "Compare each line with the example.",
-                "One line matches the example.",
+                "Follow the job, which reads the role of the first message.",
+                "The role key says who sent the message.",
                 "messages[0]['role']"
               ],
               "explanation": "The role key says who sent the message.",
@@ -92,13 +92,13 @@
             {
               "id": "ai-prompt-system-predict",
               "type": "output_prediction",
-              "question": "Depot clerks recount crates before dawn. For assemble chat message lists, what value is displayed?",
+              "question": "Follow the code that reads the role of the first message for messages holding role, then choose the displayed value.",
               "hints": [
-                "Run the example in your head from the top.",
-                "The last line is what gets displayed.",
+                "Follow the job, which reads the role of the first message.",
+                "The role key says who sent the message.",
                 "system"
               ],
-              "explanation": "The Build Chat Messages program displays that value.",
+              "explanation": "The role key says who sent the message.",
               "xp_reward": 10,
               "starter_code": "messages = [{'role': 'system', 'text': 'thyme'}]\nprint(messages[0]['role'])\n",
               "options": [
@@ -112,10 +112,10 @@
             {
               "id": "ai-prompt-system-order",
               "type": "ordering",
-              "question": "Depot clerks recount crates before dawn. For assemble chat message lists, build the line that reads the role of the first message.",
+              "question": "Order the pieces so the line reads the role of the first message for messages holding role.",
               "hints": [
-                "Start at the left of the example.",
-                "Keep the example order.",
+                "Follow the job, which reads the role of the first message.",
+                "The role key says who sent the message.",
                 "role = messages[0]['role']"
               ],
               "explanation": "The role key says who sent the message.",
@@ -135,10 +135,10 @@
             {
               "id": "ai-prompt-system-fill",
               "type": "fill_blank",
-              "question": "Depot clerks recount crates before dawn. For assemble chat message lists, fill the blank so the line reads the role of the first message.",
+              "question": "Supply the missing piece so the line reads the role of the first message for messages holding role.",
               "hints": [
-                "The blank is the missing piece of the example.",
-                "The example uses that piece.",
+                "Follow the job, which reads the role of the first message.",
+                "The role key says who sent the message.",
                 "'role'"
               ],
               "explanation": "The role key says who sent the message.",
@@ -155,10 +155,10 @@
             {
               "id": "ai-prompt-system-bug",
               "type": "debugging",
-              "question": "Depot clerks recount crates before dawn. For assemble chat message lists, which line does a different job than the example?",
+              "question": "The wrong line is the one that misses the job, which reads the role of the first message, for messages holding role.",
               "hints": [
-                "The other lines match the example.",
-                "One line is the odd one.",
+                "Follow the job, which reads the role of the first message.",
+                "The print shows the text instead of the role.",
                 "Line 2"
               ],
               "explanation": "The print shows the text instead of the role.",
@@ -169,13 +169,13 @@
             {
               "id": "ai-prompt-system-predict-2",
               "type": "output_prediction",
-              "question": "Depot clerks recount crates before dawn. For assemble chat message lists, what does the second run display?",
+              "question": "A new input still has code that reads the role of the first message for messages holding role, and the correct choice is what it prints.",
               "hints": [
-                "Apply the same steps to the new value.",
-                "The display comes from the last line.",
+                "Follow the job, which reads the role of the first message.",
+                "The role key says who sent the message.",
                 "user"
               ],
-              "explanation": "The second Build Chat Messages program displays that value.",
+              "explanation": "The role key says who sent the message.",
               "xp_reward": 10,
               "starter_code": "messages = [{'role': 'user', 'text': 'thyme'}]\nprint(messages[0]['role'])\n",
               "options": [
@@ -189,10 +189,10 @@
             {
               "id": "ai-prompt-system-write",
               "type": "code",
-              "question": "Depot clerks recount crates before dawn. For assemble chat message lists, fill the blank so the program prints the result.",
+              "question": "The blank is the missing piece of the program that reads the role of the first message for messages holding role.",
               "hints": [
-                "The blank is the missing piece.",
-                "Print the value that piece produces.",
+                "Follow the job, which reads the role of the first message.",
+                "The printed value is the result after this step reads the role of the first message.",
                 "label = messages[0]['role']"
               ],
               "explanation": "The printed value is the result after this step reads the role of the first message.",
@@ -227,7 +227,7 @@
       ],
       "prerequisites": [],
       "learning_objectives": [
-        "Ridge clerks recount crates before dawn, and render prompt templates."
+        "This step fills the name into the template, using name holding cedar."
       ],
       "starter_code": "def render_prompt(template, **kwargs):\n    # TODO\n    pass\n",
       "solution_code": "def render_prompt(template, **kwargs):\n    return template.format_map(kwargs)\n",
@@ -260,23 +260,23 @@
             {
               "id": "ai-prompt-template-teach",
               "type": "teach",
-              "question": "Ridge clerks recount crates before dawn, and render prompt templates.",
+              "question": "This step fills the name into the template, using name holding cedar.",
               "hints": [
-                "Read the one job this step is practicing.",
-                "The example is about Prompt Template.",
+                "Follow the job, which fills the name into the template.",
+                "The template substitutes the name into the sentence.",
                 "f'Hello {name}'"
               ],
-              "explanation": "Ridge clerks recount crates before dawn, and render prompt templates.",
+              "explanation": "This step fills the name into the template, using name holding cedar.",
               "xp_reward": 0,
               "worked_example": "f'Hello {name}'"
             },
             {
               "id": "ai-prompt-template-mcq",
               "type": "mcq",
-              "question": "Ridge clerks recount crates before dawn. For render prompt templates, which line fills the name into the template?",
+              "question": "Keep the choice that fills the name into the template for name holding cedar.",
               "hints": [
-                "Compare each line with the example.",
-                "One line matches the example.",
+                "Follow the job, which fills the name into the template.",
+                "The template substitutes the name into the sentence.",
                 "f'Hello {name}'"
               ],
               "explanation": "The template substitutes the name into the sentence.",
@@ -292,30 +292,30 @@
             {
               "id": "ai-prompt-template-predict",
               "type": "output_prediction",
-              "question": "Ridge clerks recount crates before dawn. For render prompt templates, what value is displayed?",
+              "question": "Trace the code that fills the name into the template using name holding cedar, and select what it displays.",
               "hints": [
-                "Run the example in your head from the top.",
-                "The last line is what gets displayed.",
-                "Hello birch"
+                "Follow the job, which fills the name into the template.",
+                "The template substitutes the name into the sentence.",
+                "Hello cedar"
               ],
-              "explanation": "The Prompt Template program displays that value.",
+              "explanation": "The template substitutes the name into the sentence.",
               "xp_reward": 10,
-              "starter_code": "name = 'birch'\nprint(f'Hello {name}')\n",
+              "starter_code": "name = 'cedar'\nprint(f'Hello {name}')\n",
               "options": [
-                "Hello flint",
+                "Hello grove",
                 "none",
                 "0",
-                "Hello birch"
+                "Hello cedar"
               ],
-              "correct_answer": "Hello birch"
+              "correct_answer": "Hello cedar"
             },
             {
               "id": "ai-prompt-template-order",
               "type": "ordering",
-              "question": "Ridge clerks recount crates before dawn. For render prompt templates, build the line that fills the name into the template.",
+              "question": "Tap the pieces, in order, of the line that fills the name into the template for name holding cedar.",
               "hints": [
-                "Start at the left of the example.",
-                "Keep the example order.",
+                "Follow the job, which fills the name into the template.",
+                "The template substitutes the name into the sentence.",
                 "text = f'Hello {name}'"
               ],
               "explanation": "The template substitutes the name into the sentence.",
@@ -337,10 +337,10 @@
             {
               "id": "ai-prompt-template-fill",
               "type": "fill_blank",
-              "question": "Ridge clerks recount crates before dawn. For render prompt templates, fill the blank so the line fills the name into the template.",
+              "question": "The blank is the missing piece of the line that fills the name into the template for name holding cedar.",
               "hints": [
-                "The blank is the missing piece of the example.",
-                "The example uses that piece.",
+                "Follow the job, which fills the name into the template.",
+                "The template substitutes the name into the sentence.",
                 "{name}"
               ],
               "explanation": "The template substitutes the name into the sentence.",
@@ -357,55 +357,55 @@
             {
               "id": "ai-prompt-template-bug",
               "type": "debugging",
-              "question": "Ridge clerks recount crates before dawn. For render prompt templates, which line does a different job than the example?",
+              "question": "Choose the line that does another job than the one that fills the name into the template for name holding cedar.",
               "hints": [
-                "The other lines match the example.",
-                "One line is the odd one.",
+                "Follow the job, which fills the name into the template.",
+                "The print shows the name without the template around it.",
                 "Line 2"
               ],
               "explanation": "The print shows the name without the template around it.",
               "xp_reward": 10,
-              "starter_code": "name = 'birch'\nprint(name)\n",
+              "starter_code": "name = 'cedar'\nprint(name)\n",
               "correct_answer": "2"
             },
             {
               "id": "ai-prompt-template-predict-2",
               "type": "output_prediction",
-              "question": "Ridge clerks recount crates before dawn. For render prompt templates, what does the second run display?",
+              "question": "Trace the second run, which fills the name into the template for name holding cedar, and select what it displays.",
               "hints": [
-                "Apply the same steps to the new value.",
-                "The display comes from the last line.",
-                "Hello flint"
+                "Follow the job, which fills the name into the template.",
+                "The template substitutes the name into the sentence.",
+                "Hello grove"
               ],
-              "explanation": "The second Prompt Template program displays that value.",
+              "explanation": "The template substitutes the name into the sentence.",
               "xp_reward": 10,
-              "starter_code": "name = 'flint'\nprint(f'Hello {name}')\n",
+              "starter_code": "name = 'grove'\nprint(f'Hello {name}')\n",
               "options": [
-                "Hello birch",
+                "Hello cedar",
                 "none",
-                "Hello flint",
+                "Hello grove",
                 "0"
               ],
-              "correct_answer": "Hello flint"
+              "correct_answer": "Hello grove"
             },
             {
               "id": "ai-prompt-template-write",
               "type": "code",
-              "question": "Ridge clerks recount crates before dawn. For render prompt templates, fill the blank so the program prints the result.",
+              "question": "Type the missing piece so the program fills the name into the template for name holding cedar and prints it.",
               "hints": [
-                "The blank is the missing piece.",
-                "Print the value that piece produces.",
+                "Follow the job, which fills the name into the template.",
+                "The printed value is the result after this step fills the name into the template.",
                 "label = f'Hello {name}'"
               ],
               "explanation": "The printed value is the result after this step fills the name into the template.",
               "xp_reward": 10,
-              "starter_code": "name = 'birch'\nlabel = ___\nprint(label)\n",
-              "solution_code": "name = 'birch'\nlabel = f'Hello {name}'\nprint(label)\n",
+              "starter_code": "name = 'cedar'\nlabel = ___\nprint(label)\n",
+              "solution_code": "name = 'cedar'\nlabel = f'Hello {name}'\nprint(label)\n",
               "tests": [
                 {
                   "name": "ai-prompt-template-prints",
                   "description": "The printed value is the result after this step fills the name into the template",
-                  "expected_stdout": "Hello birch\n",
+                  "expected_stdout": "Hello cedar\n",
                   "required": true
                 }
               ]
@@ -429,7 +429,7 @@
       ],
       "prerequisites": [],
       "learning_objectives": [
-        "Cove clerks recount crates before dawn, and pack few-shot examples into prompts."
+        "This step counts the packed examples, using shots holding kelp."
       ],
       "starter_code": "def few_shot(examples, query):\n    # TODO\n    pass\n",
       "solution_code": "def few_shot(examples, query):\n    blocks = [f'Input: {inp}\\nOutput: {out}' for inp, out in examples]\n    blocks.append(f'Input: {query}\\nOutput:')\n    return '\\n\\n'.join(blocks)\n",
@@ -461,23 +461,23 @@
             {
               "id": "ai-prompt-fewshot-teach",
               "type": "teach",
-              "question": "Cove clerks recount crates before dawn, and pack few-shot examples into prompts.",
+              "question": "This step counts the packed examples, using shots holding kelp.",
               "hints": [
-                "Read the one job this step is practicing.",
-                "The example is about Few-Shot Packing.",
+                "Stay with the step this screen is about.",
+                "The packed list length is the number of examples.",
                 "len(shots)"
               ],
-              "explanation": "Cove clerks recount crates before dawn, and pack few-shot examples into prompts.",
+              "explanation": "This step counts the packed examples, using shots holding kelp.",
               "xp_reward": 0,
               "worked_example": "len(shots)"
             },
             {
               "id": "ai-prompt-fewshot-mcq",
               "type": "mcq",
-              "question": "Cove clerks recount crates before dawn. For pack few-shot examples into prompts, which line counts the packed examples?",
+              "question": "Pick the line that counts the packed examples, not a line about something else, for shots holding kelp.",
               "hints": [
-                "Compare each line with the example.",
-                "One line matches the example.",
+                "Stay with the step this screen is about.",
+                "The packed list length is the number of examples.",
                 "len(shots)"
               ],
               "explanation": "The packed list length is the number of examples.",
@@ -493,15 +493,15 @@
             {
               "id": "ai-prompt-fewshot-predict",
               "type": "output_prediction",
-              "question": "Cove clerks recount crates before dawn. For pack few-shot examples into prompts, what value is displayed?",
+              "question": "The displayed value is what the code prints when it counts the packed examples for shots holding kelp.",
               "hints": [
-                "Run the example in your head from the top.",
-                "The last line is what gets displayed.",
+                "Stay with the step this screen is about.",
+                "The packed list length is the number of examples.",
                 "2"
               ],
-              "explanation": "The Few-Shot Packing program displays that value.",
+              "explanation": "The packed list length is the number of examples.",
               "xp_reward": 10,
-              "starter_code": "shots = ['juniper', 'nectar']\nprint(len(shots))\n",
+              "starter_code": "shots = ['kelp', 'olive']\nprint(len(shots))\n",
               "options": [
                 "3",
                 "2",
@@ -513,35 +513,35 @@
             {
               "id": "ai-prompt-fewshot-order",
               "type": "ordering",
-              "question": "Cove clerks recount crates before dawn. For pack few-shot examples into prompts, build the line that counts the packed examples.",
+              "question": "Place every piece so the result counts the packed examples for shots holding kelp.",
               "hints": [
-                "Start at the left of the example.",
-                "Keep the example order.",
-                "shots = ['juniper', 'nectar']"
+                "Stay with the step this screen is about.",
+                "The packed list length is the number of examples.",
+                "shots = ['kelp', 'olive']"
               ],
               "explanation": "The packed list length is the number of examples.",
               "xp_reward": 10,
               "options": [
                 "shots",
                 "=",
-                "['juniper',",
-                "'nectar']",
+                "['kelp',",
+                "'olive']",
                 "=="
               ],
               "correct_answer": [
                 "shots",
                 "=",
-                "['juniper',",
-                "'nectar']"
+                "['kelp',",
+                "'olive']"
               ]
             },
             {
               "id": "ai-prompt-fewshot-fill",
               "type": "fill_blank",
-              "question": "Cove clerks recount crates before dawn. For pack few-shot examples into prompts, fill the blank so the line counts the packed examples.",
+              "question": "Drop in the piece that lets the line counts the packed examples for shots holding kelp.",
               "hints": [
-                "The blank is the missing piece of the example.",
-                "The example uses that piece.",
+                "Stay with the step this screen is about.",
+                "The packed list length is the number of examples.",
                 "len"
               ],
               "explanation": "The packed list length is the number of examples.",
@@ -558,29 +558,29 @@
             {
               "id": "ai-prompt-fewshot-bug",
               "type": "debugging",
-              "question": "Cove clerks recount crates before dawn. For pack few-shot examples into prompts, which line does a different job than the example?",
+              "question": "The mismatch misses the job, which counts the packed examples, for shots holding kelp.",
               "hints": [
-                "The other lines match the example.",
-                "One line is the odd one.",
+                "Stay with the step this screen is about.",
+                "The print shows one example instead of the count.",
                 "Line 2"
               ],
               "explanation": "The print shows one example instead of the count.",
               "xp_reward": 10,
-              "starter_code": "shots = ['juniper', 'nectar']\nprint(shots[0])\n",
+              "starter_code": "shots = ['kelp', 'olive']\nprint(shots[0])\n",
               "correct_answer": "2"
             },
             {
               "id": "ai-prompt-fewshot-predict-2",
               "type": "output_prediction",
-              "question": "Cove clerks recount crates before dawn. For pack few-shot examples into prompts, what does the second run display?",
+              "question": "Choose the printed result of the second run that counts the packed examples for shots holding kelp.",
               "hints": [
-                "Apply the same steps to the new value.",
-                "The display comes from the last line.",
+                "Stay with the step this screen is about.",
+                "The packed list length is the number of examples.",
                 "3"
               ],
-              "explanation": "The second Few-Shot Packing program displays that value.",
+              "explanation": "The packed list length is the number of examples.",
               "xp_reward": 10,
-              "starter_code": "shots = ['juniper', 'nectar', 'extra']\nprint(len(shots))\n",
+              "starter_code": "shots = ['kelp', 'olive', 'extra']\nprint(len(shots))\n",
               "options": [
                 "2",
                 "none",
@@ -592,16 +592,16 @@
             {
               "id": "ai-prompt-fewshot-write",
               "type": "code",
-              "question": "Cove clerks recount crates before dawn. For pack few-shot examples into prompts, fill the blank so the program prints the result.",
+              "question": "Make the program counts the packed examples by filling the blank for shots holding kelp.",
               "hints": [
-                "The blank is the missing piece.",
-                "Print the value that piece produces.",
+                "Stay with the step this screen is about.",
+                "The printed value is the result after this step counts the packed examples.",
                 "label = len(shots)"
               ],
               "explanation": "The printed value is the result after this step counts the packed examples.",
               "xp_reward": 10,
-              "starter_code": "shots = ['juniper', 'nectar']\nlabel = ___\nprint(label)\n",
-              "solution_code": "shots = ['juniper', 'nectar']\nlabel = len(shots)\nprint(label)\n",
+              "starter_code": "shots = ['kelp', 'olive']\nlabel = ___\nprint(label)\n",
+              "solution_code": "shots = ['kelp', 'olive']\nlabel = len(shots)\nprint(label)\n",
               "tests": [
                 {
                   "name": "ai-prompt-fewshot-prints",
@@ -631,7 +631,7 @@
       ],
       "prerequisites": [],
       "learning_objectives": [
-        "Plaza clerks recount crates before dawn, and request structured JSON outputs."
+        "This step reads the ok flag from the JSON object, using blob holding ok."
       ],
       "starter_code": "def json_instruction(schema_keys):\n    # TODO\n    pass\n",
       "solution_code": "def json_instruction(schema_keys):\n    keys = ', '.join(schema_keys)\n    return f'Respond with JSON containing keys: {keys}.'\n",
@@ -664,23 +664,23 @@
             {
               "id": "ai-prompt-json-schema-teach",
               "type": "teach",
-              "question": "Plaza clerks recount crates before dawn, and request structured JSON outputs.",
+              "question": "This step reads the ok flag from the JSON object, using blob holding ok.",
               "hints": [
-                "Read the one job this step is practicing.",
-                "The example is about Ask for JSON.",
+                "Follow the job, which reads the ok flag from the JSON object.",
+                "loads turns the JSON text into a dictionary.",
                 "json.loads(blob)"
               ],
-              "explanation": "Plaza clerks recount crates before dawn, and request structured JSON outputs.",
+              "explanation": "This step reads the ok flag from the JSON object, using blob holding ok.",
               "xp_reward": 0,
               "worked_example": "json.loads(blob)"
             },
             {
               "id": "ai-prompt-json-schema-mcq",
               "type": "mcq",
-              "question": "Plaza clerks recount crates before dawn. For request structured JSON outputs, which line reads the ok flag from the JSON object?",
+              "question": "Pick the line that reads the ok flag from the JSON object, not a line about something else, for blob holding ok.",
               "hints": [
-                "Compare each line with the example.",
-                "One line matches the example.",
+                "Follow the job, which reads the ok flag from the JSON object.",
+                "loads turns the JSON text into a dictionary.",
                 "json.loads(blob)"
               ],
               "explanation": "loads turns the JSON text into a dictionary.",
@@ -696,13 +696,13 @@
             {
               "id": "ai-prompt-json-schema-predict",
               "type": "output_prediction",
-              "question": "Plaza clerks recount crates before dawn. For request structured JSON outputs, what value is displayed?",
+              "question": "The displayed value is what the code prints when it reads the ok flag from the JSON object for blob holding ok.",
               "hints": [
-                "Run the example in your head from the top.",
-                "The last line is what gets displayed.",
+                "Follow the job, which reads the ok flag from the JSON object.",
+                "loads turns the JSON text into a dictionary.",
                 "1"
               ],
-              "explanation": "The Ask for JSON program displays that value.",
+              "explanation": "loads turns the JSON text into a dictionary.",
               "xp_reward": 10,
               "starter_code": "import json\nblob = '{\"ok\": 1}'\nprint(json.loads(blob)['ok'])\n",
               "options": [
@@ -716,10 +716,10 @@
             {
               "id": "ai-prompt-json-schema-order",
               "type": "ordering",
-              "question": "Plaza clerks recount crates before dawn. For request structured JSON outputs, build the line that reads the ok flag from the JSON object.",
+              "question": "Place every piece so the result reads the ok flag from the JSON object for blob holding ok.",
               "hints": [
-                "Start at the left of the example.",
-                "Keep the example order.",
+                "Follow the job, which reads the ok flag from the JSON object.",
+                "loads turns the JSON text into a dictionary.",
                 "data = json.loads(blob)"
               ],
               "explanation": "loads turns the JSON text into a dictionary.",
@@ -739,10 +739,10 @@
             {
               "id": "ai-prompt-json-schema-fill",
               "type": "fill_blank",
-              "question": "Plaza clerks recount crates before dawn. For request structured JSON outputs, fill the blank so the line reads the ok flag from the JSON object.",
+              "question": "Drop in the piece that lets the line reads the ok flag from the JSON object for blob holding ok.",
               "hints": [
-                "The blank is the missing piece of the example.",
-                "The example uses that piece.",
+                "Follow the job, which reads the ok flag from the JSON object.",
+                "loads turns the JSON text into a dictionary.",
                 "loads"
               ],
               "explanation": "loads turns the JSON text into a dictionary.",
@@ -759,10 +759,10 @@
             {
               "id": "ai-prompt-json-schema-bug",
               "type": "debugging",
-              "question": "Plaza clerks recount crates before dawn. For request structured JSON outputs, which line does a different job than the example?",
+              "question": "The mismatch misses the job, which reads the ok flag from the JSON object, for blob holding ok.",
               "hints": [
-                "The other lines match the example.",
-                "One line is the odd one.",
+                "Follow the job, which reads the ok flag from the JSON object.",
+                "The print shows a character and never parses the object.",
                 "Line 3"
               ],
               "explanation": "The print shows a character and never parses the object.",
@@ -773,13 +773,13 @@
             {
               "id": "ai-prompt-json-schema-predict-2",
               "type": "output_prediction",
-              "question": "Plaza clerks recount crates before dawn. For request structured JSON outputs, what does the second run display?",
+              "question": "Choose the printed result of the second run that reads the ok flag from the JSON object for blob holding ok.",
               "hints": [
-                "Apply the same steps to the new value.",
-                "The display comes from the last line.",
+                "Follow the job, which reads the ok flag from the JSON object.",
+                "loads turns the JSON text into a dictionary.",
                 "0"
               ],
-              "explanation": "The second Ask for JSON program displays that value.",
+              "explanation": "loads turns the JSON text into a dictionary.",
               "xp_reward": 10,
               "starter_code": "import json\nblob = '{\"ok\": 0}'\nprint(json.loads(blob)['ok'])\n",
               "options": [
@@ -793,10 +793,10 @@
             {
               "id": "ai-prompt-json-schema-write",
               "type": "code",
-              "question": "Plaza clerks recount crates before dawn. For request structured JSON outputs, fill the blank so the program prints the result.",
+              "question": "Make the program reads the ok flag from the JSON object by filling the blank for blob holding ok.",
               "hints": [
-                "The blank is the missing piece.",
-                "Print the value that piece produces.",
+                "Follow the job, which reads the ok flag from the JSON object.",
+                "The printed value is the result after this step reads the ok flag from the JSON object.",
                 "label = json.loads(blob)['ok']"
               ],
               "explanation": "The printed value is the result after this step reads the ok flag from the JSON object.",
@@ -831,7 +831,7 @@
       ],
       "prerequisites": [],
       "learning_objectives": [
-        "Marsh clerks recount crates before dawn, and extract JSON from model output."
+        "This step reads the ok flag from a JSON block inside text, using text holding note {."
       ],
       "starter_code": "def extract_json(text):\n    # TODO\n    pass\n",
       "solution_code": "def extract_json(text):\n    start = text.find('{')\n    end = text.rfind('}')\n    if start == -1 or end == -1 or end < start:\n        raise ValueError('no json object')\n    return text[start:end + 1]\n",
@@ -864,23 +864,23 @@
             {
               "id": "ai-prompt-checkpoint-teach",
               "type": "teach",
-              "question": "Marsh clerks recount crates before dawn, and extract JSON from model output.",
+              "question": "This step reads the ok flag from a JSON block inside text, using text holding note {.",
               "hints": [
-                "Read the one job this step is practicing.",
-                "The example is about Checkpoint Extract JSON Block.",
+                "Follow the job, which reads the ok flag from a JSON block inside text.",
+                "The slice from the brace through the closing brace is the JSON block.",
                 "text[start:end]"
               ],
-              "explanation": "Marsh clerks recount crates before dawn, and extract JSON from model output.",
+              "explanation": "This step reads the ok flag from a JSON block inside text, using text holding note {.",
               "xp_reward": 0,
               "worked_example": "text[start:end]"
             },
             {
               "id": "ai-prompt-checkpoint-mcq",
               "type": "mcq",
-              "question": "Marsh clerks recount crates before dawn. For extract JSON from model output, which line reads the ok flag from a JSON block inside text?",
+              "question": "Pick the line that reads the ok flag from a JSON block inside text, not a line about something else, for text holding note {.",
               "hints": [
-                "Compare each line with the example.",
-                "One line matches the example.",
+                "Follow the job, which reads the ok flag from a JSON block inside text.",
+                "The slice from the brace through the closing brace is the JSON block.",
                 "text[start:end]"
               ],
               "explanation": "The slice from the brace through the closing brace is the JSON block.",
@@ -896,13 +896,13 @@
             {
               "id": "ai-prompt-checkpoint-predict",
               "type": "output_prediction",
-              "question": "Marsh clerks recount crates before dawn. For extract JSON from model output, what value is displayed?",
+              "question": "The displayed value is what the code prints when it reads the ok flag from a JSON block inside text for text holding note {.",
               "hints": [
-                "Run the example in your head from the top.",
-                "The last line is what gets displayed.",
+                "Follow the job, which reads the ok flag from a JSON block inside text.",
+                "The slice from the brace through the closing brace is the JSON block.",
                 "1"
               ],
-              "explanation": "The Checkpoint Extract JSON Block program displays that value.",
+              "explanation": "The slice from the brace through the closing brace is the JSON block.",
               "xp_reward": 10,
               "starter_code": "import json\ntext = 'note {\"ok\": 1} tail'\nstart = text.index('{')\nend = text.index('}') + 1\nprint(json.loads(text[start:end])['ok'])\n",
               "options": [
@@ -916,10 +916,10 @@
             {
               "id": "ai-prompt-checkpoint-order",
               "type": "ordering",
-              "question": "Marsh clerks recount crates before dawn. For extract JSON from model output, build the line that reads the ok flag from a JSON block inside text.",
+              "question": "Place every piece so the result reads the ok flag from a JSON block inside text for text holding note {.",
               "hints": [
-                "Start at the left of the example.",
-                "Keep the example order.",
+                "Follow the job, which reads the ok flag from a JSON block inside text.",
+                "The slice from the brace through the closing brace is the JSON block.",
                 "block = text[start:end]"
               ],
               "explanation": "The slice from the brace through the closing brace is the JSON block.",
@@ -939,10 +939,10 @@
             {
               "id": "ai-prompt-checkpoint-fill",
               "type": "fill_blank",
-              "question": "Marsh clerks recount crates before dawn. For extract JSON from model output, fill the blank so the line reads the ok flag from a JSON block inside text.",
+              "question": "Drop in the piece that lets the line reads the ok flag from a JSON block inside text for text holding note {.",
               "hints": [
-                "The blank is the missing piece of the example.",
-                "The example uses that piece.",
+                "Follow the job, which reads the ok flag from a JSON block inside text.",
+                "The slice from the brace through the closing brace is the JSON block.",
                 "+"
               ],
               "explanation": "The slice from the brace through the closing brace is the JSON block.",
@@ -959,10 +959,10 @@
             {
               "id": "ai-prompt-checkpoint-bug",
               "type": "debugging",
-              "question": "Marsh clerks recount crates before dawn. For extract JSON from model output, which line does a different job than the example?",
+              "question": "The mismatch misses the job, which reads the ok flag from a JSON block inside text, for text holding note {.",
               "hints": [
-                "The other lines match the example.",
-                "One line is the odd one.",
+                "Follow the job, which reads the ok flag from a JSON block inside text.",
+                "The print shows the first character of the note.",
                 "Line 3"
               ],
               "explanation": "The print shows the first character of the note.",
@@ -973,13 +973,13 @@
             {
               "id": "ai-prompt-checkpoint-predict-2",
               "type": "output_prediction",
-              "question": "Marsh clerks recount crates before dawn. For extract JSON from model output, what does the second run display?",
+              "question": "Choose the printed result of the second run that reads the ok flag from a JSON block inside text for text holding note {.",
               "hints": [
-                "Apply the same steps to the new value.",
-                "The display comes from the last line.",
+                "Follow the job, which reads the ok flag from a JSON block inside text.",
+                "The slice from the brace through the closing brace is the JSON block.",
                 "2"
               ],
-              "explanation": "The second Checkpoint Extract JSON Block program displays that value.",
+              "explanation": "The slice from the brace through the closing brace is the JSON block.",
               "xp_reward": 10,
               "starter_code": "import json\ntext = 'note {\"ok\": 2} tail'\nstart = text.index('{')\nend = text.index('}') + 1\nprint(json.loads(text[start:end])['ok'])\n",
               "options": [
@@ -993,10 +993,10 @@
             {
               "id": "ai-prompt-checkpoint-write",
               "type": "code",
-              "question": "Marsh clerks recount crates before dawn. For extract JSON from model output, fill the blank so the program prints the result.",
+              "question": "Make the program reads the ok flag from a JSON block inside text by filling the blank for text holding note {.",
               "hints": [
-                "The blank is the missing piece.",
-                "Print the value that piece produces.",
+                "Follow the job, which reads the ok flag from a JSON block inside text.",
+                "The printed value is the result after this step reads the ok flag from a JSON block inside text.",
                 "label = json.loads(text[start:end])['ok']"
               ],
               "explanation": "The printed value is the result after this step reads the ok flag from a JSON block inside text.",

@@ -30,7 +30,7 @@
         "sql-db-basics"
       ],
       "learning_objectives": [
-        "Plaza clerks recount crates before dawn, and project only the columns you need instead of SELECT."
+        "This step lists each country once, using country and customers."
       ],
       "starter_code": "-- TODO: select each country only once (duplicate rows removed)\nSELECT country FROM customers WHERE 0;\n",
       "solution_code": "SELECT DISTINCT country FROM customers;\n",
@@ -63,23 +63,23 @@
             {
               "id": "sql-02-teach",
               "type": "teach",
-              "question": "Plaza clerks recount crates before dawn, and project only the columns you need instead of SELECT.",
+              "question": "This step lists each country once, using country and customers.",
               "hints": [
-                "Read the one job this step is practicing.",
-                "The example is about Selecting Columns DISTINCT.",
+                "Follow the job, which lists each country once.",
+                "DISTINCT keeps one row for each country.",
                 "SELECT DISTINCT country FROM customers;"
               ],
-              "explanation": "Plaza clerks recount crates before dawn, and project only the columns you need instead of SELECT.",
+              "explanation": "This step lists each country once, using country and customers.",
               "xp_reward": 0,
               "worked_example": "SELECT DISTINCT country FROM customers;"
             },
             {
               "id": "sql-02-mcq",
               "type": "mcq",
-              "question": "Plaza clerks recount crates before dawn. For project only the columns you need instead of SELECT, which line lists each country once?",
+              "question": "A correct choice lists each country once and goes with country and customers.",
               "hints": [
-                "Compare each line with the example.",
-                "One line matches the example.",
+                "Follow the job, which lists each country once.",
+                "DISTINCT keeps one row for each country.",
                 "SELECT DISTINCT country FROM customers"
               ],
               "explanation": "DISTINCT keeps one row for each country.",
@@ -95,13 +95,13 @@
             {
               "id": "sql-02-predict",
               "type": "output_prediction",
-              "question": "Plaza clerks recount crates before dawn. For project only the columns you need instead of SELECT, what value is displayed?",
+              "question": "Select the output after the code lists each country once, using country and customers.",
               "hints": [
-                "Run the example in your head from the top.",
-                "The last line is what gets displayed.",
+                "Follow the job, which lists each country once.",
+                "DISTINCT keeps one row for each country.",
                 "┌─────────┐\n│ country │\n├─────────┤\n│ Canada  │\n│ UK      │\n│ USA     │\n└─────────┘"
               ],
-              "explanation": "The Selecting Columns DISTINCT program displays that value.",
+              "explanation": "DISTINCT keeps one row for each country.",
               "xp_reward": 10,
               "starter_code": "SELECT DISTINCT country FROM customers ORDER BY country;\n",
               "options": [
@@ -115,10 +115,10 @@
             {
               "id": "sql-02-order",
               "type": "ordering",
-              "question": "Plaza clerks recount crates before dawn. For project only the columns you need instead of SELECT, build the line that lists each country once.",
+              "question": "Make the line that lists each country once by ordering the pieces for country and customers.",
               "hints": [
-                "Start at the left of the example.",
-                "Keep the example order.",
+                "Follow the job, which lists each country once.",
+                "DISTINCT keeps one row for each country.",
                 "SELECT DISTINCT country FROM customers"
               ],
               "explanation": "DISTINCT keeps one row for each country.",
@@ -142,10 +142,10 @@
             {
               "id": "sql-02-fill",
               "type": "fill_blank",
-              "question": "Plaza clerks recount crates before dawn. For project only the columns you need instead of SELECT, fill the blank so the line lists each country once.",
+              "question": "Complete the line for country and customers so that it lists each country once.",
               "hints": [
-                "The blank is the missing piece of the example.",
-                "The example uses that piece.",
+                "Follow the job, which lists each country once.",
+                "DISTINCT keeps one row for each country.",
                 "DISTINCT"
               ],
               "explanation": "DISTINCT keeps one row for each country.",
@@ -162,10 +162,10 @@
             {
               "id": "sql-02-bug",
               "type": "debugging",
-              "question": "Plaza clerks recount crates before dawn. For project only the columns you need instead of SELECT, which line does a different job than the example?",
+              "question": "Select the line that gets in the way of the job, which lists each country once, for country and customers.",
               "hints": [
-                "The other lines match the example.",
-                "One line is the odd one.",
+                "Follow the job, which lists each country once.",
+                "The query lists every row, so repeated countries stay.",
                 "Line 1"
               ],
               "explanation": "The query lists every row, so repeated countries stay.",
@@ -176,13 +176,13 @@
             {
               "id": "sql-02-predict-2",
               "type": "output_prediction",
-              "question": "Plaza clerks recount crates before dawn. For project only the columns you need instead of SELECT, what does the second run display?",
+              "question": "With the new data around country and customers, the code lists each country once, so select the new output.",
               "hints": [
-                "Apply the same steps to the new value.",
-                "The display comes from the last line.",
+                "Follow the job, which lists each country once.",
+                "DISTINCT keeps one row for each country.",
                 "┌─────────────┐\n│ category    │\n├─────────────┤\n│ Electronics │\n│ Furniture   │\n│ Kitchen     │\n└─────────────┘"
               ],
-              "explanation": "The second Selecting Columns DISTINCT program displays that value.",
+              "explanation": "DISTINCT keeps one row for each country.",
               "xp_reward": 10,
               "starter_code": "SELECT DISTINCT category FROM products ORDER BY category;\n",
               "options": [
@@ -196,10 +196,10 @@
             {
               "id": "sql-02-write",
               "type": "code",
-              "question": "Plaza clerks recount crates before dawn. For project only the columns you need instead of SELECT, fill the blank so the program prints the result.",
+              "question": "The printed result shows up after you fill the blank so the code lists each country once for country and customers.",
               "hints": [
-                "The blank is the missing piece.",
-                "Print the value that piece produces.",
+                "Follow the job, which lists each country once.",
+                "The query result is what this step lists each country once.",
                 "SELECT DISTINCT country FROM customers ORDER BY country;"
               ],
               "explanation": "The query result is what this step lists each country once.",

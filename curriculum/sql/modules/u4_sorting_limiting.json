@@ -45,7 +45,7 @@
         "license": "Public domain (SQLite documentation)"
       },
       "learning_objectives": [
-        "Harbor potters recount crates before dawn, and sort result sets with ORDER BY, descending when needed."
+        "This step returns the first name in sorted order, using name and 1."
       ],
       "xp_reward": 10,
       "player_mode": "micro",
@@ -59,23 +59,23 @@
             {
               "id": "sql-04-teach",
               "type": "teach",
-              "question": "Harbor potters recount crates before dawn, and sort result sets with ORDER BY, descending when needed.",
+              "question": "This step returns the first name in sorted order, using name and 1.",
               "hints": [
-                "Read the one job this step is practicing.",
-                "The example is about ORDER BY LIMIT.",
+                "Follow the job, which returns the first name in sorted order.",
+                "ORDER BY name LIMIT 1 returns the first sorted name.",
                 "ORDER BY name LIMIT 1"
               ],
-              "explanation": "Harbor potters recount crates before dawn, and sort result sets with ORDER BY, descending when needed.",
+              "explanation": "This step returns the first name in sorted order, using name and 1.",
               "xp_reward": 0,
               "worked_example": "ORDER BY name LIMIT 1"
             },
             {
               "id": "sql-04-mcq",
               "type": "mcq",
-              "question": "Harbor potters recount crates before dawn. For sort result sets with ORDER BY, descending when needed, which line returns the first name in sorted order?",
+              "question": "The correct line returns the first name in sorted order, and it is the line tied to name and 1.",
               "hints": [
-                "Compare each line with the example.",
-                "One line matches the example.",
+                "Follow the job, which returns the first name in sorted order.",
+                "ORDER BY name LIMIT 1 returns the first sorted name.",
                 "SELECT name FROM customers ORDER BY name LIMIT 1"
               ],
               "explanation": "ORDER BY name LIMIT 1 returns the first sorted name.",
@@ -91,13 +91,13 @@
             {
               "id": "sql-04-predict",
               "type": "output_prediction",
-              "question": "Harbor potters recount crates before dawn. For sort result sets with ORDER BY, descending when needed, what value is displayed?",
+              "question": "The program returns the first name in sorted order with name and 1, so choose the printed value.",
               "hints": [
-                "Run the example in your head from the top.",
-                "The last line is what gets displayed.",
+                "Follow the job, which returns the first name in sorted order.",
+                "ORDER BY name LIMIT 1 returns the first sorted name.",
                 "┌─────────────┐\n│ name        │\n├─────────────┤\n│ Alice Smith │\n└─────────────┘"
               ],
-              "explanation": "The ORDER BY LIMIT program displays that value.",
+              "explanation": "ORDER BY name LIMIT 1 returns the first sorted name.",
               "xp_reward": 10,
               "starter_code": "SELECT name FROM customers ORDER BY name LIMIT 1;\n",
               "options": [
@@ -111,10 +111,10 @@
             {
               "id": "sql-04-order",
               "type": "ordering",
-              "question": "Harbor potters recount crates before dawn. For sort result sets with ORDER BY, descending when needed, build the line that returns the first name in sorted order.",
+              "question": "Build the line that returns the first name in sorted order for name and 1, from the first piece to the last.",
               "hints": [
-                "Start at the left of the example.",
-                "Keep the example order.",
+                "Follow the job, which returns the first name in sorted order.",
+                "ORDER BY name LIMIT 1 returns the first sorted name.",
                 "SELECT name FROM customers ORDER BY name LIMIT 1"
               ],
               "explanation": "ORDER BY name LIMIT 1 returns the first sorted name.",
@@ -142,10 +142,10 @@
             {
               "id": "sql-04-fill",
               "type": "fill_blank",
-              "question": "Harbor potters recount crates before dawn. For sort result sets with ORDER BY, descending when needed, fill the blank so the line returns the first name in sorted order.",
+              "question": "Replace the blank with the piece that makes the line returns the first name in sorted order for name and.",
               "hints": [
-                "The blank is the missing piece of the example.",
-                "The example uses that piece.",
+                "Follow the job, which returns the first name in sorted order.",
+                "ORDER BY name LIMIT 1 returns the first sorted name.",
                 "1"
               ],
               "explanation": "ORDER BY name LIMIT 1 returns the first sorted name.",
@@ -162,10 +162,10 @@
             {
               "id": "sql-04-bug",
               "type": "debugging",
-              "question": "Harbor potters recount crates before dawn. For sort result sets with ORDER BY, descending when needed, which line does a different job than the example?",
+              "question": "Spot the line that fails the job, which returns the first name in sorted order, around name and.",
               "hints": [
-                "The other lines match the example.",
-                "One line is the odd one.",
+                "Follow the job, which returns the first name in sorted order.",
+                "Without LIMIT the query returns every name.",
                 "Line 1"
               ],
               "explanation": "Without LIMIT the query returns every name.",
@@ -176,13 +176,13 @@
             {
               "id": "sql-04-predict-2",
               "type": "output_prediction",
-              "question": "Harbor potters recount crates before dawn. For sort result sets with ORDER BY, descending when needed, what does the second run display?",
+              "question": "The second program returns the first name in sorted order for name and 1, so choose the new printed value.",
               "hints": [
-                "Apply the same steps to the new value.",
-                "The display comes from the last line.",
+                "Follow the job, which returns the first name in sorted order.",
+                "ORDER BY name LIMIT 1 returns the first sorted name.",
                 "┌────────────┐\n│ name       │\n├────────────┤\n│ Coffee Mug │\n└────────────┘"
               ],
-              "explanation": "The second ORDER BY LIMIT program displays that value.",
+              "explanation": "ORDER BY name LIMIT 1 returns the first sorted name.",
               "xp_reward": 10,
               "starter_code": "SELECT name FROM products ORDER BY price LIMIT 1;\n",
               "options": [
@@ -196,10 +196,10 @@
             {
               "id": "sql-04-write",
               "type": "code",
-              "question": "Harbor potters recount crates before dawn. For sort result sets with ORDER BY, descending when needed, fill the blank so the program prints the result.",
+              "question": "Complete the blank so this program returns the first name in sorted order and prints the result for name and 1.",
               "hints": [
-                "The blank is the missing piece.",
-                "Print the value that piece produces.",
+                "Follow the job, which returns the first name in sorted order.",
+                "The query result is what this step returns the first name in sorted order.",
                 "SELECT name FROM customers ORDER BY name LIMIT 1;"
               ],
               "explanation": "The query result is what this step returns the first name in sorted order.",

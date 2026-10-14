@@ -27,7 +27,7 @@
       ],
       "prerequisites": [],
       "learning_objectives": [
-        "Harbor clerks recount crates before dawn, and build Authorization bearer headers."
+        "This step reads the scheme from the header, using header holding Bearer ivory."
       ],
       "starter_code": "def auth_header(token):\n    # TODO\n    pass\n",
       "solution_code": "def auth_header(token):\n    return {'Authorization': 'Bearer ' + token}\n",
@@ -60,23 +60,23 @@
             {
               "id": "fs-auth-header-teach",
               "type": "teach",
-              "question": "Harbor clerks recount crates before dawn, and build Authorization bearer headers.",
+              "question": "This step reads the scheme from the header, using header holding Bearer ivory.",
               "hints": [
-                "Read the one job this step is practicing.",
-                "The example is about Bearer Header.",
+                "Follow the job, which reads the scheme from the header.",
+                "The first word of the header is the scheme.",
                 "header.split()[0]"
               ],
-              "explanation": "Harbor clerks recount crates before dawn, and build Authorization bearer headers.",
+              "explanation": "This step reads the scheme from the header, using header holding Bearer ivory.",
               "xp_reward": 0,
               "worked_example": "header.split()[0]"
             },
             {
               "id": "fs-auth-header-mcq",
               "type": "mcq",
-              "question": "Harbor clerks recount crates before dawn. For build Authorization bearer headers, which line reads the scheme from the header?",
+              "question": "Pick the line that reads the scheme from the header, not a line about something else, for header holding Bearer ivory.",
               "hints": [
-                "Compare each line with the example.",
-                "One line matches the example.",
+                "Follow the job, which reads the scheme from the header.",
+                "The first word of the header is the scheme.",
                 "header.split()[0]"
               ],
               "explanation": "The first word of the header is the scheme.",
@@ -92,13 +92,13 @@
             {
               "id": "fs-auth-header-predict",
               "type": "output_prediction",
-              "question": "Harbor clerks recount crates before dawn. Choose the match for this step.",
+              "question": "The displayed value is what the code prints when it reads the scheme from the header for header holding ivory.",
               "hints": [
-                "Run the example in your head from the top.",
-                "The last line is what gets displayed.",
+                "Follow the job, which reads the scheme from the header.",
+                "The first word of the header is the scheme.",
                 "Bearer"
               ],
-              "explanation": "The Bearer Header program displays that value.",
+              "explanation": "The first word of the header is the scheme.",
               "xp_reward": 10,
               "starter_code": "header = 'Bearer ivory'\nprint(header.split()[0])\n",
               "options": [
@@ -112,10 +112,10 @@
             {
               "id": "fs-auth-header-order",
               "type": "ordering",
-              "question": "Harbor clerks recount crates before dawn. For build Authorization bearer headers, build the line that reads the scheme from the header.",
+              "question": "Place every piece so the result reads the scheme from the header for header holding Bearer ivory.",
               "hints": [
-                "Start at the left of the example.",
-                "Keep the example order.",
+                "Follow the job, which reads the scheme from the header.",
+                "The first word of the header is the scheme.",
                 "scheme = header.split()[0]"
               ],
               "explanation": "The first word of the header is the scheme.",
@@ -135,10 +135,10 @@
             {
               "id": "fs-auth-header-fill",
               "type": "fill_blank",
-              "question": "Harbor clerks recount crates before dawn. For build Authorization bearer headers, fill the blank so the line reads the scheme from the header.",
+              "question": "Drop in the piece that lets the line reads the scheme from the header for header holding Bearer ivory.",
               "hints": [
-                "The blank is the missing piece of the example.",
-                "The example uses that piece.",
+                "Follow the job, which reads the scheme from the header.",
+                "The first word of the header is the scheme.",
                 "0"
               ],
               "explanation": "The first word of the header is the scheme.",
@@ -155,10 +155,10 @@
             {
               "id": "fs-auth-header-bug",
               "type": "debugging",
-              "question": "Harbor clerks recount crates before dawn. For build Authorization bearer headers, which line does a different job than the example?",
+              "question": "The mismatch misses the job, which reads the scheme from the header, for header holding Bearer ivory.",
               "hints": [
-                "The other lines match the example.",
-                "One line is the odd one.",
+                "Follow the job, which reads the scheme from the header.",
+                "The print shows the token instead of the scheme.",
                 "Line 2"
               ],
               "explanation": "The print shows the token instead of the scheme.",
@@ -169,13 +169,13 @@
             {
               "id": "fs-auth-header-predict-2",
               "type": "output_prediction",
-              "question": "Harbor clerks recount crates before dawn. For build Authorization bearer headers, what does the second run display?",
+              "question": "Choose the printed result of the second run that reads the scheme from the header for header holding Bearer ivory.",
               "hints": [
-                "Apply the same steps to the new value.",
-                "The display comes from the last line.",
+                "Follow the job, which reads the scheme from the header.",
+                "The first word of the header is the scheme.",
                 "Token"
               ],
-              "explanation": "The second Bearer Header program displays that value.",
+              "explanation": "The first word of the header is the scheme.",
               "xp_reward": 10,
               "starter_code": "header = 'Token ivory'\nprint(header.split()[0])\n",
               "options": [
@@ -189,10 +189,10 @@
             {
               "id": "fs-auth-header-write",
               "type": "code",
-              "question": "Harbor clerks recount crates before dawn. Choose the match for this step.",
+              "question": "Make the program reads the scheme from the header by filling the blank for header holding ivory.",
               "hints": [
-                "The blank is the missing piece.",
-                "Print the value that piece produces.",
+                "Follow the job, which reads the scheme from the header.",
+                "The printed value is the result after this step reads the scheme from the header.",
                 "label = header.split()[0]"
               ],
               "explanation": "The printed value is the result after this step reads the scheme from the header.",
@@ -227,7 +227,7 @@
       ],
       "prerequisites": [],
       "learning_objectives": [
-        "Mesa clerks recount crates before dawn, and store auth tokens client-side."
+        "This step reads the token that was stored, using store holding access."
       ],
       "starter_code": "class TokenStore:\n    def __init__(self):\n        # TODO\n        pass\n    def set(self, token):\n        pass\n    def get(self):\n        pass\n    def clear(self):\n        pass\n",
       "solution_code": "class TokenStore:\n    def __init__(self):\n        self._token = None\n    def set(self, token):\n        self._token = token\n    def get(self):\n        return self._token\n    def clear(self):\n        self._token = None\n",
@@ -260,23 +260,23 @@
             {
               "id": "fs-auth-store-teach",
               "type": "teach",
-              "question": "Mesa clerks recount crates before dawn, and store auth tokens client-side.",
+              "question": "This step reads the token that was stored, using store holding access.",
               "hints": [
-                "Read the one job this step is practicing.",
-                "The example is about Token Store.",
+                "Follow the job, which reads the token that was stored.",
+                "The access key holds the stored token.",
                 "store['access']"
               ],
-              "explanation": "Mesa clerks recount crates before dawn, and store auth tokens client-side.",
+              "explanation": "This step reads the token that was stored, using store holding access.",
               "xp_reward": 0,
               "worked_example": "store['access']"
             },
             {
               "id": "fs-auth-store-mcq",
               "type": "mcq",
-              "question": "Mesa clerks recount crates before dawn. For store auth tokens client-side, which line reads the token that was stored?",
+              "question": "Keep the choice that reads the token that was stored for store holding access.",
               "hints": [
-                "Compare each line with the example.",
-                "One line matches the example.",
+                "Follow the job, which reads the token that was stored.",
+                "The access key holds the stored token.",
                 "store['access']"
               ],
               "explanation": "The access key holds the stored token.",
@@ -292,13 +292,13 @@
             {
               "id": "fs-auth-store-predict",
               "type": "output_prediction",
-              "question": "Mesa clerks recount crates before dawn. For store auth tokens client-side, what value is displayed?",
+              "question": "Trace the code that reads the token that was stored using store holding access, and select what it displays.",
               "hints": [
-                "Run the example in your head from the top.",
-                "The last line is what gets displayed.",
+                "Follow the job, which reads the token that was stored.",
+                "The access key holds the stored token.",
                 "yarrow"
               ],
-              "explanation": "The Token Store program displays that value.",
+              "explanation": "The access key holds the stored token.",
               "xp_reward": 10,
               "starter_code": "store = {}\nstore['access'] = 'yarrow'\nprint(store['access'])\n",
               "options": [
@@ -312,10 +312,10 @@
             {
               "id": "fs-auth-store-order",
               "type": "ordering",
-              "question": "Mesa clerks recount crates before dawn. For store auth tokens client-side, build the line that reads the token that was stored.",
+              "question": "Tap the pieces, in order, of the line that reads the token that was stored for store holding access.",
               "hints": [
-                "Start at the left of the example.",
-                "Keep the example order.",
+                "Follow the job, which reads the token that was stored.",
+                "The access key holds the stored token.",
                 "store['access'] = token"
               ],
               "explanation": "The access key holds the stored token.",
@@ -335,10 +335,10 @@
             {
               "id": "fs-auth-store-fill",
               "type": "fill_blank",
-              "question": "Mesa clerks recount crates before dawn. For store auth tokens client-side, fill the blank so the line reads the token that was stored.",
+              "question": "The blank is the missing piece of the line that reads the token that was stored for store holding access.",
               "hints": [
-                "The blank is the missing piece of the example.",
-                "The example uses that piece.",
+                "Follow the job, which reads the token that was stored.",
+                "The access key holds the stored token.",
                 "'access'"
               ],
               "explanation": "The access key holds the stored token.",
@@ -355,10 +355,10 @@
             {
               "id": "fs-auth-store-bug",
               "type": "debugging",
-              "question": "Mesa clerks recount crates before dawn. For store auth tokens client-side, which line does a different job than the example?",
+              "question": "Choose the line that does another job than the one that reads the token that was stored for store holding access.",
               "hints": [
-                "The other lines match the example.",
-                "One line is the odd one.",
+                "Follow the job, which reads the token that was stored.",
+                "The print counts keys instead of reading the token.",
                 "Line 2"
               ],
               "explanation": "The print counts keys instead of reading the token.",
@@ -369,13 +369,13 @@
             {
               "id": "fs-auth-store-predict-2",
               "type": "output_prediction",
-              "question": "Mesa clerks recount crates before dawn. For store auth tokens client-side, what does the second run display?",
+              "question": "Trace the second run, which reads the token that was stored for store holding access, and select what it displays.",
               "hints": [
-                "Apply the same steps to the new value.",
-                "The display comes from the last line.",
+                "Follow the job, which reads the token that was stored.",
+                "The access key holds the stored token.",
                 "cedar"
               ],
-              "explanation": "The second Token Store program displays that value.",
+              "explanation": "The access key holds the stored token.",
               "xp_reward": 10,
               "starter_code": "store = {}\nstore['access'] = 'cedar'\nprint(store['access'])\n",
               "options": [
@@ -389,10 +389,10 @@
             {
               "id": "fs-auth-store-write",
               "type": "code",
-              "question": "Mesa clerks recount crates before dawn. For store auth tokens client-side, fill the blank so the program prints the result.",
+              "question": "Type the missing piece so the program reads the token that was stored for store holding access and prints it.",
               "hints": [
-                "The blank is the missing piece.",
-                "Print the value that piece produces.",
+                "Follow the job, which reads the token that was stored.",
+                "The printed value is the result after this step reads the token that was stored.",
                 "label = store['access']"
               ],
               "explanation": "The printed value is the result after this step reads the token that was stored.",
@@ -427,7 +427,7 @@
       ],
       "prerequisites": [],
       "learning_objectives": [
-        "Orchard clerks recount crates before dawn, and decode JWT payloads without verifying."
+        "This step reads the subject from the decoded payload, using raw holding sub."
       ],
       "starter_code": "import base64, json\n\ndef jwt_payload(token):\n    # TODO\n    pass\n",
       "solution_code": "import base64, json\n\ndef jwt_payload(token):\n    parts = token.split('.')\n    payload = parts[1]\n    pad = '=' * (-len(payload) % 4)\n    raw = base64.urlsafe_b64decode(payload + pad)\n    return json.loads(raw.decode('utf-8'))\n",
@@ -459,23 +459,23 @@
             {
               "id": "fs-auth-jwt-payload-teach",
               "type": "teach",
-              "question": "Orchard clerks recount crates before dawn, and decode JWT payloads without verifying.",
+              "question": "This step reads the subject from the decoded payload, using raw holding sub.",
               "hints": [
-                "Read the one job this step is practicing.",
-                "The example is about Decode JWT Payload.",
+                "Follow the job, which reads the subject from the decoded payload.",
+                "Padding the base64 text lets the payload decode.",
                 "blob + pad"
               ],
-              "explanation": "Orchard clerks recount crates before dawn, and decode JWT payloads without verifying.",
+              "explanation": "This step reads the subject from the decoded payload, using raw holding sub.",
               "xp_reward": 0,
               "worked_example": "blob + pad"
             },
             {
               "id": "fs-auth-jwt-payload-mcq",
               "type": "mcq",
-              "question": "Orchard clerks recount crates before dawn. For decode JWT payloads without verifying, which line reads the subject from the decoded payload?",
+              "question": "The correct line reads the subject from the decoded payload, and it is the line tied to raw holding sub.",
               "hints": [
-                "Compare each line with the example.",
-                "One line matches the example.",
+                "Follow the job, which reads the subject from the decoded payload.",
+                "Padding the base64 text lets the payload decode.",
                 "json.loads(base64.urlsafe_b64decode(blob + pad))"
               ],
               "explanation": "Padding the base64 text lets the payload decode.",
@@ -491,13 +491,13 @@
             {
               "id": "fs-auth-jwt-payload-predict",
               "type": "output_prediction",
-              "question": "Orchard clerks recount crates before dawn. For decode JWT payloads without verifying, what value is displayed?",
+              "question": "The program reads the subject from the decoded payload with raw holding sub, so choose the printed value.",
               "hints": [
-                "Run the example in your head from the top.",
-                "The last line is what gets displayed.",
+                "Follow the job, which reads the subject from the decoded payload.",
+                "Padding the base64 text lets the payload decode.",
                 "yarrow"
               ],
-              "explanation": "The Decode JWT Payload program displays that value.",
+              "explanation": "Padding the base64 text lets the payload decode.",
               "xp_reward": 10,
               "starter_code": "import base64, json\nraw = json.dumps({'sub': 'yarrow'}).encode()\nblob = base64.urlsafe_b64encode(raw).decode().rstrip('=')\npad = '=' * (-len(blob) % 4)\nprint(json.loads(base64.urlsafe_b64decode(blob + pad))['sub'])\n",
               "options": [
@@ -511,10 +511,10 @@
             {
               "id": "fs-auth-jwt-payload-order",
               "type": "ordering",
-              "question": "Orchard clerks recount crates before dawn. For decode JWT payloads without verifying, build the line that reads the subject from the decoded payload.",
+              "question": "Build the line that reads the subject from the decoded payload for raw holding sub, from the first piece to the last.",
               "hints": [
-                "Start at the left of the example.",
-                "Keep the example order.",
+                "Follow the job, which reads the subject from the decoded payload.",
+                "Padding the base64 text lets the payload decode.",
                 "data = json.loads(base64.urlsafe_b64decode(blob + pad))"
               ],
               "explanation": "Padding the base64 text lets the payload decode.",
@@ -538,10 +538,10 @@
             {
               "id": "fs-auth-jwt-payload-fill",
               "type": "fill_blank",
-              "question": "Orchard clerks recount crates before dawn. For decode JWT payloads without verifying, fill the blank so the line reads the subject from the decoded payload.",
+              "question": "Replace the blank with the piece that makes the line reads the subject from the decoded payload for raw holding sub.",
               "hints": [
-                "The blank is the missing piece of the example.",
-                "The example uses that piece.",
+                "Follow the job, which reads the subject from the decoded payload.",
+                "Padding the base64 text lets the payload decode.",
                 "'='"
               ],
               "explanation": "Padding the base64 text lets the payload decode.",
@@ -558,10 +558,10 @@
             {
               "id": "fs-auth-jwt-payload-bug",
               "type": "debugging",
-              "question": "Orchard clerks recount crates before dawn. For decode JWT payloads without verifying, which line does a different job than the example?",
+              "question": "Spot the line that fails the job, which reads the subject from the decoded payload, around raw holding sub.",
               "hints": [
-                "The other lines match the example.",
-                "One line is the odd one.",
+                "Follow the job, which reads the subject from the decoded payload.",
+                "The print shows one character and never decodes the payload.",
                 "Line 2"
               ],
               "explanation": "The print shows one character and never decodes the payload.",
@@ -572,13 +572,13 @@
             {
               "id": "fs-auth-jwt-payload-predict-2",
               "type": "output_prediction",
-              "question": "Orchard clerks recount crates before dawn. For decode JWT payloads without verifying, what does the second run display?",
+              "question": "The second program reads the subject from the decoded payload for raw holding sub, so choose the new printed value.",
               "hints": [
-                "Apply the same steps to the new value.",
-                "The display comes from the last line.",
+                "Follow the job, which reads the subject from the decoded payload.",
+                "Padding the base64 text lets the payload decode.",
                 "cedar"
               ],
-              "explanation": "The second Decode JWT Payload program displays that value.",
+              "explanation": "Padding the base64 text lets the payload decode.",
               "xp_reward": 10,
               "starter_code": "import base64, json\nraw = json.dumps({'sub': 'cedar'}).encode()\nblob = base64.urlsafe_b64encode(raw).decode().rstrip('=')\npad = '=' * (-len(blob) % 4)\nprint(json.loads(base64.urlsafe_b64decode(blob + pad))['sub'])\n",
               "options": [
@@ -592,10 +592,10 @@
             {
               "id": "fs-auth-jwt-payload-write",
               "type": "code",
-              "question": "Orchard clerks recount crates before dawn. For decode JWT payloads without verifying, fill the blank so the program prints the result.",
+              "question": "Complete the blank so this program reads the subject from the decoded payload and prints the result for raw holding sub.",
               "hints": [
-                "The blank is the missing piece.",
-                "Print the value that piece produces.",
+                "Follow the job, which reads the subject from the decoded payload.",
+                "The printed value is the result after this step reads the subject from the decoded payload.",
                 "label = json.loads(base64.urlsafe_b64decode(blob + pad))['sub']"
               ],
               "explanation": "The printed value is the result after this step reads the subject from the decoded payload.",
@@ -631,7 +631,7 @@
       ],
       "prerequisites": [],
       "learning_objectives": [
-        "Quarry clerks recount crates before dawn, and detect expired tokens."
+        "This step labels a token past its expiry, using now holding fresh."
       ],
       "starter_code": "def is_expired(payload, now):\n    # TODO\n    pass\n",
       "solution_code": "def is_expired(payload, now):\n    return payload.get('exp', 0) <= now\n",
@@ -664,23 +664,23 @@
             {
               "id": "fs-auth-expired-teach",
               "type": "teach",
-              "question": "Quarry clerks recount crates before dawn, and detect expired tokens.",
+              "question": "This step labels a token past its expiry, using now holding fresh.",
               "hints": [
-                "Read the one job this step is practicing.",
-                "The example is about Expiry Check.",
+                "Follow the job, which labels a token past its expiry.",
+                "The token is fresh while now is before the expiry.",
                 "now < exp"
               ],
-              "explanation": "Quarry clerks recount crates before dawn, and detect expired tokens.",
+              "explanation": "This step labels a token past its expiry, using now holding fresh.",
               "xp_reward": 0,
               "worked_example": "now < exp"
             },
             {
               "id": "fs-auth-expired-mcq",
               "type": "mcq",
-              "question": "Quarry clerks recount crates before dawn. For detect expired tokens, which line labels a token past its expiry?",
+              "question": "Pick the line that labels a token past its expiry, not a line about something else, for now holding fresh.",
               "hints": [
-                "Compare each line with the example.",
-                "One line matches the example.",
+                "Follow the job, which labels a token past its expiry.",
+                "The token is fresh while now is before the expiry.",
                 "now < exp"
               ],
               "explanation": "The token is fresh while now is before the expiry.",
@@ -696,15 +696,15 @@
             {
               "id": "fs-auth-expired-predict",
               "type": "output_prediction",
-              "question": "Quarry clerks recount crates before dawn. For detect expired tokens, what value is displayed?",
+              "question": "The displayed value is what the code prints when it labels a token past its expiry for now holding fresh.",
               "hints": [
-                "Run the example in your head from the top.",
-                "The last line is what gets displayed.",
+                "Follow the job, which labels a token past its expiry.",
+                "The token is fresh while now is before the expiry.",
                 "stale"
               ],
-              "explanation": "The Expiry Check program displays that value.",
+              "explanation": "The token is fresh while now is before the expiry.",
               "xp_reward": 10,
-              "starter_code": "now = 100\nexp = 24\nprint('fresh' if now < exp else 'stale')\n",
+              "starter_code": "now = 100\nexp = 25\nprint('fresh' if now < exp else 'stale')\n",
               "options": [
                 "fresh",
                 "stale",
@@ -716,10 +716,10 @@
             {
               "id": "fs-auth-expired-order",
               "type": "ordering",
-              "question": "Quarry clerks recount crates before dawn. For detect expired tokens, build the line that labels a token past its expiry.",
+              "question": "Place every piece so the result labels a token past its expiry for now holding fresh.",
               "hints": [
-                "Start at the left of the example.",
-                "Keep the example order.",
+                "Follow the job, which labels a token past its expiry.",
+                "The token is fresh while now is before the expiry.",
                 "if now < exp: pass"
               ],
               "explanation": "The token is fresh while now is before the expiry.",
@@ -743,10 +743,10 @@
             {
               "id": "fs-auth-expired-fill",
               "type": "fill_blank",
-              "question": "Quarry clerks recount crates before dawn. For detect expired tokens, fill the blank so the line labels a token past its expiry.",
+              "question": "Drop in the piece that lets the line labels a token past its expiry for now holding fresh.",
               "hints": [
-                "The blank is the missing piece of the example.",
-                "The example uses that piece.",
+                "Follow the job, which labels a token past its expiry.",
+                "The token is fresh while now is before the expiry.",
                 "<"
               ],
               "explanation": "The token is fresh while now is before the expiry.",
@@ -763,27 +763,27 @@
             {
               "id": "fs-auth-expired-bug",
               "type": "debugging",
-              "question": "Quarry clerks recount crates before dawn. For detect expired tokens, which line does a different job than the example?",
+              "question": "The mismatch misses the job, which labels a token past its expiry, for now holding fresh.",
               "hints": [
-                "The other lines match the example.",
-                "One line is the odd one.",
+                "Follow the job, which labels a token past its expiry.",
+                "The print says stale without comparing the clock to the expiry.",
                 "Line 3"
               ],
               "explanation": "The print says stale without comparing the clock to the expiry.",
               "xp_reward": 10,
-              "starter_code": "now = 100\nexp = 24\nprint('stale')\n",
+              "starter_code": "now = 100\nexp = 25\nprint('stale')\n",
               "correct_answer": "3"
             },
             {
               "id": "fs-auth-expired-predict-2",
               "type": "output_prediction",
-              "question": "Quarry clerks recount crates before dawn. For detect expired tokens, what does the second run display?",
+              "question": "Choose the printed result of the second run that labels a token past its expiry for now holding.",
               "hints": [
-                "Apply the same steps to the new value.",
-                "The display comes from the last line.",
+                "Follow the job, which labels a token past its expiry.",
+                "The token is fresh while now is before the expiry.",
                 "fresh"
               ],
-              "explanation": "The second Expiry Check program displays that value.",
+              "explanation": "The token is fresh while now is before the expiry.",
               "xp_reward": 10,
               "starter_code": "now = 40\nexp = 50\nprint('fresh' if now < exp else 'stale')\n",
               "options": [
@@ -797,16 +797,16 @@
             {
               "id": "fs-auth-expired-write",
               "type": "code",
-              "question": "Quarry clerks recount crates before dawn. For detect expired tokens, fill the blank so the program prints the result.",
+              "question": "Make the program labels a token past its expiry by filling the blank for now holding fresh.",
               "hints": [
-                "The blank is the missing piece.",
-                "Print the value that piece produces.",
+                "Follow the job, which labels a token past its expiry.",
+                "The printed value is the result after this step labels a token past its expiry.",
                 "label = 'fresh' if now < exp else 'stale'"
               ],
               "explanation": "The printed value is the result after this step labels a token past its expiry.",
               "xp_reward": 10,
-              "starter_code": "now = 100\nexp = 24\nlabel = ___\nprint(label)\n",
-              "solution_code": "now = 100\nexp = 24\nlabel = 'fresh' if now < exp else 'stale'\nprint(label)\n",
+              "starter_code": "now = 100\nexp = 25\nlabel = ___\nprint(label)\n",
+              "solution_code": "now = 100\nexp = 25\nlabel = 'fresh' if now < exp else 'stale'\nprint(label)\n",
               "tests": [
                 {
                   "name": "fs-auth-expired-prints",
@@ -835,7 +835,7 @@
       ],
       "prerequisites": [],
       "learning_objectives": [
-        "Attic clerks recount crates before dawn, and decide when to refresh tokens."
+        "This step asks for a refresh when the token is close to expiry, using expires_in holding refresh."
       ],
       "starter_code": "def should_refresh(payload, now, skew=30):\n    # TODO\n    pass\n",
       "solution_code": "def should_refresh(payload, now, skew=30):\n    return payload.get('exp', 0) - now <= skew\n",
@@ -868,23 +868,23 @@
             {
               "id": "fs-auth-checkpoint-teach",
               "type": "teach",
-              "question": "Attic clerks recount crates before dawn, and decide when to refresh tokens.",
+              "question": "This step asks for a refresh when the token is close to expiry, using expires_in holding refresh.",
               "hints": [
-                "Read the one job this step is practicing.",
-                "The example is about Checkpoint Refresh Decision.",
+                "Follow the job, which asks for a refresh when the token is close to expiry.",
+                "Under 30 seconds left means refresh.",
                 "expires_in < 30"
               ],
-              "explanation": "Attic clerks recount crates before dawn, and decide when to refresh tokens.",
+              "explanation": "This step asks for a refresh when the token is close to expiry, using expires_in holding refresh.",
               "xp_reward": 0,
               "worked_example": "expires_in < 30"
             },
             {
               "id": "fs-auth-checkpoint-mcq",
               "type": "mcq",
-              "question": "Attic clerks recount crates before dawn. For decide when to refresh tokens, which line asks for a refresh when the token is close to expiry?",
+              "question": "The match is the line that asks for a refresh when the token is close to expiry for expires_in holding refresh.",
               "hints": [
-                "Compare each line with the example.",
-                "One line matches the example.",
+                "Follow the job, which asks for a refresh when the token is close to expiry.",
+                "Under 30 seconds left means refresh.",
                 "expires_in < 30"
               ],
               "explanation": "Under 30 seconds left means refresh.",
@@ -900,13 +900,13 @@
             {
               "id": "fs-auth-checkpoint-predict",
               "type": "output_prediction",
-              "question": "Attic clerks recount crates before dawn. Choose the match for this step, using sage.",
+              "question": "Work out what is printed when the code asks for a when the token is close to expiry for expires_in holding.",
               "hints": [
-                "Run the example in your head from the top.",
-                "The last line is what gets displayed.",
+                "Follow the job, which Follow the job, which asks for a when the token is close to expiry.",
+                "Under 30 seconds left means refresh.",
                 "refresh"
               ],
-              "explanation": "The Checkpoint Refresh Decision program displays that value.",
+              "explanation": "Under 30 seconds left means refresh.",
               "xp_reward": 10,
               "starter_code": "expires_in = 10\nprint('refresh' if expires_in < 30 else 'keep')\n",
               "options": [
@@ -920,10 +920,10 @@
             {
               "id": "fs-auth-checkpoint-order",
               "type": "ordering",
-              "question": "Attic clerks recount crates before dawn. For decide when to refresh tokens, build the line that asks for a refresh when the token is close to expiry.",
+              "question": "Rebuild, from the left, the line that asks for a refresh when the token is close to expiry for expires_in holding refresh.",
               "hints": [
-                "Start at the left of the example.",
-                "Keep the example order.",
+                "Follow the job, which asks for a refresh when the token is close to expiry.",
+                "Under 30 seconds left means refresh.",
                 "if expires_in < 30: pass"
               ],
               "explanation": "Under 30 seconds left means refresh.",
@@ -947,10 +947,10 @@
             {
               "id": "fs-auth-checkpoint-fill",
               "type": "fill_blank",
-              "question": "Attic clerks recount crates before dawn. For decide when to refresh tokens, fill the blank so the line asks for a refresh when the token is close to expiry.",
+              "question": "The completed line asks for a refresh when the token is close to expiry once you fill the blank for expires_in holding refresh.",
               "hints": [
-                "The blank is the missing piece of the example.",
-                "The example uses that piece.",
+                "Follow the job, which asks for a refresh when the token is close to expiry.",
+                "Under 30 seconds left means refresh.",
                 "<"
               ],
               "explanation": "Under 30 seconds left means refresh.",
@@ -967,10 +967,10 @@
             {
               "id": "fs-auth-checkpoint-bug",
               "type": "debugging",
-              "question": "Attic clerks recount crates before dawn. For decide when to refresh tokens, which line does a different job than the example?",
+              "question": "One line does another job than the one that asks for a refresh when the token is close to expiry for expires_in holding refresh.",
               "hints": [
-                "The other lines match the example.",
-                "One line is the odd one.",
+                "Follow the job, which asks for a refresh when the token is close to expiry.",
+                "The print says keep for a token that is about to expire.",
                 "Line 2"
               ],
               "explanation": "The print says keep for a token that is about to expire.",
@@ -981,13 +981,13 @@
             {
               "id": "fs-auth-checkpoint-predict-2",
               "type": "output_prediction",
-              "question": "Attic clerks recount crates before dawn. For decide when to refresh tokens, what does the second run display?",
+              "question": "The second display is what prints after the code asks for a refresh when the token is close to expiry for expires_in holding refresh.",
               "hints": [
-                "Apply the same steps to the new value.",
-                "The display comes from the last line.",
+                "Follow the job, which asks for a refresh when the token is close to expiry.",
+                "Under 30 seconds left means refresh.",
                 "keep"
               ],
-              "explanation": "The second Checkpoint Refresh Decision program displays that value.",
+              "explanation": "Under 30 seconds left means refresh.",
               "xp_reward": 10,
               "starter_code": "expires_in = 90\nprint('refresh' if expires_in < 30 else 'keep')\n",
               "options": [
@@ -1001,10 +1001,10 @@
             {
               "id": "fs-auth-checkpoint-write",
               "type": "code",
-              "question": "Attic clerks recount crates before dawn. Choose the match for this step, using yarrow.",
+              "question": "Supply the blank so the run asks for a when the token is close to expiry and prints the result for expires_in holding.",
               "hints": [
-                "The blank is the missing piece.",
-                "Print the value that piece produces.",
+                "Follow the job, which asks for a refresh when the token is close to expiry.",
+                "The printed value is the result after this step asks for a refresh when the token is close to expiry.",
                 "label = 'refresh' if expires_in < 30 else 'keep'"
               ],
               "explanation": "The printed value is the result after this step asks for a refresh when the token is close to expiry.",

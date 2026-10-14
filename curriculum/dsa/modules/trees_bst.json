@@ -30,7 +30,7 @@
         "recursion-binary-search"
       ],
       "learning_objectives": [
-        "Harbor crews recount crates before dawn, and recursively traverse left-root-right."
+        "This step joins the preorder visit, using Node holding a."
       ],
       "starter_code": "class TreeNode:\n    def __init__(self, value, left=None, right=None):\n        self.value = value\n        self.left = left\n        self.right = right\n\ndef inorder(root):\n    # TODO\n    pass\n",
       "solution_code": "class TreeNode:\n    def __init__(self, value, left=None, right=None):\n        self.value = value\n        self.left = left\n        self.right = right\n\ndef inorder(root):\n    if root is None:\n        return []\n    return inorder(root.left) + [root.value] + inorder(root.right)\n",
@@ -63,23 +63,23 @@
             {
               "id": "trees-bst-step-1-teach",
               "type": "teach",
-              "question": "Harbor crews recount crates before dawn, and recursively traverse left-root-right.",
+              "question": "This step joins the preorder visit, using Node holding a.",
               "hints": [
-                "Read the one job this step is practicing.",
-                "The example is about Binary Tree Node Traversal.",
+                "Follow the job, which joins the preorder visit.",
+                "append records the node before its children.",
                 "order.append(node.value)"
               ],
-              "explanation": "Harbor crews recount crates before dawn, and recursively traverse left-root-right.",
+              "explanation": "This step joins the preorder visit, using Node holding a.",
               "xp_reward": 0,
               "worked_example": "order.append(node.value)"
             },
             {
               "id": "trees-bst-step-1-mcq",
               "type": "mcq",
-              "question": "Harbor crews recount crates before dawn. For recursively traverse left-root-right, which line joins the preorder visit?",
+              "question": "Choose the line that joins the preorder visit, which is the line that fits Node holding a.",
               "hints": [
-                "Compare each line with the example.",
-                "One line matches the example.",
+                "Follow the job, which joins the preorder visit.",
+                "append records the node before its children.",
                 "order.append(node.value)"
               ],
               "explanation": "append records the node before its children.",
@@ -95,13 +95,13 @@
             {
               "id": "trees-bst-step-1-predict",
               "type": "output_prediction",
-              "question": "Harbor crews recount crates before dawn. For recursively traverse left-root-right, what value is displayed?",
+              "question": "Read the code that joins the preorder visit for Node holding a, and choose the value it prints.",
               "hints": [
-                "Run the example in your head from the top.",
-                "The last line is what gets displayed.",
+                "Follow the job, which joins the preorder visit.",
+                "append records the node before its children.",
                 "abc"
               ],
-              "explanation": "The Binary Tree Node Traversal program displays that value.",
+              "explanation": "append records the node before its children.",
               "xp_reward": 10,
               "starter_code": "class Node:\n    def __init__(self, value, left=None, right=None):\n        self.value = value\n        self.left = left\n        self.right = right\nroot = Node('a', Node('b'), Node('c'))\norder = []\ndef walk(node):\n    if not node:\n        return\n    order.append(node.value)\n    walk(node.left)\n    walk(node.right)\nwalk(root)\nprint(''.join(order))\n",
               "options": [
@@ -115,10 +115,10 @@
             {
               "id": "trees-bst-step-1-order",
               "type": "ordering",
-              "question": "Harbor crews recount crates before dawn. For recursively traverse left-root-right, build the line that joins the preorder visit.",
+              "question": "Arrange the pieces of the line that joins the preorder visit, left to right, for Node holding a.",
               "hints": [
-                "Start at the left of the example.",
-                "Keep the example order.",
+                "Follow the job, which joins the preorder visit.",
+                "append records the node before its children.",
                 "order.append(node.value)"
               ],
               "explanation": "append records the node before its children.",
@@ -134,10 +134,10 @@
             {
               "id": "trees-bst-step-1-fill",
               "type": "fill_blank",
-              "question": "Harbor crews recount crates before dawn. For recursively traverse left-root-right, fill the blank so the line joins the preorder visit.",
+              "question": "Fill the blank so the line joins the preorder visit for Node holding a.",
               "hints": [
-                "The blank is the missing piece of the example.",
-                "The example uses that piece.",
+                "Follow the job, which joins the preorder visit.",
+                "append records the node before its children.",
                 "append"
               ],
               "explanation": "append records the node before its children.",
@@ -154,10 +154,10 @@
             {
               "id": "trees-bst-step-1-bug",
               "type": "debugging",
-              "question": "Harbor crews recount crates before dawn. For recursively traverse left-root-right, which line does a different job than the example?",
+              "question": "Find the line that misses the job, which joins the preorder visit, for Node holding a.",
               "hints": [
-                "The other lines match the example.",
-                "One line is the odd one.",
+                "Follow the job, which joins the preorder visit.",
+                "The print shows the root and never visits the children.",
                 "Line 5"
               ],
               "explanation": "The print shows the root and never visits the children.",
@@ -168,13 +168,13 @@
             {
               "id": "trees-bst-step-1-predict-2",
               "type": "output_prediction",
-              "question": "Harbor crews recount crates before dawn. For recursively traverse left-root-right, what does the second run display?",
+              "question": "On the new input, the code still joins the preorder visit for Node holding a, so choose what it prints.",
               "hints": [
-                "Apply the same steps to the new value.",
-                "The display comes from the last line.",
+                "Follow the job, which joins the preorder visit.",
+                "append records the node before its children.",
                 "ab"
               ],
-              "explanation": "The second Binary Tree Node Traversal program displays that value.",
+              "explanation": "append records the node before its children.",
               "xp_reward": 10,
               "starter_code": "class Node:\n    def __init__(self, value, left=None, right=None):\n        self.value = value\n        self.left = left\n        self.right = right\nroot = Node('a', Node('b'))\norder = []\ndef walk(node):\n    if not node:\n        return\n    order.append(node.value)\n    walk(node.left)\n    walk(node.right)\nwalk(root)\nprint(''.join(order))\n",
               "options": [
@@ -188,10 +188,10 @@
             {
               "id": "trees-bst-step-1-write",
               "type": "code",
-              "question": "Harbor crews recount crates before dawn. For recursively traverse left-root-right, fill the blank so the program prints the result.",
+              "question": "Fill the blank so the program joins the preorder visit, and the print shows that result for Node holding a.",
               "hints": [
-                "The blank is the missing piece.",
-                "Print the value that piece produces.",
+                "Follow the job, which joins the preorder visit.",
+                "The printed value is the result after this step joins the preorder visit.",
                 "label = ''.join(order)"
               ],
               "explanation": "The printed value is the result after this step joins the preorder visit.",
@@ -228,7 +228,7 @@
         "recursion-binary-search"
       ],
       "learning_objectives": [
-        "Mesa crews recount crates before dawn, and maintain BST ordering on insert."
+        "This step reads the left child after inserting, using Node and 7."
       ],
       "starter_code": "class TreeNode:\n    def __init__(self, value, left=None, right=None):\n        self.value = value\n        self.left = left\n        self.right = right\n\ndef bst_insert(root, value):\n    # TODO: insert and return root\n    pass\n",
       "solution_code": "class TreeNode:\n    def __init__(self, value, left=None, right=None):\n        self.value = value\n        self.left = left\n        self.right = right\n\ndef bst_insert(root, value):\n    if root is None:\n        return TreeNode(value)\n    if value < root.value:\n        root.left = bst_insert(root.left, value)\n    else:\n        root.right = bst_insert(root.right, value)\n    return root\n",
@@ -261,23 +261,23 @@
             {
               "id": "trees-bst-step-2-teach",
               "type": "teach",
-              "question": "Mesa crews recount crates before dawn, and maintain BST ordering on insert.",
+              "question": "This step reads the left child after inserting, using Node and 7.",
               "hints": [
-                "Read the one job this step is practicing.",
-                "The example is about BST Insert.",
+                "Follow the job, which reads the left child after inserting.",
+                "A smaller value goes to the left child.",
                 "value < node.value"
               ],
-              "explanation": "Mesa crews recount crates before dawn, and maintain BST ordering on insert.",
+              "explanation": "This step reads the left child after inserting, using Node and 7.",
               "xp_reward": 0,
               "worked_example": "value < node.value"
             },
             {
               "id": "trees-bst-step-2-mcq",
               "type": "mcq",
-              "question": "Mesa crews recount crates before dawn. For maintain BST ordering on insert, which line reads the left child after inserting?",
+              "question": "The correct line reads the left child after inserting, and it is the line tied to Node and 7.",
               "hints": [
-                "Compare each line with the example.",
-                "One line matches the example.",
+                "Follow the job, which reads the left child after inserting.",
+                "A smaller value goes to the left child.",
                 "if value < node.value: pass"
               ],
               "explanation": "A smaller value goes to the left child.",
@@ -293,13 +293,13 @@
             {
               "id": "trees-bst-step-2-predict",
               "type": "output_prediction",
-              "question": "Mesa crews recount crates before dawn. For maintain BST ordering on insert, what value is displayed?",
+              "question": "The program reads the left child after inserting with Node and 7, so choose the printed value.",
               "hints": [
-                "Run the example in your head from the top.",
-                "The last line is what gets displayed.",
+                "Follow the job, which reads the left child after inserting.",
+                "A smaller value goes to the left child.",
                 "3"
               ],
-              "explanation": "The BST Insert program displays that value.",
+              "explanation": "A smaller value goes to the left child.",
               "xp_reward": 10,
               "starter_code": "class Node:\n    def __init__(self, value):\n        self.value = value\n        self.left = None\n        self.right = None\ndef insert(node, value):\n    if node is None:\n        return Node(value)\n    if value < node.value:\n        node.left = insert(node.left, value)\n    else:\n        node.right = insert(node.right, value)\n    return node\nroot = insert(None, 5)\nroot = insert(root, 3)\nroot = insert(root, 7)\nprint(root.left.value)\n",
               "options": [
@@ -313,10 +313,10 @@
             {
               "id": "trees-bst-step-2-order",
               "type": "ordering",
-              "question": "Mesa crews recount crates before dawn. For maintain BST ordering on insert, build the line that reads the left child after inserting.",
+              "question": "Build the line that reads the left child after inserting for Node and 7, from the first piece to the last.",
               "hints": [
-                "Start at the left of the example.",
-                "Keep the example order.",
+                "Follow the job, which reads the left child after inserting.",
+                "A smaller value goes to the left child.",
                 "if value < node.value: pass"
               ],
               "explanation": "A smaller value goes to the left child.",
@@ -340,10 +340,10 @@
             {
               "id": "trees-bst-step-2-fill",
               "type": "fill_blank",
-              "question": "Mesa crews recount crates before dawn. For maintain BST ordering on insert, fill the blank so the line reads the left child after inserting.",
+              "question": "Replace the blank with the piece that makes the line reads the left child after inserting for Node and 7.",
               "hints": [
-                "The blank is the missing piece of the example.",
-                "The example uses that piece.",
+                "Follow the job, which reads the left child after inserting.",
+                "A smaller value goes to the left child.",
                 "<"
               ],
               "explanation": "A smaller value goes to the left child.",
@@ -360,10 +360,10 @@
             {
               "id": "trees-bst-step-2-bug",
               "type": "debugging",
-              "question": "Mesa crews recount crates before dawn. For maintain BST ordering on insert, which line does a different job than the example?",
+              "question": "Spot the line that fails the job, which reads the left child after inserting, around Node and 7.",
               "hints": [
-                "The other lines match the example.",
-                "One line is the odd one.",
+                "Follow the job, which reads the left child after inserting.",
+                "The print shows the root and never inserts a child.",
                 "Line 5"
               ],
               "explanation": "The print shows the root and never inserts a child.",
@@ -374,13 +374,13 @@
             {
               "id": "trees-bst-step-2-predict-2",
               "type": "output_prediction",
-              "question": "Mesa crews recount crates before dawn. For maintain BST ordering on insert, what does the second run display?",
+              "question": "The second program reads the left child after inserting for Node and 7, so choose the new printed value.",
               "hints": [
-                "Apply the same steps to the new value.",
-                "The display comes from the last line.",
+                "Follow the job, which reads the left child after inserting.",
+                "A smaller value goes to the left child.",
                 "1"
               ],
-              "explanation": "The second BST Insert program displays that value.",
+              "explanation": "A smaller value goes to the left child.",
               "xp_reward": 10,
               "starter_code": "class Node:\n    def __init__(self, value):\n        self.value = value\n        self.left = None\n        self.right = None\ndef insert(node, value):\n    if node is None:\n        return Node(value)\n    if value < node.value:\n        node.left = insert(node.left, value)\n    else:\n        node.right = insert(node.right, value)\n    return node\nroot = insert(None, 5)\nroot = insert(root, 1)\nroot = insert(root, 9)\nprint(root.left.value)\n",
               "options": [
@@ -394,10 +394,10 @@
             {
               "id": "trees-bst-step-2-write",
               "type": "code",
-              "question": "Mesa crews recount crates before dawn. For maintain BST ordering on insert, fill the blank so the program prints the result.",
+              "question": "Complete the blank so this program reads the left child after inserting and prints the result for Node and 7.",
               "hints": [
-                "The blank is the missing piece.",
-                "Print the value that piece produces.",
+                "Follow the job, which reads the left child after inserting.",
+                "The printed value is the result after this step reads the left child after inserting.",
                 "label = root.left.value"
               ],
               "explanation": "The printed value is the result after this step reads the left child after inserting.",
@@ -434,7 +434,7 @@
         "recursion-binary-search"
       ],
       "learning_objectives": [
-        "Orchard crews recount crates before dawn, and search left right based on comparison."
+        "This step reports whether the tree contains the value, using Node and 7."
       ],
       "starter_code": "class TreeNode:\n    def __init__(self, value, left=None, right=None):\n        self.value = value\n        self.left = left\n        self.right = right\n\ndef bst_contains(root, value):\n    # TODO\n    pass\n",
       "solution_code": "class TreeNode:\n    def __init__(self, value, left=None, right=None):\n        self.value = value\n        self.left = left\n        self.right = right\n\ndef bst_contains(root, value):\n    cur = root\n    while cur:\n        if value == cur.value:\n            return True\n        cur = cur.left if value < cur.value else cur.right\n    return False\n",
@@ -467,23 +467,23 @@
             {
               "id": "trees-bst-01-teach",
               "type": "teach",
-              "question": "Orchard crews recount crates before dawn, and search left right based on comparison.",
+              "question": "This step reports whether the tree contains the value, using Node and 7.",
               "hints": [
-                "Read the one job this step is practicing.",
-                "The example is about BST Contains.",
+                "Follow the job, which reports whether the tree contains the value.",
+                "Equal values mean the tree contains the target.",
                 "node.value == value"
               ],
-              "explanation": "Orchard crews recount crates before dawn, and search left right based on comparison.",
+              "explanation": "This step reports whether the tree contains the value, using Node and 7.",
               "xp_reward": 0,
               "worked_example": "node.value == value"
             },
             {
               "id": "trees-bst-01-mcq",
               "type": "mcq",
-              "question": "Orchard crews recount crates before dawn. For search left right based on comparison, which line reports whether the tree contains the value?",
+              "question": "A correct choice reports whether the tree contains the value and goes with Node and 7.",
               "hints": [
-                "Compare each line with the example.",
-                "One line matches the example.",
+                "Follow the job, which reports whether the tree contains the value.",
+                "Equal values mean the tree contains the target.",
                 "if node.value == value: return 1"
               ],
               "explanation": "Equal values mean the tree contains the target.",
@@ -499,13 +499,13 @@
             {
               "id": "trees-bst-01-predict",
               "type": "output_prediction",
-              "question": "Orchard crews recount crates before dawn. For search left right based on comparison, what value is displayed?",
+              "question": "Select the output after the code reports whether the tree contains the value, using Node and 7.",
               "hints": [
-                "Run the example in your head from the top.",
-                "The last line is what gets displayed.",
+                "Follow the job, which reports whether the tree contains the value.",
+                "Equal values mean the tree contains the target.",
                 "1"
               ],
-              "explanation": "The BST Contains program displays that value.",
+              "explanation": "Equal values mean the tree contains the target.",
               "xp_reward": 10,
               "starter_code": "class Node:\n    def __init__(self, value, left=None, right=None):\n        self.value = value\n        self.left = left\n        self.right = right\ndef contains(node, value):\n    if node is None:\n        return 0\n    if node.value == value:\n        return 1\n    if value < node.value:\n        return contains(node.left, value)\n    return contains(node.right, value)\nroot = Node(5, Node(3), Node(7))\nprint(contains(root, 7))\n",
               "options": [
@@ -519,10 +519,10 @@
             {
               "id": "trees-bst-01-order",
               "type": "ordering",
-              "question": "Orchard crews recount crates before dawn. For search left right based on comparison, build the line that reports whether the tree contains the value.",
+              "question": "Make the line that reports whether the tree contains the value by ordering the pieces for Node and 7.",
               "hints": [
-                "Start at the left of the example.",
-                "Keep the example order.",
+                "Follow the job, which reports whether the tree contains the value.",
+                "Equal values mean the tree contains the target.",
                 "def f(): return contains(node.right, value)"
               ],
               "explanation": "Equal values mean the tree contains the target.",
@@ -546,10 +546,10 @@
             {
               "id": "trees-bst-01-fill",
               "type": "fill_blank",
-              "question": "Orchard crews recount crates before dawn. For search left right based on comparison, fill the blank so the line reports whether the tree contains the value.",
+              "question": "Complete the line for Node and 7 so that it reports whether the tree contains the value.",
               "hints": [
-                "The blank is the missing piece of the example.",
-                "The example uses that piece.",
+                "Follow the job, which reports whether the tree contains the value.",
+                "Equal values mean the tree contains the target.",
                 "=="
               ],
               "explanation": "Equal values mean the tree contains the target.",
@@ -566,10 +566,10 @@
             {
               "id": "trees-bst-01-bug",
               "type": "debugging",
-              "question": "Orchard crews recount crates before dawn. For search left right based on comparison, which line does a different job than the example?",
+              "question": "Select the line that gets in the way of the job, which reports whether the tree contains the value, for Node and 7.",
               "hints": [
-                "The other lines match the example.",
-                "One line is the odd one.",
+                "Follow the job, which reports whether the tree contains the value.",
+                "The print is zero and never looks at the tree.",
                 "Line 5"
               ],
               "explanation": "The print is zero and never looks at the tree.",
@@ -580,13 +580,13 @@
             {
               "id": "trees-bst-01-predict-2",
               "type": "output_prediction",
-              "question": "Orchard crews recount crates before dawn. For search left right based on comparison, what does the second run display?",
+              "question": "With the new data around Node and 7, the code reports whether the tree contains the value, so select the new output.",
               "hints": [
-                "Apply the same steps to the new value.",
-                "The display comes from the last line.",
+                "Follow the job, which reports whether the tree contains the value.",
+                "Equal values mean the tree contains the target.",
                 "0"
               ],
-              "explanation": "The second BST Contains program displays that value.",
+              "explanation": "Equal values mean the tree contains the target.",
               "xp_reward": 10,
               "starter_code": "class Node:\n    def __init__(self, value, left=None, right=None):\n        self.value = value\n        self.left = left\n        self.right = right\ndef contains(node, value):\n    if node is None:\n        return 0\n    if node.value == value:\n        return 1\n    if value < node.value:\n        return contains(node.left, value)\n    return contains(node.right, value)\nroot = Node(5, Node(3), Node(7))\nprint(contains(root, 4))\n",
               "options": [
@@ -600,10 +600,10 @@
             {
               "id": "trees-bst-01-write",
               "type": "code",
-              "question": "Orchard crews recount crates before dawn. For search left right based on comparison, fill the blank so the program prints the result.",
+              "question": "The printed result shows up after you fill the blank so the code reports whether the tree contains the value for Node and 7.",
               "hints": [
-                "The blank is the missing piece.",
-                "Print the value that piece produces.",
+                "Follow the job, which reports whether the tree contains the value.",
+                "The printed value is the result after this step reports whether the tree contains the value.",
                 "label = contains(root, 7)"
               ],
               "explanation": "The printed value is the result after this step reports whether the tree contains the value.",
@@ -640,7 +640,7 @@
         "recursion-binary-search"
       ],
       "learning_objectives": [
-        "Quarry crews recount crates before dawn, and height is 1 max of children."
+        "This step counts the levels in the tree, using Node holding a."
       ],
       "starter_code": "class TreeNode:\n    def __init__(self, value, left=None, right=None):\n        self.value = value\n        self.left = left\n        self.right = right\n\ndef height(root):\n    # TODO\n    pass\n",
       "solution_code": "class TreeNode:\n    def __init__(self, value, left=None, right=None):\n        self.value = value\n        self.left = left\n        self.right = right\n\ndef height(root):\n    if root is None:\n        return 0\n    return 1 + max(height(root.left), height(root.right))\n",
@@ -673,23 +673,23 @@
             {
               "id": "trees-bst-practice-1-teach",
               "type": "teach",
-              "question": "Quarry crews recount crates before dawn, and height is 1 max of children.",
+              "question": "This step counts the levels in the tree, using Node holding a.",
               "hints": [
-                "Read the one job this step is practicing.",
-                "The example is about Tree Height.",
+                "Follow the job, which counts the levels in the tree.",
+                "Height is one plus the taller child.",
                 "1 + max(height(node.left), height(node.right))"
               ],
-              "explanation": "Quarry crews recount crates before dawn, and height is 1 max of children.",
+              "explanation": "This step counts the levels in the tree, using Node holding a.",
               "xp_reward": 0,
               "worked_example": "1 + max(height(node.left), height(node.right))"
             },
             {
               "id": "trees-bst-practice-1-mcq",
               "type": "mcq",
-              "question": "Quarry crews recount crates before dawn. For height is 1 max of children, which line counts the levels in the tree?",
+              "question": "A correct choice counts the levels in the tree and goes with Node holding a.",
               "hints": [
-                "Compare each line with the example.",
-                "One line matches the example.",
+                "Follow the job, which counts the levels in the tree.",
+                "Height is one plus the taller child.",
                 "return 1 + max(height(node.left), height(node.right))"
               ],
               "explanation": "Height is one plus the taller child.",
@@ -705,13 +705,13 @@
             {
               "id": "trees-bst-practice-1-predict",
               "type": "output_prediction",
-              "question": "Quarry crews recount crates before dawn. For height is 1 max of children, what value is displayed?",
+              "question": "Select the output after the code counts the levels in the tree, using Node holding a.",
               "hints": [
-                "Run the example in your head from the top.",
-                "The last line is what gets displayed.",
+                "Follow the job, which counts the levels in the tree.",
+                "Height is one plus the taller child.",
                 "2"
               ],
-              "explanation": "The Tree Height program displays that value.",
+              "explanation": "Height is one plus the taller child.",
               "xp_reward": 10,
               "starter_code": "class Node:\n    def __init__(self, value, left=None, right=None):\n        self.value = value\n        self.left = left\n        self.right = right\ndef height(node):\n    if node is None:\n        return 0\n    return 1 + max(height(node.left), height(node.right))\nroot = Node('a', Node('b'), Node('c'))\nprint(height(root))\n",
               "options": [
@@ -725,10 +725,10 @@
             {
               "id": "trees-bst-practice-1-order",
               "type": "ordering",
-              "question": "Quarry crews recount crates before dawn. For height is 1 max of children, build the line that counts the levels in the tree.",
+              "question": "Make the line that counts the levels in the tree by ordering the pieces for Node holding a.",
               "hints": [
-                "Start at the left of the example.",
-                "Keep the example order.",
+                "Follow the job, which counts the levels in the tree.",
+                "Height is one plus the taller child.",
                 "def f(): return 1+max(height(node.left), height(node.right))"
               ],
               "explanation": "Height is one plus the taller child.",
@@ -752,10 +752,10 @@
             {
               "id": "trees-bst-practice-1-fill",
               "type": "fill_blank",
-              "question": "Quarry crews recount crates before dawn. For height is 1 max of children, fill the blank so the line counts the levels in the tree.",
+              "question": "Complete the line for Node holding a so that it counts the levels in the tree.",
               "hints": [
-                "The blank is the missing piece of the example.",
-                "The example uses that piece.",
+                "Follow the job, which counts the levels in the tree.",
+                "Height is one plus the taller child.",
                 "+"
               ],
               "explanation": "Height is one plus the taller child.",
@@ -772,10 +772,10 @@
             {
               "id": "trees-bst-practice-1-bug",
               "type": "debugging",
-              "question": "Quarry crews recount crates before dawn. For height is 1 max of children, which line does a different job than the example?",
+              "question": "Select the line that gets in the way of the job, which counts the levels in the tree, for Node holding a.",
               "hints": [
-                "The other lines match the example.",
-                "One line is the odd one.",
+                "Follow the job, which counts the levels in the tree.",
+                "The print shows the root label instead of the height.",
                 "Line 5"
               ],
               "explanation": "The print shows the root label instead of the height.",
@@ -786,13 +786,13 @@
             {
               "id": "trees-bst-practice-1-predict-2",
               "type": "output_prediction",
-              "question": "Quarry crews recount crates before dawn. Choose the match for this step.",
+              "question": "With the new data around Node holding a, the code counts the levels in the tree, so select the new output.",
               "hints": [
-                "Apply the same steps to the new value.",
-                "The display comes from the last line.",
+                "Follow the job, which counts the levels in the tree.",
+                "Height is one plus the taller child.",
                 "1"
               ],
-              "explanation": "The second Tree Height program displays that value.",
+              "explanation": "Height is one plus the taller child.",
               "xp_reward": 10,
               "starter_code": "class Node:\n    def __init__(self, value, left=None, right=None):\n        self.value = value\n        self.left = left\n        self.right = right\ndef height(node):\n    if node is None:\n        return 0\n    return 1 + max(height(node.left), height(node.right))\nroot = Node('a')\nprint(height(root))\n",
               "options": [
@@ -806,10 +806,10 @@
             {
               "id": "trees-bst-practice-1-write",
               "type": "code",
-              "question": "Quarry crews recount crates before dawn. For height is 1 max of children, fill the blank so the program prints the result.",
+              "question": "The printed result shows up after you fill the blank so the code counts the levels in the tree for Node holding a.",
               "hints": [
-                "The blank is the missing piece.",
-                "Print the value that piece produces.",
+                "Follow the job, which counts the levels in the tree.",
+                "The printed value is the result after this step counts the levels in the tree.",
                 "label = height(root)"
               ],
               "explanation": "The printed value is the result after this step counts the levels in the tree.",
@@ -846,7 +846,7 @@
         "recursion-binary-search"
       ],
       "learning_objectives": [
-        "Attic crews recount crates before dawn, and track allowed value ranges while recursing."
+        "Using Node holding a, this step counts the nodes in the tree."
       ],
       "starter_code": "class TreeNode:\n    def __init__(self, value, left=None, right=None):\n        self.value = value\n        self.left = left\n        self.right = right\n\ndef is_bst(root):\n    # TODO\n    pass\n",
       "solution_code": "class TreeNode:\n    def __init__(self, value, left=None, right=None):\n        self.value = value\n        self.left = left\n        self.right = right\n\ndef is_bst(root):\n    def helper(node, lo, hi):\n        if node is None:\n            return True\n        if not (lo < node.value < hi):\n            return False\n        return helper(node.left, lo, node.value) and helper(node.right, node.value, hi)\n    return helper(root, float('-inf'), float('inf'))\n",
@@ -879,23 +879,23 @@
             {
               "id": "trees-bst-checkpoint-teach",
               "type": "teach",
-              "question": "Attic crews recount crates before dawn, and track allowed value ranges while recursing.",
+              "question": "Using Node holding a, this step counts the nodes in the tree.",
               "hints": [
-                "Read the one job this step is practicing.",
-                "The example is about Unit 6 Checkpoint Trees BST.",
+                "Follow the job, which counts the nodes in the tree.",
+                "Each node contributes one plus its children.",
                 "1 + count(node.left)"
               ],
-              "explanation": "Attic crews recount crates before dawn, and track allowed value ranges while recursing.",
+              "explanation": "Using Node holding a, this step counts the nodes in the tree.",
               "xp_reward": 0,
               "worked_example": "1 + count(node.left)"
             },
             {
               "id": "trees-bst-checkpoint-mcq",
               "type": "mcq",
-              "question": "Attic crews recount crates before dawn. For track allowed value ranges while recursing, which line counts the nodes in the tree?",
+              "question": "Pick the line that counts the nodes in the tree, not a line about something else, for Node holding a.",
               "hints": [
-                "Compare each line with the example.",
-                "One line matches the example.",
+                "Follow the job, which counts the nodes in the tree.",
+                "Each node contributes one plus its children.",
                 "return 1 + count(node.left) + count(node.right)"
               ],
               "explanation": "Each node contributes one plus its children.",
@@ -911,13 +911,13 @@
             {
               "id": "trees-bst-checkpoint-predict",
               "type": "output_prediction",
-              "question": "Attic crews recount crates before dawn. For track allowed value ranges while recursing, what value is displayed?",
+              "question": "The displayed value is what the code prints when it counts the nodes in the tree for Node holding a.",
               "hints": [
-                "Run the example in your head from the top.",
-                "The last line is what gets displayed.",
+                "Follow the job, which counts the nodes in the tree.",
+                "Each node contributes one plus its children.",
                 "3"
               ],
-              "explanation": "The Unit 6 Checkpoint Trees BST program displays that value.",
+              "explanation": "Each node contributes one plus its children.",
               "xp_reward": 10,
               "starter_code": "class Node:\n    def __init__(self, value, left=None, right=None):\n        self.value = value\n        self.left = left\n        self.right = right\ndef count(node):\n    if node is None:\n        return 0\n    return 1 + count(node.left) + count(node.right)\nroot = Node('a', Node('b'), Node('c'))\nprint(count(root))\n",
               "options": [
@@ -931,10 +931,10 @@
             {
               "id": "trees-bst-checkpoint-order",
               "type": "ordering",
-              "question": "Attic crews recount crates before dawn. For track allowed value ranges while recursing, build the line that counts the nodes in the tree.",
+              "question": "Place every piece so the result counts the nodes in the tree for Node holding a.",
               "hints": [
-                "Start at the left of the example.",
-                "Keep the example order.",
+                "Follow the job, which counts the nodes in the tree.",
+                "Each node contributes one plus its children.",
                 "def f(): return 1+count(node.left) + count(node.right)"
               ],
               "explanation": "Each node contributes one plus its children.",
@@ -960,10 +960,10 @@
             {
               "id": "trees-bst-checkpoint-fill",
               "type": "fill_blank",
-              "question": "Attic crews recount crates before dawn. For track allowed value ranges while recursing, fill the blank so the line counts the nodes in the tree.",
+              "question": "Drop in the piece that lets the line counts the nodes in the tree for Node holding a.",
               "hints": [
-                "The blank is the missing piece of the example.",
-                "The example uses that piece.",
+                "Follow the job, which counts the nodes in the tree.",
+                "Each node contributes one plus its children.",
                 "+"
               ],
               "explanation": "Each node contributes one plus its children.",
@@ -980,10 +980,10 @@
             {
               "id": "trees-bst-checkpoint-bug",
               "type": "debugging",
-              "question": "Attic crews recount crates before dawn. For track allowed value ranges while recursing, which line does a different job than the example?",
+              "question": "The mismatch misses the job, which counts the nodes in the tree, for Node holding a.",
               "hints": [
-                "The other lines match the example.",
-                "One line is the odd one.",
+                "Follow the job, which counts the nodes in the tree.",
+                "The print shows the label instead of the node count.",
                 "Line 5"
               ],
               "explanation": "The print shows the label instead of the node count.",
@@ -994,13 +994,13 @@
             {
               "id": "trees-bst-checkpoint-predict-2",
               "type": "output_prediction",
-              "question": "Attic crews recount crates before dawn. For track allowed value ranges while recursing, what does the second run display?",
+              "question": "Choose the printed result of the second run that counts the nodes in the tree for Node holding a.",
               "hints": [
-                "Apply the same steps to the new value.",
-                "The display comes from the last line.",
+                "Follow the job, which counts the nodes in the tree.",
+                "Each node contributes one plus its children.",
                 "1"
               ],
-              "explanation": "The second Unit 6 Checkpoint Trees BST program displays that value.",
+              "explanation": "Each node contributes one plus its children.",
               "xp_reward": 10,
               "starter_code": "class Node:\n    def __init__(self, value, left=None, right=None):\n        self.value = value\n        self.left = left\n        self.right = right\ndef count(node):\n    if node is None:\n        return 0\n    return 1 + count(node.left) + count(node.right)\nroot = Node('a')\nprint(count(root))\n",
               "options": [
@@ -1014,10 +1014,10 @@
             {
               "id": "trees-bst-checkpoint-write",
               "type": "code",
-              "question": "Attic crews recount crates before dawn. For track allowed value ranges while recursing, fill the blank so the program prints the result.",
+              "question": "Make the program counts the nodes in the tree by filling the blank for Node holding a.",
               "hints": [
-                "The blank is the missing piece.",
-                "Print the value that piece produces.",
+                "Follow the job, which counts the nodes in the tree.",
+                "The printed value is the result after this step counts the nodes in the tree.",
                 "label = count(root)"
               ],
               "explanation": "The printed value is the result after this step counts the nodes in the tree.",

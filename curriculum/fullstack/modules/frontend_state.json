@@ -27,7 +27,7 @@
       ],
       "prerequisites": [],
       "learning_objectives": [
-        "Depot clerks recount crates before dawn, and immutably update state fields."
+        "This step copies the state and changes one field, using state holding name."
       ],
       "starter_code": "def set_field(state, key, value):\n    # TODO\n    pass\n",
       "solution_code": "def set_field(state, key, value):\n    out = dict(state)\n    out[key] = value\n    return out\n",
@@ -59,23 +59,23 @@
             {
               "id": "fs-state-update-teach",
               "type": "teach",
-              "question": "Depot clerks recount crates before dawn, and immutably update state fields.",
+              "question": "This step copies the state and changes one field, using state holding name.",
               "hints": [
-                "Read the one job this step is practicing.",
-                "The example is about Immutable Set Field.",
+                "Follow the job, which copies the state and changes one field.",
+                "Spreading the old state and setting the field makes a new state.",
                 "{**state, 'name': name}"
               ],
-              "explanation": "Depot clerks recount crates before dawn, and immutably update state fields.",
+              "explanation": "This step copies the state and changes one field, using state holding name.",
               "xp_reward": 0,
               "worked_example": "{**state, 'name': name}"
             },
             {
               "id": "fs-state-update-mcq",
               "type": "mcq",
-              "question": "Depot clerks recount crates before dawn. For immutably update state fields, which line copies the state and changes one field?",
+              "question": "A correct choice copies the state and changes one field and goes with state holding name.",
               "hints": [
-                "Compare each line with the example.",
-                "One line matches the example.",
+                "Follow the job, which copies the state and changes one field.",
+                "Spreading the old state and setting the field makes a new state.",
                 "{**state, 'name': name}"
               ],
               "explanation": "Spreading the old state and setting the field makes a new state.",
@@ -91,13 +91,13 @@
             {
               "id": "fs-state-update-predict",
               "type": "output_prediction",
-              "question": "Depot clerks recount crates before dawn. For immutably update state fields, what value is displayed?",
+              "question": "Select the output after the code copies the state and changes one field, using state holding name.",
               "hints": [
-                "Run the example in your head from the top.",
-                "The last line is what gets displayed.",
+                "Follow the job, which copies the state and changes one field.",
+                "Spreading the old state and setting the field makes a new state.",
                 "umber"
               ],
-              "explanation": "The Immutable Set Field program displays that value.",
+              "explanation": "Spreading the old state and setting the field makes a new state.",
               "xp_reward": 10,
               "starter_code": "state = {'name': 'old'}\nnext_state = {**state, 'name': 'umber'}\nprint(next_state['name'])\n",
               "options": [
@@ -111,10 +111,10 @@
             {
               "id": "fs-state-update-order",
               "type": "ordering",
-              "question": "Depot clerks recount crates before dawn. For immutably update state fields, build the line that copies the state and changes one field.",
+              "question": "Make the line that copies the state and changes one field by ordering the pieces for state holding name.",
               "hints": [
-                "Start at the left of the example.",
-                "Keep the example order.",
+                "Follow the job, which copies the state and changes one field.",
+                "Spreading the old state and setting the field makes a new state.",
                 "next_state = {**state, 'name': name}"
               ],
               "explanation": "Spreading the old state and setting the field makes a new state.",
@@ -138,10 +138,10 @@
             {
               "id": "fs-state-update-fill",
               "type": "fill_blank",
-              "question": "Depot clerks recount crates before dawn. For immutably update state fields, fill the blank so the line copies the state and changes one field.",
+              "question": "Complete the line for state holding name so that it copies the state and changes one field.",
               "hints": [
-                "The blank is the missing piece of the example.",
-                "The example uses that piece.",
+                "Follow the job, which copies the state and changes one field.",
+                "Spreading the old state and setting the field makes a new state.",
                 "'umber'"
               ],
               "explanation": "Spreading the old state and setting the field makes a new state.",
@@ -158,10 +158,10 @@
             {
               "id": "fs-state-update-bug",
               "type": "debugging",
-              "question": "Depot clerks recount crates before dawn. For immutably update state fields, which line does a different job than the example?",
+              "question": "Select the line that gets in the way of the job, which copies the state and changes one field, for state holding name.",
               "hints": [
-                "The other lines match the example.",
-                "One line is the odd one.",
+                "Follow the job, which copies the state and changes one field.",
+                "The update writes into the old state instead of a copy.",
                 "Line 2"
               ],
               "explanation": "The update writes into the old state instead of a copy.",
@@ -172,13 +172,13 @@
             {
               "id": "fs-state-update-predict-2",
               "type": "output_prediction",
-              "question": "Depot clerks recount crates before dawn. For immutably update state fields, what does the second run display?",
+              "question": "With the new data around state holding name, the code copies the state and changes one field, so select the new output.",
               "hints": [
-                "Apply the same steps to the new value.",
-                "The display comes from the last line.",
+                "Follow the job, which copies the state and changes one field.",
+                "Spreading the old state and setting the field makes a new state.",
                 "zircon"
               ],
-              "explanation": "The second Immutable Set Field program displays that value.",
+              "explanation": "Spreading the old state and setting the field makes a new state.",
               "xp_reward": 10,
               "starter_code": "state = {'name': 'old'}\nnext_state = {**state, 'name': 'zircon'}\nprint(next_state['name'])\n",
               "options": [
@@ -192,10 +192,10 @@
             {
               "id": "fs-state-update-write",
               "type": "code",
-              "question": "Depot clerks recount crates before dawn. For immutably update state fields, fill the blank so the program prints the result.",
+              "question": "The printed result shows up after you fill the blank so the code copies the state and changes one field for state holding name.",
               "hints": [
-                "The blank is the missing piece.",
-                "Print the value that piece produces.",
+                "Follow the job, which copies the state and changes one field.",
+                "The printed value is the result after this step copies the state and changes one field.",
                 "label = next_state['name']"
               ],
               "explanation": "The printed value is the result after this step copies the state and changes one field.",
@@ -231,7 +231,7 @@
       ],
       "prerequisites": [],
       "learning_objectives": [
-        "Ridge clerks recount crates before dawn, and implement a tiny state reducer."
+        "This step adds the action amount to the count, using state holding n."
       ],
       "starter_code": "def reduce(state, action):\n    # TODO\n    pass\n",
       "solution_code": "def reduce(state, action):\n    t = action.get('type')\n    if t == 'inc':\n        return {'count': state['count'] + 1}\n    if t == 'set':\n        return {'count': action['value']}\n    return state\n",
@@ -263,23 +263,23 @@
             {
               "id": "fs-state-reducer-teach",
               "type": "teach",
-              "question": "Ridge clerks recount crates before dawn, and implement a tiny state reducer.",
+              "question": "This step adds the action amount to the count, using state holding n.",
               "hints": [
-                "Read the one job this step is practicing.",
-                "The example is about Simple Reducer.",
+                "Follow the job, which adds the action amount to the count.",
+                "An add action increases the count by the by field.",
                 "action['type'] == 'add'"
               ],
-              "explanation": "Ridge clerks recount crates before dawn, and implement a tiny state reducer.",
+              "explanation": "This step adds the action amount to the count, using state holding n.",
               "xp_reward": 0,
               "worked_example": "action['type'] == 'add'"
             },
             {
               "id": "fs-state-reducer-mcq",
               "type": "mcq",
-              "question": "Ridge clerks recount crates before dawn. For implement a tiny state reducer, which line adds the action amount to the count?",
+              "question": "Pick the line that adds the action amount to the count, not a line about something else, for state holding n.",
               "hints": [
-                "Compare each line with the example.",
-                "One line matches the example.",
+                "Follow the job, which adds the action amount to the count.",
+                "An add action increases the count by the by field.",
                 "action['type'] == 'add'"
               ],
               "explanation": "An add action increases the count by the by field.",
@@ -295,30 +295,30 @@
             {
               "id": "fs-state-reducer-predict",
               "type": "output_prediction",
-              "question": "Ridge clerks recount crates before dawn. For implement a tiny state reducer, what value is displayed?",
+              "question": "The displayed value is what the code prints when it adds the action amount to the count for state holding n.",
               "hints": [
-                "Run the example in your head from the top.",
-                "The last line is what gets displayed.",
-                "49"
+                "Follow the job, which adds the action amount to the count.",
+                "An add action increases the count by the by field.",
+                "50"
               ],
-              "explanation": "The Simple Reducer program displays that value.",
+              "explanation": "An add action increases the count by the by field.",
               "xp_reward": 10,
-              "starter_code": "state = {'n': 1}\naction = {'type': 'add', 'by': 48}\nprint(state['n'] + action['by'] if action['type'] == 'add' else state['n'])\n",
+              "starter_code": "state = {'n': 1}\naction = {'type': 'add', 'by': 49}\nprint(state['n'] + action['by'] if action['type'] == 'add' else state['n'])\n",
               "options": [
-                "52",
+                "53",
                 "none",
                 "0",
-                "49"
+                "50"
               ],
-              "correct_answer": "49"
+              "correct_answer": "50"
             },
             {
               "id": "fs-state-reducer-order",
               "type": "ordering",
-              "question": "Ridge clerks recount crates before dawn. For implement a tiny state reducer, build the line that adds the action amount to the count.",
+              "question": "Place every piece so the result adds the action amount to the count for state holding n.",
               "hints": [
-                "Start at the left of the example.",
-                "Keep the example order.",
+                "Follow the job, which adds the action amount to the count.",
+                "An add action increases the count by the by field.",
                 "if action['type'] == 'add': pass"
               ],
               "explanation": "An add action increases the count by the by field.",
@@ -342,10 +342,10 @@
             {
               "id": "fs-state-reducer-fill",
               "type": "fill_blank",
-              "question": "Ridge clerks recount crates before dawn. For implement a tiny state reducer, fill the blank so the line adds the action amount to the count.",
+              "question": "Drop in the piece that lets the line adds the action amount to the count for state holding n.",
               "hints": [
-                "The blank is the missing piece of the example.",
-                "The example uses that piece.",
+                "Follow the job, which adds the action amount to the count.",
+                "An add action increases the count by the by field.",
                 "=="
               ],
               "explanation": "An add action increases the count by the by field.",
@@ -362,55 +362,55 @@
             {
               "id": "fs-state-reducer-bug",
               "type": "debugging",
-              "question": "Ridge clerks recount crates before dawn. For implement a tiny state reducer, which line does a different job than the example?",
+              "question": "The mismatch misses the job, which adds the action amount to the count, for state holding n.",
               "hints": [
-                "The other lines match the example.",
-                "One line is the odd one.",
+                "Follow the job, which adds the action amount to the count.",
+                "The print shows the old count and ignores the action.",
                 "Line 3"
               ],
               "explanation": "The print shows the old count and ignores the action.",
               "xp_reward": 10,
-              "starter_code": "state = {'n': 1}\naction = {'type': 'add', 'by': 48}\nprint(state['n'])\n",
+              "starter_code": "state = {'n': 1}\naction = {'type': 'add', 'by': 49}\nprint(state['n'])\n",
               "correct_answer": "3"
             },
             {
               "id": "fs-state-reducer-predict-2",
               "type": "output_prediction",
-              "question": "Ridge clerks recount crates before dawn. For implement a tiny state reducer, what does the second run display?",
+              "question": "Choose the printed result of the second run that adds the action amount to the count for state holding n.",
               "hints": [
-                "Apply the same steps to the new value.",
-                "The display comes from the last line.",
-                "52"
+                "Follow the job, which adds the action amount to the count.",
+                "An add action increases the count by the by field.",
+                "53"
               ],
-              "explanation": "The second Simple Reducer program displays that value.",
+              "explanation": "An add action increases the count by the by field.",
               "xp_reward": 10,
-              "starter_code": "state = {'n': 1}\naction = {'type': 'add', 'by': 51}\nprint(state['n'] + action['by'] if action['type'] == 'add' else state['n'])\n",
+              "starter_code": "state = {'n': 1}\naction = {'type': 'add', 'by': 52}\nprint(state['n'] + action['by'] if action['type'] == 'add' else state['n'])\n",
               "options": [
-                "49",
+                "50",
                 "none",
-                "52",
+                "53",
                 "0"
               ],
-              "correct_answer": "52"
+              "correct_answer": "53"
             },
             {
               "id": "fs-state-reducer-write",
               "type": "code",
-              "question": "Ridge clerks recount crates before dawn. For implement a tiny state reducer, fill the blank so the program prints the result.",
+              "question": "Make the program adds the action amount to the count by filling the blank for state holding n.",
               "hints": [
-                "The blank is the missing piece.",
-                "Print the value that piece produces.",
+                "Follow the job, which adds the action amount to the count.",
+                "The printed value is the result after this step adds the action amount to the count.",
                 "label = state['n'] + action['by'] if action['type'] == 'add' else state['n']"
               ],
               "explanation": "The printed value is the result after this step adds the action amount to the count.",
               "xp_reward": 10,
-              "starter_code": "state = {'n': 1}\naction = {'type': 'add', 'by': 48}\nlabel = ___\nprint(label)\n",
-              "solution_code": "state = {'n': 1}\naction = {'type': 'add', 'by': 48}\nlabel = state['n'] + action['by'] if action['type'] == 'add' else state['n']\nprint(label)\n",
+              "starter_code": "state = {'n': 1}\naction = {'type': 'add', 'by': 49}\nlabel = ___\nprint(label)\n",
+              "solution_code": "state = {'n': 1}\naction = {'type': 'add', 'by': 49}\nlabel = state['n'] + action['by'] if action['type'] == 'add' else state['n']\nprint(label)\n",
               "tests": [
                 {
                   "name": "fs-state-reducer-prints",
                   "description": "The printed value is the result after this step adds the action amount to the co",
-                  "expected_stdout": "49\n",
+                  "expected_stdout": "50\n",
                   "required": true
                 }
               ]
@@ -435,7 +435,7 @@
       ],
       "prerequisites": [],
       "learning_objectives": [
-        "Cove clerks recount crates before dawn, and upsert items in client state."
+        "This step counts the list after an append, using items holding willow."
       ],
       "starter_code": "def upsert_item(items, item):\n    # TODO\n    pass\n",
       "solution_code": "def upsert_item(items, item):\n    out = []\n    found = False\n    for it in items:\n        if it.get('id') == item.get('id'):\n            out.append(item)\n            found = True\n        else:\n            out.append(it)\n    if not found:\n        out.append(item)\n    return out\n",
@@ -468,23 +468,23 @@
             {
               "id": "fs-state-list-teach",
               "type": "teach",
-              "question": "Cove clerks recount crates before dawn, and upsert items in client state.",
+              "question": "This step counts the list after an append, using items holding willow.",
               "hints": [
-                "Read the one job this step is practicing.",
-                "The example is about List CRUD.",
+                "Follow the job, which counts the list after an append.",
+                "Adding a one-item list creates the new list.",
                 "items + ['other']"
               ],
-              "explanation": "Cove clerks recount crates before dawn, and upsert items in client state.",
+              "explanation": "This step counts the list after an append, using items holding willow.",
               "xp_reward": 0,
               "worked_example": "items + ['other']"
             },
             {
               "id": "fs-state-list-mcq",
               "type": "mcq",
-              "question": "Cove clerks recount crates before dawn. For upsert items in client state, which line counts the list after an append?",
+              "question": "Choose the line that counts the list after an append, which is the line that fits items holding willow.",
               "hints": [
-                "Compare each line with the example.",
-                "One line matches the example.",
+                "Follow the job, which counts the list after an append.",
+                "Adding a one-item list creates the new list.",
                 "items + ['other']"
               ],
               "explanation": "Adding a one-item list creates the new list.",
@@ -500,15 +500,15 @@
             {
               "id": "fs-state-list-predict",
               "type": "output_prediction",
-              "question": "Cove clerks recount crates before dawn. For upsert items in client state, what value is displayed?",
+              "question": "Read the code that counts the list after an append for items holding willow, and choose the value it prints.",
               "hints": [
-                "Run the example in your head from the top.",
-                "The last line is what gets displayed.",
+                "Follow the job, which counts the list after an append.",
+                "Adding a one-item list creates the new list.",
                 "2"
               ],
-              "explanation": "The List CRUD program displays that value.",
+              "explanation": "Adding a one-item list creates the new list.",
               "xp_reward": 10,
-              "starter_code": "items = ['violet']\nitems = items + ['other']\nprint(len(items))\n",
+              "starter_code": "items = ['willow']\nitems = items + ['other']\nprint(len(items))\n",
               "options": [
                 "3",
                 "2",
@@ -520,10 +520,10 @@
             {
               "id": "fs-state-list-order",
               "type": "ordering",
-              "question": "Cove clerks recount crates before dawn. For upsert items in client state, build the line that counts the list after an append.",
+              "question": "Arrange the pieces of the line that counts the list after an append, left to right, for items holding willow.",
               "hints": [
-                "Start at the left of the example.",
-                "Keep the example order.",
+                "Follow the job, which counts the list after an append.",
+                "Adding a one-item list creates the new list.",
                 "items= items+ ['other']"
               ],
               "explanation": "Adding a one-item list creates the new list.",
@@ -543,10 +543,10 @@
             {
               "id": "fs-state-list-fill",
               "type": "fill_blank",
-              "question": "Cove clerks recount crates before dawn. For upsert items in client state, fill the blank so the line counts the list after an append.",
+              "question": "Fill the blank so the line counts the list after an append for items holding willow.",
               "hints": [
-                "The blank is the missing piece of the example.",
-                "The example uses that piece.",
+                "Follow the job, which counts the list after an append.",
+                "Adding a one-item list creates the new list.",
                 "+"
               ],
               "explanation": "Adding a one-item list creates the new list.",
@@ -563,29 +563,29 @@
             {
               "id": "fs-state-list-bug",
               "type": "debugging",
-              "question": "Cove clerks recount crates before dawn. For upsert items in client state, which line does a different job than the example?",
+              "question": "Find the line that misses the job, which counts the list after an append, for items holding willow.",
               "hints": [
-                "The other lines match the example.",
-                "One line is the odd one.",
+                "Follow the job, which counts the list after an append.",
+                "The print happens before the new item is added.",
                 "Line 2"
               ],
               "explanation": "The print happens before the new item is added.",
               "xp_reward": 10,
-              "starter_code": "items = ['violet']\nprint(len(items))\n",
+              "starter_code": "items = ['willow']\nprint(len(items))\n",
               "correct_answer": "2"
             },
             {
               "id": "fs-state-list-predict-2",
               "type": "output_prediction",
-              "question": "Cove clerks recount crates before dawn. For upsert items in client state, what does the second run display?",
+              "question": "On the new input, the code still counts the list after an append for items holding willow, so choose what it prints.",
               "hints": [
-                "Apply the same steps to the new value.",
-                "The display comes from the last line.",
+                "Follow the job, which counts the list after an append.",
+                "Adding a one-item list creates the new list.",
                 "3"
               ],
-              "explanation": "The second List CRUD program displays that value.",
+              "explanation": "Adding a one-item list creates the new list.",
               "xp_reward": 10,
-              "starter_code": "items = ['violet']\nitems = items + ['other', 'extra']\nprint(len(items))\n",
+              "starter_code": "items = ['willow']\nitems = items + ['other', 'extra']\nprint(len(items))\n",
               "options": [
                 "2",
                 "none",
@@ -597,16 +597,16 @@
             {
               "id": "fs-state-list-write",
               "type": "code",
-              "question": "Cove clerks recount crates before dawn. For upsert items in client state, fill the blank so the program prints the result.",
+              "question": "Fill the blank so the program counts the list after an append, and the print shows that result for items holding willow.",
               "hints": [
-                "The blank is the missing piece.",
-                "Print the value that piece produces.",
+                "Follow the job, which counts the list after an append.",
+                "The printed value is the result after this step counts the list after an append.",
                 "label = len(items)"
               ],
               "explanation": "The printed value is the result after this step counts the list after an append.",
               "xp_reward": 10,
-              "starter_code": "items = ['violet']\nitems = items + ['other']\nlabel = ___\nprint(label)\n",
-              "solution_code": "items = ['violet']\nitems = items + ['other']\nlabel = len(items)\nprint(label)\n",
+              "starter_code": "items = ['willow']\nitems = items + ['other']\nlabel = ___\nprint(label)\n",
+              "solution_code": "items = ['willow']\nitems = items + ['other']\nlabel = len(items)\nprint(label)\n",
               "tests": [
                 {
                   "name": "fs-state-list-prints",
@@ -635,7 +635,7 @@
       ],
       "prerequisites": [],
       "learning_objectives": [
-        "Plaza clerks recount crates before dawn, and derive views from state."
+        "This step sums the items derived from state, using state holding items."
       ],
       "starter_code": "def select_active(items):\n    # TODO\n    pass\n",
       "solution_code": "def select_active(items):\n    return [it for it in items if it.get('active')]\n",
@@ -668,23 +668,23 @@
             {
               "id": "fs-state-select-teach",
               "type": "teach",
-              "question": "Plaza clerks recount crates before dawn, and derive views from state.",
+              "question": "This step sums the items derived from state, using state holding items.",
               "hints": [
-                "Read the one job this step is practicing.",
-                "The example is about Derived Selector.",
+                "Follow the job, which sums the items derived from state.",
+                "The selector adds the items stored on the state.",
                 "sum(state['items'])"
               ],
-              "explanation": "Plaza clerks recount crates before dawn, and derive views from state.",
+              "explanation": "This step sums the items derived from state, using state holding items.",
               "xp_reward": 0,
               "worked_example": "sum(state['items'])"
             },
             {
               "id": "fs-state-select-mcq",
               "type": "mcq",
-              "question": "Plaza clerks recount crates before dawn. For derive views from state, which line sums the items derived from state?",
+              "question": "Mark the choice that sums the items derived from state when the code mentions state holding items.",
               "hints": [
-                "Compare each line with the example.",
-                "One line matches the example.",
+                "Follow the job, which sums the items derived from state.",
+                "The selector adds the items stored on the state.",
                 "sum(state['items'])"
               ],
               "explanation": "The selector adds the items stored on the state.",
@@ -700,30 +700,30 @@
             {
               "id": "fs-state-select-predict",
               "type": "output_prediction",
-              "question": "Plaza clerks recount crates before dawn. For derive views from state, what value is displayed?",
+              "question": "After state holding items, the code sums the items derived from state, and the correct choice is the printed value.",
               "hints": [
-                "Run the example in your head from the top.",
-                "The last line is what gets displayed.",
-                "25"
+                "Follow the job, which sums the items derived from state.",
+                "The selector adds the items stored on the state.",
+                "26"
               ],
-              "explanation": "The Derived Selector program displays that value.",
+              "explanation": "The selector adds the items stored on the state.",
               "xp_reward": 10,
-              "starter_code": "state = {'items': [1, 2, 22]}\nprint(sum(state['items']))\n",
+              "starter_code": "state = {'items': [1, 2, 23]}\nprint(sum(state['items']))\n",
               "options": [
                 "none",
-                "25",
+                "26",
                 "0",
-                "28"
+                "29"
               ],
-              "correct_answer": "25"
+              "correct_answer": "26"
             },
             {
               "id": "fs-state-select-order",
               "type": "ordering",
-              "question": "Plaza clerks recount crates before dawn. For derive views from state, build the line that sums the items derived from state.",
+              "question": "The finished line sums the items derived from state, so place its pieces in order for state holding items.",
               "hints": [
-                "Start at the left of the example.",
-                "Keep the example order.",
+                "Follow the job, which sums the items derived from state.",
+                "The selector adds the items stored on the state.",
                 "total = sum(state['items'])"
               ],
               "explanation": "The selector adds the items stored on the state.",
@@ -743,10 +743,10 @@
             {
               "id": "fs-state-select-fill",
               "type": "fill_blank",
-              "question": "Plaza clerks recount crates before dawn. Choose the match for this step, using amber, using flint.",
+              "question": "Finish the line that the items derived from state by filling the blank for state holding items.",
               "hints": [
-                "The blank is the missing piece of the example.",
-                "The example uses that piece.",
+                "Follow the job, which Follow the job, which the items derived from state.",
+                "The selector adds the items stored on the state.",
                 "sum"
               ],
               "explanation": "The selector adds the items stored on the state.",
@@ -763,55 +763,55 @@
             {
               "id": "fs-state-select-bug",
               "type": "debugging",
-              "question": "Plaza clerks recount crates before dawn. For derive views from state, which line does a different job than the example?",
+              "question": "Mark the line that breaks the job, which sums the items derived from state, for state holding items.",
               "hints": [
-                "The other lines match the example.",
-                "One line is the odd one.",
+                "Follow the job, which sums the items derived from state.",
+                "The print counts items instead of adding them.",
                 "Line 2"
               ],
               "explanation": "The print counts items instead of adding them.",
               "xp_reward": 10,
-              "starter_code": "state = {'items': [1, 2, 22]}\nprint(len(state['items']))\n",
+              "starter_code": "state = {'items': [1, 2, 23]}\nprint(len(state['items']))\n",
               "correct_answer": "2"
             },
             {
               "id": "fs-state-select-predict-2",
               "type": "output_prediction",
-              "question": "Plaza clerks recount crates before dawn. For derive views from state, what does the second run display?",
+              "question": "Follow the second program, which sums the items derived from state for state holding items, and choose its output.",
               "hints": [
-                "Apply the same steps to the new value.",
-                "The display comes from the last line.",
-                "28"
+                "Follow the job, which sums the items derived from state.",
+                "The selector adds the items stored on the state.",
+                "29"
               ],
-              "explanation": "The second Derived Selector program displays that value.",
+              "explanation": "The selector adds the items stored on the state.",
               "xp_reward": 10,
-              "starter_code": "state = {'items': [1, 2, 25]}\nprint(sum(state['items']))\n",
+              "starter_code": "state = {'items': [1, 2, 26]}\nprint(sum(state['items']))\n",
               "options": [
-                "25",
-                "28",
+                "26",
+                "29",
                 "none",
                 "0"
               ],
-              "correct_answer": "28"
+              "correct_answer": "29"
             },
             {
               "id": "fs-state-select-write",
               "type": "code",
-              "question": "Plaza clerks recount crates before dawn. For derive views from state, fill the blank so the program prints the result.",
+              "question": "Finish the program that sums the items derived from state by filling the blank for state holding items.",
               "hints": [
-                "The blank is the missing piece.",
-                "Print the value that piece produces.",
+                "Follow the job, which Follow the job, which the items derived from state.",
+                "The printed value is the result after this step sums the items derived from state.",
                 "label = sum(state['items'])"
               ],
               "explanation": "The printed value is the result after this step sums the items derived from state.",
               "xp_reward": 10,
-              "starter_code": "state = {'items': [1, 2, 22]}\nlabel = ___\nprint(label)\n",
-              "solution_code": "state = {'items': [1, 2, 22]}\nlabel = sum(state['items'])\nprint(label)\n",
+              "starter_code": "state = {'items': [1, 2, 23]}\nlabel = ___\nprint(label)\n",
+              "solution_code": "state = {'items': [1, 2, 23]}\nlabel = sum(state['items'])\nprint(label)\n",
               "tests": [
                 {
                   "name": "fs-state-select-prints",
                   "description": "The printed value is the result after this step sums the items derived from stat",
-                  "expected_stdout": "25\n",
+                  "expected_stdout": "26\n",
                   "required": true
                 }
               ]
@@ -835,7 +835,7 @@
       ],
       "prerequisites": [],
       "learning_objectives": [
-        "Marsh clerks recount crates before dawn, and apply batches of state actions."
+        "This step applies a batch of increments, using n and 3."
       ],
       "starter_code": "def reduce(state, action):\n    t = action.get('type')\n    if t == 'inc':\n        return {'count': state['count'] + 1}\n    if t == 'set':\n        return {'count': action['value']}\n    return state\n\ndef apply_actions(state, actions):\n    # TODO\n    pass\n",
       "solution_code": "def reduce(state, action):\n    t = action.get('type')\n    if t == 'inc':\n        return {'count': state['count'] + 1}\n    if t == 'set':\n        return {'count': action['value']}\n    return state\n\ndef apply_actions(state, actions):\n    for action in actions:\n        state = reduce(state, action)\n    return state\n",
@@ -868,23 +868,23 @@
             {
               "id": "fs-state-checkpoint-teach",
               "type": "teach",
-              "question": "Marsh clerks recount crates before dawn, and apply batches of state actions.",
+              "question": "This step applies a batch of increments, using n and 3.",
               "hints": [
-                "Read the one job this step is practicing.",
-                "The example is about Checkpoint Batch Actions.",
+                "Follow the job, which applies a batch of increments.",
+                "Each action in the batch adds its step.",
                 "n = n + step"
               ],
-              "explanation": "Marsh clerks recount crates before dawn, and apply batches of state actions.",
+              "explanation": "This step applies a batch of increments, using n and 3.",
               "xp_reward": 0,
               "worked_example": "n = n + step"
             },
             {
               "id": "fs-state-checkpoint-mcq",
               "type": "mcq",
-              "question": "Marsh clerks recount crates before dawn. For apply batches of state actions, which line applies a batch of increments?",
+              "question": "Mark the choice that applies a batch of increments when the code mentions n and 3.",
               "hints": [
-                "Compare each line with the example.",
-                "One line matches the example.",
+                "Follow the job, which applies a batch of increments.",
+                "Each action in the batch adds its step.",
                 "n = n + step"
               ],
               "explanation": "Each action in the batch adds its step.",
@@ -900,13 +900,13 @@
             {
               "id": "fs-state-checkpoint-predict",
               "type": "output_prediction",
-              "question": "Marsh clerks recount crates before dawn. For apply batches of state actions, what value is displayed?",
+              "question": "After n and 3, the code applies a batch of increments, and the correct choice is the printed value.",
               "hints": [
-                "Run the example in your head from the top.",
-                "The last line is what gets displayed.",
+                "Follow the job, which applies a batch of increments.",
+                "Each action in the batch adds its step.",
                 "6"
               ],
-              "explanation": "The Checkpoint Batch Actions program displays that value.",
+              "explanation": "Each action in the batch adds its step.",
               "xp_reward": 10,
               "starter_code": "n = 0\nfor step in (1, 2, 3):\n    n = n + step\nprint(n)\n",
               "options": [
@@ -920,10 +920,10 @@
             {
               "id": "fs-state-checkpoint-order",
               "type": "ordering",
-              "question": "Marsh clerks recount crates before dawn. For apply batches of state actions, build the line that applies a batch of increments.",
+              "question": "The finished line applies a batch of increments, so place its pieces in order for n and 3.",
               "hints": [
-                "Start at the left of the example.",
-                "Keep the example order.",
+                "Follow the job, which applies a batch of increments.",
+                "Each action in the batch adds its step.",
                 "for step in steps: n+=step"
               ],
               "explanation": "Each action in the batch adds its step.",
@@ -947,10 +947,10 @@
             {
               "id": "fs-state-checkpoint-fill",
               "type": "fill_blank",
-              "question": "Marsh clerks recount crates before dawn. For apply batches of state actions, fill the blank so the line applies a batch of increments.",
+              "question": "Finish the line that applies a batch of increments by filling the blank for n and 3.",
               "hints": [
-                "The blank is the missing piece of the example.",
-                "The example uses that piece.",
+                "Follow the job, which applies a batch of increments.",
+                "Each action in the batch adds its step.",
                 "+"
               ],
               "explanation": "Each action in the batch adds its step.",
@@ -967,10 +967,10 @@
             {
               "id": "fs-state-checkpoint-bug",
               "type": "debugging",
-              "question": "Marsh clerks recount crates before dawn. For apply batches of state actions, which line does a different job than the example?",
+              "question": "Mark the line that breaks the job, which applies a batch of increments, for n and.",
               "hints": [
-                "The other lines match the example.",
-                "One line is the odd one.",
+                "Follow the job, which applies a batch of increments.",
+                "The batch subtracts each step.",
                 "Line 3"
               ],
               "explanation": "The batch subtracts each step.",
@@ -981,13 +981,13 @@
             {
               "id": "fs-state-checkpoint-predict-2",
               "type": "output_prediction",
-              "question": "Marsh clerks recount crates before dawn. For apply batches of state actions, what does the second run display?",
+              "question": "Follow the second program, which applies a batch of increments for n and and choose its output.",
               "hints": [
-                "Apply the same steps to the new value.",
-                "The display comes from the last line.",
+                "Follow the job, which applies a batch of increments.",
+                "Each action in the batch adds its step.",
                 "3"
               ],
-              "explanation": "The second Checkpoint Batch Actions program displays that value.",
+              "explanation": "Each action in the batch adds its step.",
               "xp_reward": 10,
               "starter_code": "n = 0\nfor step in (1, 2):\n    n = n + step\nprint(n)\n",
               "options": [
@@ -1001,10 +1001,10 @@
             {
               "id": "fs-state-checkpoint-write",
               "type": "code",
-              "question": "Marsh clerks recount crates before dawn. For apply batches of state actions, fill the blank so the program prints the result.",
+              "question": "Finish the program that applies a batch of increments by filling the blank for n and 3.",
               "hints": [
-                "The blank is the missing piece.",
-                "Print the value that piece produces.",
+                "Follow the job, which applies a batch of increments.",
+                "The printed value is the result after this step applies a batch of increments.",
                 "label = n"
               ],
               "explanation": "The printed value is the result after this step applies a batch of increments.",

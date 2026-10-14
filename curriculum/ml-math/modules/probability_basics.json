@@ -27,7 +27,7 @@
       ],
       "prerequisites": [],
       "learning_objectives": [
-        "Depot clerks recount crates before dawn, and compute classical probability."
+        "This step computes one share of a uniform chance, using faces and 4."
       ],
       "starter_code": "def uniform_prob(n_favorable, n_total):\n    # TODO\n    pass\n",
       "solution_code": "def uniform_prob(n_favorable, n_total):\n    if n_total == 0:\n        raise ValueError('n_total must be > 0')\n    return n_favorable / n_total\n",
@@ -60,23 +60,23 @@
             {
               "id": "prob-uniform-teach",
               "type": "teach",
-              "question": "Depot clerks recount crates before dawn, and compute classical probability.",
+              "question": "This step computes one share of a uniform chance, using faces and 4.",
               "hints": [
-                "Read the one job this step is practicing.",
-                "The example is about Uniform Probability.",
+                "Follow the job, which computes one share of a uniform chance.",
+                "One outcome out of every face is 1 divided by the count.",
                 "1 / faces"
               ],
-              "explanation": "Depot clerks recount crates before dawn, and compute classical probability.",
+              "explanation": "This step computes one share of a uniform chance, using faces and 4.",
               "xp_reward": 0,
               "worked_example": "1 / faces"
             },
             {
               "id": "prob-uniform-mcq",
               "type": "mcq",
-              "question": "Depot clerks recount crates before dawn. For compute classical probability, which line computes one share of a uniform chance?",
+              "question": "Choose the line that computes one share of a uniform chance, which is the line that fits faces and 4.",
               "hints": [
-                "Compare each line with the example.",
-                "One line matches the example.",
+                "Follow the job, which computes one share of a uniform chance.",
+                "One outcome out of every face is 1 divided by the count.",
                 "1 / faces"
               ],
               "explanation": "One outcome out of every face is 1 divided by the count.",
@@ -92,13 +92,13 @@
             {
               "id": "prob-uniform-predict",
               "type": "output_prediction",
-              "question": "Depot clerks recount crates before dawn. For compute classical probability, what value is displayed?",
+              "question": "Read the code that computes one share of a uniform chance for faces and 4, and choose the value it prints.",
               "hints": [
-                "Run the example in your head from the top.",
-                "The last line is what gets displayed.",
+                "Follow the job, which computes one share of a uniform chance.",
+                "One outcome out of every face is 1 divided by the count.",
                 "0.0172"
               ],
-              "explanation": "The Uniform Probability program displays that value.",
+              "explanation": "One outcome out of every face is 1 divided by the count.",
               "xp_reward": 10,
               "starter_code": "faces = 58\nprint(round(1 / faces, 4))\n",
               "options": [
@@ -112,10 +112,10 @@
             {
               "id": "prob-uniform-order",
               "type": "ordering",
-              "question": "Depot clerks recount crates before dawn. For compute classical probability, build the line that computes one share of a uniform chance.",
+              "question": "Arrange the pieces of the line that computes one share of a uniform chance, left to right, for faces and 4.",
               "hints": [
-                "Start at the left of the example.",
-                "Keep the example order.",
+                "Follow the job, which computes one share of a uniform chance.",
+                "One outcome out of every face is 1 divided by the count.",
                 "chance = 1 / faces"
               ],
               "explanation": "One outcome out of every face is 1 divided by the count.",
@@ -139,10 +139,10 @@
             {
               "id": "prob-uniform-fill",
               "type": "fill_blank",
-              "question": "Depot clerks recount crates before dawn. For compute classical probability, fill the blank so the line computes one share of a uniform chance.",
+              "question": "Fill the blank so the line computes one share of a uniform chance for faces and 4.",
               "hints": [
-                "The blank is the missing piece of the example.",
-                "The example uses that piece.",
+                "Follow the job, which computes one share of a uniform chance.",
+                "One outcome out of every face is 1 divided by the count.",
                 "/"
               ],
               "explanation": "One outcome out of every face is 1 divided by the count.",
@@ -159,10 +159,10 @@
             {
               "id": "prob-uniform-bug",
               "type": "debugging",
-              "question": "Depot clerks recount crates before dawn. For compute classical probability, which line does a different job than the example?",
+              "question": "Find the line that misses the job, which computes one share of a uniform chance, for faces and 4.",
               "hints": [
-                "The other lines match the example.",
-                "One line is the odd one.",
+                "Follow the job, which computes one share of a uniform chance.",
+                "The print shows the count of faces, not one share.",
                 "Line 2"
               ],
               "explanation": "The print shows the count of faces, not one share.",
@@ -173,13 +173,13 @@
             {
               "id": "prob-uniform-predict-2",
               "type": "output_prediction",
-              "question": "Depot clerks recount crates before dawn. For compute classical probability, what does the second run display?",
+              "question": "On the new input, the code still computes one share of a uniform chance for faces and 4, so choose what it prints.",
               "hints": [
-                "Apply the same steps to the new value.",
-                "The display comes from the last line.",
+                "Follow the job, which computes one share of a uniform chance.",
+                "One outcome out of every face is 1 divided by the count.",
                 "0.0164"
               ],
-              "explanation": "The second Uniform Probability program displays that value.",
+              "explanation": "One outcome out of every face is 1 divided by the count.",
               "xp_reward": 10,
               "starter_code": "faces = 61\nprint(round(1 / faces, 4))\n",
               "options": [
@@ -193,10 +193,10 @@
             {
               "id": "prob-uniform-write",
               "type": "code",
-              "question": "Depot clerks recount crates before dawn. For compute classical probability, fill the blank so the program prints the result.",
+              "question": "Fill the blank so the program computes one share of a uniform chance, and the print shows that result for faces and 4.",
               "hints": [
-                "The blank is the missing piece.",
-                "Print the value that piece produces.",
+                "Follow the job, which computes one share of a uniform chance.",
+                "The printed value is the result after this step computes one share of a uniform chance.",
                 "label = round(1 / faces, 4)"
               ],
               "explanation": "The printed value is the result after this step computes one share of a uniform chance.",
@@ -231,7 +231,7 @@
       ],
       "prerequisites": [],
       "learning_objectives": [
-        "Ridge clerks recount crates before dawn, and apply complement rule."
+        "This step subtracts the chance from one, using chance and 2."
       ],
       "starter_code": "def prob_at_least_one(p_single, n):\n    # TODO\n    pass\n",
       "solution_code": "def prob_at_least_one(p_single, n):\n    return 1.0 - (1.0 - p_single) ** n\n",
@@ -264,23 +264,23 @@
             {
               "id": "prob-complement-teach",
               "type": "teach",
-              "question": "Ridge clerks recount crates before dawn, and apply complement rule.",
+              "question": "This step subtracts the chance from one, using chance and 2.",
               "hints": [
-                "Read the one job this step is practicing.",
-                "The example is about Complement Rule.",
+                "Follow the job, which subtracts the chance from one.",
+                "The complement is one minus the chance.",
                 "1 - chance"
               ],
-              "explanation": "Ridge clerks recount crates before dawn, and apply complement rule.",
+              "explanation": "This step subtracts the chance from one, using chance and 2.",
               "xp_reward": 0,
               "worked_example": "1 - chance"
             },
             {
               "id": "prob-complement-mcq",
               "type": "mcq",
-              "question": "Ridge clerks recount crates before dawn. For apply complement rule, which line subtracts the chance from one?",
+              "question": "Mark the choice that subtracts the chance from one when the code mentions chance and 2.",
               "hints": [
-                "Compare each line with the example.",
-                "One line matches the example.",
+                "Follow the job, which subtracts the chance from one.",
+                "The complement is one minus the chance.",
                 "1 - chance"
               ],
               "explanation": "The complement is one minus the chance.",
@@ -296,13 +296,13 @@
             {
               "id": "prob-complement-predict",
               "type": "output_prediction",
-              "question": "Ridge clerks recount crates before dawn. For apply complement rule, what value is displayed?",
+              "question": "After chance and 2, the code subtracts the chance from one, and the correct choice is the printed value.",
               "hints": [
-                "Run the example in your head from the top.",
-                "The last line is what gets displayed.",
+                "Follow the job, which subtracts the chance from one.",
+                "The complement is one minus the chance.",
                 "0.54"
               ],
-              "explanation": "The Complement Rule program displays that value.",
+              "explanation": "The complement is one minus the chance.",
               "xp_reward": 10,
               "starter_code": "chance = 46 / 100\nprint(round(1 - chance, 2))\n",
               "options": [
@@ -316,10 +316,10 @@
             {
               "id": "prob-complement-order",
               "type": "ordering",
-              "question": "Ridge clerks recount crates before dawn. For apply complement rule, build the line that subtracts the chance from one.",
+              "question": "The finished line subtracts the chance from one, so place its pieces in order for chance and 2.",
               "hints": [
-                "Start at the left of the example.",
-                "Keep the example order.",
+                "Follow the job, which subtracts the chance from one.",
+                "The complement is one minus the chance.",
                 "other = 1 - chance"
               ],
               "explanation": "The complement is one minus the chance.",
@@ -343,10 +343,10 @@
             {
               "id": "prob-complement-fill",
               "type": "fill_blank",
-              "question": "Ridge clerks recount crates before dawn. For apply complement rule, fill the blank so the line subtracts the chance from one.",
+              "question": "Finish the line that subtracts the chance from one by filling the blank for chance and 2.",
               "hints": [
-                "The blank is the missing piece of the example.",
-                "The example uses that piece.",
+                "Follow the job, which subtracts the chance from one.",
+                "The complement is one minus the chance.",
                 "-"
               ],
               "explanation": "The complement is one minus the chance.",
@@ -363,10 +363,10 @@
             {
               "id": "prob-complement-bug",
               "type": "debugging",
-              "question": "Ridge clerks recount crates before dawn. For apply complement rule, which line does a different job than the example?",
+              "question": "Mark the line that breaks the job, which subtracts the chance from one, for chance and.",
               "hints": [
-                "The other lines match the example.",
-                "One line is the odd one.",
+                "Follow the job, which subtracts the chance from one.",
+                "The print repeats the original chance.",
                 "Line 2"
               ],
               "explanation": "The print repeats the original chance.",
@@ -377,13 +377,13 @@
             {
               "id": "prob-complement-predict-2",
               "type": "output_prediction",
-              "question": "Ridge clerks recount crates before dawn. For apply complement rule, what does the second run display?",
+              "question": "Follow the second program, which subtracts the chance from one for chance and 2, and choose its output.",
               "hints": [
-                "Apply the same steps to the new value.",
-                "The display comes from the last line.",
+                "Follow the job, which subtracts the chance from one.",
+                "The complement is one minus the chance.",
                 "0.51"
               ],
-              "explanation": "The second Complement Rule program displays that value.",
+              "explanation": "The complement is one minus the chance.",
               "xp_reward": 10,
               "starter_code": "chance = 49 / 100\nprint(round(1 - chance, 2))\n",
               "options": [
@@ -397,10 +397,10 @@
             {
               "id": "prob-complement-write",
               "type": "code",
-              "question": "Ridge clerks recount crates before dawn. For apply complement rule, fill the blank so the program prints the result.",
+              "question": "Finish the program that subtracts the chance from one by filling the blank for chance and 2.",
               "hints": [
-                "The blank is the missing piece.",
-                "Print the value that piece produces.",
+                "Follow the job, which subtracts the chance from one.",
+                "The printed value is the result after this step subtracts the chance from one.",
                 "label = round(1 - chance, 2)"
               ],
               "explanation": "The printed value is the result after this step subtracts the chance from one.",
@@ -435,7 +435,7 @@
       ],
       "prerequisites": [],
       "learning_objectives": [
-        "Cove clerks recount crates before dawn, and compute conditional probability."
+        "This step divides the joint count by the given count, using joint and 2."
       ],
       "starter_code": "def conditional(p_a_and_b, p_b):\n    # TODO\n    pass\n",
       "solution_code": "def conditional(p_a_and_b, p_b):\n    if p_b == 0:\n        raise ValueError('P(B) must be > 0')\n    return p_a_and_b / p_b\n",
@@ -468,23 +468,23 @@
             {
               "id": "prob-conditional-teach",
               "type": "teach",
-              "question": "Cove clerks recount crates before dawn, and compute conditional probability.",
+              "question": "This step divides the joint count by the given count, using joint and 2.",
               "hints": [
-                "Read the one job this step is practicing.",
-                "The example is about Conditional Probability.",
+                "Follow the job, which divides the joint count by the given count.",
+                "Conditional chance is the joint count divided by the given count.",
                 "joint / given"
               ],
-              "explanation": "Cove clerks recount crates before dawn, and compute conditional probability.",
+              "explanation": "This step divides the joint count by the given count, using joint and 2.",
               "xp_reward": 0,
               "worked_example": "joint / given"
             },
             {
               "id": "prob-conditional-mcq",
               "type": "mcq",
-              "question": "Cove clerks recount crates before dawn. For compute conditional probability, which line divides the joint count by the given count?",
+              "question": "Mark the choice that divides the joint count by the given count when the code mentions joint and 2.",
               "hints": [
-                "Compare each line with the example.",
-                "One line matches the example.",
+                "Follow the job, which divides the joint count by the given count.",
+                "Conditional chance is the joint count divided by the given count.",
                 "joint / given"
               ],
               "explanation": "Conditional chance is the joint count divided by the given count.",
@@ -500,13 +500,13 @@
             {
               "id": "prob-conditional-predict",
               "type": "output_prediction",
-              "question": "Cove clerks recount crates before dawn. For compute conditional probability, what value is displayed, using quartz?",
+              "question": "After joint and 2, the code divides the joint count by the given count, and the correct choice is the printed value.",
               "hints": [
-                "Run the example in your head from the top.",
-                "The last line is what gets displayed.",
+                "Follow the job, which divides the joint count by the given count.",
+                "Conditional chance is the joint count divided by the given count.",
                 "0.3"
               ],
-              "explanation": "The Conditional Probability program displays that value.",
+              "explanation": "Conditional chance is the joint count divided by the given count.",
               "xp_reward": 10,
               "starter_code": "joint = 3\ngiven = 10\nprint(round(joint / given, 2))\n",
               "options": [
@@ -520,10 +520,10 @@
             {
               "id": "prob-conditional-order",
               "type": "ordering",
-              "question": "Cove clerks recount crates before dawn. For compute conditional probability, build the line that divides the joint count by the given count.",
+              "question": "The finished line divides the joint count by the given count, so place its pieces in order for joint and 2.",
               "hints": [
-                "Start at the left of the example.",
-                "Keep the example order.",
+                "Follow the job, which divides the joint count by the given count.",
+                "Conditional chance is the joint count divided by the given count.",
                 "chance = joint / given"
               ],
               "explanation": "Conditional chance is the joint count divided by the given count.",
@@ -547,10 +547,10 @@
             {
               "id": "prob-conditional-fill",
               "type": "fill_blank",
-              "question": "Cove clerks recount crates before dawn. For compute conditional probability, fill the blank so the line divides the joint count by the given count.",
+              "question": "Finish the line that divides the joint count by the given count by filling the blank for joint and 2.",
               "hints": [
-                "The blank is the missing piece of the example.",
-                "The example uses that piece.",
+                "Follow the job, which divides the joint count by the given count.",
+                "Conditional chance is the joint count divided by the given count.",
                 "/"
               ],
               "explanation": "Conditional chance is the joint count divided by the given count.",
@@ -567,10 +567,10 @@
             {
               "id": "prob-conditional-bug",
               "type": "debugging",
-              "question": "Cove clerks recount crates before dawn. For compute conditional probability, which line does a different job than the example, using violet?",
+              "question": "Mark the line that breaks the job, which divides the joint count by the given count, for joint and 2.",
               "hints": [
-                "The other lines match the example.",
-                "One line is the odd one.",
+                "Follow the job, which divides the joint count by the given count.",
+                "The line multiplies the counts instead of dividing.",
                 "Line 3"
               ],
               "explanation": "The line multiplies the counts instead of dividing.",
@@ -581,13 +581,13 @@
             {
               "id": "prob-conditional-predict-2",
               "type": "output_prediction",
-              "question": "Cove clerks recount crates before dawn. For compute conditional probability, what does the second run display, using birch?",
+              "question": "Follow the second program, which divides the joint count by the given count for joint and 2, and choose its output.",
               "hints": [
-                "Apply the same steps to the new value.",
-                "The display comes from the last line.",
+                "Follow the job, which divides the joint count by the given count.",
+                "Conditional chance is the joint count divided by the given count.",
                 "0.6"
               ],
-              "explanation": "The second Conditional Probability program displays that value.",
+              "explanation": "Conditional chance is the joint count divided by the given count.",
               "xp_reward": 10,
               "starter_code": "joint = 3\ngiven = 5\nprint(round(joint / given, 2))\n",
               "options": [
@@ -601,10 +601,10 @@
             {
               "id": "prob-conditional-write",
               "type": "code",
-              "question": "Cove clerks recount crates before dawn. For compute conditional probability, fill the blank so the program prints the result, using grove.",
+              "question": "Finish the program that divides the joint count by the given count by filling the blank for joint and 2.",
               "hints": [
-                "The blank is the missing piece.",
-                "Print the value that piece produces.",
+                "Follow the job, which divides the joint count by the given count.",
+                "The printed value is the result after this step divides the joint count by the given count.",
                 "label = round(joint / given, 2)"
               ],
               "explanation": "The printed value is the result after this step divides the joint count by the given count.",
@@ -639,7 +639,7 @@
       ],
       "prerequisites": [],
       "learning_objectives": [
-        "Plaza clerks recount crates before dawn, and apply Bayes rule."
+        "This step weights the prior by the likelihood, using prior and 2."
       ],
       "starter_code": "def bayes(prior, likelihood, evidence):\n    # TODO\n    pass\n",
       "solution_code": "def bayes(prior, likelihood, evidence):\n    return (prior * likelihood) / evidence\n",
@@ -672,23 +672,23 @@
             {
               "id": "prob-bayes-teach",
               "type": "teach",
-              "question": "Plaza clerks recount crates before dawn, and apply Bayes rule.",
+              "question": "This step weights the prior by the likelihood, using prior and 2.",
               "hints": [
-                "Read the one job this step is practicing.",
-                "The example is about Bayes Update.",
+                "Follow the job, which weights the prior by the likelihood.",
+                "The numerator is the prior times the likelihood.",
                 "prior * like"
               ],
-              "explanation": "Plaza clerks recount crates before dawn, and apply Bayes rule.",
+              "explanation": "This step weights the prior by the likelihood, using prior and 2.",
               "xp_reward": 0,
               "worked_example": "prior * like"
             },
             {
               "id": "prob-bayes-mcq",
               "type": "mcq",
-              "question": "Plaza clerks recount crates before dawn. For apply Bayes rule, which line weights the prior by the likelihood?",
+              "question": "Mark the choice that weights the prior by the likelihood when the code mentions prior and 2.",
               "hints": [
-                "Compare each line with the example.",
-                "One line matches the example.",
+                "Follow the job, which weights the prior by the likelihood.",
+                "The numerator is the prior times the likelihood.",
                 "prior * like"
               ],
               "explanation": "The numerator is the prior times the likelihood.",
@@ -704,13 +704,13 @@
             {
               "id": "prob-bayes-predict",
               "type": "output_prediction",
-              "question": "Plaza clerks recount crates before dawn. For apply Bayes rule, what value is displayed?",
+              "question": "After prior and 2, the code weights the prior by the likelihood, and the correct choice is the printed value.",
               "hints": [
-                "Run the example in your head from the top.",
-                "The last line is what gets displayed.",
+                "Follow the job, which weights the prior by the likelihood.",
+                "The numerator is the prior times the likelihood.",
                 "0.8"
               ],
-              "explanation": "The Bayes Update program displays that value.",
+              "explanation": "The numerator is the prior times the likelihood.",
               "xp_reward": 10,
               "starter_code": "prior = 1\nlike = 4\nopposite = 1\nprint(round((prior * like) / (prior * like + opposite), 2))\n",
               "options": [
@@ -724,10 +724,10 @@
             {
               "id": "prob-bayes-order",
               "type": "ordering",
-              "question": "Plaza clerks recount crates before dawn. For apply Bayes rule, build the line that weights the prior by the likelihood.",
+              "question": "The finished line weights the prior by the likelihood, so place its pieces in order for prior and 2.",
               "hints": [
-                "Start at the left of the example.",
-                "Keep the example order.",
+                "Follow the job, which weights the prior by the likelihood.",
+                "The numerator is the prior times the likelihood.",
                 "top = prior * like"
               ],
               "explanation": "The numerator is the prior times the likelihood.",
@@ -751,10 +751,10 @@
             {
               "id": "prob-bayes-fill",
               "type": "fill_blank",
-              "question": "Plaza clerks recount crates before dawn. For apply Bayes rule, fill the blank so the line weights the prior by the likelihood.",
+              "question": "Finish the line that weights the prior by the likelihood by filling the blank for prior and 2.",
               "hints": [
-                "The blank is the missing piece of the example.",
-                "The example uses that piece.",
+                "Follow the job, which weights the prior by the likelihood.",
+                "The numerator is the prior times the likelihood.",
                 "*"
               ],
               "explanation": "The numerator is the prior times the likelihood.",
@@ -771,10 +771,10 @@
             {
               "id": "prob-bayes-bug",
               "type": "debugging",
-              "question": "Plaza clerks recount crates before dawn. For apply Bayes rule, which line does a different job than the example?",
+              "question": "Mark the line that breaks the job, which weights the prior by the likelihood, for prior and 2.",
               "hints": [
-                "The other lines match the example.",
-                "One line is the odd one.",
+                "Follow the job, which weights the prior by the likelihood.",
+                "The line adds the prior and the likelihood.",
                 "Line 3"
               ],
               "explanation": "The line adds the prior and the likelihood.",
@@ -785,13 +785,13 @@
             {
               "id": "prob-bayes-predict-2",
               "type": "output_prediction",
-              "question": "Plaza clerks recount crates before dawn. For apply Bayes rule, what does the second run display, using flint?",
+              "question": "Follow the second program, which weights the prior by the likelihood for prior and 2, and choose its output.",
               "hints": [
-                "Apply the same steps to the new value.",
-                "The display comes from the last line.",
+                "Follow the job, which weights the prior by the likelihood.",
+                "The numerator is the prior times the likelihood.",
                 "0.25"
               ],
-              "explanation": "The second Bayes Update program displays that value.",
+              "explanation": "The numerator is the prior times the likelihood.",
               "xp_reward": 10,
               "starter_code": "prior = 1\nlike = 1\nopposite = 3\nprint(round((prior * like) / (prior * like + opposite), 2))\n",
               "options": [
@@ -805,10 +805,10 @@
             {
               "id": "prob-bayes-write",
               "type": "code",
-              "question": "Plaza clerks recount crates before dawn. For apply Bayes rule, fill the blank so the program prints the result.",
+              "question": "Finish the program that weights the prior by the likelihood by filling the blank for prior and 2.",
               "hints": [
-                "The blank is the missing piece.",
-                "Print the value that piece produces.",
+                "Follow the job, which weights the prior by the likelihood.",
+                "The printed value is the result after this step weights the prior by the likelihood.",
                 "label = round((prior * like) / (prior * like + opposite), 2)"
               ],
               "explanation": "The printed value is the result after this step weights the prior by the likelihood.",
@@ -843,7 +843,7 @@
       ],
       "prerequisites": [],
       "learning_objectives": [
-        "Marsh clerks recount crates before dawn, and compute discrete expectation."
+        "This step adds value times chance, using value and 2."
       ],
       "starter_code": "def expected_value(values, probs):\n    # TODO\n    pass\n",
       "solution_code": "def expected_value(values, probs):\n    return sum(v * p for v, p in zip(values, probs))\n",
@@ -876,23 +876,23 @@
             {
               "id": "prob-checkpoint-teach",
               "type": "teach",
-              "question": "Marsh clerks recount crates before dawn, and compute discrete expectation.",
+              "question": "This step adds value times chance, using value and 2.",
               "hints": [
-                "Read the one job this step is practicing.",
-                "The example is about Checkpoint Expected Value.",
+                "Follow the job, which adds value times chance.",
+                "Expected value adds each value times its chance.",
                 "value * chance"
               ],
-              "explanation": "Marsh clerks recount crates before dawn, and compute discrete expectation.",
+              "explanation": "This step adds value times chance, using value and 2.",
               "xp_reward": 0,
               "worked_example": "value * chance"
             },
             {
               "id": "prob-checkpoint-mcq",
               "type": "mcq",
-              "question": "Marsh clerks recount crates before dawn. For compute discrete expectation, which line adds value times chance?",
+              "question": "Choose the line that adds value times chance, which is the line that fits value and 2.",
               "hints": [
-                "Compare each line with the example.",
-                "One line matches the example.",
+                "Follow the job, which adds value times chance.",
+                "Expected value adds each value times its chance.",
                 "value * chance"
               ],
               "explanation": "Expected value adds each value times its chance.",
@@ -908,13 +908,13 @@
             {
               "id": "prob-checkpoint-predict",
               "type": "output_prediction",
-              "question": "Marsh clerks recount crates before dawn. For compute discrete expectation, what value is displayed?",
+              "question": "Read the code that adds value times chance for value and 2, and choose the value it prints.",
               "hints": [
-                "Run the example in your head from the top.",
-                "The last line is what gets displayed.",
+                "Follow the job, which adds value times chance.",
+                "Expected value adds each value times its chance.",
                 "68"
               ],
-              "explanation": "The Checkpoint Expected Value program displays that value.",
+              "explanation": "Expected value adds each value times its chance.",
               "xp_reward": 10,
               "starter_code": "value = 34\nchance = 2\nprint(value * chance)\n",
               "options": [
@@ -928,10 +928,10 @@
             {
               "id": "prob-checkpoint-order",
               "type": "ordering",
-              "question": "Marsh clerks recount crates before dawn. For compute discrete expectation, build the line that adds value times chance.",
+              "question": "Arrange the pieces of the line that adds value times chance, left to right, for value and 2.",
               "hints": [
-                "Start at the left of the example.",
-                "Keep the example order.",
+                "Follow the job, which adds value times chance.",
+                "Expected value adds each value times its chance.",
                 "total = value * chance"
               ],
               "explanation": "Expected value adds each value times its chance.",
@@ -955,10 +955,10 @@
             {
               "id": "prob-checkpoint-fill",
               "type": "fill_blank",
-              "question": "Marsh clerks recount crates before dawn. For compute discrete expectation, fill the blank so the line adds value times chance.",
+              "question": "Fill the blank so the line adds value times chance for value and 2.",
               "hints": [
-                "The blank is the missing piece of the example.",
-                "The example uses that piece.",
+                "Follow the job, which adds value times chance.",
+                "Expected value adds each value times its chance.",
                 "*"
               ],
               "explanation": "Expected value adds each value times its chance.",
@@ -975,10 +975,10 @@
             {
               "id": "prob-checkpoint-bug",
               "type": "debugging",
-              "question": "Marsh clerks recount crates before dawn. For compute discrete expectation, which line does a different job than the example?",
+              "question": "Find the line that misses the job, which adds value times chance, for value and 2.",
               "hints": [
-                "The other lines match the example.",
-                "One line is the odd one.",
+                "Follow the job, which adds value times chance.",
+                "The line adds the value and the chance.",
                 "Line 3"
               ],
               "explanation": "The line adds the value and the chance.",
@@ -989,13 +989,13 @@
             {
               "id": "prob-checkpoint-predict-2",
               "type": "output_prediction",
-              "question": "Marsh clerks recount crates before dawn. For compute discrete expectation, what does the second run display?",
+              "question": "On the new input, the code still adds value times chance for value and 2, so choose what it prints.",
               "hints": [
-                "Apply the same steps to the new value.",
-                "The display comes from the last line.",
+                "Follow the job, which adds value times chance.",
+                "Expected value adds each value times its chance.",
                 "74"
               ],
-              "explanation": "The second Checkpoint Expected Value program displays that value.",
+              "explanation": "Expected value adds each value times its chance.",
               "xp_reward": 10,
               "starter_code": "value = 37\nchance = 2\nprint(value * chance)\n",
               "options": [
@@ -1009,10 +1009,10 @@
             {
               "id": "prob-checkpoint-write",
               "type": "code",
-              "question": "Marsh clerks recount crates before dawn. For compute discrete expectation, fill the blank so the program prints the result.",
+              "question": "Fill the blank so the program adds value times chance, and the print shows that result for value and 2.",
               "hints": [
-                "The blank is the missing piece.",
-                "Print the value that piece produces.",
+                "Follow the job, which adds value times chance.",
+                "The printed value is the result after this step adds value times chance.",
                 "label = value * chance"
               ],
               "explanation": "The printed value is the result after this step adds value times chance.",

@@ -45,7 +45,7 @@
         "license": "CC BY-SA 4.0 (cppreference.com)"
       },
       "learning_objectives": [
-        "Ridge pickers recount crates before dawn, and explain RAII std unique ptr disposes its object when it goes out of scope."
+        "This step owns an integer with a unique pointer, using auto and 39."
       ],
       "xp_reward": 10,
       "player_mode": "micro",
@@ -59,23 +59,23 @@
             {
               "id": "cpp-mem-01-teach",
               "type": "teach",
-              "question": "Ridge pickers recount crates before dawn, and explain RAII std unique ptr disposes its object when it goes out of scope.",
+              "question": "This step owns an integer with a unique pointer, using auto and 39.",
               "hints": [
-                "Read the one job this step is practicing.",
-                "The example is about Smart Pointers RAII.",
+                "Follow the job, which owns an integer with a unique pointer.",
+                "make_unique owns the integer, and *bag reads it.",
                 "std::make_unique<int>(39)"
               ],
-              "explanation": "Ridge pickers recount crates before dawn, and explain RAII std unique ptr disposes its object when it goes out of scope.",
+              "explanation": "This step owns an integer with a unique pointer, using auto and 39.",
               "xp_reward": 0,
               "worked_example": "std::make_unique<int>(39)"
             },
             {
               "id": "cpp-mem-01-mcq",
               "type": "mcq",
-              "question": "Ridge pickers recount crates before dawn. For explain RAII std unique ptr disposes its object when it goes out of scope, which line owns an integer with a unique pointer?",
+              "question": "The match is the line that owns an integer with a unique pointer for auto and 39.",
               "hints": [
-                "Compare each line with the example.",
-                "One line matches the example.",
+                "Follow the job, which owns an integer with a unique pointer.",
+                "make_unique owns the integer, and *bag reads it.",
                 "std::make_unique<int>(value)"
               ],
               "explanation": "make_unique owns the integer, and *bag reads it.",
@@ -91,13 +91,13 @@
             {
               "id": "cpp-mem-01-predict",
               "type": "output_prediction",
-              "question": "Ridge pickers recount crates before dawn. For explain RAII std unique ptr disposes its object when it goes out of scope, what value is displayed?",
+              "question": "Work out what is printed when the code owns an integer with a unique pointer for auto and.",
               "hints": [
-                "Run the example in your head from the top.",
-                "The last line is what gets displayed.",
+                "Follow the job, which owns an integer with a unique pointer.",
+                "make_unique owns the integer, and *bag reads it.",
                 "39"
               ],
-              "explanation": "The Smart Pointers RAII program displays that value.",
+              "explanation": "make_unique owns the integer, and *bag reads it.",
               "xp_reward": 10,
               "starter_code": "#include <iostream>\n#include <string>\n#include <vector>\n#include <algorithm>\n#include <memory>\nint main() {\n    auto bag = std::make_unique<int>(39);\n    std::cout << *bag << std::endl;\n    return 0;\n}\n",
               "options": [
@@ -111,10 +111,10 @@
             {
               "id": "cpp-mem-01-order",
               "type": "ordering",
-              "question": "Ridge pickers recount crates before dawn. For explain RAII std unique ptr disposes its object when it goes out of scope, build the line that owns an integer with a unique pointer.",
+              "question": "Rebuild, from the left, the line that owns an integer with a unique pointer for auto and 39.",
               "hints": [
-                "Start at the left of the example.",
-                "Keep the example order.",
+                "Follow the job, which owns an integer with a unique pointer.",
+                "make_unique owns the integer, and *bag reads it.",
                 "auto bag = std::make_unique<int>(left);"
               ],
               "explanation": "make_unique owns the integer, and *bag reads it.",
@@ -136,10 +136,10 @@
             {
               "id": "cpp-mem-01-fill",
               "type": "fill_blank",
-              "question": "Ridge pickers recount crates before dawn. For explain RAII std unique ptr disposes its object when it goes out of scope, fill the blank so the line owns an integer with a unique pointer.",
+              "question": "The completed line owns an integer with a unique pointer once you fill the blank for auto and 39.",
               "hints": [
-                "The blank is the missing piece of the example.",
-                "The example uses that piece.",
+                "Follow the job, which owns an integer with a unique pointer.",
+                "make_unique owns the integer, and *bag reads it.",
                 "left"
               ],
               "explanation": "make_unique owns the integer, and *bag reads it.",
@@ -156,10 +156,10 @@
             {
               "id": "cpp-mem-01-bug",
               "type": "debugging",
-              "question": "Ridge pickers recount crates before dawn. For explain RAII std unique ptr disposes its object when it goes out of scope, which line does a different job than the example?",
+              "question": "One line does another job than the one that owns an integer with a unique pointer for auto and 39.",
               "hints": [
-                "The other lines match the example.",
-                "One line is the odd one.",
+                "Follow the job, which owns an integer with a unique pointer.",
+                "The print writes the pointer instead of the owned integer.",
                 "Line 8"
               ],
               "explanation": "The print writes the pointer instead of the owned integer.",
@@ -170,13 +170,13 @@
             {
               "id": "cpp-mem-01-predict-2",
               "type": "output_prediction",
-              "question": "Ridge pickers recount crates before dawn. For explain RAII std unique ptr disposes its object when it goes out of scope, what does the second run display?",
+              "question": "The second display is what prints after the code owns an integer with a unique pointer for auto and 39.",
               "hints": [
-                "Apply the same steps to the new value.",
-                "The display comes from the last line.",
+                "Follow the job, which owns an integer with a unique pointer.",
+                "make_unique owns the integer, and *bag reads it.",
                 "42"
               ],
-              "explanation": "The second Smart Pointers RAII program displays that value.",
+              "explanation": "make_unique owns the integer, and *bag reads it.",
               "xp_reward": 10,
               "starter_code": "#include <iostream>\n#include <string>\n#include <vector>\n#include <algorithm>\n#include <memory>\nint main() {\n    auto bag = std::make_unique<int>(42);\n    std::cout << *bag << std::endl;\n    return 0;\n}\n",
               "options": [
@@ -190,10 +190,10 @@
             {
               "id": "cpp-mem-01-write",
               "type": "code",
-              "question": "Ridge pickers recount crates before dawn. For explain RAII std unique ptr disposes its object when it goes out of scope, fill the blank so the program prints the result.",
+              "question": "Supply the blank so the run owns an integer with a unique pointer and prints the result for auto and.",
               "hints": [
-                "The blank is the missing piece.",
-                "Print the value that piece produces.",
+                "Follow the job, which owns an integer with a unique pointer.",
+                "The printed value is the result after this step owns an integer with a unique pointer.",
                 "int label = *bag;"
               ],
               "explanation": "The printed value is the result after this step owns an integer with a unique pointer.",

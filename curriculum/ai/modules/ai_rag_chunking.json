@@ -27,7 +27,7 @@
       ],
       "prerequisites": [],
       "learning_objectives": [
-        "Harbor potters recount crates before dawn, and chunk documents for RAG."
+        "This step counts fixed-size chunks, using text holding abcdefgh."
       ],
       "starter_code": "def chunk_text(text, size, overlap):\n    # TODO\n    pass\n",
       "solution_code": "def chunk_text(text, size, overlap):\n    if size <= 0:\n        raise ValueError('size')\n    step = max(size - overlap, 1)\n    chunks = []\n    for i in range(0, len(text), step):\n        chunk = text[i:i + size]\n        if chunk:\n            chunks.append(chunk)\n        if i + size >= len(text):\n            break\n    return chunks\n",
@@ -60,23 +60,23 @@
             {
               "id": "ai-rag-chunk-teach",
               "type": "teach",
-              "question": "Harbor potters recount crates before dawn, and chunk documents for RAG.",
+              "question": "This step counts fixed-size chunks, using text holding abcdefgh.",
               "hints": [
-                "Read the one job this step is practicing.",
-                "The example is about Chunk Text.",
+                "Follow the job, which counts fixed-size chunks.",
+                "Whole-number division by the size counts the chunks.",
                 "len(text) // size"
               ],
-              "explanation": "Harbor potters recount crates before dawn, and chunk documents for RAG.",
+              "explanation": "This step counts fixed-size chunks, using text holding abcdefgh.",
               "xp_reward": 0,
               "worked_example": "len(text) // size"
             },
             {
               "id": "ai-rag-chunk-mcq",
               "type": "mcq",
-              "question": "Harbor potters recount crates before dawn. For chunk documents for RAG, which line counts fixed-size chunks?",
+              "question": "A correct choice counts fixed-size chunks and goes with text holding abcdefgh.",
               "hints": [
-                "Compare each line with the example.",
-                "One line matches the example.",
+                "Follow the job, which counts fixed-size chunks.",
+                "Whole-number division by the size counts the chunks.",
                 "len(text) // size"
               ],
               "explanation": "Whole-number division by the size counts the chunks.",
@@ -92,13 +92,13 @@
             {
               "id": "ai-rag-chunk-predict",
               "type": "output_prediction",
-              "question": "Harbor potters recount crates before dawn. For chunk documents for RAG, what value is displayed?",
+              "question": "Select the output after the code counts fixed-size chunks, using text holding abcdefgh.",
               "hints": [
-                "Run the example in your head from the top.",
-                "The last line is what gets displayed.",
+                "Follow the job, which counts fixed-size chunks.",
+                "Whole-number division by the size counts the chunks.",
                 "2"
               ],
-              "explanation": "The Chunk Text program displays that value.",
+              "explanation": "Whole-number division by the size counts the chunks.",
               "xp_reward": 10,
               "starter_code": "text = 'abcdefgh'\nsize = 3\nprint(len(text) // size)\n",
               "options": [
@@ -112,10 +112,10 @@
             {
               "id": "ai-rag-chunk-order",
               "type": "ordering",
-              "question": "Harbor potters recount crates before dawn. For chunk documents for RAG, build the line that counts fixed-size chunks.",
+              "question": "Make the line that counts fixed-size chunks by ordering the pieces for text holding abcdefgh.",
               "hints": [
-                "Start at the left of the example.",
-                "Keep the example order.",
+                "Follow the job, which counts fixed-size chunks.",
+                "Whole-number division by the size counts the chunks.",
                 "chunks = len(text) // size"
               ],
               "explanation": "Whole-number division by the size counts the chunks.",
@@ -139,10 +139,10 @@
             {
               "id": "ai-rag-chunk-fill",
               "type": "fill_blank",
-              "question": "Harbor potters recount crates before dawn. For chunk documents for RAG, fill the blank so the line counts fixed-size chunks.",
+              "question": "Complete the line for text holding abcdefgh so that it counts fixed-size chunks.",
               "hints": [
-                "The blank is the missing piece of the example.",
-                "The example uses that piece.",
+                "Follow the job, which counts fixed-size chunks.",
+                "Whole-number division by the size counts the chunks.",
                 "//"
               ],
               "explanation": "Whole-number division by the size counts the chunks.",
@@ -159,10 +159,10 @@
             {
               "id": "ai-rag-chunk-bug",
               "type": "debugging",
-              "question": "Harbor potters recount crates before dawn. For chunk documents for RAG, which line does a different job than the example?",
+              "question": "Select the line that gets in the way of the job, which counts fixed-size chunks, for text holding abcdefgh.",
               "hints": [
-                "The other lines match the example.",
-                "One line is the odd one.",
+                "Follow the job, which counts fixed-size chunks.",
+                "The print counts characters instead of chunks.",
                 "Line 3"
               ],
               "explanation": "The print counts characters instead of chunks.",
@@ -173,13 +173,13 @@
             {
               "id": "ai-rag-chunk-predict-2",
               "type": "output_prediction",
-              "question": "Harbor potters recount crates before dawn. For chunk documents for RAG, what does the second run display?",
+              "question": "With the new data around text holding abcdefgh, the code counts fixed-size chunks, so select the new output.",
               "hints": [
-                "Apply the same steps to the new value.",
-                "The display comes from the last line.",
+                "Follow the job, which counts fixed-size chunks.",
+                "Whole-number division by the size counts the chunks.",
                 "3"
               ],
-              "explanation": "The second Chunk Text program displays that value.",
+              "explanation": "Whole-number division by the size counts the chunks.",
               "xp_reward": 10,
               "starter_code": "text = 'abcdefghi'\nsize = 3\nprint(len(text) // size)\n",
               "options": [
@@ -193,10 +193,10 @@
             {
               "id": "ai-rag-chunk-write",
               "type": "code",
-              "question": "Harbor potters recount crates before dawn. For chunk documents for RAG, fill the blank so the program prints the result.",
+              "question": "The printed result shows up after you fill the blank so the code counts fixed-size chunks for text holding abcdefgh.",
               "hints": [
-                "The blank is the missing piece.",
-                "Print the value that piece produces.",
+                "Follow the job, which counts fixed-size chunks.",
+                "The printed value is the result after this step counts fixed-size chunks.",
                 "label = len(text) // size"
               ],
               "explanation": "The printed value is the result after this step counts fixed-size chunks.",
@@ -231,7 +231,7 @@
       ],
       "prerequisites": [],
       "learning_objectives": [
-        "Mesa potters recount crates before dawn, and build an inverted index."
+        "This step counts the postings for one token, using index holding ridge."
       ],
       "starter_code": "def build_index(chunks):\n    # TODO\n    pass\n",
       "solution_code": "def build_index(chunks):\n    index = {}\n    for i, chunk in enumerate(chunks):\n        for tok in chunk.lower().split():\n            index.setdefault(tok, [])\n            if i not in index[tok]:\n                index[tok].append(i)\n    return index\n",
@@ -264,23 +264,23 @@
             {
               "id": "ai-rag-index-teach",
               "type": "teach",
-              "question": "Mesa potters recount crates before dawn, and build an inverted index.",
+              "question": "This step counts the postings for one token, using index holding ridge.",
               "hints": [
-                "Read the one job this step is practicing.",
-                "The example is about Build Lexical Index.",
+                "Follow the job, which counts the postings for one token.",
+                "The posting list is stored under the token.",
                 "index['ridge']"
               ],
-              "explanation": "Mesa potters recount crates before dawn, and build an inverted index.",
+              "explanation": "This step counts the postings for one token, using index holding ridge.",
               "xp_reward": 0,
               "worked_example": "index['ridge']"
             },
             {
               "id": "ai-rag-index-mcq",
               "type": "mcq",
-              "question": "Mesa potters recount crates before dawn. For build an inverted index, which line counts the postings for one token?",
+              "question": "Pick the line that counts the postings for one token, not a line about something else, for index holding ridge.",
               "hints": [
-                "Compare each line with the example.",
-                "One line matches the example.",
+                "Follow the job, which counts the postings for one token.",
+                "The posting list is stored under the token.",
                 "index[token]"
               ],
               "explanation": "The posting list is stored under the token.",
@@ -296,13 +296,13 @@
             {
               "id": "ai-rag-index-predict",
               "type": "output_prediction",
-              "question": "Mesa potters recount crates before dawn. For build an inverted index, what value is displayed?",
+              "question": "The displayed value is what the code prints when it counts the postings for one token for index holding ridge.",
               "hints": [
-                "Run the example in your head from the top.",
-                "The last line is what gets displayed.",
+                "Follow the job, which counts the postings for one token.",
+                "The posting list is stored under the token.",
                 "2"
               ],
-              "explanation": "The Build Lexical Index program displays that value.",
+              "explanation": "The posting list is stored under the token.",
               "xp_reward": 10,
               "starter_code": "index = {'ridge': [1, 2]}\nprint(len(index['ridge']))\n",
               "options": [
@@ -316,10 +316,10 @@
             {
               "id": "ai-rag-index-order",
               "type": "ordering",
-              "question": "Mesa potters recount crates before dawn. For build an inverted index, build the line that counts the postings for one token.",
+              "question": "Place every piece so the result counts the postings for one token for index holding ridge.",
               "hints": [
-                "Start at the left of the example.",
-                "Keep the example order.",
+                "Follow the job, which counts the postings for one token.",
+                "The posting list is stored under the token.",
                 "postings = index[token]"
               ],
               "explanation": "The posting list is stored under the token.",
@@ -339,10 +339,10 @@
             {
               "id": "ai-rag-index-fill",
               "type": "fill_blank",
-              "question": "Mesa potters recount crates before dawn. For build an inverted index, fill the blank so the line counts the postings for one token.",
+              "question": "Drop in the piece that lets the line counts the postings for one token for index holding ridge.",
               "hints": [
-                "The blank is the missing piece of the example.",
-                "The example uses that piece.",
+                "Follow the job, which counts the postings for one token.",
+                "The posting list is stored under the token.",
                 "'ridge'"
               ],
               "explanation": "The posting list is stored under the token.",
@@ -359,10 +359,10 @@
             {
               "id": "ai-rag-index-bug",
               "type": "debugging",
-              "question": "Mesa potters recount crates before dawn. For build an inverted index, which line does a different job than the example?",
+              "question": "The mismatch misses the job, which counts the postings for one token, for index holding ridge.",
               "hints": [
-                "The other lines match the example.",
-                "One line is the odd one.",
+                "Follow the job, which counts the postings for one token.",
+                "The print counts tokens, not the postings of one token.",
                 "Line 2"
               ],
               "explanation": "The print counts tokens, not the postings of one token.",
@@ -373,13 +373,13 @@
             {
               "id": "ai-rag-index-predict-2",
               "type": "output_prediction",
-              "question": "Mesa potters recount crates before dawn. For build an inverted index, what does the second run display?",
+              "question": "Choose the printed result of the second run that counts the postings for one token for index holding ridge.",
               "hints": [
-                "Apply the same steps to the new value.",
-                "The display comes from the last line.",
+                "Follow the job, which counts the postings for one token.",
+                "The posting list is stored under the token.",
                 "1"
               ],
-              "explanation": "The second Build Lexical Index program displays that value.",
+              "explanation": "The posting list is stored under the token.",
               "xp_reward": 10,
               "starter_code": "index = {'ridge': [1]}\nprint(len(index['ridge']))\n",
               "options": [
@@ -393,10 +393,10 @@
             {
               "id": "ai-rag-index-write",
               "type": "code",
-              "question": "Mesa potters recount crates before dawn. For build an inverted index, fill the blank so the program prints the result.",
+              "question": "Make the program counts the postings for one token by filling the blank for index holding ridge.",
               "hints": [
-                "The blank is the missing piece.",
-                "Print the value that piece produces.",
+                "Follow the job, which counts the postings for one token.",
+                "The printed value is the result after this step counts the postings for one token.",
                 "label = len(index['ridge'])"
               ],
               "explanation": "The printed value is the result after this step counts the postings for one token.",
@@ -431,7 +431,7 @@
       ],
       "prerequisites": [],
       "learning_objectives": [
-        "Orchard potters recount crates before dawn, and retrieve chunks by token overlap."
+        "This step counts the overlapping letters, using query holding amber."
       ],
       "starter_code": "def retrieve(query, chunks, k):\n    # TODO\n    pass\n",
       "solution_code": "def retrieve(query, chunks, k):\n    q = set(query.lower().split())\n    scored = []\n    for i, ch in enumerate(chunks):\n        score = len(q & set(ch.lower().split()))\n        scored.append((score, i, ch))\n    scored.sort(key=lambda t: (-t[0], t[1]))\n    positives = [ch for score, _, ch in scored[:k] if score > 0]\n    return positives if positives else [ch for _, _, ch in scored[:k]]\n",
@@ -464,23 +464,23 @@
             {
               "id": "ai-rag-retrieve-teach",
               "type": "teach",
-              "question": "Orchard potters recount crates before dawn, and retrieve chunks by token overlap.",
+              "question": "This step counts the overlapping letters, using query holding amber.",
               "hints": [
-                "Read the one job this step is practicing.",
-                "The example is about Retrieve by Overlap.",
+                "Follow the job, which counts the overlapping letters.",
+                "The intersection is the overlap.",
                 "query & doc"
               ],
-              "explanation": "Orchard potters recount crates before dawn, and retrieve chunks by token overlap.",
+              "explanation": "This step counts the overlapping letters, using query holding amber.",
               "xp_reward": 0,
               "worked_example": "query & doc"
             },
             {
               "id": "ai-rag-retrieve-mcq",
               "type": "mcq",
-              "question": "Orchard potters recount crates before dawn. For retrieve chunks by token overlap, which line counts the overlapping letters?",
+              "question": "Mark the choice that counts the overlapping letters when the code mentions query holding amber.",
               "hints": [
-                "Compare each line with the example.",
-                "One line matches the example.",
+                "Follow the job, which counts the overlapping letters.",
+                "The intersection is the overlap.",
                 "query & doc"
               ],
               "explanation": "The intersection is the overlap.",
@@ -496,13 +496,13 @@
             {
               "id": "ai-rag-retrieve-predict",
               "type": "output_prediction",
-              "question": "Orchard potters recount crates before dawn. For retrieve chunks by token overlap, what value is displayed?",
+              "question": "After query holding amber, the code counts the overlapping letters, and the correct choice is the printed value.",
               "hints": [
-                "Run the example in your head from the top.",
-                "The last line is what gets displayed.",
+                "Follow the job, which counts the overlapping letters.",
+                "The intersection is the overlap.",
                 "5"
               ],
-              "explanation": "The Retrieve by Overlap program displays that value.",
+              "explanation": "The intersection is the overlap.",
               "xp_reward": 10,
               "starter_code": "query = set('amber')\ndoc = set('amber')\nprint(len(query & doc))\n",
               "options": [
@@ -516,10 +516,10 @@
             {
               "id": "ai-rag-retrieve-order",
               "type": "ordering",
-              "question": "Orchard potters recount crates before dawn. For retrieve chunks by token overlap, build the line that counts the overlapping letters.",
+              "question": "The finished line counts the overlapping letters, so place its pieces in order for query holding amber.",
               "hints": [
-                "Start at the left of the example.",
-                "Keep the example order.",
+                "Follow the job, which counts the overlapping letters.",
+                "The intersection is the overlap.",
                 "shared = query & doc"
               ],
               "explanation": "The intersection is the overlap.",
@@ -543,10 +543,10 @@
             {
               "id": "ai-rag-retrieve-fill",
               "type": "fill_blank",
-              "question": "Orchard potters recount crates before dawn. For retrieve chunks by token overlap, fill the blank so the line counts the overlapping letters.",
+              "question": "Finish the line that counts the overlapping letters by filling the blank for query holding amber.",
               "hints": [
-                "The blank is the missing piece of the example.",
-                "The example uses that piece.",
+                "Follow the job, which counts the overlapping letters.",
+                "The intersection is the overlap.",
                 "&"
               ],
               "explanation": "The intersection is the overlap.",
@@ -563,10 +563,10 @@
             {
               "id": "ai-rag-retrieve-bug",
               "type": "debugging",
-              "question": "Orchard potters recount crates before dawn. For retrieve chunks by token overlap, which line does a different job than the example?",
+              "question": "Mark the line that breaks the job, which counts the overlapping letters, for query holding amber.",
               "hints": [
-                "The other lines match the example.",
-                "One line is the odd one.",
+                "Follow the job, which counts the overlapping letters.",
+                "The print counts the query and ignores the document.",
                 "Line 3"
               ],
               "explanation": "The print counts the query and ignores the document.",
@@ -577,13 +577,13 @@
             {
               "id": "ai-rag-retrieve-predict-2",
               "type": "output_prediction",
-              "question": "Orchard potters recount crates before dawn. For retrieve chunks by token overlap, what does the second run display?",
+              "question": "Follow the second program, which counts the overlapping letters for query holding amber, and choose its output.",
               "hints": [
-                "Apply the same steps to the new value.",
-                "The display comes from the last line.",
+                "Follow the job, which counts the overlapping letters.",
+                "The intersection is the overlap.",
                 "0"
               ],
-              "explanation": "The second Retrieve by Overlap program displays that value.",
+              "explanation": "The intersection is the overlap.",
               "xp_reward": 10,
               "starter_code": "query = set('amber')\ndoc = set('zzzzz')\nprint(len(query & doc))\n",
               "options": [
@@ -597,10 +597,10 @@
             {
               "id": "ai-rag-retrieve-write",
               "type": "code",
-              "question": "Orchard potters recount crates before dawn. For retrieve chunks by token overlap, fill the blank so the program prints the result.",
+              "question": "Finish the program that counts the overlapping letters by filling the blank for query holding amber.",
               "hints": [
-                "The blank is the missing piece.",
-                "Print the value that piece produces.",
+                "Follow the job, which counts the overlapping letters.",
+                "The printed value is the result after this step counts the overlapping letters.",
                 "label = len(query & doc)"
               ],
               "explanation": "The printed value is the result after this step counts the overlapping letters.",
@@ -635,7 +635,7 @@
       ],
       "prerequisites": [],
       "learning_objectives": [
-        "Quarry potters recount crates before dawn, and pack retrieved context under a budget."
+        "This step keeps the chunks that fit the limit, using chunks holding ember."
       ],
       "starter_code": "def pack_context(chunks, budget):\n    # TODO\n    pass\n",
       "solution_code": "def pack_context(chunks, budget):\n    parts = []\n    used = 0\n    sep = chr(10) + '---' + chr(10)\n    for ch in chunks:\n        add = len(ch) if not parts else len(sep) + len(ch)\n        if used + add > budget:\n            break\n        parts.append(ch)\n        used += add\n    return sep.join(parts)\n",
@@ -668,23 +668,23 @@
             {
               "id": "ai-rag-context-teach",
               "type": "teach",
-              "question": "Quarry potters recount crates before dawn, and pack retrieved context under a budget.",
+              "question": "This step keeps the chunks that fit the limit, using chunks holding ember.",
               "hints": [
-                "Read the one job this step is practicing.",
-                "The example is about Pack Context.",
+                "Follow the job, which keeps the chunks that fit the limit.",
+                "The slice keeps the first chunks up to the limit.",
                 "chunks[:limit]"
               ],
-              "explanation": "Quarry potters recount crates before dawn, and pack retrieved context under a budget.",
+              "explanation": "This step keeps the chunks that fit the limit, using chunks holding ember.",
               "xp_reward": 0,
               "worked_example": "chunks[:limit]"
             },
             {
               "id": "ai-rag-context-mcq",
               "type": "mcq",
-              "question": "Quarry potters recount crates before dawn. For pack retrieved context under a budget, which line keeps the chunks that fit the limit?",
+              "question": "Select the line that keeps the chunks that fit the limit, the one that belongs with chunks holding ember.",
               "hints": [
-                "Compare each line with the example.",
-                "One line matches the example.",
+                "Follow the job, which keeps the chunks that fit the limit.",
+                "The slice keeps the first chunks up to the limit.",
                 "chunks[:limit]"
               ],
               "explanation": "The slice keeps the first chunks up to the limit.",
@@ -700,13 +700,13 @@
             {
               "id": "ai-rag-context-predict",
               "type": "output_prediction",
-              "question": "Quarry potters recount crates before dawn. For pack retrieved context under a budget, what value is displayed?",
+              "question": "Follow the code that keeps the chunks that fit the limit for chunks holding ember, then choose the displayed value.",
               "hints": [
-                "Run the example in your head from the top.",
-                "The last line is what gets displayed.",
+                "Follow the job, which keeps the chunks that fit the limit.",
+                "The slice keeps the first chunks up to the limit.",
                 "1"
               ],
-              "explanation": "The Pack Context program displays that value.",
+              "explanation": "The slice keeps the first chunks up to the limit.",
               "xp_reward": 10,
               "starter_code": "chunks = ['ember', 'ivory', 'extra']\nlimit = 1\nprint(len(chunks[:limit]))\n",
               "options": [
@@ -720,10 +720,10 @@
             {
               "id": "ai-rag-context-order",
               "type": "ordering",
-              "question": "Quarry potters recount crates before dawn. For pack retrieved context under a budget, build the line that keeps the chunks that fit the limit.",
+              "question": "Order the pieces so the line keeps the chunks that fit the limit for chunks holding ember.",
               "hints": [
-                "Start at the left of the example.",
-                "Keep the example order.",
+                "Follow the job, which keeps the chunks that fit the limit.",
+                "The slice keeps the first chunks up to the limit.",
                 "packed = chunks[:limit]"
               ],
               "explanation": "The slice keeps the first chunks up to the limit.",
@@ -743,10 +743,10 @@
             {
               "id": "ai-rag-context-fill",
               "type": "fill_blank",
-              "question": "Quarry potters recount crates before dawn. For pack retrieved context under a budget, fill the blank so the line keeps the chunks that fit the limit.",
+              "question": "Supply the missing piece so the line keeps the chunks that fit the limit for chunks holding ember.",
               "hints": [
-                "The blank is the missing piece of the example.",
-                "The example uses that piece.",
+                "Follow the job, which keeps the chunks that fit the limit.",
+                "The slice keeps the first chunks up to the limit.",
                 ":"
               ],
               "explanation": "The slice keeps the first chunks up to the limit.",
@@ -763,10 +763,10 @@
             {
               "id": "ai-rag-context-bug",
               "type": "debugging",
-              "question": "Quarry potters recount crates before dawn. For pack retrieved context under a budget, which line does a different job than the example?",
+              "question": "The wrong line is the one that misses the job, which keeps the chunks that fit the limit, for chunks holding ember.",
               "hints": [
-                "The other lines match the example.",
-                "One line is the odd one.",
+                "Follow the job, which keeps the chunks that fit the limit.",
+                "The print ignores the limit.",
                 "Line 3"
               ],
               "explanation": "The print ignores the limit.",
@@ -777,13 +777,13 @@
             {
               "id": "ai-rag-context-predict-2",
               "type": "output_prediction",
-              "question": "Quarry potters recount crates before dawn. For pack retrieved context under a budget, what does the second run display?",
+              "question": "A new input still has code that keeps the chunks that fit the limit for chunks holding ember, and the correct choice is what it prints.",
               "hints": [
-                "Apply the same steps to the new value.",
-                "The display comes from the last line.",
+                "Follow the job, which keeps the chunks that fit the limit.",
+                "The slice keeps the first chunks up to the limit.",
                 "2"
               ],
-              "explanation": "The second Pack Context program displays that value.",
+              "explanation": "The slice keeps the first chunks up to the limit.",
               "xp_reward": 10,
               "starter_code": "chunks = ['ember', 'ivory', 'extra']\nlimit = 2\nprint(len(chunks[:limit]))\n",
               "options": [
@@ -797,10 +797,10 @@
             {
               "id": "ai-rag-context-write",
               "type": "code",
-              "question": "Quarry potters recount crates before dawn. For pack retrieved context under a budget, fill the blank so the program prints the result.",
+              "question": "The blank is the missing piece of the program that keeps the chunks that fit the limit for chunks holding ember.",
               "hints": [
-                "The blank is the missing piece.",
-                "Print the value that piece produces.",
+                "Follow the job, which keeps the chunks that fit the limit.",
+                "The printed value is the result after this step keeps the chunks that fit the limit.",
                 "label = len(chunks[:limit])"
               ],
               "explanation": "The printed value is the result after this step keeps the chunks that fit the limit.",
@@ -835,7 +835,7 @@
       ],
       "prerequisites": [],
       "learning_objectives": [
-        "Attic potters recount crates before dawn, and attach citation ids to chunks."
+        "This step reads the citation stored for a chunk, using cite holding umber."
       ],
       "starter_code": "def cite(chunks):\n    # TODO\n    pass\n",
       "solution_code": "def cite(chunks):\n    return [{'id': i, 'text': c} for i, c in enumerate(chunks)]\n",
@@ -868,23 +868,23 @@
             {
               "id": "ai-rag-checkpoint2-teach",
               "type": "teach",
-              "question": "Attic potters recount crates before dawn, and attach citation ids to chunks.",
+              "question": "This step reads the citation stored for a chunk, using cite holding umber.",
               "hints": [
-                "Read the one job this step is practicing.",
-                "The example is about Checkpoint Citation Map.",
+                "Follow the job, which reads the citation stored for a chunk.",
+                "The map stores the source under the chunk id.",
                 "cite[1]"
               ],
-              "explanation": "Attic potters recount crates before dawn, and attach citation ids to chunks.",
+              "explanation": "This step reads the citation stored for a chunk, using cite holding umber.",
               "xp_reward": 0,
               "worked_example": "cite[1]"
             },
             {
               "id": "ai-rag-checkpoint2-mcq",
               "type": "mcq",
-              "question": "Attic potters recount crates before dawn. For attach citation ids to chunks, which line reads the citation stored for a chunk?",
+              "question": "Choose the line that reads the citation stored for a chunk, which is the line that fits cite holding umber.",
               "hints": [
-                "Compare each line with the example.",
-                "One line matches the example.",
+                "Follow the job, which reads the citation stored for a chunk.",
+                "The map stores the source under the chunk id.",
                 "cite[1]"
               ],
               "explanation": "The map stores the source under the chunk id.",
@@ -900,13 +900,13 @@
             {
               "id": "ai-rag-checkpoint2-predict",
               "type": "output_prediction",
-              "question": "Attic potters recount crates before dawn. For attach citation ids to chunks, what value is displayed?",
+              "question": "Read the code that reads the citation stored for a chunk for cite holding and choose the value it prints.",
               "hints": [
-                "Run the example in your head from the top.",
-                "The last line is what gets displayed.",
+                "Follow the job, which reads the citation stored for a chunk.",
+                "The map stores the source under the chunk id.",
                 "umber"
               ],
-              "explanation": "The Checkpoint Citation Map program displays that value.",
+              "explanation": "The map stores the source under the chunk id.",
               "xp_reward": 10,
               "starter_code": "cite = {1: 'umber'}\nprint(cite[1])\n",
               "options": [
@@ -920,10 +920,10 @@
             {
               "id": "ai-rag-checkpoint2-order",
               "type": "ordering",
-              "question": "Attic potters recount crates before dawn. For attach citation ids to chunks, build the line that reads the citation stored for a chunk.",
+              "question": "Arrange the pieces of the line that reads the citation stored for a chunk, left to right, for cite holding umber.",
               "hints": [
-                "Start at the left of the example.",
-                "Keep the example order.",
+                "Follow the job, which reads the citation stored for a chunk.",
+                "The map stores the source under the chunk id.",
                 "source = cite[1]"
               ],
               "explanation": "The map stores the source under the chunk id.",
@@ -943,10 +943,10 @@
             {
               "id": "ai-rag-checkpoint2-fill",
               "type": "fill_blank",
-              "question": "Attic potters recount crates before dawn. For attach citation ids to chunks, fill the blank so the line reads the citation stored for a chunk.",
+              "question": "Fill the blank so the line reads the citation stored for a chunk for cite holding umber.",
               "hints": [
-                "The blank is the missing piece of the example.",
-                "The example uses that piece.",
+                "Follow the job, which reads the citation stored for a chunk.",
+                "The map stores the source under the chunk id.",
                 "1"
               ],
               "explanation": "The map stores the source under the chunk id.",
@@ -963,10 +963,10 @@
             {
               "id": "ai-rag-checkpoint2-bug",
               "type": "debugging",
-              "question": "Attic potters recount crates before dawn. For attach citation ids to chunks, which line does a different job than the example?",
+              "question": "Find the line that misses the job, which reads the citation stored for a chunk, for cite holding umber.",
               "hints": [
-                "The other lines match the example.",
-                "One line is the odd one.",
+                "Follow the job, which reads the citation stored for a chunk.",
+                "The print counts citations instead of reading one.",
                 "Line 2"
               ],
               "explanation": "The print counts citations instead of reading one.",
@@ -977,13 +977,13 @@
             {
               "id": "ai-rag-checkpoint2-predict-2",
               "type": "output_prediction",
-              "question": "Attic potters recount crates before dawn. For attach citation ids to chunks, what does the second run display?",
+              "question": "On the new input, the code still reads the citation stored for a chunk for cite holding umber, so choose what it prints.",
               "hints": [
-                "Apply the same steps to the new value.",
-                "The display comes from the last line.",
+                "Follow the job, which reads the citation stored for a chunk.",
+                "The map stores the source under the chunk id.",
                 "zircon"
               ],
-              "explanation": "The second Checkpoint Citation Map program displays that value.",
+              "explanation": "The map stores the source under the chunk id.",
               "xp_reward": 10,
               "starter_code": "cite = {1: 'zircon'}\nprint(cite[1])\n",
               "options": [
@@ -997,10 +997,10 @@
             {
               "id": "ai-rag-checkpoint2-write",
               "type": "code",
-              "question": "Attic potters recount crates before dawn. For attach citation ids to chunks, fill the blank so the program prints the result.",
+              "question": "Fill the blank so the program reads the citation stored for a chunk, and the print shows that result for cite holding.",
               "hints": [
-                "The blank is the missing piece.",
-                "Print the value that piece produces.",
+                "Follow the job, which reads the citation stored for a chunk.",
+                "The printed value is the result after this step reads the citation stored for a chunk.",
                 "label = cite[1]"
               ],
               "explanation": "The printed value is the result after this step reads the citation stored for a chunk.",

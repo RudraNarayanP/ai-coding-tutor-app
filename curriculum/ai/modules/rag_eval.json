@@ -46,7 +46,7 @@
         "license": "Python documentation license (PSF)"
       },
       "learning_objectives": [
-        "Cove pickers recount crates before dawn, and shape conversation logs as dict rows ready for a database insert."
+        "This step reads the note stored in the table, using conn holding violet."
       ],
       "xp_reward": 45,
       "player_mode": "micro",
@@ -60,23 +60,23 @@
             {
               "id": "ai-03-teach",
               "type": "teach",
-              "question": "Cove pickers recount crates before dawn, and shape conversation logs as dict rows ready for a database insert.",
+              "question": "This step reads the note stored in the table, using conn holding violet.",
               "hints": [
-                "Read the one job this step is practicing.",
-                "The example is about Storing AI Conversations RAG Context in SQL.",
+                "Follow the job, which reads the note stored in the table.",
+                "The select reads the body stored under that id.",
                 "SELECT body FROM notes"
               ],
-              "explanation": "Cove pickers recount crates before dawn, and shape conversation logs as dict rows ready for a database insert.",
+              "explanation": "This step reads the note stored in the table, using conn holding violet.",
               "xp_reward": 0,
               "worked_example": "SELECT body FROM notes"
             },
             {
               "id": "ai-03-mcq",
               "type": "mcq",
-              "question": "Cove pickers recount crates before dawn. For shape conversation logs as dict rows ready for a database insert, which line reads the note stored in the table?",
+              "question": "Keep the choice that reads the note stored in the table for conn holding violet.",
               "hints": [
-                "Compare each line with the example.",
-                "One line matches the example.",
+                "Follow the job, which reads the note stored in the table.",
+                "The select reads the body stored under that id.",
                 "SELECT body FROM notes WHERE id = 1"
               ],
               "explanation": "The select reads the body stored under that id.",
@@ -92,13 +92,13 @@
             {
               "id": "ai-03-predict",
               "type": "output_prediction",
-              "question": "Cove pickers recount crates before dawn. For shape conversation logs as dict rows ready for a database insert, what value is displayed?",
+              "question": "Trace the code that reads the note stored in the table using conn holding and select what it displays.",
               "hints": [
-                "Run the example in your head from the top.",
-                "The last line is what gets displayed.",
+                "Follow the job, which reads the note stored in the table.",
+                "The select reads the body stored under that id.",
                 "violet"
               ],
-              "explanation": "The Storing AI Conversations RAG Context in SQL program displays that value.",
+              "explanation": "The select reads the body stored under that id.",
               "xp_reward": 10,
               "starter_code": "import sqlite3\nconn = sqlite3.connect(':memory:')\nconn.execute('CREATE TABLE notes (id INTEGER, body TEXT)')\nconn.execute('INSERT INTO notes VALUES (1, ?)', ('violet',))\nprint(conn.execute('SELECT body FROM notes WHERE id = 1').fetchone()[0])\n",
               "options": [
@@ -112,10 +112,10 @@
             {
               "id": "ai-03-order",
               "type": "ordering",
-              "question": "Cove pickers recount crates before dawn. For shape conversation logs as dict rows ready for a database insert, build the line that reads the note stored in the table.",
+              "question": "Tap the pieces, in order, of the line that reads the note stored in the table for conn holding violet.",
               "hints": [
-                "Start at the left of the example.",
-                "Keep the example order.",
+                "Follow the job, which reads the note stored in the table.",
+                "The select reads the body stored under that id.",
                 "conn.execute('INSERT INTO notes VALUES (1, ?)', (body,))"
               ],
               "explanation": "The select reads the body stored under that id.",
@@ -143,10 +143,10 @@
             {
               "id": "ai-03-fill",
               "type": "fill_blank",
-              "question": "Cove pickers recount crates before dawn. For shape conversation logs as dict rows ready for a database insert, fill the blank so the line reads the note stored in the table.",
+              "question": "The blank is the missing piece of the line that reads the note stored in the table for conn holding violet.",
               "hints": [
-                "The blank is the missing piece of the example.",
-                "The example uses that piece.",
+                "Follow the job, which reads the note stored in the table.",
+                "The select reads the body stored under that id.",
                 "="
               ],
               "explanation": "The select reads the body stored under that id.",
@@ -163,10 +163,10 @@
             {
               "id": "ai-03-bug",
               "type": "debugging",
-              "question": "Cove pickers recount crates before dawn. For shape conversation logs as dict rows ready for a database insert, which line does a different job than the example?",
+              "question": "Choose the line that does another job than the one that reads the note stored in the table for conn holding violet.",
               "hints": [
-                "The other lines match the example.",
-                "One line is the odd one.",
+                "Follow the job, which reads the note stored in the table.",
+                "The print is zero and never reads the stored note.",
                 "Line 4"
               ],
               "explanation": "The print is zero and never reads the stored note.",
@@ -177,13 +177,13 @@
             {
               "id": "ai-03-predict-2",
               "type": "output_prediction",
-              "question": "Cove pickers recount crates before dawn. For shape conversation logs as dict rows ready for a database insert, what does the second run display?",
+              "question": "Trace the second run, which reads the note stored in the table for conn holding violet, and select what it displays.",
               "hints": [
-                "Apply the same steps to the new value.",
-                "The display comes from the last line.",
+                "Follow the job, which reads the note stored in the table.",
+                "The select reads the body stored under that id.",
                 "amber"
               ],
-              "explanation": "The second Storing AI Conversations RAG Context in SQL program displays that value.",
+              "explanation": "The select reads the body stored under that id.",
               "xp_reward": 10,
               "starter_code": "import sqlite3\nconn = sqlite3.connect(':memory:')\nconn.execute('CREATE TABLE notes (id INTEGER, body TEXT)')\nconn.execute('INSERT INTO notes VALUES (1, ?)', ('amber',))\nprint(conn.execute('SELECT body FROM notes WHERE id = 1').fetchone()[0])\n",
               "options": [
@@ -197,10 +197,10 @@
             {
               "id": "ai-03-write",
               "type": "code",
-              "question": "Cove pickers recount crates before dawn. For shape conversation logs as dict rows ready for a database insert, fill the blank so the program prints the result.",
+              "question": "Type the missing piece so the program reads the note stored in the table for conn holding and prints it.",
               "hints": [
-                "The blank is the missing piece.",
-                "Print the value that piece produces.",
+                "Follow the job, which reads the note stored in the table.",
+                "The printed value is the result after this step reads the note stored in the table.",
                 "label = conn.execute('SELECT body FROM notes WHERE id = 1').fetchone()[0]"
               ],
               "explanation": "The printed value is the result after this step reads the note stored in the table.",

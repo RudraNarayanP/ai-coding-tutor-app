@@ -45,7 +45,7 @@
         "license": "Public domain (SQLite documentation)"
       },
       "learning_objectives": [
-        "Attic potters recount crates before dawn, and combine rows from two tables with INNER JOIN."
+        "This step finds the customer on one order, using customers and 103."
       ],
       "xp_reward": 10,
       "player_mode": "micro",
@@ -59,23 +59,23 @@
             {
               "id": "sql-08-teach",
               "type": "teach",
-              "question": "Attic potters recount crates before dawn, and combine rows from two tables with INNER JOIN.",
+              "question": "This step finds the customer on one order, using customers and 103.",
               "hints": [
-                "Read the one job this step is practicing.",
-                "The example is about Relational JOINs.",
+                "Follow the job, which finds the customer on one order.",
+                "JOIN matches customers.id to orders.customer_id.",
                 "JOIN orders ON customers.id = orders.customer_id"
               ],
-              "explanation": "Attic potters recount crates before dawn, and combine rows from two tables with INNER JOIN.",
+              "explanation": "This step finds the customer on one order, using customers and 103.",
               "xp_reward": 0,
               "worked_example": "JOIN orders ON customers.id = orders.customer_id"
             },
             {
               "id": "sql-08-mcq",
               "type": "mcq",
-              "question": "Attic potters recount crates before dawn. For combine rows from two tables with INNER JOIN, which line finds the customer on one order?",
+              "question": "The match is the line that finds the customer on one order for customers and 103.",
               "hints": [
-                "Compare each line with the example.",
-                "One line matches the example.",
+                "Follow the job, which finds the customer on one order.",
+                "JOIN matches customers.id to orders.customer_id.",
                 "SELECT customers.name FROM customers JOIN orders ON customers.id = orders.customer_id"
               ],
               "explanation": "JOIN matches customers.id to orders.customer_id.",
@@ -91,13 +91,13 @@
             {
               "id": "sql-08-predict",
               "type": "output_prediction",
-              "question": "Attic potters recount crates before dawn. For combine rows from two tables with INNER JOIN, what value is displayed?",
+              "question": "Work out what is printed when the code finds the customer on one order for customers and 103.",
               "hints": [
-                "Run the example in your head from the top.",
-                "The last line is what gets displayed.",
+                "Follow the job, which finds the customer on one order.",
+                "JOIN matches customers.id to orders.customer_id.",
                 "┌───────────┐\n│ name      │\n├───────────┤\n│ Bob Jones │\n└───────────┘"
               ],
-              "explanation": "The Relational JOINs program displays that value.",
+              "explanation": "JOIN matches customers.id to orders.customer_id.",
               "xp_reward": 10,
               "starter_code": "SELECT customers.name FROM customers JOIN orders ON customers.id = orders.customer_id WHERE orders.id = 103;\n",
               "options": [
@@ -111,10 +111,10 @@
             {
               "id": "sql-08-order",
               "type": "ordering",
-              "question": "Attic potters recount crates before dawn. For combine rows from two tables with INNER JOIN, build the line that finds the customer on one order.",
+              "question": "Rebuild, from the left, the line that finds the customer on one order for customers and 103.",
               "hints": [
-                "Start at the left of the example.",
-                "Keep the example order.",
+                "Follow the job, which finds the customer on one order.",
+                "JOIN matches customers.id to orders.customer_id.",
                 "SELECT customers.name FROM customers JOIN orders ON customers.id = orders.customer_id"
               ],
               "explanation": "JOIN matches customers.id to orders.customer_id.",
@@ -148,10 +148,10 @@
             {
               "id": "sql-08-fill",
               "type": "fill_blank",
-              "question": "Attic potters recount crates before dawn. For combine rows from two tables with INNER JOIN, fill the blank so the line finds the customer on one order.",
+              "question": "The completed line finds the customer on one order once you fill the blank for customers and 103.",
               "hints": [
-                "The blank is the missing piece of the example.",
-                "The example uses that piece.",
+                "Follow the job, which finds the customer on one order.",
+                "JOIN matches customers.id to orders.customer_id.",
                 "="
               ],
               "explanation": "JOIN matches customers.id to orders.customer_id.",
@@ -168,10 +168,10 @@
             {
               "id": "sql-08-bug",
               "type": "debugging",
-              "question": "Attic potters recount crates before dawn. For combine rows from two tables with INNER JOIN, which line does a different job than the example?",
+              "question": "One line does another job than the one that finds the customer on one order for customers and.",
               "hints": [
-                "The other lines match the example.",
-                "One line is the odd one.",
+                "Follow the job, which finds the customer on one order.",
+                "The filter asks for an order that is not in the table.",
                 "Line 1"
               ],
               "explanation": "The filter asks for an order that is not in the table.",
@@ -182,13 +182,13 @@
             {
               "id": "sql-08-predict-2",
               "type": "output_prediction",
-              "question": "Attic potters recount crates before dawn. For combine rows from two tables with INNER JOIN, what does the second run display?",
+              "question": "The second display is what prints after the code finds the customer on one order for customers and 103.",
               "hints": [
-                "Apply the same steps to the new value.",
-                "The display comes from the last line.",
+                "Follow the job, which finds the customer on one order.",
+                "JOIN matches customers.id to orders.customer_id.",
                 "┌───────────────┐\n│ name          │\n├───────────────┤\n│ Carol Danvers │\n└───────────────┘"
               ],
-              "explanation": "The second Relational JOINs program displays that value.",
+              "explanation": "JOIN matches customers.id to orders.customer_id.",
               "xp_reward": 10,
               "starter_code": "SELECT customers.name FROM customers JOIN orders ON customers.id = orders.customer_id WHERE orders.id = 104;\n",
               "options": [
@@ -202,10 +202,10 @@
             {
               "id": "sql-08-write",
               "type": "code",
-              "question": "Attic potters recount crates before dawn. For combine rows from two tables with INNER JOIN, fill the blank so the program prints the result.",
+              "question": "Supply the blank so the run finds the customer on one order and prints the result for customers and 103.",
               "hints": [
-                "The blank is the missing piece.",
-                "Print the value that piece produces.",
+                "Follow the job, which finds the customer on one order.",
+                "The query result is what this step finds the customer on one order.",
                 "WHERE orders.id = 103"
               ],
               "explanation": "The query result is what this step finds the customer on one order.",

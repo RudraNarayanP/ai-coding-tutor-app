@@ -27,7 +27,7 @@
       ],
       "prerequisites": [],
       "learning_objectives": [
-        "Depot potters recount crates before dawn, and build REST resource paths."
+        "This step builds the resource path, using item and 44."
       ],
       "starter_code": "def resource_path(collection, id=None):\n    # TODO\n    pass\n",
       "solution_code": "def resource_path(collection, id=None):\n    base = '/' + collection.strip('/')\n    if id is None:\n        return base\n    return base + '/' + str(id)\n",
@@ -60,23 +60,23 @@
             {
               "id": "fs-rest-get-teach",
               "type": "teach",
-              "question": "Depot potters recount crates before dawn, and build REST resource paths.",
+              "question": "This step builds the resource path, using item and 44.",
               "hints": [
-                "Read the one job this step is practicing.",
-                "The example is about REST Resource Path.",
+                "Follow the job, which builds the resource path.",
+                "The path starts with /items/ and then the id.",
                 "f'/items/{item}'"
               ],
-              "explanation": "Depot potters recount crates before dawn, and build REST resource paths.",
+              "explanation": "This step builds the resource path, using item and 44.",
               "xp_reward": 0,
               "worked_example": "f'/items/{item}'"
             },
             {
               "id": "fs-rest-get-mcq",
               "type": "mcq",
-              "question": "Depot potters recount crates before dawn. For build REST resource paths, which line builds the resource path?",
+              "question": "The correct line builds the resource path, and it is the line tied to item and 44.",
               "hints": [
-                "Compare each line with the example.",
-                "One line matches the example.",
+                "Follow the job, which builds the resource path.",
+                "The path starts with /items/ and then the id.",
                 "f'/items/{item}'"
               ],
               "explanation": "The path starts with /items/ and then the id.",
@@ -92,30 +92,30 @@
             {
               "id": "fs-rest-get-predict",
               "type": "output_prediction",
-              "question": "Depot potters recount crates before dawn. For build REST resource paths, what value is displayed?",
+              "question": "The program builds the resource path with item and 44, so choose the printed value.",
               "hints": [
-                "Run the example in your head from the top.",
-                "The last line is what gets displayed.",
-                "/items/43"
+                "Follow the job, which builds the resource path.",
+                "The path starts with /items/ and then the id.",
+                "/items/44"
               ],
-              "explanation": "The REST Resource Path program displays that value.",
+              "explanation": "The path starts with /items/ and then the id.",
               "xp_reward": 10,
-              "starter_code": "item = 43\nprint(f'/items/{item}')\n",
+              "starter_code": "item = 44\nprint(f'/items/{item}')\n",
               "options": [
-                "/items/46",
+                "/items/47",
                 "none",
                 "0",
-                "/items/43"
+                "/items/44"
               ],
-              "correct_answer": "/items/43"
+              "correct_answer": "/items/44"
             },
             {
               "id": "fs-rest-get-order",
               "type": "ordering",
-              "question": "Depot potters recount crates before dawn. For build REST resource paths, build the line that builds the resource path.",
+              "question": "Build the line that builds the resource path for item and 44, from the first piece to the last.",
               "hints": [
-                "Start at the left of the example.",
-                "Keep the example order.",
+                "Follow the job, which builds the resource path.",
+                "The path starts with /items/ and then the id.",
                 "path = f'/items/{item}'"
               ],
               "explanation": "The path starts with /items/ and then the id.",
@@ -135,10 +135,10 @@
             {
               "id": "fs-rest-get-fill",
               "type": "fill_blank",
-              "question": "Depot potters recount crates before dawn. For build REST resource paths, fill the blank so the line builds the resource path.",
+              "question": "Replace the blank with the piece that makes the line builds the resource path for item and 44.",
               "hints": [
-                "The blank is the missing piece of the example.",
-                "The example uses that piece.",
+                "Follow the job, which builds the resource path.",
+                "The path starts with /items/ and then the id.",
                 "{item}"
               ],
               "explanation": "The path starts with /items/ and then the id.",
@@ -147,7 +147,7 @@
               "options": [
                 "{id}",
                 "{ok}",
-                "43",
+                "44",
                 "{item}"
               ],
               "correct_answer": "{item}"
@@ -155,55 +155,55 @@
             {
               "id": "fs-rest-get-bug",
               "type": "debugging",
-              "question": "Depot potters recount crates before dawn. For build REST resource paths, which line does a different job than the example?",
+              "question": "Spot the line that fails the job, which builds the resource path, around item and 44.",
               "hints": [
-                "The other lines match the example.",
-                "One line is the odd one.",
+                "Follow the job, which builds the resource path.",
+                "The print shows the id without the resource path.",
                 "Line 2"
               ],
               "explanation": "The print shows the id without the resource path.",
               "xp_reward": 10,
-              "starter_code": "item = 43\nprint(item)\n",
+              "starter_code": "item = 44\nprint(item)\n",
               "correct_answer": "2"
             },
             {
               "id": "fs-rest-get-predict-2",
               "type": "output_prediction",
-              "question": "Depot potters recount crates before dawn. For build REST resource paths, what does the second run display?",
+              "question": "The second program builds the resource path for item and 44, so choose the new printed value.",
               "hints": [
-                "Apply the same steps to the new value.",
-                "The display comes from the last line.",
-                "/items/46"
+                "Follow the job, which builds the resource path.",
+                "The path starts with /items/ and then the id.",
+                "/items/47"
               ],
-              "explanation": "The second REST Resource Path program displays that value.",
+              "explanation": "The path starts with /items/ and then the id.",
               "xp_reward": 10,
-              "starter_code": "item = 46\nprint(f'/items/{item}')\n",
+              "starter_code": "item = 47\nprint(f'/items/{item}')\n",
               "options": [
-                "/items/43",
-                "/items/46",
+                "/items/44",
+                "/items/47",
                 "none",
                 "0"
               ],
-              "correct_answer": "/items/46"
+              "correct_answer": "/items/47"
             },
             {
               "id": "fs-rest-get-write",
               "type": "code",
-              "question": "Depot potters recount crates before dawn. For build REST resource paths, fill the blank so the program prints the result.",
+              "question": "Complete the blank so this program builds the resource path and prints the result for item and 44.",
               "hints": [
-                "The blank is the missing piece.",
-                "Print the value that piece produces.",
+                "Follow the job, which builds the resource path.",
+                "The printed value is the result after this step builds the resource path.",
                 "label = f'/items/{item}'"
               ],
               "explanation": "The printed value is the result after this step builds the resource path.",
               "xp_reward": 10,
-              "starter_code": "item = 43\nlabel = ___\nprint(label)\n",
-              "solution_code": "item = 43\nlabel = f'/items/{item}'\nprint(label)\n",
+              "starter_code": "item = 44\nlabel = ___\nprint(label)\n",
+              "solution_code": "item = 44\nlabel = f'/items/{item}'\nprint(label)\n",
               "tests": [
                 {
                   "name": "fs-rest-get-prints",
                   "description": "The printed value is the result after this step builds the resource path.",
-                  "expected_stdout": "/items/43\n",
+                  "expected_stdout": "/items/44\n",
                   "required": true
                 }
               ]
@@ -227,7 +227,7 @@
       ],
       "prerequisites": [],
       "learning_objectives": [
-        "Ridge potters recount crates before dawn, and compute offset pagination."
+        "This step computes the offset for a page, using page and 1."
       ],
       "starter_code": "def page_params(page, page_size):\n    # TODO\n    pass\n",
       "solution_code": "def page_params(page, page_size):\n    return {'limit': page_size, 'offset': (page - 1) * page_size}\n",
@@ -260,23 +260,23 @@
             {
               "id": "fs-rest-page-teach",
               "type": "teach",
-              "question": "Ridge potters recount crates before dawn, and compute offset pagination.",
+              "question": "This step computes the offset for a page, using page and 1.",
               "hints": [
-                "Read the one job this step is practicing.",
-                "The example is about Pagination Params.",
+                "Follow the job, which computes the offset for a page.",
+                "The offset is the previous pages times the page size.",
                 "(page - 1) * size"
               ],
-              "explanation": "Ridge potters recount crates before dawn, and compute offset pagination.",
+              "explanation": "This step computes the offset for a page, using page and 1.",
               "xp_reward": 0,
               "worked_example": "(page - 1) * size"
             },
             {
               "id": "fs-rest-page-mcq",
               "type": "mcq",
-              "question": "Ridge potters recount crates before dawn. For compute offset pagination, which line computes the offset for a page?",
+              "question": "Pick the line that computes the offset for a page, not a line about something else, for page and 1.",
               "hints": [
-                "Compare each line with the example.",
-                "One line matches the example.",
+                "Follow the job, which computes the offset for a page.",
+                "The offset is the previous pages times the page size.",
                 "(page - 1) * size"
               ],
               "explanation": "The offset is the previous pages times the page size.",
@@ -292,13 +292,13 @@
             {
               "id": "fs-rest-page-predict",
               "type": "output_prediction",
-              "question": "Ridge potters recount crates before dawn. For compute offset pagination, what value is displayed?",
+              "question": "The displayed value is what the code prints when it computes the offset for a page for page and 1.",
               "hints": [
-                "Run the example in your head from the top.",
-                "The last line is what gets displayed.",
+                "Follow the job, which computes the offset for a page.",
+                "The offset is the previous pages times the page size.",
                 "10"
               ],
-              "explanation": "The Pagination Params program displays that value.",
+              "explanation": "The offset is the previous pages times the page size.",
               "xp_reward": 10,
               "starter_code": "page = 2\nsize = 10\nprint((page - 1) * size)\n",
               "options": [
@@ -312,10 +312,10 @@
             {
               "id": "fs-rest-page-order",
               "type": "ordering",
-              "question": "Ridge potters recount crates before dawn. For compute offset pagination, build the line that computes the offset for a page.",
+              "question": "Place every piece so the result computes the offset for a page for page and 1.",
               "hints": [
-                "Start at the left of the example.",
-                "Keep the example order.",
+                "Follow the job, which computes the offset for a page.",
+                "The offset is the previous pages times the page size.",
                 "offset = (page - 1) * size"
               ],
               "explanation": "The offset is the previous pages times the page size.",
@@ -343,10 +343,10 @@
             {
               "id": "fs-rest-page-fill",
               "type": "fill_blank",
-              "question": "Ridge potters recount crates before dawn. For compute offset pagination, fill the blank so the line computes the offset for a page.",
+              "question": "Drop in the piece that lets the line computes the offset for a page for page and 1.",
               "hints": [
-                "The blank is the missing piece of the example.",
-                "The example uses that piece.",
+                "Follow the job, which computes the offset for a page.",
+                "The offset is the previous pages times the page size.",
                 "*"
               ],
               "explanation": "The offset is the previous pages times the page size.",
@@ -363,10 +363,10 @@
             {
               "id": "fs-rest-page-bug",
               "type": "debugging",
-              "question": "Ridge potters recount crates before dawn. For compute offset pagination, which line does a different job than the example?",
+              "question": "The mismatch misses the job, which computes the offset for a page, for page and 1.",
               "hints": [
-                "The other lines match the example.",
-                "One line is the odd one.",
+                "Follow the job, which computes the offset for a page.",
+                "The print skips the minus one, so page 2 starts too late.",
                 "Line 3"
               ],
               "explanation": "The print skips the minus one, so page 2 starts too late.",
@@ -377,13 +377,13 @@
             {
               "id": "fs-rest-page-predict-2",
               "type": "output_prediction",
-              "question": "Ridge potters recount crates before dawn. For compute offset pagination, what does the second run display?",
+              "question": "Choose the printed result of the second run that computes the offset for a page for page and 1.",
               "hints": [
-                "Apply the same steps to the new value.",
-                "The display comes from the last line.",
+                "Follow the job, which computes the offset for a page.",
+                "The offset is the previous pages times the page size.",
                 "20"
               ],
-              "explanation": "The second Pagination Params program displays that value.",
+              "explanation": "The offset is the previous pages times the page size.",
               "xp_reward": 10,
               "starter_code": "page = 3\nsize = 10\nprint((page - 1) * size)\n",
               "options": [
@@ -397,10 +397,10 @@
             {
               "id": "fs-rest-page-write",
               "type": "code",
-              "question": "Ridge potters recount crates before dawn. For compute offset pagination, fill the blank so the program prints the result.",
+              "question": "Make the program computes the offset for a page by filling the blank for page and 1.",
               "hints": [
-                "The blank is the missing piece.",
-                "Print the value that piece produces.",
+                "Follow the job, which computes the offset for a page.",
+                "The printed value is the result after this step computes the offset for a page.",
                 "label = (page - 1) * size"
               ],
               "explanation": "The printed value is the result after this step computes the offset for a page.",
@@ -435,7 +435,7 @@
       ],
       "prerequisites": [],
       "learning_objectives": [
-        "Cove potters recount crates before dawn, and filter API result collections."
+        "This step counts the rows that are on, using rows holding id."
       ],
       "starter_code": "def filter_items(items, **criteria):\n    # TODO\n    pass\n",
       "solution_code": "def filter_items(items, **criteria):\n    return [it for it in items if all(it.get(k) == v for k, v in criteria.items())]\n",
@@ -468,23 +468,23 @@
             {
               "id": "fs-rest-filter-teach",
               "type": "teach",
-              "question": "Cove potters recount crates before dawn, and filter API result collections.",
+              "question": "This step counts the rows that are on, using rows holding id.",
               "hints": [
-                "Read the one job this step is practicing.",
-                "The example is about Filter Client Collection.",
+                "Follow the job, which counts the rows that are on.",
+                "The filter keeps rows whose on flag is true.",
                 "row['on']"
               ],
-              "explanation": "Cove potters recount crates before dawn, and filter API result collections.",
+              "explanation": "This step counts the rows that are on, using rows holding id.",
               "xp_reward": 0,
               "worked_example": "row['on']"
             },
             {
               "id": "fs-rest-filter-mcq",
               "type": "mcq",
-              "question": "Cove potters recount crates before dawn. For filter API result collections, which line counts the rows that are on?",
+              "question": "A correct choice counts the rows that are on and goes with rows holding id.",
               "hints": [
-                "Compare each line with the example.",
-                "One line matches the example.",
+                "Follow the job, which counts the rows that are on.",
+                "The filter keeps rows whose on flag is true.",
                 "row['on']"
               ],
               "explanation": "The filter keeps rows whose on flag is true.",
@@ -500,13 +500,13 @@
             {
               "id": "fs-rest-filter-predict",
               "type": "output_prediction",
-              "question": "Cove potters recount crates before dawn. For filter API result collections, what value is displayed?",
+              "question": "Select the output after the code counts the rows that are on, using rows holding id.",
               "hints": [
-                "Run the example in your head from the top.",
-                "The last line is what gets displayed.",
+                "Follow the job, which counts the rows that are on.",
+                "The filter keeps rows whose on flag is true.",
                 "1"
               ],
-              "explanation": "The Filter Client Collection program displays that value.",
+              "explanation": "The filter keeps rows whose on flag is true.",
               "xp_reward": 10,
               "starter_code": "rows = [{'id': 1, 'on': True}, {'id': 2, 'on': False}]\nprint(sum(1 for row in rows if row['on']))\n",
               "options": [
@@ -520,10 +520,10 @@
             {
               "id": "fs-rest-filter-order",
               "type": "ordering",
-              "question": "Cove potters recount crates before dawn. For filter API result collections, build the line that counts the rows that are on.",
+              "question": "Make the line that counts the rows that are on by ordering the pieces for rows holding id.",
               "hints": [
-                "Start at the left of the example.",
-                "Keep the example order.",
+                "Follow the job, which counts the rows that are on.",
+                "The filter keeps rows whose on flag is true.",
                 "if row['on']: pass"
               ],
               "explanation": "The filter keeps rows whose on flag is true.",
@@ -543,10 +543,10 @@
             {
               "id": "fs-rest-filter-fill",
               "type": "fill_blank",
-              "question": "Cove potters recount crates before dawn. For filter API result collections, fill the blank so the line counts the rows that are on.",
+              "question": "Complete the line for rows holding id so that it counts the rows that are on.",
               "hints": [
-                "The blank is the missing piece of the example.",
-                "The example uses that piece.",
+                "Follow the job, which counts the rows that are on.",
+                "The filter keeps rows whose on flag is true.",
                 "'on'"
               ],
               "explanation": "The filter keeps rows whose on flag is true.",
@@ -563,10 +563,10 @@
             {
               "id": "fs-rest-filter-bug",
               "type": "debugging",
-              "question": "Cove potters recount crates before dawn. For filter API result collections, which line does a different job than the example?",
+              "question": "Select the line that gets in the way of the job, which counts the rows that are on, for rows holding id.",
               "hints": [
-                "The other lines match the example.",
-                "One line is the odd one.",
+                "Follow the job, which counts the rows that are on.",
+                "The print counts every row, including the ones that are off.",
                 "Line 2"
               ],
               "explanation": "The print counts every row, including the ones that are off.",
@@ -577,13 +577,13 @@
             {
               "id": "fs-rest-filter-predict-2",
               "type": "output_prediction",
-              "question": "Cove potters recount crates before dawn. For filter API result collections, what does the second run display?",
+              "question": "With the new data around rows holding id, the code counts the rows that are on, so select the new output.",
               "hints": [
-                "Apply the same steps to the new value.",
-                "The display comes from the last line.",
+                "Follow the job, which counts the rows that are on.",
+                "The filter keeps rows whose on flag is true.",
                 "2"
               ],
-              "explanation": "The second Filter Client Collection program displays that value.",
+              "explanation": "The filter keeps rows whose on flag is true.",
               "xp_reward": 10,
               "starter_code": "rows = [{'id': 1, 'on': True}, {'id': 2, 'on': True}]\nprint(sum(1 for row in rows if row['on']))\n",
               "options": [
@@ -597,10 +597,10 @@
             {
               "id": "fs-rest-filter-write",
               "type": "code",
-              "question": "Cove potters recount crates before dawn. For filter API result collections, fill the blank so the program prints the result.",
+              "question": "The printed result shows up after you fill the blank so the code counts the rows that are on for rows holding id.",
               "hints": [
-                "The blank is the missing piece.",
-                "Print the value that piece produces.",
+                "Follow the job, which counts the rows that are on.",
+                "The printed value is the result after this step counts the rows that are on.",
                 "label = sum(1 for row in rows if row['on'])"
               ],
               "explanation": "The printed value is the result after this step counts the rows that are on.",
@@ -635,7 +635,7 @@
       ],
       "prerequisites": [],
       "learning_objectives": [
-        "Plaza potters recount crates before dawn, and form idempotency keys."
+        "This step skips a key that was already seen, using seen holding kelp."
       ],
       "starter_code": "def idempotency_key(method, path, body):\n    # TODO\n    pass\n",
       "solution_code": "def idempotency_key(method, path, body):\n    return method.upper() + '|' + path + '|' + (body or '')\n",
@@ -668,23 +668,23 @@
             {
               "id": "fs-rest-idempotent-teach",
               "type": "teach",
-              "question": "Plaza potters recount crates before dawn, and form idempotency keys.",
+              "question": "This step skips a key that was already seen, using seen holding kelp.",
               "hints": [
-                "Read the one job this step is practicing.",
-                "The example is about Idempotent Key.",
+                "Follow the job, which skips a key that was already seen.",
+                "A key already in the set is a duplicate and should be skipped.",
                 "key in seen"
               ],
-              "explanation": "Plaza potters recount crates before dawn, and form idempotency keys.",
+              "explanation": "This step skips a key that was already seen, using seen holding kelp.",
               "xp_reward": 0,
               "worked_example": "key in seen"
             },
             {
               "id": "fs-rest-idempotent-mcq",
               "type": "mcq",
-              "question": "Plaza potters recount crates before dawn. For form idempotency keys, which line skips a key that was already seen?",
+              "question": "Keep the choice that skips a key that was already seen for seen holding kelp.",
               "hints": [
-                "Compare each line with the example.",
-                "One line matches the example.",
+                "Follow the job, which skips a key that was already seen.",
+                "A key already in the set is a duplicate and should be skipped.",
                 "key in seen"
               ],
               "explanation": "A key already in the set is a duplicate and should be skipped.",
@@ -700,15 +700,15 @@
             {
               "id": "fs-rest-idempotent-predict",
               "type": "output_prediction",
-              "question": "Plaza potters recount crates before dawn. For form idempotency keys, what value is displayed?",
+              "question": "Trace the code that a key that was already seen using seen holding kelp, and select what it displays.",
               "hints": [
-                "Run the example in your head from the top.",
-                "The last line is what gets displayed.",
+                "Follow the job, which Follow the job, which a key that was already seen.",
+                "A key already in the set is a duplicate and should be skipped.",
                 "skip"
               ],
-              "explanation": "The Idempotent Key program displays that value.",
+              "explanation": "A key already in the set is a duplicate and should be skipped.",
               "xp_reward": 10,
-              "starter_code": "seen = {'juniper'}\nprint('skip' if 'juniper' in seen else 'run')\n",
+              "starter_code": "seen = {'kelp'}\nprint('skip' if 'kelp' in seen else 'run')\n",
               "options": [
                 "run",
                 "none",
@@ -720,10 +720,10 @@
             {
               "id": "fs-rest-idempotent-order",
               "type": "ordering",
-              "question": "Plaza potters recount crates before dawn. For form idempotency keys, build the line that skips a key that was already seen.",
+              "question": "Tap the pieces, in order, of the line that skips a key that was already seen for seen holding kelp.",
               "hints": [
-                "Start at the left of the example.",
-                "Keep the example order.",
+                "Follow the job, which skips a key that was already seen.",
+                "A key already in the set is a duplicate and should be skipped.",
                 "if key in seen: pass"
               ],
               "explanation": "A key already in the set is a duplicate and should be skipped.",
@@ -747,10 +747,10 @@
             {
               "id": "fs-rest-idempotent-fill",
               "type": "fill_blank",
-              "question": "Plaza potters recount crates before dawn. Choose the match for this step.",
+              "question": "The blank is the piece of the that skips a key that was already seen for seen kelp.",
               "hints": [
-                "Use the example rather than the lookalike.",
-                "The example uses that piece.",
+                "Follow the job, which skips a key that was already seen.",
+                "A key already in the set is a duplicate and should be skipped.",
                 "in"
               ],
               "explanation": "A key already in the set is a duplicate and should be skipped.",
@@ -767,29 +767,29 @@
             {
               "id": "fs-rest-idempotent-bug",
               "type": "debugging",
-              "question": "Plaza potters recount crates before dawn. For form idempotency keys, which line does a different job than the example?",
+              "question": "Choose the line that does another job than the one that skips a key that was already seen for seen holding kelp.",
               "hints": [
-                "The other lines match the example.",
-                "One line is the odd one.",
+                "Follow the job, which skips a key that was already seen.",
+                "The print says run for a key that was already stored.",
                 "Line 2"
               ],
               "explanation": "The print says run for a key that was already stored.",
               "xp_reward": 10,
-              "starter_code": "seen = {'juniper'}\nprint('run')\n",
+              "starter_code": "seen = {'kelp'}\nprint('run')\n",
               "correct_answer": "2"
             },
             {
               "id": "fs-rest-idempotent-predict-2",
               "type": "output_prediction",
-              "question": "Plaza potters recount crates before dawn. Choose the match for this step.",
+              "question": "Trace the second which skips a key that was already seen for seen holding kelp, and select what it displays.",
               "hints": [
-                "Apply the same steps to the new value.",
-                "The display comes from the last line.",
+                "Follow the job, which skips a key that was already seen.",
+                "A key already in the set is a duplicate and should be skipped.",
                 "run"
               ],
-              "explanation": "The second Idempotent Key program displays that value.",
+              "explanation": "A key already in the set is a duplicate and should be skipped.",
               "xp_reward": 10,
-              "starter_code": "seen = {'juniper'}\nprint('skip' if 'nectar' in seen else 'run')\n",
+              "starter_code": "seen = {'kelp'}\nprint('skip' if 'olive' in seen else 'run')\n",
               "options": [
                 "skip",
                 "run",
@@ -801,16 +801,16 @@
             {
               "id": "fs-rest-idempotent-write",
               "type": "code",
-              "question": "Plaza potters recount crates before dawn. For form idempotency keys, fill the blank so the program prints the result.",
+              "question": "Type the missing piece so the program a key that was already seen for seen holding kelp and prints it.",
               "hints": [
-                "Use the example rather than the lookalike.",
-                "Print the value that piece produces.",
-                "label = 'skip' if 'juniper' in seen else 'run'"
+                "Follow the job, which skips a key that was already seen.",
+                "The printed value is the result after this step skips a key that was already seen.",
+                "label = 'skip' if 'kelp' in seen else 'run'"
               ],
               "explanation": "The printed value is the result after this step skips a key that was already seen.",
               "xp_reward": 10,
-              "starter_code": "seen = {'juniper'}\nlabel = ___\nprint(label)\n",
-              "solution_code": "seen = {'juniper'}\nlabel = 'skip' if 'juniper' in seen else 'run'\nprint(label)\n",
+              "starter_code": "seen = {'kelp'}\nlabel = ___\nprint(label)\n",
+              "solution_code": "seen = {'kelp'}\nlabel = 'skip' if 'kelp' in seen else 'run'\nprint(label)\n",
               "tests": [
                 {
                   "name": "fs-rest-idempotent-prints",
@@ -839,7 +839,7 @@
       ],
       "prerequisites": [],
       "learning_objectives": [
-        "Marsh potters recount crates before dawn, and categorize HTTP status codes."
+        "This step labels a status code by its class, using code holding ok."
       ],
       "starter_code": "def status_category(code):\n    # TODO\n    pass\n",
       "solution_code": "def status_category(code):\n    if 200 <= code < 300:\n        return 'success'\n    if 300 <= code < 400:\n        return 'redirect'\n    if 400 <= code < 500:\n        return 'client_error'\n    if 500 <= code < 600:\n        return 'server_error'\n    return 'other'\n",
@@ -872,23 +872,23 @@
             {
               "id": "fs-rest-checkpoint-teach",
               "type": "teach",
-              "question": "Marsh potters recount crates before dawn, and categorize HTTP status codes.",
+              "question": "This step labels a status code by its class, using code holding ok.",
               "hints": [
-                "Read the one job this step is practicing.",
-                "The example is about Checkpoint Status Category.",
+                "Follow the job, which labels a status code by its class.",
+                "Codes from 200 up to but not including 300 are successes.",
                 "200 <= code < 300"
               ],
-              "explanation": "Marsh potters recount crates before dawn, and categorize HTTP status codes.",
+              "explanation": "This step labels a status code by its class, using code holding ok.",
               "xp_reward": 0,
               "worked_example": "200 <= code < 300"
             },
             {
               "id": "fs-rest-checkpoint-mcq",
               "type": "mcq",
-              "question": "Marsh potters recount crates before dawn. For categorize HTTP status codes, which line labels a status code by its class?",
+              "question": "The correct line labels a status code by its class, and it is the line tied to code holding ok.",
               "hints": [
-                "Compare each line with the example.",
-                "One line matches the example.",
+                "Follow the job, which labels a status code by its class.",
+                "Codes from 200 up to but not including 300 are successes.",
                 "200 <= code < 300"
               ],
               "explanation": "Codes from 200 up to but not including 300 are successes.",
@@ -904,13 +904,13 @@
             {
               "id": "fs-rest-checkpoint-predict",
               "type": "output_prediction",
-              "question": "Marsh potters recount crates before dawn. For categorize HTTP status codes, what value is displayed?",
+              "question": "The program labels a status code by its class with code holding so choose the printed value.",
               "hints": [
-                "Run the example in your head from the top.",
-                "The last line is what gets displayed.",
+                "Follow the job, which labels a status code by its class.",
+                "Codes from 200 up to but not including 300 are successes.",
                 "ok"
               ],
-              "explanation": "The Checkpoint Status Category program displays that value.",
+              "explanation": "Codes from 200 up to but not including 300 are successes.",
               "xp_reward": 10,
               "starter_code": "code = 200\nprint('ok' if 200 <= code < 300 else 'err')\n",
               "options": [
@@ -924,10 +924,10 @@
             {
               "id": "fs-rest-checkpoint-order",
               "type": "ordering",
-              "question": "Marsh potters recount crates before dawn. For categorize HTTP status codes, build the line that labels a status code by its class.",
+              "question": "Build the line that labels a status code by its class for code holding ok, from the first piece to the last.",
               "hints": [
-                "Start at the left of the example.",
-                "Keep the example order.",
+                "Follow the job, which labels a status code by its class.",
+                "Codes from 200 up to but not including 300 are successes.",
                 "if 200 <= code < 300: pass"
               ],
               "explanation": "Codes from 200 up to but not including 300 are successes.",
@@ -955,10 +955,10 @@
             {
               "id": "fs-rest-checkpoint-fill",
               "type": "fill_blank",
-              "question": "Marsh potters recount crates before dawn. For categorize HTTP status codes, fill the blank so the line labels a status code by its class.",
+              "question": "Replace the blank with the piece that makes the line labels a status code by its class for code holding ok.",
               "hints": [
-                "The blank is the missing piece of the example.",
-                "The example uses that piece.",
+                "Follow the job, which labels a status code by its class.",
+                "Codes from 200 up to but not including 300 are successes.",
                 "<="
               ],
               "explanation": "Codes from 200 up to but not including 300 are successes.",
@@ -975,10 +975,10 @@
             {
               "id": "fs-rest-checkpoint-bug",
               "type": "debugging",
-              "question": "Marsh potters recount crates before dawn. For categorize HTTP status codes, which line does a different job than the example?",
+              "question": "Spot the line that fails the job, which labels a status code by its class, around code holding ok.",
               "hints": [
-                "The other lines match the example.",
-                "One line is the odd one.",
+                "Follow the job, which labels a status code by its class.",
+                "The print says err for a success code.",
                 "Line 2"
               ],
               "explanation": "The print says err for a success code.",
@@ -989,13 +989,13 @@
             {
               "id": "fs-rest-checkpoint-predict-2",
               "type": "output_prediction",
-              "question": "Marsh potters recount crates before dawn. For categorize HTTP status codes, what does the second run display?",
+              "question": "The second program labels a status code by its class for code holding ok, so choose the new printed value.",
               "hints": [
-                "Apply the same steps to the new value.",
-                "The display comes from the last line.",
+                "Follow the job, which labels a status code by its class.",
+                "Codes from 200 up to but not including 300 are successes.",
                 "err"
               ],
-              "explanation": "The second Checkpoint Status Category program displays that value.",
+              "explanation": "Codes from 200 up to but not including 300 are successes.",
               "xp_reward": 10,
               "starter_code": "code = 404\nprint('ok' if 200 <= code < 300 else 'err')\n",
               "options": [
@@ -1009,10 +1009,10 @@
             {
               "id": "fs-rest-checkpoint-write",
               "type": "code",
-              "question": "Marsh potters recount crates before dawn. For categorize HTTP status codes, fill the blank so the program prints the result.",
+              "question": "Complete the blank so this program labels a status code by its class and prints the result for code holding.",
               "hints": [
-                "The blank is the missing piece.",
-                "Print the value that piece produces.",
+                "Follow the job, which labels a status code by its class.",
+                "The printed value is the result after this step labels a status code by its class.",
                 "label = 'ok' if 200 <= code < 300 else 'err'"
               ],
               "explanation": "The printed value is the result after this step labels a status code by its class.",

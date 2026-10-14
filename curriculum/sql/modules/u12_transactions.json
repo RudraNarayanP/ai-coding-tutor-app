@@ -45,7 +45,7 @@
         "license": "Public domain (SQLite documentation)"
       },
       "learning_objectives": [
-        "Orchard clerks recount crates before dawn, and wrap multiple statements in BEGIN TRANSACTION."
+        "This step commits a stock change and shows the stored value, using BEGIN and 4."
       ],
       "xp_reward": 10,
       "player_mode": "micro",
@@ -59,23 +59,23 @@
             {
               "id": "sql-12-teach",
               "type": "teach",
-              "question": "Orchard clerks recount crates before dawn, and wrap multiple statements in BEGIN TRANSACTION.",
+              "question": "This step commits a stock change and shows the stored value, using BEGIN and 4.",
               "hints": [
-                "Read the one job this step is practicing.",
-                "The example is about Transactions Atomicity.",
+                "Follow the job, which commits a stock change and shows the stored value.",
+                "COMMIT keeps the update.",
                 "COMMIT;"
               ],
-              "explanation": "Orchard clerks recount crates before dawn, and wrap multiple statements in BEGIN TRANSACTION.",
+              "explanation": "This step commits a stock change and shows the stored value, using BEGIN and 4.",
               "xp_reward": 0,
               "worked_example": "COMMIT;"
             },
             {
               "id": "sql-12-mcq",
               "type": "mcq",
-              "question": "Orchard clerks recount crates before dawn. Choose the match for this step.",
+              "question": "Choose the line that a stock change and shows the stored value, which is the line that fits BEGIN and 4.",
               "hints": [
-                "Compare each line with the example.",
-                "One line matches the example.",
+                "Follow the job, which Follow the job, which a stock change and shows the stored value.",
+                "COMMIT keeps the update.",
                 "COMMIT"
               ],
               "explanation": "COMMIT keeps the update.",
@@ -91,13 +91,13 @@
             {
               "id": "sql-12-predict",
               "type": "output_prediction",
-              "question": "Orchard clerks recount crates before dawn. For wrap multiple statements in BEGIN TRANSACTION, what value is displayed?",
+              "question": "Read the code that commits a stock change and shows the stored value for BEGIN and 4, and choose the value it prints.",
               "hints": [
-                "Run the example in your head from the top.",
-                "The last line is what gets displayed.",
+                "Follow the job, which commits a stock change and shows the stored value.",
+                "COMMIT keeps the update.",
                 "┌───────┐\n│ stock │\n├───────┤\n│ 99    │\n└───────┘"
               ],
-              "explanation": "The Transactions Atomicity program displays that value.",
+              "explanation": "COMMIT keeps the update.",
               "xp_reward": 10,
               "starter_code": "BEGIN;\nUPDATE products SET stock = stock - 1 WHERE id = 4;\nCOMMIT;\nSELECT stock FROM products WHERE id = 4;\n",
               "options": [
@@ -111,10 +111,10 @@
             {
               "id": "sql-12-order",
               "type": "ordering",
-              "question": "Orchard clerks recount crates before dawn. For wrap multiple statements in BEGIN TRANSACTION, build the line that commits a stock change and shows the stored value.",
+              "question": "Arrange the pieces of the line that commits a stock change and shows the stored value, left to right, for BEGIN and 4.",
               "hints": [
-                "Start at the left of the example.",
-                "Keep the example order.",
+                "Follow the job, which commits a stock change and shows the stored value.",
+                "COMMIT keeps the update.",
                 "BEGIN; UPDATE products SET stock=stock-1 WHERE id=4; COMMIT;"
               ],
               "explanation": "COMMIT keeps the update.",
@@ -144,10 +144,10 @@
             {
               "id": "sql-12-fill",
               "type": "fill_blank",
-              "question": "Orchard clerks recount crates before dawn. Choose the match for this step.",
+              "question": "Fill the blank so the line a stock change and shows the stored value for BEGIN and 4.",
               "hints": [
-                "The blank is the missing piece of the example.",
-                "The example uses that piece.",
+                "Follow the job, which Follow the job, which a stock change and shows the stored value.",
+                "COMMIT keeps the update.",
                 "COMMIT"
               ],
               "explanation": "COMMIT keeps the update.",
@@ -164,10 +164,10 @@
             {
               "id": "sql-12-bug",
               "type": "debugging",
-              "question": "Orchard clerks recount crates before dawn. For wrap multiple statements in BEGIN TRANSACTION, which line does a different job than the example?",
+              "question": "Find the line that misses the job, which commits a stock change and shows the stored value, for BEGIN and 4.",
               "hints": [
-                "The other lines match the example.",
-                "One line is the odd one.",
+                "Follow the job, which commits a stock change and shows the stored value.",
+                "ROLLBACK undoes the stock change the transaction was supposed to keep.",
                 "Line 3"
               ],
               "explanation": "ROLLBACK undoes the stock change the transaction was supposed to keep.",
@@ -178,13 +178,13 @@
             {
               "id": "sql-12-predict-2",
               "type": "output_prediction",
-              "question": "Orchard clerks recount crates before dawn. For wrap multiple statements in BEGIN TRANSACTION, what does the second run display?",
+              "question": "On the new input, the code still commits a stock change and shows the stored value for BEGIN and 4, so choose what it prints.",
               "hints": [
-                "Apply the same steps to the new value.",
-                "The display comes from the last line.",
+                "Follow the job, which commits a stock change and shows the stored value.",
+                "COMMIT keeps the update.",
                 "┌───────┐\n│ stock │\n├───────┤\n│ 98    │\n└───────┘"
               ],
-              "explanation": "The second Transactions Atomicity program displays that value.",
+              "explanation": "COMMIT keeps the update.",
               "xp_reward": 10,
               "starter_code": "BEGIN;\nUPDATE products SET stock = stock - 2 WHERE id = 4;\nCOMMIT;\nSELECT stock FROM products WHERE id = 4;\n",
               "options": [
@@ -198,10 +198,10 @@
             {
               "id": "sql-12-write",
               "type": "code",
-              "question": "Orchard clerks recount crates before dawn. For wrap multiple statements in BEGIN TRANSACTION, fill the blank so the program prints the result.",
+              "question": "Fill the blank so the program commits a stock change and shows the stored value, and the print shows that result for BEGIN and 4.",
               "hints": [
-                "The blank is the missing piece.",
-                "Print the value that piece produces.",
+                "Follow the job, which Follow the job, which a stock change and shows the stored value.",
+                "The query result is what this step commits a stock change and shows the stored value.",
                 "COMMIT"
               ],
               "explanation": "The query result is what this step commits a stock change and shows the stored value.",

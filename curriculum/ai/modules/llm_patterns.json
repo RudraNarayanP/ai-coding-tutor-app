@@ -45,7 +45,7 @@
         "license": "OpenAI API documentation (developers.openai.com)"
       },
       "learning_objectives": [
-        "Ridge pickers recount crates before dawn, and declare a function tool with type, name, description, parameters."
+        "This step counts the parameters declared on the tool, using tool holding name."
       ],
       "xp_reward": 10,
       "sublessons": [
@@ -58,23 +58,23 @@
             {
               "id": "ai-02-teach",
               "type": "teach",
-              "question": "Ridge pickers recount crates before dawn, and declare a function tool with type, name, description, parameters.",
+              "question": "This step counts the parameters declared on the tool, using tool holding name.",
               "hints": [
-                "Read the one job this step is practicing.",
-                "The example is about Function Tool Definitions for LLMs.",
+                "Follow the job, which counts the parameters declared on the tool.",
+                "The params list is the tool's declared arguments.",
                 "tool['params']"
               ],
-              "explanation": "Ridge pickers recount crates before dawn, and declare a function tool with type, name, description, parameters.",
+              "explanation": "This step counts the parameters declared on the tool, using tool holding name.",
               "xp_reward": 0,
               "worked_example": "tool['params']"
             },
             {
               "id": "ai-02-mcq",
               "type": "mcq",
-              "question": "Ridge pickers recount crates before dawn. For declare a function tool with type, name, description, parameters, which line counts the parameters declared on the tool?",
+              "question": "The correct line counts the parameters declared on the tool, and it is the line tied to tool holding name.",
               "hints": [
-                "Compare each line with the example.",
-                "One line matches the example.",
+                "Follow the job, which counts the parameters declared on the tool.",
+                "The params list is the tool's declared arguments.",
                 "tool['params']"
               ],
               "explanation": "The params list is the tool's declared arguments.",
@@ -90,13 +90,13 @@
             {
               "id": "ai-02-predict",
               "type": "output_prediction",
-              "question": "Ridge pickers recount crates before dawn. For declare a function tool with type, name, description, parameters, what value is displayed?",
+              "question": "The program counts the parameters declared on the tool with tool holding name, so choose the printed value.",
               "hints": [
-                "Run the example in your head from the top.",
-                "The last line is what gets displayed.",
+                "Follow the job, which counts the parameters declared on the tool.",
+                "The params list is the tool's declared arguments.",
                 "1"
               ],
-              "explanation": "The Function Tool Definitions for LLMs program displays that value.",
+              "explanation": "The params list is the tool's declared arguments.",
               "xp_reward": 10,
               "starter_code": "tool = {'name': 'sum', 'params': ['n']}\nprint(len(tool['params']))\n",
               "options": [
@@ -110,10 +110,10 @@
             {
               "id": "ai-02-order",
               "type": "ordering",
-              "question": "Ridge pickers recount crates before dawn. For declare a function tool with type, name, description, parameters, build the line that counts the parameters declared on the tool.",
+              "question": "Build the line that counts the parameters declared on the tool for tool holding name, from the first piece to the last.",
               "hints": [
-                "Start at the left of the example.",
-                "Keep the example order.",
+                "Follow the job, which counts the parameters declared on the tool.",
+                "The params list is the tool's declared arguments.",
                 "params = tool['params']"
               ],
               "explanation": "The params list is the tool's declared arguments.",
@@ -133,10 +133,10 @@
             {
               "id": "ai-02-fill",
               "type": "fill_blank",
-              "question": "Ridge pickers recount crates before dawn. For declare a function tool with type, name, description, parameters, fill the blank so the line counts the parameters declared on the tool.",
+              "question": "Replace the blank with the piece that makes the line counts the parameters declared on the tool for tool holding name.",
               "hints": [
-                "The blank is the missing piece of the example.",
-                "The example uses that piece.",
+                "Follow the job, which counts the parameters declared on the tool.",
+                "The params list is the tool's declared arguments.",
                 "'params'"
               ],
               "explanation": "The params list is the tool's declared arguments.",
@@ -153,10 +153,10 @@
             {
               "id": "ai-02-bug",
               "type": "debugging",
-              "question": "Ridge pickers recount crates before dawn. For declare a function tool with type, name, description, parameters, which line does a different job than the example?",
+              "question": "Spot the line that fails the job, which counts the parameters declared on the tool, around tool holding name.",
               "hints": [
-                "The other lines match the example.",
-                "One line is the odd one.",
+                "Follow the job, which counts the parameters declared on the tool.",
+                "The print shows the tool name instead of the parameter count.",
                 "Line 2"
               ],
               "explanation": "The print shows the tool name instead of the parameter count.",
@@ -167,13 +167,13 @@
             {
               "id": "ai-02-predict-2",
               "type": "output_prediction",
-              "question": "Ridge pickers recount crates before dawn. For declare a function tool with type, name, description, parameters, what does the second run display?",
+              "question": "The second program counts the parameters declared on the tool for tool holding name, so choose the new printed value.",
               "hints": [
-                "Apply the same steps to the new value.",
-                "The display comes from the last line.",
+                "Follow the job, which counts the parameters declared on the tool.",
+                "The params list is the tool's declared arguments.",
                 "2"
               ],
-              "explanation": "The second Function Tool Definitions for LLMs program displays that value.",
+              "explanation": "The params list is the tool's declared arguments.",
               "xp_reward": 10,
               "starter_code": "tool = {'name': 'sum', 'params': ['n', 'm']}\nprint(len(tool['params']))\n",
               "options": [
@@ -187,10 +187,10 @@
             {
               "id": "ai-02-write",
               "type": "code",
-              "question": "Ridge pickers recount crates before dawn. For declare a function tool with type, name, description, parameters, fill the blank so the program prints the result.",
+              "question": "Complete the blank so this program counts the parameters declared on the tool and prints the result for tool holding name.",
               "hints": [
-                "The blank is the missing piece.",
-                "Print the value that piece produces.",
+                "Follow the job, which counts the parameters declared on the tool.",
+                "The printed value is the result after this step counts the parameters declared on the tool.",
                 "label = len(tool['params'])"
               ],
               "explanation": "The printed value is the result after this step counts the parameters declared on the tool.",

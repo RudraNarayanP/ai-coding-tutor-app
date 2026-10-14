@@ -45,7 +45,7 @@
         "license": "Public domain (SQLite documentation)"
       },
       "learning_objectives": [
-        "Harbor clerks recount crates before dawn, and name an intermediate result set with WITH."
+        "This step finds the product with the highest price, using name and products."
       ],
       "xp_reward": 10,
       "player_mode": "micro",
@@ -59,23 +59,23 @@
             {
               "id": "sql-10-teach",
               "type": "teach",
-              "question": "Harbor clerks recount crates before dawn, and name an intermediate result set with WITH.",
+              "question": "This step finds the product with the highest price, using name and products.",
               "hints": [
-                "Read the one job this step is practicing.",
-                "The example is about Subqueries Common Table Expressions.",
+                "Follow the job, which finds the product with the highest price.",
+                "The subquery MAX(price) picks the highest price.",
                 "WHERE price = (SELECT MAX(price) FROM products)"
               ],
-              "explanation": "Harbor clerks recount crates before dawn, and name an intermediate result set with WITH.",
+              "explanation": "This step finds the product with the highest price, using name and products.",
               "xp_reward": 0,
               "worked_example": "WHERE price = (SELECT MAX(price) FROM products)"
             },
             {
               "id": "sql-10-mcq",
               "type": "mcq",
-              "question": "Harbor clerks recount crates before dawn. For name an intermediate result set with WITH, which line finds the product with the highest price?",
+              "question": "Pick the line that finds the product with the highest price, not a line about something else, for name and products.",
               "hints": [
-                "Compare each line with the example.",
-                "One line matches the example.",
+                "Follow the job, which finds the product with the highest price.",
+                "The subquery MAX(price) picks the highest price.",
                 "SELECT name FROM products WHERE price = (SELECT MAX(price) FROM products)"
               ],
               "explanation": "The subquery MAX(price) picks the highest price.",
@@ -91,13 +91,13 @@
             {
               "id": "sql-10-predict",
               "type": "output_prediction",
-              "question": "Harbor clerks recount crates before dawn. For name an intermediate result set with WITH, what value is displayed?",
+              "question": "The displayed value is what the code prints when it finds the product with the highest price for name and products.",
               "hints": [
-                "Run the example in your head from the top.",
-                "The last line is what gets displayed.",
+                "Follow the job, which finds the product with the highest price.",
+                "The subquery MAX(price) picks the highest price.",
                 "┌────────────┐\n│ name       │\n├────────────┤\n│ Laptop Pro │\n└────────────┘"
               ],
-              "explanation": "The Subqueries Common Table Expressions program displays that value.",
+              "explanation": "The subquery MAX(price) picks the highest price.",
               "xp_reward": 10,
               "starter_code": "SELECT name FROM products WHERE price = (SELECT MAX(price) FROM products);\n",
               "options": [
@@ -111,10 +111,10 @@
             {
               "id": "sql-10-order",
               "type": "ordering",
-              "question": "Harbor clerks recount crates before dawn. For name an intermediate result set with WITH, build the line that finds the product with the highest price.",
+              "question": "Place every piece so the result finds the product with the highest price for name and products.",
               "hints": [
-                "Start at the left of the example.",
-                "Keep the example order.",
+                "Follow the job, which finds the product with the highest price.",
+                "The subquery MAX(price) picks the highest price.",
                 "SELECT name FROM products WHERE price= (SELECT MAX(price) FROM products)"
               ],
               "explanation": "The subquery MAX(price) picks the highest price.",
@@ -142,10 +142,10 @@
             {
               "id": "sql-10-fill",
               "type": "fill_blank",
-              "question": "Harbor clerks recount crates before dawn. For name an intermediate result set with WITH, fill the blank so the line finds the product with the highest price.",
+              "question": "Drop in the piece that lets the line finds the product with the highest price for name and products.",
               "hints": [
-                "The blank is the missing piece of the example.",
-                "The example uses that piece.",
+                "Follow the job, which finds the product with the highest price.",
+                "The subquery MAX(price) picks the highest price.",
                 "MAX"
               ],
               "explanation": "The subquery MAX(price) picks the highest price.",
@@ -162,10 +162,10 @@
             {
               "id": "sql-10-bug",
               "type": "debugging",
-              "question": "Harbor clerks recount crates before dawn. For name an intermediate result set with WITH, which line does a different job than the example?",
+              "question": "The mismatch misses the job, which finds the product with the highest price, for name and products.",
               "hints": [
-                "The other lines match the example.",
-                "One line is the odd one.",
+                "Follow the job, which finds the product with the highest price.",
+                "The subquery asks for the lowest price instead of the highest.",
                 "Line 1"
               ],
               "explanation": "The subquery asks for the lowest price instead of the highest.",
@@ -176,13 +176,13 @@
             {
               "id": "sql-10-predict-2",
               "type": "output_prediction",
-              "question": "Harbor clerks recount crates before dawn. For name an intermediate result set with WITH, what does the second run display?",
+              "question": "Choose the printed result of the second run that finds the product with the highest price for name and products.",
               "hints": [
-                "Apply the same steps to the new value.",
-                "The display comes from the last line.",
+                "Follow the job, which finds the product with the highest price.",
+                "The subquery MAX(price) picks the highest price.",
                 "┌────────────┐\n│ name       │\n├────────────┤\n│ Coffee Mug │\n└────────────┘"
               ],
-              "explanation": "The second Subqueries Common Table Expressions program displays that value.",
+              "explanation": "The subquery MAX(price) picks the highest price.",
               "xp_reward": 10,
               "starter_code": "SELECT name FROM products WHERE price = (SELECT MIN(price) FROM products);\n",
               "options": [
@@ -196,10 +196,10 @@
             {
               "id": "sql-10-write",
               "type": "code",
-              "question": "Harbor clerks recount crates before dawn. For name an intermediate result set with WITH, fill the blank so the program prints the result.",
+              "question": "Make the program finds the product with the highest price by filling the blank for name and products.",
               "hints": [
-                "The blank is the missing piece.",
-                "Print the value that piece produces.",
+                "Follow the job, which finds the product with the highest price.",
+                "The query result is what this step finds the product with the highest price.",
                 "SELECT MAX(price) FROM products"
               ],
               "explanation": "The query result is what this step finds the product with the highest price.",

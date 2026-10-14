@@ -27,7 +27,7 @@
       ],
       "prerequisites": [],
       "learning_objectives": [
-        "Harbor pickers recount crates before dawn, and parse tool-call payloads."
+        "This step reads the tool name from the call, using call holding name."
       ],
       "starter_code": "def parse_tool_call(payload):\n    # TODO\n    pass\n",
       "solution_code": "def parse_tool_call(payload):\n    return payload['name'], payload['arguments']\n",
@@ -60,23 +60,23 @@
             {
               "id": "ai-tool-parse-call-teach",
               "type": "teach",
-              "question": "Harbor pickers recount crates before dawn, and parse tool-call payloads.",
+              "question": "This step reads the tool name from the call, using call holding name.",
               "hints": [
-                "Read the one job this step is practicing.",
-                "The example is about Parse Tool Call.",
+                "Follow the job, which reads the tool name from the call.",
+                "The name field says which tool to call.",
                 "call['name']"
               ],
-              "explanation": "Harbor pickers recount crates before dawn, and parse tool-call payloads.",
+              "explanation": "This step reads the tool name from the call, using call holding name.",
               "xp_reward": 0,
               "worked_example": "call['name']"
             },
             {
               "id": "ai-tool-parse-call-mcq",
               "type": "mcq",
-              "question": "Harbor pickers recount crates before dawn. For parse tool-call payloads, which line reads the tool name from the call?",
+              "question": "Pick the line that reads the tool name from the call, not a line about something else, for call holding name.",
               "hints": [
-                "Compare each line with the example.",
-                "One line matches the example.",
+                "Follow the job, which reads the tool name from the call.",
+                "The name field says which tool to call.",
                 "call['name']"
               ],
               "explanation": "The name field says which tool to call.",
@@ -92,13 +92,13 @@
             {
               "id": "ai-tool-parse-call-predict",
               "type": "output_prediction",
-              "question": "Harbor pickers recount crates before dawn. For parse tool-call payloads, what value is displayed?",
+              "question": "The displayed value is what the code prints when it reads the tool name from the call for call holding name.",
               "hints": [
-                "Run the example in your head from the top.",
-                "The last line is what gets displayed.",
+                "Follow the job, which reads the tool name from the call.",
+                "The name field says which tool to call.",
                 "sum"
               ],
-              "explanation": "The Parse Tool Call program displays that value.",
+              "explanation": "The name field says which tool to call.",
               "xp_reward": 10,
               "starter_code": "import json\ncall = json.loads('{\"name\": \"sum\", \"n\": 2}')\nprint(call['name'])\n",
               "options": [
@@ -112,10 +112,10 @@
             {
               "id": "ai-tool-parse-call-order",
               "type": "ordering",
-              "question": "Harbor pickers recount crates before dawn. For parse tool-call payloads, build the line that reads the tool name from the call.",
+              "question": "Place every piece so the result reads the tool name from the call for call holding name.",
               "hints": [
-                "Start at the left of the example.",
-                "Keep the example order.",
+                "Follow the job, which reads the tool name from the call.",
+                "The name field says which tool to call.",
                 "name = call['name']"
               ],
               "explanation": "The name field says which tool to call.",
@@ -135,10 +135,10 @@
             {
               "id": "ai-tool-parse-call-fill",
               "type": "fill_blank",
-              "question": "Harbor pickers recount crates before dawn. For parse tool-call payloads, fill the blank so the line reads the tool name from the call.",
+              "question": "Drop in the piece that lets the line reads the tool name from the call for call holding name.",
               "hints": [
-                "The blank is the missing piece of the example.",
-                "The example uses that piece.",
+                "Follow the job, which reads the tool name from the call.",
+                "The name field says which tool to call.",
                 "'name'"
               ],
               "explanation": "The name field says which tool to call.",
@@ -155,10 +155,10 @@
             {
               "id": "ai-tool-parse-call-bug",
               "type": "debugging",
-              "question": "Harbor pickers recount crates before dawn. For parse tool-call payloads, which line does a different job than the example?",
+              "question": "The mismatch misses the job, which reads the tool name from the call, for call holding name.",
               "hints": [
-                "The other lines match the example.",
-                "One line is the odd one.",
+                "Follow the job, which reads the tool name from the call.",
+                "The print reads the argument instead of the tool name.",
                 "Line 3"
               ],
               "explanation": "The print reads the argument instead of the tool name.",
@@ -169,13 +169,13 @@
             {
               "id": "ai-tool-parse-call-predict-2",
               "type": "output_prediction",
-              "question": "Harbor pickers recount crates before dawn. For parse tool-call payloads, what does the second run display?",
+              "question": "Choose the printed result of the second run that reads the tool name from the call for call holding name.",
               "hints": [
-                "Apply the same steps to the new value.",
-                "The display comes from the last line.",
+                "Follow the job, which reads the tool name from the call.",
+                "The name field says which tool to call.",
                 "echo"
               ],
-              "explanation": "The second Parse Tool Call program displays that value.",
+              "explanation": "The name field says which tool to call.",
               "xp_reward": 10,
               "starter_code": "import json\ncall = json.loads('{\"name\": \"echo\", \"n\": 2}')\nprint(call['name'])\n",
               "options": [
@@ -189,10 +189,10 @@
             {
               "id": "ai-tool-parse-call-write",
               "type": "code",
-              "question": "Harbor pickers recount crates before dawn. For parse tool-call payloads, fill the blank so the program prints the result.",
+              "question": "Make the program reads the tool name from the call by filling the blank for call holding name.",
               "hints": [
-                "The blank is the missing piece.",
-                "Print the value that piece produces.",
+                "Follow the job, which reads the tool name from the call.",
+                "The printed value is the result after this step reads the tool name from the call.",
                 "label = call['name']"
               ],
               "explanation": "The printed value is the result after this step reads the tool name from the call.",
@@ -227,7 +227,7 @@
       ],
       "prerequisites": [],
       "learning_objectives": [
-        "Mesa pickers recount crates before dawn, and dispatch tool calls to functions."
+        "This step runs the registered tool, using tools holding sum."
       ],
       "starter_code": "def dispatch(name, args, registry):\n    # TODO\n    pass\n",
       "solution_code": "def dispatch(name, args, registry):\n    return registry[name](**args)\n",
@@ -260,23 +260,23 @@
             {
               "id": "ai-tool-dispatch-teach",
               "type": "teach",
-              "question": "Mesa pickers recount crates before dawn, and dispatch tool calls to functions.",
+              "question": "This step runs the registered tool, using tools holding sum.",
               "hints": [
-                "Read the one job this step is practicing.",
-                "The example is about Dispatch Tool.",
+                "Follow the job, which runs the registered tool.",
+                "Dispatch looks up the function and calls it.",
                 "tools['sum']"
               ],
-              "explanation": "Mesa pickers recount crates before dawn, and dispatch tool calls to functions.",
+              "explanation": "This step runs the registered tool, using tools holding sum.",
               "xp_reward": 0,
               "worked_example": "tools['sum']"
             },
             {
               "id": "ai-tool-dispatch-mcq",
               "type": "mcq",
-              "question": "Mesa pickers recount crates before dawn. For dispatch tool calls to functions, which line runs the registered tool?",
+              "question": "Keep the choice that runs the registered tool for tools holding sum.",
               "hints": [
-                "Compare each line with the example.",
-                "One line matches the example.",
+                "Follow the job, which runs the registered tool.",
+                "Dispatch looks up the function and calls it.",
                 "tools['sum'](n)"
               ],
               "explanation": "Dispatch looks up the function and calls it.",
@@ -292,30 +292,30 @@
             {
               "id": "ai-tool-dispatch-predict",
               "type": "output_prediction",
-              "question": "Mesa pickers recount crates before dawn. For dispatch tool calls to functions, what value is displayed?",
+              "question": "Trace the code that runs the registered tool using tools holding sum, and select what it displays.",
               "hints": [
-                "Run the example in your head from the top.",
-                "The last line is what gets displayed.",
-                "37"
+                "Follow the job, which runs the registered tool.",
+                "Dispatch looks up the function and calls it.",
+                "38"
               ],
-              "explanation": "The Dispatch Tool program displays that value.",
+              "explanation": "Dispatch looks up the function and calls it.",
               "xp_reward": 10,
-              "starter_code": "tools = {'sum': lambda n: n + 1}\nprint(tools['sum'](36))\n",
+              "starter_code": "tools = {'sum': lambda n: n + 1}\nprint(tools['sum'](37))\n",
               "options": [
                 "0",
-                "37",
+                "38",
                 "none",
-                "40"
+                "41"
               ],
-              "correct_answer": "37"
+              "correct_answer": "38"
             },
             {
               "id": "ai-tool-dispatch-order",
               "type": "ordering",
-              "question": "Mesa pickers recount crates before dawn. For dispatch tool calls to functions, build the line that runs the registered tool.",
+              "question": "Tap the pieces, in order, of the line that runs the registered tool for tools holding sum.",
               "hints": [
-                "Start at the left of the example.",
-                "Keep the example order.",
+                "Follow the job, which runs the registered tool.",
+                "Dispatch looks up the function and calls it.",
                 "result = tools['sum'](n)"
               ],
               "explanation": "Dispatch looks up the function and calls it.",
@@ -335,10 +335,10 @@
             {
               "id": "ai-tool-dispatch-fill",
               "type": "fill_blank",
-              "question": "Mesa pickers recount crates before dawn. For dispatch tool calls to functions, fill the blank so the line runs the registered tool.",
+              "question": "The blank is the missing piece of the line that runs the registered tool for tools holding sum.",
               "hints": [
-                "The blank is the missing piece of the example.",
-                "The example uses that piece.",
+                "Follow the job, which runs the registered tool.",
+                "Dispatch looks up the function and calls it.",
                 "'sum'"
               ],
               "explanation": "Dispatch looks up the function and calls it.",
@@ -355,55 +355,55 @@
             {
               "id": "ai-tool-dispatch-bug",
               "type": "debugging",
-              "question": "Mesa pickers recount crates before dawn. For dispatch tool calls to functions, which line does a different job than the example?",
+              "question": "Choose the line that does another job than the one that runs the registered tool for tools holding sum.",
               "hints": [
-                "The other lines match the example.",
-                "One line is the odd one.",
+                "Follow the job, which runs the registered tool.",
+                "The print shows the input and never calls the tool.",
                 "Line 2"
               ],
               "explanation": "The print shows the input and never calls the tool.",
               "xp_reward": 10,
-              "starter_code": "tools = {'sum': lambda n: n + 1}\nprint(36)\n",
+              "starter_code": "tools = {'sum': lambda n: n + 1}\nprint(37)\n",
               "correct_answer": "2"
             },
             {
               "id": "ai-tool-dispatch-predict-2",
               "type": "output_prediction",
-              "question": "Mesa pickers recount crates before dawn. For dispatch tool calls to functions, what does the second run display?",
+              "question": "Trace the second run, which runs the registered tool for tools holding sum, and select what it displays.",
               "hints": [
-                "Apply the same steps to the new value.",
-                "The display comes from the last line.",
-                "40"
+                "Follow the job, which runs the registered tool.",
+                "Dispatch looks up the function and calls it.",
+                "41"
               ],
-              "explanation": "The second Dispatch Tool program displays that value.",
+              "explanation": "Dispatch looks up the function and calls it.",
               "xp_reward": 10,
-              "starter_code": "tools = {'sum': lambda n: n + 1}\nprint(tools['sum'](39))\n",
+              "starter_code": "tools = {'sum': lambda n: n + 1}\nprint(tools['sum'](40))\n",
               "options": [
+                "38",
+                "41",
                 "0",
-                "40",
-                "37",
                 "none"
               ],
-              "correct_answer": "40"
+              "correct_answer": "41"
             },
             {
               "id": "ai-tool-dispatch-write",
               "type": "code",
-              "question": "Mesa pickers recount crates before dawn. For dispatch tool calls to functions, fill the blank so the program prints the result.",
+              "question": "Type the missing piece so the program runs the registered tool for tools holding sum and prints it.",
               "hints": [
-                "The blank is the missing piece.",
-                "Print the value that piece produces.",
-                "label = tools['sum'](36)"
+                "Follow the job, which runs the registered tool.",
+                "The printed value is the result after this step runs the registered tool.",
+                "label = tools['sum'](37)"
               ],
               "explanation": "The printed value is the result after this step runs the registered tool.",
               "xp_reward": 10,
               "starter_code": "tools = {'sum': lambda n: n + 1}\nlabel = ___\nprint(label)\n",
-              "solution_code": "tools = {'sum': lambda n: n + 1}\nlabel = tools['sum'](36)\nprint(label)\n",
+              "solution_code": "tools = {'sum': lambda n: n + 1}\nlabel = tools['sum'](37)\nprint(label)\n",
               "tests": [
                 {
                   "name": "ai-tool-dispatch-prints",
                   "description": "The printed value is the result after this step runs the registered tool.",
-                  "expected_stdout": "37\n",
+                  "expected_stdout": "38\n",
                   "required": true
                 }
               ]
@@ -427,7 +427,7 @@
       ],
       "prerequisites": [],
       "learning_objectives": [
-        "Orchard pickers recount crates before dawn, and validate required tool arguments."
+        "This step accepts a call that has the required key, using args holding n."
       ],
       "starter_code": "def validate_args(args, required):\n    # TODO\n    pass\n",
       "solution_code": "def validate_args(args, required):\n    missing = [k for k in required if k not in args]\n    if missing:\n        raise ValueError('missing: ' + str(missing))\n    return args\n",
@@ -460,23 +460,23 @@
             {
               "id": "ai-tool-validate-teach",
               "type": "teach",
-              "question": "Orchard pickers recount crates before dawn, and validate required tool arguments.",
+              "question": "This step accepts a call that has the required key, using args holding n.",
               "hints": [
-                "Read the one job this step is practicing.",
-                "The example is about Validate Arguments.",
+                "Follow the job, which accepts a call that has the required key.",
+                "The call is ok when the required key is present.",
                 "'n' in args"
               ],
-              "explanation": "Orchard pickers recount crates before dawn, and validate required tool arguments.",
+              "explanation": "This step accepts a call that has the required key, using args holding n.",
               "xp_reward": 0,
               "worked_example": "'n' in args"
             },
             {
               "id": "ai-tool-validate-mcq",
               "type": "mcq",
-              "question": "Orchard pickers recount crates before dawn. For validate required tool arguments, which line accepts a call that has the required key?",
+              "question": "Mark the choice that accepts a call that has the required key when the code mentions args holding n.",
               "hints": [
-                "Compare each line with the example.",
-                "One line matches the example.",
+                "Follow the job, which accepts a call that has the required key.",
+                "The call is ok when the required key is present.",
                 "'n' in args"
               ],
               "explanation": "The call is ok when the required key is present.",
@@ -492,15 +492,15 @@
             {
               "id": "ai-tool-validate-predict",
               "type": "output_prediction",
-              "question": "Orchard pickers recount crates before dawn. For validate required tool arguments, what value is displayed?",
+              "question": "After args holding n, the code accepts a call that has the required key, and the correct choice is the printed value.",
               "hints": [
-                "Run the example in your head from the top.",
-                "The last line is what gets displayed.",
+                "Follow the job, which accepts a call that has the required key.",
+                "The call is ok when the required key is present.",
                 "ok"
               ],
-              "explanation": "The Validate Arguments program displays that value.",
+              "explanation": "The call is ok when the required key is present.",
               "xp_reward": 10,
-              "starter_code": "args = {'n': 30}\nprint('ok' if 'n' in args else 'bad')\n",
+              "starter_code": "args = {'n': 31}\nprint('ok' if 'n' in args else 'bad')\n",
               "options": [
                 "bad",
                 "none",
@@ -512,10 +512,10 @@
             {
               "id": "ai-tool-validate-order",
               "type": "ordering",
-              "question": "Orchard pickers recount crates before dawn. For validate required tool arguments, build the line that accepts a call that has the required key.",
+              "question": "The finished line accepts a call that has the required key, so place its pieces in order for args holding n.",
               "hints": [
-                "Start at the left of the example.",
-                "Keep the example order.",
+                "Follow the job, which accepts a call that has the required key.",
+                "The call is ok when the required key is present.",
                 "if 'n' in args: pass"
               ],
               "explanation": "The call is ok when the required key is present.",
@@ -539,10 +539,10 @@
             {
               "id": "ai-tool-validate-fill",
               "type": "fill_blank",
-              "question": "Orchard pickers recount crates before dawn. For validate required tool arguments, fill the blank so the line accepts a call that has the required key.",
+              "question": "Finish the line that accepts a call that has the required key by filling the blank for args holding n.",
               "hints": [
-                "The blank is the missing piece of the example.",
-                "The example uses that piece.",
+                "Follow the job, which accepts a call that has the required key.",
+                "The call is ok when the required key is present.",
                 "'n'"
               ],
               "explanation": "The call is ok when the required key is present.",
@@ -559,27 +559,27 @@
             {
               "id": "ai-tool-validate-bug",
               "type": "debugging",
-              "question": "Orchard pickers recount crates before dawn. For validate required tool arguments, which line does a different job than the example?",
+              "question": "Mark the line that breaks the job, which accepts a call that has the required key, for args holding n.",
               "hints": [
-                "The other lines match the example.",
-                "One line is the odd one.",
+                "Follow the job, which accepts a call that has the required key.",
+                "The print says bad even though the key is present.",
                 "Line 2"
               ],
               "explanation": "The print says bad even though the key is present.",
               "xp_reward": 10,
-              "starter_code": "args = {'n': 30}\nprint('bad')\n",
+              "starter_code": "args = {'n': 31}\nprint('bad')\n",
               "correct_answer": "2"
             },
             {
               "id": "ai-tool-validate-predict-2",
               "type": "output_prediction",
-              "question": "Orchard pickers recount crates before dawn. For validate required tool arguments, what does the second run display?",
+              "question": "Follow the second program, which accepts a call that has the required key for args holding n, and choose its output.",
               "hints": [
-                "Apply the same steps to the new value.",
-                "The display comes from the last line.",
+                "Follow the job, which accepts a call that has the required key.",
+                "The call is ok when the required key is present.",
                 "bad"
               ],
-              "explanation": "The second Validate Arguments program displays that value.",
+              "explanation": "The call is ok when the required key is present.",
               "xp_reward": 10,
               "starter_code": "args = {}\nprint('ok' if 'n' in args else 'bad')\n",
               "options": [
@@ -593,16 +593,16 @@
             {
               "id": "ai-tool-validate-write",
               "type": "code",
-              "question": "Orchard pickers recount crates before dawn. For validate required tool arguments, fill the blank so the program prints the result.",
+              "question": "Finish the program that accepts a call that has the required key by filling the blank for args holding n.",
               "hints": [
-                "The blank is the missing piece.",
-                "Print the value that piece produces.",
+                "Follow the job, which accepts a call that has the required key.",
+                "The printed value is the result after this step accepts a call that has the required key.",
                 "label = 'ok' if 'n' in args else 'bad'"
               ],
               "explanation": "The printed value is the result after this step accepts a call that has the required key.",
               "xp_reward": 10,
-              "starter_code": "args = {'n': 30}\nlabel = ___\nprint(label)\n",
-              "solution_code": "args = {'n': 30}\nlabel = 'ok' if 'n' in args else 'bad'\nprint(label)\n",
+              "starter_code": "args = {'n': 31}\nlabel = ___\nprint(label)\n",
+              "solution_code": "args = {'n': 31}\nlabel = 'ok' if 'n' in args else 'bad'\nprint(label)\n",
               "tests": [
                 {
                   "name": "ai-tool-validate-prints",
@@ -631,7 +631,7 @@
       ],
       "prerequisites": [],
       "learning_objectives": [
-        "Quarry pickers recount crates before dawn, and format tool result messages."
+        "This step formats the tool result, using value holding tool:{value}."
       ],
       "starter_code": "def tool_result_message(call_id, content):\n    # TODO: return the tool result message described in the task\n    return {}\n",
       "solution_code": "def tool_result_message(call_id, content):\n    return {'role': 'tool', 'call_id': call_id, 'content': content}\n",
@@ -664,23 +664,23 @@
             {
               "id": "ai-tool-result-msg-teach",
               "type": "teach",
-              "question": "Quarry pickers recount crates before dawn, and format tool result messages.",
+              "question": "This step formats the tool result, using value holding tool:{value}.",
               "hints": [
-                "Read the one job this step is practicing.",
-                "The example is about Tool Result Message.",
+                "Follow the job, which formats the tool result.",
+                "The message prefixes the value so the chat can tell it is a tool result.",
                 "f'tool:{value}'"
               ],
-              "explanation": "Quarry pickers recount crates before dawn, and format tool result messages.",
+              "explanation": "This step formats the tool result, using value holding tool:{value}.",
               "xp_reward": 0,
               "worked_example": "f'tool:{value}'"
             },
             {
               "id": "ai-tool-result-msg-mcq",
               "type": "mcq",
-              "question": "Quarry pickers recount crates before dawn. For format tool result messages, which line formats the tool result?",
+              "question": "The match is the line that formats the tool result for value holding tool:{value}.",
               "hints": [
-                "Compare each line with the example.",
-                "One line matches the example.",
+                "Follow the job, which formats the tool result.",
+                "The message prefixes the value so the chat can tell it is a tool result.",
                 "f'tool:{value}'"
               ],
               "explanation": "The message prefixes the value so the chat can tell it is a tool result.",
@@ -696,30 +696,30 @@
             {
               "id": "ai-tool-result-msg-predict",
               "type": "output_prediction",
-              "question": "Quarry pickers recount crates before dawn. For format tool result messages, what value is displayed?",
+              "question": "Work out what is printed when the code formats the tool result for value holding tool:{value}.",
               "hints": [
-                "Run the example in your head from the top.",
-                "The last line is what gets displayed.",
-                "tool:31"
+                "Follow the job, which formats the tool result.",
+                "The message prefixes the value so the chat can tell it is a tool result.",
+                "tool:32"
               ],
-              "explanation": "The Tool Result Message program displays that value.",
+              "explanation": "The message prefixes the value so the chat can tell it is a tool result.",
               "xp_reward": 10,
-              "starter_code": "value = 31\nprint(f'tool:{value}')\n",
+              "starter_code": "value = 32\nprint(f'tool:{value}')\n",
               "options": [
-                "tool:34",
+                "tool:35",
                 "none",
                 "0",
-                "tool:31"
+                "tool:32"
               ],
-              "correct_answer": "tool:31"
+              "correct_answer": "tool:32"
             },
             {
               "id": "ai-tool-result-msg-order",
               "type": "ordering",
-              "question": "Quarry pickers recount crates before dawn. For format tool result messages, build the line that formats the tool result.",
+              "question": "Rebuild, from the left, the line that formats the tool result for value holding tool:{value}.",
               "hints": [
-                "Start at the left of the example.",
-                "Keep the example order.",
+                "Follow the job, which formats the tool result.",
+                "The message prefixes the value so the chat can tell it is a tool result.",
                 "text = f'tool:{value}'"
               ],
               "explanation": "The message prefixes the value so the chat can tell it is a tool result.",
@@ -739,10 +739,10 @@
             {
               "id": "ai-tool-result-msg-fill",
               "type": "fill_blank",
-              "question": "Quarry pickers recount crates before dawn. For format tool result messages, fill the blank so the line formats the tool result.",
+              "question": "The completed line formats the tool result once you fill the blank for value holding.",
               "hints": [
-                "The blank is the missing piece of the example.",
-                "The example uses that piece.",
+                "Follow the job, which formats the tool result.",
+                "The message prefixes the value so the chat can tell it is a tool result.",
                 "{value}"
               ],
               "explanation": "The message prefixes the value so the chat can tell it is a tool result.",
@@ -759,55 +759,55 @@
             {
               "id": "ai-tool-result-msg-bug",
               "type": "debugging",
-              "question": "Quarry pickers recount crates before dawn. For format tool result messages, which line does a different job than the example?",
+              "question": "One line does another job than the one that formats the tool result for value holding tool:{value}.",
               "hints": [
-                "The other lines match the example.",
-                "One line is the odd one.",
+                "Follow the job, which formats the tool result.",
+                "The print shows the bare value without the tool prefix.",
                 "Line 2"
               ],
               "explanation": "The print shows the bare value without the tool prefix.",
               "xp_reward": 10,
-              "starter_code": "value = 31\nprint(value)\n",
+              "starter_code": "value = 32\nprint(value)\n",
               "correct_answer": "2"
             },
             {
               "id": "ai-tool-result-msg-predict-2",
               "type": "output_prediction",
-              "question": "Quarry pickers recount crates before dawn. For format tool result messages, what does the second run display?",
+              "question": "The second display is what prints after the code formats the tool result for value holding tool:{value}.",
               "hints": [
-                "Apply the same steps to the new value.",
-                "The display comes from the last line.",
-                "tool:34"
+                "Follow the job, which formats the tool result.",
+                "The message prefixes the value so the chat can tell it is a tool result.",
+                "tool:35"
               ],
-              "explanation": "The second Tool Result Message program displays that value.",
+              "explanation": "The message prefixes the value so the chat can tell it is a tool result.",
               "xp_reward": 10,
-              "starter_code": "value = 34\nprint(f'tool:{value}')\n",
+              "starter_code": "value = 35\nprint(f'tool:{value}')\n",
               "options": [
-                "tool:31",
+                "tool:32",
                 "none",
-                "tool:34",
+                "tool:35",
                 "0"
               ],
-              "correct_answer": "tool:34"
+              "correct_answer": "tool:35"
             },
             {
               "id": "ai-tool-result-msg-write",
               "type": "code",
-              "question": "Quarry pickers recount crates before dawn. For format tool result messages, fill the blank so the program prints the result.",
+              "question": "Supply the blank so the run formats the tool result and prints the result for value holding tool:{value}.",
               "hints": [
-                "The blank is the missing piece.",
-                "Print the value that piece produces.",
+                "Follow the job, which formats the tool result.",
+                "The printed value is the result after this step formats the tool result.",
                 "label = f'tool:{value}'"
               ],
               "explanation": "The printed value is the result after this step formats the tool result.",
               "xp_reward": 10,
-              "starter_code": "value = 31\nlabel = ___\nprint(label)\n",
-              "solution_code": "value = 31\nlabel = f'tool:{value}'\nprint(label)\n",
+              "starter_code": "value = 32\nlabel = ___\nprint(label)\n",
+              "solution_code": "value = 32\nlabel = f'tool:{value}'\nprint(label)\n",
               "tests": [
                 {
                   "name": "ai-tool-result-msg-prints",
                   "description": "The printed value is the result after this step formats the tool result.",
-                  "expected_stdout": "tool:31\n",
+                  "expected_stdout": "tool:32\n",
                   "required": true
                 }
               ]
@@ -831,7 +831,7 @@
       ],
       "prerequisites": [],
       "learning_objectives": [
-        "Attic pickers recount crates before dawn, and safely dispatch unknown tools."
+        "This step allows only registered tool names, using allowed holding sum."
       ],
       "starter_code": "def safe_dispatch(name, args, registry):\n    # TODO\n    pass\n",
       "solution_code": "def safe_dispatch(name, args, registry):\n    if name not in registry:\n        return {'error': 'unknown tool: ' + name}\n    return {'result': registry[name](**args)}\n",
@@ -864,23 +864,23 @@
             {
               "id": "ai-tool-checkpoint-teach",
               "type": "teach",
-              "question": "Attic pickers recount crates before dawn, and safely dispatch unknown tools.",
+              "question": "This step allows only registered tool names, using allowed holding sum.",
               "hints": [
-                "Read the one job this step is practicing.",
-                "The example is about Checkpoint Safe Registry.",
+                "Follow the job, which allows only registered tool names.",
+                "A name in the registry is safe to call.",
                 "'sum' in allowed"
               ],
-              "explanation": "Attic pickers recount crates before dawn, and safely dispatch unknown tools.",
+              "explanation": "This step allows only registered tool names, using allowed holding sum.",
               "xp_reward": 0,
               "worked_example": "'sum' in allowed"
             },
             {
               "id": "ai-tool-checkpoint-mcq",
               "type": "mcq",
-              "question": "Attic pickers recount crates before dawn. For safely dispatch unknown tools, which line allows only registered tool names?",
+              "question": "Keep the choice that allows only registered tool names for allowed holding sum.",
               "hints": [
-                "Compare each line with the example.",
-                "One line matches the example.",
+                "Follow the job, which allows only registered tool names.",
+                "A name in the registry is safe to call.",
                 "'sum' in allowed"
               ],
               "explanation": "A name in the registry is safe to call.",
@@ -896,13 +896,13 @@
             {
               "id": "ai-tool-checkpoint-predict",
               "type": "output_prediction",
-              "question": "Attic pickers recount crates before dawn. For safely dispatch unknown tools, what value is displayed?",
+              "question": "Trace the code that allows only registered tool names using allowed holding sum, and select what it displays.",
               "hints": [
-                "Run the example in your head from the top.",
-                "The last line is what gets displayed.",
+                "Follow the job, which allows only registered tool names.",
+                "A name in the registry is safe to call.",
                 "yes"
               ],
-              "explanation": "The Checkpoint Safe Registry program displays that value.",
+              "explanation": "A name in the registry is safe to call.",
               "xp_reward": 10,
               "starter_code": "allowed = {'sum', 'echo'}\nprint('yes' if 'sum' in allowed else 'no')\n",
               "options": [
@@ -916,10 +916,10 @@
             {
               "id": "ai-tool-checkpoint-order",
               "type": "ordering",
-              "question": "Attic pickers recount crates before dawn. For safely dispatch unknown tools, build the line that allows only registered tool names.",
+              "question": "Tap the pieces, in order, of the line that allows only registered tool names for allowed holding sum.",
               "hints": [
-                "Start at the left of the example.",
-                "Keep the example order.",
+                "Follow the job, which allows only registered tool names.",
+                "A name in the registry is safe to call.",
                 "if 'sum' in allowed: pass"
               ],
               "explanation": "A name in the registry is safe to call.",
@@ -943,10 +943,10 @@
             {
               "id": "ai-tool-checkpoint-fill",
               "type": "fill_blank",
-              "question": "Attic pickers recount crates before dawn. For safely dispatch unknown tools, fill the blank so the line allows only registered tool names.",
+              "question": "The blank is the missing piece of the line that allows only registered tool names for allowed holding sum.",
               "hints": [
-                "The blank is the missing piece of the example.",
-                "The example uses that piece.",
+                "Follow the job, which allows only registered tool names.",
+                "A name in the registry is safe to call.",
                 "'sum'"
               ],
               "explanation": "A name in the registry is safe to call.",
@@ -963,10 +963,10 @@
             {
               "id": "ai-tool-checkpoint-bug",
               "type": "debugging",
-              "question": "Attic pickers recount crates before dawn. For safely dispatch unknown tools, which line does a different job than the example?",
+              "question": "Choose the line that does another job than the one that allows only registered tool names for allowed holding sum.",
               "hints": [
-                "The other lines match the example.",
-                "One line is the odd one.",
+                "Follow the job, which allows only registered tool names.",
+                "The print says no for a name that is registered.",
                 "Line 2"
               ],
               "explanation": "The print says no for a name that is registered.",
@@ -977,13 +977,13 @@
             {
               "id": "ai-tool-checkpoint-predict-2",
               "type": "output_prediction",
-              "question": "Attic pickers recount crates before dawn. Choose the match for this step, using sage.",
+              "question": "Trace the second run, which allows only registered tool names for allowed holding sum, and select what it displays.",
               "hints": [
-                "Apply the same steps to the new value.",
-                "The display comes from the last line.",
+                "Follow the job, which allows only registered tool names.",
+                "A name in the registry is safe to call.",
                 "no"
               ],
-              "explanation": "The second Checkpoint Safe Registry program displays that value.",
+              "explanation": "A name in the registry is safe to call.",
               "xp_reward": 10,
               "starter_code": "allowed = {'sum', 'echo'}\nprint('yes' if 'drop' in allowed else 'no')\n",
               "options": [
@@ -997,10 +997,10 @@
             {
               "id": "ai-tool-checkpoint-write",
               "type": "code",
-              "question": "Attic pickers recount crates before dawn. For safely dispatch unknown tools, fill the blank so the program prints the result.",
+              "question": "Type the missing piece so the program allows only registered tool names for allowed holding sum and prints it.",
               "hints": [
-                "The blank is the missing piece.",
-                "Print the value that piece produces.",
+                "Follow the job, which allows only registered tool names.",
+                "The printed value is the result after this step allows only registered tool names.",
                 "label = 'yes' if 'sum' in allowed else 'no'"
               ],
               "explanation": "The printed value is the result after this step allows only registered tool names.",

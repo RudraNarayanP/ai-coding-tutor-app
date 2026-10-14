@@ -25,7 +25,7 @@
       ],
       "prerequisites": [],
       "learning_objectives": [
-        "Depot clerks recount crates before dawn, and compute linear predictions."
+        "This step computes intercept plus slope times x, using x and 1."
       ],
       "starter_code": "def predict(x, w, b):\n    # TODO\n    pass\n",
       "solution_code": "def predict(x, w, b):\n    return w * x + b\n",
@@ -58,23 +58,23 @@
             {
               "id": "linreg-predict-teach",
               "type": "teach",
-              "question": "Depot clerks recount crates before dawn, and compute linear predictions.",
+              "question": "This step computes intercept plus slope times x, using x and 1.",
               "hints": [
-                "Read the one job this step is practicing.",
-                "The example is about Linear Prediction.",
+                "Follow the job, which computes intercept plus slope times x.",
+                "The line is intercept plus slope times x.",
                 "2 * x + 1"
               ],
-              "explanation": "Depot clerks recount crates before dawn, and compute linear predictions.",
+              "explanation": "This step computes intercept plus slope times x, using x and 1.",
               "xp_reward": 0,
               "worked_example": "2 * x + 1"
             },
             {
               "id": "linreg-predict-mcq",
               "type": "mcq",
-              "question": "Depot clerks recount crates before dawn. For compute linear predictions, which line computes intercept plus slope times x?",
+              "question": "The correct line computes intercept plus slope times x, and it is the line tied to x and 1.",
               "hints": [
-                "Compare each line with the example.",
-                "One line matches the example.",
+                "Follow the job, which computes intercept plus slope times x.",
+                "The line is intercept plus slope times x.",
                 "2 * x + 1"
               ],
               "explanation": "The line is intercept plus slope times x.",
@@ -90,13 +90,13 @@
             {
               "id": "linreg-predict-predict",
               "type": "output_prediction",
-              "question": "Depot clerks recount crates before dawn. For compute linear predictions, what value is displayed?",
+              "question": "The program computes intercept plus slope times x with x and 1, so choose the printed value.",
               "hints": [
-                "Run the example in your head from the top.",
-                "The last line is what gets displayed.",
+                "Follow the job, which computes intercept plus slope times x.",
+                "The line is intercept plus slope times x.",
                 "87"
               ],
-              "explanation": "The Linear Prediction program displays that value.",
+              "explanation": "The line is intercept plus slope times x.",
               "xp_reward": 10,
               "starter_code": "x = 43\nprint(2 * x + 1)\n",
               "options": [
@@ -110,10 +110,10 @@
             {
               "id": "linreg-predict-order",
               "type": "ordering",
-              "question": "Depot clerks recount crates before dawn. For compute linear predictions, build the line that computes intercept plus slope times x.",
+              "question": "Build the line that computes intercept plus slope times x for x and 1, from the first piece to the last.",
               "hints": [
-                "Start at the left of the example.",
-                "Keep the example order.",
+                "Follow the job, which computes intercept plus slope times x.",
+                "The line is intercept plus slope times x.",
                 "y = 2 * x + 1"
               ],
               "explanation": "The line is intercept plus slope times x.",
@@ -141,10 +141,10 @@
             {
               "id": "linreg-predict-fill",
               "type": "fill_blank",
-              "question": "Depot clerks recount crates before dawn. For compute linear predictions, fill the blank so the line computes intercept plus slope times x.",
+              "question": "Replace the blank with the piece that makes the line computes intercept plus slope times x for x and 1.",
               "hints": [
-                "The blank is the missing piece of the example.",
-                "The example uses that piece.",
+                "Follow the job, which computes intercept plus slope times x.",
+                "The line is intercept plus slope times x.",
                 "*"
               ],
               "explanation": "The line is intercept plus slope times x.",
@@ -161,10 +161,10 @@
             {
               "id": "linreg-predict-bug",
               "type": "debugging",
-              "question": "Depot clerks recount crates before dawn. For compute linear predictions, which line does a different job than the example?",
+              "question": "Spot the line that fails the job, which computes intercept plus slope times x, around x and 1.",
               "hints": [
-                "The other lines match the example.",
-                "One line is the odd one.",
+                "Follow the job, which computes intercept plus slope times x.",
+                "The print adds one and never multiplies by the slope.",
                 "Line 2"
               ],
               "explanation": "The print adds one and never multiplies by the slope.",
@@ -175,13 +175,13 @@
             {
               "id": "linreg-predict-predict-2",
               "type": "output_prediction",
-              "question": "Depot clerks recount crates before dawn. For compute linear predictions, what does the second run display?",
+              "question": "The second program computes intercept plus slope times x for x and 1, so choose the new printed value.",
               "hints": [
-                "Apply the same steps to the new value.",
-                "The display comes from the last line.",
+                "Follow the job, which computes intercept plus slope times x.",
+                "The line is intercept plus slope times x.",
                 "93"
               ],
-              "explanation": "The second Linear Prediction program displays that value.",
+              "explanation": "The line is intercept plus slope times x.",
               "xp_reward": 10,
               "starter_code": "x = 46\nprint(2 * x + 1)\n",
               "options": [
@@ -195,10 +195,10 @@
             {
               "id": "linreg-predict-write",
               "type": "code",
-              "question": "Depot clerks recount crates before dawn. For compute linear predictions, fill the blank so the program prints the result.",
+              "question": "Complete the blank so this program computes intercept plus slope times x and prints the result for x and 1.",
               "hints": [
-                "The blank is the missing piece.",
-                "Print the value that piece produces.",
+                "Follow the job, which computes intercept plus slope times x.",
+                "The printed value is the result after this step computes intercept plus slope times x.",
                 "label = 2 * x + 1"
               ],
               "explanation": "The printed value is the result after this step computes intercept plus slope times x.",
@@ -233,7 +233,7 @@
       ],
       "prerequisites": [],
       "learning_objectives": [
-        "Ridge clerks recount crates before dawn, and compute MSE loss."
+        "This step averages the squared errors, using errors and 3."
       ],
       "starter_code": "def mse(y_true, y_pred):\n    # TODO\n    pass\n",
       "solution_code": "def mse(y_true, y_pred):\n    n = len(y_true)\n    return sum((a - b) ** 2 for a, b in zip(y_true, y_pred)) / n\n",
@@ -266,23 +266,23 @@
             {
               "id": "linreg-mse-teach",
               "type": "teach",
-              "question": "Ridge clerks recount crates before dawn, and compute MSE loss.",
+              "question": "This step averages the squared errors, using errors and 3.",
               "hints": [
-                "Read the one job this step is practicing.",
-                "The example is about Mean Squared Error.",
+                "Follow the job, which averages the squared errors.",
+                "Mean squared error averages the squared gaps.",
                 "item * item"
               ],
-              "explanation": "Ridge clerks recount crates before dawn, and compute MSE loss.",
+              "explanation": "This step averages the squared errors, using errors and 3.",
               "xp_reward": 0,
               "worked_example": "item * item"
             },
             {
               "id": "linreg-mse-mcq",
               "type": "mcq",
-              "question": "Ridge clerks recount crates before dawn. For compute MSE loss, which line averages the squared errors?",
+              "question": "Select the line that averages the squared errors, the one that belongs with errors and 3.",
               "hints": [
-                "Compare each line with the example.",
-                "One line matches the example.",
+                "Follow the job, which averages the squared errors.",
+                "Mean squared error averages the squared gaps.",
                 "item * item"
               ],
               "explanation": "Mean squared error averages the squared gaps.",
@@ -298,13 +298,13 @@
             {
               "id": "linreg-mse-predict",
               "type": "output_prediction",
-              "question": "Ridge clerks recount crates before dawn. For compute MSE loss, what value is displayed?",
+              "question": "Follow the code that averages the squared errors for errors and 3, then choose the displayed value.",
               "hints": [
-                "Run the example in your head from the top.",
-                "The last line is what gets displayed.",
+                "Follow the job, which averages the squared errors.",
+                "Mean squared error averages the squared gaps.",
                 "5"
               ],
-              "explanation": "The Mean Squared Error program displays that value.",
+              "explanation": "Mean squared error averages the squared gaps.",
               "xp_reward": 10,
               "starter_code": "errors = [1, 3]\nprint(sum(item * item for item in errors) // len(errors))\n",
               "options": [
@@ -318,10 +318,10 @@
             {
               "id": "linreg-mse-order",
               "type": "ordering",
-              "question": "Ridge clerks recount crates before dawn. For compute MSE loss, build the line that averages the squared errors.",
+              "question": "Order the pieces so the line averages the squared errors for errors and 3.",
               "hints": [
-                "Start at the left of the example.",
-                "Keep the example order.",
+                "Follow the job, which averages the squared errors.",
+                "Mean squared error averages the squared gaps.",
                 "loss= sum(item*item for err in errors)//len(errors)"
               ],
               "explanation": "Mean squared error averages the squared gaps.",
@@ -347,10 +347,10 @@
             {
               "id": "linreg-mse-fill",
               "type": "fill_blank",
-              "question": "Ridge clerks recount crates before dawn. For compute MSE loss, fill the blank so the line averages the squared errors.",
+              "question": "Supply the missing piece so the line averages the squared errors for errors and 3.",
               "hints": [
-                "The blank is the missing piece of the example.",
-                "The example uses that piece.",
+                "Follow the job, which averages the squared errors.",
+                "Mean squared error averages the squared gaps.",
                 "*"
               ],
               "explanation": "Mean squared error averages the squared gaps.",
@@ -367,10 +367,10 @@
             {
               "id": "linreg-mse-bug",
               "type": "debugging",
-              "question": "Ridge clerks recount crates before dawn. For compute MSE loss, which line does a different job than the example?",
+              "question": "The wrong line is the one that misses the job, which averages the squared errors, for errors and 3.",
               "hints": [
-                "The other lines match the example.",
-                "One line is the odd one.",
+                "Follow the job, which averages the squared errors.",
+                "The average uses raw errors, so the signs are not squared away.",
                 "Line 2"
               ],
               "explanation": "The average uses raw errors, so the signs are not squared away.",
@@ -381,13 +381,13 @@
             {
               "id": "linreg-mse-predict-2",
               "type": "output_prediction",
-              "question": "Ridge clerks recount crates before dawn. For compute MSE loss, what does the second run display?",
+              "question": "A new input still has code that averages the squared errors for errors and 3, and the correct choice is what it prints.",
               "hints": [
-                "Apply the same steps to the new value.",
-                "The display comes from the last line.",
+                "Follow the job, which averages the squared errors.",
+                "Mean squared error averages the squared gaps.",
                 "10"
               ],
-              "explanation": "The second Mean Squared Error program displays that value.",
+              "explanation": "Mean squared error averages the squared gaps.",
               "xp_reward": 10,
               "starter_code": "errors = [2, 4]\nprint(sum(item * item for item in errors) // len(errors))\n",
               "options": [
@@ -401,10 +401,10 @@
             {
               "id": "linreg-mse-write",
               "type": "code",
-              "question": "Ridge clerks recount crates before dawn. For compute MSE loss, fill the blank so the program prints the result.",
+              "question": "The blank is the missing piece of the program that averages the squared errors for errors and 3.",
               "hints": [
-                "The blank is the missing piece.",
-                "Print the value that piece produces.",
+                "Follow the job, which averages the squared errors.",
+                "The printed value is the result after this step averages the squared errors.",
                 "label = sum(item * item for item in errors) // len(errors)"
               ],
               "explanation": "The printed value is the result after this step averages the squared errors.",
@@ -439,7 +439,7 @@
       ],
       "prerequisites": [],
       "learning_objectives": [
-        "Cove clerks recount crates before dawn, and take one GD step for linear regression."
+        "This step steps the weight against the gradient, using weight and 1."
       ],
       "starter_code": "def gd_step(xs, ys, w, b, lr):\n    # TODO\n    pass\n",
       "solution_code": "def gd_step(xs, ys, w, b, lr):\n    n = len(xs)\n    dw = sum((w * x + b - y) * x for x, y in zip(xs, ys)) * 2 / n\n    db = sum((w * x + b - y) for x, y in zip(xs, ys)) * 2 / n\n    return w - lr * dw, b - lr * db\n",
@@ -472,23 +472,23 @@
             {
               "id": "linreg-gd-step-teach",
               "type": "teach",
-              "question": "Cove clerks recount crates before dawn, and take one GD step for linear regression.",
+              "question": "This step steps the weight against the gradient, using weight and 1.",
               "hints": [
-                "Read the one job this step is practicing.",
-                "The example is about Gradient Descent Step.",
+                "Follow the job, which steps the weight against the gradient.",
+                "Gradient descent subtracts the rate times the gradient.",
                 "weight - rate * grad"
               ],
-              "explanation": "Cove clerks recount crates before dawn, and take one GD step for linear regression.",
+              "explanation": "This step steps the weight against the gradient, using weight and 1.",
               "xp_reward": 0,
               "worked_example": "weight - rate * grad"
             },
             {
               "id": "linreg-gd-step-mcq",
               "type": "mcq",
-              "question": "Cove clerks recount crates before dawn. For take one GD step for linear regression, which line steps the weight against the gradient?",
+              "question": "Keep the choice that steps the weight against the gradient for weight and 1.",
               "hints": [
-                "Compare each line with the example.",
-                "One line matches the example.",
+                "Follow the job, which steps the weight against the gradient.",
+                "Gradient descent subtracts the rate times the gradient.",
                 "weight - rate * grad"
               ],
               "explanation": "Gradient descent subtracts the rate times the gradient.",
@@ -504,13 +504,13 @@
             {
               "id": "linreg-gd-step-predict",
               "type": "output_prediction",
-              "question": "Cove clerks recount crates before dawn. For take one GD step for linear regression, what value is displayed?",
+              "question": "Trace the code that steps the weight against the gradient using weight and 1, and select what it displays.",
               "hints": [
-                "Run the example in your head from the top.",
-                "The last line is what gets displayed.",
+                "Follow the job, which steps the weight against the gradient.",
+                "Gradient descent subtracts the rate times the gradient.",
                 "8"
               ],
-              "explanation": "The Gradient Descent Step program displays that value.",
+              "explanation": "Gradient descent subtracts the rate times the gradient.",
               "xp_reward": 10,
               "starter_code": "weight = 10\ngrad = 2\nrate = 1\nprint(weight - rate * grad)\n",
               "options": [
@@ -524,10 +524,10 @@
             {
               "id": "linreg-gd-step-order",
               "type": "ordering",
-              "question": "Cove clerks recount crates before dawn. For take one GD step for linear regression, build the line that steps the weight against the gradient.",
+              "question": "Tap the pieces, in order, of the line that steps the weight against the gradient for weight and 1.",
               "hints": [
-                "Start at the left of the example.",
-                "Keep the example order.",
+                "Follow the job, which steps the weight against the gradient.",
+                "Gradient descent subtracts the rate times the gradient.",
                 "next = weight - rate * grad"
               ],
               "explanation": "Gradient descent subtracts the rate times the gradient.",
@@ -555,10 +555,10 @@
             {
               "id": "linreg-gd-step-fill",
               "type": "fill_blank",
-              "question": "Cove clerks recount crates before dawn. For take one GD step for linear regression, fill the blank so the line steps the weight against the gradient.",
+              "question": "The blank is the missing piece of the line that steps the weight against the gradient for weight and 1.",
               "hints": [
-                "The blank is the missing piece of the example.",
-                "The example uses that piece.",
+                "Follow the job, which steps the weight against the gradient.",
+                "Gradient descent subtracts the rate times the gradient.",
                 "-"
               ],
               "explanation": "Gradient descent subtracts the rate times the gradient.",
@@ -575,10 +575,10 @@
             {
               "id": "linreg-gd-step-bug",
               "type": "debugging",
-              "question": "Cove clerks recount crates before dawn. For take one GD step for linear regression, which line does a different job than the example?",
+              "question": "Choose the line that does another job than the one that steps the weight against the gradient for weight and 1.",
               "hints": [
-                "The other lines match the example.",
-                "One line is the odd one.",
+                "Follow the job, which steps the weight against the gradient.",
+                "The step adds the gradient and walks uphill.",
                 "Line 3"
               ],
               "explanation": "The step adds the gradient and walks uphill.",
@@ -589,13 +589,13 @@
             {
               "id": "linreg-gd-step-predict-2",
               "type": "output_prediction",
-              "question": "Cove clerks recount crates before dawn. For take one GD step for linear regression, what does the second run display?",
+              "question": "Trace the second run, which steps the weight against the gradient for weight and 1, and select what it displays.",
               "hints": [
-                "Apply the same steps to the new value.",
-                "The display comes from the last line.",
+                "Follow the job, which steps the weight against the gradient.",
+                "Gradient descent subtracts the rate times the gradient.",
                 "6"
               ],
-              "explanation": "The second Gradient Descent Step program displays that value.",
+              "explanation": "Gradient descent subtracts the rate times the gradient.",
               "xp_reward": 10,
               "starter_code": "weight = 10\ngrad = 2\nrate = 2\nprint(weight - rate * grad)\n",
               "options": [
@@ -609,10 +609,10 @@
             {
               "id": "linreg-gd-step-write",
               "type": "code",
-              "question": "Cove clerks recount crates before dawn. For take one GD step for linear regression, fill the blank so the program prints the result.",
+              "question": "Type the missing piece so the program steps the weight against the gradient for weight and 1 and prints it.",
               "hints": [
-                "The blank is the missing piece.",
-                "Print the value that piece produces.",
+                "Follow the job, which steps the weight against the gradient.",
+                "The printed value is the result after this step steps the weight against the gradient.",
                 "label = weight - rate * grad"
               ],
               "explanation": "The printed value is the result after this step steps the weight against the gradient.",
@@ -647,7 +647,7 @@
       ],
       "prerequisites": [],
       "learning_objectives": [
-        "Plaza clerks recount crates before dawn, and fit slope via normal equation."
+        "This step reads the slope between two points, using rise and 1."
       ],
       "starter_code": "def fit_slope(xs, ys):\n    # TODO\n    pass\n",
       "solution_code": "def fit_slope(xs, ys):\n    return sum(x * y for x, y in zip(xs, ys)) / sum(x * x for x in xs)\n",
@@ -680,23 +680,23 @@
             {
               "id": "linreg-closed-form-teach",
               "type": "teach",
-              "question": "Plaza clerks recount crates before dawn, and fit slope via normal equation.",
+              "question": "This step reads the slope between two points, using rise and 1.",
               "hints": [
-                "Read the one job this step is practicing.",
-                "The example is about Closed-Form Slope.",
+                "Follow the job, which reads the slope between two points.",
+                "Slope is the rise divided by the run.",
                 "rise // run"
               ],
-              "explanation": "Plaza clerks recount crates before dawn, and fit slope via normal equation.",
+              "explanation": "This step reads the slope between two points, using rise and 1.",
               "xp_reward": 0,
               "worked_example": "rise // run"
             },
             {
               "id": "linreg-closed-form-mcq",
               "type": "mcq",
-              "question": "Plaza clerks recount crates before dawn. For fit slope via normal equation, which line reads the slope between two points?",
+              "question": "The correct line reads the slope between two points, and it is the line tied to rise and 1.",
               "hints": [
-                "Compare each line with the example.",
-                "One line matches the example.",
+                "Follow the job, which reads the slope between two points.",
+                "Slope is the rise divided by the run.",
                 "rise // run"
               ],
               "explanation": "Slope is the rise divided by the run.",
@@ -712,13 +712,13 @@
             {
               "id": "linreg-closed-form-predict",
               "type": "output_prediction",
-              "question": "Plaza clerks recount crates before dawn. For fit slope via normal equation, what value is displayed?",
+              "question": "The program reads the slope between two points with rise and 1, so choose the printed value.",
               "hints": [
-                "Run the example in your head from the top.",
-                "The last line is what gets displayed.",
+                "Follow the job, which reads the slope between two points.",
+                "Slope is the rise divided by the run.",
                 "3"
               ],
-              "explanation": "The Closed-Form Slope program displays that value.",
+              "explanation": "Slope is the rise divided by the run.",
               "xp_reward": 10,
               "starter_code": "rise = (51 + 3) - 51\nrun = 1\nprint(rise // run)\n",
               "options": [
@@ -732,10 +732,10 @@
             {
               "id": "linreg-closed-form-order",
               "type": "ordering",
-              "question": "Plaza clerks recount crates before dawn. For fit slope via normal equation, build the line that reads the slope between two points.",
+              "question": "Build the line that reads the slope between two points for rise and 1, from the first piece to the last.",
               "hints": [
-                "Start at the left of the example.",
-                "Keep the example order.",
+                "Follow the job, which reads the slope between two points.",
+                "Slope is the rise divided by the run.",
                 "slope = rise // run"
               ],
               "explanation": "Slope is the rise divided by the run.",
@@ -759,10 +759,10 @@
             {
               "id": "linreg-closed-form-fill",
               "type": "fill_blank",
-              "question": "Plaza clerks recount crates before dawn. For fit slope via normal equation, fill the blank so the line reads the slope between two points.",
+              "question": "Replace the blank with the piece that makes the line reads the slope between two points for rise and 1.",
               "hints": [
-                "The blank is the missing piece of the example.",
-                "The example uses that piece.",
+                "Follow the job, which reads the slope between two points.",
+                "Slope is the rise divided by the run.",
                 "//"
               ],
               "explanation": "Slope is the rise divided by the run.",
@@ -779,10 +779,10 @@
             {
               "id": "linreg-closed-form-bug",
               "type": "debugging",
-              "question": "Plaza clerks recount crates before dawn. For fit slope via normal equation, which line does a different job than the example?",
+              "question": "Spot the line that fails the job, which reads the slope between two points, around rise and 1.",
               "hints": [
-                "The other lines match the example.",
-                "One line is the odd one.",
+                "Follow the job, which reads the slope between two points.",
+                "The print changes the rise and never divides by the run.",
                 "Line 2"
               ],
               "explanation": "The print changes the rise and never divides by the run.",
@@ -793,13 +793,13 @@
             {
               "id": "linreg-closed-form-predict-2",
               "type": "output_prediction",
-              "question": "Plaza clerks recount crates before dawn. For fit slope via normal equation, what does the second run display?",
+              "question": "The second program reads the slope between two points for rise and 1, so choose the new printed value.",
               "hints": [
-                "Apply the same steps to the new value.",
-                "The display comes from the last line.",
+                "Follow the job, which reads the slope between two points.",
+                "Slope is the rise divided by the run.",
                 "5"
               ],
-              "explanation": "The second Closed-Form Slope program displays that value.",
+              "explanation": "Slope is the rise divided by the run.",
               "xp_reward": 10,
               "starter_code": "rise = (51 + 5) - 51\nrun = 1\nprint(rise // run)\n",
               "options": [
@@ -813,10 +813,10 @@
             {
               "id": "linreg-closed-form-write",
               "type": "code",
-              "question": "Plaza clerks recount crates before dawn. For fit slope via normal equation, fill the blank so the program prints the result.",
+              "question": "Complete the blank so this program reads the slope between two points and prints the result for rise and 1.",
               "hints": [
-                "The blank is the missing piece.",
-                "Print the value that piece produces.",
+                "Follow the job, which reads the slope between two points.",
+                "The printed value is the result after this step reads the slope between two points.",
                 "label = rise // run"
               ],
               "explanation": "The printed value is the result after this step reads the slope between two points.",
@@ -851,7 +851,7 @@
       ],
       "prerequisites": [],
       "learning_objectives": [
-        "Marsh clerks recount crates before dawn, and evaluate with R-squared."
+        "This step computes one minus the leftover share, using ss_res and 1."
       ],
       "starter_code": "def r2(y_true, y_pred):\n    # TODO\n    pass\n",
       "solution_code": "def r2(y_true, y_pred):\n    mean_y = sum(y_true) / len(y_true)\n    ss_tot = sum((y - mean_y) ** 2 for y in y_true)\n    ss_res = sum((a - b) ** 2 for a, b in zip(y_true, y_pred))\n    if ss_tot == 0:\n        return 0.0\n    return 1 - ss_res / ss_tot\n",
@@ -884,23 +884,23 @@
             {
               "id": "linreg-checkpoint-teach",
               "type": "teach",
-              "question": "Marsh clerks recount crates before dawn, and evaluate with R-squared.",
+              "question": "This step computes one minus the leftover share, using ss_res and 1.",
               "hints": [
-                "Read the one job this step is practicing.",
-                "The example is about Checkpoint R Score.",
+                "Follow the job, which computes one minus the leftover share.",
+                "R squared is one minus leftover over total.",
                 "1 - ss_res / ss_tot"
               ],
-              "explanation": "Marsh clerks recount crates before dawn, and evaluate with R-squared.",
+              "explanation": "This step computes one minus the leftover share, using ss_res and 1.",
               "xp_reward": 0,
               "worked_example": "1 - ss_res / ss_tot"
             },
             {
               "id": "linreg-checkpoint-mcq",
               "type": "mcq",
-              "question": "Marsh clerks recount crates before dawn. For evaluate with R-squared, which line computes one minus the leftover share?",
+              "question": "Pick the line that computes one minus the leftover share, not a line about something else, for ss_res and 1.",
               "hints": [
-                "Compare each line with the example.",
-                "One line matches the example.",
+                "Follow the job, which computes one minus the leftover share.",
+                "R squared is one minus leftover over total.",
                 "1 - ss_res / ss_tot"
               ],
               "explanation": "R squared is one minus leftover over total.",
@@ -916,13 +916,13 @@
             {
               "id": "linreg-checkpoint-predict",
               "type": "output_prediction",
-              "question": "Marsh clerks recount crates before dawn. For evaluate with R-squared, what value is displayed?",
+              "question": "The displayed value is what the code prints when it computes one minus the leftover share for ss_res and 1.",
               "hints": [
-                "Run the example in your head from the top.",
-                "The last line is what gets displayed.",
+                "Follow the job, which computes one minus the leftover share.",
+                "R squared is one minus leftover over total.",
                 "0.75"
               ],
-              "explanation": "The Checkpoint R Score program displays that value.",
+              "explanation": "R squared is one minus leftover over total.",
               "xp_reward": 10,
               "starter_code": "ss_res = 2\nss_tot = 8\nprint(round(1 - ss_res / ss_tot, 2))\n",
               "options": [
@@ -936,10 +936,10 @@
             {
               "id": "linreg-checkpoint-order",
               "type": "ordering",
-              "question": "Marsh clerks recount crates before dawn. For evaluate with R-squared, build the line that computes one minus the leftover share.",
+              "question": "Place every piece so the result computes one minus the leftover share for ss_res and 1.",
               "hints": [
-                "Start at the left of the example.",
-                "Keep the example order.",
+                "Follow the job, which computes one minus the leftover share.",
+                "R squared is one minus leftover over total.",
                 "score = 1 - ss_res / ss_tot"
               ],
               "explanation": "R squared is one minus leftover over total.",
@@ -967,10 +967,10 @@
             {
               "id": "linreg-checkpoint-fill",
               "type": "fill_blank",
-              "question": "Marsh clerks recount crates before dawn. Choose the match for this step.",
+              "question": "Drop in the piece that lets the line computes one minus the leftover share for ss_res and 1.",
               "hints": [
-                "The blank is the missing piece of the example.",
-                "The example uses that piece.",
+                "Follow the job, which computes one minus the leftover share.",
+                "R squared is one minus leftover over total.",
                 "-"
               ],
               "explanation": "R squared is one minus leftover over total.",
@@ -987,10 +987,10 @@
             {
               "id": "linreg-checkpoint-bug",
               "type": "debugging",
-              "question": "Marsh clerks recount crates before dawn. For evaluate with R-squared, which line does a different job than the example?",
+              "question": "The mismatch misses the job, which computes one minus the leftover share, for ss_res and 1.",
               "hints": [
-                "The other lines match the example.",
-                "One line is the odd one.",
+                "Follow the job, which computes one minus the leftover share.",
+                "The print is the leftover share, not one minus that share.",
                 "Line 3"
               ],
               "explanation": "The print is the leftover share, not one minus that share.",
@@ -1001,13 +1001,13 @@
             {
               "id": "linreg-checkpoint-predict-2",
               "type": "output_prediction",
-              "question": "Marsh clerks recount crates before dawn. For evaluate with R-squared, what does the second run display?",
+              "question": "Choose the printed result of the second run that computes one minus the leftover share for ss_res and 1.",
               "hints": [
-                "Apply the same steps to the new value.",
-                "The display comes from the last line.",
+                "Follow the job, which computes one minus the leftover share.",
+                "R squared is one minus leftover over total.",
                 "0.5"
               ],
-              "explanation": "The second Checkpoint R Score program displays that value.",
+              "explanation": "R squared is one minus leftover over total.",
               "xp_reward": 10,
               "starter_code": "ss_res = 4\nss_tot = 8\nprint(round(1 - ss_res / ss_tot, 2))\n",
               "options": [
@@ -1021,10 +1021,10 @@
             {
               "id": "linreg-checkpoint-write",
               "type": "code",
-              "question": "Marsh clerks recount crates before dawn. For evaluate with R-squared, fill the blank so the program prints the result.",
+              "question": "Make the program computes one minus the leftover share by filling the blank for ss_res and 1.",
               "hints": [
-                "The blank is the missing piece.",
-                "Print the value that piece produces.",
+                "Follow the job, which computes one minus the leftover share.",
+                "The printed value is the result after this step computes one minus the leftover share.",
                 "label = round(1 - ss_res / ss_tot, 2)"
               ],
               "explanation": "The printed value is the result after this step computes one minus the leftover share.",

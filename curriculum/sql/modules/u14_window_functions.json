@@ -45,7 +45,7 @@
         "license": "Public domain (SQLite documentation)"
       },
       "learning_objectives": [
-        "Attic clerks recount crates before dawn, and compute per-row results without collapsing rows using OVER."
+        "This step ranks employees by salary, using name and 1."
       ],
       "xp_reward": 10,
       "player_mode": "micro",
@@ -59,23 +59,23 @@
             {
               "id": "sql-14-teach",
               "type": "teach",
-              "question": "Attic clerks recount crates before dawn, and compute per-row results without collapsing rows using OVER.",
+              "question": "This step ranks employees by salary, using name and 1.",
               "hints": [
-                "Read the one job this step is practicing.",
-                "The example is about Window Functions.",
+                "Follow the job, which ranks employees by salary.",
+                "RANK over salary descending puts the highest salary at place 1.",
                 "RANK() OVER (ORDER BY salary DESC)"
               ],
-              "explanation": "Attic clerks recount crates before dawn, and compute per-row results without collapsing rows using OVER.",
+              "explanation": "This step ranks employees by salary, using name and 1.",
               "xp_reward": 0,
               "worked_example": "RANK() OVER (ORDER BY salary DESC)"
             },
             {
               "id": "sql-14-mcq",
               "type": "mcq",
-              "question": "Attic clerks recount crates before dawn. For compute per-row results without collapsing rows using OVER, which line ranks employees by salary?",
+              "question": "Keep the choice that ranks employees by salary for name and 1.",
               "hints": [
-                "Compare each line with the example.",
-                "One line matches the example.",
+                "Follow the job, which ranks employees by salary.",
+                "RANK over salary descending puts the highest salary at place 1.",
                 "RANK() OVER (ORDER BY salary DESC)"
               ],
               "explanation": "RANK over salary descending puts the highest salary at place 1.",
@@ -91,13 +91,13 @@
             {
               "id": "sql-14-predict",
               "type": "output_prediction",
-              "question": "Attic clerks recount crates before dawn. For compute per-row results without collapsing rows using OVER, what value is displayed?",
+              "question": "Trace the code that ranks employees by salary using name and 1, and select what it displays.",
               "hints": [
-                "Run the example in your head from the top.",
-                "The last line is what gets displayed.",
+                "Follow the job, which ranks employees by salary.",
+                "RANK over salary descending puts the highest salary at place 1.",
                 "┌──────┐\n│ name │\n├──────┤\n│ Jane │\n└──────┘"
               ],
-              "explanation": "The Window Functions program displays that value.",
+              "explanation": "RANK over salary descending puts the highest salary at place 1.",
               "xp_reward": 10,
               "starter_code": "SELECT name FROM (SELECT first_name AS name, RANK() OVER (ORDER BY salary DESC) AS place FROM employees) ranked WHERE place = 1;\n",
               "options": [
@@ -111,10 +111,10 @@
             {
               "id": "sql-14-order",
               "type": "ordering",
-              "question": "Attic clerks recount crates before dawn. For compute per-row results without collapsing rows using OVER, build the line that ranks employees by salary.",
+              "question": "Tap the pieces, in order, of the line that ranks employees by salary for name and 1.",
               "hints": [
-                "Start at the left of the example.",
-                "Keep the example order.",
+                "Follow the job, which ranks employees by salary.",
+                "RANK over salary descending puts the highest salary at place 1.",
                 "SELECT first_name, RANK() OVER (ORDER BY salary DESC) AS place FROM employees"
               ],
               "explanation": "RANK over salary descending puts the highest salary at place 1.",
@@ -152,10 +152,10 @@
             {
               "id": "sql-14-fill",
               "type": "fill_blank",
-              "question": "Attic clerks recount crates before dawn. For compute per-row results without collapsing rows using OVER, fill the blank so the line ranks employees by salary.",
+              "question": "The blank is the missing piece of the line that ranks employees by salary for name and 1.",
               "hints": [
-                "The blank is the missing piece of the example.",
-                "The example uses that piece.",
+                "Follow the job, which ranks employees by salary.",
+                "RANK over salary descending puts the highest salary at place 1.",
                 "DESC"
               ],
               "explanation": "RANK over salary descending puts the highest salary at place 1.",
@@ -172,10 +172,10 @@
             {
               "id": "sql-14-bug",
               "type": "debugging",
-              "question": "Attic clerks recount crates before dawn. For compute per-row results without collapsing rows using OVER, which line does a different job than the example?",
+              "question": "Choose the line that does another job than the one that ranks employees by salary for name and.",
               "hints": [
-                "The other lines match the example.",
-                "One line is the odd one.",
+                "Follow the job, which ranks employees by salary.",
+                "The sort is ascending, so the lowest salary comes first.",
                 "Line 1"
               ],
               "explanation": "The sort is ascending, so the lowest salary comes first.",
@@ -186,13 +186,13 @@
             {
               "id": "sql-14-predict-2",
               "type": "output_prediction",
-              "question": "Attic clerks recount crates before dawn. For compute per-row results without collapsing rows using OVER, what does the second run display?",
+              "question": "Trace the second run, which ranks employees by salary for name and 1, and select what it displays.",
               "hints": [
-                "Apply the same steps to the new value.",
-                "The display comes from the last line.",
+                "Follow the job, which ranks employees by salary.",
+                "RANK over salary descending puts the highest salary at place 1.",
                 "┌──────┐\n│ name │\n├──────┤\n│ John │\n└──────┘"
               ],
-              "explanation": "The second Window Functions program displays that value.",
+              "explanation": "RANK over salary descending puts the highest salary at place 1.",
               "xp_reward": 10,
               "starter_code": "SELECT name FROM (SELECT first_name AS name, RANK() OVER (ORDER BY salary DESC) AS place FROM employees) ranked WHERE place = 2;\n",
               "options": [
@@ -206,10 +206,10 @@
             {
               "id": "sql-14-write",
               "type": "code",
-              "question": "Attic clerks recount crates before dawn. For compute per-row results without collapsing rows using OVER, fill the blank so the program prints the result.",
+              "question": "Type the missing piece so the program ranks employees by salary for name and 1 and prints it.",
               "hints": [
-                "The blank is the missing piece.",
-                "Print the value that piece produces.",
+                "Follow the job, which ranks employees by salary.",
+                "The query result is what this step ranks employees by salary.",
                 "WHERE place = 1"
               ],
               "explanation": "The query result is what this step ranks employees by salary.",

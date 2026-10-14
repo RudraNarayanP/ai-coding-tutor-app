@@ -27,7 +27,7 @@
         "cpp-vectors"
       ],
       "learning_objectives": [
-        "Ridge clerks recount crates before dawn, and define C class with constructor and getter member functions."
+        "This step stores the constructor argument, using struct holding birch."
       ],
       "starter_code": "#include <string>\n\nclass Player {\nprivate:\n    std::string name_;\n    int health_;\npublic:\n    // TODO: initialize name_ and health_ in a member initializer list\n    Player(const std::string& name, int health = 100)\n        : name_(), health_(0) {}\n\n    std::string get_name() const { return name_; }\n    int get_health() const { return health_; }\n};\n",
       "solution_code": "#include <string>\n\nclass Player {\nprivate:\n    std::string name_;\n    int health_;\npublic:\n    Player(const std::string& name, int health = 100)\n        : name_(name), health_(health) {}\n\n    std::string get_name() const { return name_; }\n    int get_health() const { return health_; }\n};\n",
@@ -60,23 +60,23 @@
             {
               "id": "cpp-classes-step-1-teach",
               "type": "teach",
-              "question": "Ridge clerks recount crates before dawn, and define C class with constructor and getter member functions.",
+              "question": "This step stores the constructor argument, using struct holding birch.",
               "hints": [
-                "Read the one job this step is practicing.",
-                "The example is about Defining Classes Constructors.",
+                "Follow the job, which stores the constructor argument.",
+                "The member initializer stores the constructor argument.",
                 "Bag(\"birch\")"
               ],
-              "explanation": "Ridge clerks recount crates before dawn, and define C class with constructor and getter member functions.",
+              "explanation": "This step stores the constructor argument, using struct holding birch.",
               "xp_reward": 0,
               "worked_example": "Bag(\"birch\")"
             },
             {
               "id": "cpp-classes-step-1-mcq",
               "type": "mcq",
-              "question": "Ridge clerks recount crates before dawn. For define C class with constructor and getter member functions, which line stores the constructor argument?",
+              "question": "The match is the line that stores the constructor argument for struct holding birch.",
               "hints": [
-                "Compare each line with the example.",
-                "One line matches the example.",
+                "Follow the job, which stores the constructor argument.",
+                "The member initializer stores the constructor argument.",
                 "item(std::move(value))"
               ],
               "explanation": "The member initializer stores the constructor argument.",
@@ -92,13 +92,13 @@
             {
               "id": "cpp-classes-step-1-predict",
               "type": "output_prediction",
-              "question": "Ridge clerks recount crates before dawn. For define C class with constructor and getter member functions, what value is displayed?",
+              "question": "Work out what is printed when the code stores the constructor argument for struct holding.",
               "hints": [
-                "Run the example in your head from the top.",
-                "The last line is what gets displayed.",
+                "Follow the job, which stores the constructor argument.",
+                "The member initializer stores the constructor argument.",
                 "birch"
               ],
-              "explanation": "The Defining Classes Constructors program displays that value.",
+              "explanation": "The member initializer stores the constructor argument.",
               "xp_reward": 10,
               "starter_code": "#include <iostream>\n#include <string>\n#include <vector>\n#include <algorithm>\n#include <memory>\nint main() {\n    struct Bag { std::string item; explicit Bag(std::string value) : item(std::move(value)) {} };\n    std::cout << Bag(\"birch\").item << std::endl;\n    return 0;\n}\n",
               "options": [
@@ -112,10 +112,10 @@
             {
               "id": "cpp-classes-step-1-order",
               "type": "ordering",
-              "question": "Ridge clerks recount crates before dawn. For define C class with constructor and getter member functions, build the line that stores the constructor argument.",
+              "question": "Rebuild, from the left, the line that stores the constructor argument for struct holding birch.",
               "hints": [
-                "Start at the left of the example.",
-                "Keep the example order.",
+                "Follow the job, which stores the constructor argument.",
+                "The member initializer stores the constructor argument.",
                 "std::string item = word;"
               ],
               "explanation": "The member initializer stores the constructor argument.",
@@ -137,10 +137,10 @@
             {
               "id": "cpp-classes-step-1-fill",
               "type": "fill_blank",
-              "question": "Ridge clerks recount crates before dawn. For define C class with constructor and getter member functions, fill the blank so the line stores the constructor argument.",
+              "question": "The completed line stores the constructor argument once you fill the blank for struct holding birch.",
               "hints": [
-                "The blank is the missing piece of the example.",
-                "The example uses that piece.",
+                "Follow the job, which stores the constructor argument.",
+                "The member initializer stores the constructor argument.",
                 "word"
               ],
               "explanation": "The member initializer stores the constructor argument.",
@@ -157,10 +157,10 @@
             {
               "id": "cpp-classes-step-1-bug",
               "type": "debugging",
-              "question": "Ridge clerks recount crates before dawn. For define C class with constructor and getter member functions, which line does a different job than the example?",
+              "question": "One line does another job than the one that stores the constructor argument for struct holding birch.",
               "hints": [
-                "The other lines match the example.",
-                "One line is the odd one.",
+                "Follow the job, which stores the constructor argument.",
+                "The constructor appends a mark.",
                 "Line 7"
               ],
               "explanation": "The constructor appends a mark.",
@@ -171,13 +171,13 @@
             {
               "id": "cpp-classes-step-1-predict-2",
               "type": "output_prediction",
-              "question": "Ridge clerks recount crates before dawn. For define C class with constructor and getter member functions, what does the second run display?",
+              "question": "The second display is what prints after the code stores the constructor argument for struct holding birch.",
               "hints": [
-                "Apply the same steps to the new value.",
-                "The display comes from the last line.",
+                "Follow the job, which stores the constructor argument.",
+                "The member initializer stores the constructor argument.",
                 "flint"
               ],
-              "explanation": "The second Defining Classes Constructors program displays that value.",
+              "explanation": "The member initializer stores the constructor argument.",
               "xp_reward": 10,
               "starter_code": "#include <iostream>\n#include <string>\n#include <vector>\n#include <algorithm>\n#include <memory>\nint main() {\n    struct Bag { std::string item; explicit Bag(std::string value) : item(std::move(value)) {} };\n    std::cout << Bag(\"flint\").item << std::endl;\n    return 0;\n}\n",
               "options": [
@@ -191,10 +191,10 @@
             {
               "id": "cpp-classes-step-1-write",
               "type": "code",
-              "question": "Ridge clerks recount crates before dawn. For define C class with constructor and getter member functions, fill the blank so the program prints the result.",
+              "question": "Supply the blank so the run stores the constructor argument and prints the result for struct holding.",
               "hints": [
-                "The blank is the missing piece.",
-                "Print the value that piece produces.",
+                "Follow the job, which stores the constructor argument.",
+                "The printed value is the result after this step stores the constructor argument.",
                 "std::string label = bag.item;"
               ],
               "explanation": "The printed value is the result after this step stores the constructor argument.",
@@ -229,7 +229,7 @@
         "cpp-vectors"
       ],
       "learning_objectives": [
-        "Cove clerks recount crates before dawn, and implement member functions that modify object state."
+        "This step adds through a mutator, using struct and 33."
       ],
       "starter_code": "#include <string>\n#include <algorithm>\n\nclass Player {\nprivate:\n    std::string name_;\n    int health_;\npublic:\n    Player(const std::string& name, int health = 100)\n        : name_(name), health_(health) {}\n\n    int get_health() const { return health_; }\n\n    void take_damage(int damage) {\n        // TODO: Subtract damage from health_ (minimum 0)\n    }\n};\n",
       "solution_code": "#include <string>\n#include <algorithm>\n\nclass Player {\nprivate:\n    std::string name_;\n    int health_;\npublic:\n    Player(const std::string& name, int health = 100)\n        : name_(name), health_(health) {}\n\n    int get_health() const { return health_; }\n\n    void take_damage(int damage) {\n        health_ = std::max(0, health_ - damage);\n    }\n};\n",
@@ -262,23 +262,23 @@
             {
               "id": "cpp-classes-step-2-teach",
               "type": "teach",
-              "question": "Cove clerks recount crates before dawn, and implement member functions that modify object state.",
+              "question": "This step adds through a mutator, using struct and 33.",
               "hints": [
-                "Read the one job this step is practicing.",
-                "The example is about Mutator Member Functions.",
-                "meter.add(32)"
+                "Follow the job, which adds through a mutator.",
+                "add updates the object's charge.",
+                "meter.add(33)"
               ],
-              "explanation": "Cove clerks recount crates before dawn, and implement member functions that modify object state.",
+              "explanation": "This step adds through a mutator, using struct and 33.",
               "xp_reward": 0,
-              "worked_example": "meter.add(32)"
+              "worked_example": "meter.add(33)"
             },
             {
               "id": "cpp-classes-step-2-mcq",
               "type": "mcq",
-              "question": "Cove clerks recount crates before dawn. For implement member functions that modify object state, which line adds through a mutator?",
+              "question": "Pick the line that adds through a mutator, not a line about something else, for struct and 33.",
               "hints": [
-                "Compare each line with the example.",
-                "One line matches the example.",
+                "Follow the job, which adds through a mutator.",
+                "add updates the object's charge.",
                 "charge = charge + amount;"
               ],
               "explanation": "add updates the object's charge.",
@@ -294,30 +294,30 @@
             {
               "id": "cpp-classes-step-2-predict",
               "type": "output_prediction",
-              "question": "Cove clerks recount crates before dawn. For implement member functions that modify object state, what value is displayed?",
+              "question": "The displayed value is what the code prints when it adds through a mutator for struct and.",
               "hints": [
-                "Run the example in your head from the top.",
-                "The last line is what gets displayed.",
-                "32"
+                "Follow the job, which adds through a mutator.",
+                "add updates the object's charge.",
+                "33"
               ],
-              "explanation": "The Mutator Member Functions program displays that value.",
+              "explanation": "add updates the object's charge.",
               "xp_reward": 10,
-              "starter_code": "#include <iostream>\n#include <string>\n#include <vector>\n#include <algorithm>\n#include <memory>\nint main() {\n    struct Meter { int charge = 0; void add(int amount) { charge = charge + amount; } };\n    Meter meter;\n    meter.add(32);\n    std::cout << meter.charge << std::endl;\n    return 0;\n}\n",
+              "starter_code": "#include <iostream>\n#include <string>\n#include <vector>\n#include <algorithm>\n#include <memory>\nint main() {\n    struct Meter { int charge = 0; void add(int amount) { charge = charge + amount; } };\n    Meter meter;\n    meter.add(33);\n    std::cout << meter.charge << std::endl;\n    return 0;\n}\n",
               "options": [
-                "35",
+                "36",
                 "none",
-                "32",
+                "33",
                 "0"
               ],
-              "correct_answer": "32"
+              "correct_answer": "33"
             },
             {
               "id": "cpp-classes-step-2-order",
               "type": "ordering",
-              "question": "Cove clerks recount crates before dawn. For implement member functions that modify object state, build the line that adds through a mutator.",
+              "question": "Place every piece so the result adds through a mutator for struct and 33.",
               "hints": [
-                "Start at the left of the example.",
-                "Keep the example order.",
+                "Follow the job, which adds through a mutator.",
+                "add updates the object's charge.",
                 "int total = left + right;"
               ],
               "explanation": "add updates the object's charge.",
@@ -343,10 +343,10 @@
             {
               "id": "cpp-classes-step-2-fill",
               "type": "fill_blank",
-              "question": "Cove clerks recount crates before dawn. For implement member functions that modify object state, fill the blank so the line adds through a mutator.",
+              "question": "Drop in the piece that lets the line adds through a mutator for struct and 33.",
               "hints": [
-                "The blank is the missing piece of the example.",
-                "The example uses that piece.",
+                "Follow the job, which adds through a mutator.",
+                "add updates the object's charge.",
                 "+"
               ],
               "explanation": "add updates the object's charge.",
@@ -363,55 +363,55 @@
             {
               "id": "cpp-classes-step-2-bug",
               "type": "debugging",
-              "question": "Cove clerks recount crates before dawn. For implement member functions that modify object state, which line does a different job than the example?",
+              "question": "The mismatch misses the job, which adds through a mutator, for struct and 33.",
               "hints": [
-                "The other lines match the example.",
-                "One line is the odd one.",
+                "Follow the job, which adds through a mutator.",
+                "The mutator subtracts.",
                 "Line 7"
               ],
               "explanation": "The mutator subtracts.",
               "xp_reward": 10,
-              "starter_code": "#include <iostream>\n#include <string>\n#include <vector>\n#include <algorithm>\n#include <memory>\nint main() {\n    struct Meter { int charge = 0; void add(int amount) { charge = charge - amount; } };\n    Meter meter;\n    meter.add(32);\n    std::cout << meter.charge << std::endl;\n    return 0;\n}\n",
+              "starter_code": "#include <iostream>\n#include <string>\n#include <vector>\n#include <algorithm>\n#include <memory>\nint main() {\n    struct Meter { int charge = 0; void add(int amount) { charge = charge - amount; } };\n    Meter meter;\n    meter.add(33);\n    std::cout << meter.charge << std::endl;\n    return 0;\n}\n",
               "correct_answer": "7"
             },
             {
               "id": "cpp-classes-step-2-predict-2",
               "type": "output_prediction",
-              "question": "Cove clerks recount crates before dawn. For implement member functions that modify object state, what does the second run display?",
+              "question": "Choose the printed result of the second run that adds through a mutator for struct and 33.",
               "hints": [
-                "Apply the same steps to the new value.",
-                "The display comes from the last line.",
-                "35"
+                "Follow the job, which adds through a mutator.",
+                "add updates the object's charge.",
+                "36"
               ],
-              "explanation": "The second Mutator Member Functions program displays that value.",
+              "explanation": "add updates the object's charge.",
               "xp_reward": 10,
-              "starter_code": "#include <iostream>\n#include <string>\n#include <vector>\n#include <algorithm>\n#include <memory>\nint main() {\n    struct Meter { int charge = 0; void add(int amount) { charge = charge + amount; } };\n    Meter meter;\n    meter.add(35);\n    std::cout << meter.charge << std::endl;\n    return 0;\n}\n",
+              "starter_code": "#include <iostream>\n#include <string>\n#include <vector>\n#include <algorithm>\n#include <memory>\nint main() {\n    struct Meter { int charge = 0; void add(int amount) { charge = charge + amount; } };\n    Meter meter;\n    meter.add(36);\n    std::cout << meter.charge << std::endl;\n    return 0;\n}\n",
               "options": [
-                "32",
-                "35",
+                "33",
+                "36",
                 "none",
                 "0"
               ],
-              "correct_answer": "35"
+              "correct_answer": "36"
             },
             {
               "id": "cpp-classes-step-2-write",
               "type": "code",
-              "question": "Cove clerks recount crates before dawn. For implement member functions that modify object state, fill the blank so the program prints the result.",
+              "question": "Make the program adds through a mutator by filling the blank for struct and.",
               "hints": [
-                "The blank is the missing piece.",
-                "Print the value that piece produces.",
+                "Follow the job, which adds through a mutator.",
+                "The printed value is the result after this step adds through a mutator.",
                 "int label = meter.charge;"
               ],
               "explanation": "The printed value is the result after this step adds through a mutator.",
               "xp_reward": 10,
-              "starter_code": "#include <iostream>\n#include <string>\n#include <vector>\n#include <algorithm>\n#include <memory>\nint main() {\n    struct Meter { int charge = 0; void add(int amount) { charge = charge + amount; } };\n    Meter meter;\n    meter.add(32);\n    int label = ___;\n    std::cout << label << std::endl;\n    return 0;\n}\n",
-              "solution_code": "#include <iostream>\n#include <string>\n#include <vector>\n#include <algorithm>\n#include <memory>\nint main() {\n    struct Meter { int charge = 0; void add(int amount) { charge = charge + amount; } };\n    Meter meter;\n    meter.add(32);\n    int label = meter.charge;\n    std::cout << label << std::endl;\n    return 0;\n}\n",
+              "starter_code": "#include <iostream>\n#include <string>\n#include <vector>\n#include <algorithm>\n#include <memory>\nint main() {\n    struct Meter { int charge = 0; void add(int amount) { charge = charge + amount; } };\n    Meter meter;\n    meter.add(33);\n    int label = ___;\n    std::cout << label << std::endl;\n    return 0;\n}\n",
+              "solution_code": "#include <iostream>\n#include <string>\n#include <vector>\n#include <algorithm>\n#include <memory>\nint main() {\n    struct Meter { int charge = 0; void add(int amount) { charge = charge + amount; } };\n    Meter meter;\n    meter.add(33);\n    int label = meter.charge;\n    std::cout << label << std::endl;\n    return 0;\n}\n",
               "tests": [
                 {
                   "name": "cpp-classes-step-2-prints",
                   "description": "The printed value is the result after this step adds through a mutator.",
-                  "expected_stdout": "32\n",
+                  "expected_stdout": "33\n",
                   "required": true
                 }
               ]
@@ -435,7 +435,7 @@
         "cpp-vectors"
       ],
       "learning_objectives": [
-        "Plaza clerks recount crates before dawn, and implement BankAccount class with deposit and withdraw methods."
+        "This step deposits into an account, using struct and 25."
       ],
       "starter_code": "#include <string>\n\nclass BankAccount {\nprivate:\n    std::string owner_;\n    double balance_;\npublic:\n    BankAccount(const std::string& owner, double initial_balance = 0.0)\n        : owner_(owner), balance_(initial_balance) {}\n\n    double get_balance() const { return balance_; }\n\n    void deposit(double amount) {\n        // TODO: Add amount to balance_\n    }\n\n    bool withdraw(double amount) {\n        // TODO: Subtract amount if balance_ >= amount, return true, else false\n        return false;\n    }\n};\n",
       "solution_code": "#include <string>\n\nclass BankAccount {\nprivate:\n    std::string owner_;\n    double balance_;\npublic:\n    BankAccount(const std::string& owner, double initial_balance = 0.0)\n        : owner_(owner), balance_(initial_balance) {}\n\n    double get_balance() const { return balance_; }\n\n    void deposit(double amount) {\n        if (amount > 0) balance_ += amount;\n    }\n\n    bool withdraw(double amount) {\n        if (balance_ >= amount) {\n            balance_ -= amount;\n            return true;\n        }\n        return false;\n    }\n};\n",
@@ -468,23 +468,23 @@
             {
               "id": "cpp-classes-01-teach",
               "type": "teach",
-              "question": "Plaza clerks recount crates before dawn, and implement BankAccount class with deposit and withdraw methods.",
+              "question": "This step deposits into an account, using struct and 25.",
               "hints": [
-                "Read the one job this step is practicing.",
-                "The example is about Bank Account Ledger.",
+                "Follow the job, which deposits into an account.",
+                "deposit adds the amount to the balance.",
                 "account.deposit(25)"
               ],
-              "explanation": "Plaza clerks recount crates before dawn, and implement BankAccount class with deposit and withdraw methods.",
+              "explanation": "This step deposits into an account, using struct and 25.",
               "xp_reward": 0,
               "worked_example": "account.deposit(25)"
             },
             {
               "id": "cpp-classes-01-mcq",
               "type": "mcq",
-              "question": "Plaza clerks recount crates before dawn. For implement BankAccount class with deposit and withdraw methods, which line deposits into an account?",
+              "question": "Mark the choice that deposits into an account when the code mentions struct and 25.",
               "hints": [
-                "Compare each line with the example.",
-                "One line matches the example.",
+                "Follow the job, which deposits into an account.",
+                "deposit adds the amount to the balance.",
                 "balance = balance + amount;"
               ],
               "explanation": "deposit adds the amount to the balance.",
@@ -500,13 +500,13 @@
             {
               "id": "cpp-classes-01-predict",
               "type": "output_prediction",
-              "question": "Plaza clerks recount crates before dawn. For implement BankAccount class with deposit and withdraw methods, what value is displayed?",
+              "question": "After struct and the code deposits into an account, and the correct choice is the printed value.",
               "hints": [
-                "Run the example in your head from the top.",
-                "The last line is what gets displayed.",
+                "Follow the job, which deposits into an account.",
+                "deposit adds the amount to the balance.",
                 "25"
               ],
-              "explanation": "The Bank Account Ledger program displays that value.",
+              "explanation": "deposit adds the amount to the balance.",
               "xp_reward": 10,
               "starter_code": "#include <iostream>\n#include <string>\n#include <vector>\n#include <algorithm>\n#include <memory>\nint main() {\n    struct Account { int balance = 0; void deposit(int amount) { balance = balance + amount; } };\n    Account account;\n    account.deposit(25);\n    std::cout << account.balance << std::endl;\n    return 0;\n}\n",
               "options": [
@@ -520,10 +520,10 @@
             {
               "id": "cpp-classes-01-order",
               "type": "ordering",
-              "question": "Plaza clerks recount crates before dawn. For implement BankAccount class with deposit and withdraw methods, build the line that deposits into an account.",
+              "question": "The finished line deposits into an account, so place its pieces in order for struct and 25.",
               "hints": [
-                "Start at the left of the example.",
-                "Keep the example order.",
+                "Follow the job, which deposits into an account.",
+                "deposit adds the amount to the balance.",
                 "int total = left + right;"
               ],
               "explanation": "deposit adds the amount to the balance.",
@@ -549,10 +549,10 @@
             {
               "id": "cpp-classes-01-fill",
               "type": "fill_blank",
-              "question": "Plaza clerks recount crates before dawn. For implement BankAccount class with deposit and withdraw methods, fill the blank so the line deposits into an account.",
+              "question": "Finish the line that deposits into an account by filling the blank for struct and 25.",
               "hints": [
-                "The blank is the missing piece of the example.",
-                "The example uses that piece.",
+                "Follow the job, which deposits into an account.",
+                "deposit adds the amount to the balance.",
                 "+"
               ],
               "explanation": "deposit adds the amount to the balance.",
@@ -569,10 +569,10 @@
             {
               "id": "cpp-classes-01-bug",
               "type": "debugging",
-              "question": "Plaza clerks recount crates before dawn. For implement BankAccount class with deposit and withdraw methods, which line does a different job than the example?",
+              "question": "Mark the line that breaks the job, which deposits into an account, for struct and 25.",
               "hints": [
-                "The other lines match the example.",
-                "One line is the odd one.",
+                "Follow the job, which deposits into an account.",
+                "The deposit subtracts.",
                 "Line 7"
               ],
               "explanation": "The deposit subtracts.",
@@ -583,13 +583,13 @@
             {
               "id": "cpp-classes-01-predict-2",
               "type": "output_prediction",
-              "question": "Plaza clerks recount crates before dawn. For implement BankAccount class with deposit and withdraw methods, what does the second run display?",
+              "question": "Follow the second program, which deposits into an account for struct and 25, and choose its output.",
               "hints": [
-                "Apply the same steps to the new value.",
-                "The display comes from the last line.",
+                "Follow the job, which deposits into an account.",
+                "deposit adds the amount to the balance.",
                 "40"
               ],
-              "explanation": "The second Bank Account Ledger program displays that value.",
+              "explanation": "deposit adds the amount to the balance.",
               "xp_reward": 10,
               "starter_code": "#include <iostream>\n#include <string>\n#include <vector>\n#include <algorithm>\n#include <memory>\nint main() {\n    struct Account { int balance = 0; void deposit(int amount) { balance = balance + amount; } };\n    Account account;\n    account.deposit(40);\n    std::cout << account.balance << std::endl;\n    return 0;\n}\n",
               "options": [
@@ -603,10 +603,10 @@
             {
               "id": "cpp-classes-01-write",
               "type": "code",
-              "question": "Plaza clerks recount crates before dawn. For implement BankAccount class with deposit and withdraw methods, fill the blank so the program prints the result.",
+              "question": "Finish the program that deposits into an account by filling the blank for struct and.",
               "hints": [
-                "The blank is the missing piece.",
-                "Print the value that piece produces.",
+                "Follow the job, which deposits into an account.",
+                "The printed value is the result after this step deposits into an account.",
                 "int label = account.balance;"
               ],
               "explanation": "The printed value is the result after this step deposits into an account.",
@@ -641,7 +641,7 @@
         "cpp-vectors"
       ],
       "learning_objectives": [
-        "Marsh clerks recount crates before dawn, and compute geometric values in C member functions."
+        "This step returns the rectangle area, using struct and 5."
       ],
       "starter_code": "class Rectangle {\nprivate:\n    double width_;\n    double height_;\npublic:\n    Rectangle(double width, double height)\n        : width_(width), height_(height) {}\n\n    double area() const {\n        // TODO: return the area of this rectangle\n        return 0.0;\n    }\n};\n",
       "solution_code": "class Rectangle {\nprivate:\n    double width_;\n    double height_;\npublic:\n    Rectangle(double width, double height)\n        : width_(width), height_(height) {}\n\n    double area() const {\n        return width_ * height_;\n    }\n};\n",
@@ -674,23 +674,23 @@
             {
               "id": "cpp-classes-practice-1-teach",
               "type": "teach",
-              "question": "Marsh clerks recount crates before dawn, and compute geometric values in C member functions.",
+              "question": "This step returns the rectangle area, using struct and 5.",
               "hints": [
-                "Read the one job this step is practicing.",
-                "The example is about Rectangle Class.",
+                "Follow the job, which returns the rectangle area.",
+                "area multiplies width by height.",
                 "return width * height;"
               ],
-              "explanation": "Marsh clerks recount crates before dawn, and compute geometric values in C member functions.",
+              "explanation": "This step returns the rectangle area, using struct and 5.",
               "xp_reward": 0,
               "worked_example": "return width * height;"
             },
             {
               "id": "cpp-classes-practice-1-mcq",
               "type": "mcq",
-              "question": "Marsh clerks recount crates before dawn. For compute geometric values in C member functions, which line returns the rectangle area?",
+              "question": "Mark the choice that returns the rectangle area when the code mentions struct and 5.",
               "hints": [
-                "Compare each line with the example.",
-                "One line matches the example.",
+                "Follow the job, which returns the rectangle area.",
+                "area multiplies width by height.",
                 "return width * height;"
               ],
               "explanation": "area multiplies width by height.",
@@ -706,13 +706,13 @@
             {
               "id": "cpp-classes-practice-1-predict",
               "type": "output_prediction",
-              "question": "Marsh clerks recount crates before dawn. For compute geometric values in C member functions, what value is displayed?",
+              "question": "After struct and 5, the code returns the rectangle area, and the correct choice is the printed value.",
               "hints": [
-                "Run the example in your head from the top.",
-                "The last line is what gets displayed.",
+                "Follow the job, which returns the rectangle area.",
+                "area multiplies width by height.",
                 "20"
               ],
-              "explanation": "The Rectangle Class program displays that value.",
+              "explanation": "area multiplies width by height.",
               "xp_reward": 10,
               "starter_code": "#include <iostream>\n#include <string>\n#include <vector>\n#include <algorithm>\n#include <memory>\nint main() {\n    struct Rect { int width; int height; int area() const { return width * height; } };\n    Rect rect{4, 5};\n    std::cout << rect.area() << std::endl;\n    return 0;\n}\n",
               "options": [
@@ -726,10 +726,10 @@
             {
               "id": "cpp-classes-practice-1-order",
               "type": "ordering",
-              "question": "Marsh clerks recount crates before dawn. For compute geometric values in C member functions, build the line that returns the rectangle area.",
+              "question": "The finished line returns the rectangle area, so place its pieces in order for struct and 5.",
               "hints": [
-                "Start at the left of the example.",
-                "Keep the example order.",
+                "Follow the job, which returns the rectangle area.",
+                "area multiplies width by height.",
                 "int area = left * right;"
               ],
               "explanation": "area multiplies width by height.",
@@ -755,10 +755,10 @@
             {
               "id": "cpp-classes-practice-1-fill",
               "type": "fill_blank",
-              "question": "Marsh clerks recount crates before dawn. For compute geometric values in C member functions, fill the blank so the line returns the rectangle area.",
+              "question": "Finish the line that returns the rectangle area by filling the blank for struct and 5.",
               "hints": [
-                "The blank is the missing piece of the example.",
-                "The example uses that piece.",
+                "Follow the job, which returns the rectangle area.",
+                "area multiplies width by height.",
                 "*"
               ],
               "explanation": "area multiplies width by height.",
@@ -775,10 +775,10 @@
             {
               "id": "cpp-classes-practice-1-bug",
               "type": "debugging",
-              "question": "Marsh clerks recount crates before dawn. For compute geometric values in C member functions, which line does a different job than the example?",
+              "question": "Mark the line that breaks the job, which returns the rectangle area, for struct and 5.",
               "hints": [
-                "The other lines match the example.",
-                "One line is the odd one.",
+                "Follow the job, which returns the rectangle area.",
+                "The method adds the sides instead of multiplying.",
                 "Line 7"
               ],
               "explanation": "The method adds the sides instead of multiplying.",
@@ -789,13 +789,13 @@
             {
               "id": "cpp-classes-practice-1-predict-2",
               "type": "output_prediction",
-              "question": "Marsh clerks recount crates before dawn. For compute geometric values in C member functions, what does the second run display?",
+              "question": "Follow the second program, which returns the rectangle area for struct and 5, and choose its output.",
               "hints": [
-                "Apply the same steps to the new value.",
-                "The display comes from the last line.",
+                "Follow the job, which returns the rectangle area.",
+                "area multiplies width by height.",
                 "15"
               ],
-              "explanation": "The second Rectangle Class program displays that value.",
+              "explanation": "area multiplies width by height.",
               "xp_reward": 10,
               "starter_code": "#include <iostream>\n#include <string>\n#include <vector>\n#include <algorithm>\n#include <memory>\nint main() {\n    struct Rect { int width; int height; int area() const { return width * height; } };\n    Rect rect{3, 5};\n    std::cout << rect.area() << std::endl;\n    return 0;\n}\n",
               "options": [
@@ -809,10 +809,10 @@
             {
               "id": "cpp-classes-practice-1-write",
               "type": "code",
-              "question": "Marsh clerks recount crates before dawn. For compute geometric values in C member functions, fill the blank so the program prints the result.",
+              "question": "Finish the program that returns the rectangle area by filling the blank for struct and 5.",
               "hints": [
-                "The blank is the missing piece.",
-                "Print the value that piece produces.",
+                "Follow the job, which returns the rectangle area.",
+                "The printed value is the result after this step returns the rectangle area.",
                 "int label = rect.area();"
               ],
               "explanation": "The printed value is the result after this step returns the rectangle area.",
@@ -847,7 +847,7 @@
         "cpp-vectors"
       ],
       "learning_objectives": [
-        "Harbor potters recount crates before dawn, and add 1 to a Counter's private count in increment."
+        "This step reads the stored item, using struct holding cedar."
       ],
       "starter_code": "class Counter {\nprivate:\n    int count_;\npublic:\n    Counter(int initial = 0) : count_(initial) {}\n    int get_count() const { return count_; }\n    void increment() {\n        // TODO: Add 1 to count_\n    }\n};\n",
       "solution_code": "class Counter {\nprivate:\n    int count_;\npublic:\n    Counter(int initial = 0) : count_(initial) {}\n    int get_count() const { return count_; }\n    void increment() {\n        count_++;\n    }\n};\n",
@@ -880,23 +880,23 @@
             {
               "id": "cpp-classes-checkpoint-teach",
               "type": "teach",
-              "question": "Harbor potters recount crates before dawn, and add 1 to a Counter's private count in increment.",
+              "question": "This step reads the stored item, using struct holding cedar.",
               "hints": [
-                "Read the one job this step is practicing.",
-                "The example is about Unit 6 Checkpoint C Classes Mastery.",
+                "Follow the job, which reads the stored item.",
+                "note.item is the stored text.",
                 "Note(\"cedar\")"
               ],
-              "explanation": "Harbor potters recount crates before dawn, and add 1 to a Counter's private count in increment.",
+              "explanation": "This step reads the stored item, using struct holding cedar.",
               "xp_reward": 0,
               "worked_example": "Note(\"cedar\")"
             },
             {
               "id": "cpp-classes-checkpoint-mcq",
               "type": "mcq",
-              "question": "Harbor potters recount crates before dawn. For add 1 to a Counter's private count in increment, which line reads the stored item?",
+              "question": "Select the line that reads the stored item, the one that belongs with struct holding cedar.",
               "hints": [
-                "Compare each line with the example.",
-                "One line matches the example.",
+                "Follow the job, which reads the stored item.",
+                "note.item is the stored text.",
                 "item(std::move(value))"
               ],
               "explanation": "note.item is the stored text.",
@@ -912,13 +912,13 @@
             {
               "id": "cpp-classes-checkpoint-predict",
               "type": "output_prediction",
-              "question": "Harbor potters recount crates before dawn. For add 1 to a Counter's private count in increment, what value is displayed?",
+              "question": "Follow the code that reads the stored item for struct holding then choose the displayed value.",
               "hints": [
-                "Run the example in your head from the top.",
-                "The last line is what gets displayed.",
+                "Follow the job, which reads the stored item.",
+                "note.item is the stored text.",
                 "cedar"
               ],
-              "explanation": "The Unit 6 Checkpoint C Classes Mastery program displays that value.",
+              "explanation": "note.item is the stored text.",
               "xp_reward": 10,
               "starter_code": "#include <iostream>\n#include <string>\n#include <vector>\n#include <algorithm>\n#include <memory>\nint main() {\n    struct Note { std::string item; explicit Note(std::string value) : item(std::move(value)) {} };\n    std::cout << Note(\"cedar\").item << std::endl;\n    return 0;\n}\n",
               "options": [
@@ -932,10 +932,10 @@
             {
               "id": "cpp-classes-checkpoint-order",
               "type": "ordering",
-              "question": "Harbor potters recount crates before dawn. For add 1 to a Counter's private count in increment, build the line that reads the stored item.",
+              "question": "Order the pieces so the line reads the stored item for struct holding cedar.",
               "hints": [
-                "Start at the left of the example.",
-                "Keep the example order.",
+                "Follow the job, which reads the stored item.",
+                "note.item is the stored text.",
                 "std::string item = name;"
               ],
               "explanation": "note.item is the stored text.",
@@ -957,10 +957,10 @@
             {
               "id": "cpp-classes-checkpoint-fill",
               "type": "fill_blank",
-              "question": "Harbor potters recount crates before dawn. For add 1 to a Counter's private count in increment, fill the blank so the line reads the stored item.",
+              "question": "Supply the missing piece so the line reads the stored item for struct holding cedar.",
               "hints": [
-                "The blank is the missing piece of the example.",
-                "The example uses that piece.",
+                "Follow the job, which reads the stored item.",
+                "note.item is the stored text.",
                 "name"
               ],
               "explanation": "note.item is the stored text.",
@@ -977,10 +977,10 @@
             {
               "id": "cpp-classes-checkpoint-bug",
               "type": "debugging",
-              "question": "Harbor potters recount crates before dawn. For add 1 to a Counter's private count in increment, which line does a different job than the example?",
+              "question": "The wrong line is the one that misses the job, which reads the stored item, for struct holding cedar.",
               "hints": [
-                "The other lines match the example.",
-                "One line is the odd one.",
+                "Follow the job, which reads the stored item.",
+                "The constructor stores an empty string.",
                 "Line 7"
               ],
               "explanation": "The constructor stores an empty string.",
@@ -991,13 +991,13 @@
             {
               "id": "cpp-classes-checkpoint-predict-2",
               "type": "output_prediction",
-              "question": "Harbor potters recount crates before dawn. For add 1 to a Counter's private count in increment, what does the second run display?",
+              "question": "A new input still has code that reads the stored item for struct holding cedar, and the correct choice is what it prints.",
               "hints": [
-                "Apply the same steps to the new value.",
-                "The display comes from the last line.",
+                "Follow the job, which reads the stored item.",
+                "note.item is the stored text.",
                 "grove"
               ],
-              "explanation": "The second Unit 6 Checkpoint C Classes Mastery program displays that value.",
+              "explanation": "note.item is the stored text.",
               "xp_reward": 10,
               "starter_code": "#include <iostream>\n#include <string>\n#include <vector>\n#include <algorithm>\n#include <memory>\nint main() {\n    struct Note { std::string item; explicit Note(std::string value) : item(std::move(value)) {} };\n    std::cout << Note(\"grove\").item << std::endl;\n    return 0;\n}\n",
               "options": [
@@ -1011,10 +1011,10 @@
             {
               "id": "cpp-classes-checkpoint-write",
               "type": "code",
-              "question": "Harbor potters recount crates before dawn. For add 1 to a Counter's private count in increment, fill the blank so the program prints the result.",
+              "question": "The blank is the missing piece of the program that reads the stored item for struct holding.",
               "hints": [
-                "The blank is the missing piece.",
-                "Print the value that piece produces.",
+                "Follow the job, which reads the stored item.",
+                "The printed value is the result after this step reads the stored item.",
                 "std::string label = note.item;"
               ],
               "explanation": "The printed value is the result after this step reads the stored item.",

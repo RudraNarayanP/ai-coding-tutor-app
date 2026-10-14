@@ -44,7 +44,7 @@
         "license": "OpenAI API documentation (developers.openai.com)"
       },
       "learning_objectives": [
-        "Depot pickers recount crates before dawn, and build chat completion request payloads with model and messages."
+        "This step reads the token count stored on the payload, using payload holding model."
       ],
       "xp_reward": 10,
       "sublessons": [
@@ -57,23 +57,23 @@
             {
               "id": "ai-01-teach",
               "type": "teach",
-              "question": "Depot pickers recount crates before dawn, and build chat completion request payloads with model and messages.",
+              "question": "This step reads the token count stored on the payload, using payload holding model.",
               "hints": [
-                "Read the one job this step is practicing.",
-                "The example is about Building Model API Request Payloads.",
+                "Follow the job, which reads the token count stored on the payload.",
+                "The n field is the requested token count.",
                 "payload['n']"
               ],
-              "explanation": "Depot pickers recount crates before dawn, and build chat completion request payloads with model and messages.",
+              "explanation": "This step reads the token count stored on the payload, using payload holding model.",
               "xp_reward": 0,
               "worked_example": "payload['n']"
             },
             {
               "id": "ai-01-mcq",
               "type": "mcq",
-              "question": "Depot pickers recount crates before dawn. For build chat completion request payloads with model and messages, which line reads the token count stored on the payload?",
+              "question": "Choose the line that reads the token count stored on the payload, which is the line that fits payload holding model.",
               "hints": [
-                "Compare each line with the example.",
-                "One line matches the example.",
+                "Follow the job, which reads the token count stored on the payload.",
+                "The n field is the requested token count.",
                 "payload['n']"
               ],
               "explanation": "The n field is the requested token count.",
@@ -89,30 +89,30 @@
             {
               "id": "ai-01-predict",
               "type": "output_prediction",
-              "question": "Depot pickers recount crates before dawn. For build chat completion request payloads with model and messages, what value is displayed?",
+              "question": "Read the code that reads the token count stored on the payload for payload holding model, and choose the value it prints.",
               "hints": [
-                "Run the example in your head from the top.",
-                "The last line is what gets displayed.",
-                "34"
+                "Follow the job, which reads the token count stored on the payload.",
+                "The n field is the requested token count.",
+                "35"
               ],
-              "explanation": "The Building Model API Request Payloads program displays that value.",
+              "explanation": "The n field is the requested token count.",
               "xp_reward": 10,
-              "starter_code": "payload = {'model': 'thyme', 'n': 34}\nprint(payload['n'])\n",
+              "starter_code": "payload = {'model': 'thyme', 'n': 35}\nprint(payload['n'])\n",
               "options": [
-                "37",
+                "38",
                 "none",
                 "0",
-                "34"
+                "35"
               ],
-              "correct_answer": "34"
+              "correct_answer": "35"
             },
             {
               "id": "ai-01-order",
               "type": "ordering",
-              "question": "Depot pickers recount crates before dawn. For build chat completion request payloads with model and messages, build the line that reads the token count stored on the payload.",
+              "question": "Arrange the pieces of the line that reads the token count stored on the payload, left to right, for payload holding model.",
               "hints": [
-                "Start at the left of the example.",
-                "Keep the example order.",
+                "Follow the job, which reads the token count stored on the payload.",
+                "The n field is the requested token count.",
                 "n = payload['n']"
               ],
               "explanation": "The n field is the requested token count.",
@@ -132,10 +132,10 @@
             {
               "id": "ai-01-fill",
               "type": "fill_blank",
-              "question": "Depot pickers recount crates before dawn. For build chat completion request payloads with model and messages, fill the blank so the line reads the token count stored on the payload.",
+              "question": "Fill the blank so the line reads the token count stored on the payload for payload holding model.",
               "hints": [
-                "The blank is the missing piece of the example.",
-                "The example uses that piece.",
+                "Follow the job, which reads the token count stored on the payload.",
+                "The n field is the requested token count.",
                 "'n'"
               ],
               "explanation": "The n field is the requested token count.",
@@ -152,55 +152,55 @@
             {
               "id": "ai-01-bug",
               "type": "debugging",
-              "question": "Depot pickers recount crates before dawn. For build chat completion request payloads with model and messages, which line does a different job than the example?",
+              "question": "Find the line that misses the job, which reads the token count stored on the payload, for payload holding model.",
               "hints": [
-                "The other lines match the example.",
-                "One line is the odd one.",
+                "Follow the job, which reads the token count stored on the payload.",
+                "The print reads the model name instead of the token count.",
                 "Line 2"
               ],
               "explanation": "The print reads the model name instead of the token count.",
               "xp_reward": 10,
-              "starter_code": "payload = {'model': 'thyme', 'n': 34}\nprint(payload['model'])\n",
+              "starter_code": "payload = {'model': 'thyme', 'n': 35}\nprint(payload['model'])\n",
               "correct_answer": "2"
             },
             {
               "id": "ai-01-predict-2",
               "type": "output_prediction",
-              "question": "Depot pickers recount crates before dawn. For build chat completion request payloads with model and messages, what does the second run display?",
+              "question": "On the new input, the code still reads the token count stored on the payload for payload holding model, so choose what it prints.",
               "hints": [
-                "Apply the same steps to the new value.",
-                "The display comes from the last line.",
-                "37"
+                "Follow the job, which reads the token count stored on the payload.",
+                "The n field is the requested token count.",
+                "38"
               ],
-              "explanation": "The second Building Model API Request Payloads program displays that value.",
+              "explanation": "The n field is the requested token count.",
               "xp_reward": 10,
-              "starter_code": "payload = {'model': 'thyme', 'n': 37}\nprint(payload['n'])\n",
+              "starter_code": "payload = {'model': 'thyme', 'n': 38}\nprint(payload['n'])\n",
               "options": [
-                "34",
+                "35",
                 "none",
-                "37",
+                "38",
                 "0"
               ],
-              "correct_answer": "37"
+              "correct_answer": "38"
             },
             {
               "id": "ai-01-write",
               "type": "code",
-              "question": "Depot pickers recount crates before dawn. For build chat completion request payloads with model and messages, fill the blank so the program prints the result.",
+              "question": "Fill the blank so the program reads the token count stored on the payload, and the print shows that result for payload holding model.",
               "hints": [
-                "The blank is the missing piece.",
-                "Print the value that piece produces.",
+                "Follow the job, which reads the token count stored on the payload.",
+                "The printed value is the result after this step reads the token count stored on the payload.",
                 "label = payload['n']"
               ],
               "explanation": "The printed value is the result after this step reads the token count stored on the payload.",
               "xp_reward": 10,
-              "starter_code": "payload = {'model': 'thyme', 'n': 34}\nlabel = ___\nprint(label)\n",
-              "solution_code": "payload = {'model': 'thyme', 'n': 34}\nlabel = payload['n']\nprint(label)\n",
+              "starter_code": "payload = {'model': 'thyme', 'n': 35}\nlabel = ___\nprint(label)\n",
+              "solution_code": "payload = {'model': 'thyme', 'n': 35}\nlabel = payload['n']\nprint(label)\n",
               "tests": [
                 {
                   "name": "ai-01-prints",
                   "description": "The printed value is the result after this step reads the token count stored on ",
-                  "expected_stdout": "34\n",
+                  "expected_stdout": "35\n",
                   "required": true
                 }
               ]

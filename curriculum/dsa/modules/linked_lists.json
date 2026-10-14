@@ -29,7 +29,7 @@
         "stacks-queues"
       ],
       "learning_objectives": [
-        "Depot potters recount crates before dawn, and build a singly linked list append."
+        "This step reads the value stored on the first node, using Node and 1."
       ],
       "starter_code": "class ListNode:\n    def __init__(self, value, next=None):\n        self.value = value\n        self.next = next\n\nclass LinkedList:\n    def __init__(self):\n        self.head = None\n\n    def append(self, value):\n        # TODO: append new node at end\n        pass\n\n    def to_list(self):\n        out = []\n        cur = self.head\n        while cur:\n            out.append(cur.value)\n            cur = cur.next\n        return out\n",
       "solution_code": "class ListNode:\n    def __init__(self, value, next=None):\n        self.value = value\n        self.next = next\n\nclass LinkedList:\n    def __init__(self):\n        self.head = None\n\n    def append(self, value):\n        node = ListNode(value)\n        if not self.head:\n            self.head = node\n            return\n        cur = self.head\n        while cur.next:\n            cur = cur.next\n        cur.next = node\n\n    def to_list(self):\n        out = []\n        cur = self.head\n        while cur:\n            out.append(cur.value)\n            cur = cur.next\n        return out\n",
@@ -62,23 +62,23 @@
             {
               "id": "linked-lists-step-1-teach",
               "type": "teach",
-              "question": "Depot potters recount crates before dawn, and build a singly linked list append.",
+              "question": "This step reads the value stored on the first node, using Node and 1.",
               "hints": [
-                "Read the one job this step is practicing.",
-                "The example is about Node and Singly Linked List.",
+                "Follow the job, which reads the value stored on the first node.",
+                "self.value = value stores the node value.",
                 "self.value = value"
               ],
-              "explanation": "Depot potters recount crates before dawn, and build a singly linked list append.",
+              "explanation": "This step reads the value stored on the first node, using Node and 1.",
               "xp_reward": 0,
               "worked_example": "self.value = value"
             },
             {
               "id": "linked-lists-step-1-mcq",
               "type": "mcq",
-              "question": "Depot potters recount crates before dawn. For build a singly linked list append, which line reads the value stored on the first node?",
+              "question": "Keep the choice that reads the value stored on the first node for Node and 1.",
               "hints": [
-                "Compare each line with the example.",
-                "One line matches the example.",
+                "Follow the job, which reads the value stored on the first node.",
+                "self.value = value stores the node value.",
                 "self.value = value"
               ],
               "explanation": "self.value = value stores the node value.",
@@ -94,13 +94,13 @@
             {
               "id": "linked-lists-step-1-predict",
               "type": "output_prediction",
-              "question": "Depot potters recount crates before dawn. For build a singly linked list append, what value is displayed?",
+              "question": "Trace the code that reads the value stored on the first node using Node and 1, and select what it displays.",
               "hints": [
-                "Run the example in your head from the top.",
-                "The last line is what gets displayed.",
+                "Follow the job, which reads the value stored on the first node.",
+                "self.value = value stores the node value.",
                 "28"
               ],
-              "explanation": "The Node and Singly Linked List program displays that value.",
+              "explanation": "self.value = value stores the node value.",
               "xp_reward": 10,
               "starter_code": "class Node:\n    def __init__(self, value, nxt=None):\n        self.value = value\n        self.nxt = nxt\nhead = Node(28, Node(1))\nprint(head.value)\n",
               "options": [
@@ -114,10 +114,10 @@
             {
               "id": "linked-lists-step-1-order",
               "type": "ordering",
-              "question": "Depot potters recount crates before dawn. For build a singly linked list append, build the line that reads the value stored on the first node.",
+              "question": "Tap the pieces, in order, of the line that reads the value stored on the first node for Node and 1.",
               "hints": [
-                "Start at the left of the example.",
-                "Keep the example order.",
+                "Follow the job, which reads the value stored on the first node.",
+                "self.value = value stores the node value.",
                 "self.value = value"
               ],
               "explanation": "self.value = value stores the node value.",
@@ -137,10 +137,10 @@
             {
               "id": "linked-lists-step-1-fill",
               "type": "fill_blank",
-              "question": "Depot potters recount crates before dawn. For build a singly linked list append, fill the blank so the line reads the value stored on the first node.",
+              "question": "The blank is the missing piece of the line that reads the value stored on the first node for Node and 1.",
               "hints": [
-                "The blank is the missing piece of the example.",
-                "The example uses that piece.",
+                "Follow the job, which reads the value stored on the first node.",
+                "self.value = value stores the node value.",
                 "="
               ],
               "explanation": "self.value = value stores the node value.",
@@ -157,10 +157,10 @@
             {
               "id": "linked-lists-step-1-bug",
               "type": "debugging",
-              "question": "Depot potters recount crates before dawn. For build a singly linked list append, which line does a different job than the example?",
+              "question": "Choose the line that does another job than the one that reads the value stored on the first node for Node and 1.",
               "hints": [
-                "The other lines match the example.",
-                "One line is the odd one.",
+                "Follow the job, which reads the value stored on the first node.",
+                "The constructor compares the value and never stores it.",
                 "Line 3"
               ],
               "explanation": "The constructor compares the value and never stores it.",
@@ -171,13 +171,13 @@
             {
               "id": "linked-lists-step-1-predict-2",
               "type": "output_prediction",
-              "question": "Depot potters recount crates before dawn. For build a singly linked list append, what does the second run display?",
+              "question": "Trace the second run, which reads the value stored on the first node for Node and 1, and select what it displays.",
               "hints": [
-                "Apply the same steps to the new value.",
-                "The display comes from the last line.",
+                "Follow the job, which reads the value stored on the first node.",
+                "self.value = value stores the node value.",
                 "31"
               ],
-              "explanation": "The second Node and Singly Linked List program displays that value.",
+              "explanation": "self.value = value stores the node value.",
               "xp_reward": 10,
               "starter_code": "class Node:\n    def __init__(self, value, nxt=None):\n        self.value = value\n        self.nxt = nxt\nhead = Node(31, Node(1))\nprint(head.value)\n",
               "options": [
@@ -191,10 +191,10 @@
             {
               "id": "linked-lists-step-1-write",
               "type": "code",
-              "question": "Depot potters recount crates before dawn. For build a singly linked list append, fill the blank so the program prints the result.",
+              "question": "Type the missing piece so the program reads the value stored on the first node for Node and 1 and prints it.",
               "hints": [
-                "The blank is the missing piece.",
-                "Print the value that piece produces.",
+                "Follow the job, which reads the value stored on the first node.",
+                "The printed value is the result after this step reads the value stored on the first node.",
                 "label = head.value"
               ],
               "explanation": "The printed value is the result after this step reads the value stored on the first node.",
@@ -231,7 +231,7 @@
         "stacks-queues"
       ],
       "learning_objectives": [
-        "Ridge potters recount crates before dawn, and insert at head in O."
+        "This step counts nodes after a prepend, using Node and 29."
       ],
       "starter_code": "class ListNode:\n    def __init__(self, value, next=None):\n        self.value = value\n        self.next = next\n\nclass LinkedList:\n    def __init__(self):\n        self.head = None\n\n    def prepend(self, value):\n        # TODO\n        pass\n\n    def __len__(self):\n        # TODO\n        pass\n",
       "solution_code": "class ListNode:\n    def __init__(self, value, next=None):\n        self.value = value\n        self.next = next\n\nclass LinkedList:\n    def __init__(self):\n        self.head = None\n\n    def prepend(self, value):\n        self.head = ListNode(value, self.head)\n\n    def __len__(self):\n        n = 0\n        cur = self.head\n        while cur:\n            n += 1\n            cur = cur.next\n        return n\n",
@@ -263,23 +263,23 @@
             {
               "id": "linked-lists-step-2-teach",
               "type": "teach",
-              "question": "Ridge potters recount crates before dawn, and insert at head in O.",
+              "question": "This step counts nodes after a prepend, using Node and 29.",
               "hints": [
-                "Read the one job this step is practicing.",
-                "The example is about Prepend and Length.",
+                "Follow the job, which counts nodes after a prepend.",
+                "Putting a new node in front grows the list.",
                 "Node(29, head)"
               ],
-              "explanation": "Ridge potters recount crates before dawn, and insert at head in O.",
+              "explanation": "This step counts nodes after a prepend, using Node and 29.",
               "xp_reward": 0,
               "worked_example": "Node(29, head)"
             },
             {
               "id": "linked-lists-step-2-mcq",
               "type": "mcq",
-              "question": "Ridge potters recount crates before dawn. For insert at head in O, which line counts nodes after a prepend?",
+              "question": "Select the line that counts nodes after a prepend, the one that belongs with Node and 29.",
               "hints": [
-                "Compare each line with the example.",
-                "One line matches the example.",
+                "Follow the job, which counts nodes after a prepend.",
+                "Putting a new node in front grows the list.",
                 "head = Node(value, head)"
               ],
               "explanation": "Putting a new node in front grows the list.",
@@ -295,13 +295,13 @@
             {
               "id": "linked-lists-step-2-predict",
               "type": "output_prediction",
-              "question": "Ridge potters recount crates before dawn. For insert at head in O, what value is displayed?",
+              "question": "Follow the code that counts nodes after a prepend for Node and then choose the displayed value.",
               "hints": [
-                "Run the example in your head from the top.",
-                "The last line is what gets displayed.",
+                "Follow the job, which counts nodes after a prepend.",
+                "Putting a new node in front grows the list.",
                 "2"
               ],
-              "explanation": "The Prepend and Length program displays that value.",
+              "explanation": "Putting a new node in front grows the list.",
               "xp_reward": 10,
               "starter_code": "class Node:\n    def __init__(self, value, nxt=None):\n        self.value = value\n        self.nxt = nxt\nhead = Node(1)\nhead = Node(29, head)\ncount = 0\ncur = head\nwhile cur:\n    count = count + 1\n    cur = cur.nxt\nprint(count)\n",
               "options": [
@@ -315,10 +315,10 @@
             {
               "id": "linked-lists-step-2-order",
               "type": "ordering",
-              "question": "Ridge potters recount crates before dawn. For insert at head in O, build the line that counts nodes after a prepend.",
+              "question": "Order the pieces so the line counts nodes after a prepend for Node and 29.",
               "hints": [
-                "Start at the left of the example.",
-                "Keep the example order.",
+                "Follow the job, which counts nodes after a prepend.",
+                "Putting a new node in front grows the list.",
                 "head = Node(value, head)"
               ],
               "explanation": "Putting a new node in front grows the list.",
@@ -340,10 +340,10 @@
             {
               "id": "linked-lists-step-2-fill",
               "type": "fill_blank",
-              "question": "Ridge potters recount crates before dawn. For insert at head in O, fill the blank so the line counts nodes after a prepend.",
+              "question": "Supply the missing piece so the line counts nodes after a prepend for Node and 29.",
               "hints": [
-                "The blank is the missing piece of the example.",
-                "The example uses that piece.",
+                "Follow the job, which counts nodes after a prepend.",
+                "Putting a new node in front grows the list.",
                 "+"
               ],
               "explanation": "Putting a new node in front grows the list.",
@@ -360,10 +360,10 @@
             {
               "id": "linked-lists-step-2-bug",
               "type": "debugging",
-              "question": "Ridge potters recount crates before dawn. For insert at head in O, which line does a different job than the example?",
+              "question": "The wrong line is the one that misses the job, which counts nodes after a prepend, for Node and 29.",
               "hints": [
-                "The other lines match the example.",
-                "One line is the odd one.",
+                "Follow the job, which counts nodes after a prepend.",
+                "The print shows one value and never walks the links.",
                 "Line 5"
               ],
               "explanation": "The print shows one value and never walks the links.",
@@ -374,13 +374,13 @@
             {
               "id": "linked-lists-step-2-predict-2",
               "type": "output_prediction",
-              "question": "Ridge potters recount crates before dawn. For insert at head in O, what does the second run display?",
+              "question": "A new input still has code that counts nodes after a prepend for Node and 29, and the correct choice is what it prints.",
               "hints": [
-                "Apply the same steps to the new value.",
-                "The display comes from the last line.",
+                "Follow the job, which counts nodes after a prepend.",
+                "Putting a new node in front grows the list.",
                 "3"
               ],
-              "explanation": "The second Prepend and Length program displays that value.",
+              "explanation": "Putting a new node in front grows the list.",
               "xp_reward": 10,
               "starter_code": "class Node:\n    def __init__(self, value, nxt=None):\n        self.value = value\n        self.nxt = nxt\nhead = Node(1, Node(2))\nhead = Node(29, head)\ncount = 0\ncur = head\nwhile cur:\n    count = count + 1\n    cur = cur.nxt\nprint(count)\n",
               "options": [
@@ -394,10 +394,10 @@
             {
               "id": "linked-lists-step-2-write",
               "type": "code",
-              "question": "Ridge potters recount crates before dawn. For insert at head in O, fill the blank so the program prints the result.",
+              "question": "The blank is the missing piece of the program that counts nodes after a prepend for Node and.",
               "hints": [
-                "The blank is the missing piece.",
-                "Print the value that piece produces.",
+                "Follow the job, which counts nodes after a prepend.",
+                "The printed value is the result after this step counts nodes after a prepend.",
                 "label = count"
               ],
               "explanation": "The printed value is the result after this step counts nodes after a prepend.",
@@ -435,7 +435,7 @@
         "stacks-queues"
       ],
       "learning_objectives": [
-        "Cove potters recount crates before dawn, and reverse pointers iteratively."
+        "This step reads the new head after reversing the links, using Node and 28."
       ],
       "starter_code": "class ListNode:\n    def __init__(self, value, next=None):\n        self.value = value\n        self.next = next\n\ndef reverse_list(head):\n    # TODO: reverse and return new head\n    pass\n\ndef to_list(head):\n    out = []\n    while head:\n        out.append(head.value)\n        head = head.next\n    return out\n",
       "solution_code": "class ListNode:\n    def __init__(self, value, next=None):\n        self.value = value\n        self.next = next\n\ndef reverse_list(head):\n    prev = None\n    cur = head\n    while cur:\n        nxt = cur.next\n        cur.next = prev\n        prev = cur\n        cur = nxt\n    return prev\n\ndef to_list(head):\n    out = []\n    while head:\n        out.append(head.value)\n        head = head.next\n    return out\n",
@@ -468,23 +468,23 @@
             {
               "id": "linked-lists-01-teach",
               "type": "teach",
-              "question": "Cove potters recount crates before dawn, and reverse pointers iteratively.",
+              "question": "This step reads the new head after reversing the links, using Node and 28.",
               "hints": [
-                "Read the one job this step is practicing.",
-                "The example is about Reverse a Linked List.",
+                "Follow the job, which reads the new head after reversing the links.",
+                "Pointing next at prev reverses that link.",
                 "cur.nxt = prev"
               ],
-              "explanation": "Cove potters recount crates before dawn, and reverse pointers iteratively.",
+              "explanation": "This step reads the new head after reversing the links, using Node and 28.",
               "xp_reward": 0,
               "worked_example": "cur.nxt = prev"
             },
             {
               "id": "linked-lists-01-mcq",
               "type": "mcq",
-              "question": "Cove potters recount crates before dawn. For reverse pointers iteratively, which line reads the new head after reversing the links?",
+              "question": "The correct line reads the new head after reversing the links, and it is the line tied to Node and 28.",
               "hints": [
-                "Compare each line with the example.",
-                "One line matches the example.",
+                "Follow the job, which reads the new head after reversing the links.",
+                "Pointing next at prev reverses that link.",
                 "cur.nxt = prev"
               ],
               "explanation": "Pointing next at prev reverses that link.",
@@ -500,30 +500,30 @@
             {
               "id": "linked-lists-01-predict",
               "type": "output_prediction",
-              "question": "Cove potters recount crates before dawn. For reverse pointers iteratively, what value is displayed?",
+              "question": "The program reads the new head after reversing the links with Node and so choose the printed value.",
               "hints": [
-                "Run the example in your head from the top.",
-                "The last line is what gets displayed.",
-                "27"
+                "Follow the job, which reads the new head after reversing the links.",
+                "Pointing next at prev reverses that link.",
+                "28"
               ],
-              "explanation": "The Reverse a Linked List program displays that value.",
+              "explanation": "Pointing next at prev reverses that link.",
               "xp_reward": 10,
-              "starter_code": "class Node:\n    def __init__(self, value, nxt=None):\n        self.value = value\n        self.nxt = nxt\nhead = Node(1, Node(2, Node(27)))\nprev = None\ncur = head\nwhile cur:\n    nxt = cur.nxt\n    cur.nxt = prev\n    prev = cur\n    cur = nxt\nprint(prev.value)\n",
+              "starter_code": "class Node:\n    def __init__(self, value, nxt=None):\n        self.value = value\n        self.nxt = nxt\nhead = Node(1, Node(2, Node(28)))\nprev = None\ncur = head\nwhile cur:\n    nxt = cur.nxt\n    cur.nxt = prev\n    prev = cur\n    cur = nxt\nprint(prev.value)\n",
               "options": [
                 "1",
-                "27",
+                "28",
                 "0",
                 "none"
               ],
-              "correct_answer": "27"
+              "correct_answer": "28"
             },
             {
               "id": "linked-lists-01-order",
               "type": "ordering",
-              "question": "Cove potters recount crates before dawn. For reverse pointers iteratively, build the line that reads the new head after reversing the links.",
+              "question": "Build the line that reads the new head after reversing the links for Node and 28, from the first piece to the last.",
               "hints": [
-                "Start at the left of the example.",
-                "Keep the example order.",
+                "Follow the job, which reads the new head after reversing the links.",
+                "Pointing next at prev reverses that link.",
                 "cur.nxt = prev"
               ],
               "explanation": "Pointing next at prev reverses that link.",
@@ -543,10 +543,10 @@
             {
               "id": "linked-lists-01-fill",
               "type": "fill_blank",
-              "question": "Cove potters recount crates before dawn. For reverse pointers iteratively, fill the blank so the line reads the new head after reversing the links.",
+              "question": "Replace the blank with the piece that makes the line reads the new head after reversing the links for Node and 28.",
               "hints": [
-                "The blank is the missing piece of the example.",
-                "The example uses that piece.",
+                "Follow the job, which reads the new head after reversing the links.",
+                "Pointing next at prev reverses that link.",
                 "="
               ],
               "explanation": "Pointing next at prev reverses that link.",
@@ -563,31 +563,31 @@
             {
               "id": "linked-lists-01-bug",
               "type": "debugging",
-              "question": "Cove potters recount crates before dawn. For reverse pointers iteratively, which line does a different job than the example?",
+              "question": "Spot the line that fails the job, which reads the new head after reversing the links, around Node and 28.",
               "hints": [
-                "The other lines match the example.",
-                "One line is the odd one.",
+                "Follow the job, which reads the new head after reversing the links.",
+                "The print reads the old head and never reverses the links.",
                 "Line 6"
               ],
               "explanation": "The print reads the old head and never reverses the links.",
               "xp_reward": 10,
-              "starter_code": "class Node:\n    def __init__(self, value, nxt=None):\n        self.value = value\n        self.nxt = nxt\nhead = Node(1, Node(27))\nprint(head.value)\n",
+              "starter_code": "class Node:\n    def __init__(self, value, nxt=None):\n        self.value = value\n        self.nxt = nxt\nhead = Node(1, Node(28))\nprint(head.value)\n",
               "correct_answer": "6"
             },
             {
               "id": "linked-lists-01-predict-2",
               "type": "output_prediction",
-              "question": "Cove potters recount crates before dawn. For reverse pointers iteratively, what does the second run display?",
+              "question": "The second program reads the new head after reversing the links for Node and 28, so choose the new printed value.",
               "hints": [
-                "Apply the same steps to the new value.",
-                "The display comes from the last line.",
+                "Follow the job, which reads the new head after reversing the links.",
+                "Pointing next at prev reverses that link.",
                 "1"
               ],
-              "explanation": "The second Reverse a Linked List program displays that value.",
+              "explanation": "Pointing next at prev reverses that link.",
               "xp_reward": 10,
-              "starter_code": "class Node:\n    def __init__(self, value, nxt=None):\n        self.value = value\n        self.nxt = nxt\nhead = Node(27, Node(1))\nprev = None\ncur = head\nwhile cur:\n    nxt = cur.nxt\n    cur.nxt = prev\n    prev = cur\n    cur = nxt\nprint(prev.value)\n",
+              "starter_code": "class Node:\n    def __init__(self, value, nxt=None):\n        self.value = value\n        self.nxt = nxt\nhead = Node(28, Node(1))\nprev = None\ncur = head\nwhile cur:\n    nxt = cur.nxt\n    cur.nxt = prev\n    prev = cur\n    cur = nxt\nprint(prev.value)\n",
               "options": [
-                "27",
+                "28",
                 "none",
                 "0",
                 "1"
@@ -597,21 +597,21 @@
             {
               "id": "linked-lists-01-write",
               "type": "code",
-              "question": "Cove potters recount crates before dawn. For reverse pointers iteratively, fill the blank so the program prints the result.",
+              "question": "Complete the blank so this program reads the new head after reversing the links and prints the result for Node and.",
               "hints": [
-                "The blank is the missing piece.",
-                "Print the value that piece produces.",
+                "Follow the job, which reads the new head after reversing the links.",
+                "The printed value is the result after this step reads the new head after reversing the links.",
                 "label = prev.value"
               ],
               "explanation": "The printed value is the result after this step reads the new head after reversing the links.",
               "xp_reward": 10,
-              "starter_code": "class Node:\n    def __init__(self, value, nxt=None):\n        self.value = value\n        self.nxt = nxt\nhead = Node(1, Node(2, Node(27)))\nprev = None\ncur = head\nwhile cur:\n    nxt = cur.nxt\n    cur.nxt = prev\n    prev = cur\n    cur = nxt\nlabel = ___\nprint(label)\n",
-              "solution_code": "class Node:\n    def __init__(self, value, nxt=None):\n        self.value = value\n        self.nxt = nxt\nhead = Node(1, Node(2, Node(27)))\nprev = None\ncur = head\nwhile cur:\n    nxt = cur.nxt\n    cur.nxt = prev\n    prev = cur\n    cur = nxt\nlabel = prev.value\nprint(label)\n",
+              "starter_code": "class Node:\n    def __init__(self, value, nxt=None):\n        self.value = value\n        self.nxt = nxt\nhead = Node(1, Node(2, Node(28)))\nprev = None\ncur = head\nwhile cur:\n    nxt = cur.nxt\n    cur.nxt = prev\n    prev = cur\n    cur = nxt\nlabel = ___\nprint(label)\n",
+              "solution_code": "class Node:\n    def __init__(self, value, nxt=None):\n        self.value = value\n        self.nxt = nxt\nhead = Node(1, Node(2, Node(28)))\nprev = None\ncur = head\nwhile cur:\n    nxt = cur.nxt\n    cur.nxt = prev\n    prev = cur\n    cur = nxt\nlabel = prev.value\nprint(label)\n",
               "tests": [
                 {
                   "name": "linked-lists-01-prints",
                   "description": "The printed value is the result after this step reads the new head after reversi",
-                  "expected_stdout": "27\n",
+                  "expected_stdout": "28\n",
                   "required": true
                 }
               ]
@@ -637,7 +637,7 @@
         "stacks-queues"
       ],
       "learning_objectives": [
-        "Plaza potters recount crates before dawn, and use two-pointer middle finding."
+        "This step reads the middle value, using len and 5."
       ],
       "starter_code": "class ListNode:\n    def __init__(self, value, next=None):\n        self.value = value\n        self.next = next\n\ndef middle_value(head):\n    # TODO: slow/fast pointers\n    pass\n",
       "solution_code": "class ListNode:\n    def __init__(self, value, next=None):\n        self.value = value\n        self.next = next\n\ndef middle_value(head):\n    slow = fast = head\n    while fast and fast.next:\n        slow = slow.next\n        fast = fast.next.next\n    return slow.value\n",
@@ -670,23 +670,23 @@
             {
               "id": "linked-lists-practice-1-teach",
               "type": "teach",
-              "question": "Plaza potters recount crates before dawn, and use two-pointer middle finding.",
+              "question": "This step reads the middle value, using len and 5.",
               "hints": [
-                "Read the one job this step is practicing.",
-                "The example is about Find Middle Node.",
+                "Follow the job, which reads the middle value.",
+                "Integer division by two lands on the middle index.",
                 "len(values) // 2"
               ],
-              "explanation": "Plaza potters recount crates before dawn, and use two-pointer middle finding.",
+              "explanation": "This step reads the middle value, using len and 5.",
               "xp_reward": 0,
               "worked_example": "len(values) // 2"
             },
             {
               "id": "linked-lists-practice-1-mcq",
               "type": "mcq",
-              "question": "Plaza potters recount crates before dawn. For use two-pointer middle finding, which line reads the middle value?",
+              "question": "The correct line reads the middle value, and it is the line tied to len and 5.",
               "hints": [
-                "Compare each line with the example.",
-                "One line matches the example.",
+                "Follow the job, which reads the middle value.",
+                "Integer division by two lands on the middle index.",
                 "len(values) // 2"
               ],
               "explanation": "Integer division by two lands on the middle index.",
@@ -702,13 +702,13 @@
             {
               "id": "linked-lists-practice-1-predict",
               "type": "output_prediction",
-              "question": "Plaza potters recount crates before dawn. For use two-pointer middle finding, what value is displayed?",
+              "question": "The program reads the middle value with len and 5, so choose the printed value.",
               "hints": [
-                "Run the example in your head from the top.",
-                "The last line is what gets displayed.",
+                "Follow the job, which reads the middle value.",
+                "Integer division by two lands on the middle index.",
                 "27"
               ],
-              "explanation": "The Find Middle Node program displays that value.",
+              "explanation": "Integer division by two lands on the middle index.",
               "xp_reward": 10,
               "starter_code": "values = [1, 2, 27, 4, 5]\nprint(values[len(values) // 2])\n",
               "options": [
@@ -722,10 +722,10 @@
             {
               "id": "linked-lists-practice-1-order",
               "type": "ordering",
-              "question": "Plaza potters recount crates before dawn. For use two-pointer middle finding, build the line that reads the middle value.",
+              "question": "Build the line that reads the middle value for len and 5, from the first piece to the last.",
               "hints": [
-                "Start at the left of the example.",
-                "Keep the example order.",
+                "Follow the job, which reads the middle value.",
+                "Integer division by two lands on the middle index.",
                 "mid = len(values) // 2"
               ],
               "explanation": "Integer division by two lands on the middle index.",
@@ -749,10 +749,10 @@
             {
               "id": "linked-lists-practice-1-fill",
               "type": "fill_blank",
-              "question": "Plaza potters recount crates before dawn. For use two-pointer middle finding, fill the blank so the line reads the middle value.",
+              "question": "Replace the blank with the piece that makes the line reads the middle value for len and 5.",
               "hints": [
-                "The blank is the missing piece of the example.",
-                "The example uses that piece.",
+                "Follow the job, which reads the middle value.",
+                "Integer division by two lands on the middle index.",
                 "//"
               ],
               "explanation": "Integer division by two lands on the middle index.",
@@ -769,10 +769,10 @@
             {
               "id": "linked-lists-practice-1-bug",
               "type": "debugging",
-              "question": "Plaza potters recount crates before dawn. For use two-pointer middle finding, which line does a different job than the example?",
+              "question": "Spot the line that fails the job, which reads the middle value, around len and 5.",
               "hints": [
-                "The other lines match the example.",
-                "One line is the odd one.",
+                "Follow the job, which reads the middle value.",
+                "The print reads the first value instead of the middle.",
                 "Line 2"
               ],
               "explanation": "The print reads the first value instead of the middle.",
@@ -783,13 +783,13 @@
             {
               "id": "linked-lists-practice-1-predict-2",
               "type": "output_prediction",
-              "question": "Plaza potters recount crates before dawn. For use two-pointer middle finding, what does the second run display?",
+              "question": "The second program reads the middle value for len and 5, so choose the new printed value.",
               "hints": [
-                "Apply the same steps to the new value.",
-                "The display comes from the last line.",
+                "Follow the job, which reads the middle value.",
+                "Integer division by two lands on the middle index.",
                 "3"
               ],
-              "explanation": "The second Find Middle Node program displays that value.",
+              "explanation": "Integer division by two lands on the middle index.",
               "xp_reward": 10,
               "starter_code": "values = [1, 2, 3, 4, 5]\nprint(values[len(values) // 2])\n",
               "options": [
@@ -803,10 +803,10 @@
             {
               "id": "linked-lists-practice-1-write",
               "type": "code",
-              "question": "Plaza potters recount crates before dawn. For use two-pointer middle finding, fill the blank so the program prints the result.",
+              "question": "Complete the blank so this program reads the middle value and prints the result for len and 5.",
               "hints": [
-                "The blank is the missing piece.",
-                "Print the value that piece produces.",
+                "Follow the job, which reads the middle value.",
+                "The printed value is the result after this step reads the middle value.",
                 "label = values[len(values) // 2]"
               ],
               "explanation": "The printed value is the result after this step reads the middle value.",
@@ -843,7 +843,7 @@
         "stacks-queues"
       ],
       "learning_objectives": [
-        "Marsh potters recount crates before dawn, and detect cycles with slow fast pointers."
+        "This step counts the nodes in the chain, using Node and 3."
       ],
       "starter_code": "class ListNode:\n    def __init__(self, value, next=None):\n        self.value = value\n        self.next = next\n\ndef has_cycle(head):\n    # TODO: return True if cycle exists\n    pass\n",
       "solution_code": "class ListNode:\n    def __init__(self, value, next=None):\n        self.value = value\n        self.next = next\n\ndef has_cycle(head):\n    slow = fast = head\n    while fast and fast.next:\n        slow = slow.next\n        fast = fast.next.next\n        if slow is fast:\n            return True\n    return False\n",
@@ -876,23 +876,23 @@
             {
               "id": "linked-lists-checkpoint-teach",
               "type": "teach",
-              "question": "Marsh potters recount crates before dawn, and detect cycles with slow fast pointers.",
+              "question": "This step counts the nodes in the chain, using Node and 3.",
               "hints": [
-                "Read the one job this step is practicing.",
-                "The example is about Unit 3 Checkpoint Linked Lists.",
+                "Follow the job, which counts the nodes in the chain.",
+                "Walking next until it ends counts the nodes.",
                 "cur = cur.nxt"
               ],
-              "explanation": "Marsh potters recount crates before dawn, and detect cycles with slow fast pointers.",
+              "explanation": "This step counts the nodes in the chain, using Node and 3.",
               "xp_reward": 0,
               "worked_example": "cur = cur.nxt"
             },
             {
               "id": "linked-lists-checkpoint-mcq",
               "type": "mcq",
-              "question": "Marsh potters recount crates before dawn. For detect cycles with slow fast pointers, which line counts the nodes in the chain?",
+              "question": "Choose the line that counts the nodes in the chain, which is the line that fits Node and 3.",
               "hints": [
-                "Compare each line with the example.",
-                "One line matches the example.",
+                "Follow the job, which counts the nodes in the chain.",
+                "Walking next until it ends counts the nodes.",
                 "while cur: count += 1"
               ],
               "explanation": "Walking next until it ends counts the nodes.",
@@ -908,13 +908,13 @@
             {
               "id": "linked-lists-checkpoint-predict",
               "type": "output_prediction",
-              "question": "Marsh potters recount crates before dawn. For detect cycles with slow fast pointers, what value is displayed?",
+              "question": "Read the code that counts the nodes in the chain for Node and and choose the value it prints.",
               "hints": [
-                "Run the example in your head from the top.",
-                "The last line is what gets displayed.",
+                "Follow the job, which counts the nodes in the chain.",
+                "Walking next until it ends counts the nodes.",
                 "3"
               ],
-              "explanation": "The Unit 3 Checkpoint Linked Lists program displays that value.",
+              "explanation": "Walking next until it ends counts the nodes.",
               "xp_reward": 10,
               "starter_code": "class Node:\n    def __init__(self, value, nxt=None):\n        self.value = value\n        self.nxt = nxt\nhead = Node(1, Node(2, Node(3)))\ncount = 0\ncur = head\nwhile cur:\n    count = count + 1\n    cur = cur.nxt\nprint(count)\n",
               "options": [
@@ -928,10 +928,10 @@
             {
               "id": "linked-lists-checkpoint-order",
               "type": "ordering",
-              "question": "Marsh potters recount crates before dawn. For detect cycles with slow fast pointers, build the line that counts the nodes in the chain.",
+              "question": "Arrange the pieces of the line that counts the nodes in the chain, left to right, for Node and 3.",
               "hints": [
-                "Start at the left of the example.",
-                "Keep the example order.",
+                "Follow the job, which counts the nodes in the chain.",
+                "Walking next until it ends counts the nodes.",
                 "while cur: count += 1"
               ],
               "explanation": "Walking next until it ends counts the nodes.",
@@ -955,10 +955,10 @@
             {
               "id": "linked-lists-checkpoint-fill",
               "type": "fill_blank",
-              "question": "Marsh potters recount crates before dawn. For detect cycles with slow fast pointers, fill the blank so the line counts the nodes in the chain.",
+              "question": "Fill the blank so the line counts the nodes in the chain for Node and 3.",
               "hints": [
-                "The blank is the missing piece of the example.",
-                "The example uses that piece.",
+                "Follow the job, which counts the nodes in the chain.",
+                "Walking next until it ends counts the nodes.",
                 "+"
               ],
               "explanation": "Walking next until it ends counts the nodes.",
@@ -975,10 +975,10 @@
             {
               "id": "linked-lists-checkpoint-bug",
               "type": "debugging",
-              "question": "Marsh potters recount crates before dawn. For detect cycles with slow fast pointers, which line does a different job than the example?",
+              "question": "Find the line that misses the job, which counts the nodes in the chain, for Node and 3.",
               "hints": [
-                "The other lines match the example.",
-                "One line is the odd one.",
+                "Follow the job, which counts the nodes in the chain.",
+                "The print shows the first value and ignores the rest of the chain.",
                 "Line 5"
               ],
               "explanation": "The print shows the first value and ignores the rest of the chain.",
@@ -989,13 +989,13 @@
             {
               "id": "linked-lists-checkpoint-predict-2",
               "type": "output_prediction",
-              "question": "Marsh potters recount crates before dawn. For detect cycles with slow fast pointers, what does the second run display?",
+              "question": "On the new input, the code still counts the nodes in the chain for Node and 3, so choose what it prints.",
               "hints": [
-                "Apply the same steps to the new value.",
-                "The display comes from the last line.",
+                "Follow the job, which counts the nodes in the chain.",
+                "Walking next until it ends counts the nodes.",
                 "1"
               ],
-              "explanation": "The second Unit 3 Checkpoint Linked Lists program displays that value.",
+              "explanation": "Walking next until it ends counts the nodes.",
               "xp_reward": 10,
               "starter_code": "class Node:\n    def __init__(self, value, nxt=None):\n        self.value = value\n        self.nxt = nxt\nhead = Node(1)\ncount = 0\ncur = head\nwhile cur:\n    count = count + 1\n    cur = cur.nxt\nprint(count)\n",
               "options": [
@@ -1009,10 +1009,10 @@
             {
               "id": "linked-lists-checkpoint-write",
               "type": "code",
-              "question": "Marsh potters recount crates before dawn. For detect cycles with slow fast pointers, fill the blank so the program prints the result.",
+              "question": "Fill the blank so the program counts the nodes in the chain, and the print shows that result for Node and.",
               "hints": [
-                "The blank is the missing piece.",
-                "Print the value that piece produces.",
+                "Follow the job, which counts the nodes in the chain.",
+                "The printed value is the result after this step counts the nodes in the chain.",
                 "label = count"
               ],
               "explanation": "The printed value is the result after this step counts the nodes in the chain.",

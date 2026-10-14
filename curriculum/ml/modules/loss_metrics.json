@@ -27,7 +27,7 @@
       ],
       "prerequisites": [],
       "learning_objectives": [
-        "Harbor potters recount crates before dawn, and compute mean absolute error."
+        "Using errors and 3, this step averages the absolute errors."
       ],
       "starter_code": "def mae(y_true, y_pred):\n    # TODO\n    pass\n",
       "solution_code": "def mae(y_true, y_pred):\n    return sum(abs(a - b) for a, b in zip(y_true, y_pred)) / len(y_true)\n",
@@ -60,23 +60,23 @@
             {
               "id": "metrics-mae-teach",
               "type": "teach",
-              "question": "Harbor potters recount crates before dawn, and compute mean absolute error.",
+              "question": "Using errors and 3, this step averages the absolute errors.",
               "hints": [
-                "Read the one job this step is practicing.",
-                "The example is about MAE.",
+                "Follow the job, which averages the absolute errors.",
+                "Mean absolute error averages the absolute gaps.",
                 "abs(item)"
               ],
-              "explanation": "Harbor potters recount crates before dawn, and compute mean absolute error.",
+              "explanation": "Using errors and 3, this step averages the absolute errors.",
               "xp_reward": 0,
               "worked_example": "abs(item)"
             },
             {
               "id": "metrics-mae-mcq",
               "type": "mcq",
-              "question": "Harbor potters recount crates before dawn. For compute mean absolute error, which line averages the absolute errors?",
+              "question": "A correct choice averages the absolute errors and goes with errors and 3.",
               "hints": [
-                "Compare each line with the example.",
-                "One line matches the example.",
+                "Follow the job, which averages the absolute errors.",
+                "Mean absolute error averages the absolute gaps.",
                 "abs(item)"
               ],
               "explanation": "Mean absolute error averages the absolute gaps.",
@@ -92,13 +92,13 @@
             {
               "id": "metrics-mae-predict",
               "type": "output_prediction",
-              "question": "Harbor potters recount crates before dawn. For compute mean absolute error, what value is displayed?",
+              "question": "Select the output after the code averages the absolute errors, using errors and 3.",
               "hints": [
-                "Run the example in your head from the top.",
-                "The last line is what gets displayed.",
+                "Follow the job, which averages the absolute errors.",
+                "Mean absolute error averages the absolute gaps.",
                 "2"
               ],
-              "explanation": "The MAE program displays that value.",
+              "explanation": "Mean absolute error averages the absolute gaps.",
               "xp_reward": 10,
               "starter_code": "errors = [1, -3]\nprint(sum(abs(item) for item in errors) // len(errors))\n",
               "options": [
@@ -112,10 +112,10 @@
             {
               "id": "metrics-mae-order",
               "type": "ordering",
-              "question": "Harbor potters recount crates before dawn. For compute mean absolute error, build the line that averages the absolute errors.",
+              "question": "Make the line that averages the absolute errors by ordering the pieces for errors and 3.",
               "hints": [
-                "Start at the left of the example.",
-                "Keep the example order.",
+                "Follow the job, which averages the absolute errors.",
+                "Mean absolute error averages the absolute gaps.",
                 "total = sum(abs(item) for item in errors)"
               ],
               "explanation": "Mean absolute error averages the absolute gaps.",
@@ -143,10 +143,10 @@
             {
               "id": "metrics-mae-fill",
               "type": "fill_blank",
-              "question": "Harbor potters recount crates before dawn. Choose the match for this step, using linen.",
+              "question": "Complete the line for errors and 3 so that it averages the errors.",
               "hints": [
-                "The blank is the missing piece of the example.",
-                "The example uses that piece.",
+                "Follow the job, which averages the errors.",
+                "Mean absolute error averages the absolute gaps.",
                 "abs"
               ],
               "explanation": "Mean absolute error averages the absolute gaps.",
@@ -163,10 +163,10 @@
             {
               "id": "metrics-mae-bug",
               "type": "debugging",
-              "question": "Harbor potters recount crates before dawn. For compute mean absolute error, which line does a different job than the example?",
+              "question": "Select the line that gets in the way of the job, which averages the absolute errors, for errors and 3.",
               "hints": [
-                "The other lines match the example.",
-                "One line is the odd one.",
+                "Follow the job, which averages the absolute errors.",
+                "The signed errors cancel instead of becoming distances.",
                 "Line 2"
               ],
               "explanation": "The signed errors cancel instead of becoming distances.",
@@ -177,13 +177,13 @@
             {
               "id": "metrics-mae-predict-2",
               "type": "output_prediction",
-              "question": "Harbor potters recount crates before dawn. For compute mean absolute error, what does the second run display?",
+              "question": "With the new data around the snippet, the code averages the absolute errors, so select the new output.",
               "hints": [
-                "Apply the same steps to the new value.",
-                "The display comes from the last line.",
+                "Follow the job, which averages the absolute errors.",
+                "Mean absolute error averages the absolute gaps.",
                 "3"
               ],
-              "explanation": "The second MAE program displays that value.",
+              "explanation": "Mean absolute error averages the absolute gaps.",
               "xp_reward": 10,
               "starter_code": "errors = [2, -4]\nprint(sum(abs(item) for item in errors) // len(errors))\n",
               "options": [
@@ -197,10 +197,10 @@
             {
               "id": "metrics-mae-write",
               "type": "code",
-              "question": "Harbor potters recount crates before dawn. For compute mean absolute error, fill the blank so the program prints the result.",
+              "question": "The printed result shows up after you fill the blank so the code averages the absolute errors for errors and 3.",
               "hints": [
-                "The blank is the missing piece.",
-                "Print the value that piece produces.",
+                "Follow the job, which averages the absolute errors.",
+                "The printed value is the result after this step averages the absolute errors.",
                 "label = sum(abs(item) for item in errors) // len(errors)"
               ],
               "explanation": "The printed value is the result after this step averages the absolute errors.",
@@ -235,7 +235,7 @@
       ],
       "prerequisites": [],
       "learning_objectives": [
-        "Mesa potters recount crates before dawn, and compute binary cross-entropy."
+        "This step reads the penalty of a confident wrong chance, using round and 2."
       ],
       "starter_code": "import math\n\ndef bce(y, p):\n    # TODO\n    pass\n",
       "solution_code": "import math\n\ndef bce(y, p):\n    p = min(max(p, 1e-9), 1 - 1e-9)\n    return -(y * math.log(p) + (1 - y) * math.log(1 - p))\n",
@@ -268,23 +268,23 @@
             {
               "id": "metrics-bce-teach",
               "type": "teach",
-              "question": "Mesa potters recount crates before dawn, and compute binary cross-entropy.",
+              "question": "This step reads the penalty of a confident wrong chance, using round and 2.",
               "hints": [
-                "Read the one job this step is practicing.",
-                "The example is about Binary Cross-Entropy.",
+                "Follow the job, which reads the penalty of a confident wrong chance.",
+                "Binary cross-entropy uses the negative log of the predicted chance.",
                 "-math.log(0.8)"
               ],
-              "explanation": "Mesa potters recount crates before dawn, and compute binary cross-entropy.",
+              "explanation": "This step reads the penalty of a confident wrong chance, using round and 2.",
               "xp_reward": 0,
               "worked_example": "-math.log(0.8)"
             },
             {
               "id": "metrics-bce-mcq",
               "type": "mcq",
-              "question": "Mesa potters recount crates before dawn. For compute binary cross-entropy, which line reads the penalty of a confident wrong chance?",
+              "question": "Pick the line that reads the penalty of a confident wrong chance, not a line about something else, for round and 2.",
               "hints": [
-                "Compare each line with the example.",
-                "One line matches the example.",
+                "Follow the job, which reads the penalty of a confident wrong chance.",
+                "Binary cross-entropy uses the negative log of the predicted chance.",
                 "-math.log(0.8)"
               ],
               "explanation": "Binary cross-entropy uses the negative log of the predicted chance.",
@@ -300,13 +300,13 @@
             {
               "id": "metrics-bce-predict",
               "type": "output_prediction",
-              "question": "Mesa potters recount crates before dawn. For compute binary cross-entropy, what value is displayed?",
+              "question": "The displayed value is what the code prints when it reads the penalty of a confident wrong chance for round and 2.",
               "hints": [
-                "Run the example in your head from the top.",
-                "The last line is what gets displayed.",
+                "Follow the job, which reads the penalty of a confident wrong chance.",
+                "Binary cross-entropy uses the negative log of the predicted chance.",
                 "0.22"
               ],
-              "explanation": "The Binary Cross-Entropy program displays that value.",
+              "explanation": "Binary cross-entropy uses the negative log of the predicted chance.",
               "xp_reward": 10,
               "starter_code": "import math\nprint(round(-math.log(0.8), 2))\n",
               "options": [
@@ -320,10 +320,10 @@
             {
               "id": "metrics-bce-order",
               "type": "ordering",
-              "question": "Mesa potters recount crates before dawn. For compute binary cross-entropy, build the line that reads the penalty of a confident wrong chance.",
+              "question": "Place every piece so the result reads the penalty of a confident wrong chance for round and 2.",
               "hints": [
-                "Start at the left of the example.",
-                "Keep the example order.",
+                "Follow the job, which reads the penalty of a confident wrong chance.",
+                "Binary cross-entropy uses the negative log of the predicted chance.",
                 "loss = -math.log(0.8)"
               ],
               "explanation": "Binary cross-entropy uses the negative log of the predicted chance.",
@@ -343,10 +343,10 @@
             {
               "id": "metrics-bce-fill",
               "type": "fill_blank",
-              "question": "Mesa potters recount crates before dawn. Choose the match for this step, using quartz.",
+              "question": "Drop in the piece that lets the line reads the penalty of a confident wrong chance for round and 2.",
               "hints": [
-                "The blank is the missing piece of the example.",
-                "The example uses that piece.",
+                "Follow the job, which reads the penalty of a confident wrong chance.",
+                "Binary cross-entropy uses the negative log of the predicted chance.",
                 "-"
               ],
               "explanation": "Binary cross-entropy uses the negative log of the predicted chance.",
@@ -363,10 +363,10 @@
             {
               "id": "metrics-bce-bug",
               "type": "debugging",
-              "question": "Mesa potters recount crates before dawn. For compute binary cross-entropy, which line does a different job than the example?",
+              "question": "The mismatch misses the job, which reads the penalty of a confident wrong chance, for round and.",
               "hints": [
-                "The other lines match the example.",
-                "One line is the odd one.",
+                "Follow the job, which reads the penalty of a confident wrong chance.",
+                "The print drops the leading minus, so the penalty has the wrong sign.",
                 "Line 2"
               ],
               "explanation": "The print drops the leading minus, so the penalty has the wrong sign.",
@@ -377,13 +377,13 @@
             {
               "id": "metrics-bce-predict-2",
               "type": "output_prediction",
-              "question": "Mesa potters recount crates before dawn. For compute binary cross-entropy, what does the second run display?",
+              "question": "Choose the printed result of the second run that reads the penalty of a confident wrong chance for round and 2.",
               "hints": [
-                "Apply the same steps to the new value.",
-                "The display comes from the last line.",
+                "Follow the job, which reads the penalty of a confident wrong chance.",
+                "Binary cross-entropy uses the negative log of the predicted chance.",
                 "0.51"
               ],
-              "explanation": "The second Binary Cross-Entropy program displays that value.",
+              "explanation": "Binary cross-entropy uses the negative log of the predicted chance.",
               "xp_reward": 10,
               "starter_code": "import math\nprint(round(-math.log(0.6), 2))\n",
               "options": [
@@ -397,10 +397,10 @@
             {
               "id": "metrics-bce-write",
               "type": "code",
-              "question": "Mesa potters recount crates before dawn. For compute binary cross-entropy, fill the blank so the program prints the result.",
+              "question": "Make the program reads the penalty of a confident wrong chance by filling the blank for round and 2.",
               "hints": [
-                "The blank is the missing piece.",
-                "Print the value that piece produces.",
+                "Follow the job, which reads the penalty of a confident wrong chance.",
+                "The printed value is the result after this step reads the penalty of a confident wrong chance.",
                 "label = round(-math.log(0.8), 2)"
               ],
               "explanation": "The printed value is the result after this step reads the penalty of a confident wrong chance.",
@@ -435,7 +435,7 @@
       ],
       "prerequisites": [],
       "learning_objectives": [
-        "Orchard potters recount crates before dawn, and compute F1 from precision recall."
+        "This step balances precision and recall, using precision and 2."
       ],
       "starter_code": "def f1(precision, recall):\n    # TODO\n    pass\n",
       "solution_code": "def f1(precision, recall):\n    if precision + recall == 0:\n        return 0.0\n    return 2 * precision * recall / (precision + recall)\n",
@@ -468,23 +468,23 @@
             {
               "id": "metrics-f1-teach",
               "type": "teach",
-              "question": "Orchard potters recount crates before dawn, and compute F1 from precision recall.",
+              "question": "This step balances precision and recall, using precision and 2.",
               "hints": [
-                "Read the one job this step is practicing.",
-                "The example is about F1 Score.",
+                "Follow the job, which balances precision and recall.",
+                "F1 is the balanced combination of precision and recall.",
                 "2 * precision * recall"
               ],
-              "explanation": "Orchard potters recount crates before dawn, and compute F1 from precision recall.",
+              "explanation": "This step balances precision and recall, using precision and 2.",
               "xp_reward": 0,
               "worked_example": "2 * precision * recall"
             },
             {
               "id": "metrics-f1-mcq",
               "type": "mcq",
-              "question": "Orchard potters recount crates before dawn. For compute F1 from precision recall, which line balances precision and recall?",
+              "question": "Select the line that balances precision and recall, the one that belongs with precision and 2.",
               "hints": [
-                "Compare each line with the example.",
-                "One line matches the example.",
+                "Follow the job, which balances precision and recall.",
+                "F1 is the balanced combination of precision and recall.",
                 "2 * precision * recall / (precision + recall)"
               ],
               "explanation": "F1 is the balanced combination of precision and recall.",
@@ -500,13 +500,13 @@
             {
               "id": "metrics-f1-predict",
               "type": "output_prediction",
-              "question": "Orchard potters recount crates before dawn. For compute F1 from precision recall, what value is displayed?",
+              "question": "Follow the code that balances precision and recall for precision and 2, then choose the displayed value.",
               "hints": [
-                "Run the example in your head from the top.",
-                "The last line is what gets displayed.",
+                "Follow the job, which balances precision and recall.",
+                "F1 is the balanced combination of precision and recall.",
                 "0.67"
               ],
-              "explanation": "The F1 Score program displays that value.",
+              "explanation": "F1 is the balanced combination of precision and recall.",
               "xp_reward": 10,
               "starter_code": "precision = 0.5\nrecall = 1.0\nprint(round(2 * precision * recall / (precision + recall), 2))\n",
               "options": [
@@ -520,10 +520,10 @@
             {
               "id": "metrics-f1-order",
               "type": "ordering",
-              "question": "Orchard potters recount crates before dawn. For compute F1 from precision recall, build the line that balances precision and recall.",
+              "question": "Order the pieces so the line balances precision and recall for precision and 2.",
               "hints": [
-                "Start at the left of the example.",
-                "Keep the example order.",
+                "Follow the job, which balances precision and recall.",
+                "F1 is the balanced combination of precision and recall.",
                 "score = 2*precision*recall / (precision+recall)"
               ],
               "explanation": "F1 is the balanced combination of precision and recall.",
@@ -547,10 +547,10 @@
             {
               "id": "metrics-f1-fill",
               "type": "fill_blank",
-              "question": "Orchard potters recount crates before dawn. For compute F1 from precision recall, fill the blank so the line balances precision and recall.",
+              "question": "Supply the missing piece so the line balances precision and recall for precision and 2.",
               "hints": [
-                "The blank is the missing piece of the example.",
-                "The example uses that piece.",
+                "Follow the job, which balances precision and recall.",
+                "F1 is the balanced combination of precision and recall.",
                 "*"
               ],
               "explanation": "F1 is the balanced combination of precision and recall.",
@@ -567,10 +567,10 @@
             {
               "id": "metrics-f1-bug",
               "type": "debugging",
-              "question": "Orchard potters recount crates before dawn. For compute F1 from precision recall, which line does a different job than the example?",
+              "question": "The wrong line is the one that misses the job, which balances precision and recall, for precision and 2.",
               "hints": [
-                "The other lines match the example.",
-                "One line is the odd one.",
+                "Follow the job, which balances precision and recall.",
+                "The print adds the two scores and never balances them.",
                 "Line 3"
               ],
               "explanation": "The print adds the two scores and never balances them.",
@@ -581,13 +581,13 @@
             {
               "id": "metrics-f1-predict-2",
               "type": "output_prediction",
-              "question": "Orchard potters recount crates before dawn. For compute F1 from precision recall, what does the second run display?",
+              "question": "A new input still has code that balances precision and recall for precision and 2, and the correct choice is what it prints.",
               "hints": [
-                "Apply the same steps to the new value.",
-                "The display comes from the last line.",
+                "Follow the job, which balances precision and recall.",
+                "F1 is the balanced combination of precision and recall.",
                 "1.0"
               ],
-              "explanation": "The second F1 Score program displays that value.",
+              "explanation": "F1 is the balanced combination of precision and recall.",
               "xp_reward": 10,
               "starter_code": "precision = 1.0\nrecall = 1.0\nprint(round(2 * precision * recall / (precision + recall), 2))\n",
               "options": [
@@ -601,10 +601,10 @@
             {
               "id": "metrics-f1-write",
               "type": "code",
-              "question": "Orchard potters recount crates before dawn. For compute F1 from precision recall, fill the blank so the program prints the result.",
+              "question": "The blank is the missing piece of the program that balances precision and recall for precision and 2.",
               "hints": [
-                "The blank is the missing piece.",
-                "Print the value that piece produces.",
+                "Follow the job, which balances precision and recall.",
+                "The printed value is the result after this step balances precision and recall.",
                 "label = round(2 * precision * recall / (precision + recall), 2)"
               ],
               "explanation": "The printed value is the result after this step balances precision and recall.",
@@ -639,7 +639,7 @@
       ],
       "prerequisites": [],
       "learning_objectives": [
-        "Quarry potters recount crates before dawn, and build a confusion matrix."
+        "This step counts true positives, using gold and 1."
       ],
       "starter_code": "def confusion(y_true, y_pred):\n    # TODO\n    pass\n",
       "solution_code": "def confusion(y_true, y_pred):\n    tp = fp = tn = fn = 0\n    for yt, yp in zip(y_true, y_pred):\n        if yt == 1 and yp == 1:\n            tp += 1\n        elif yt == 0 and yp == 1:\n            fp += 1\n        elif yt == 0 and yp == 0:\n            tn += 1\n        else:\n            fn += 1\n    return {'tp': tp, 'fp': fp, 'tn': tn, 'fn': fn}\n",
@@ -671,23 +671,23 @@
             {
               "id": "metrics-confusion-teach",
               "type": "teach",
-              "question": "Quarry potters recount crates before dawn, and build a confusion matrix.",
+              "question": "This step counts true positives, using gold and 1.",
               "hints": [
-                "Read the one job this step is practicing.",
-                "The example is about Confusion Counts.",
+                "Follow the job, which counts true positives.",
+                "A true positive is a gold 1 that was also predicted 1.",
                 "g == 1 and p == 1"
               ],
-              "explanation": "Quarry potters recount crates before dawn, and build a confusion matrix.",
+              "explanation": "This step counts true positives, using gold and 1.",
               "xp_reward": 0,
               "worked_example": "g == 1 and p == 1"
             },
             {
               "id": "metrics-confusion-mcq",
               "type": "mcq",
-              "question": "Quarry potters recount crates before dawn. For build a confusion matrix, which line counts true positives?",
+              "question": "Choose the line that counts true positives, which is the line that fits gold and 1.",
               "hints": [
-                "Compare each line with the example.",
-                "One line matches the example.",
+                "Follow the job, which counts true positives.",
+                "A true positive is a gold 1 that was also predicted 1.",
                 "g == 1 and p == 1"
               ],
               "explanation": "A true positive is a gold 1 that was also predicted 1.",
@@ -703,13 +703,13 @@
             {
               "id": "metrics-confusion-predict",
               "type": "output_prediction",
-              "question": "Quarry potters recount crates before dawn. For build a confusion matrix, what value is displayed?",
+              "question": "Read the code that counts true positives for gold and and choose the value it prints.",
               "hints": [
-                "Run the example in your head from the top.",
-                "The last line is what gets displayed.",
+                "Follow the job, which counts true positives.",
+                "A true positive is a gold 1 that was also predicted 1.",
                 "1"
               ],
-              "explanation": "The Confusion Counts program displays that value.",
+              "explanation": "A true positive is a gold 1 that was also predicted 1.",
               "xp_reward": 10,
               "starter_code": "gold = [1, 1, 0, 0]\npred = [1, 0, 0, 1]\nprint(sum(g == 1 and p == 1 for g, p in zip(gold, pred)))\n",
               "options": [
@@ -723,10 +723,10 @@
             {
               "id": "metrics-confusion-order",
               "type": "ordering",
-              "question": "Quarry potters recount crates before dawn. For build a confusion matrix, build the line that counts true positives.",
+              "question": "Arrange the pieces of the line that counts true positives, left to right, for gold and 1.",
               "hints": [
-                "Start at the left of the example.",
-                "Keep the example order.",
+                "Follow the job, which counts true positives.",
+                "A true positive is a gold 1 that was also predicted 1.",
                 "if g==1 and p==1: pass"
               ],
               "explanation": "A true positive is a gold 1 that was also predicted 1.",
@@ -750,10 +750,10 @@
             {
               "id": "metrics-confusion-fill",
               "type": "fill_blank",
-              "question": "Quarry potters recount crates before dawn. For build a confusion matrix, fill the blank so the line counts true positives.",
+              "question": "Fill the blank so the line counts true positives for gold 1.",
               "hints": [
-                "The blank is the missing piece of the example.",
-                "The example uses that piece.",
+                "Follow the job, which counts true positives.",
+                "A true positive is a gold 1 that was also predicted 1.",
                 "and"
               ],
               "explanation": "A true positive is a gold 1 that was also predicted 1.",
@@ -770,10 +770,10 @@
             {
               "id": "metrics-confusion-bug",
               "type": "debugging",
-              "question": "Quarry potters recount crates before dawn. For build a confusion matrix, which line does a different job than the example?",
+              "question": "Find the line that misses the job, which counts true positives, for gold and 1.",
               "hints": [
-                "The other lines match the example.",
-                "One line is the odd one.",
+                "Follow the job, which counts true positives.",
+                "The print counts gold labels and ignores the predictions.",
                 "Line 2"
               ],
               "explanation": "The print counts gold labels and ignores the predictions.",
@@ -784,13 +784,13 @@
             {
               "id": "metrics-confusion-predict-2",
               "type": "output_prediction",
-              "question": "Quarry potters recount crates before dawn. For build a confusion matrix, what does the second run display?",
+              "question": "On the new input, the code still counts true positives for gold and 1, so choose what it prints.",
               "hints": [
-                "Apply the same steps to the new value.",
-                "The display comes from the last line.",
+                "Follow the job, which counts true positives.",
+                "A true positive is a gold 1 that was also predicted 1.",
                 "2"
               ],
-              "explanation": "The second Confusion Counts program displays that value.",
+              "explanation": "A true positive is a gold 1 that was also predicted 1.",
               "xp_reward": 10,
               "starter_code": "gold = [1, 1, 0, 0]\npred = [1, 1, 0, 0]\nprint(sum(g == 1 and p == 1 for g, p in zip(gold, pred)))\n",
               "options": [
@@ -804,10 +804,10 @@
             {
               "id": "metrics-confusion-write",
               "type": "code",
-              "question": "Quarry potters recount crates before dawn. For build a confusion matrix, fill the blank so the program prints the result.",
+              "question": "Fill the blank so the program counts true positives, and the print shows that result for gold and.",
               "hints": [
-                "The blank is the missing piece.",
-                "Print the value that piece produces.",
+                "Follow the job, which counts true positives.",
+                "The printed value is the result after this step counts true positives.",
                 "label = sum(g == 1 and p == 1 for g, p in zip(gold, pred))"
               ],
               "explanation": "The printed value is the result after this step counts true positives.",
@@ -843,7 +843,7 @@
       ],
       "prerequisites": [],
       "learning_objectives": [
-        "Attic potters recount crates before dawn, and tune decision thresholds."
+        "This step counts scores at or above the cutoff, using scores and 5."
       ],
       "starter_code": "def best_threshold(scores, labels):\n    # TODO\n    pass\n",
       "solution_code": "def best_threshold(scores, labels):\n    candidates = sorted(set(scores))\n    best_thr, best_acc = candidates[0], -1.0\n    for thr in candidates:\n        preds = [1 if s >= thr else 0 for s in scores]\n        acc = sum(p == y for p, y in zip(preds, labels)) / len(labels)\n        if acc > best_acc or (acc == best_acc and thr < best_thr):\n            best_acc = acc\n            best_thr = thr\n    return best_thr\n",
@@ -876,23 +876,23 @@
             {
               "id": "metrics-checkpoint-teach",
               "type": "teach",
-              "question": "Attic potters recount crates before dawn, and tune decision thresholds.",
+              "question": "This step counts scores at or above the cutoff, using scores and 5.",
               "hints": [
-                "Read the one job this step is practicing.",
-                "The example is about Checkpoint Threshold Sweep.",
+                "Follow the job, which counts scores at or above the cutoff.",
+                "The sweep keeps scores at or above the cutoff.",
                 "score >= cutoff"
               ],
-              "explanation": "Attic potters recount crates before dawn, and tune decision thresholds.",
+              "explanation": "This step counts scores at or above the cutoff, using scores and 5.",
               "xp_reward": 0,
               "worked_example": "score >= cutoff"
             },
             {
               "id": "metrics-checkpoint-mcq",
               "type": "mcq",
-              "question": "Attic potters recount crates before dawn. For tune decision thresholds, which line counts scores at or above the cutoff?",
+              "question": "Mark the choice that counts scores at or above the cutoff when the code mentions scores and 5.",
               "hints": [
-                "Compare each line with the example.",
-                "One line matches the example.",
+                "Follow the job, which counts scores at or above the cutoff.",
+                "The sweep keeps scores at or above the cutoff.",
                 "score >= cutoff"
               ],
               "explanation": "The sweep keeps scores at or above the cutoff.",
@@ -908,13 +908,13 @@
             {
               "id": "metrics-checkpoint-predict",
               "type": "output_prediction",
-              "question": "Attic potters recount crates before dawn. For tune decision thresholds, what value is displayed?",
+              "question": "After scores and 5, the code counts scores at or above the cutoff, and the correct choice is the printed value.",
               "hints": [
-                "Run the example in your head from the top.",
-                "The last line is what gets displayed.",
+                "Follow the job, which counts scores at or above the cutoff.",
+                "The sweep keeps scores at or above the cutoff.",
                 "1"
               ],
-              "explanation": "The Checkpoint Threshold Sweep program displays that value.",
+              "explanation": "The sweep keeps scores at or above the cutoff.",
               "xp_reward": 10,
               "starter_code": "scores = [0.2, 0.8]\ncutoff = 0.5\nprint(sum(score >= cutoff for score in scores))\n",
               "options": [
@@ -928,10 +928,10 @@
             {
               "id": "metrics-checkpoint-order",
               "type": "ordering",
-              "question": "Attic potters recount crates before dawn. For tune decision thresholds, build the line that counts scores at or above the cutoff.",
+              "question": "The finished line counts scores at or above the cutoff, so place its pieces in order for scores and 5.",
               "hints": [
-                "Start at the left of the example.",
-                "Keep the example order.",
+                "Follow the job, which counts scores at or above the cutoff.",
+                "The sweep keeps scores at or above the cutoff.",
                 "if score >= cutoff: pass"
               ],
               "explanation": "The sweep keeps scores at or above the cutoff.",
@@ -955,10 +955,10 @@
             {
               "id": "metrics-checkpoint-fill",
               "type": "fill_blank",
-              "question": "Attic potters recount crates before dawn. For tune decision thresholds, fill the blank so the line counts scores at or above the cutoff.",
+              "question": "Finish the line that counts scores at or above the cutoff by filling the blank for scores and 5.",
               "hints": [
-                "The blank is the missing piece of the example.",
-                "The example uses that piece.",
+                "Follow the job, which counts scores at or above the cutoff.",
+                "The sweep keeps scores at or above the cutoff.",
                 ">="
               ],
               "explanation": "The sweep keeps scores at or above the cutoff.",
@@ -975,10 +975,10 @@
             {
               "id": "metrics-checkpoint-bug",
               "type": "debugging",
-              "question": "Attic potters recount crates before dawn. For tune decision thresholds, which line does a different job than the example?",
+              "question": "Mark the line that breaks the job, which counts scores at or above the cutoff, for scores and 5.",
               "hints": [
-                "The other lines match the example.",
-                "One line is the odd one.",
+                "Follow the job, which counts scores at or above the cutoff.",
+                "The print counts every score and ignores the cutoff.",
                 "Line 2"
               ],
               "explanation": "The print counts every score and ignores the cutoff.",
@@ -989,13 +989,13 @@
             {
               "id": "metrics-checkpoint-predict-2",
               "type": "output_prediction",
-              "question": "Attic potters recount crates before dawn. For tune decision thresholds, what does the second run display?",
+              "question": "Follow the second program, which counts scores at or above the cutoff for scores and 5, and choose its output.",
               "hints": [
-                "Apply the same steps to the new value.",
-                "The display comes from the last line.",
+                "Follow the job, which counts scores at or above the cutoff.",
+                "The sweep keeps scores at or above the cutoff.",
                 "2"
               ],
-              "explanation": "The second Checkpoint Threshold Sweep program displays that value.",
+              "explanation": "The sweep keeps scores at or above the cutoff.",
               "xp_reward": 10,
               "starter_code": "scores = [0.2, 0.8]\ncutoff = 0.1\nprint(sum(score >= cutoff for score in scores))\n",
               "options": [
@@ -1009,10 +1009,10 @@
             {
               "id": "metrics-checkpoint-write",
               "type": "code",
-              "question": "Attic potters recount crates before dawn. For tune decision thresholds, fill the blank so the program prints the result.",
+              "question": "Finish the program that counts scores at or above the cutoff by filling the blank for scores and 5.",
               "hints": [
-                "The blank is the missing piece.",
-                "Print the value that piece produces.",
+                "Follow the job, which counts scores at or above the cutoff.",
+                "The printed value is the result after this step counts scores at or above the cutoff.",
                 "label = sum(score >= cutoff for score in scores)"
               ],
               "explanation": "The printed value is the result after this step counts scores at or above the cutoff.",

@@ -30,7 +30,7 @@
         "functions"
       ],
       "learning_objectives": [
-        "Depot archivists recount crates before dawn, and write a generator that yields a sequence."
+        "This step adds the yielded steps, using seq and 36."
       ],
       "starter_code": "def count_up(n):\n    # TODO: yield 1, 2, ..., n\n    pass\n",
       "solution_code": "def count_up(n):\n    for i in range(1, n + 1):\n        yield i\n",
@@ -63,23 +63,23 @@
             {
               "id": "generators-step-1-teach",
               "type": "teach",
-              "question": "Depot archivists recount crates before dawn, and write a generator that yields a sequence.",
+              "question": "This step adds the yielded steps, using seq and 36.",
               "hints": [
-                "Read the one job this step is practicing.",
-                "The example is about yield Basics.",
+                "Follow the job, which adds the yielded steps.",
+                "yield hands each step out one at a time.",
                 "yield step"
               ],
-              "explanation": "Depot archivists recount crates before dawn, and write a generator that yields a sequence.",
+              "explanation": "This step adds the yielded steps, using seq and 36.",
               "xp_reward": 0,
               "worked_example": "yield step"
             },
             {
               "id": "generators-step-1-mcq",
               "type": "mcq",
-              "question": "Depot archivists recount crates before dawn. For write a generator that yields a sequence, which line adds the yielded steps?",
+              "question": "The correct line adds the yielded steps, and it is the line tied to seq and 36.",
               "hints": [
-                "Compare each line with the example.",
-                "One line matches the example.",
+                "Follow the job, which adds the yielded steps.",
+                "yield hands each step out one at a time.",
                 "yield step"
               ],
               "explanation": "yield hands each step out one at a time.",
@@ -95,30 +95,30 @@
             {
               "id": "generators-step-1-predict",
               "type": "output_prediction",
-              "question": "Depot archivists recount crates before dawn. For write a generator that yields a sequence, what value is displayed?",
+              "question": "The program adds the yielded steps with seq and 36, so choose the printed value.",
               "hints": [
-                "Run the example in your head from the top.",
-                "The last line is what gets displayed.",
-                "41"
+                "Follow the job, which adds the yielded steps.",
+                "yield hands each step out one at a time.",
+                "42"
               ],
-              "explanation": "The yield Basics program displays that value.",
+              "explanation": "yield hands each step out one at a time.",
               "xp_reward": 10,
-              "starter_code": "def seq(limit):\n    step = 0\n    while step < limit:\n        yield step\n        step = step + 1\nprint(sum(seq(4)) + 35)\n",
+              "starter_code": "def seq(limit):\n    step = 0\n    while step < limit:\n        yield step\n        step = step + 1\nprint(sum(seq(4)) + 36)\n",
               "options": [
-                "45",
-                "41",
+                "46",
+                "42",
                 "none",
                 "0"
               ],
-              "correct_answer": "41"
+              "correct_answer": "42"
             },
             {
               "id": "generators-step-1-order",
               "type": "ordering",
-              "question": "Depot archivists recount crates before dawn. For write a generator that yields a sequence, build the line that adds the yielded steps.",
+              "question": "Build the line that adds the yielded steps for seq and 36, from the first piece to the last.",
               "hints": [
-                "Start at the left of the example.",
-                "Keep the example order.",
+                "Follow the job, which adds the yielded steps.",
+                "def seq(): yield step hands out one step.",
                 "def seq(): yield step"
               ],
               "explanation": "def seq(): yield step hands out one step.",
@@ -140,10 +140,10 @@
             {
               "id": "generators-step-1-fill",
               "type": "fill_blank",
-              "question": "Depot archivists recount crates before dawn. For write a generator that yields a sequence, fill the blank so the line adds the yielded steps.",
+              "question": "Replace the blank with the piece that makes the line adds the yielded steps for seq and 36.",
               "hints": [
-                "The blank is the missing piece of the example.",
-                "The example uses that piece.",
+                "Follow the job, which adds the yielded steps.",
+                "Plus moves to the next step.",
                 "+"
               ],
               "explanation": "Plus moves to the next step.",
@@ -160,55 +160,55 @@
             {
               "id": "generators-step-1-bug",
               "type": "debugging",
-              "question": "Depot archivists recount crates before dawn. For write a generator that yields a sequence, which line does a different job than the example?",
+              "question": "Spot the line that fails the job, which adds the yielded steps, around seq and 36.",
               "hints": [
-                "The other lines match the example.",
-                "One line is the odd one.",
+                "Follow the job, which adds the yielded steps.",
+                "The function returns one step and then stops.",
                 "Line 4"
               ],
               "explanation": "The function returns one step and then stops.",
               "xp_reward": 10,
-              "starter_code": "def seq(limit):\n    step = 0\n    while step < limit:\n        return step\n        step = step + 1\nprint(sum(seq(4)) + 35)\n",
+              "starter_code": "def seq(limit):\n    step = 0\n    while step < limit:\n        return step\n        step = step + 1\nprint(sum(seq(4)) + 36)\n",
               "correct_answer": "4"
             },
             {
               "id": "generators-step-1-predict-2",
               "type": "output_prediction",
-              "question": "Depot archivists recount crates before dawn. For write a generator that yields a sequence, what does the second run display?",
+              "question": "The second program adds the yielded steps for seq and 36, so choose the new printed value.",
               "hints": [
-                "Apply the same steps to the new value.",
-                "The display comes from the last line.",
-                "45"
+                "Follow the job, which adds the yielded steps.",
+                "yield hands each step out one at a time.",
+                "46"
               ],
-              "explanation": "The second yield Basics program displays that value.",
+              "explanation": "yield hands each step out one at a time.",
               "xp_reward": 10,
-              "starter_code": "def seq(limit):\n    step = 0\n    while step < limit:\n        yield step\n        step = step + 1\nprint(sum(seq(5)) + 35)\n",
+              "starter_code": "def seq(limit):\n    step = 0\n    while step < limit:\n        yield step\n        step = step + 1\nprint(sum(seq(5)) + 36)\n",
               "options": [
-                "41",
+                "42",
                 "none",
                 "0",
-                "45"
+                "46"
               ],
-              "correct_answer": "45"
+              "correct_answer": "46"
             },
             {
               "id": "generators-step-1-write",
               "type": "code",
-              "question": "Depot archivists recount crates before dawn. For write a generator that yields a sequence, fill the blank so the program prints the result.",
+              "question": "Complete the blank so this program adds the yielded steps and prints the result for seq and 36.",
               "hints": [
-                "The blank is the missing piece.",
-                "Print the value that piece produces.",
-                "label = sum(seq(4)) + 35"
+                "Follow the job, which adds the yielded steps.",
+                "The yielded total is what gets printed.",
+                "label = sum(seq(4)) + 36"
               ],
               "explanation": "The yielded total is what gets printed.",
               "xp_reward": 10,
               "starter_code": "def seq(limit):\n    step = 0\n    while step < limit:\n        yield step\n        step = step + 1\nlabel = ___\nprint(label)\n",
-              "solution_code": "def seq(limit):\n    step = 0\n    while step < limit:\n        yield step\n        step = step + 1\nlabel = sum(seq(4)) + 35\nprint(label)\n",
+              "solution_code": "def seq(limit):\n    step = 0\n    while step < limit:\n        yield step\n        step = step + 1\nlabel = sum(seq(4)) + 36\nprint(label)\n",
               "tests": [
                 {
                   "name": "generators-step-1-prints",
                   "description": "The yielded total is what gets printed.",
-                  "expected_stdout": "41\n",
+                  "expected_stdout": "42\n",
                   "required": true
                 }
               ]
@@ -234,7 +234,7 @@
         "functions"
       ],
       "learning_objectives": [
-        "Ridge archivists recount crates before dawn, and limit an iterable with a generator."
+        "This step adds only the first readings from the source, using take and 45."
       ],
       "starter_code": "def take(n, iterable):\n    # TODO: yield first n items from iterable\n    pass\n",
       "solution_code": "def take(n, iterable):\n    for i, item in enumerate(iterable):\n        if i >= n:\n            break\n        yield item\n",
@@ -267,23 +267,23 @@
             {
               "id": "generators-step-2-teach",
               "type": "teach",
-              "question": "Ridge archivists recount crates before dawn, and limit an iterable with a generator.",
+              "question": "This step adds only the first readings from the source, using take and 45.",
               "hints": [
-                "Read the one job this step is practicing.",
-                "The example is about Infinite Generators with take.",
+                "Follow the job, which adds only the first readings from the source.",
+                "The generator stops when the limit is reached.",
                 "if count == limit: break"
               ],
-              "explanation": "Ridge archivists recount crates before dawn, and limit an iterable with a generator.",
+              "explanation": "This step adds only the first readings from the source, using take and 45.",
               "xp_reward": 0,
               "worked_example": "if count == limit: break"
             },
             {
               "id": "generators-step-2-mcq",
               "type": "mcq",
-              "question": "Ridge archivists recount crates before dawn. For limit an iterable with a generator, which line adds only the first readings from the source?",
+              "question": "Keep the choice that adds only the first readings from the source for take and 45.",
               "hints": [
-                "Compare each line with the example.",
-                "One line matches the example.",
+                "Follow the job, which adds only the first readings from the source.",
+                "The generator stops when the limit is reached.",
                 "if count == limit: break"
               ],
               "explanation": "The generator stops when the limit is reached.",
@@ -299,13 +299,13 @@
             {
               "id": "generators-step-2-predict",
               "type": "output_prediction",
-              "question": "Ridge archivists recount crates before dawn. For limit an iterable with a generator, what value is displayed?",
+              "question": "Trace the code that adds only the first readings from the source using take and 45, and select what it displays.",
               "hints": [
-                "Run the example in your head from the top.",
-                "The last line is what gets displayed.",
+                "Follow the job, which adds only the first readings from the source.",
+                "The generator stops when the limit is reached.",
                 "75"
               ],
-              "explanation": "The Infinite Generators with take program displays that value.",
+              "explanation": "The generator stops when the limit is reached.",
               "xp_reward": 10,
               "starter_code": "def take(limit, source):\n    count = 0\n    for item in source:\n        if count == limit:\n            break\n        yield item\n        count = count + 1\nprint(sum(take(2, [36, 39, 45])))\n",
               "options": [
@@ -319,10 +319,10 @@
             {
               "id": "generators-step-2-order",
               "type": "ordering",
-              "question": "Ridge archivists recount crates before dawn. For limit an iterable with a generator, build the line that adds only the first readings from the source.",
+              "question": "Tap the pieces, in order, of the line that adds only the first readings from the source for take and 45.",
               "hints": [
-                "Start at the left of the example.",
-                "Keep the example order.",
+                "Follow the job, which adds only the first readings from the source.",
+                "if count == limit: break stops the walk.",
                 "if count == limit: break"
               ],
               "explanation": "if count == limit: break stops the walk.",
@@ -346,10 +346,10 @@
             {
               "id": "generators-step-2-fill",
               "type": "fill_blank",
-              "question": "Ridge archivists recount crates before dawn. For limit an iterable with a generator, fill the blank so the line adds only the first readings from the source.",
+              "question": "The blank is the missing piece of the line that adds only the first readings from the source for take and 45.",
               "hints": [
-                "The blank is the missing piece of the example.",
-                "The example uses that piece.",
+                "Follow the job, which adds only the first readings from the source.",
+                "Plus counts one more taken reading.",
                 "+"
               ],
               "explanation": "Plus counts one more taken reading.",
@@ -366,10 +366,10 @@
             {
               "id": "generators-step-2-bug",
               "type": "debugging",
-              "question": "Ridge archivists recount crates before dawn. For limit an iterable with a generator, which line does a different job than the example?",
+              "question": "Choose the line that does another job than the one that adds only the first readings from the source for take and.",
               "hints": [
-                "The other lines match the example.",
-                "One line is the odd one.",
+                "Follow the job, which adds only the first readings from the source.",
+                "The stop check matches immediately.",
                 "Line 4"
               ],
               "explanation": "The stop check matches immediately.",
@@ -380,13 +380,13 @@
             {
               "id": "generators-step-2-predict-2",
               "type": "output_prediction",
-              "question": "Ridge archivists recount crates before dawn. For limit an iterable with a generator, what does the second run display?",
+              "question": "Trace the second run, which adds only the first readings from the source for take and 45, and select what it displays.",
               "hints": [
-                "Apply the same steps to the new value.",
-                "The display comes from the last line.",
+                "Follow the job, which adds only the first readings from the source.",
+                "The generator stops when the limit is reached.",
                 "36"
               ],
-              "explanation": "The second Infinite Generators with take program displays that value.",
+              "explanation": "The generator stops when the limit is reached.",
               "xp_reward": 10,
               "starter_code": "def take(limit, source):\n    count = 0\n    for item in source:\n        if count == limit:\n            break\n        yield item\n        count = count + 1\nprint(sum(take(1, [36, 39, 45])))\n",
               "options": [
@@ -400,10 +400,10 @@
             {
               "id": "generators-step-2-write",
               "type": "code",
-              "question": "Ridge archivists recount crates before dawn. For limit an iterable with a generator, fill the blank so the program prints the result.",
+              "question": "Type the missing piece so the program adds only the first readings from the source for take and 45 and prints it.",
               "hints": [
-                "The blank is the missing piece.",
-                "Print the value that piece produces.",
+                "Follow the job, which adds only the first readings from the source.",
+                "The taken total is what gets printed.",
                 "label = sum(take(2, [36, 39, 45]))"
               ],
               "explanation": "The taken total is what gets printed.",
@@ -440,7 +440,7 @@
         "functions"
       ],
       "learning_objectives": [
-        "Cove archivists recount crates before dawn, and maintain state across yields."
+        "This step yields the running whole-number average, using averages and 38."
       ],
       "starter_code": "def running_average(nums):\n    # TODO: yield average after each number\n    pass\n",
       "solution_code": "def running_average(nums):\n    total = 0\n    count = 0\n    for x in nums:\n        total += x\n        count += 1\n        yield total / count\n",
@@ -473,23 +473,23 @@
             {
               "id": "generators-01-teach",
               "type": "teach",
-              "question": "Cove archivists recount crates before dawn, and maintain state across yields.",
+              "question": "This step yields the running whole-number average, using averages and 38.",
               "hints": [
-                "Read the one job this step is practicing.",
-                "The example is about Running Average Stream.",
+                "Follow the job, which yields the running whole-number average.",
+                "total // seen is the average so far.",
                 "total // seen"
               ],
-              "explanation": "Cove archivists recount crates before dawn, and maintain state across yields.",
+              "explanation": "This step yields the running whole-number average, using averages and 38.",
               "xp_reward": 0,
               "worked_example": "total // seen"
             },
             {
               "id": "generators-01-mcq",
               "type": "mcq",
-              "question": "Cove archivists recount crates before dawn. For maintain state across yields, which line yields the running whole-number average?",
+              "question": "Choose the line that yields the running whole-number average, which is the line that fits averages and 38.",
               "hints": [
-                "Compare each line with the example.",
-                "One line matches the example.",
+                "Follow the job, which yields the running whole-number average.",
+                "total // seen is the average so far.",
                 "total // seen"
               ],
               "explanation": "total // seen is the average so far.",
@@ -505,13 +505,13 @@
             {
               "id": "generators-01-predict",
               "type": "output_prediction",
-              "question": "Cove archivists recount crates before dawn. For maintain state across yields, what value is displayed?",
+              "question": "Read the code that yields the running whole-number average for averages and 38, and choose the value it prints.",
               "hints": [
-                "Run the example in your head from the top.",
-                "The last line is what gets displayed.",
+                "Follow the job, which yields the running whole-number average.",
+                "total // seen is the average so far.",
                 "36"
               ],
-              "explanation": "The Running Average Stream program displays that value.",
+              "explanation": "total // seen is the average so far.",
               "xp_reward": 10,
               "starter_code": "def averages(values):\n    total = 0\n    seen = 0\n    for value in values:\n        total = total + value\n        seen = seen + 1\n        yield total // seen\nprint(list(averages([34, 38]))[-1])\n",
               "options": [
@@ -525,10 +525,10 @@
             {
               "id": "generators-01-order",
               "type": "ordering",
-              "question": "Cove archivists recount crates before dawn. For maintain state across yields, build the line that yields the running whole-number average.",
+              "question": "Arrange the pieces of the line that yields the running whole-number average, left to right, for averages and 38.",
               "hints": [
-                "Start at the left of the example.",
-                "Keep the example order.",
+                "Follow the job, which yields the running whole-number average.",
+                "yield total // seen hands out the average.",
                 "def gen(): yield total // seen"
               ],
               "explanation": "yield total // seen hands out the average.",
@@ -554,10 +554,10 @@
             {
               "id": "generators-01-fill",
               "type": "fill_blank",
-              "question": "Cove archivists recount crates before dawn. For maintain state across yields, fill the blank so the line yields the running whole-number average.",
+              "question": "Fill the blank so the line yields the running whole-number average for averages and 38.",
               "hints": [
-                "The blank is the missing piece of the example.",
-                "The example uses that piece.",
+                "Follow the job, which yields the running whole-number average.",
+                "Plus adds the new reading into the running total.",
                 "+"
               ],
               "explanation": "Plus adds the new reading into the running total.",
@@ -574,10 +574,10 @@
             {
               "id": "generators-01-bug",
               "type": "debugging",
-              "question": "Cove archivists recount crates before dawn. For maintain state across yields, which line does a different job than the example?",
+              "question": "Find the line that misses the job, which yields the running whole-number average, for averages and 38.",
               "hints": [
-                "The other lines match the example.",
-                "One line is the odd one.",
+                "Follow the job, which yields the running whole-number average.",
+                "The generator multiplies instead of dividing.",
                 "Line 7"
               ],
               "explanation": "The generator multiplies instead of dividing.",
@@ -588,13 +588,13 @@
             {
               "id": "generators-01-predict-2",
               "type": "output_prediction",
-              "question": "Cove archivists recount crates before dawn. For maintain state across yields, what does the second run display?",
+              "question": "On the new input, the code still yields the running whole-number average for averages and 38, so choose what it prints.",
               "hints": [
-                "Apply the same steps to the new value.",
-                "The display comes from the last line.",
+                "Follow the job, which yields the running whole-number average.",
+                "total // seen is the average so far.",
                 "37"
               ],
-              "explanation": "The second Running Average Stream program displays that value.",
+              "explanation": "total // seen is the average so far.",
               "xp_reward": 10,
               "starter_code": "def averages(values):\n    total = 0\n    seen = 0\n    for value in values:\n        total = total + value\n        seen = seen + 1\n        yield total // seen\nprint(list(averages([34, 38, 40]))[-1])\n",
               "options": [
@@ -608,10 +608,10 @@
             {
               "id": "generators-01-write",
               "type": "code",
-              "question": "Cove archivists recount crates before dawn. For maintain state across yields, fill the blank so the program prints the result.",
+              "question": "Fill the blank so the program yields the running whole-number average, and the print shows that result for averages and 38.",
               "hints": [
-                "The blank is the missing piece.",
-                "Print the value that piece produces.",
+                "Follow the job, which yields the running whole-number average.",
+                "The latest average is what gets printed.",
                 "label = list(averages([34, 38]))[-1]"
               ],
               "explanation": "The latest average is what gets printed.",
@@ -648,7 +648,7 @@
         "lists"
       ],
       "learning_objectives": [
-        "Plaza archivists recount crates before dawn, and slice an iterable into chunks via yield."
+        "This step adds the first chunk of readings, using chunks and 4."
       ],
       "starter_code": "def chunks(items, size):\n    # TODO: yield successive slices of length size\n    pass\n",
       "solution_code": "def chunks(items, size):\n    for i in range(0, len(items), size):\n        yield items[i:i + size]\n",
@@ -681,23 +681,23 @@
             {
               "id": "generators-practice-1-teach",
               "type": "teach",
-              "question": "Plaza archivists recount crates before dawn, and slice an iterable into chunks via yield.",
+              "question": "This step adds the first chunk of readings, using chunks and 4.",
               "hints": [
-                "Read the one job this step is practicing.",
-                "The example is about Chunked Reader.",
+                "Follow the job, which adds the first chunk of readings.",
+                "The slice takes size readings and then the start moves forward.",
                 "start + size"
               ],
-              "explanation": "Plaza archivists recount crates before dawn, and slice an iterable into chunks via yield.",
+              "explanation": "This step adds the first chunk of readings, using chunks and 4.",
               "xp_reward": 0,
               "worked_example": "start + size"
             },
             {
               "id": "generators-practice-1-mcq",
               "type": "mcq",
-              "question": "Plaza archivists recount crates before dawn. For slice an iterable into chunks via yield, which line adds the first chunk of readings?",
+              "question": "Choose the line that adds the first chunk of readings, which is the line that fits chunks and 4.",
               "hints": [
-                "Compare each line with the example.",
-                "One line matches the example.",
+                "Follow the job, which adds the first chunk of readings.",
+                "The slice takes size readings and then the start moves forward.",
                 "start + size"
               ],
               "explanation": "The slice takes size readings and then the start moves forward.",
@@ -713,13 +713,13 @@
             {
               "id": "generators-practice-1-predict",
               "type": "output_prediction",
-              "question": "Plaza archivists recount crates before dawn. For slice an iterable into chunks via yield, what value is displayed?",
+              "question": "Read the code that adds the first chunk of readings for chunks and 4, and choose the value it prints.",
               "hints": [
-                "Run the example in your head from the top.",
-                "The last line is what gets displayed.",
+                "Follow the job, which adds the first chunk of readings.",
+                "The slice takes size readings and then the start moves forward.",
                 "36"
               ],
-              "explanation": "The Chunked Reader program displays that value.",
+              "explanation": "The slice takes size readings and then the start moves forward.",
               "xp_reward": 10,
               "starter_code": "def chunks(values, size):\n    start = 0\n    while start < len(values):\n        yield values[start:start + size]\n        start = start + size\nprint(sum(list(chunks([34, 2, 3, 4], 2))[0]))\n",
               "options": [
@@ -733,10 +733,10 @@
             {
               "id": "generators-practice-1-order",
               "type": "ordering",
-              "question": "Plaza archivists recount crates before dawn. For slice an iterable into chunks via yield, build the line that adds the first chunk of readings.",
+              "question": "Arrange the pieces of the line that adds the first chunk of readings, left to right, for chunks and 4.",
               "hints": [
-                "Start at the left of the example.",
-                "Keep the example order.",
+                "Follow the job, which adds the first chunk of readings.",
+                "step = start + size is the next chunk boundary.",
                 "step = start + size"
               ],
               "explanation": "step = start + size is the next chunk boundary.",
@@ -760,10 +760,10 @@
             {
               "id": "generators-practice-1-fill",
               "type": "fill_blank",
-              "question": "Plaza archivists recount crates before dawn. For slice an iterable into chunks via yield, fill the blank so the line adds the first chunk of readings.",
+              "question": "Fill the blank so the line adds the first chunk of readings for chunks and 4.",
               "hints": [
-                "The blank is the missing piece of the example.",
-                "The example uses that piece.",
+                "Follow the job, which adds the first chunk of readings.",
+                "Plus moves the start by one chunk.",
                 "+"
               ],
               "explanation": "Plus moves the start by one chunk.",
@@ -780,10 +780,10 @@
             {
               "id": "generators-practice-1-bug",
               "type": "debugging",
-              "question": "Plaza archivists recount crates before dawn. For slice an iterable into chunks via yield, which line does a different job than the example?",
+              "question": "Find the line that misses the job, which adds the first chunk of readings, for chunks and 4.",
               "hints": [
-                "The other lines match the example.",
-                "One line is the odd one.",
+                "Follow the job, which adds the first chunk of readings.",
+                "The chunk moves backward.",
                 "Line 5"
               ],
               "explanation": "The chunk moves backward.",
@@ -794,13 +794,13 @@
             {
               "id": "generators-practice-1-predict-2",
               "type": "output_prediction",
-              "question": "Plaza archivists recount crates before dawn. For slice an iterable into chunks via yield, what does the second run display?",
+              "question": "On the new input, the code still adds the first chunk of readings for chunks and 4, so choose what it prints.",
               "hints": [
-                "Apply the same steps to the new value.",
-                "The display comes from the last line.",
+                "Follow the job, which adds the first chunk of readings.",
+                "The slice takes size readings and then the start moves forward.",
                 "39"
               ],
-              "explanation": "The second Chunked Reader program displays that value.",
+              "explanation": "The slice takes size readings and then the start moves forward.",
               "xp_reward": 10,
               "starter_code": "def chunks(values, size):\n    start = 0\n    while start < len(values):\n        yield values[start:start + size]\n        start = start + size\nprint(sum(list(chunks([34, 2, 3, 4], 3))[0]))\n",
               "options": [
@@ -814,10 +814,10 @@
             {
               "id": "generators-practice-1-write",
               "type": "code",
-              "question": "Plaza archivists recount crates before dawn. For slice an iterable into chunks via yield, fill the blank so the program prints the result.",
+              "question": "Fill the blank so the program adds the first chunk of readings, and the print shows that result for chunks and 4.",
               "hints": [
-                "The blank is the missing piece.",
-                "Print the value that piece produces.",
+                "Follow the job, which adds the first chunk of readings.",
+                "The first chunk total is what gets printed.",
                 "label = sum(list(chunks([34, 2, 3, 4], 2))[0])"
               ],
               "explanation": "The first chunk total is what gets printed.",
@@ -854,7 +854,7 @@
         "functions"
       ],
       "learning_objectives": [
-        "Marsh archivists recount crates before dawn, and build a filtering generator."
+        "This step adds only the readings above the cutoff, using keep and cut."
       ],
       "starter_code": "def filter_gen(pred, iterable):\n    # TODO: yield items where pred(item) is True\n    pass\n",
       "solution_code": "def filter_gen(pred, iterable):\n    for item in iterable:\n        if pred(item):\n            yield item\n",
@@ -887,23 +887,23 @@
             {
               "id": "generators-checkpoint-teach",
               "type": "teach",
-              "question": "Marsh archivists recount crates before dawn, and build a filtering generator.",
+              "question": "This step adds only the readings above the cutoff, using keep and cut.",
               "hints": [
-                "Read the one job this step is practicing.",
-                "The example is about Unit 17 Checkpoint Generators.",
+                "Follow the job, which adds only the readings above the cutoff.",
+                "yield runs only when the reading is above the cutoff.",
                 "value > cut"
               ],
-              "explanation": "Marsh archivists recount crates before dawn, and build a filtering generator.",
+              "explanation": "This step adds only the readings above the cutoff, using keep and cut.",
               "xp_reward": 0,
               "worked_example": "value > cut"
             },
             {
               "id": "generators-checkpoint-mcq",
               "type": "mcq",
-              "question": "Marsh archivists recount crates before dawn. For build a filtering generator, which line adds only the readings above the cutoff?",
+              "question": "A correct choice adds only the readings above the cutoff and goes with keep and 10.",
               "hints": [
-                "Compare each line with the example.",
-                "One line matches the example.",
+                "Follow the job, which adds only the readings above the cutoff.",
+                "yield runs only when the reading is above the cutoff.",
                 "value > cut"
               ],
               "explanation": "yield runs only when the reading is above the cutoff.",
@@ -919,13 +919,13 @@
             {
               "id": "generators-checkpoint-predict",
               "type": "output_prediction",
-              "question": "Marsh archivists recount crates before dawn. For build a filtering generator, what value is displayed?",
+              "question": "Select the output after the code adds only the readings above the cutoff, using keep and 10.",
               "hints": [
-                "Run the example in your head from the top.",
-                "The last line is what gets displayed.",
+                "Follow the job, which adds only the readings above the cutoff.",
+                "yield runs only when the reading is above the cutoff.",
                 "87"
               ],
-              "explanation": "The Unit 17 Checkpoint Generators program displays that value.",
+              "explanation": "yield runs only when the reading is above the cutoff.",
               "xp_reward": 10,
               "starter_code": "def keep(values, cut):\n    for value in values:\n        if value > cut:\n            yield value\nprint(sum(keep([41, 3, 46], 10)))\n",
               "options": [
@@ -939,10 +939,10 @@
             {
               "id": "generators-checkpoint-order",
               "type": "ordering",
-              "question": "Marsh archivists recount crates before dawn. For build a filtering generator, build the line that adds only the readings above the cutoff.",
+              "question": "Make the line that adds only the readings above the cutoff by ordering the pieces for keep and 10.",
               "hints": [
-                "Start at the left of the example.",
-                "Keep the example order.",
+                "Follow the job, which adds only the readings above the cutoff.",
+                "flag = value > cut is the keep test.",
                 "flag = value > cut"
               ],
               "explanation": "flag = value > cut is the keep test.",
@@ -966,10 +966,10 @@
             {
               "id": "generators-checkpoint-fill",
               "type": "fill_blank",
-              "question": "Marsh archivists recount crates before dawn. For build a filtering generator, fill the blank so the line adds only the readings above the cutoff.",
+              "question": "Complete the line for keep and 10 so that it adds only the readings above the cutoff.",
               "hints": [
-                "The blank is the missing piece of the example.",
-                "The example uses that piece.",
+                "Follow the job, which adds only the readings above the cutoff.",
+                "The cutoff keeps the greater readings.",
                 ">"
               ],
               "explanation": "The cutoff keeps the greater readings.",
@@ -986,10 +986,10 @@
             {
               "id": "generators-checkpoint-bug",
               "type": "debugging",
-              "question": "Marsh archivists recount crates before dawn. For build a filtering generator, which line does a different job than the example?",
+              "question": "Select the line that gets in the way of the job, which adds only the readings above the cutoff, for keep and 10.",
               "hints": [
-                "The other lines match the example.",
-                "One line is the odd one.",
+                "Follow the job, which adds only the readings above the cutoff.",
+                "The generator keeps the small readings.",
                 "Line 3"
               ],
               "explanation": "The generator keeps the small readings.",
@@ -1000,13 +1000,13 @@
             {
               "id": "generators-checkpoint-predict-2",
               "type": "output_prediction",
-              "question": "Marsh archivists recount crates before dawn. For build a filtering generator, what does the second run display?",
+              "question": "With the new data around keep and 10, the code adds only the readings above the cutoff, so select the new output.",
               "hints": [
-                "Apply the same steps to the new value.",
-                "The display comes from the last line.",
+                "Follow the job, which adds only the readings above the cutoff.",
+                "yield runs only when the reading is above the cutoff.",
                 "46"
               ],
-              "explanation": "The second Unit 17 Checkpoint Generators program displays that value.",
+              "explanation": "yield runs only when the reading is above the cutoff.",
               "xp_reward": 10,
               "starter_code": "def keep(values, cut):\n    for value in values:\n        if value > cut:\n            yield value\nprint(sum(keep([41, 3, 46], 41)))\n",
               "options": [
@@ -1020,10 +1020,10 @@
             {
               "id": "generators-checkpoint-write",
               "type": "code",
-              "question": "Marsh archivists recount crates before dawn. For build a filtering generator, fill the blank so the program prints the result.",
+              "question": "The printed result shows up after you fill the blank so the code adds only the readings above the cutoff for keep and 10.",
               "hints": [
-                "The blank is the missing piece.",
-                "Print the value that piece produces.",
+                "Follow the job, which adds only the readings above the cutoff.",
+                "The kept total is what gets printed.",
                 "label = sum(keep([41, 3, 46], 10))"
               ],
               "explanation": "The kept total is what gets printed.",

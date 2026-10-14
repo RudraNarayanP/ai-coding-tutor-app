@@ -26,7 +26,7 @@
       ],
       "prerequisites": [],
       "learning_objectives": [
-        "Cove clerks recount crates before dawn, and understand tables, rows, and columns."
+        "This step counts the seeded tables, using total holding table."
       ],
       "starter_code": "-- TODO: select every column from the customers table\nSELECT id FROM customers WHERE 0;\n",
       "solution_code": "SELECT * FROM customers;\n",
@@ -52,23 +52,23 @@
             {
               "id": "sql-01-teach",
               "type": "teach",
-              "question": "Cove clerks recount crates before dawn, and understand tables, rows, and columns.",
+              "question": "This step counts the seeded tables, using total holding table.",
               "hints": [
-                "Read the one job this step is practicing.",
-                "The example is about Database Exploration.",
+                "Follow the job, which counts the seeded tables.",
+                "COUNT(*) over sqlite_master where type is table counts the tables.",
                 "SELECT COUNT(*) AS total FROM sqlite_master WHERE type = 'table';"
               ],
-              "explanation": "Cove clerks recount crates before dawn, and understand tables, rows, and columns.",
+              "explanation": "This step counts the seeded tables, using total holding table.",
               "xp_reward": 0,
               "worked_example": "SELECT COUNT(*) AS total FROM sqlite_master WHERE type = 'table';"
             },
             {
               "id": "sql-01-mcq",
               "type": "mcq",
-              "question": "Cove clerks recount crates before dawn. For understand tables, rows, and columns, which line counts the seeded tables?",
+              "question": "Pick the line that counts the seeded tables, not a line about something else, for total holding table.",
               "hints": [
-                "Compare each line with the example.",
-                "One line matches the example.",
+                "Follow the job, which counts the seeded tables.",
+                "COUNT(*) over sqlite_master where type is table counts the tables.",
                 "SELECT COUNT(*) AS total FROM sqlite_master"
               ],
               "explanation": "COUNT(*) over sqlite_master where type is table counts the tables.",
@@ -84,13 +84,13 @@
             {
               "id": "sql-01-predict",
               "type": "output_prediction",
-              "question": "Cove clerks recount crates before dawn. For understand tables, rows, and columns, what value is displayed?",
+              "question": "The displayed value is what the code prints when it counts the seeded tables for total holding table.",
               "hints": [
-                "Run the example in your head from the top.",
-                "The last line is what gets displayed.",
+                "Follow the job, which counts the seeded tables.",
+                "COUNT(*) over sqlite_master where type is table counts the tables.",
                 "┌───────┐\n│ total │\n├───────┤\n│ 7     │\n└───────┘"
               ],
-              "explanation": "The Database Exploration program displays that value.",
+              "explanation": "COUNT(*) over sqlite_master where type is table counts the tables.",
               "xp_reward": 10,
               "starter_code": "SELECT COUNT(*) AS total FROM sqlite_master WHERE type = 'table';\n",
               "options": [
@@ -104,10 +104,10 @@
             {
               "id": "sql-01-order",
               "type": "ordering",
-              "question": "Cove clerks recount crates before dawn. For understand tables, rows, and columns, build the line that counts the seeded tables.",
+              "question": "Place every piece so the result counts the seeded tables for total holding table.",
               "hints": [
-                "Start at the left of the example.",
-                "Keep the example order.",
+                "Follow the job, which counts the seeded tables.",
+                "COUNT(*) over sqlite_master where type is table counts the tables.",
                 "SELECT COUNT(*) AS total FROM sqlite_master"
               ],
               "explanation": "COUNT(*) over sqlite_master where type is table counts the tables.",
@@ -133,10 +133,10 @@
             {
               "id": "sql-01-fill",
               "type": "fill_blank",
-              "question": "Cove clerks recount crates before dawn. For understand tables, rows, and columns, fill the blank so the line counts the seeded tables.",
+              "question": "Drop in the piece that lets the line counts the seeded tables for total holding table.",
               "hints": [
-                "The blank is the missing piece of the example.",
-                "The example uses that piece.",
+                "Follow the job, which counts the seeded tables.",
+                "COUNT(*) over sqlite_master where type is table counts the tables.",
                 "="
               ],
               "explanation": "COUNT(*) over sqlite_master where type is table counts the tables.",
@@ -153,10 +153,10 @@
             {
               "id": "sql-01-bug",
               "type": "debugging",
-              "question": "Cove clerks recount crates before dawn. For understand tables, rows, and columns, which line does a different job than the example?",
+              "question": "The mismatch misses the job, which counts the seeded tables, for total holding table.",
               "hints": [
-                "The other lines match the example.",
-                "One line is the odd one.",
+                "Follow the job, which counts the seeded tables.",
+                "The filter counts views instead of tables.",
                 "Line 1"
               ],
               "explanation": "The filter counts views instead of tables.",
@@ -167,13 +167,13 @@
             {
               "id": "sql-01-predict-2",
               "type": "output_prediction",
-              "question": "Cove clerks recount crates before dawn. For understand tables, rows, and columns, what does the second run display?",
+              "question": "Choose the printed result of the second run that counts the seeded tables for total holding table.",
               "hints": [
-                "Apply the same steps to the new value.",
-                "The display comes from the last line.",
+                "Follow the job, which counts the seeded tables.",
+                "COUNT(*) over sqlite_master where type is table counts the tables.",
                 "┌───────┐\n│ total │\n├───────┤\n│ 0     │\n└───────┘"
               ],
-              "explanation": "The second Database Exploration program displays that value.",
+              "explanation": "COUNT(*) over sqlite_master where type is table counts the tables.",
               "xp_reward": 10,
               "starter_code": "SELECT COUNT(*) AS total FROM sqlite_master WHERE type = 'view';\n",
               "options": [
@@ -187,10 +187,10 @@
             {
               "id": "sql-01-write",
               "type": "code",
-              "question": "Cove clerks recount crates before dawn. For understand tables, rows, and columns, fill the blank so the program prints the result.",
+              "question": "Make the program counts the seeded tables by filling the blank for total holding table.",
               "hints": [
-                "The blank is the missing piece.",
-                "Print the value that piece produces.",
+                "Follow the job, which counts the seeded tables.",
+                "The query result is what this step counts the seeded tables.",
                 "SELECT COUNT(*) AS total FROM sqlite_master WHERE type = 'table';"
               ],
               "explanation": "The query result is what this step counts the seeded tables.",

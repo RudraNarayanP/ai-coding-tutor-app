@@ -27,7 +27,7 @@
       ],
       "prerequisites": [],
       "learning_objectives": [
-        "Harbor clerks recount crates before dawn, and filter tabular dict rows."
+        "This step counts rows at or above the cutoff, using rows holding name."
       ],
       "starter_code": "def filter_rows(rows, key, value):\n    # TODO\n    pass\n",
       "solution_code": "def filter_rows(rows, key, value):\n    return [r for r in rows if r.get(key) == value]\n",
@@ -60,23 +60,23 @@
             {
               "id": "wrangle-filter-teach",
               "type": "teach",
-              "question": "Harbor clerks recount crates before dawn, and filter tabular dict rows.",
+              "question": "This step counts rows at or above the cutoff, using rows holding name.",
               "hints": [
-                "Read the one job this step is practicing.",
-                "The example is about Filter Rows.",
+                "Follow the job, which counts rows at or above the cutoff.",
+                "The cutoff keeps rows whose value is at least 10.",
                 "row['v'] >= 10"
               ],
-              "explanation": "Harbor clerks recount crates before dawn, and filter tabular dict rows.",
+              "explanation": "This step counts rows at or above the cutoff, using rows holding name.",
               "xp_reward": 0,
               "worked_example": "row['v'] >= 10"
             },
             {
               "id": "wrangle-filter-mcq",
               "type": "mcq",
-              "question": "Harbor clerks recount crates before dawn. For filter tabular dict rows, which line counts rows at or above the cutoff?",
+              "question": "Select the line that counts rows at or above the cutoff, the one that belongs with rows holding name.",
               "hints": [
-                "Compare each line with the example.",
-                "One line matches the example.",
+                "Follow the job, which counts rows at or above the cutoff.",
+                "The cutoff keeps rows whose value is at least 10.",
                 "row['v'] >= 10"
               ],
               "explanation": "The cutoff keeps rows whose value is at least 10.",
@@ -92,13 +92,13 @@
             {
               "id": "wrangle-filter-predict",
               "type": "output_prediction",
-              "question": "Harbor clerks recount crates before dawn. For filter tabular dict rows, what value is displayed?",
+              "question": "Follow the code that counts rows at or above the cutoff for rows holding name, then choose the displayed value.",
               "hints": [
-                "Run the example in your head from the top.",
-                "The last line is what gets displayed.",
+                "Follow the job, which counts rows at or above the cutoff.",
+                "The cutoff keeps rows whose value is at least 10.",
                 "1"
               ],
-              "explanation": "The Filter Rows program displays that value.",
+              "explanation": "The cutoff keeps rows whose value is at least 10.",
               "xp_reward": 10,
               "starter_code": "rows = [{'name': 'sage', 'v': 53}, {'name': 'other', 'v': 1}]\nkept = [row for row in rows if row['v'] >= 10]\nprint(len(kept))\n",
               "options": [
@@ -112,10 +112,10 @@
             {
               "id": "wrangle-filter-order",
               "type": "ordering",
-              "question": "Harbor clerks recount crates before dawn. For filter tabular dict rows, build the line that counts rows at or above the cutoff.",
+              "question": "Order the pieces so the line counts rows at or above the cutoff for rows holding name.",
               "hints": [
-                "Start at the left of the example.",
-                "Keep the example order.",
+                "Follow the job, which counts rows at or above the cutoff.",
+                "The cutoff keeps rows whose value is at least 10.",
                 "if row['v'] >= 10: pass"
               ],
               "explanation": "The cutoff keeps rows whose value is at least 10.",
@@ -139,10 +139,10 @@
             {
               "id": "wrangle-filter-fill",
               "type": "fill_blank",
-              "question": "Harbor clerks recount crates before dawn. For filter tabular dict rows, fill the blank so the line counts rows at or above the cutoff.",
+              "question": "Supply the missing piece so the line counts rows at or above the cutoff for rows holding name.",
               "hints": [
-                "The blank is the missing piece of the example.",
-                "The example uses that piece.",
+                "Follow the job, which counts rows at or above the cutoff.",
+                "The cutoff keeps rows whose value is at least 10.",
                 ">="
               ],
               "explanation": "The cutoff keeps rows whose value is at least 10.",
@@ -159,10 +159,10 @@
             {
               "id": "wrangle-filter-bug",
               "type": "debugging",
-              "question": "Harbor clerks recount crates before dawn. For filter tabular dict rows, which line does a different job than the example?",
+              "question": "The wrong line is the one that misses the job, which counts rows at or above the cutoff, for rows holding name.",
               "hints": [
-                "The other lines match the example.",
-                "One line is the odd one.",
+                "Follow the job, which counts rows at or above the cutoff.",
+                "The print counts every row and never applies the cutoff.",
                 "Line 2"
               ],
               "explanation": "The print counts every row and never applies the cutoff.",
@@ -173,13 +173,13 @@
             {
               "id": "wrangle-filter-predict-2",
               "type": "output_prediction",
-              "question": "Harbor clerks recount crates before dawn. For filter tabular dict rows, what does the second run display?",
+              "question": "A new input still has code that counts rows at or above the cutoff for rows holding name, and the correct choice is what it prints.",
               "hints": [
-                "Apply the same steps to the new value.",
-                "The display comes from the last line.",
+                "Follow the job, which counts rows at or above the cutoff.",
+                "The cutoff keeps rows whose value is at least 10.",
                 "0"
               ],
-              "explanation": "The second Filter Rows program displays that value.",
+              "explanation": "The cutoff keeps rows whose value is at least 10.",
               "xp_reward": 10,
               "starter_code": "rows = [{'name': 'sage', 'v': 1}, {'name': 'other', 'v': 2}]\nkept = [row for row in rows if row['v'] >= 10]\nprint(len(kept))\n",
               "options": [
@@ -193,10 +193,10 @@
             {
               "id": "wrangle-filter-write",
               "type": "code",
-              "question": "Harbor clerks recount crates before dawn. For filter tabular dict rows, fill the blank so the program prints the result.",
+              "question": "The blank is the missing piece of the program that counts rows at or above the cutoff for rows holding name.",
               "hints": [
-                "The blank is the missing piece.",
-                "Print the value that piece produces.",
+                "Follow the job, which counts rows at or above the cutoff.",
+                "The printed value is the result after this step counts rows at or above the cutoff.",
                 "label = len(kept)"
               ],
               "explanation": "The printed value is the result after this step counts rows at or above the cutoff.",
@@ -231,7 +231,7 @@
       ],
       "prerequisites": [],
       "learning_objectives": [
-        "Mesa clerks recount crates before dawn, and project columns from rows."
+        "This step reads one column from the row, using row holding name."
       ],
       "starter_code": "def select(rows, cols):\n    # TODO\n    pass\n",
       "solution_code": "def select(rows, cols):\n    return [{c: r[c] for c in cols if c in r} for r in rows]\n",
@@ -264,23 +264,23 @@
             {
               "id": "wrangle-select-teach",
               "type": "teach",
-              "question": "Mesa clerks recount crates before dawn, and project columns from rows.",
+              "question": "This step reads one column from the row, using row holding name.",
               "hints": [
-                "Read the one job this step is practicing.",
-                "The example is about Select Columns.",
+                "Follow the job, which reads one column from the row.",
+                "The name key selects that column.",
                 "row['name']"
               ],
-              "explanation": "Mesa clerks recount crates before dawn, and project columns from rows.",
+              "explanation": "This step reads one column from the row, using row holding name.",
               "xp_reward": 0,
               "worked_example": "row['name']"
             },
             {
               "id": "wrangle-select-mcq",
               "type": "mcq",
-              "question": "Mesa clerks recount crates before dawn. For project columns from rows, which line reads one column from the row?",
+              "question": "The match is the line that reads one column from the row for row holding name.",
               "hints": [
-                "Compare each line with the example.",
-                "One line matches the example.",
+                "Follow the job, which reads one column from the row.",
+                "The name key selects that column.",
                 "row['name']"
               ],
               "explanation": "The name key selects that column.",
@@ -296,15 +296,15 @@
             {
               "id": "wrangle-select-predict",
               "type": "output_prediction",
-              "question": "Mesa clerks recount crates before dawn. For project columns from rows, what value is displayed?",
+              "question": "Work out what is printed when the code reads one column from the row for row holding name.",
               "hints": [
-                "Run the example in your head from the top.",
-                "The last line is what gets displayed.",
+                "Follow the job, which reads one column from the row.",
+                "The name key selects that column.",
                 "maple"
               ],
-              "explanation": "The Select Columns program displays that value.",
+              "explanation": "The name key selects that column.",
               "xp_reward": 10,
-              "starter_code": "row = {'name': 'maple', 'age': 47}\nprint(row['name'])\n",
+              "starter_code": "row = {'name': 'maple', 'age': 48}\nprint(row['name'])\n",
               "options": [
                 "quartz",
                 "maple",
@@ -316,10 +316,10 @@
             {
               "id": "wrangle-select-order",
               "type": "ordering",
-              "question": "Mesa clerks recount crates before dawn. For project columns from rows, build the line that reads one column from the row.",
+              "question": "Rebuild, from the left, the line that reads one column from the row for row holding name.",
               "hints": [
-                "Start at the left of the example.",
-                "Keep the example order.",
+                "Follow the job, which reads one column from the row.",
+                "The name key selects that column.",
                 "row['name']"
               ],
               "explanation": "The name key selects that column.",
@@ -335,10 +335,10 @@
             {
               "id": "wrangle-select-fill",
               "type": "fill_blank",
-              "question": "Mesa clerks recount crates before dawn. For project columns from rows, fill the blank so the line reads one column from the row.",
+              "question": "The completed line reads one column from the row once you fill the blank for row holding name.",
               "hints": [
-                "The blank is the missing piece of the example.",
-                "The example uses that piece.",
+                "Follow the job, which reads one column from the row.",
+                "The name key selects that column.",
                 "'name'"
               ],
               "explanation": "The name key selects that column.",
@@ -355,29 +355,29 @@
             {
               "id": "wrangle-select-bug",
               "type": "debugging",
-              "question": "Mesa clerks recount crates before dawn. For project columns from rows, which line does a different job than the example?",
+              "question": "One line does another job than the one that reads one column from the row for row holding name.",
               "hints": [
-                "The other lines match the example.",
-                "One line is the odd one.",
+                "Follow the job, which reads one column from the row.",
+                "The print reads the age column instead of the name.",
                 "Line 2"
               ],
               "explanation": "The print reads the age column instead of the name.",
               "xp_reward": 10,
-              "starter_code": "row = {'name': 'maple', 'age': 47}\nprint(row['age'])\n",
+              "starter_code": "row = {'name': 'maple', 'age': 48}\nprint(row['age'])\n",
               "correct_answer": "2"
             },
             {
               "id": "wrangle-select-predict-2",
               "type": "output_prediction",
-              "question": "Mesa clerks recount crates before dawn. For project columns from rows, what does the second run display?",
+              "question": "The second display is what prints after the code reads one column from the row for row holding name.",
               "hints": [
-                "Apply the same steps to the new value.",
-                "The display comes from the last line.",
+                "Follow the job, which reads one column from the row.",
+                "The name key selects that column.",
                 "quartz"
               ],
-              "explanation": "The second Select Columns program displays that value.",
+              "explanation": "The name key selects that column.",
               "xp_reward": 10,
-              "starter_code": "row = {'name': 'quartz', 'age': 47}\nprint(row['name'])\n",
+              "starter_code": "row = {'name': 'quartz', 'age': 48}\nprint(row['name'])\n",
               "options": [
                 "none",
                 "maple",
@@ -389,16 +389,16 @@
             {
               "id": "wrangle-select-write",
               "type": "code",
-              "question": "Mesa clerks recount crates before dawn. For project columns from rows, fill the blank so the program prints the result.",
+              "question": "Supply the blank so the run reads one column from the row and prints the result for row holding name.",
               "hints": [
-                "The blank is the missing piece.",
-                "Print the value that piece produces.",
+                "Follow the job, which reads one column from the row.",
+                "The printed value is the result after this step reads one column from the row.",
                 "label = row['name']"
               ],
               "explanation": "The printed value is the result after this step reads one column from the row.",
               "xp_reward": 10,
-              "starter_code": "row = {'name': 'maple', 'age': 47}\nlabel = ___\nprint(label)\n",
-              "solution_code": "row = {'name': 'maple', 'age': 47}\nlabel = row['name']\nprint(label)\n",
+              "starter_code": "row = {'name': 'maple', 'age': 48}\nlabel = ___\nprint(label)\n",
+              "solution_code": "row = {'name': 'maple', 'age': 48}\nlabel = row['name']\nprint(label)\n",
               "tests": [
                 {
                   "name": "wrangle-select-prints",
@@ -427,7 +427,7 @@
       ],
       "prerequisites": [],
       "learning_objectives": [
-        "Orchard clerks recount crates before dawn, and aggregate with group-by count."
+        "This step counts rows in one group, using rows holding yarrow."
       ],
       "starter_code": "def group_count(rows, key):\n    # TODO\n    pass\n",
       "solution_code": "def group_count(rows, key):\n    out = {}\n    for r in rows:\n        v = r[key]\n        out[v] = out.get(v, 0) + 1\n    return out\n",
@@ -460,23 +460,23 @@
             {
               "id": "wrangle-groupby-teach",
               "type": "teach",
-              "question": "Orchard clerks recount crates before dawn, and aggregate with group-by count.",
+              "question": "This step counts rows in one group, using rows holding yarrow.",
               "hints": [
-                "Read the one job this step is practicing.",
-                "The example is about Group-By Count.",
+                "Follow the job, which counts rows in one group.",
+                "The group count keeps rows equal to the label.",
                 "item == 'yarrow'"
               ],
-              "explanation": "Orchard clerks recount crates before dawn, and aggregate with group-by count.",
+              "explanation": "This step counts rows in one group, using rows holding yarrow.",
               "xp_reward": 0,
               "worked_example": "item == 'yarrow'"
             },
             {
               "id": "wrangle-groupby-mcq",
               "type": "mcq",
-              "question": "Orchard clerks recount crates before dawn. For aggregate with group-by count, which line counts rows in one group?",
+              "question": "The match is the line that counts rows in one group for rows holding yarrow.",
               "hints": [
-                "Compare each line with the example.",
-                "One line matches the example.",
+                "Follow the job, which counts rows in one group.",
+                "The group count keeps rows equal to the label.",
                 "item == label"
               ],
               "explanation": "The group count keeps rows equal to the label.",
@@ -492,13 +492,13 @@
             {
               "id": "wrangle-groupby-predict",
               "type": "output_prediction",
-              "question": "Orchard clerks recount crates before dawn. For aggregate with group-by count, what value is displayed?",
+              "question": "Work out what is printed when the code counts rows in one group for rows holding yarrow.",
               "hints": [
-                "Run the example in your head from the top.",
-                "The last line is what gets displayed.",
+                "Follow the job, which counts rows in one group.",
+                "The group count keeps rows equal to the label.",
                 "2"
               ],
-              "explanation": "The Group-By Count program displays that value.",
+              "explanation": "The group count keeps rows equal to the label.",
               "xp_reward": 10,
               "starter_code": "rows = ['yarrow', 'yarrow', 'cedar']\nprint(sum(1 for item in rows if item == 'yarrow'))\n",
               "options": [
@@ -512,10 +512,10 @@
             {
               "id": "wrangle-groupby-order",
               "type": "ordering",
-              "question": "Orchard clerks recount crates before dawn. For aggregate with group-by count, build the line that counts rows in one group.",
+              "question": "Rebuild, from the left, the line that counts rows in one group for rows holding yarrow.",
               "hints": [
-                "Start at the left of the example.",
-                "Keep the example order.",
+                "Follow the job, which counts rows in one group.",
+                "The group count keeps rows equal to the label.",
                 "sum(1 for item in rows if item==label)"
               ],
               "explanation": "The group count keeps rows equal to the label.",
@@ -543,10 +543,10 @@
             {
               "id": "wrangle-groupby-fill",
               "type": "fill_blank",
-              "question": "Orchard clerks recount crates before dawn. For aggregate with group-by count, fill the blank so the line counts rows in one group.",
+              "question": "The completed line counts rows in one group once you fill the blank for rows holding yarrow.",
               "hints": [
-                "The blank is the missing piece of the example.",
-                "The example uses that piece.",
+                "Follow the job, which counts rows in one group.",
+                "The group count keeps rows equal to the label.",
                 "=="
               ],
               "explanation": "The group count keeps rows equal to the label.",
@@ -563,10 +563,10 @@
             {
               "id": "wrangle-groupby-bug",
               "type": "debugging",
-              "question": "Orchard clerks recount crates before dawn. For aggregate with group-by count, which line does a different job than the example?",
+              "question": "One line does another job than the one that counts rows in one group for rows holding yarrow.",
               "hints": [
-                "The other lines match the example.",
-                "One line is the odd one.",
+                "Follow the job, which counts rows in one group.",
+                "The print counts every row, not one group.",
                 "Line 2"
               ],
               "explanation": "The print counts every row, not one group.",
@@ -577,13 +577,13 @@
             {
               "id": "wrangle-groupby-predict-2",
               "type": "output_prediction",
-              "question": "Orchard clerks recount crates before dawn. For aggregate with group-by count, what does the second run display?",
+              "question": "The second display is what prints after the code counts rows in one group for rows holding yarrow.",
               "hints": [
-                "Apply the same steps to the new value.",
-                "The display comes from the last line.",
+                "Follow the job, which counts rows in one group.",
+                "The group count keeps rows equal to the label.",
                 "1"
               ],
-              "explanation": "The second Group-By Count program displays that value.",
+              "explanation": "The group count keeps rows equal to the label.",
               "xp_reward": 10,
               "starter_code": "rows = ['yarrow', 'cedar', 'extra']\nprint(sum(1 for item in rows if item == 'yarrow'))\n",
               "options": [
@@ -597,10 +597,10 @@
             {
               "id": "wrangle-groupby-write",
               "type": "code",
-              "question": "Orchard clerks recount crates before dawn. For aggregate with group-by count, fill the blank so the program prints the result.",
+              "question": "Supply the blank so the run counts rows in one group and prints the result for rows holding yarrow.",
               "hints": [
-                "The blank is the missing piece.",
-                "Print the value that piece produces.",
+                "Follow the job, which counts rows in one group.",
+                "The printed value is the result after this step counts rows in one group.",
                 "label = sum(1 for item in rows if item == 'yarrow')"
               ],
               "explanation": "The printed value is the result after this step counts rows in one group.",
@@ -635,7 +635,7 @@
       ],
       "prerequisites": [],
       "learning_objectives": [
-        "Quarry clerks recount crates before dawn, and inner-join dict tables."
+        "This step keeps the name when the ids match, using id holding id."
       ],
       "starter_code": "def inner_join(left, right, key):\n    # TODO\n    pass\n",
       "solution_code": "def inner_join(left, right, key):\n    index = {}\n    for r in right:\n        index.setdefault(r[key], []).append(r)\n    out = []\n    for l in left:\n        for r in index.get(l[key], []):\n            merged = dict(l)\n            merged.update(r)\n            out.append(merged)\n    return out\n",
@@ -668,23 +668,23 @@
             {
               "id": "wrangle-join-teach",
               "type": "teach",
-              "question": "Quarry clerks recount crates before dawn, and inner-join dict tables.",
+              "question": "This step keeps the name when the ids match, using id holding id.",
               "hints": [
-                "Read the one job this step is practicing.",
-                "The example is about Inner Join.",
+                "Follow the job, which keeps the name when the ids match.",
+                "An inner join keeps the pair only when the ids match.",
                 "left[0]['id'] == right[0]['id']"
               ],
-              "explanation": "Quarry clerks recount crates before dawn, and inner-join dict tables.",
+              "explanation": "This step keeps the name when the ids match, using id holding id.",
               "xp_reward": 0,
               "worked_example": "left[0]['id'] == right[0]['id']"
             },
             {
               "id": "wrangle-join-mcq",
               "type": "mcq",
-              "question": "Quarry clerks recount crates before dawn. For inner-join dict tables, which line keeps the name when the ids match?",
+              "question": "The match is the line that keeps the name when the ids match for id holding id.",
               "hints": [
-                "Compare each line with the example.",
-                "One line matches the example.",
+                "Follow the job, which keeps the name when the ids match.",
+                "An inner join keeps the pair only when the ids match.",
                 "left[0]['id'] == right[0]['id']"
               ],
               "explanation": "An inner join keeps the pair only when the ids match.",
@@ -700,13 +700,13 @@
             {
               "id": "wrangle-join-predict",
               "type": "output_prediction",
-              "question": "Quarry clerks recount crates before dawn. For inner-join dict tables, what value is displayed?",
+              "question": "Work out what is printed when the code keeps the name when the ids match for id holding id.",
               "hints": [
-                "Run the example in your head from the top.",
-                "The last line is what gets displayed.",
+                "Follow the job, which keeps the name when the ids match.",
+                "An inner join keeps the pair only when the ids match.",
                 "ember"
               ],
-              "explanation": "The Inner Join program displays that value.",
+              "explanation": "An inner join keeps the pair only when the ids match.",
               "xp_reward": 10,
               "starter_code": "left = [{'id': 1, 'name': 'ember'}]\nright = [{'id': 1, 'score': 39}]\nprint('ember' if left[0]['id'] == right[0]['id'] else 'none')\n",
               "options": [
@@ -720,10 +720,10 @@
             {
               "id": "wrangle-join-order",
               "type": "ordering",
-              "question": "Quarry clerks recount crates before dawn. For inner-join dict tables, build the line that keeps the name when the ids match.",
+              "question": "Rebuild, from the left, the line that keeps the name when the ids match for id holding id.",
               "hints": [
-                "Start at the left of the example.",
-                "Keep the example order.",
+                "Follow the job, which keeps the name when the ids match.",
+                "An inner join keeps the pair only when the ids match.",
                 "if left[0]['id'] == right[0]['id']: pass"
               ],
               "explanation": "An inner join keeps the pair only when the ids match.",
@@ -747,10 +747,10 @@
             {
               "id": "wrangle-join-fill",
               "type": "fill_blank",
-              "question": "Quarry clerks recount crates before dawn. For inner-join dict tables, fill the blank so the line keeps the name when the ids match.",
+              "question": "The completed line keeps the name when the ids match once you fill the blank for id holding id.",
               "hints": [
-                "The blank is the missing piece of the example.",
-                "The example uses that piece.",
+                "Follow the job, which keeps the name when the ids match.",
+                "An inner join keeps the pair only when the ids match.",
                 "=="
               ],
               "explanation": "An inner join keeps the pair only when the ids match.",
@@ -767,10 +767,10 @@
             {
               "id": "wrangle-join-bug",
               "type": "debugging",
-              "question": "Quarry clerks recount crates before dawn. For inner-join dict tables, which line does a different job than the example?",
+              "question": "One line does another job than the one that keeps the name when the ids match for id holding id.",
               "hints": [
-                "The other lines match the example.",
-                "One line is the odd one.",
+                "Follow the job, which keeps the name when the ids match.",
+                "The print shows the name even when no right row matches.",
                 "Line 2"
               ],
               "explanation": "The print shows the name even when no right row matches.",
@@ -781,13 +781,13 @@
             {
               "id": "wrangle-join-predict-2",
               "type": "output_prediction",
-              "question": "Quarry clerks recount crates before dawn. For inner-join dict tables, what does the second run display?",
+              "question": "The second display is what prints after the code keeps the name when the ids match for id holding id.",
               "hints": [
-                "Apply the same steps to the new value.",
-                "The display comes from the last line.",
+                "Follow the job, which keeps the name when the ids match.",
+                "An inner join keeps the pair only when the ids match.",
                 "none"
               ],
-              "explanation": "The second Inner Join program displays that value.",
+              "explanation": "An inner join keeps the pair only when the ids match.",
               "xp_reward": 10,
               "starter_code": "left = [{'id': 1, 'name': 'ember'}]\nright = [{'id': 2, 'score': 39}]\nprint('ember' if left[0]['id'] == right[0]['id'] else 'none')\n",
               "options": [
@@ -801,10 +801,10 @@
             {
               "id": "wrangle-join-write",
               "type": "code",
-              "question": "Quarry clerks recount crates before dawn. For inner-join dict tables, fill the blank so the program prints the result.",
+              "question": "Supply the blank so the run keeps the name when the ids match and prints the result for id holding id.",
               "hints": [
-                "The blank is the missing piece.",
-                "Print the value that piece produces.",
+                "Follow the job, which keeps the name when the ids match.",
+                "The printed value is the result after this step keeps the name when the ids match.",
                 "label = 'ember' if left[0]['id'] == right[0]['id'] else 'none'"
               ],
               "explanation": "The printed value is the result after this step keeps the name when the ids match.",
@@ -839,7 +839,7 @@
       ],
       "prerequisites": [],
       "learning_objectives": [
-        "Attic clerks recount crates before dawn, and impute missing values."
+        "This step fills a missing value with the backup, using value and 32."
       ],
       "starter_code": "def fill_na(rows, key, default):\n    # TODO\n    pass\n",
       "solution_code": "def fill_na(rows, key, default):\n    out = []\n    for r in rows:\n        nr = dict(r)\n        if key not in nr or nr[key] is None:\n            nr[key] = default\n        out.append(nr)\n    return out\n",
@@ -872,23 +872,23 @@
             {
               "id": "wrangle-checkpoint-teach",
               "type": "teach",
-              "question": "Attic clerks recount crates before dawn, and impute missing values.",
+              "question": "This step fills a missing value with the backup, using value and 32.",
               "hints": [
-                "Read the one job this step is practicing.",
-                "The example is about Checkpoint Fill Missing.",
+                "Follow the job, which fills a missing value with the backup.",
+                "None means the backup should fill the cell.",
                 "value is None"
               ],
-              "explanation": "Attic clerks recount crates before dawn, and impute missing values.",
+              "explanation": "This step fills a missing value with the backup, using value and 32.",
               "xp_reward": 0,
               "worked_example": "value is None"
             },
             {
               "id": "wrangle-checkpoint-mcq",
               "type": "mcq",
-              "question": "Attic clerks recount crates before dawn. For impute missing values, which line fills a missing value with the backup?",
+              "question": "The match is the line that fills a missing value with the backup for value and 32.",
               "hints": [
-                "Compare each line with the example.",
-                "One line matches the example.",
+                "Follow the job, which fills a missing value with the backup.",
+                "None means the backup should fill the cell.",
                 "value is None"
               ],
               "explanation": "None means the backup should fill the cell.",
@@ -904,30 +904,30 @@
             {
               "id": "wrangle-checkpoint-predict",
               "type": "output_prediction",
-              "question": "Attic clerks recount crates before dawn. For impute missing values, what value is displayed?",
+              "question": "Work out what is printed when the code fills a missing value with the backup for value and.",
               "hints": [
-                "Run the example in your head from the top.",
-                "The last line is what gets displayed.",
-                "31"
+                "Follow the job, which fills a missing value with the backup.",
+                "None means the backup should fill the cell.",
+                "32"
               ],
-              "explanation": "The Checkpoint Fill Missing program displays that value.",
+              "explanation": "None means the backup should fill the cell.",
               "xp_reward": 10,
-              "starter_code": "value = None\nbackup = 31\nprint(backup if value is None else value)\n",
+              "starter_code": "value = None\nbackup = 32\nprint(backup if value is None else value)\n",
               "options": [
                 "7",
                 "none",
-                "31",
+                "32",
                 "0"
               ],
-              "correct_answer": "31"
+              "correct_answer": "32"
             },
             {
               "id": "wrangle-checkpoint-order",
               "type": "ordering",
-              "question": "Attic clerks recount crates before dawn. For impute missing values, build the line that fills a missing value with the backup.",
+              "question": "Rebuild, from the left, the line that fills a missing value with the backup for value and 32.",
               "hints": [
-                "Start at the left of the example.",
-                "Keep the example order.",
+                "Follow the job, which fills a missing value with the backup.",
+                "None means the backup should fill the cell.",
                 "kept = backup if value is None else fallback"
               ],
               "explanation": "None means the backup should fill the cell.",
@@ -955,10 +955,10 @@
             {
               "id": "wrangle-checkpoint-fill",
               "type": "fill_blank",
-              "question": "Attic clerks recount crates before dawn. Choose the match.",
+              "question": "The completed line fills a value with the backup once you fill the blank for value and 32.",
               "hints": [
-                "Use the example rather than the lookalike.",
-                "The example uses that piece.",
+                "Follow the job, which Follow the job, which fills a value with the backup.",
+                "None means the backup should fill the cell.",
                 "is"
               ],
               "explanation": "None means the backup should fill the cell.",
@@ -975,33 +975,33 @@
             {
               "id": "wrangle-checkpoint-bug",
               "type": "debugging",
-              "question": "Attic clerks recount crates before dawn. For impute missing values, which line does a different job than the example?",
+              "question": "One line does another job than the one that fills a missing value with the backup for value and.",
               "hints": [
-                "The other lines match the example.",
-                "One line is the odd one.",
+                "Follow the job, which fills a missing value with the backup.",
+                "The print is zero and never uses the backup.",
                 "Line 3"
               ],
               "explanation": "The print is zero and never uses the backup.",
               "xp_reward": 10,
-              "starter_code": "value = None\nbackup = 31\nprint(0)\n",
+              "starter_code": "value = None\nbackup = 32\nprint(0)\n",
               "correct_answer": "3"
             },
             {
               "id": "wrangle-checkpoint-predict-2",
               "type": "output_prediction",
-              "question": "Attic clerks recount crates before dawn. For impute missing values, what does the second run display?",
+              "question": "The second display is what prints after the code fills a missing value with the backup for value and 32.",
               "hints": [
-                "Apply the same steps to the new value.",
-                "The display comes from the last line.",
+                "Follow the job, which fills a missing value with the backup.",
+                "None means the backup should fill the cell.",
                 "7"
               ],
-              "explanation": "The second Checkpoint Fill Missing program displays that value.",
+              "explanation": "None means the backup should fill the cell.",
               "xp_reward": 10,
-              "starter_code": "value = 7\nbackup = 31\nprint(backup if value is None else value)\n",
+              "starter_code": "value = 7\nbackup = 32\nprint(backup if value is None else value)\n",
               "options": [
                 "none",
                 "7",
-                "31",
+                "32",
                 "0"
               ],
               "correct_answer": "7"
@@ -1009,21 +1009,21 @@
             {
               "id": "wrangle-checkpoint-write",
               "type": "code",
-              "question": "Attic clerks recount crates before dawn. For impute missing values, fill the blank so the program prints the result.",
+              "question": "Supply the blank so the run fills a missing value with the backup and prints the result for value and.",
               "hints": [
-                "Use the example rather than the lookalike.",
-                "Print the value that piece produces.",
+                "Follow the job, which Follow the job, which fills a value with the backup.",
+                "The printed value is the result after this step fills a missing value with the backup.",
                 "label = backup if value is None else value"
               ],
               "explanation": "The printed value is the result after this step fills a missing value with the backup.",
               "xp_reward": 10,
-              "starter_code": "value = None\nbackup = 31\nlabel = ___\nprint(label)\n",
-              "solution_code": "value = None\nbackup = 31\nlabel = backup if value is None else value\nprint(label)\n",
+              "starter_code": "value = None\nbackup = 32\nlabel = ___\nprint(label)\n",
+              "solution_code": "value = None\nbackup = 32\nlabel = backup if value is None else value\nprint(label)\n",
               "tests": [
                 {
                   "name": "wrangle-checkpoint-prints",
                   "description": "The printed value is the result after this step fills a missing value with the b",
-                  "expected_stdout": "31\n",
+                  "expected_stdout": "32\n",
                   "required": true
                 }
               ]
