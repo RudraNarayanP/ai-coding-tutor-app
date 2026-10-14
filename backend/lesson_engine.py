@@ -550,13 +550,24 @@ class LessonEngine:
     async def _sandbox_supported(self, lang: str) -> bool:
         """Whether the sandbox runner can actually execute `lang`.
 
-        Python always runs (the host fallback supports it). Other languages
-        need the Docker sandbox: the multi-language runner (java, cpp, sql,
-        js, ts) ships inside the image. Executors without a Docker probe
-        (unit-test doubles) are treated as Python-only.
+        The host runner executes Python, JavaScript, TypeScript, SQL, Java,
+        and C++. Python-family courses run as Python. Anything else still
+        needs Docker. A missing compiler is a failed run, not a pass.
+        Executors without a Docker probe stay limited to those host languages.
         """
         lang = (lang or "").lower().strip()
+        host = {
+            "python", "py", "",
+            "javascript", "js", "typescript", "ts",
+            "sql", "sqlite",
+            "java", "cpp", "c++",
+            "dsa", "ml", "ml-math", "ai", "fullstack",
+        }
         if lang in ("python", "py", ""):
+            return True
+        # The real sandbox can run these on the host. Test doubles keep the
+        # static comparison so a missing runner is never reported as a pass.
+        if lang in host and hasattr(self.executor, "_run_local"):
             return True
         probe = getattr(self.executor, "_probe_docker", None)
         if probe is None:

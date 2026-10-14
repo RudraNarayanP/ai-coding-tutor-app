@@ -102,30 +102,44 @@ def _ex(eid, etype, question, hints, explanation, **kwargs):
     return item
 
 
-def build_exercises(spec: dict) -> list[dict]:
+def _parse_python(code: str) -> tuple[bool, str]:
+    try:
+        ast.parse(code)
+    except SyntaxError as exc:
+        return False, f"{exc.msg} (line {exc.lineno})"
+    return True, ""
+
+
+def build_exercises(spec: dict, *, run=None, parse=None) -> list[dict]:
+    """Build the eight screens. ``run`` returns stdout; ``parse`` checks a snippet.
+
+    Python is the default. Other languages pass the sandbox runner and
+    ``program_parses`` so a prediction is the stdout the gate will rerun.
+    """
+    runner = run or capture
+    checker = parse or _parse_python
     lid = spec["id"]
     teach = spec["teach"].strip()
     if teach.count(".") != 1 or not teach.endswith("."):
         raise SystemExit(f"{lid} teach must be one sentence: {teach}")
     _no_ticks(teach, spec["example"])
 
-    pred_out = capture(spec["predict_code"]).strip()
+    pred_out = runner(spec["predict_code"]).strip()
     if pred_out not in spec["predict_options"]:
         raise SystemExit(f"{lid} predict stdout {pred_out!r} not in options")
     pred2_out = ""
     if spec["second_kind"] == "predict":
-        pred2_out = capture(spec["predict2_code"]).strip()
+        pred2_out = runner(spec["predict2_code"]).strip()
         if pred2_out not in spec["predict2_options"]:
             raise SystemExit(f"{lid} predict2 stdout {pred2_out!r} not in options")
-    write_out = capture(spec["solution"])
-    if not write_out.endswith("\n"):
-        raise SystemExit(f"{lid} solution must print a trailing newline")
+    write_out = runner(spec["solution"])
+    if not write_out.strip():
+        raise SystemExit(f"{lid} solution printed nothing")
 
     order_src = " ".join(spec["order"])
-    try:
-        ast.parse(order_src)
-    except SyntaxError as exc:
-        raise SystemExit(f"{lid} ordering does not parse: {order_src}: {exc}") from exc
+    ok, err = checker(order_src)
+    if not ok:
+        raise SystemExit(f"{lid} ordering does not parse: {order_src}: {err}")
     missing = [chip for chip in spec["order"] if chip not in spec["chips"]]
     if missing:
         raise SystemExit(f"{lid} order chip missing from options: {missing}")
@@ -135,10 +149,9 @@ def build_exercises(spec: dict) -> list[dict]:
     filled = spec["fill_code"].replace("___", spec["fill_answer"], 1)
     if "___" in filled:
         raise SystemExit(f"{lid} fill left a blank")
-    try:
-        ast.parse(filled)
-    except SyntaxError as exc:
-        raise SystemExit(f"{lid} fill does not parse: {filled}: {exc}") from exc
+    ok, err = checker(filled)
+    if not ok:
+        raise SystemExit(f"{lid} fill does not parse: {filled}: {err}")
     _stem_hides(spec["fill_q"], spec["fill_nudge"], spec["fill_answer"])
 
     _stem_hides(spec["mcq_q"], spec["mcq_nudge"], spec["mcq_answer"])
@@ -235,7 +248,7 @@ def assert_distinct(groups: list[tuple[str, list[str]]]) -> None:
                 raise SystemExit(f"near duplicate\n{left_id}: {left}\n{right_id}: {right}")
 
 
-def install(course: str, specs: list[dict]) -> None:
+def install(course: str, specs: list[dict], *, run=None, parse=None) -> None:
     folder = ROOT / course / "modules"
     by_id = {spec["id"]: spec for spec in specs}
     if len(by_id) != len(specs):
@@ -243,7 +256,7 @@ def install(course: str, specs: list[dict]) -> None:
     built: dict[str, list[dict]] = {}
     groups: list[tuple[str, list[str]]] = []
     for spec in specs:
-        exercises = build_exercises(spec)
+        exercises = build_exercises(spec, run=run, parse=parse)
         if not 8 <= len(exercises) <= 10:
             raise SystemExit(f"{spec['id']} screen count {len(exercises)}")
         built[spec["id"]] = exercises
@@ -270,6 +283,10 @@ def install(course: str, specs: list[dict]) -> None:
         for lesson in data.get("lessons", []):
             spec = by_id.get(lesson["id"])
             if spec is None:
+                continue
+            # A shipped micro lesson is the source of truth. Re-running a catalog
+            # must not overwrite it.
+            if lesson.get("player_mode") == "micro":
                 continue
             exercises = built[lesson["id"]]
             lesson["title"] = spec["title"]
