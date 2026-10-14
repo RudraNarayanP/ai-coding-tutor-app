@@ -15,8 +15,8 @@
   "lessons": [
     {
       "id": "type-hints-dataclasses-step-1",
-      "title": "1. Function Type Hints",
-      "description": "Annotate parameters and return types. Implement `add(a: int, b: int) -> int`. The test checks that `add(2, 3)` equals `5`.",
+      "title": "Practice Function Type Hints",
+      "description": "Annotate parameters and return types. Implement add(a: int, b: int) -> int. The test checks that add(2, 3) equals 5.",
       "order": 96,
       "difficulty": "intermediate",
       "duration_minutes": 5,
@@ -30,7 +30,7 @@
         "functions"
       ],
       "learning_objectives": [
-        "Add basic type annotations"
+        "Attic wardens recount crates before dawn, and add basic type annotations."
       ],
       "starter_code": "def add(a: int, b: int) -> int:\n    # TODO: return a + b\n    pass\n",
       "solution_code": "def add(a: int, b: int) -> int:\n    return a + b\n",
@@ -51,12 +51,182 @@
         "url": "https://docs.python.org/3/library/typing.html",
         "license": "Python documentation license (PSF)"
       },
-      "xp_reward": 10
+      "xp_reward": 10,
+      "player_mode": "micro",
+      "sublessons": [
+        {
+          "id": "type-hints-dataclasses-step-1-micro",
+          "title": "Practice Function Type Hints",
+          "description": "",
+          "order": 1,
+          "exercises": [
+            {
+              "id": "type-hints-dataclasses-step-1-teach",
+              "type": "teach",
+              "question": "Attic wardens recount crates before dawn, and add basic type annotations.",
+              "hints": [
+                "Read the one job this step is practicing.",
+                "The example is about Function Type Hints.",
+                "def score(value: int) -> int"
+              ],
+              "explanation": "Attic wardens recount crates before dawn, and add basic type annotations.",
+              "xp_reward": 0,
+              "worked_example": "def score(value: int) -> int"
+            },
+            {
+              "id": "type-hints-dataclasses-step-1-mcq",
+              "type": "mcq",
+              "question": "Attic wardens recount crates before dawn. For add basic type annotations, which line adds two and hands back an integer?",
+              "hints": [
+                "Compare each line with the example.",
+                "One line matches the example.",
+                "def score(value: int) -> int"
+              ],
+              "explanation": "The annotation says the argument and the result are integers.",
+              "xp_reward": 10,
+              "options": [
+                "value == int",
+                "print(value)",
+                "def score(value: int) -> int",
+                "pass"
+              ],
+              "correct_answer": "def score(value: int) -> int"
+            },
+            {
+              "id": "type-hints-dataclasses-step-1-predict",
+              "type": "output_prediction",
+              "question": "Attic wardens recount crates before dawn. For add basic type annotations, what value is displayed?",
+              "hints": [
+                "Run the example in your head from the top.",
+                "The last line is what gets displayed.",
+                "45"
+              ],
+              "explanation": "The Function Type Hints program displays that value.",
+              "xp_reward": 10,
+              "starter_code": "def score(value: int) -> int:\n    return value + 2\nprint(score(43))\n",
+              "options": [
+                "48",
+                "none",
+                "45",
+                "0"
+              ],
+              "correct_answer": "45"
+            },
+            {
+              "id": "type-hints-dataclasses-step-1-order",
+              "type": "ordering",
+              "question": "Attic wardens recount crates before dawn. For add basic type annotations, build the line that adds two and hands back an integer.",
+              "hints": [
+                "Start at the left of the example.",
+                "Keep the example order.",
+                "def score(value: int) -> int: return value"
+              ],
+              "explanation": "The annotation marks an integer argument and result.",
+              "xp_reward": 10,
+              "options": [
+                "def",
+                "score(value:",
+                "int)",
+                "->",
+                "int:",
+                "return",
+                "value",
+                "str"
+              ],
+              "correct_answer": [
+                "def",
+                "score(value:",
+                "int)",
+                "->",
+                "int:",
+                "return",
+                "value"
+              ]
+            },
+            {
+              "id": "type-hints-dataclasses-step-1-fill",
+              "type": "fill_blank",
+              "question": "Attic wardens recount crates before dawn. For add basic type annotations, fill the blank so the line adds two and hands back an integer.",
+              "hints": [
+                "The blank is the missing piece of the example.",
+                "The example uses that piece.",
+                "+"
+              ],
+              "explanation": "Plus adds two.",
+              "xp_reward": 10,
+              "starter_code": "return value ___ 2\n",
+              "options": [
+                "-",
+                "*",
+                "+",
+                "=="
+              ],
+              "correct_answer": "+"
+            },
+            {
+              "id": "type-hints-dataclasses-step-1-bug",
+              "type": "debugging",
+              "question": "Attic wardens recount crates before dawn. For add basic type annotations, which line does a different job than the example?",
+              "hints": [
+                "The other lines match the example.",
+                "One line is the odd one.",
+                "Line 2"
+              ],
+              "explanation": "The function subtracts two.",
+              "xp_reward": 10,
+              "starter_code": "def score(value: int) -> int:\n    return value - 2\nprint(score(43))\n",
+              "correct_answer": "2"
+            },
+            {
+              "id": "type-hints-dataclasses-step-1-predict-2",
+              "type": "output_prediction",
+              "question": "Attic wardens recount crates before dawn. For add basic type annotations, what does the second run display?",
+              "hints": [
+                "Apply the same steps to the new value.",
+                "The display comes from the last line.",
+                "48"
+              ],
+              "explanation": "The second Function Type Hints program displays that value.",
+              "xp_reward": 10,
+              "starter_code": "def score(value: int) -> int:\n    return value + 2\nprint(score(46))\n",
+              "options": [
+                "45",
+                "48",
+                "none",
+                "0"
+              ],
+              "correct_answer": "48"
+            },
+            {
+              "id": "type-hints-dataclasses-step-1-write",
+              "type": "code",
+              "question": "Attic wardens recount crates before dawn. For add basic type annotations, fill the blank so the program prints the result.",
+              "hints": [
+                "The blank is the missing piece.",
+                "Print the value that piece produces.",
+                "label = score(43)"
+              ],
+              "explanation": "The annotated result is what gets printed.",
+              "xp_reward": 10,
+              "starter_code": "def score(value: int) -> int:\n    return value + 2\nlabel = ___\nprint(label)\n",
+              "solution_code": "def score(value: int) -> int:\n    return value + 2\nlabel = score(43)\nprint(label)\n",
+              "tests": [
+                {
+                  "name": "type-hints-dataclasses-step-1-prints",
+                  "description": "The annotated result is what gets printed.",
+                  "expected_stdout": "45\n",
+                  "required": true
+                }
+              ]
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "type-hints-dataclasses-step-2",
-      "title": "2. Dataclass Basics",
-      "description": "Use `@dataclass` to define `Point` with x and y floats and a `magnitude` method. The test checks that `Point(3, 4).magnitude()` equals `5.0`.",
+      "title": "Practice Dataclass Basics",
+      "description": "Use @dataclass to define Point with x and y floats and a magnitude method. The test checks that Point(3, 4).magnitude() equals 5.0.",
       "order": 97,
       "difficulty": "intermediate",
       "duration_minutes": 5,
@@ -70,7 +240,7 @@
         "classes"
       ],
       "learning_objectives": [
-        "Define a dataclass with a method"
+        "Depot wardens recount crates before dawn, and define a dataclass with a method."
       ],
       "starter_code": "from dataclasses import dataclass\nimport math\n\n@dataclass\nclass Point:\n    x: float\n    y: float\n\n    def magnitude(self) -> float:\n        # TODO: return sqrt(x^2 + y^2)\n        pass\n",
       "solution_code": "from dataclasses import dataclass\nimport math\n\n@dataclass\nclass Point:\n    x: float\n    y: float\n\n    def magnitude(self) -> float:\n        return math.sqrt(self.x * self.x + self.y * self.y)\n",
@@ -91,12 +261,184 @@
         "url": "https://docs.python.org/3/library/dataclasses.html",
         "license": "Python documentation license (PSF)"
       },
-      "xp_reward": 10
+      "xp_reward": 10,
+      "player_mode": "micro",
+      "sublessons": [
+        {
+          "id": "type-hints-dataclasses-step-2-micro",
+          "title": "Practice Dataclass Basics",
+          "description": "",
+          "order": 1,
+          "exercises": [
+            {
+              "id": "type-hints-dataclasses-step-2-teach",
+              "type": "teach",
+              "question": "Depot wardens recount crates before dawn, and define a dataclass with a method.",
+              "hints": [
+                "Read the one job this step is practicing.",
+                "The example is about Dataclass Basics.",
+                "Point(x, y).x"
+              ],
+              "explanation": "Depot wardens recount crates before dawn, and define a dataclass with a method.",
+              "xp_reward": 0,
+              "worked_example": "Point(x, y).x"
+            },
+            {
+              "id": "type-hints-dataclasses-step-2-mcq",
+              "type": "mcq",
+              "question": "Depot wardens recount crates before dawn. For define a dataclass with a method, which line shows one field of the new point?",
+              "hints": [
+                "Compare each line with the example.",
+                "One line matches the example.",
+                "Point(x, y).x"
+              ],
+              "explanation": "Point(x, y) stores both fields.",
+              "xp_reward": 10,
+              "options": [
+                "Point == x",
+                "print(Point)",
+                "pass",
+                "Point(x, y).x"
+              ],
+              "correct_answer": "Point(x, y).x"
+            },
+            {
+              "id": "type-hints-dataclasses-step-2-predict",
+              "type": "output_prediction",
+              "question": "Depot wardens recount crates before dawn. For define a dataclass with a method, what value is displayed?",
+              "hints": [
+                "Run the example in your head from the top.",
+                "The last line is what gets displayed.",
+                "45"
+              ],
+              "explanation": "The Dataclass Basics program displays that value.",
+              "xp_reward": 10,
+              "starter_code": "from dataclasses import dataclass\n@dataclass\nclass Point:\n    x: int\n    y: int\nprint(Point(44, 4).x + 1)\n",
+              "options": [
+                "none",
+                "5",
+                "0",
+                "45"
+              ],
+              "correct_answer": "45"
+            },
+            {
+              "id": "type-hints-dataclasses-step-2-order",
+              "type": "ordering",
+              "question": "Depot wardens recount crates before dawn. For define a dataclass with a method, build the line that shows one field of the new point.",
+              "hints": [
+                "Start at the left of the example.",
+                "Keep the example order.",
+                "point = Point ( left , right )"
+              ],
+              "explanation": "point = Point(left, right) builds the point.",
+              "xp_reward": 10,
+              "options": [
+                "point",
+                "=",
+                "Point",
+                "(",
+                "left",
+                ",",
+                "right",
+                ")",
+                "=="
+              ],
+              "correct_answer": [
+                "point",
+                "=",
+                "Point",
+                "(",
+                "left",
+                ",",
+                "right",
+                ")"
+              ]
+            },
+            {
+              "id": "type-hints-dataclasses-step-2-fill",
+              "type": "fill_blank",
+              "question": "Depot wardens recount crates before dawn. For define a dataclass with a method, fill the blank so the line shows one field of the new point.",
+              "hints": [
+                "The blank is the missing piece of the example.",
+                "The example uses that piece.",
+                "+"
+              ],
+              "explanation": "Plus adds one to the field.",
+              "xp_reward": 10,
+              "starter_code": "shown = point.x ___ 1\n",
+              "options": [
+                "-",
+                "*",
+                "==",
+                "+"
+              ],
+              "correct_answer": "+"
+            },
+            {
+              "id": "type-hints-dataclasses-step-2-bug",
+              "type": "debugging",
+              "question": "Depot wardens recount crates before dawn. For define a dataclass with a method, which line does a different job than the example?",
+              "hints": [
+                "The other lines match the example.",
+                "One line is the odd one.",
+                "Line 6"
+              ],
+              "explanation": "The print subtracts one from the field.",
+              "xp_reward": 10,
+              "starter_code": "from dataclasses import dataclass\n@dataclass\nclass Point:\n    x: int\n    y: int\nprint(Point(44, 4).x - 1)\n",
+              "correct_answer": "6"
+            },
+            {
+              "id": "type-hints-dataclasses-step-2-predict-2",
+              "type": "output_prediction",
+              "question": "Depot wardens recount crates before dawn. For define a dataclass with a method, what does the second run display?",
+              "hints": [
+                "Apply the same steps to the new value.",
+                "The display comes from the last line.",
+                "5"
+              ],
+              "explanation": "The second Dataclass Basics program displays that value.",
+              "xp_reward": 10,
+              "starter_code": "from dataclasses import dataclass\n@dataclass\nclass Point:\n    x: int\n    y: int\nprint(Point(44, 4).y + 1)\n",
+              "options": [
+                "45",
+                "none",
+                "5",
+                "0"
+              ],
+              "correct_answer": "5"
+            },
+            {
+              "id": "type-hints-dataclasses-step-2-write",
+              "type": "code",
+              "question": "Depot wardens recount crates before dawn. For define a dataclass with a method, fill the blank so the program prints the result.",
+              "hints": [
+                "The blank is the missing piece.",
+                "Print the value that piece produces.",
+                "label = point.x + 1"
+              ],
+              "explanation": "The field plus one is what gets printed.",
+              "xp_reward": 10,
+              "starter_code": "from dataclasses import dataclass\n@dataclass\nclass Point:\n    x: int\n    y: int\npoint = Point(44, 4)\nlabel = ___\nprint(label)\n",
+              "solution_code": "from dataclasses import dataclass\n@dataclass\nclass Point:\n    x: int\n    y: int\npoint = Point(44, 4)\nlabel = point.x + 1\nprint(label)\n",
+              "tests": [
+                {
+                  "name": "type-hints-dataclasses-step-2-prints",
+                  "description": "The field plus one is what gets printed.",
+                  "expected_stdout": "45\n",
+                  "required": true
+                }
+              ]
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "type-hints-dataclasses-01",
-      "title": "3. Frozen Dataclass Config (Concept Challenge)",
-      "description": "Finish `with_port`. Create an immutable `Config` dataclass and a helper that updates via `dataclasses.replace`. The test checks that `with_port(c, 8080).port` equals `8080`; `Config('localhost').port` equals `80`.",
+      "title": "Practice Frozen Dataclass Config",
+      "description": "Finish with_port. Create an immutable Config dataclass and a helper that updates via dataclasses.replace. The test checks that with_port(c, 8080).port equals 8080; Config('localhost').port equals 80.",
       "order": 98,
       "difficulty": "intermediate",
       "duration_minutes": 8,
@@ -110,7 +452,7 @@
         "classes"
       ],
       "learning_objectives": [
-        "Use frozen=True and replace()"
+        "Ridge wardens recount crates before dawn, and use frozen True and replace."
       ],
       "starter_code": "from dataclasses import dataclass, replace\n\n@dataclass(frozen=True)\nclass Config:\n    host: str\n    port: int = 80\n\ndef with_port(cfg: Config, port: int) -> Config:\n    # TODO: return a new Config that uses the given port\n    pass\n",
       "solution_code": "from dataclasses import dataclass, replace\n\n@dataclass(frozen=True)\nclass Config:\n    host: str\n    port: int = 80\n\ndef with_port(cfg: Config, port: int) -> Config:\n    return replace(cfg, port=port)\n",
@@ -131,12 +473,184 @@
         "url": "https://docs.python.org/3/library/dataclasses.html",
         "license": "Python documentation license (PSF)"
       },
-      "xp_reward": 25
+      "xp_reward": 25,
+      "player_mode": "micro",
+      "sublessons": [
+        {
+          "id": "type-hints-dataclasses-01-micro",
+          "title": "Practice Frozen Dataclass Config",
+          "description": "",
+          "order": 1,
+          "exercises": [
+            {
+              "id": "type-hints-dataclasses-01-teach",
+              "type": "teach",
+              "question": "Ridge wardens recount crates before dawn, and use frozen True and replace.",
+              "hints": [
+                "Read the one job this step is practicing.",
+                "The example is about Frozen Dataclass Config.",
+                "replace(self, port=self.port + 1)"
+              ],
+              "explanation": "Ridge wardens recount crates before dawn, and use frozen True and replace.",
+              "xp_reward": 0,
+              "worked_example": "replace(self, port=self.port + 1)"
+            },
+            {
+              "id": "type-hints-dataclasses-01-mcq",
+              "type": "mcq",
+              "question": "Ridge wardens recount crates before dawn. For use frozen True and replace, which line shows the port on a new config?",
+              "hints": [
+                "Compare each line with the example.",
+                "One line matches the example.",
+                "replace(self, port=self.port + 1)"
+              ],
+              "explanation": "replace builds a new frozen config instead of editing the old one.",
+              "xp_reward": 10,
+              "options": [
+                "self.port = 1",
+                "print(self)",
+                "replace(self, port=self.port + 1)",
+                "pass"
+              ],
+              "correct_answer": "replace(self, port=self.port + 1)"
+            },
+            {
+              "id": "type-hints-dataclasses-01-predict",
+              "type": "output_prediction",
+              "question": "Ridge wardens recount crates before dawn. For use frozen True and replace, what value is displayed?",
+              "hints": [
+                "Run the example in your head from the top.",
+                "The last line is what gets displayed.",
+                "43"
+              ],
+              "explanation": "The Frozen Dataclass Config program displays that value.",
+              "xp_reward": 10,
+              "starter_code": "from dataclasses import dataclass, replace\n@dataclass(frozen=True)\nclass Config:\n    port: int\n    def moved(self):\n        return replace(self, port=self.port + 1)\nprint(Config(42).moved().port)\n",
+              "options": [
+                "46",
+                "0",
+                "43",
+                "none"
+              ],
+              "correct_answer": "43"
+            },
+            {
+              "id": "type-hints-dataclasses-01-order",
+              "type": "ordering",
+              "question": "Ridge wardens recount crates before dawn. For use frozen True and replace, build the line that shows the port on a new config.",
+              "hints": [
+                "Start at the left of the example.",
+                "Keep the example order.",
+                "updated = replace ( self , port=1 )"
+              ],
+              "explanation": "replace builds a new config.",
+              "xp_reward": 10,
+              "options": [
+                "updated",
+                "=",
+                "replace",
+                "(",
+                "self",
+                ",",
+                "port=1",
+                ")",
+                "=="
+              ],
+              "correct_answer": [
+                "updated",
+                "=",
+                "replace",
+                "(",
+                "self",
+                ",",
+                "port=1",
+                ")"
+              ]
+            },
+            {
+              "id": "type-hints-dataclasses-01-fill",
+              "type": "fill_blank",
+              "question": "Ridge wardens recount crates before dawn. For use frozen True and replace, fill the blank so the line shows the port on a new config.",
+              "hints": [
+                "The blank is the missing piece of the example.",
+                "The example uses that piece.",
+                "+"
+              ],
+              "explanation": "Plus moves the port up by one.",
+              "xp_reward": 10,
+              "starter_code": "return replace(self, port=self.port ___ 1)\n",
+              "options": [
+                "-",
+                "*",
+                "+",
+                "=="
+              ],
+              "correct_answer": "+"
+            },
+            {
+              "id": "type-hints-dataclasses-01-bug",
+              "type": "debugging",
+              "question": "Ridge wardens recount crates before dawn. For use frozen True and replace, which line does a different job than the example?",
+              "hints": [
+                "The other lines match the example.",
+                "One line is the odd one.",
+                "Line 6"
+              ],
+              "explanation": "The new config moves the port down.",
+              "xp_reward": 10,
+              "starter_code": "from dataclasses import dataclass, replace\n@dataclass(frozen=True)\nclass Config:\n    port: int\n    def moved(self):\n        return replace(self, port=self.port - 1)\nprint(Config(42).moved().port)\n",
+              "correct_answer": "6"
+            },
+            {
+              "id": "type-hints-dataclasses-01-predict-2",
+              "type": "output_prediction",
+              "question": "Ridge wardens recount crates before dawn. For use frozen True and replace, what does the second run display?",
+              "hints": [
+                "Apply the same steps to the new value.",
+                "The display comes from the last line.",
+                "46"
+              ],
+              "explanation": "The second Frozen Dataclass Config program displays that value.",
+              "xp_reward": 10,
+              "starter_code": "from dataclasses import dataclass, replace\n@dataclass(frozen=True)\nclass Config:\n    port: int\n    def moved(self):\n        return replace(self, port=self.port + 1)\nprint(Config(45).moved().port)\n",
+              "options": [
+                "43",
+                "46",
+                "none",
+                "0"
+              ],
+              "correct_answer": "46"
+            },
+            {
+              "id": "type-hints-dataclasses-01-write",
+              "type": "code",
+              "question": "Ridge wardens recount crates before dawn. For use frozen True and replace, fill the blank so the program prints the result.",
+              "hints": [
+                "The blank is the missing piece.",
+                "Print the value that piece produces.",
+                "label = Config(42).moved().port"
+              ],
+              "explanation": "The new port is what gets printed.",
+              "xp_reward": 10,
+              "starter_code": "from dataclasses import dataclass, replace\n@dataclass(frozen=True)\nclass Config:\n    port: int\n    def moved(self):\n        return replace(self, port=self.port + 1)\nlabel = ___\nprint(label)\n",
+              "solution_code": "from dataclasses import dataclass, replace\n@dataclass(frozen=True)\nclass Config:\n    port: int\n    def moved(self):\n        return replace(self, port=self.port + 1)\nlabel = Config(42).moved().port\nprint(label)\n",
+              "tests": [
+                {
+                  "name": "type-hints-dataclasses-01-prints",
+                  "description": "The new port is what gets printed.",
+                  "expected_stdout": "43\n",
+                  "required": true
+                }
+              ]
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "type-hints-dataclasses-practice-1",
-      "title": "4. Typed Optional Defaults (Practice)",
-      "description": "Implement `greet(name: str, title: str | None = None) -> str`. The test checks that `greet('Ada')` equals `'Ada'`; `greet('Ada', 'Dr')` equals `'Dr Ada'`.",
+      "title": "Practice Typed Optional Defaults",
+      "description": "Implement greet(name: str, title: str | None = None) -> str. The test checks that greet('Ada') equals 'Ada'; greet('Ada', 'Dr') equals 'Dr Ada'.",
       "order": 99,
       "difficulty": "intermediate",
       "duration_minutes": 6,
@@ -150,7 +664,7 @@
         "functions"
       ],
       "learning_objectives": [
-        "Use Optional / union types in annotations"
+        "Cove wardens recount crates before dawn, and use Optional union types in annotations."
       ],
       "starter_code": "def greet(name: str, title: str | None = None) -> str:\n    # TODO: if title: return f'{title} {name}' else return name\n    pass\n",
       "solution_code": "def greet(name: str, title: str | None = None) -> str:\n    if title:\n        return f'{title} {name}'\n    return name\n",
@@ -171,12 +685,182 @@
         "url": "https://docs.python.org/3/library/typing.html",
         "license": "Python documentation license (PSF)"
       },
-      "xp_reward": 15
+      "xp_reward": 15,
+      "player_mode": "micro",
+      "sublessons": [
+        {
+          "id": "type-hints-dataclasses-practice-1-micro",
+          "title": "Practice Typed Optional Defaults",
+          "description": "",
+          "order": 1,
+          "exercises": [
+            {
+              "id": "type-hints-dataclasses-practice-1-teach",
+              "type": "teach",
+              "question": "Cove wardens recount crates before dawn, and use Optional union types in annotations.",
+              "hints": [
+                "Read the one job this step is practicing.",
+                "The example is about Typed Optional Defaults.",
+                "value: int | None"
+              ],
+              "explanation": "Cove wardens recount crates before dawn, and use Optional union types in annotations.",
+              "xp_reward": 0,
+              "worked_example": "value: int | None"
+            },
+            {
+              "id": "type-hints-dataclasses-practice-1-mcq",
+              "type": "mcq",
+              "question": "Cove wardens recount crates before dawn. For use Optional union types in annotations, which line uses the fallback when the argument is missing?",
+              "hints": [
+                "Compare each line with the example.",
+                "One line matches the example.",
+                "value: int | None"
+              ],
+              "explanation": "None selects the fallback integer.",
+              "xp_reward": 10,
+              "options": [
+                "value == None",
+                "print(value)",
+                "value: int | None",
+                "value = None"
+              ],
+              "correct_answer": "value: int | None"
+            },
+            {
+              "id": "type-hints-dataclasses-practice-1-predict",
+              "type": "output_prediction",
+              "question": "Cove wardens recount crates before dawn. For use Optional union types in annotations, what value is displayed?",
+              "hints": [
+                "Run the example in your head from the top.",
+                "The last line is what gets displayed.",
+                "42"
+              ],
+              "explanation": "The Typed Optional Defaults program displays that value.",
+              "xp_reward": 10,
+              "starter_code": "def label(value: int | None = None) -> int:\n    if value is None:\n        return 42\n    return value\nprint(label(None))\n",
+              "options": [
+                "46",
+                "none",
+                "42",
+                "0"
+              ],
+              "correct_answer": "42"
+            },
+            {
+              "id": "type-hints-dataclasses-practice-1-order",
+              "type": "ordering",
+              "question": "Cove wardens recount crates before dawn. For use Optional union types in annotations, build the line that uses the fallback when the argument is missing.",
+              "hints": [
+                "Start at the left of the example.",
+                "Keep the example order.",
+                "def label(value: int) -> int: return value"
+              ],
+              "explanation": "The annotation allows an integer result.",
+              "xp_reward": 10,
+              "options": [
+                "def",
+                "label(value:",
+                "int)",
+                "->",
+                "int:",
+                "return",
+                "value",
+                "str"
+              ],
+              "correct_answer": [
+                "def",
+                "label(value:",
+                "int)",
+                "->",
+                "int:",
+                "return",
+                "value"
+              ]
+            },
+            {
+              "id": "type-hints-dataclasses-practice-1-fill",
+              "type": "fill_blank",
+              "question": "Cove wardens recount crates before dawn. For use Optional union types in annotations, fill the blank so the line uses the fallback when the argument is missing.",
+              "hints": [
+                "The blank is the missing piece of the example.",
+                "The example uses that piece.",
+                "+"
+              ],
+              "explanation": "Plus builds the other reading.",
+              "xp_reward": 10,
+              "starter_code": "shown = 42 ___ 4\n",
+              "options": [
+                "-",
+                "*",
+                "+",
+                "=="
+              ],
+              "correct_answer": "+"
+            },
+            {
+              "id": "type-hints-dataclasses-practice-1-bug",
+              "type": "debugging",
+              "question": "Cove wardens recount crates before dawn. For use Optional union types in annotations, which line does a different job than the example?",
+              "hints": [
+                "The other lines match the example.",
+                "One line is the odd one.",
+                "Line 2"
+              ],
+              "explanation": "The fallback check does not recognize a missing argument.",
+              "xp_reward": 10,
+              "starter_code": "def label(value: int | None = None) -> int:\n    if value == 1:\n        return 42\n    return value\nprint(label(None))\n",
+              "correct_answer": "2"
+            },
+            {
+              "id": "type-hints-dataclasses-practice-1-predict-2",
+              "type": "output_prediction",
+              "question": "Cove wardens recount crates before dawn. For use Optional union types in annotations, what does the second run display?",
+              "hints": [
+                "Apply the same steps to the new value.",
+                "The display comes from the last line.",
+                "46"
+              ],
+              "explanation": "The second Typed Optional Defaults program displays that value.",
+              "xp_reward": 10,
+              "starter_code": "def label(value: int | None = None) -> int:\n    if value is None:\n        return 42\n    return value\nprint(label(46))\n",
+              "options": [
+                "42",
+                "46",
+                "none",
+                "0"
+              ],
+              "correct_answer": "46"
+            },
+            {
+              "id": "type-hints-dataclasses-practice-1-write",
+              "type": "code",
+              "question": "Cove wardens recount crates before dawn. For use Optional union types in annotations, fill the blank so the program prints the result.",
+              "hints": [
+                "The blank is the missing piece.",
+                "Print the value that piece produces.",
+                "label_out = label(None)"
+              ],
+              "explanation": "The fallback integer is what gets printed.",
+              "xp_reward": 10,
+              "starter_code": "def label(value: int | None = None) -> int:\n    if value is None:\n        return 42\n    return value\nlabel_out = ___\nprint(label_out)\n",
+              "solution_code": "def label(value: int | None = None) -> int:\n    if value is None:\n        return 42\n    return value\nlabel_out = label(None)\nprint(label_out)\n",
+              "tests": [
+                {
+                  "name": "type-hints-dataclasses-practice-1-prints",
+                  "description": "The fallback integer is what gets printed.",
+                  "expected_stdout": "42\n",
+                  "required": true
+                }
+              ]
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "type-hints-dataclasses-checkpoint",
-      "title": "5. Unit 20 Checkpoint: Types & Dataclasses",
-      "description": "Define `@dataclass` `Pair` with a generic-feeling `swap` method returning a new Pair. The test checks that `(p.left, p.right)` equals `('b', 'a')`.",
+      "title": "Practice Unit 20 Checkpoint Types Dataclasses",
+      "description": "Define @dataclass Pair with a generic-feeling swap method returning a new Pair. The test checks that (p.left, p.right) equals ('b', 'a').",
       "order": 100,
       "difficulty": "intermediate",
       "duration_minutes": 10,
@@ -190,7 +874,7 @@
         "classes"
       ],
       "learning_objectives": [
-        "Return a new dataclass instance from a method"
+        "Plaza wardens recount crates before dawn, and return a new dataclass instance from a method."
       ],
       "starter_code": "from dataclasses import dataclass\n\n@dataclass\nclass Pair:\n    left: str\n    right: str\n\n    def swap(self) -> 'Pair':\n        # TODO: return a Pair with the two sides exchanged\n        pass\n",
       "solution_code": "from dataclasses import dataclass\n\n@dataclass\nclass Pair:\n    left: str\n    right: str\n\n    def swap(self) -> 'Pair':\n        return Pair(self.right, self.left)\n",
@@ -211,7 +895,179 @@
         "url": "https://docs.python.org/3/library/dataclasses.html",
         "license": "Python documentation license (PSF)"
       },
-      "xp_reward": 40
+      "xp_reward": 40,
+      "player_mode": "micro",
+      "sublessons": [
+        {
+          "id": "type-hints-dataclasses-checkpoint-micro",
+          "title": "Practice Unit 20 Checkpoint Types Dataclasses",
+          "description": "",
+          "order": 1,
+          "exercises": [
+            {
+              "id": "type-hints-dataclasses-checkpoint-teach",
+              "type": "teach",
+              "question": "Plaza wardens recount crates before dawn, and return a new dataclass instance from a method.",
+              "hints": [
+                "Read the one job this step is practicing.",
+                "The example is about Unit 20 Checkpoint Types Dataclasses.",
+                "Point(x, y).x"
+              ],
+              "explanation": "Plaza wardens recount crates before dawn, and return a new dataclass instance from a method.",
+              "xp_reward": 0,
+              "worked_example": "Point(x, y).x"
+            },
+            {
+              "id": "type-hints-dataclasses-checkpoint-mcq",
+              "type": "mcq",
+              "question": "Plaza wardens recount crates before dawn. For return a new dataclass instance from a method, which line shows one field of the new point?",
+              "hints": [
+                "Compare each line with the example.",
+                "One line matches the example.",
+                "Point(x, y).x"
+              ],
+              "explanation": "Point(x, y) stores both fields.",
+              "xp_reward": 10,
+              "options": [
+                "Point == x",
+                "print(Point)",
+                "pass",
+                "Point(x, y).x"
+              ],
+              "correct_answer": "Point(x, y).x"
+            },
+            {
+              "id": "type-hints-dataclasses-checkpoint-predict",
+              "type": "output_prediction",
+              "question": "Plaza wardens recount crates before dawn. For return a new dataclass instance from a method, what value is displayed?",
+              "hints": [
+                "Run the example in your head from the top.",
+                "The last line is what gets displayed.",
+                "53"
+              ],
+              "explanation": "The Unit 20 Checkpoint Types Dataclasses program displays that value.",
+              "xp_reward": 10,
+              "starter_code": "from dataclasses import dataclass\n@dataclass\nclass Point:\n    x: int\n    y: int\nprint(Point(52, 5).x + 1)\n",
+              "options": [
+                "6",
+                "none",
+                "0",
+                "53"
+              ],
+              "correct_answer": "53"
+            },
+            {
+              "id": "type-hints-dataclasses-checkpoint-order",
+              "type": "ordering",
+              "question": "Plaza wardens recount crates before dawn. For return a new dataclass instance from a method, build the line that shows one field of the new point.",
+              "hints": [
+                "Start at the left of the example.",
+                "Keep the example order.",
+                "point = Point ( left , right )"
+              ],
+              "explanation": "point = Point(left, right) builds the point.",
+              "xp_reward": 10,
+              "options": [
+                "point",
+                "=",
+                "Point",
+                "(",
+                "left",
+                ",",
+                "right",
+                ")",
+                "=="
+              ],
+              "correct_answer": [
+                "point",
+                "=",
+                "Point",
+                "(",
+                "left",
+                ",",
+                "right",
+                ")"
+              ]
+            },
+            {
+              "id": "type-hints-dataclasses-checkpoint-fill",
+              "type": "fill_blank",
+              "question": "Plaza wardens recount crates before dawn. For return a new dataclass instance from a method, fill the blank so the line shows one field of the new point.",
+              "hints": [
+                "The blank is the missing piece of the example.",
+                "The example uses that piece.",
+                "+"
+              ],
+              "explanation": "Plus adds one to the field.",
+              "xp_reward": 10,
+              "starter_code": "shown = point.x ___ 1\n",
+              "options": [
+                "==",
+                "+",
+                "*",
+                "-"
+              ],
+              "correct_answer": "+"
+            },
+            {
+              "id": "type-hints-dataclasses-checkpoint-bug",
+              "type": "debugging",
+              "question": "Plaza wardens recount crates before dawn. For return a new dataclass instance from a method, which line does a different job than the example?",
+              "hints": [
+                "The other lines match the example.",
+                "One line is the odd one.",
+                "Line 6"
+              ],
+              "explanation": "The print subtracts one from the field.",
+              "xp_reward": 10,
+              "starter_code": "from dataclasses import dataclass\n@dataclass\nclass Point:\n    x: int\n    y: int\nprint(Point(52, 5).x - 1)\n",
+              "correct_answer": "6"
+            },
+            {
+              "id": "type-hints-dataclasses-checkpoint-predict-2",
+              "type": "output_prediction",
+              "question": "Plaza wardens recount crates before dawn. For return a new dataclass instance from a method, what does the second run display?",
+              "hints": [
+                "Apply the same steps to the new value.",
+                "The display comes from the last line.",
+                "6"
+              ],
+              "explanation": "The second Unit 20 Checkpoint Types Dataclasses program displays that value.",
+              "xp_reward": 10,
+              "starter_code": "from dataclasses import dataclass\n@dataclass\nclass Point:\n    x: int\n    y: int\nprint(Point(52, 5).y + 1)\n",
+              "options": [
+                "53",
+                "none",
+                "6",
+                "0"
+              ],
+              "correct_answer": "6"
+            },
+            {
+              "id": "type-hints-dataclasses-checkpoint-write",
+              "type": "code",
+              "question": "Plaza wardens recount crates before dawn. For return a new dataclass instance from a method, fill the blank so the program prints the result.",
+              "hints": [
+                "The blank is the missing piece.",
+                "Print the value that piece produces.",
+                "label = point.x + 1"
+              ],
+              "explanation": "The field plus one is what gets printed.",
+              "xp_reward": 10,
+              "starter_code": "from dataclasses import dataclass\n@dataclass\nclass Point:\n    x: int\n    y: int\npoint = Point(52, 5)\nlabel = ___\nprint(label)\n",
+              "solution_code": "from dataclasses import dataclass\n@dataclass\nclass Point:\n    x: int\n    y: int\npoint = Point(52, 5)\nlabel = point.x + 1\nprint(label)\n",
+              "tests": [
+                {
+                  "name": "type-hints-dataclasses-checkpoint-prints",
+                  "description": "The field plus one is what gets printed.",
+                  "expected_stdout": "53\n",
+                  "required": true
+                }
+              ]
+            }
+          ]
+        }
+      ]
     }
   ]
 }

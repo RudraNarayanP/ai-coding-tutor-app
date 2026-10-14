@@ -14,8 +14,8 @@
   "lessons": [
     {
       "id": "sql-06",
-      "title": "6. Aggregate Functions",
-      "description": "From `orders`, select `SUM(total_amount)` as the total revenue and `AVG(total_amount)` as the average order value. The test checks that the query returns one row and the total is greater than 0.",
+      "title": "Practice Aggregate Functions",
+      "description": "From orders, select SUM(total_amount) as the total revenue and AVG(total_amount) as the average order value. The test checks that the query returns one row and the total is greater than 0.",
       "order": 6,
       "difficulty": "intermediate",
       "duration_minutes": 5,
@@ -45,10 +45,177 @@
         "license": "Public domain (SQLite documentation)"
       },
       "learning_objectives": [
-        "Summarize a whole table with SUM(), AVG() and COUNT()",
-        "Give aggregate results readable names with AS aliases"
+        "Orchard potters recount crates before dawn, and summarize a whole table with SUM, AVG and COUNT."
       ],
-      "xp_reward": 10
+      "xp_reward": 10,
+      "player_mode": "micro",
+      "sublessons": [
+        {
+          "id": "sql-06-micro",
+          "title": "Practice Aggregate Functions",
+          "description": "",
+          "order": 1,
+          "exercises": [
+            {
+              "id": "sql-06-teach",
+              "type": "teach",
+              "question": "Orchard potters recount crates before dawn, and summarize a whole table with SUM, AVG and COUNT.",
+              "hints": [
+                "Read the one job this step is practicing.",
+                "The example is about Aggregate Functions.",
+                "SELECT COUNT(*) AS total FROM products;"
+              ],
+              "explanation": "Orchard potters recount crates before dawn, and summarize a whole table with SUM, AVG and COUNT.",
+              "xp_reward": 0,
+              "worked_example": "SELECT COUNT(*) AS total FROM products;"
+            },
+            {
+              "id": "sql-06-mcq",
+              "type": "mcq",
+              "question": "Orchard potters recount crates before dawn. For summarize a whole table with SUM, AVG and COUNT, which line counts the product rows?",
+              "hints": [
+                "Compare each line with the example.",
+                "One line matches the example.",
+                "SELECT COUNT(*) AS total FROM products"
+              ],
+              "explanation": "COUNT(*) counts the rows in products.",
+              "xp_reward": 10,
+              "options": [
+                "INSERT INTO products",
+                "SELECT COUNT(*) AS total FROM products",
+                "total == total",
+                "DROP TABLE products"
+              ],
+              "correct_answer": "SELECT COUNT(*) AS total FROM products"
+            },
+            {
+              "id": "sql-06-predict",
+              "type": "output_prediction",
+              "question": "Orchard potters recount crates before dawn. For summarize a whole table with SUM, AVG and COUNT, what value is displayed?",
+              "hints": [
+                "Run the example in your head from the top.",
+                "The last line is what gets displayed.",
+                "┌───────┐\n│ total │\n├───────┤\n│ 5     │\n└───────┘"
+              ],
+              "explanation": "The Aggregate Functions program displays that value.",
+              "xp_reward": 10,
+              "starter_code": "SELECT COUNT(*) AS total FROM products;\n",
+              "options": [
+                "┌───────┐\n│ total │\n├───────┤\n│ 4     │\n└───────┘",
+                "┌───────┐\n│ total │\n├───────┤\n│ 5     │\n└───────┘",
+                "none",
+                "0"
+              ],
+              "correct_answer": "┌───────┐\n│ total │\n├───────┤\n│ 5     │\n└───────┘"
+            },
+            {
+              "id": "sql-06-order",
+              "type": "ordering",
+              "question": "Orchard potters recount crates before dawn. For summarize a whole table with SUM, AVG and COUNT, build the line that counts the product rows.",
+              "hints": [
+                "Start at the left of the example.",
+                "Keep the example order.",
+                "SELECT COUNT(*) AS total FROM products"
+              ],
+              "explanation": "COUNT(*) counts the rows in products.",
+              "xp_reward": 10,
+              "options": [
+                "SELECT",
+                "COUNT(*)",
+                "AS",
+                "total",
+                "FROM",
+                "products",
+                "DROP"
+              ],
+              "correct_answer": [
+                "SELECT",
+                "COUNT(*)",
+                "AS",
+                "total",
+                "FROM",
+                "products"
+              ]
+            },
+            {
+              "id": "sql-06-fill",
+              "type": "fill_blank",
+              "question": "Orchard potters recount crates before dawn. For summarize a whole table with SUM, AVG and COUNT, fill the blank so the line counts the product rows.",
+              "hints": [
+                "The blank is the missing piece of the example.",
+                "The example uses that piece.",
+                "COUNT(*)"
+              ],
+              "explanation": "COUNT(*) counts the rows in products.",
+              "xp_reward": 10,
+              "starter_code": "SELECT ___ AS total FROM products;",
+              "options": [
+                "SUM(name)",
+                "COUNT(*)",
+                "AVG(name)",
+                "MIN(name)"
+              ],
+              "correct_answer": "COUNT(*)"
+            },
+            {
+              "id": "sql-06-bug",
+              "type": "debugging",
+              "question": "Orchard potters recount crates before dawn. For summarize a whole table with SUM, AVG and COUNT, which line does a different job than the example?",
+              "hints": [
+                "The other lines match the example.",
+                "One line is the odd one.",
+                "Line 1"
+              ],
+              "explanation": "The count reads customers instead of products.",
+              "xp_reward": 10,
+              "starter_code": "SELECT COUNT(*) AS total FROM customers;",
+              "correct_answer": "1"
+            },
+            {
+              "id": "sql-06-predict-2",
+              "type": "output_prediction",
+              "question": "Orchard potters recount crates before dawn. For summarize a whole table with SUM, AVG and COUNT, what does the second run display?",
+              "hints": [
+                "Apply the same steps to the new value.",
+                "The display comes from the last line.",
+                "┌───────┐\n│ total │\n├───────┤\n│ 4     │\n└───────┘"
+              ],
+              "explanation": "The second Aggregate Functions program displays that value.",
+              "xp_reward": 10,
+              "starter_code": "SELECT COUNT(*) AS total FROM customers;\n",
+              "options": [
+                "┌───────┐\n│ total │\n├───────┤\n│ 5     │\n└───────┘",
+                "none",
+                "0",
+                "┌───────┐\n│ total │\n├───────┤\n│ 4     │\n└───────┘"
+              ],
+              "correct_answer": "┌───────┐\n│ total │\n├───────┤\n│ 4     │\n└───────┘"
+            },
+            {
+              "id": "sql-06-write",
+              "type": "code",
+              "question": "Orchard potters recount crates before dawn. For summarize a whole table with SUM, AVG and COUNT, fill the blank so the program prints the result.",
+              "hints": [
+                "The blank is the missing piece.",
+                "Print the value that piece produces.",
+                "SELECT COUNT(*) AS total FROM products;"
+              ],
+              "explanation": "The query result is what this step counts the product rows.",
+              "xp_reward": 10,
+              "starter_code": "SELECT ___ AS total FROM products;\n",
+              "solution_code": "SELECT COUNT(*) AS total FROM products;\n",
+              "tests": [
+                {
+                  "name": "sql-06-prints",
+                  "description": "The query result is what this step counts the product rows.",
+                  "expected_stdout": "┌───────┐\n│ total │\n├───────┤\n│ 5     │\n└───────┘",
+                  "required": true
+                }
+              ]
+            }
+          ]
+        }
+      ]
     }
   ]
 }

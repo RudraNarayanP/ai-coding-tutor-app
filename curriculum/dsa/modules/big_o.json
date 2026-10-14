@@ -12,8 +12,8 @@
   "lessons": [
     {
       "id": "big-o-step-1",
-      "title": "1. Counting Operations",
-      "description": "Estimate work by counting loop iterations. Implement `linear_sum(n)` that sums 1..n in O(n) with an explicit loop. The test checks that `linear_sum(5)` equals `15`.",
+      "title": "Count Operations",
+      "description": "Estimate work by counting loop iterations. Implement linear_sum(n) that sums 1..n in O(n) with an explicit loop. The test checks that linear_sum(5) equals 15.",
       "order": 1,
       "difficulty": "intermediate",
       "duration_minutes": 5,
@@ -25,7 +25,7 @@
       ],
       "prerequisites": [],
       "learning_objectives": [
-        "Write an O(n) summation loop"
+        "Harbor clerks recount crates before dawn, and write an O summation loop."
       ],
       "starter_code": "def linear_sum(n):\n    # TODO: sum 1..n with a loop\n    pass\n",
       "solution_code": "def linear_sum(n):\n    total = 0\n    for i in range(1, n + 1):\n        total += i\n    return total\n",
@@ -49,31 +49,175 @@
       "xp_reward": 10,
       "sublessons": [
         {
-          "id": "big-o-step-1-out-sub",
-          "title": "Predict the output",
+          "id": "big-o-step-1-micro",
+          "title": "Count Operations",
+          "description": "",
           "order": 1,
           "exercises": [
             {
-              "id": "big-o-step-1-out-1",
-              "type": "output_prediction",
-              "question": "What does this program print?\n\n```python\ndef linear_sum(n):\n    total = 0\n    for i in range(1, n + 1):\n        total += i\n    return total\n\nprint(linear_sum(5))\n```",
-              "options": [
-                "21",
-                "15",
-                "10"
+              "id": "big-o-step-1-teach",
+              "type": "teach",
+              "question": "Harbor clerks recount crates before dawn, and write an O summation loop.",
+              "hints": [
+                "Read the one job this step is practicing.",
+                "The example is about Counting Operations.",
+                "for item in items:"
               ],
-              "correct_answer": "15",
-              "explanation": "range(1, 6) yields 1, 2, 3, 4 and 5, which add to 15. 10 is what stopping one early (range(1, n)) gives; 21 is what one extra iteration (range(1, n + 2)) gives.",
-              "xp_reward": 10
+              "explanation": "Harbor clerks recount crates before dawn, and write an O summation loop.",
+              "xp_reward": 0,
+              "worked_example": "for item in items:"
+            },
+            {
+              "id": "big-o-step-1-mcq",
+              "type": "mcq",
+              "question": "Harbor clerks recount crates before dawn. For write an O summation loop, which line counts one step per item?",
+              "hints": [
+                "Compare each line with the example.",
+                "One line matches the example.",
+                "steps = steps + 1"
+              ],
+              "explanation": "steps = steps + 1 counts one operation.",
+              "xp_reward": 10,
+              "options": [
+                "item == items",
+                "return steps",
+                "steps = steps + 1",
+                "pass"
+              ],
+              "correct_answer": "steps = steps + 1"
+            },
+            {
+              "id": "big-o-step-1-predict",
+              "type": "output_prediction",
+              "question": "Harbor clerks recount crates before dawn. For write an O summation loop, what value is displayed?",
+              "hints": [
+                "Run the example in your head from the top.",
+                "The last line is what gets displayed.",
+                "4"
+              ],
+              "explanation": "The Counting Operations program displays that value.",
+              "xp_reward": 10,
+              "starter_code": "items = [1, 2, 3, 4]\nsteps = 0\nfor item in items:\n    steps = steps + 1\nprint(steps)\n",
+              "options": [
+                "3",
+                "none",
+                "4",
+                "0"
+              ],
+              "correct_answer": "4"
+            },
+            {
+              "id": "big-o-step-1-order",
+              "type": "ordering",
+              "question": "Harbor clerks recount crates before dawn. For write an O summation loop, build the line that counts one step per item.",
+              "hints": [
+                "Start at the left of the example.",
+                "Keep the example order.",
+                "for item in items: steps+=1"
+              ],
+              "explanation": "steps = steps + 1 counts one operation.",
+              "xp_reward": 10,
+              "options": [
+                "for",
+                "item",
+                "in",
+                "items:",
+                "steps+=1",
+                "if"
+              ],
+              "correct_answer": [
+                "for",
+                "item",
+                "in",
+                "items:",
+                "steps+=1"
+              ]
+            },
+            {
+              "id": "big-o-step-1-fill",
+              "type": "fill_blank",
+              "question": "Harbor clerks recount crates before dawn. For write an O summation loop, fill the blank so the line counts one step per item.",
+              "hints": [
+                "The blank is the missing piece of the example.",
+                "The example uses that piece.",
+                "+"
+              ],
+              "explanation": "steps = steps + 1 counts one operation.",
+              "xp_reward": 10,
+              "starter_code": "steps = steps ___ 1\n",
+              "options": [
+                "*",
+                "+",
+                "-",
+                "=="
+              ],
+              "correct_answer": "+"
+            },
+            {
+              "id": "big-o-step-1-bug",
+              "type": "debugging",
+              "question": "Harbor clerks recount crates before dawn. For write an O summation loop, which line does a different job than the example?",
+              "hints": [
+                "The other lines match the example.",
+                "One line is the odd one.",
+                "Line 3"
+              ],
+              "explanation": "The loop uses of, so it is not a Python walk.",
+              "xp_reward": 10,
+              "starter_code": "items = [1, 2, 3, 4]\nsteps = 0\nfor item of items:\n    steps = steps + 1\nprint(steps)\n",
+              "correct_answer": "3"
+            },
+            {
+              "id": "big-o-step-1-predict-2",
+              "type": "output_prediction",
+              "question": "Harbor clerks recount crates before dawn. For write an O summation loop, what does the second run display?",
+              "hints": [
+                "Apply the same steps to the new value.",
+                "The display comes from the last line.",
+                "3"
+              ],
+              "explanation": "The second Counting Operations program displays that value.",
+              "xp_reward": 10,
+              "starter_code": "items = [1, 2, 3]\nsteps = 0\nfor item in items:\n    steps = steps + 1\nprint(steps)\n",
+              "options": [
+                "4",
+                "3",
+                "none",
+                "0"
+              ],
+              "correct_answer": "3"
+            },
+            {
+              "id": "big-o-step-1-write",
+              "type": "code",
+              "question": "Harbor clerks recount crates before dawn. For write an O summation loop, fill the blank so the program prints the result.",
+              "hints": [
+                "The blank is the missing piece.",
+                "Print the value that piece produces.",
+                "label = steps"
+              ],
+              "explanation": "The printed value is the result after this step counts one step per item.",
+              "xp_reward": 10,
+              "starter_code": "items = [1, 2, 3, 4]\nsteps = 0\nfor item in items:\n    steps = steps + 1\nlabel = ___\nprint(label)\n",
+              "solution_code": "items = [1, 2, 3, 4]\nsteps = 0\nfor item in items:\n    steps = steps + 1\nlabel = steps\nprint(label)\n",
+              "tests": [
+                {
+                  "name": "big-o-step-1-prints",
+                  "description": "The printed value is the result after this step counts one step per item.",
+                  "expected_stdout": "4\n",
+                  "required": true
+                }
+              ]
             }
           ]
         }
-      ]
+      ],
+      "player_mode": "micro"
     },
     {
       "id": "big-o-step-2",
-      "title": "2. Constant vs Linear Lookup",
-      "description": "Compare list membership (O(n)) vs set membership (O(1) average). Implement `has_in_set(items, target)`. The test checks that `has_in_set([1, 2, 3], 2)` is true; `has_in_set([1, 2, 3], 9)` is false.",
+      "title": "Practice Constant vs Linear Lookup",
+      "description": "Compare list membership (O(n)) vs set membership (O(1) average). Implement has_in_set(items, target). The test checks that has_in_set([1, 2, 3], 2) is true; has_in_set([1, 2, 3], 9) is false.",
       "order": 2,
       "difficulty": "intermediate",
       "duration_minutes": 5,
@@ -85,7 +229,7 @@
       ],
       "prerequisites": [],
       "learning_objectives": [
-        "Use a set for average O(1) membership"
+        "Mesa clerks recount crates before dawn, and use a set for average O membership."
       ],
       "starter_code": "def has_in_set(items, target):\n    # TODO: return True if target is in set(items)\n    pass\n",
       "solution_code": "def has_in_set(items, target):\n    return target in set(items)\n",
@@ -106,12 +250,174 @@
         "url": "https://docs.python.org/3/library/time-complexity.html",
         "license": "Python documentation license (PSF)"
       },
-      "xp_reward": 10
+      "xp_reward": 10,
+      "player_mode": "micro",
+      "sublessons": [
+        {
+          "id": "big-o-step-2-micro",
+          "title": "Practice Constant vs Linear Lookup",
+          "description": "",
+          "order": 1,
+          "exercises": [
+            {
+              "id": "big-o-step-2-teach",
+              "type": "teach",
+              "question": "Mesa clerks recount crates before dawn, and use a set for average O membership.",
+              "hints": [
+                "Read the one job this step is practicing.",
+                "The example is about Constant vs Linear Lookup.",
+                "items[0]"
+              ],
+              "explanation": "Mesa clerks recount crates before dawn, and use a set for average O membership.",
+              "xp_reward": 0,
+              "worked_example": "items[0]"
+            },
+            {
+              "id": "big-o-step-2-mcq",
+              "type": "mcq",
+              "question": "Mesa clerks recount crates before dawn. For use a set for average O membership, which line reads the first item in one step?",
+              "hints": [
+                "Compare each line with the example.",
+                "One line matches the example.",
+                "items[0]"
+              ],
+              "explanation": "items[0] is a direct read.",
+              "xp_reward": 10,
+              "options": [
+                "len(items)",
+                "items + items",
+                "item == items",
+                "items[0]"
+              ],
+              "correct_answer": "items[0]"
+            },
+            {
+              "id": "big-o-step-2-predict",
+              "type": "output_prediction",
+              "question": "Mesa clerks recount crates before dawn. For use a set for average O membership, what value is displayed?",
+              "hints": [
+                "Run the example in your head from the top.",
+                "The last line is what gets displayed.",
+                "violet"
+              ],
+              "explanation": "The Constant vs Linear Lookup program displays that value.",
+              "xp_reward": 10,
+              "starter_code": "items = ['violet', 'other', 'third']\nprint(items[0])\n",
+              "options": [
+                "amber",
+                "none",
+                "0",
+                "violet"
+              ],
+              "correct_answer": "violet"
+            },
+            {
+              "id": "big-o-step-2-order",
+              "type": "ordering",
+              "question": "Mesa clerks recount crates before dawn. For use a set for average O membership, build the line that reads the first item in one step.",
+              "hints": [
+                "Start at the left of the example.",
+                "Keep the example order.",
+                "picked = items[0]"
+              ],
+              "explanation": "items[0] is a direct read.",
+              "xp_reward": 10,
+              "options": [
+                "picked",
+                "=",
+                "items[0]",
+                "=="
+              ],
+              "correct_answer": [
+                "picked",
+                "=",
+                "items[0]"
+              ]
+            },
+            {
+              "id": "big-o-step-2-fill",
+              "type": "fill_blank",
+              "question": "Mesa clerks recount crates before dawn. For use a set for average O membership, fill the blank so the line reads the first item in one step.",
+              "hints": [
+                "The blank is the missing piece of the example.",
+                "The example uses that piece.",
+                "0"
+              ],
+              "explanation": "items[0] is a direct read.",
+              "xp_reward": 10,
+              "starter_code": "picked = items[___]\n",
+              "options": [
+                "1",
+                "2",
+                "3",
+                "0"
+              ],
+              "correct_answer": "0"
+            },
+            {
+              "id": "big-o-step-2-bug",
+              "type": "debugging",
+              "question": "Mesa clerks recount crates before dawn. For use a set for average O membership, which line does a different job than the example?",
+              "hints": [
+                "The other lines match the example.",
+                "One line is the odd one.",
+                "Line 2"
+              ],
+              "explanation": "The read asks for a slot that is not in the list.",
+              "xp_reward": 10,
+              "starter_code": "items = ['violet', 'other']\nprint(items[9])\n",
+              "correct_answer": "2"
+            },
+            {
+              "id": "big-o-step-2-predict-2",
+              "type": "output_prediction",
+              "question": "Mesa clerks recount crates before dawn. For use a set for average O membership, what does the second run display?",
+              "hints": [
+                "Apply the same steps to the new value.",
+                "The display comes from the last line.",
+                "amber"
+              ],
+              "explanation": "The second Constant vs Linear Lookup program displays that value.",
+              "xp_reward": 10,
+              "starter_code": "items = ['amber', 'other', 'third']\nprint(items[0])\n",
+              "options": [
+                "violet",
+                "amber",
+                "0",
+                "none"
+              ],
+              "correct_answer": "amber"
+            },
+            {
+              "id": "big-o-step-2-write",
+              "type": "code",
+              "question": "Mesa clerks recount crates before dawn. For use a set for average O membership, fill the blank so the program prints the result.",
+              "hints": [
+                "The blank is the missing piece.",
+                "Print the value that piece produces.",
+                "label = items[0]"
+              ],
+              "explanation": "The printed value is the result after this step reads the first item in one step.",
+              "xp_reward": 10,
+              "starter_code": "items = ['violet', 'other', 'third']\nlabel = ___\nprint(label)\n",
+              "solution_code": "items = ['violet', 'other', 'third']\nlabel = items[0]\nprint(label)\n",
+              "tests": [
+                {
+                  "name": "big-o-step-2-prints",
+                  "description": "The printed value is the result after this step reads the first item in one step",
+                  "expected_stdout": "violet\n",
+                  "required": true
+                }
+              ]
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "big-o-01",
-      "title": "3. Nested Loops Complexity (Concept Challenge)",
-      "description": "Implement `count_pairs(n)` that counts pairs (i,j) with 0<=i<j<n — classic O(n^2) nested loops — and return the count. The test checks that `count_pairs(4)` equals `6`.",
+      "title": "Practice Nested Loops Complexity",
+      "description": "Implement count_pairs(n) that counts pairs (i,j) with 0<=i<j<n — classic O(n^2) nested loops — and return the count. The test checks that count_pairs(4) equals 6.",
       "order": 3,
       "difficulty": "intermediate",
       "duration_minutes": 8,
@@ -123,7 +429,7 @@
       ],
       "prerequisites": [],
       "learning_objectives": [
-        "Recognize quadratic nested loops"
+        "Orchard clerks recount crates before dawn, and recognize quadratic nested loops."
       ],
       "starter_code": "def count_pairs(n):\n    # TODO: count pairs i < j\n    pass\n",
       "solution_code": "def count_pairs(n):\n    count = 0\n    for i in range(n):\n        for j in range(i + 1, n):\n            count += 1\n    return count\n",
@@ -144,12 +450,178 @@
         "url": "https://docs.python.org/3/tutorial/controlflow.html#for-statements",
         "license": "Python documentation license (PSF)"
       },
-      "xp_reward": 25
+      "xp_reward": 25,
+      "player_mode": "micro",
+      "sublessons": [
+        {
+          "id": "big-o-01-micro",
+          "title": "Practice Nested Loops Complexity",
+          "description": "",
+          "order": 1,
+          "exercises": [
+            {
+              "id": "big-o-01-teach",
+              "type": "teach",
+              "question": "Orchard clerks recount crates before dawn, and recognize quadratic nested loops.",
+              "hints": [
+                "Read the one job this step is practicing.",
+                "The example is about Nested Loops Complexity.",
+                "for inner in range(54):"
+              ],
+              "explanation": "Orchard clerks recount crates before dawn, and recognize quadratic nested loops.",
+              "xp_reward": 0,
+              "worked_example": "for inner in range(54):"
+            },
+            {
+              "id": "big-o-01-mcq",
+              "type": "mcq",
+              "question": "Orchard clerks recount crates before dawn. For recognize quadratic nested loops, which line counts the trips of a nested loop?",
+              "hints": [
+                "Compare each line with the example.",
+                "One line matches the example.",
+                "count = count + 1"
+              ],
+              "explanation": "Each inner trip adds one to the nested count.",
+              "xp_reward": 10,
+              "options": [
+                "outer == inner",
+                "return count",
+                "count = count + 1",
+                "pass"
+              ],
+              "correct_answer": "count = count + 1"
+            },
+            {
+              "id": "big-o-01-predict",
+              "type": "output_prediction",
+              "question": "Orchard clerks recount crates before dawn. For recognize quadratic nested loops, what value is displayed?",
+              "hints": [
+                "Run the example in your head from the top.",
+                "The last line is what gets displayed.",
+                "162"
+              ],
+              "explanation": "The Nested Loops Complexity program displays that value.",
+              "xp_reward": 10,
+              "starter_code": "count = 0\nfor outer in range(3):\n    for inner in range(54):\n        count = count + 1\nprint(count)\n",
+              "options": [
+                "108",
+                "none",
+                "162",
+                "0"
+              ],
+              "correct_answer": "162"
+            },
+            {
+              "id": "big-o-01-order",
+              "type": "ordering",
+              "question": "Orchard clerks recount crates before dawn. For recognize quadratic nested loops, build the line that counts the trips of a nested loop.",
+              "hints": [
+                "Start at the left of the example.",
+                "Keep the example order.",
+                "for inner in range(limit): count+=1"
+              ],
+              "explanation": "Each inner trip adds one to the nested count.",
+              "xp_reward": 10,
+              "options": [
+                "for",
+                "inner",
+                "in",
+                "range(limit):",
+                "count+=1",
+                "if"
+              ],
+              "correct_answer": [
+                "for",
+                "inner",
+                "in",
+                "range(limit):",
+                "count+=1"
+              ]
+            },
+            {
+              "id": "big-o-01-fill",
+              "type": "fill_blank",
+              "question": "Orchard clerks recount crates before dawn. For recognize quadratic nested loops, fill the blank so the line counts the trips of a nested loop.",
+              "hints": [
+                "The blank is the missing piece of the example.",
+                "The example uses that piece.",
+                "+"
+              ],
+              "explanation": "Each inner trip adds one to the nested count.",
+              "xp_reward": 10,
+              "starter_code": "count = count ___ 1\n",
+              "options": [
+                "-",
+                "*",
+                "+",
+                "=="
+              ],
+              "correct_answer": "+"
+            },
+            {
+              "id": "big-o-01-bug",
+              "type": "debugging",
+              "question": "Orchard clerks recount crates before dawn. For recognize quadratic nested loops, which line does a different job than the example?",
+              "hints": [
+                "The other lines match the example.",
+                "One line is the odd one.",
+                "Line 2"
+              ],
+              "explanation": "The inner loop is missing, so the count is only the outer trips.",
+              "xp_reward": 10,
+              "starter_code": "count = 0\nfor outer in range(3):\n    count = count + 1\nprint(count)\n",
+              "correct_answer": "2"
+            },
+            {
+              "id": "big-o-01-predict-2",
+              "type": "output_prediction",
+              "question": "Orchard clerks recount crates before dawn. For recognize quadratic nested loops, what does the second run display?",
+              "hints": [
+                "Apply the same steps to the new value.",
+                "The display comes from the last line.",
+                "108"
+              ],
+              "explanation": "The second Nested Loops Complexity program displays that value.",
+              "xp_reward": 10,
+              "starter_code": "count = 0\nfor outer in range(2):\n    for inner in range(54):\n        count = count + 1\nprint(count)\n",
+              "options": [
+                "162",
+                "108",
+                "none",
+                "0"
+              ],
+              "correct_answer": "108"
+            },
+            {
+              "id": "big-o-01-write",
+              "type": "code",
+              "question": "Orchard clerks recount crates before dawn. For recognize quadratic nested loops, fill the blank so the program prints the result.",
+              "hints": [
+                "The blank is the missing piece.",
+                "Print the value that piece produces.",
+                "label = count"
+              ],
+              "explanation": "The printed value is the result after this step counts the trips of a nested loop.",
+              "xp_reward": 10,
+              "starter_code": "count = 0\nfor outer in range(3):\n    for inner in range(54):\n        count = count + 1\nlabel = ___\nprint(label)\n",
+              "solution_code": "count = 0\nfor outer in range(3):\n    for inner in range(54):\n        count = count + 1\nlabel = count\nprint(label)\n",
+              "tests": [
+                {
+                  "name": "big-o-01-prints",
+                  "description": "The printed value is the result after this step counts the trips of a nested loo",
+                  "expected_stdout": "162\n",
+                  "required": true
+                }
+              ]
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "big-o-practice-1",
-      "title": "4. Early Exit Search (Practice)",
-      "description": "Implement `first_index(items, pred)` returning the first index where pred is true, or -1 — best case O(1). The test checks that `first_index([1, 3, 5], lambda x: x % 2 == 0)` equals `-1`; `first_index([1, 4, 5], lambda x: x % 2 == 0)` equals `1`.",
+      "title": "Practice Early Exit Search",
+      "description": "Implement first_index(items, pred) returning the first index where pred is true, or -1 — best case O(1). The test checks that first_index([1, 3, 5], lambda x: x % 2 == 0) equals -1; first_index([1, 4, 5], lambda x: x % 2 == 0) equals 1.",
       "order": 4,
       "difficulty": "intermediate",
       "duration_minutes": 6,
@@ -161,7 +633,7 @@
       ],
       "prerequisites": [],
       "learning_objectives": [
-        "Stop scanning once a match is found"
+        "Quarry clerks recount crates before dawn, and stop scanning once a match is found."
       ],
       "starter_code": "def first_index(items, pred):\n    # TODO: return first i where pred(items[i]) else -1\n    pass\n",
       "solution_code": "def first_index(items, pred):\n    for i, item in enumerate(items):\n        if pred(item):\n            return i\n    return -1\n",
@@ -182,12 +654,178 @@
         "url": "https://docs.python.org/3/library/functions.html#enumerate",
         "license": "Python documentation license (PSF)"
       },
-      "xp_reward": 15
+      "xp_reward": 15,
+      "player_mode": "micro",
+      "sublessons": [
+        {
+          "id": "big-o-practice-1-micro",
+          "title": "Practice Early Exit Search",
+          "description": "",
+          "order": 1,
+          "exercises": [
+            {
+              "id": "big-o-practice-1-teach",
+              "type": "teach",
+              "question": "Quarry clerks recount crates before dawn, and stop scanning once a match is found.",
+              "hints": [
+                "Read the one job this step is practicing.",
+                "The example is about Early Exit Search.",
+                "if item == 54:"
+              ],
+              "explanation": "Quarry clerks recount crates before dawn, and stop scanning once a match is found.",
+              "xp_reward": 0,
+              "worked_example": "if item == 54:"
+            },
+            {
+              "id": "big-o-practice-1-mcq",
+              "type": "mcq",
+              "question": "Quarry clerks recount crates before dawn. For stop scanning once a match is found, which line stops the scan at the first match?",
+              "hints": [
+                "Compare each line with the example.",
+                "One line matches the example.",
+                "if item == target: break"
+              ],
+              "explanation": "break leaves the scan at the first match.",
+              "xp_reward": 10,
+              "options": [
+                "pass",
+                "item == items",
+                "return found",
+                "if item == target: break"
+              ],
+              "correct_answer": "if item == target: break"
+            },
+            {
+              "id": "big-o-practice-1-predict",
+              "type": "output_prediction",
+              "question": "Quarry clerks recount crates before dawn. For stop scanning once a match is found, what value is displayed?",
+              "hints": [
+                "Run the example in your head from the top.",
+                "The last line is what gets displayed.",
+                "3"
+              ],
+              "explanation": "The Early Exit Search program displays that value.",
+              "xp_reward": 10,
+              "starter_code": "items = [2, 4, 54, 9]\nfound = 0\nfor item in items:\n    found = found + 1\n    if item == 54:\n        break\nprint(found)\n",
+              "options": [
+                "1",
+                "none",
+                "3",
+                "0"
+              ],
+              "correct_answer": "3"
+            },
+            {
+              "id": "big-o-practice-1-order",
+              "type": "ordering",
+              "question": "Quarry clerks recount crates before dawn. For stop scanning once a match is found, build the line that stops the scan at the first match.",
+              "hints": [
+                "Start at the left of the example.",
+                "Keep the example order.",
+                "if item == target: break"
+              ],
+              "explanation": "break leaves the scan at the first match.",
+              "xp_reward": 10,
+              "options": [
+                "if",
+                "item",
+                "==",
+                "target:",
+                "break",
+                "continue"
+              ],
+              "correct_answer": [
+                "if",
+                "item",
+                "==",
+                "target:",
+                "break"
+              ]
+            },
+            {
+              "id": "big-o-practice-1-fill",
+              "type": "fill_blank",
+              "question": "Quarry clerks recount crates before dawn. For stop scanning once a match is found, fill the blank so the line stops the scan at the first match.",
+              "hints": [
+                "The blank is the missing piece of the example.",
+                "The example uses that piece.",
+                "=="
+              ],
+              "explanation": "break leaves the scan at the first match.",
+              "xp_reward": 10,
+              "starter_code": "if item ___ 54:\n    found = 1\n",
+              "options": [
+                "!=",
+                ">=",
+                "==",
+                "<"
+              ],
+              "correct_answer": "=="
+            },
+            {
+              "id": "big-o-practice-1-bug",
+              "type": "debugging",
+              "question": "Quarry clerks recount crates before dawn. For stop scanning once a match is found, which line does a different job than the example?",
+              "hints": [
+                "The other lines match the example.",
+                "One line is the odd one.",
+                "Line 5"
+              ],
+              "explanation": "The loop never breaks, so it counts every item.",
+              "xp_reward": 10,
+              "starter_code": "items = [2, 4, 54, 9]\nfound = 0\nfor item in items:\n    found = found + 1\nprint(found)\n",
+              "correct_answer": "5"
+            },
+            {
+              "id": "big-o-practice-1-predict-2",
+              "type": "output_prediction",
+              "question": "Quarry clerks recount crates before dawn. For stop scanning once a match is found, what does the second run display?",
+              "hints": [
+                "Apply the same steps to the new value.",
+                "The display comes from the last line.",
+                "1"
+              ],
+              "explanation": "The second Early Exit Search program displays that value.",
+              "xp_reward": 10,
+              "starter_code": "items = [54, 4, 9]\nfound = 0\nfor item in items:\n    found = found + 1\n    if item == 54:\n        break\nprint(found)\n",
+              "options": [
+                "3",
+                "1",
+                "none",
+                "0"
+              ],
+              "correct_answer": "1"
+            },
+            {
+              "id": "big-o-practice-1-write",
+              "type": "code",
+              "question": "Quarry clerks recount crates before dawn. For stop scanning once a match is found, fill the blank so the program prints the result.",
+              "hints": [
+                "The blank is the missing piece.",
+                "Print the value that piece produces.",
+                "label = found"
+              ],
+              "explanation": "The printed value is the result after this step stops the scan at the first match.",
+              "xp_reward": 10,
+              "starter_code": "items = [2, 4, 54, 9]\nfound = 0\nfor item in items:\n    found = found + 1\n    if item == 54:\n        break\nlabel = ___\nprint(label)\n",
+              "solution_code": "items = [2, 4, 54, 9]\nfound = 0\nfor item in items:\n    found = found + 1\n    if item == 54:\n        break\nlabel = found\nprint(label)\n",
+              "tests": [
+                {
+                  "name": "big-o-practice-1-prints",
+                  "description": "The printed value is the result after this step stops the scan at the first matc",
+                  "expected_stdout": "3\n",
+                  "required": true
+                }
+              ]
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "big-o-checkpoint",
-      "title": "5. Unit 1 Checkpoint: Complexity",
-      "description": "Implement `closed_form_sum(n)` returning n*(n+1)//2 — O(1) arithmetic. The test checks that `closed_form_sum(100)` equals `5050`.",
+      "title": "Practice Unit 1 Checkpoint Complexity",
+      "description": "Implement closed_form_sum(n) returning n*(n+1)//2 — O(1) arithmetic. The test checks that closed_form_sum(100) equals 5050.",
       "order": 5,
       "difficulty": "intermediate",
       "duration_minutes": 10,
@@ -199,7 +837,7 @@
       ],
       "prerequisites": [],
       "learning_objectives": [
-        "Prefer O(1) closed form when available"
+        "Attic clerks recount crates before dawn, and prefer O closed form when available."
       ],
       "starter_code": "def closed_form_sum(n):\n    # TODO: return n*(n+1)//2\n    pass\n",
       "solution_code": "def closed_form_sum(n):\n    return n * (n + 1) // 2\n",
@@ -220,7 +858,169 @@
         "url": "https://docs.python.org/3/tutorial/introduction.html#numbers",
         "license": "Python documentation license (PSF)"
       },
-      "xp_reward": 40
+      "xp_reward": 40,
+      "player_mode": "micro",
+      "sublessons": [
+        {
+          "id": "big-o-checkpoint-micro",
+          "title": "Practice Unit 1 Checkpoint Complexity",
+          "description": "",
+          "order": 1,
+          "exercises": [
+            {
+              "id": "big-o-checkpoint-teach",
+              "type": "teach",
+              "question": "Attic clerks recount crates before dawn, and prefer O closed form when available.",
+              "hints": [
+                "Read the one job this step is practicing.",
+                "The example is about Unit 1 Checkpoint Complexity.",
+                "ops = 21 * 21"
+              ],
+              "explanation": "Attic clerks recount crates before dawn, and prefer O closed form when available.",
+              "xp_reward": 0,
+              "worked_example": "ops = 21 * 21"
+            },
+            {
+              "id": "big-o-checkpoint-mcq",
+              "type": "mcq",
+              "question": "Attic clerks recount crates before dawn. For prefer O closed form when available, which line squares the input to price a nested scan?",
+              "hints": [
+                "Compare each line with the example.",
+                "One line matches the example.",
+                "ops = limit * limit"
+              ],
+              "explanation": "limit * limit is the nested cost.",
+              "xp_reward": 10,
+              "options": [
+                "ops == limit",
+                "return ops",
+                "pass",
+                "ops = limit * limit"
+              ],
+              "correct_answer": "ops = limit * limit"
+            },
+            {
+              "id": "big-o-checkpoint-predict",
+              "type": "output_prediction",
+              "question": "Attic clerks recount crates before dawn. For prefer O closed form when available, what value is displayed?",
+              "hints": [
+                "Run the example in your head from the top.",
+                "The last line is what gets displayed.",
+                "441"
+              ],
+              "explanation": "The Unit 1 Checkpoint Complexity program displays that value.",
+              "xp_reward": 10,
+              "starter_code": "ops = 21 * 21\nprint(ops)\n",
+              "options": [
+                "462",
+                "none",
+                "0",
+                "441"
+              ],
+              "correct_answer": "441"
+            },
+            {
+              "id": "big-o-checkpoint-order",
+              "type": "ordering",
+              "question": "Attic clerks recount crates before dawn. For prefer O closed form when available, build the line that squares the input to price a nested scan.",
+              "hints": [
+                "Start at the left of the example.",
+                "Keep the example order.",
+                "ops = limit*limit"
+              ],
+              "explanation": "limit * limit is the nested cost.",
+              "xp_reward": 10,
+              "options": [
+                "ops",
+                "=",
+                "limit*limit",
+                "=="
+              ],
+              "correct_answer": [
+                "ops",
+                "=",
+                "limit*limit"
+              ]
+            },
+            {
+              "id": "big-o-checkpoint-fill",
+              "type": "fill_blank",
+              "question": "Attic clerks recount crates before dawn. For prefer O closed form when available, fill the blank so the line squares the input to price a nested scan.",
+              "hints": [
+                "The blank is the missing piece of the example.",
+                "The example uses that piece.",
+                "*"
+              ],
+              "explanation": "limit * limit is the nested cost.",
+              "xp_reward": 10,
+              "starter_code": "ops = limit ___ limit\n",
+              "options": [
+                "+",
+                "==",
+                "-",
+                "*"
+              ],
+              "correct_answer": "*"
+            },
+            {
+              "id": "big-o-checkpoint-bug",
+              "type": "debugging",
+              "question": "Attic clerks recount crates before dawn. For prefer O closed form when available, which line does a different job than the example?",
+              "hints": [
+                "The other lines match the example.",
+                "One line is the odd one.",
+                "Line 1"
+              ],
+              "explanation": "The cost adds the limit instead of squaring it.",
+              "xp_reward": 10,
+              "starter_code": "ops = 21 + 21\nprint(ops)\n",
+              "correct_answer": "1"
+            },
+            {
+              "id": "big-o-checkpoint-predict-2",
+              "type": "output_prediction",
+              "question": "Attic clerks recount crates before dawn. For prefer O closed form when available, what does the second run display?",
+              "hints": [
+                "Apply the same steps to the new value.",
+                "The display comes from the last line.",
+                "462"
+              ],
+              "explanation": "The second Unit 1 Checkpoint Complexity program displays that value.",
+              "xp_reward": 10,
+              "starter_code": "ops = 21 * 22\nprint(ops)\n",
+              "options": [
+                "441",
+                "none",
+                "462",
+                "0"
+              ],
+              "correct_answer": "462"
+            },
+            {
+              "id": "big-o-checkpoint-write",
+              "type": "code",
+              "question": "Attic clerks recount crates before dawn. For prefer O closed form when available, fill the blank so the program prints the result.",
+              "hints": [
+                "The blank is the missing piece.",
+                "Print the value that piece produces.",
+                "label = ops"
+              ],
+              "explanation": "The printed value is the result after this step squares the input to price a nested scan.",
+              "xp_reward": 10,
+              "starter_code": "ops = 21 * 21\nlabel = ___\nprint(label)\n",
+              "solution_code": "ops = 21 * 21\nlabel = ops\nprint(label)\n",
+              "tests": [
+                {
+                  "name": "big-o-checkpoint-prints",
+                  "description": "The printed value is the result after this step squares the input to price a nes",
+                  "expected_stdout": "441\n",
+                  "required": true
+                }
+              ]
+            }
+          ]
+        }
+      ]
     }
   ]
 }

@@ -14,8 +14,8 @@
   "lessons": [
     {
       "id": "cpp-ptr-01",
-      "title": "1. Pointers & References in C++",
-      "description": "Finish `swapValues` so the two integers trade places through their references. Save the first value in a temporary variable before you overwrite it. After `swapValues(x, y)` with `x` equal to 10 and `y` equal to 20, `x` is 20 and `y` is 10. The test checks that `x` equals `20 || y != 10`.",
+      "title": "Practice Pointers References in C",
+      "description": "Finish swapValues so the two integers trade places through their references. Save the first value in a temporary variable before you overwrite it. After swapValues(x, y) with x equal to 10 and y equal to 20, x is 20 and y is 10. The test checks that x equals 20 || y != 10.",
       "order": 31,
       "difficulty": "intermediate",
       "duration_minutes": 5,
@@ -45,32 +45,173 @@
         "license": "CC BY-SA 4.0 (cppreference.com)"
       },
       "learning_objectives": [
-        "Swap two integers through references without losing a value"
+        "Cove pickers recount crates before dawn, and swap two integers through references without losing a value."
       ],
       "xp_reward": 10,
       "sublessons": [
         {
-          "id": "cpp-ptr-01-mcq-1-sub",
-          "title": "Reading through a pointer",
+          "id": "cpp-ptr-01-micro",
+          "title": "Practice Pointers References in C",
+          "description": "",
           "order": 1,
           "exercises": [
             {
-              "id": "cpp-ptr-01-mcq-1",
-              "type": "mcq",
-              "question": "Given `int value = 7;` and `int* ptr = &value;`, which expression reaches the number `value` holds *through the pointer*?",
-              "options": [
-                "ptr",
-                "&value",
-                "ptr->value",
-                "*ptr"
+              "id": "cpp-ptr-01-teach",
+              "type": "teach",
+              "question": "Cove pickers recount crates before dawn, and swap two integers through references without losing a value.",
+              "hints": [
+                "Read the one job this step is practicing.",
+                "The example is about Pointers References in C.",
+                "int* slot = &value;"
               ],
-              "correct_answer": "*ptr",
-              "explanation": "`*ptr` dereferences the address and yields the pointed-to object. `ptr` alone is the address, and `&value` just recomputes it.",
-              "xp_reward": 10
+              "explanation": "Cove pickers recount crates before dawn, and swap two integers through references without losing a value.",
+              "xp_reward": 0,
+              "worked_example": "int* slot = &value;"
+            },
+            {
+              "id": "cpp-ptr-01-mcq",
+              "type": "mcq",
+              "question": "Cove pickers recount crates before dawn. For swap two integers through references without losing a value, which line reads the integer through a pointer?",
+              "hints": [
+                "Compare each line with the example.",
+                "One line matches the example.",
+                "int* slot = &value;"
+              ],
+              "explanation": "*slot reads the integer stored at the address.",
+              "xp_reward": 10,
+              "options": [
+                "slot == &value;",
+                "int* slot = &value;",
+                "return value;",
+                "slot = slot;"
+              ],
+              "correct_answer": "int* slot = &value;"
+            },
+            {
+              "id": "cpp-ptr-01-predict",
+              "type": "output_prediction",
+              "question": "Cove pickers recount crates before dawn. For swap two integers through references without losing a value, what value is displayed?",
+              "hints": [
+                "Run the example in your head from the top.",
+                "The last line is what gets displayed.",
+                "22"
+              ],
+              "explanation": "The Pointers References in C program displays that value.",
+              "xp_reward": 10,
+              "starter_code": "#include <iostream>\n#include <string>\n#include <vector>\n#include <algorithm>\n#include <memory>\nint main() {\n    int value = 22;\n    int* slot = &value;\n    std::cout << *slot << std::endl;\n    return 0;\n}\n",
+              "options": [
+                "25",
+                "22",
+                "none",
+                "0"
+              ],
+              "correct_answer": "22"
+            },
+            {
+              "id": "cpp-ptr-01-order",
+              "type": "ordering",
+              "question": "Cove pickers recount crates before dawn. For swap two integers through references without losing a value, build the line that reads the integer through a pointer.",
+              "hints": [
+                "Start at the left of the example.",
+                "Keep the example order.",
+                "int* slot = &left;"
+              ],
+              "explanation": "*slot reads the integer stored at the address.",
+              "xp_reward": 10,
+              "options": [
+                "int*",
+                "slot",
+                "=",
+                "&left;",
+                "=="
+              ],
+              "correct_answer": [
+                "int*",
+                "slot",
+                "=",
+                "&left;"
+              ]
+            },
+            {
+              "id": "cpp-ptr-01-fill",
+              "type": "fill_blank",
+              "question": "Cove pickers recount crates before dawn. For swap two integers through references without losing a value, fill the blank so the line reads the integer through a pointer.",
+              "hints": [
+                "The blank is the missing piece of the example.",
+                "The example uses that piece.",
+                "&"
+              ],
+              "explanation": "*slot reads the integer stored at the address.",
+              "xp_reward": 10,
+              "starter_code": "int* slot = ___left;",
+              "options": [
+                "*",
+                "&",
+                "+",
+                "-"
+              ],
+              "correct_answer": "&"
+            },
+            {
+              "id": "cpp-ptr-01-bug",
+              "type": "debugging",
+              "question": "Cove pickers recount crates before dawn. For swap two integers through references without losing a value, which line does a different job than the example?",
+              "hints": [
+                "The other lines match the example.",
+                "One line is the odd one.",
+                "Line 9"
+              ],
+              "explanation": "The print writes the address instead of the integer it points at.",
+              "xp_reward": 10,
+              "starter_code": "#include <iostream>\n#include <string>\n#include <vector>\n#include <algorithm>\n#include <memory>\nint main() {\n    int value = 22;\n    int* slot = &value;\n    std::cout << slot << std::endl;\n    return 0;\n}\n",
+              "correct_answer": "9"
+            },
+            {
+              "id": "cpp-ptr-01-predict-2",
+              "type": "output_prediction",
+              "question": "Cove pickers recount crates before dawn. For swap two integers through references without losing a value, what does the second run display?",
+              "hints": [
+                "Apply the same steps to the new value.",
+                "The display comes from the last line.",
+                "25"
+              ],
+              "explanation": "The second Pointers References in C program displays that value.",
+              "xp_reward": 10,
+              "starter_code": "#include <iostream>\n#include <string>\n#include <vector>\n#include <algorithm>\n#include <memory>\nint main() {\n    int value = 25;\n    int* slot = &value;\n    std::cout << *slot << std::endl;\n    return 0;\n}\n",
+              "options": [
+                "22",
+                "none",
+                "0",
+                "25"
+              ],
+              "correct_answer": "25"
+            },
+            {
+              "id": "cpp-ptr-01-write",
+              "type": "code",
+              "question": "Cove pickers recount crates before dawn. For swap two integers through references without losing a value, fill the blank so the program prints the result.",
+              "hints": [
+                "The blank is the missing piece.",
+                "Print the value that piece produces.",
+                "int label = *slot;"
+              ],
+              "explanation": "The printed value is the result after this step reads the integer through a pointer.",
+              "xp_reward": 10,
+              "starter_code": "#include <iostream>\n#include <string>\n#include <vector>\n#include <algorithm>\n#include <memory>\nint main() {\n    int value = 22;\n    int* slot = &value;\n    int label = ___;\n    std::cout << label << std::endl;\n    return 0;\n}\n",
+              "solution_code": "#include <iostream>\n#include <string>\n#include <vector>\n#include <algorithm>\n#include <memory>\nint main() {\n    int value = 22;\n    int* slot = &value;\n    int label = *slot;\n    std::cout << label << std::endl;\n    return 0;\n}\n",
+              "tests": [
+                {
+                  "name": "cpp-ptr-01-prints",
+                  "description": "The printed value is the result after this step reads the integer through a poin",
+                  "expected_stdout": "22\n",
+                  "required": true
+                }
+              ]
             }
           ]
         }
-      ]
+      ],
+      "player_mode": "micro"
     }
   ]
 }

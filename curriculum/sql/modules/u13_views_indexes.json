@@ -14,8 +14,8 @@
   "lessons": [
     {
       "id": "sql-13",
-      "title": "13. Views & Indexes",
-      "description": "Create a view `active_users` that selects `username` and `email` from `users` where `role` is not `guest`. Also create an index on `users(email)`. The test checks that the view returns at least 4 rows.",
+      "title": "Practice Views Indexes",
+      "description": "Create a view active_users that selects username and email from users where role is not guest. Also create an index on users(email). The test checks that the view returns at least 4 rows.",
       "order": 13,
       "difficulty": "advanced",
       "duration_minutes": 5,
@@ -45,10 +45,181 @@
         "license": "Public domain (SQLite documentation)"
       },
       "learning_objectives": [
-        "Store a query as a reusable view with CREATE VIEW",
-        "Speed up lookups with CREATE INDEX on frequently queried columns"
+        "Quarry clerks recount crates before dawn, and store a query as a reusable view with CREATE VIEW."
       ],
-      "xp_reward": 10
+      "xp_reward": 10,
+      "player_mode": "micro",
+      "sublessons": [
+        {
+          "id": "sql-13-micro",
+          "title": "Practice Views Indexes",
+          "description": "",
+          "order": 1,
+          "exercises": [
+            {
+              "id": "sql-13-teach",
+              "type": "teach",
+              "question": "Quarry clerks recount crates before dawn, and store a query as a reusable view with CREATE VIEW.",
+              "hints": [
+                "Read the one job this step is practicing.",
+                "The example is about Views Indexes.",
+                "CREATE VIEW kitchen AS SELECT name FROM products"
+              ],
+              "explanation": "Quarry clerks recount crates before dawn, and store a query as a reusable view with CREATE VIEW.",
+              "xp_reward": 0,
+              "worked_example": "CREATE VIEW kitchen AS SELECT name FROM products"
+            },
+            {
+              "id": "sql-13-mcq",
+              "type": "mcq",
+              "question": "Quarry clerks recount crates before dawn. For store a query as a reusable view with CREATE VIEW, which line reads names through a view?",
+              "hints": [
+                "Compare each line with the example.",
+                "One line matches the example.",
+                "CREATE VIEW kitchen AS SELECT name FROM products"
+              ],
+              "explanation": "CREATE VIEW stores the select, and reading the view runs it.",
+              "xp_reward": 10,
+              "options": [
+                "DROP TABLE products",
+                "INSERT INTO products",
+                "CREATE VIEW kitchen AS SELECT name FROM products",
+                "name == name"
+              ],
+              "correct_answer": "CREATE VIEW kitchen AS SELECT name FROM products"
+            },
+            {
+              "id": "sql-13-predict",
+              "type": "output_prediction",
+              "question": "Quarry clerks recount crates before dawn. For store a query as a reusable view with CREATE VIEW, what value is displayed?",
+              "hints": [
+                "Run the example in your head from the top.",
+                "The last line is what gets displayed.",
+                "┌────────────┐\n│ name       │\n├────────────┤\n│ Coffee Mug │\n└────────────┘"
+              ],
+              "explanation": "The Views Indexes program displays that value.",
+              "xp_reward": 10,
+              "starter_code": "CREATE VIEW kitchen AS SELECT name FROM products WHERE category = 'Kitchen';\nSELECT name FROM kitchen;\n",
+              "options": [
+                "┌─────────────────────┐\n│ name                │\n├─────────────────────┤\n│ Laptop Pro          │\n│ Mechanical Keyboard │\n│ Monitor 27-inch     │\n└─────────────────────┘",
+                "none",
+                "┌────────────┐\n│ name       │\n├────────────┤\n│ Coffee Mug │\n└────────────┘",
+                "0"
+              ],
+              "correct_answer": "┌────────────┐\n│ name       │\n├────────────┤\n│ Coffee Mug │\n└────────────┘"
+            },
+            {
+              "id": "sql-13-order",
+              "type": "ordering",
+              "question": "Quarry clerks recount crates before dawn. For store a query as a reusable view with CREATE VIEW, build the line that reads names through a view.",
+              "hints": [
+                "Start at the left of the example.",
+                "Keep the example order.",
+                "CREATE VIEW kitchen AS SELECT name FROM products"
+              ],
+              "explanation": "CREATE VIEW stores the select, and reading the view runs it.",
+              "xp_reward": 10,
+              "options": [
+                "CREATE",
+                "VIEW",
+                "kitchen",
+                "AS",
+                "SELECT",
+                "name",
+                "FROM",
+                "products",
+                "DROP"
+              ],
+              "correct_answer": [
+                "CREATE",
+                "VIEW",
+                "kitchen",
+                "AS",
+                "SELECT",
+                "name",
+                "FROM",
+                "products"
+              ]
+            },
+            {
+              "id": "sql-13-fill",
+              "type": "fill_blank",
+              "question": "Quarry clerks recount crates before dawn. Choose the match for this step, using grove.",
+              "hints": [
+                "The blank is the missing piece of the example.",
+                "The example uses that piece.",
+                "AS"
+              ],
+              "explanation": "CREATE VIEW stores the select, and reading the view runs it.",
+              "xp_reward": 10,
+              "starter_code": "CREATE VIEW kitchen ___ SELECT name FROM products WHERE category = 'Kitchen';",
+              "options": [
+                "WHERE",
+                "SET",
+                "AS",
+                "FROM"
+              ],
+              "correct_answer": "AS"
+            },
+            {
+              "id": "sql-13-bug",
+              "type": "debugging",
+              "question": "Quarry clerks recount crates before dawn. For store a query as a reusable view with CREATE VIEW, which line does a different job than the example?",
+              "hints": [
+                "The other lines match the example.",
+                "One line is the odd one.",
+                "Line 1"
+              ],
+              "explanation": "The view filters a category that has no products.",
+              "xp_reward": 10,
+              "starter_code": "CREATE VIEW kitchen AS SELECT name FROM products WHERE category = 'Missing';\nSELECT name FROM kitchen;",
+              "correct_answer": "1"
+            },
+            {
+              "id": "sql-13-predict-2",
+              "type": "output_prediction",
+              "question": "Quarry clerks recount crates before dawn. For store a query as a reusable view with CREATE VIEW, what does the second run display?",
+              "hints": [
+                "Apply the same steps to the new value.",
+                "The display comes from the last line.",
+                "┌─────────────────────┐\n│ name                │\n├─────────────────────┤\n│ Laptop Pro          │\n│ Mechanical Keyboard │\n│ Monitor 27-inch     │\n└─────────────────────┘"
+              ],
+              "explanation": "The second Views Indexes program displays that value.",
+              "xp_reward": 10,
+              "starter_code": "CREATE VIEW gear AS SELECT name FROM products WHERE category = 'Electronics' ORDER BY name;\nSELECT name FROM gear;\n",
+              "options": [
+                "┌────────────┐\n│ name       │\n├────────────┤\n│ Coffee Mug │\n└────────────┘",
+                "┌─────────────────────┐\n│ name                │\n├─────────────────────┤\n│ Laptop Pro          │\n│ Mechanical Keyboard │\n│ Monitor 27-inch     │\n└─────────────────────┘",
+                "0",
+                "none"
+              ],
+              "correct_answer": "┌─────────────────────┐\n│ name                │\n├─────────────────────┤\n│ Laptop Pro          │\n│ Mechanical Keyboard │\n│ Monitor 27-inch     │\n└─────────────────────┘"
+            },
+            {
+              "id": "sql-13-write",
+              "type": "code",
+              "question": "Quarry clerks recount crates before dawn. For store a query as a reusable view with CREATE VIEW, fill the blank so the program prints the result.",
+              "hints": [
+                "The blank is the missing piece.",
+                "Print the value that piece produces.",
+                "SELECT name FROM products"
+              ],
+              "explanation": "The query result is what this step reads names through a view.",
+              "xp_reward": 10,
+              "starter_code": "CREATE VIEW kitchen AS SELECT ___ FROM products WHERE category = 'Kitchen';\nSELECT name FROM kitchen;\n",
+              "solution_code": "CREATE VIEW kitchen AS SELECT name FROM products WHERE category = 'Kitchen';\nSELECT name FROM kitchen;\n",
+              "tests": [
+                {
+                  "name": "sql-13-prints",
+                  "description": "The query result is what this step reads names through a view.",
+                  "expected_stdout": "┌────────────┐\n│ name       │\n├────────────┤\n│ Coffee Mug │\n└────────────┘",
+                  "required": true
+                }
+              ]
+            }
+          ]
+        }
+      ]
     }
   ]
 }

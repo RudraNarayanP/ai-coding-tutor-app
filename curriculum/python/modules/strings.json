@@ -15,8 +15,8 @@
   "lessons": [
     {
       "id": "strings-step-1",
-      "title": "1. String Concatenation & Indexing",
-      "description": "Finish two functions. `combine(a, b)` joins the strings with `+` (`combine(\"py\", \"thon\")` is `\"python\"`). `get_first_and_last(s)` returns the first character plus the last character (`get_first_and_last(\"hello\")` is `\"ho\"`). The test checks that `combine(\"py\", \"thon\")` equals `\"python\"`; `get_first_and_last(\"hello\")` equals `\"ho\"`.",
+      "title": "Practice String Concatenation Indexing",
+      "description": "Finish two functions. combine(a, b) joins the strings with + (combine(\"py\", \"thon\") is \"python\"). get_first_and_last(s) returns the first character plus the last character (get_first_and_last(\"hello\") is \"ho\"). The test checks that combine(\"py\", \"thon\") equals \"python\"; get_first_and_last(\"hello\") equals \"ho\".",
       "order": 26,
       "difficulty": "beginner",
       "duration_minutes": 5,
@@ -28,7 +28,7 @@
         "variables"
       ],
       "learning_objectives": [
-        "Concatenate strings and index single characters"
+        "Attic bakers recount crates before dawn, and concatenate strings and index single characters."
       ],
       "starter_code": "def combine(a, b):\n    # TODO: Return a + b\n    pass\n\ndef get_first_and_last(s):\n    # TODO: Return string with first and last character of s, e.g. s[0] + s[-1]\n    pass\n",
       "tests": [
@@ -49,12 +49,178 @@
         "url": "https://docs.python.org/3/tutorial/introduction.html#strings",
         "license": "Python documentation license (PSF)"
       },
-      "xp_reward": 10
+      "xp_reward": 10,
+      "player_mode": "micro",
+      "sublessons": [
+        {
+          "id": "strings-step-1-micro",
+          "title": "Practice String Concatenation Indexing",
+          "description": "",
+          "order": 1,
+          "exercises": [
+            {
+              "id": "strings-step-1-teach",
+              "type": "teach",
+              "question": "Attic bakers recount crates before dawn, and concatenate strings and index single characters.",
+              "hints": [
+                "Read the one job this step is practicing.",
+                "The example is about String Concatenation Indexing.",
+                "left + right"
+              ],
+              "explanation": "Attic bakers recount crates before dawn, and concatenate strings and index single characters.",
+              "xp_reward": 0,
+              "worked_example": "left + right"
+            },
+            {
+              "id": "strings-step-1-mcq",
+              "type": "mcq",
+              "question": "Attic bakers recount crates before dawn. For concatenate strings and index single characters, which line joins the reading and the mark?",
+              "hints": [
+                "Compare each line with the example.",
+                "One line matches the example.",
+                "left + right"
+              ],
+              "explanation": "left + right joins the two pieces.",
+              "xp_reward": 10,
+              "options": [
+                "left - right",
+                "len(left)",
+                "left == right",
+                "left + right"
+              ],
+              "correct_answer": "left + right"
+            },
+            {
+              "id": "strings-step-1-predict",
+              "type": "output_prediction",
+              "question": "Attic bakers recount crates before dawn. For concatenate strings and index single characters, what value is displayed?",
+              "hints": [
+                "Run the example in your head from the top.",
+                "The last line is what gets displayed.",
+                "linen!"
+              ],
+              "explanation": "The String Concatenation Indexing program displays that value.",
+              "xp_reward": 10,
+              "starter_code": "left = 'linen'\nright = '!'\nprint(left + right)\n",
+              "options": [
+                "linen?",
+                "none",
+                "0",
+                "linen!"
+              ],
+              "correct_answer": "linen!"
+            },
+            {
+              "id": "strings-step-1-order",
+              "type": "ordering",
+              "question": "Attic bakers recount crates before dawn. For concatenate strings and index single characters, build the line that joins the reading and the mark.",
+              "hints": [
+                "Start at the left of the example.",
+                "Keep the example order.",
+                "joined = left + right"
+              ],
+              "explanation": "joined = left + right joins the text.",
+              "xp_reward": 10,
+              "options": [
+                "joined",
+                "=",
+                "left",
+                "+",
+                "right",
+                "-"
+              ],
+              "correct_answer": [
+                "joined",
+                "=",
+                "left",
+                "+",
+                "right"
+              ]
+            },
+            {
+              "id": "strings-step-1-fill",
+              "type": "fill_blank",
+              "question": "Attic bakers recount crates before dawn. For concatenate strings and index single characters, fill the blank so the line joins the reading and the mark.",
+              "hints": [
+                "The blank is the missing piece of the example.",
+                "The example uses that piece.",
+                "+"
+              ],
+              "explanation": "Plus joins the two pieces.",
+              "xp_reward": 10,
+              "starter_code": "joined = left ___ right\n",
+              "options": [
+                "-",
+                "*",
+                "==",
+                "+"
+              ],
+              "correct_answer": "+"
+            },
+            {
+              "id": "strings-step-1-bug",
+              "type": "debugging",
+              "question": "Attic bakers recount crates before dawn. For concatenate strings and index single characters, which line does a different job than the example?",
+              "hints": [
+                "The other lines match the example.",
+                "One line is the odd one.",
+                "Line 3"
+              ],
+              "explanation": "The mark is never joined.",
+              "xp_reward": 10,
+              "starter_code": "left = 'linen'\nright = '!'\nprint(left)\n",
+              "correct_answer": "3"
+            },
+            {
+              "id": "strings-step-1-predict-2",
+              "type": "output_prediction",
+              "question": "Attic bakers recount crates before dawn. For concatenate strings and index single characters, what does the second run display?",
+              "hints": [
+                "Apply the same steps to the new value.",
+                "The display comes from the last line.",
+                "linen?"
+              ],
+              "explanation": "The second String Concatenation Indexing program displays that value.",
+              "xp_reward": 10,
+              "starter_code": "left = 'linen'\nright = '?'\nprint(left + right)\n",
+              "options": [
+                "linen!",
+                "0",
+                "linen?",
+                "none"
+              ],
+              "correct_answer": "linen?"
+            },
+            {
+              "id": "strings-step-1-write",
+              "type": "code",
+              "question": "Attic bakers recount crates before dawn. For concatenate strings and index single characters, fill the blank so the program prints the result.",
+              "hints": [
+                "The blank is the missing piece.",
+                "Print the value that piece produces.",
+                "label = left + right"
+              ],
+              "explanation": "The joined text is what gets printed.",
+              "xp_reward": 10,
+              "starter_code": "left = 'linen'\nright = '!'\nlabel = ___\nprint(label)\n",
+              "solution_code": "left = 'linen'\nright = '!'\nlabel = left + right\nprint(label)\n",
+              "tests": [
+                {
+                  "name": "strings-step-1-prints",
+                  "description": "The joined text is what gets printed.",
+                  "expected_stdout": "linen!\n",
+                  "required": true
+                }
+              ]
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "strings-step-2",
-      "title": "2. String Slicing",
-      "description": "Finish two slicing functions. `drop_last_char(s)` returns everything except the last character (`\"code!\"` becomes `\"code\"`). `get_prefix(s, n)` returns the first `n` characters (`get_prefix(\"patchwork\", 5)` is `\"patch\"`). The test checks that `drop_last_char(\"code!\")` equals `\"code\"`; `get_prefix(\"patchwork\", 5)` equals `\"patch\"`.",
+      "title": "Practice String Slicing",
+      "description": "Finish two slicing functions. drop_last_char(s) returns everything except the last character (\"code!\" becomes \"code\"). get_prefix(s, n) returns the first n characters (get_prefix(\"patchwork\", 5) is \"patch\"). The test checks that drop_last_char(\"code!\") equals \"code\"; get_prefix(\"patchwork\", 5) equals \"patch\".",
       "order": 27,
       "difficulty": "beginner",
       "duration_minutes": 5,
@@ -66,7 +232,7 @@
         "variables"
       ],
       "learning_objectives": [
-        "Extract substrings with slicing [start:end]"
+        "Depot bakers recount crates before dawn, and extract substrings with slicing start end."
       ],
       "starter_code": "def drop_last_char(s):\n    # TODO: Return s[:-1]\n    pass\n\ndef get_prefix(s, n):\n    # TODO: Return first n characters s[:n]\n    pass\n",
       "tests": [
@@ -87,12 +253,180 @@
         "url": "https://docs.python.org/3/tutorial/introduction.html#strings",
         "license": "Python documentation license (PSF)"
       },
-      "xp_reward": 10
+      "xp_reward": 10,
+      "player_mode": "micro",
+      "sublessons": [
+        {
+          "id": "strings-step-2-micro",
+          "title": "Practice String Slicing",
+          "description": "",
+          "order": 1,
+          "exercises": [
+            {
+              "id": "strings-step-2-teach",
+              "type": "teach",
+              "question": "Depot bakers recount crates before dawn, and extract substrings with slicing start end.",
+              "hints": [
+                "Read the one job this step is practicing.",
+                "The example is about String Slicing.",
+                "text[:3]"
+              ],
+              "explanation": "Depot bakers recount crates before dawn, and extract substrings with slicing start end.",
+              "xp_reward": 0,
+              "worked_example": "text[:3]"
+            },
+            {
+              "id": "strings-step-2-mcq",
+              "type": "mcq",
+              "question": "Depot bakers recount crates before dawn. For extract substrings with slicing start end, which line shows the opening letters of the reading?",
+              "hints": [
+                "Compare each line with the example.",
+                "One line matches the example.",
+                "text[:3]"
+              ],
+              "explanation": "text[:3] keeps the first three letters.",
+              "xp_reward": 10,
+              "options": [
+                "text[0]",
+                "text[:3]",
+                "len(text)",
+                "text + text"
+              ],
+              "correct_answer": "text[:3]"
+            },
+            {
+              "id": "strings-step-2-predict",
+              "type": "output_prediction",
+              "question": "Depot bakers recount crates before dawn. For extract substrings with slicing start end, what value is displayed?",
+              "hints": [
+                "Run the example in your head from the top.",
+                "The last line is what gets displayed.",
+                "map"
+              ],
+              "explanation": "The String Slicing program displays that value.",
+              "xp_reward": 10,
+              "starter_code": "text = 'maple' + 'stone'\nprint(text[:3])\n",
+              "options": [
+                "none",
+                "0",
+                "map",
+                "mapl"
+              ],
+              "correct_answer": "map"
+            },
+            {
+              "id": "strings-step-2-order",
+              "type": "ordering",
+              "question": "Depot bakers recount crates before dawn. For extract substrings with slicing start end, build the line that shows the opening letters of the reading.",
+              "hints": [
+                "Start at the left of the example.",
+                "Keep the example order.",
+                "chunk = text [ :3 ]"
+              ],
+              "explanation": "chunk = text[:3] keeps the opening letters.",
+              "xp_reward": 10,
+              "options": [
+                "chunk",
+                "=",
+                "text",
+                "[",
+                ":3",
+                "]",
+                "len"
+              ],
+              "correct_answer": [
+                "chunk",
+                "=",
+                "text",
+                "[",
+                ":3",
+                "]"
+              ]
+            },
+            {
+              "id": "strings-step-2-fill",
+              "type": "fill_blank",
+              "question": "Depot bakers recount crates before dawn. For extract substrings with slicing start end, fill the blank so the line shows the opening letters of the reading.",
+              "hints": [
+                "The blank is the missing piece of the example.",
+                "The example uses that piece.",
+                ":"
+              ],
+              "explanation": "The colon starts the slice from the beginning.",
+              "xp_reward": 10,
+              "starter_code": "chunk = text[___3]\n",
+              "options": [
+                ",",
+                ":",
+                "+",
+                "-"
+              ],
+              "correct_answer": ":"
+            },
+            {
+              "id": "strings-step-2-bug",
+              "type": "debugging",
+              "question": "Depot bakers recount crates before dawn. For extract substrings with slicing start end, which line does a different job than the example?",
+              "hints": [
+                "The other lines match the example.",
+                "One line is the odd one.",
+                "Line 2"
+              ],
+              "explanation": "The slice drops the opening letters.",
+              "xp_reward": 10,
+              "starter_code": "text = 'maple' + 'stone'\nprint(text[3:])\n",
+              "correct_answer": "2"
+            },
+            {
+              "id": "strings-step-2-predict-2",
+              "type": "output_prediction",
+              "question": "Depot bakers recount crates before dawn. For extract substrings with slicing start end, what does the second run display?",
+              "hints": [
+                "Apply the same steps to the new value.",
+                "The display comes from the last line.",
+                "mapl"
+              ],
+              "explanation": "The second String Slicing program displays that value.",
+              "xp_reward": 10,
+              "starter_code": "text = 'maple' + 'stone'\nprint(text[:4])\n",
+              "options": [
+                "map",
+                "none",
+                "0",
+                "mapl"
+              ],
+              "correct_answer": "mapl"
+            },
+            {
+              "id": "strings-step-2-write",
+              "type": "code",
+              "question": "Depot bakers recount crates before dawn. For extract substrings with slicing start end, fill the blank so the program prints the result.",
+              "hints": [
+                "The blank is the missing piece.",
+                "Print the value that piece produces.",
+                "label = text[:3]"
+              ],
+              "explanation": "The opening letters are what get printed.",
+              "xp_reward": 10,
+              "starter_code": "text = 'maple' + 'stone'\nlabel = ___\nprint(label)\n",
+              "solution_code": "text = 'maple' + 'stone'\nlabel = text[:3]\nprint(label)\n",
+              "tests": [
+                {
+                  "name": "strings-step-2-prints",
+                  "description": "The opening letters are what get printed.",
+                  "expected_stdout": "map\n",
+                  "required": true
+                }
+              ]
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "strings-01",
-      "title": "3. Little Sister's Vocabulary (Concept Challenge)",
-      "description": "Finish `add_prefix_un`, `make_word_groups`, `remove_suffix_ness`, `adjective_to_verb`. Transform words using string concatenation, indexing, slicing, and joining. The test checks that `add_prefix_un('happy')` equals `'unhappy'`; `make_word_groups(['en', 'close', 'joy', 'tire'])` equals `'en :: enclose :: enjoy :: entire'`; `remove_suffix_ness('heaviness')` equals `'heavy'`.",
+      "title": "Practice Little Sister's Vocabulary",
+      "description": "Finish add_prefix_un, make_word_groups, remove_suffix_ness, adjective_to_verb. Transform words using string concatenation, indexing, slicing, and joining. The test checks that add_prefix_un('happy') equals 'unhappy'; make_word_groups(['en', 'close', 'joy', 'tire']) equals 'en :: enclose :: enjoy :: entire'; remove_suffix_ness('heaviness') equals 'heavy'.",
       "order": 28,
       "difficulty": "beginner",
       "duration_minutes": 8,
@@ -105,9 +439,7 @@
         "conditionals"
       ],
       "learning_objectives": [
-        "Concatenate strings with +",
-        "Index and slice strings with positive and negative indices",
-        "Transform root words with prefixes and suffixes"
+        "Ridge bakers recount crates before dawn, and concatenate strings with."
       ],
       "starter_code": "def add_prefix_un(word):\n    \"\"\"Return word with 'un' prefix.\"\"\"\n    pass\n\ndef make_word_groups(vocab_words):\n    \"\"\"Return prefix and prefixed words joined by ' :: '.\"\"\"\n    pass\n\ndef remove_suffix_ness(word):\n    \"\"\"Remove -ness suffix, fixing iness -> y spelling.\"\"\"\n    pass\n\ndef adjective_to_verb(sentence, index):\n    \"\"\"Return the word at index with -en appended, removing trailing punctuation.\"\"\"\n    pass\n",
       "tests": [
@@ -146,12 +478,178 @@
         "license": "MIT"
       },
       "solution_code": "def add_prefix_un(word):\n    \"\"\"Return word with 'un' prefix.\"\"\"\n    return 'un' + word\n\n\ndef make_word_groups(vocab_words):\n    \"\"\"Return prefix and prefixed words joined by ' :: '.\"\"\"\n    prefix = vocab_words[0]\n    return ' :: '.join([prefix] + [prefix + w for w in vocab_words[1:]])\n\n\ndef remove_suffix_ness(word):\n    \"\"\"Remove -ness suffix, fixing iness -> y spelling.\"\"\"\n    root = word[:-4]\n    if root.endswith('i'):\n        return root[:-1] + 'y'\n    return root\n\n\ndef adjective_to_verb(sentence, index):\n    \"\"\"Return the word at index with -en appended, removing trailing punctuation.\"\"\"\n    word = sentence.split()[index]\n    return word.rstrip('.') + 'en'\n",
-      "xp_reward": 25
+      "xp_reward": 25,
+      "player_mode": "micro",
+      "sublessons": [
+        {
+          "id": "strings-01-micro",
+          "title": "Practice Little Sister's Vocabulary",
+          "description": "",
+          "order": 1,
+          "exercises": [
+            {
+              "id": "strings-01-teach",
+              "type": "teach",
+              "question": "Ridge bakers recount crates before dawn, and concatenate strings with.",
+              "hints": [
+                "Read the one job this step is practicing.",
+                "The example is about Little Sister's Vocabulary.",
+                "left + right"
+              ],
+              "explanation": "Ridge bakers recount crates before dawn, and concatenate strings with.",
+              "xp_reward": 0,
+              "worked_example": "left + right"
+            },
+            {
+              "id": "strings-01-mcq",
+              "type": "mcq",
+              "question": "Ridge bakers recount crates before dawn. For concatenate strings with, which line joins the reading and the mark?",
+              "hints": [
+                "Compare each line with the example.",
+                "One line matches the example.",
+                "left + right"
+              ],
+              "explanation": "left + right joins the two pieces.",
+              "xp_reward": 10,
+              "options": [
+                "left == right",
+                "left - right",
+                "left + right",
+                "len(left)"
+              ],
+              "correct_answer": "left + right"
+            },
+            {
+              "id": "strings-01-predict",
+              "type": "output_prediction",
+              "question": "Ridge bakers recount crates before dawn. For concatenate strings with, what value is displayed?",
+              "hints": [
+                "Run the example in your head from the top.",
+                "The last line is what gets displayed.",
+                "umber#"
+              ],
+              "explanation": "The Little Sister's Vocabulary program displays that value.",
+              "xp_reward": 10,
+              "starter_code": "left = 'umber'\nright = '#'\nprint(left + right)\n",
+              "options": [
+                "umber*",
+                "none",
+                "0",
+                "umber#"
+              ],
+              "correct_answer": "umber#"
+            },
+            {
+              "id": "strings-01-order",
+              "type": "ordering",
+              "question": "Ridge bakers recount crates before dawn. For concatenate strings with, build the line that joins the reading and the mark.",
+              "hints": [
+                "Start at the left of the example.",
+                "Keep the example order.",
+                "joined = left + right"
+              ],
+              "explanation": "joined = left + right joins the text.",
+              "xp_reward": 10,
+              "options": [
+                "joined",
+                "=",
+                "left",
+                "+",
+                "right",
+                "-"
+              ],
+              "correct_answer": [
+                "joined",
+                "=",
+                "left",
+                "+",
+                "right"
+              ]
+            },
+            {
+              "id": "strings-01-fill",
+              "type": "fill_blank",
+              "question": "Ridge bakers recount crates before dawn. For concatenate strings with, fill the blank so the line joins the reading and the mark.",
+              "hints": [
+                "The blank is the missing piece of the example.",
+                "The example uses that piece.",
+                "+"
+              ],
+              "explanation": "Plus joins the two pieces.",
+              "xp_reward": 10,
+              "starter_code": "joined = left ___ right\n",
+              "options": [
+                "-",
+                "*",
+                "==",
+                "+"
+              ],
+              "correct_answer": "+"
+            },
+            {
+              "id": "strings-01-bug",
+              "type": "debugging",
+              "question": "Ridge bakers recount crates before dawn. For concatenate strings with, which line does a different job than the example?",
+              "hints": [
+                "The other lines match the example.",
+                "One line is the odd one.",
+                "Line 3"
+              ],
+              "explanation": "The mark is never joined.",
+              "xp_reward": 10,
+              "starter_code": "left = 'umber'\nright = '#'\nprint(left)\n",
+              "correct_answer": "3"
+            },
+            {
+              "id": "strings-01-predict-2",
+              "type": "output_prediction",
+              "question": "Ridge bakers recount crates before dawn. For concatenate strings with, what does the second run display?",
+              "hints": [
+                "Apply the same steps to the new value.",
+                "The display comes from the last line.",
+                "umber*"
+              ],
+              "explanation": "The second Little Sister's Vocabulary program displays that value.",
+              "xp_reward": 10,
+              "starter_code": "left = 'umber'\nright = '*'\nprint(left + right)\n",
+              "options": [
+                "umber#",
+                "0",
+                "umber*",
+                "none"
+              ],
+              "correct_answer": "umber*"
+            },
+            {
+              "id": "strings-01-write",
+              "type": "code",
+              "question": "Ridge bakers recount crates before dawn. For concatenate strings with, fill the blank so the program prints the result.",
+              "hints": [
+                "The blank is the missing piece.",
+                "Print the value that piece produces.",
+                "label = left + right"
+              ],
+              "explanation": "The joined text is what gets printed.",
+              "xp_reward": 10,
+              "starter_code": "left = 'umber'\nright = '#'\nlabel = ___\nprint(label)\n",
+              "solution_code": "left = 'umber'\nright = '#'\nlabel = left + right\nprint(label)\n",
+              "tests": [
+                {
+                  "name": "strings-01-prints",
+                  "description": "The joined text is what gets printed.",
+                  "expected_stdout": "umber#\n",
+                  "required": true
+                }
+              ]
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "strings-practice-1",
-      "title": "4. ID Badge Formatter (Practice)",
-      "description": "Finish `format_badge`. Format user details into an ID badge string: `\"ID: \" + name.upper() + \" (\" + role + \")\"`. The test checks that `format_badge(\"Alice\", \"Admin\")` equals `\"ID: Alice (Admin)\"`.",
+      "title": "Practice ID Badge Formatter",
+      "description": "Finish format_badge. Format user details into an ID badge string: \"ID: \" + name.upper() + \" (\" + role + \")\". The test checks that format_badge(\"Alice\", \"Admin\") equals \"ID: Alice (Admin)\".",
       "order": 29,
       "difficulty": "beginner",
       "duration_minutes": 6,
@@ -163,7 +661,7 @@
         "variables"
       ],
       "learning_objectives": [
-        "Combine string building techniques"
+        "Cove bakers recount crates before dawn, and combine string building techniques."
       ],
       "starter_code": "def format_badge(name, role):\n    # TODO: return the badge text for this name and role\n    pass\n",
       "tests": [
@@ -184,12 +682,184 @@
         "url": "https://docs.python.org/3/tutorial/introduction.html#strings",
         "license": "Python documentation license (PSF)"
       },
-      "xp_reward": 15
+      "xp_reward": 15,
+      "player_mode": "micro",
+      "sublessons": [
+        {
+          "id": "strings-practice-1-micro",
+          "title": "Practice ID Badge Formatter",
+          "description": "",
+          "order": 1,
+          "exercises": [
+            {
+              "id": "strings-practice-1-teach",
+              "type": "teach",
+              "question": "Cove bakers recount crates before dawn, and combine string building techniques.",
+              "hints": [
+                "Read the one job this step is practicing.",
+                "The example is about ID Badge Formatter.",
+                "'-'.join(parts)"
+              ],
+              "explanation": "Cove bakers recount crates before dawn, and combine string building techniques.",
+              "xp_reward": 0,
+              "worked_example": "'-'.join(parts)"
+            },
+            {
+              "id": "strings-practice-1-mcq",
+              "type": "mcq",
+              "question": "Cove bakers recount crates before dawn. For combine string building techniques, which line joins the parts with the separator?",
+              "hints": [
+                "Compare each line with the example.",
+                "One line matches the example.",
+                "'-'.join(parts)"
+              ],
+              "explanation": "join places the separator between the parts.",
+              "xp_reward": 10,
+              "options": [
+                "parts[0]",
+                "len(parts)",
+                "parts + parts",
+                "'-'.join(parts)"
+              ],
+              "correct_answer": "'-'.join(parts)"
+            },
+            {
+              "id": "strings-practice-1-predict",
+              "type": "output_prediction",
+              "question": "Cove bakers recount crates before dawn. For combine string building techniques, what value is displayed?",
+              "hints": [
+                "Run the example in your head from the top.",
+                "The last line is what gets displayed.",
+                "kelp-id"
+              ],
+              "explanation": "The ID Badge Formatter program displays that value.",
+              "xp_reward": 10,
+              "starter_code": "parts = ['kelp', 'id']\nprint('-'.join(parts))\n",
+              "options": [
+                "0",
+                "kelp-id",
+                "kelp/id",
+                "none"
+              ],
+              "correct_answer": "kelp-id"
+            },
+            {
+              "id": "strings-practice-1-order",
+              "type": "ordering",
+              "question": "Cove bakers recount crates before dawn. For combine string building techniques, build the line that joins the parts with the separator.",
+              "hints": [
+                "Start at the left of the example.",
+                "Keep the example order.",
+                "joined = '-' . join ( parts )"
+              ],
+              "explanation": "'-'.join(parts) places the dash between the parts.",
+              "xp_reward": 10,
+              "options": [
+                "joined",
+                "=",
+                "'-'",
+                ".",
+                "join",
+                "(",
+                "parts",
+                ")",
+                "split"
+              ],
+              "correct_answer": [
+                "joined",
+                "=",
+                "'-'",
+                ".",
+                "join",
+                "(",
+                "parts",
+                ")"
+              ]
+            },
+            {
+              "id": "strings-practice-1-fill",
+              "type": "fill_blank",
+              "question": "Cove bakers recount crates before dawn. For combine string building techniques, fill the blank so the line joins the parts with the separator.",
+              "hints": [
+                "The blank is the missing piece of the example.",
+                "The example uses that piece.",
+                "+"
+              ],
+              "explanation": "Plus is the other way to join two pieces.",
+              "xp_reward": 10,
+              "starter_code": "joined = left ___ right\n",
+              "options": [
+                "-",
+                "*",
+                "==",
+                "+"
+              ],
+              "correct_answer": "+"
+            },
+            {
+              "id": "strings-practice-1-bug",
+              "type": "debugging",
+              "question": "Cove bakers recount crates before dawn. For combine string building techniques, which line does a different job than the example?",
+              "hints": [
+                "The other lines match the example.",
+                "One line is the odd one.",
+                "Line 2"
+              ],
+              "explanation": "The separator is empty, so the parts are stuck together.",
+              "xp_reward": 10,
+              "starter_code": "parts = ['kelp', 'id']\nprint(''.join(parts))\n",
+              "correct_answer": "2"
+            },
+            {
+              "id": "strings-practice-1-predict-2",
+              "type": "output_prediction",
+              "question": "Cove bakers recount crates before dawn. For combine string building techniques, what does the second run display?",
+              "hints": [
+                "Apply the same steps to the new value.",
+                "The display comes from the last line.",
+                "kelp/id"
+              ],
+              "explanation": "The second ID Badge Formatter program displays that value.",
+              "xp_reward": 10,
+              "starter_code": "parts = ['kelp', 'id']\nprint('/'.join(parts))\n",
+              "options": [
+                "kelp-id",
+                "none",
+                "kelp/id",
+                "0"
+              ],
+              "correct_answer": "kelp/id"
+            },
+            {
+              "id": "strings-practice-1-write",
+              "type": "code",
+              "question": "Cove bakers recount crates before dawn. For combine string building techniques, fill the blank so the program prints the result.",
+              "hints": [
+                "The blank is the missing piece.",
+                "Print the value that piece produces.",
+                "label = '-'.join(parts)"
+              ],
+              "explanation": "The joined parts are what get printed.",
+              "xp_reward": 10,
+              "starter_code": "parts = ['kelp', 'id']\nlabel = ___\nprint(label)\n",
+              "solution_code": "parts = ['kelp', 'id']\nlabel = '-'.join(parts)\nprint(label)\n",
+              "tests": [
+                {
+                  "name": "strings-practice-1-prints",
+                  "description": "The joined parts are what get printed.",
+                  "expected_stdout": "kelp-id\n",
+                  "required": true
+                }
+              ]
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "strings-checkpoint",
-      "title": "5. Unit 6 Checkpoint: Strings Mastery",
-      "description": "wrap_string(s, char) must surround s with char on both sides, returning char + s + char using string concatenation. The test checks that `wrap_string(\"test\", \"*\")` equals `\"*test*\"`.",
+      "title": "Practice Unit 6 Checkpoint Strings Mastery",
+      "description": "wrap_string(s, char) must surround s with char on both sides, returning char + s + char using string concatenation. The test checks that wrap_string(\"test\", \"*\") equals \"*test*\".",
       "order": 30,
       "difficulty": "beginner",
       "duration_minutes": 10,
@@ -201,7 +871,7 @@
         "variables"
       ],
       "learning_objectives": [
-        "Master string slicing and building"
+        "Plaza bakers recount crates before dawn, and master string slicing and building."
       ],
       "starter_code": "def wrap_string(s, char):\n    # TODO: return s with char on both sides\n    pass\n",
       "tests": [
@@ -222,7 +892,175 @@
         "url": "https://docs.python.org/3/tutorial/introduction.html#strings",
         "license": "Python documentation license (PSF)"
       },
-      "xp_reward": 40
+      "xp_reward": 40,
+      "player_mode": "micro",
+      "sublessons": [
+        {
+          "id": "strings-checkpoint-micro",
+          "title": "Practice Unit 6 Checkpoint Strings Mastery",
+          "description": "",
+          "order": 1,
+          "exercises": [
+            {
+              "id": "strings-checkpoint-teach",
+              "type": "teach",
+              "question": "Plaza bakers recount crates before dawn, and master string slicing and building.",
+              "hints": [
+                "Read the one job this step is practicing.",
+                "The example is about Unit 6 Checkpoint Strings Mastery.",
+                "text.index('!')"
+              ],
+              "explanation": "Plaza bakers recount crates before dawn, and master string slicing and building.",
+              "xp_reward": 0,
+              "worked_example": "text.index('!')"
+            },
+            {
+              "id": "strings-checkpoint-mcq",
+              "type": "mcq",
+              "question": "Plaza bakers recount crates before dawn. For master string slicing and building, which line adds the base reading to the slot where the mark sits?",
+              "hints": [
+                "Compare each line with the example.",
+                "One line matches the example.",
+                "text.index('!')"
+              ],
+              "explanation": "index finds the slot of the mark.",
+              "xp_reward": 10,
+              "options": [
+                "text[0]",
+                "text.index('!')",
+                "text + '!'",
+                "len(text)"
+              ],
+              "correct_answer": "text.index('!')"
+            },
+            {
+              "id": "strings-checkpoint-predict",
+              "type": "output_prediction",
+              "question": "Plaza bakers recount crates before dawn. For master string slicing and building, what value is displayed?",
+              "hints": [
+                "Run the example in your head from the top.",
+                "The last line is what gets displayed.",
+                "62"
+              ],
+              "explanation": "The Unit 6 Checkpoint Strings Mastery program displays that value.",
+              "xp_reward": 10,
+              "starter_code": "text = 'maple' + '!'\nprint(text.index('!') + 57)\n",
+              "options": [
+                "57",
+                "62",
+                "none",
+                "0"
+              ],
+              "correct_answer": "62"
+            },
+            {
+              "id": "strings-checkpoint-order",
+              "type": "ordering",
+              "question": "Plaza bakers recount crates before dawn. For master string slicing and building, build the line that adds the base reading to the slot where the mark sits.",
+              "hints": [
+                "Start at the left of the example.",
+                "Keep the example order.",
+                "slot = text.index ( '!' )"
+              ],
+              "explanation": "text.index('!') finds the mark.",
+              "xp_reward": 10,
+              "options": [
+                "slot",
+                "=",
+                "text.index",
+                "(",
+                "'!'",
+                ")",
+                "len"
+              ],
+              "correct_answer": [
+                "slot",
+                "=",
+                "text.index",
+                "(",
+                "'!'",
+                ")"
+              ]
+            },
+            {
+              "id": "strings-checkpoint-fill",
+              "type": "fill_blank",
+              "question": "Plaza bakers recount crates before dawn. For master string slicing and building, fill the blank so the line adds the base reading to the slot where the mark sits.",
+              "hints": [
+                "The blank is the missing piece of the example.",
+                "The example uses that piece.",
+                "+"
+              ],
+              "explanation": "Plus adds the base reading to the slot.",
+              "xp_reward": 10,
+              "starter_code": "shown = slot ___ left\n",
+              "options": [
+                "-",
+                "+",
+                "*",
+                "=="
+              ],
+              "correct_answer": "+"
+            },
+            {
+              "id": "strings-checkpoint-bug",
+              "type": "debugging",
+              "question": "Plaza bakers recount crates before dawn. For master string slicing and building, which line does a different job than the example?",
+              "hints": [
+                "The other lines match the example.",
+                "One line is the odd one.",
+                "Line 2"
+              ],
+              "explanation": "The mark being sought is not in the reading.",
+              "xp_reward": 10,
+              "starter_code": "text = 'maple' + '!'\nprint(text.index('?') + 57)\n",
+              "correct_answer": "2"
+            },
+            {
+              "id": "strings-checkpoint-predict-2",
+              "type": "output_prediction",
+              "question": "Plaza bakers recount crates before dawn. For master string slicing and building, what does the second run display?",
+              "hints": [
+                "Apply the same steps to the new value.",
+                "The display comes from the last line.",
+                "57"
+              ],
+              "explanation": "The second Unit 6 Checkpoint Strings Mastery program displays that value.",
+              "xp_reward": 10,
+              "starter_code": "text = 'maple' + '!'\nprint(text.index('m') + 57)\n",
+              "options": [
+                "62",
+                "none",
+                "0",
+                "57"
+              ],
+              "correct_answer": "57"
+            },
+            {
+              "id": "strings-checkpoint-write",
+              "type": "code",
+              "question": "Plaza bakers recount crates before dawn. For master string slicing and building, fill the blank so the program prints the result.",
+              "hints": [
+                "The blank is the missing piece.",
+                "Print the value that piece produces.",
+                "label = text.index('!') + 57"
+              ],
+              "explanation": "The slot plus the base reading is what gets printed.",
+              "xp_reward": 10,
+              "starter_code": "text = 'maple' + '!'\nlabel = ___\nprint(label)\n",
+              "solution_code": "text = 'maple' + '!'\nlabel = text.index('!') + 57\nprint(label)\n",
+              "tests": [
+                {
+                  "name": "strings-checkpoint-prints",
+                  "description": "The slot plus the base reading is what gets printed.",
+                  "expected_stdout": "62\n",
+                  "required": true
+                }
+              ]
+            }
+          ]
+        }
+      ]
     }
   ]
 }

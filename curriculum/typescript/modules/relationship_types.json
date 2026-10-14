@@ -12,7 +12,7 @@
   "lessons": [
     {
       "id": "ts-01",
-      "title": "1. TypeScript & Static Typing",
+      "title": "Practice TypeScript Static Typing",
       "description": "TypeScript adds explicit type annotations on top of JavaScript's string, number, and boolean primitives. Implement the exported formatGreeting(name: string, isDeveloper: boolean): string so it returns 'Hello <name>' and appends ' (Dev)' only when isDeveloper is true. Tests check both branches.",
       "order": 1,
       "difficulty": "beginner",
@@ -39,9 +39,7 @@
         ]
       },
       "learning_objectives": [
-        "Annotate parameters and return types with lowercase primitives",
-        "Use template literals with embedded ternaries",
-        "Export functions from TypeScript modules"
+        "Depot clerks recount crates before dawn, and annotate parameters and return types with lowercase primitives."
       ],
       "source": {
         "name": "TypeScript Handbook — Everyday Types — 'The primitives: string, number, and boolean'",
@@ -51,48 +49,178 @@
       "xp_reward": 10,
       "sublessons": [
         {
-          "id": "ts-annotations-sub",
-          "title": "Match annotation to values",
+          "id": "ts-01-micro",
+          "title": "Practice TypeScript Static Typing",
+          "description": "",
           "order": 1,
           "exercises": [
             {
-              "id": "ts-annotations-match-1",
-              "type": "matching",
-              "question": "TypeScript annotates JavaScript's primitives with lowercase type names. Match each annotation to the values it accepts.",
-              "pairs": [
-                {
-                  "left": ": string",
-                  "right": "text such as 'Alice'"
-                },
-                {
-                  "left": ": number",
-                  "right": "42 and 3.5 alike"
-                },
-                {
-                  "left": ": boolean",
-                  "right": "true or false only"
-                },
-                {
-                  "left": ") : string",
-                  "right": "the type of the value the function hands back"
-                }
+              "id": "ts-01-teach",
+              "type": "teach",
+              "question": "Depot clerks recount crates before dawn, and annotate parameters and return types with lowercase primitives.",
+              "hints": [
+                "Read the one job this step is practicing.",
+                "The example is about TypeScript Static Typing.",
+                "const total: number = left + right;"
               ],
-              "correct_answer": {
-                ": string": "text such as 'Alice'",
-                ": number": "42 and 3.5 alike",
-                ": boolean": "true or false only",
-                ") : string": "the type of the value the function hands back"
-              },
-              "explanation": "Parameter annotations sit before the parameter, the return annotation after the parentheses, and `number` covers integers and decimals.",
-              "xp_reward": 10
+              "explanation": "Depot clerks recount crates before dawn, and annotate parameters and return types with lowercase primitives.",
+              "xp_reward": 0,
+              "worked_example": "const total: number = left + right;"
+            },
+            {
+              "id": "ts-01-mcq",
+              "type": "mcq",
+              "question": "Depot clerks recount crates before dawn. For annotate parameters and return types with lowercase primitives, which line stores a typed number sum?",
+              "hints": [
+                "Compare each line with the example.",
+                "One line matches the example.",
+                "const total: number = left + right;"
+              ],
+              "explanation": "const total: number stores the sum with a number annotation.",
+              "xp_reward": 10,
+              "options": [
+                "left == right;",
+                "console.log(left);",
+                "const total: number = left + right;",
+                "return left;"
+              ],
+              "correct_answer": "const total: number = left + right;"
+            },
+            {
+              "id": "ts-01-predict",
+              "type": "output_prediction",
+              "question": "Depot clerks recount crates before dawn. For annotate parameters and return types with lowercase primitives, what value is displayed?",
+              "hints": [
+                "Run the example in your head from the top.",
+                "The last line is what gets displayed.",
+                "28"
+              ],
+              "explanation": "The TypeScript Static Typing program displays that value.",
+              "xp_reward": 10,
+              "starter_code": "const left: number = 23;\nconst right: number = 5;\nconsole.log(left + right);\n",
+              "options": [
+                "32",
+                "0",
+                "28",
+                "none"
+              ],
+              "correct_answer": "28"
+            },
+            {
+              "id": "ts-01-order",
+              "type": "ordering",
+              "question": "Depot clerks recount crates before dawn. For annotate parameters and return types with lowercase primitives, build the line that stores a typed number sum.",
+              "hints": [
+                "Start at the left of the example.",
+                "Keep the example order.",
+                "const total: number = 23 + 5;"
+              ],
+              "explanation": "const total: number stores the sum with a number annotation.",
+              "xp_reward": 10,
+              "options": [
+                "const",
+                "total:",
+                "number",
+                "=",
+                "23",
+                "+",
+                "5;",
+                "=="
+              ],
+              "correct_answer": [
+                "const",
+                "total:",
+                "number",
+                "=",
+                "23",
+                "+",
+                "5;"
+              ]
+            },
+            {
+              "id": "ts-01-fill",
+              "type": "fill_blank",
+              "question": "Depot clerks recount crates before dawn. For annotate parameters and return types with lowercase primitives, fill the blank so the line stores a typed number sum.",
+              "hints": [
+                "The blank is the missing piece of the example.",
+                "The example uses that piece.",
+                "+"
+              ],
+              "explanation": "const total: number stores the sum with a number annotation.",
+              "xp_reward": 10,
+              "starter_code": "const left: number = 23;\nconst right: number = 5;\nconst total: number = left ___ right;\n",
+              "options": [
+                "-",
+                "*",
+                "+",
+                "=="
+              ],
+              "correct_answer": "+"
+            },
+            {
+              "id": "ts-01-bug",
+              "type": "debugging",
+              "question": "Depot clerks recount crates before dawn. For annotate parameters and return types with lowercase primitives, which line does a different job than the example?",
+              "hints": [
+                "The other lines match the example.",
+                "One line is the odd one.",
+                "Line 3"
+              ],
+              "explanation": "The print subtracts the typed numbers instead of adding them.",
+              "xp_reward": 10,
+              "starter_code": "const left: number = 23;\nconst right: number = 5;\nconsole.log(left - right);\n",
+              "correct_answer": "3"
+            },
+            {
+              "id": "ts-01-predict-2",
+              "type": "output_prediction",
+              "question": "Depot clerks recount crates before dawn. For annotate parameters and return types with lowercase primitives, what does the second run display?",
+              "hints": [
+                "Apply the same steps to the new value.",
+                "The display comes from the last line.",
+                "32"
+              ],
+              "explanation": "The second TypeScript Static Typing program displays that value.",
+              "xp_reward": 10,
+              "starter_code": "const left: number = 23;\nconst right: number = 9;\nconsole.log(left + right);\n",
+              "options": [
+                "28",
+                "32",
+                "none",
+                "0"
+              ],
+              "correct_answer": "32"
+            },
+            {
+              "id": "ts-01-write",
+              "type": "code",
+              "question": "Depot clerks recount crates before dawn. For annotate parameters and return types with lowercase primitives, fill the blank so the program prints the result.",
+              "hints": [
+                "The blank is the missing piece.",
+                "Print the value that piece produces.",
+                "const label = left + right;"
+              ],
+              "explanation": "The printed value is the result after this step stores a typed number sum.",
+              "xp_reward": 10,
+              "starter_code": "const left: number = 23;\nconst right: number = 5;\nconst label = ___;\nconsole.log(label);\n",
+              "solution_code": "const left: number = 23;\nconst right: number = 5;\nconst label = left + right;\nconsole.log(label);\n",
+              "tests": [
+                {
+                  "name": "ts-01-prints",
+                  "description": "The printed value is the result after this step stores a typed number sum.",
+                  "expected_stdout": "28\n",
+                  "required": true
+                }
+              ]
             }
           ]
         }
-      ]
+      ],
+      "player_mode": "micro"
     },
     {
       "id": "ts-05",
-      "title": "5. Primitives and typeof Guards",
+      "title": "Practice Primitives and typeof Guards",
       "description": "JavaScript's three most common primitives are string, number, and boolean (always lowercase in TypeScript). Implement the exported describeValue(value: string | number | boolean): string that uses a typeof type guard to return exactly 'string', 'number', or 'boolean'. The test checks all three primitives.",
       "order": 5,
       "difficulty": "beginner",
@@ -106,9 +234,7 @@
       ],
       "prerequisites": [],
       "learning_objectives": [
-        "Work with the string, number, and boolean primitives",
-        "Combine unions with typeof type guards",
-        "Return literal strings from exhaustive checks"
+        "Ridge clerks recount crates before dawn, and work with the string, number, and boolean primitives."
       ],
       "source": {
         "name": "TypeScript Handbook — Everyday Types — 'JavaScript has three very commonly used primitives: string, number, and boolean'",
@@ -129,7 +255,173 @@
           "test_describe_value"
         ]
       },
-      "xp_reward": 10
+      "xp_reward": 10,
+      "player_mode": "micro",
+      "sublessons": [
+        {
+          "id": "ts-05-micro",
+          "title": "Practice Primitives and typeof Guards",
+          "description": "",
+          "order": 1,
+          "exercises": [
+            {
+              "id": "ts-05-teach",
+              "type": "teach",
+              "question": "Ridge clerks recount crates before dawn, and work with the string, number, and boolean primitives.",
+              "hints": [
+                "Read the one job this step is practicing.",
+                "The example is about Primitives and typeof Guards.",
+                "return typeof value;"
+              ],
+              "explanation": "Ridge clerks recount crates before dawn, and work with the string, number, and boolean primitives.",
+              "xp_reward": 0,
+              "worked_example": "return typeof value;"
+            },
+            {
+              "id": "ts-05-mcq",
+              "type": "mcq",
+              "question": "Ridge clerks recount crates before dawn. For work with the string, number, and boolean primitives, which line reports the runtime kind with typeof?",
+              "hints": [
+                "Compare each line with the example.",
+                "One line matches the example.",
+                "return typeof value;"
+              ],
+              "explanation": "typeof reports string or number for the union.",
+              "xp_reward": 10,
+              "options": [
+                "value == value;",
+                "console.log(value);",
+                "return;",
+                "return typeof value;"
+              ],
+              "correct_answer": "return typeof value;"
+            },
+            {
+              "id": "ts-05-predict",
+              "type": "output_prediction",
+              "question": "Ridge clerks recount crates before dawn. Choose the match for this step, using flint.",
+              "hints": [
+                "Run the example in your head from the top.",
+                "The last line is what gets displayed.",
+                "string"
+              ],
+              "explanation": "The Primitives and typeof Guards program displays that value.",
+              "xp_reward": 10,
+              "starter_code": "function kind(value: string | number): string { return typeof value; }\nconsole.log(kind(\"cedar\"));\n",
+              "options": [
+                "number",
+                "none",
+                "0",
+                "string"
+              ],
+              "correct_answer": "string"
+            },
+            {
+              "id": "ts-05-order",
+              "type": "ordering",
+              "question": "Ridge clerks recount crates before dawn. For work with the string, number, and boolean primitives, build the line that reports the runtime kind with typeof.",
+              "hints": [
+                "Start at the left of the example.",
+                "Keep the example order.",
+                "const seen = typeof value;"
+              ],
+              "explanation": "typeof reports string or number for the union.",
+              "xp_reward": 10,
+              "options": [
+                "const",
+                "seen",
+                "=",
+                "typeof",
+                "value;",
+                "instanceof"
+              ],
+              "correct_answer": [
+                "const",
+                "seen",
+                "=",
+                "typeof",
+                "value;"
+              ]
+            },
+            {
+              "id": "ts-05-fill",
+              "type": "fill_blank",
+              "question": "Ridge clerks recount crates before dawn. Choose the match for this step, using kelp.",
+              "hints": [
+                "The blank is the missing piece of the example.",
+                "The example uses that piece.",
+                "typeof"
+              ],
+              "explanation": "typeof reports string or number for the union.",
+              "xp_reward": 10,
+              "starter_code": "const seen = ___ value;\n",
+              "options": [
+                "instanceof",
+                "delete",
+                "void",
+                "typeof"
+              ],
+              "correct_answer": "typeof"
+            },
+            {
+              "id": "ts-05-bug",
+              "type": "debugging",
+              "question": "Ridge clerks recount crates before dawn. For work with the string, number, and boolean primitives, which line does a different job than the example?",
+              "hints": [
+                "The other lines match the example.",
+                "One line is the odd one.",
+                "Line 2"
+              ],
+              "explanation": "The print appends a mark that typeof did not produce.",
+              "xp_reward": 10,
+              "starter_code": "function kind(value: string | number): string { return typeof value; }\nconsole.log(kind(\"cedar\") + \"!\");\n",
+              "correct_answer": "2"
+            },
+            {
+              "id": "ts-05-predict-2",
+              "type": "output_prediction",
+              "question": "Ridge clerks recount crates before dawn. Choose the match for this step, using pebble.",
+              "hints": [
+                "Apply the same steps to the new value.",
+                "The display comes from the last line.",
+                "number"
+              ],
+              "explanation": "The second Primitives and typeof Guards program displays that value.",
+              "xp_reward": 10,
+              "starter_code": "function kind(value: string | number): string { return typeof value; }\nconsole.log(kind(27));\n",
+              "options": [
+                "string",
+                "none",
+                "number",
+                "0"
+              ],
+              "correct_answer": "number"
+            },
+            {
+              "id": "ts-05-write",
+              "type": "code",
+              "question": "Ridge clerks recount crates before dawn. Choose the match for this step, using umber.",
+              "hints": [
+                "The blank is the missing piece.",
+                "Print the value that piece produces.",
+                "const label = kind(\"cedar\");"
+              ],
+              "explanation": "The printed value is the result after this step reports the runtime kind with typeof.",
+              "xp_reward": 10,
+              "starter_code": "function kind(value: string | number): string { return typeof value; }\nconst label = ___;\nconsole.log(label);\n",
+              "solution_code": "function kind(value: string | number): string { return typeof value; }\nconst label = kind(\"cedar\");\nconsole.log(label);\n",
+              "tests": [
+                {
+                  "name": "ts-05-prints",
+                  "description": "The printed value is the result after this step reports the runtime kind with ty",
+                  "expected_stdout": "string\n",
+                  "required": true
+                }
+              ]
+            }
+          ]
+        }
+      ]
     }
   ]
 }

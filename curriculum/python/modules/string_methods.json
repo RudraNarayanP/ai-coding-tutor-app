@@ -14,8 +14,8 @@
   "lessons": [
     {
       "id": "string-methods-step-1",
-      "title": "1. Case Transformation & Checking Endings",
-      "description": "Finish two functions. String methods return a new string. `make_loud(s)` returns `s` in capitals (`\"hello\"` becomes `\"HELLO\"`). `is_question(s)` returns true when the string ends with `?` (`\"Ready?\"` is true, `\"Ready.\"` is false). The test checks that `make_loud(\"hello\")` equals `\"HELLO\"`; `is_question(\"Ready?\")` is true; `is_question(\"Ready.\")` is false.",
+      "title": "Practice Case Transformation Checking Endings",
+      "description": "Finish two functions. String methods return a new string. make_loud(s) returns s in capitals (\"hello\" becomes \"HELLO\"). is_question(s) returns true when the string ends with ? (\"Ready?\" is true, \"Ready.\" is false). The test checks that make_loud(\"hello\") equals \"HELLO\"; is_question(\"Ready?\") is true; is_question(\"Ready.\") is false.",
       "order": 31,
       "difficulty": "beginner",
       "duration_minutes": 5,
@@ -27,7 +27,7 @@
         "strings"
       ],
       "learning_objectives": [
-        "Transform string case and test endings"
+        "Marsh scouts recount crates before dawn, and transform string case and test endings."
       ],
       "starter_code": "def make_loud(s):\n    # TODO: return s in capital letters\n    pass\n\ndef is_question(s):\n    # TODO: return True when s ends with a question mark\n    pass\n",
       "tests": [
@@ -48,12 +48,178 @@
         "url": "https://docs.python.org/3/library/stdtypes.html#string-methods",
         "license": "Python documentation license (PSF)"
       },
-      "xp_reward": 10
+      "xp_reward": 10,
+      "player_mode": "micro",
+      "sublessons": [
+        {
+          "id": "string-methods-step-1-micro",
+          "title": "Practice Case Transformation Checking Endings",
+          "description": "",
+          "order": 1,
+          "exercises": [
+            {
+              "id": "string-methods-step-1-teach",
+              "type": "teach",
+              "question": "Marsh scouts recount crates before dawn, and transform string case and test endings.",
+              "hints": [
+                "Read the one job this step is practicing.",
+                "The example is about Case Transformation Checking Endings.",
+                "text.upper()"
+              ],
+              "explanation": "Marsh scouts recount crates before dawn, and transform string case and test endings.",
+              "xp_reward": 0,
+              "worked_example": "text.upper()"
+            },
+            {
+              "id": "string-methods-step-1-mcq",
+              "type": "mcq",
+              "question": "Marsh scouts recount crates before dawn. For transform string case and test endings, which line shows the reading in uppercase?",
+              "hints": [
+                "Compare each line with the example.",
+                "One line matches the example.",
+                "text.upper()"
+              ],
+              "explanation": "upper() changes every letter to uppercase.",
+              "xp_reward": 10,
+              "options": [
+                "text.lower()",
+                "len(text)",
+                "text.upper()",
+                "text == text"
+              ],
+              "correct_answer": "text.upper()"
+            },
+            {
+              "id": "string-methods-step-1-predict",
+              "type": "output_prediction",
+              "question": "Marsh scouts recount crates before dawn. For transform string case and test endings, what value is displayed?",
+              "hints": [
+                "Run the example in your head from the top.",
+                "The last line is what gets displayed.",
+                "WILLOWING"
+              ],
+              "explanation": "The Case Transformation Checking Endings program displays that value.",
+              "xp_reward": 10,
+              "starter_code": "text = 'willow' + 'ing'\nprint(text.upper())\n",
+              "options": [
+                "WILLOWED",
+                "none",
+                "WILLOWING",
+                "0"
+              ],
+              "correct_answer": "WILLOWING"
+            },
+            {
+              "id": "string-methods-step-1-order",
+              "type": "ordering",
+              "question": "Marsh scouts recount crates before dawn. For transform string case and test endings, build the line that shows the reading in uppercase.",
+              "hints": [
+                "Start at the left of the example.",
+                "Keep the example order.",
+                "shouted = text.upper ( )"
+              ],
+              "explanation": "shouted = text.upper() stores the uppercase reading.",
+              "xp_reward": 10,
+              "options": [
+                "shouted",
+                "=",
+                "text.upper",
+                "(",
+                ")",
+                "lower"
+              ],
+              "correct_answer": [
+                "shouted",
+                "=",
+                "text.upper",
+                "(",
+                ")"
+              ]
+            },
+            {
+              "id": "string-methods-step-1-fill",
+              "type": "fill_blank",
+              "question": "Marsh scouts recount crates before dawn. For transform string case and test endings, fill the blank so the line shows the reading in uppercase.",
+              "hints": [
+                "The blank is the missing piece of the example.",
+                "The example uses that piece.",
+                "+"
+              ],
+              "explanation": "Plus adds one to the size.",
+              "xp_reward": 10,
+              "starter_code": "shown = size ___ 1\n",
+              "options": [
+                "-",
+                "*",
+                "+",
+                "=="
+              ],
+              "correct_answer": "+"
+            },
+            {
+              "id": "string-methods-step-1-bug",
+              "type": "debugging",
+              "question": "Marsh scouts recount crates before dawn. For transform string case and test endings, which line does a different job than the example?",
+              "hints": [
+                "The other lines match the example.",
+                "One line is the odd one.",
+                "Line 2"
+              ],
+              "explanation": "The print uses lowercase.",
+              "xp_reward": 10,
+              "starter_code": "text = 'willow' + 'ing'\nprint(text.lower())\n",
+              "correct_answer": "2"
+            },
+            {
+              "id": "string-methods-step-1-predict-2",
+              "type": "output_prediction",
+              "question": "Marsh scouts recount crates before dawn. For transform string case and test endings, what does the second run display?",
+              "hints": [
+                "Apply the same steps to the new value.",
+                "The display comes from the last line.",
+                "WILLOWED"
+              ],
+              "explanation": "The second Case Transformation Checking Endings program displays that value.",
+              "xp_reward": 10,
+              "starter_code": "text = 'willow' + 'ed'\nprint(text.upper())\n",
+              "options": [
+                "WILLOWING",
+                "WILLOWED",
+                "none",
+                "0"
+              ],
+              "correct_answer": "WILLOWED"
+            },
+            {
+              "id": "string-methods-step-1-write",
+              "type": "code",
+              "question": "Marsh scouts recount crates before dawn. For transform string case and test endings, fill the blank so the program prints the result.",
+              "hints": [
+                "The blank is the missing piece.",
+                "Print the value that piece produces.",
+                "label = text.upper()"
+              ],
+              "explanation": "The uppercase reading is what gets printed.",
+              "xp_reward": 10,
+              "starter_code": "text = 'willow' + 'ing'\nlabel = ___\nprint(label)\n",
+              "solution_code": "text = 'willow' + 'ing'\nlabel = text.upper()\nprint(label)\n",
+              "tests": [
+                {
+                  "name": "string-methods-step-1-prints",
+                  "description": "The uppercase reading is what gets printed.",
+                  "expected_stdout": "WILLOWING\n",
+                  "required": true
+                }
+              ]
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "string-methods-step-2",
-      "title": "2. Trimming & Replacing Text",
-      "description": "Finish `clean_and_censor(text, word, mask)`. Trim spaces from both ends, then replace `word` with `mask`. `clean_and_censor(\" bad words \", \"bad\", \"***\")` equals `\"*** words\"`. The test checks that `clean_and_censor(\" bad words \", \"bad\", \"***\")` equals `\"*** words\"`.",
+      "title": "Practice Trimming Replacing Text",
+      "description": "Finish clean_and_censor(text, word, mask). Trim spaces from both ends, then replace word with mask. clean_and_censor(\" bad words \", \"bad\", \"***\") equals \"*** words\". The test checks that clean_and_censor(\" bad words \", \"bad\", \"***\") equals \"*** words\".",
       "order": 32,
       "difficulty": "beginner",
       "duration_minutes": 5,
@@ -65,7 +231,7 @@
         "strings"
       ],
       "learning_objectives": [
-        "Clean strings using strip() and replace()"
+        "Harbor bakers recount crates before dawn, and clean strings using strip and replace."
       ],
       "starter_code": "def clean_and_censor(s, word, mask):\n    # TODO: trim the ends, then swap word for mask\n    pass\n",
       "tests": [
@@ -86,12 +252,184 @@
         "url": "https://docs.python.org/3/library/stdtypes.html#string-methods",
         "license": "Python documentation license (PSF)"
       },
-      "xp_reward": 10
+      "xp_reward": 10,
+      "player_mode": "micro",
+      "sublessons": [
+        {
+          "id": "string-methods-step-2-micro",
+          "title": "Practice Trimming Replacing Text",
+          "description": "",
+          "order": 1,
+          "exercises": [
+            {
+              "id": "string-methods-step-2-teach",
+              "type": "teach",
+              "question": "Harbor bakers recount crates before dawn, and clean strings using strip and replace.",
+              "hints": [
+                "Read the one job this step is practicing.",
+                "The example is about Trimming Replacing Text.",
+                "text.replace('!', '?')"
+              ],
+              "explanation": "Harbor bakers recount crates before dawn, and clean strings using strip and replace.",
+              "xp_reward": 0,
+              "worked_example": "text.replace('!', '?')"
+            },
+            {
+              "id": "string-methods-step-2-mcq",
+              "type": "mcq",
+              "question": "Harbor bakers recount crates before dawn. For clean strings using strip and replace, which line swaps the mark at the end of the reading?",
+              "hints": [
+                "Compare each line with the example.",
+                "One line matches the example.",
+                "text.replace('!', '?')"
+              ],
+              "explanation": "replace swaps one mark for another.",
+              "xp_reward": 10,
+              "options": [
+                "text.upper()",
+                "len(text)",
+                "text == '!'",
+                "text.replace('!', '?')"
+              ],
+              "correct_answer": "text.replace('!', '?')"
+            },
+            {
+              "id": "string-methods-step-2-predict",
+              "type": "output_prediction",
+              "question": "Harbor bakers recount crates before dawn. For clean strings using strip and replace, what value is displayed?",
+              "hints": [
+                "Run the example in your head from the top.",
+                "The last line is what gets displayed.",
+                "yarrow?"
+              ],
+              "explanation": "The Trimming Replacing Text program displays that value.",
+              "xp_reward": 10,
+              "starter_code": "text = 'yarrow' + '!'\nprint(text.replace('!', '?'))\n",
+              "options": [
+                "yarrow.",
+                "none",
+                "0",
+                "yarrow?"
+              ],
+              "correct_answer": "yarrow?"
+            },
+            {
+              "id": "string-methods-step-2-order",
+              "type": "ordering",
+              "question": "Harbor bakers recount crates before dawn. For clean strings using strip and replace, build the line that swaps the mark at the end of the reading.",
+              "hints": [
+                "Start at the left of the example.",
+                "Keep the example order.",
+                "clean = text.replace ( '!' , '?' )"
+              ],
+              "explanation": "text.replace('!', '?') swaps the mark.",
+              "xp_reward": 10,
+              "options": [
+                "clean",
+                "=",
+                "text.replace",
+                "(",
+                "'!'",
+                ",",
+                "'?'",
+                ")",
+                "upper"
+              ],
+              "correct_answer": [
+                "clean",
+                "=",
+                "text.replace",
+                "(",
+                "'!'",
+                ",",
+                "'?'",
+                ")"
+              ]
+            },
+            {
+              "id": "string-methods-step-2-fill",
+              "type": "fill_blank",
+              "question": "Harbor bakers recount crates before dawn. For clean strings using strip and replace, fill the blank so the line swaps the mark at the end of the reading.",
+              "hints": [
+                "The blank is the missing piece of the example.",
+                "The example uses that piece.",
+                "'?'"
+              ],
+              "explanation": "The question mark is the replacement.",
+              "xp_reward": 10,
+              "starter_code": "clean = text.replace('!', ___)\n",
+              "options": [
+                "'!'",
+                "''",
+                "'x'",
+                "'?'"
+              ],
+              "correct_answer": "'?'"
+            },
+            {
+              "id": "string-methods-step-2-bug",
+              "type": "debugging",
+              "question": "Harbor bakers recount crates before dawn. For clean strings using strip and replace, which line does a different job than the example?",
+              "hints": [
+                "The other lines match the example.",
+                "One line is the odd one.",
+                "Line 2"
+              ],
+              "explanation": "The search mark is not in the reading, so nothing changes.",
+              "xp_reward": 10,
+              "starter_code": "text = 'yarrow' + '!'\nprint(text.replace('x', '?'))\n",
+              "correct_answer": "2"
+            },
+            {
+              "id": "string-methods-step-2-predict-2",
+              "type": "output_prediction",
+              "question": "Harbor bakers recount crates before dawn. For clean strings using strip and replace, what does the second run display?",
+              "hints": [
+                "Apply the same steps to the new value.",
+                "The display comes from the last line.",
+                "yarrow."
+              ],
+              "explanation": "The second Trimming Replacing Text program displays that value.",
+              "xp_reward": 10,
+              "starter_code": "text = 'yarrow' + '!'\nprint(text.replace('!', '.'))\n",
+              "options": [
+                "yarrow?",
+                "none",
+                "yarrow.",
+                "0"
+              ],
+              "correct_answer": "yarrow."
+            },
+            {
+              "id": "string-methods-step-2-write",
+              "type": "code",
+              "question": "Harbor bakers recount crates before dawn. For clean strings using strip and replace, fill the blank so the program prints the result.",
+              "hints": [
+                "The blank is the missing piece.",
+                "Print the value that piece produces.",
+                "label = text.replace('!', '?')"
+              ],
+              "explanation": "The swapped reading is what gets printed.",
+              "xp_reward": 10,
+              "starter_code": "text = 'yarrow' + '!'\nlabel = ___\nprint(label)\n",
+              "solution_code": "text = 'yarrow' + '!'\nlabel = text.replace('!', '?')\nprint(label)\n",
+              "tests": [
+                {
+                  "name": "string-methods-step-2-prints",
+                  "description": "The swapped reading is what gets printed.",
+                  "expected_stdout": "yarrow?\n",
+                  "required": true
+                }
+              ]
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "string-methods-01",
-      "title": "3. Little Sister's Essay (Concept Challenge)",
-      "description": "Finish `capitalize_title`, `check_sentence_ending`, `clean_up_spacing`, `replace_word_choice`. Clean and format essay text using built-in string methods. The test checks that `capitalize_title('fish be with YOU')` equals `'Fish Be With You'`; `check_sentence_ending('Snails are slow.')` equals `True`; `check_sentence_ending('Snails are slow')` equals `False`.",
+      "title": "Practice Little Sister's Essay",
+      "description": "Finish capitalize_title, check_sentence_ending, clean_up_spacing, replace_word_choice. Clean and format essay text using built-in string methods. The test checks that capitalize_title('fish be with YOU') equals 'Fish Be With You'; check_sentence_ending('Snails are slow.') equals True; check_sentence_ending('Snails are slow') equals False.",
       "order": 33,
       "difficulty": "beginner",
       "duration_minutes": 8,
@@ -103,9 +441,7 @@
         "strings"
       ],
       "learning_objectives": [
-        "Use .title(), .endswith(), .strip(), and .replace()",
-        "Clean up user text input and fix spacing issues",
-        "Perform exact substring replacements"
+        "Mesa bakers recount crates before dawn, and use."
       ],
       "starter_code": "def capitalize_title(title):\n    \"\"\"Return title in title case.\"\"\"\n    pass\n\ndef check_sentence_ending(sentence):\n    \"\"\"Return True if sentence ends with a period.\"\"\"\n    pass\n\ndef clean_up_spacing(sentence):\n    \"\"\"Strip leading and trailing whitespace.\"\"\"\n    pass\n\ndef replace_word_choice(sentence, old_word, new_word):\n    \"\"\"Replace old_word with new_word in sentence.\"\"\"\n    pass\n",
       "tests": [
@@ -144,12 +480,178 @@
         "license": "MIT"
       },
       "solution_code": "def capitalize_title(title):\n    \"\"\"Return title in title case.\"\"\"\n    return title.title()\n\n\ndef check_sentence_ending(sentence):\n    \"\"\"Return True if sentence ends with a period.\"\"\"\n    return sentence.endswith('.')\n\n\ndef clean_up_spacing(sentence):\n    \"\"\"Strip leading and trailing whitespace.\"\"\"\n    return sentence.strip()\n\n\ndef replace_word_choice(sentence, old_word, new_word):\n    \"\"\"Replace old_word with new_word in sentence.\"\"\"\n    return sentence.replace(old_word, new_word)\n",
-      "xp_reward": 25
+      "xp_reward": 25,
+      "player_mode": "micro",
+      "sublessons": [
+        {
+          "id": "string-methods-01-micro",
+          "title": "Practice Little Sister's Essay",
+          "description": "",
+          "order": 1,
+          "exercises": [
+            {
+              "id": "string-methods-01-teach",
+              "type": "teach",
+              "question": "Mesa bakers recount crates before dawn, and use.",
+              "hints": [
+                "Read the one job this step is practicing.",
+                "The example is about Little Sister's Essay.",
+                "text.strip().replace('!', '?').upper()"
+              ],
+              "explanation": "Mesa bakers recount crates before dawn, and use.",
+              "xp_reward": 0,
+              "worked_example": "text.strip().replace('!', '?').upper()"
+            },
+            {
+              "id": "string-methods-01-mcq",
+              "type": "mcq",
+              "question": "Mesa bakers recount crates before dawn. For use, which line trims, swaps the mark, then shows uppercase?",
+              "hints": [
+                "Compare each line with the example.",
+                "One line matches the example.",
+                "text.strip().replace('!', '?').upper()"
+              ],
+              "explanation": "The methods run from left to right.",
+              "xp_reward": 10,
+              "options": [
+                "text.upper().strip()",
+                "len(text)",
+                "text.strip().replace('!', '?').upper()",
+                "text == text"
+              ],
+              "correct_answer": "text.strip().replace('!', '?').upper()"
+            },
+            {
+              "id": "string-methods-01-predict",
+              "type": "output_prediction",
+              "question": "Mesa bakers recount crates before dawn. For use, what value is displayed?",
+              "hints": [
+                "Run the example in your head from the top.",
+                "The last line is what gets displayed.",
+                "GROVE?"
+              ],
+              "explanation": "The Little Sister's Essay program displays that value.",
+              "xp_reward": 10,
+              "starter_code": "text = '  ' + 'grove' + '!'\nprint(text.strip().replace('!', '?').upper())\n",
+              "options": [
+                "GROVE.",
+                "none",
+                "GROVE?",
+                "0"
+              ],
+              "correct_answer": "GROVE?"
+            },
+            {
+              "id": "string-methods-01-order",
+              "type": "ordering",
+              "question": "Mesa bakers recount crates before dawn. For use, build the line that trims, swaps the mark, then shows uppercase.",
+              "hints": [
+                "Start at the left of the example.",
+                "Keep the example order.",
+                "clean = text.strip ( )"
+              ],
+              "explanation": "text.strip() removes the outer spaces first.",
+              "xp_reward": 10,
+              "options": [
+                "clean",
+                "=",
+                "text.strip",
+                "(",
+                ")",
+                "upper"
+              ],
+              "correct_answer": [
+                "clean",
+                "=",
+                "text.strip",
+                "(",
+                ")"
+              ]
+            },
+            {
+              "id": "string-methods-01-fill",
+              "type": "fill_blank",
+              "question": "Mesa bakers recount crates before dawn. For use, fill the blank so the line trims, swaps the mark, then shows uppercase.",
+              "hints": [
+                "The blank is the missing piece of the example.",
+                "The example uses that piece.",
+                "+"
+              ],
+              "explanation": "Plus adds one to the size.",
+              "xp_reward": 10,
+              "starter_code": "shown = size ___ 1\n",
+              "options": [
+                "-",
+                "*",
+                "+",
+                "=="
+              ],
+              "correct_answer": "+"
+            },
+            {
+              "id": "string-methods-01-bug",
+              "type": "debugging",
+              "question": "Mesa bakers recount crates before dawn. For use, which line does a different job than the example?",
+              "hints": [
+                "The other lines match the example.",
+                "One line is the odd one.",
+                "Line 2"
+              ],
+              "explanation": "The spaces are never trimmed.",
+              "xp_reward": 10,
+              "starter_code": "text = '  ' + 'grove' + '!'\nprint(text.replace('!', '?').upper())\n",
+              "correct_answer": "2"
+            },
+            {
+              "id": "string-methods-01-predict-2",
+              "type": "output_prediction",
+              "question": "Mesa bakers recount crates before dawn. For use, what does the second run display?",
+              "hints": [
+                "Apply the same steps to the new value.",
+                "The display comes from the last line.",
+                "GROVE."
+              ],
+              "explanation": "The second Little Sister's Essay program displays that value.",
+              "xp_reward": 10,
+              "starter_code": "text = '  ' + 'grove' + '!'\nprint(text.strip().replace('!', '.').upper())\n",
+              "options": [
+                "none",
+                "GROVE.",
+                "GROVE?",
+                "0"
+              ],
+              "correct_answer": "GROVE."
+            },
+            {
+              "id": "string-methods-01-write",
+              "type": "code",
+              "question": "Mesa bakers recount crates before dawn. For use, fill the blank so the program prints the result.",
+              "hints": [
+                "The blank is the missing piece.",
+                "Print the value that piece produces.",
+                "label = text.strip().replace('!', '?').upper()"
+              ],
+              "explanation": "The cleaned reading is what gets printed.",
+              "xp_reward": 10,
+              "starter_code": "text = '  ' + 'grove' + '!'\nlabel = ___\nprint(label)\n",
+              "solution_code": "text = '  ' + 'grove' + '!'\nlabel = text.strip().replace('!', '?').upper()\nprint(label)\n",
+              "tests": [
+                {
+                  "name": "string-methods-01-prints",
+                  "description": "The cleaned reading is what gets printed.",
+                  "expected_stdout": "GROVE?\n",
+                  "required": true
+                }
+              ]
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "string-methods-practice-1",
-      "title": "4. Form Field Sanitizer (Practice)",
-      "description": "Finish `sanitize_email`. Sanitize user input: lowercased and whitespace-trimmed. The test checks that `sanitize_email(\" User@Example.COM \")` equals `\"user@example.com\"`.",
+      "title": "Practice Form Field Sanitizer",
+      "description": "Finish sanitize_email. Sanitize user input: lowercased and whitespace-trimmed. The test checks that sanitize_email(\" User@Example.COM \") equals \"user@example.com\".",
       "order": 34,
       "difficulty": "beginner",
       "duration_minutes": 6,
@@ -161,7 +663,7 @@
         "strings"
       ],
       "learning_objectives": [
-        "Sanitize inputs using chained string methods"
+        "Orchard bakers recount crates before dawn, and sanitize inputs using chained string methods."
       ],
       "starter_code": "def sanitize_email(raw_email):\n    # TODO: return the address trimmed and in lower case\n    pass\n",
       "tests": [
@@ -182,12 +684,178 @@
         "url": "https://docs.python.org/3/library/stdtypes.html#string-methods",
         "license": "Python documentation license (PSF)"
       },
-      "xp_reward": 15
+      "xp_reward": 15,
+      "player_mode": "micro",
+      "sublessons": [
+        {
+          "id": "string-methods-practice-1-micro",
+          "title": "Practice Form Field Sanitizer",
+          "description": "",
+          "order": 1,
+          "exercises": [
+            {
+              "id": "string-methods-practice-1-teach",
+              "type": "teach",
+              "question": "Orchard bakers recount crates before dawn, and sanitize inputs using chained string methods.",
+              "hints": [
+                "Read the one job this step is practicing.",
+                "The example is about Form Field Sanitizer.",
+                "text.strip()"
+              ],
+              "explanation": "Orchard bakers recount crates before dawn, and sanitize inputs using chained string methods.",
+              "xp_reward": 0,
+              "worked_example": "text.strip()"
+            },
+            {
+              "id": "string-methods-practice-1-mcq",
+              "type": "mcq",
+              "question": "Orchard bakers recount crates before dawn. For sanitize inputs using chained string methods, which line shows the reading without the outer spaces?",
+              "hints": [
+                "Compare each line with the example.",
+                "One line matches the example.",
+                "text.strip()"
+              ],
+              "explanation": "strip() removes spaces from both ends.",
+              "xp_reward": 10,
+              "options": [
+                "text.upper()",
+                "len(text)",
+                "text.strip()",
+                "text == text"
+              ],
+              "correct_answer": "text.strip()"
+            },
+            {
+              "id": "string-methods-practice-1-predict",
+              "type": "output_prediction",
+              "question": "Orchard bakers recount crates before dawn. For sanitize inputs using chained string methods, what value is displayed?",
+              "hints": [
+                "Run the example in your head from the top.",
+                "The last line is what gets displayed.",
+                "violet"
+              ],
+              "explanation": "The Form Field Sanitizer program displays that value.",
+              "xp_reward": 10,
+              "starter_code": "text = '  ' + 'violet'\nprint(text.strip())\n",
+              "options": [
+                "violets",
+                "none",
+                "violet",
+                "0"
+              ],
+              "correct_answer": "violet"
+            },
+            {
+              "id": "string-methods-practice-1-order",
+              "type": "ordering",
+              "question": "Orchard bakers recount crates before dawn. For sanitize inputs using chained string methods, build the line that shows the reading without the outer spaces.",
+              "hints": [
+                "Start at the left of the example.",
+                "Keep the example order.",
+                "clean = text.strip ( )"
+              ],
+              "explanation": "clean = text.strip() stores the trimmed reading.",
+              "xp_reward": 10,
+              "options": [
+                "clean",
+                "=",
+                "text.strip",
+                "(",
+                ")",
+                "upper"
+              ],
+              "correct_answer": [
+                "clean",
+                "=",
+                "text.strip",
+                "(",
+                ")"
+              ]
+            },
+            {
+              "id": "string-methods-practice-1-fill",
+              "type": "fill_blank",
+              "question": "Orchard bakers recount crates before dawn. For sanitize inputs using chained string methods, fill the blank so the line shows the reading without the outer spaces.",
+              "hints": [
+                "The blank is the missing piece of the example.",
+                "The example uses that piece.",
+                "+"
+              ],
+              "explanation": "Plus adds one to the size.",
+              "xp_reward": 10,
+              "starter_code": "shown = size ___ 1\n",
+              "options": [
+                "==",
+                "-",
+                "+",
+                "*"
+              ],
+              "correct_answer": "+"
+            },
+            {
+              "id": "string-methods-practice-1-bug",
+              "type": "debugging",
+              "question": "Orchard bakers recount crates before dawn. For sanitize inputs using chained string methods, which line does a different job than the example?",
+              "hints": [
+                "The other lines match the example.",
+                "One line is the odd one.",
+                "Line 2"
+              ],
+              "explanation": "The print changes case and leaves the spaces.",
+              "xp_reward": 10,
+              "starter_code": "text = '  ' + 'violet'\nprint(text.upper())\n",
+              "correct_answer": "2"
+            },
+            {
+              "id": "string-methods-practice-1-predict-2",
+              "type": "output_prediction",
+              "question": "Orchard bakers recount crates before dawn. For sanitize inputs using chained string methods, what does the second run display?",
+              "hints": [
+                "Apply the same steps to the new value.",
+                "The display comes from the last line.",
+                "violets"
+              ],
+              "explanation": "The second Form Field Sanitizer program displays that value.",
+              "xp_reward": 10,
+              "starter_code": "text = '  ' + 'violet' + 's'\nprint(text.strip())\n",
+              "options": [
+                "0",
+                "violet",
+                "none",
+                "violets"
+              ],
+              "correct_answer": "violets"
+            },
+            {
+              "id": "string-methods-practice-1-write",
+              "type": "code",
+              "question": "Orchard bakers recount crates before dawn. For sanitize inputs using chained string methods, fill the blank so the program prints the result.",
+              "hints": [
+                "The blank is the missing piece.",
+                "Print the value that piece produces.",
+                "label = text.strip()"
+              ],
+              "explanation": "The trimmed reading is what gets printed.",
+              "xp_reward": 10,
+              "starter_code": "text = '  ' + 'violet'\nlabel = ___\nprint(label)\n",
+              "solution_code": "text = '  ' + 'violet'\nlabel = text.strip()\nprint(label)\n",
+              "tests": [
+                {
+                  "name": "string-methods-practice-1-prints",
+                  "description": "The trimmed reading is what gets printed.",
+                  "expected_stdout": "violet\n",
+                  "required": true
+                }
+              ]
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "string-methods-checkpoint",
-      "title": "5. Unit 7 Checkpoint: String Methods Mastery",
-      "description": "hashtagify(word) must turn any raw word into a hashtag: strip surrounding whitespace, lowercase it, and prefix it with \"#\" (e.g. ' Python ' -> '#python'). The test checks that `hashtagify(\" Python \")` equals `\"#python\"`.",
+      "title": "Practice Unit 7 Checkpoint String Methods",
+      "description": "hashtagify(word) must turn any raw word into a hashtag: strip surrounding whitespace, lowercase it, and prefix it with \"#\" (e.g. ' Python ' -> '#python'). The test checks that hashtagify(\" Python \") equals \"#python\".",
       "order": 35,
       "difficulty": "beginner",
       "duration_minutes": 10,
@@ -199,7 +867,7 @@
         "strings"
       ],
       "learning_objectives": [
-        "Complete string methods check"
+        "Quarry bakers recount crates before dawn, and complete string methods check."
       ],
       "starter_code": "def hashtagify(word):\n    # TODO: return the word dressed up as a hashtag\n    pass\n",
       "tests": [
@@ -220,7 +888,175 @@
         "url": "https://docs.python.org/3/library/stdtypes.html#string-methods",
         "license": "Python documentation license (PSF)"
       },
-      "xp_reward": 40
+      "xp_reward": 40,
+      "player_mode": "micro",
+      "sublessons": [
+        {
+          "id": "string-methods-checkpoint-micro",
+          "title": "Practice Unit 7 Checkpoint String Methods",
+          "description": "",
+          "order": 1,
+          "exercises": [
+            {
+              "id": "string-methods-checkpoint-teach",
+              "type": "teach",
+              "question": "Quarry bakers recount crates before dawn, and complete string methods check.",
+              "hints": [
+                "Read the one job this step is practicing.",
+                "The example is about Unit 7 Checkpoint String Methods Mastery.",
+                "text.endswith('ing')"
+              ],
+              "explanation": "Quarry bakers recount crates before dawn, and complete string methods check.",
+              "xp_reward": 0,
+              "worked_example": "text.endswith('ing')"
+            },
+            {
+              "id": "string-methods-checkpoint-mcq",
+              "type": "mcq",
+              "question": "Quarry bakers recount crates before dawn. For complete string methods check, which line keeps the reading when it ends with the mark?",
+              "hints": [
+                "Compare each line with the example.",
+                "One line matches the example.",
+                "text.endswith('ing')"
+              ],
+              "explanation": "endswith asks whether the mark is at the end.",
+              "xp_reward": 10,
+              "options": [
+                "text.startswith('ing')",
+                "len(text)",
+                "text == text",
+                "text.endswith('ing')"
+              ],
+              "correct_answer": "text.endswith('ing')"
+            },
+            {
+              "id": "string-methods-checkpoint-predict",
+              "type": "output_prediction",
+              "question": "Quarry bakers recount crates before dawn. For complete string methods check, what value is displayed?",
+              "hints": [
+                "Run the example in your head from the top.",
+                "The last line is what gets displayed.",
+                "yarrowing"
+              ],
+              "explanation": "The Unit 7 Checkpoint String Methods Mastery program displays that value.",
+              "xp_reward": 10,
+              "starter_code": "text = 'yarrow' + 'ing'\nprint(text if text.endswith('ing') else text + '?')\n",
+              "options": [
+                "yarrowing?",
+                "none",
+                "0",
+                "yarrowing"
+              ],
+              "correct_answer": "yarrowing"
+            },
+            {
+              "id": "string-methods-checkpoint-order",
+              "type": "ordering",
+              "question": "Quarry bakers recount crates before dawn. For complete string methods check, build the line that keeps the reading when it ends with the mark.",
+              "hints": [
+                "Start at the left of the example.",
+                "Keep the example order.",
+                "flag = text.endswith ( 'ing' )"
+              ],
+              "explanation": "text.endswith('ing') checks the ending.",
+              "xp_reward": 10,
+              "options": [
+                "flag",
+                "=",
+                "text.endswith",
+                "(",
+                "'ing'",
+                ")",
+                "upper"
+              ],
+              "correct_answer": [
+                "flag",
+                "=",
+                "text.endswith",
+                "(",
+                "'ing'",
+                ")"
+              ]
+            },
+            {
+              "id": "string-methods-checkpoint-fill",
+              "type": "fill_blank",
+              "question": "Quarry bakers recount crates before dawn. For complete string methods check, fill the blank so the line keeps the reading when it ends with the mark.",
+              "hints": [
+                "The blank is the missing piece of the example.",
+                "The example uses that piece.",
+                "+"
+              ],
+              "explanation": "Plus adds one to the size.",
+              "xp_reward": 10,
+              "starter_code": "shown = size ___ 1\n",
+              "options": [
+                "-",
+                "*",
+                "==",
+                "+"
+              ],
+              "correct_answer": "+"
+            },
+            {
+              "id": "string-methods-checkpoint-bug",
+              "type": "debugging",
+              "question": "Quarry bakers recount crates before dawn. For complete string methods check, which line does a different job than the example?",
+              "hints": [
+                "The other lines match the example.",
+                "One line is the odd one.",
+                "Line 2"
+              ],
+              "explanation": "The check looks at the start instead of the end.",
+              "xp_reward": 10,
+              "starter_code": "text = 'yarrow' + 'ing'\nprint(text if text.startswith('ing') else text + '?')\n",
+              "correct_answer": "2"
+            },
+            {
+              "id": "string-methods-checkpoint-predict-2",
+              "type": "output_prediction",
+              "question": "Quarry bakers recount crates before dawn. For complete string methods check, what does the second run display?",
+              "hints": [
+                "Apply the same steps to the new value.",
+                "The display comes from the last line.",
+                "yarrowing?"
+              ],
+              "explanation": "The second Unit 7 Checkpoint String Methods Mastery program displays that value.",
+              "xp_reward": 10,
+              "starter_code": "text = 'yarrow' + 'ing'\nprint(text if text.endswith('xyz') else text + '?')\n",
+              "options": [
+                "yarrowing",
+                "none",
+                "yarrowing?",
+                "0"
+              ],
+              "correct_answer": "yarrowing?"
+            },
+            {
+              "id": "string-methods-checkpoint-write",
+              "type": "code",
+              "question": "Quarry bakers recount crates before dawn. For complete string methods check, fill the blank so the program prints the result.",
+              "hints": [
+                "The blank is the missing piece.",
+                "Print the value that piece produces.",
+                "label = text if text.endswith('ing') else text + '?'"
+              ],
+              "explanation": "The ending check is what gets printed.",
+              "xp_reward": 10,
+              "starter_code": "text = 'yarrow' + 'ing'\nlabel = ___\nprint(label)\n",
+              "solution_code": "text = 'yarrow' + 'ing'\nlabel = text if text.endswith('ing') else text + '?'\nprint(label)\n",
+              "tests": [
+                {
+                  "name": "string-methods-checkpoint-prints",
+                  "description": "The ending check is what gets printed.",
+                  "expected_stdout": "yarrowing\n",
+                  "required": true
+                }
+              ]
+            }
+          ]
+        }
+      ]
     }
   ]
 }

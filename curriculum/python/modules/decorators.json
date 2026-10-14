@@ -15,8 +15,8 @@
   "lessons": [
     {
       "id": "decorators-step-1",
-      "title": "1. Simple Decorator",
-      "description": "A decorator wraps a function. Implement `shout` that uppercases the string returned by the wrapped function. The test checks that `greet('ada')` equals `'HELLO ADA'`.",
+      "title": "Practice Simple Decorator",
+      "description": "A decorator wraps a function. Implement shout that uppercases the string returned by the wrapped function. The test checks that greet('ada') equals 'HELLO ADA'.",
       "order": 86,
       "difficulty": "intermediate",
       "duration_minutes": 5,
@@ -30,7 +30,7 @@
         "functions"
       ],
       "learning_objectives": [
-        "Write a decorator that wraps a return value"
+        "Ridge pickers recount crates before dawn, and write a decorator that wraps a return value."
       ],
       "starter_code": "def shout(fn):\n    def wrapper(*args, **kwargs):\n        # TODO: call fn and return result.upper()\n        pass\n    return wrapper\n\n@shout\ndef greet(name):\n    return f'hello {name}'\n",
       "solution_code": "def shout(fn):\n    def wrapper(*args, **kwargs):\n        return fn(*args, **kwargs).upper()\n    return wrapper\n\n@shout\ndef greet(name):\n    return f'hello {name}'\n",
@@ -51,12 +51,178 @@
         "url": "https://docs.python.org/3/reference/compound_stmts.html#function-definitions",
         "license": "Python documentation license (PSF)"
       },
-      "xp_reward": 10
+      "xp_reward": 10,
+      "player_mode": "micro",
+      "sublessons": [
+        {
+          "id": "decorators-step-1-micro",
+          "title": "Practice Simple Decorator",
+          "description": "",
+          "order": 1,
+          "exercises": [
+            {
+              "id": "decorators-step-1-teach",
+              "type": "teach",
+              "question": "Ridge pickers recount crates before dawn, and write a decorator that wraps a return value.",
+              "hints": [
+                "Read the one job this step is practicing.",
+                "The example is about Simple Decorator.",
+                "fn(value) + 3"
+              ],
+              "explanation": "Ridge pickers recount crates before dawn, and write a decorator that wraps a return value.",
+              "xp_reward": 0,
+              "worked_example": "fn(value) + 3"
+            },
+            {
+              "id": "decorators-step-1-mcq",
+              "type": "mcq",
+              "question": "Ridge pickers recount crates before dawn. For write a decorator that wraps a return value, which line adds the bonus before handing the result back?",
+              "hints": [
+                "Compare each line with the example.",
+                "One line matches the example.",
+                "fn(value) + 3"
+              ],
+              "explanation": "The wrapper adds the bonus to the original result.",
+              "xp_reward": 10,
+              "options": [
+                "fn(value) == value",
+                "print(fn)",
+                "pass",
+                "fn(value) + 3"
+              ],
+              "correct_answer": "fn(value) + 3"
+            },
+            {
+              "id": "decorators-step-1-predict",
+              "type": "output_prediction",
+              "question": "Ridge pickers recount crates before dawn. For write a decorator that wraps a return value, what value is displayed?",
+              "hints": [
+                "Run the example in your head from the top.",
+                "The last line is what gets displayed.",
+                "34"
+              ],
+              "explanation": "The Simple Decorator program displays that value.",
+              "xp_reward": 10,
+              "starter_code": "def bonus(fn):\n    def wrapped(value):\n        return fn(value) + 3\n    return wrapped\n@bonus\ndef base(value):\n    return value\nprint(base(31))\n",
+              "options": [
+                "38",
+                "none",
+                "0",
+                "34"
+              ],
+              "correct_answer": "34"
+            },
+            {
+              "id": "decorators-step-1-order",
+              "type": "ordering",
+              "question": "Ridge pickers recount crates before dawn. For write a decorator that wraps a return value, build the line that adds the bonus before handing the result back.",
+              "hints": [
+                "Start at the left of the example.",
+                "Keep the example order.",
+                "return fn ( value )"
+              ],
+              "explanation": "return fn(value) calls the wrapped function.",
+              "xp_reward": 10,
+              "options": [
+                "return",
+                "fn",
+                "(",
+                "value",
+                ")",
+                "print"
+              ],
+              "correct_answer": [
+                "return",
+                "fn",
+                "(",
+                "value",
+                ")"
+              ]
+            },
+            {
+              "id": "decorators-step-1-fill",
+              "type": "fill_blank",
+              "question": "Ridge pickers recount crates before dawn. For write a decorator that wraps a return value, fill the blank so the line adds the bonus before handing the result back.",
+              "hints": [
+                "The blank is the missing piece of the example.",
+                "The example uses that piece.",
+                "+"
+              ],
+              "explanation": "Plus adds the bonus.",
+              "xp_reward": 10,
+              "starter_code": "return fn(value) ___ extra\n",
+              "options": [
+                "*",
+                "+",
+                "==",
+                "-"
+              ],
+              "correct_answer": "+"
+            },
+            {
+              "id": "decorators-step-1-bug",
+              "type": "debugging",
+              "question": "Ridge pickers recount crates before dawn. For write a decorator that wraps a return value, which line does a different job than the example?",
+              "hints": [
+                "The other lines match the example.",
+                "One line is the odd one.",
+                "Line 3"
+              ],
+              "explanation": "The wrapper subtracts the bonus.",
+              "xp_reward": 10,
+              "starter_code": "def bonus(fn):\n    def wrapped(value):\n        return fn(value) - extra\n    return wrapped\nextra = 3\n@bonus\ndef base(value):\n    return value\nprint(base(31))\n",
+              "correct_answer": "3"
+            },
+            {
+              "id": "decorators-step-1-predict-2",
+              "type": "output_prediction",
+              "question": "Ridge pickers recount crates before dawn. For write a decorator that wraps a return value, what does the second run display?",
+              "hints": [
+                "Apply the same steps to the new value.",
+                "The display comes from the last line.",
+                "38"
+              ],
+              "explanation": "The second Simple Decorator program displays that value.",
+              "xp_reward": 10,
+              "starter_code": "def bonus(fn):\n    def wrapped(value):\n        return fn(value) + 7\n    return wrapped\n@bonus\ndef base(value):\n    return value\nprint(base(31))\n",
+              "options": [
+                "34",
+                "none",
+                "38",
+                "0"
+              ],
+              "correct_answer": "38"
+            },
+            {
+              "id": "decorators-step-1-write",
+              "type": "code",
+              "question": "Ridge pickers recount crates before dawn. For write a decorator that wraps a return value, fill the blank so the program prints the result.",
+              "hints": [
+                "The blank is the missing piece.",
+                "Print the value that piece produces.",
+                "label = base(31)"
+              ],
+              "explanation": "The wrapped result is what gets printed.",
+              "xp_reward": 10,
+              "starter_code": "def bonus(fn):\n    def wrapped(value):\n        return fn(value) + 3\n    return wrapped\n@bonus\ndef base(value):\n    return value\nlabel = ___\nprint(label)\n",
+              "solution_code": "def bonus(fn):\n    def wrapped(value):\n        return fn(value) + 3\n    return wrapped\n@bonus\ndef base(value):\n    return value\nlabel = base(31)\nprint(label)\n",
+              "tests": [
+                {
+                  "name": "decorators-step-1-prints",
+                  "description": "The wrapped result is what gets printed.",
+                  "expected_stdout": "34\n",
+                  "required": true
+                }
+              ]
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "decorators-step-2",
-      "title": "2. Decorator with Arguments",
-      "description": "Implement `repeat(n)` that calls the wrapped function n times and returns a list of results. The test checks that `ping()` equals `['pong', 'pong', 'pong']`.",
+      "title": "Practice Decorator with Arguments",
+      "description": "Implement repeat(n) that calls the wrapped function n times and returns a list of results. The test checks that ping() equals ['pong', 'pong', 'pong'].",
       "order": 87,
       "difficulty": "intermediate",
       "duration_minutes": 5,
@@ -70,7 +236,7 @@
         "functions"
       ],
       "learning_objectives": [
-        "Build a parameterized decorator"
+        "Cove pickers recount crates before dawn, and build a parameterized decorator."
       ],
       "starter_code": "def repeat(n):\n    def decorator(fn):\n        def wrapper(*args, **kwargs):\n            # TODO: return list of n calls to fn\n            pass\n        return wrapper\n    return decorator\n\n@repeat(3)\ndef ping():\n    return 'pong'\n",
       "solution_code": "def repeat(n):\n    def decorator(fn):\n        def wrapper(*args, **kwargs):\n            return [fn(*args, **kwargs) for _ in range(n)]\n        return wrapper\n    return decorator\n\n@repeat(3)\ndef ping():\n    return 'pong'\n",
@@ -91,12 +257,178 @@
         "url": "https://docs.python.org/3/reference/compound_stmts.html#function-definitions",
         "license": "Python documentation license (PSF)"
       },
-      "xp_reward": 10
+      "xp_reward": 10,
+      "player_mode": "micro",
+      "sublessons": [
+        {
+          "id": "decorators-step-2-micro",
+          "title": "Practice Decorator with Arguments",
+          "description": "",
+          "order": 1,
+          "exercises": [
+            {
+              "id": "decorators-step-2-teach",
+              "type": "teach",
+              "question": "Cove pickers recount crates before dawn, and build a parameterized decorator.",
+              "hints": [
+                "Read the one job this step is practicing.",
+                "The example is about Decorator with Arguments.",
+                "fn(value) + 4"
+              ],
+              "explanation": "Cove pickers recount crates before dawn, and build a parameterized decorator.",
+              "xp_reward": 0,
+              "worked_example": "fn(value) + 4"
+            },
+            {
+              "id": "decorators-step-2-mcq",
+              "type": "mcq",
+              "question": "Cove pickers recount crates before dawn. For build a parameterized decorator, which line adds the bonus before handing the result back?",
+              "hints": [
+                "Compare each line with the example.",
+                "One line matches the example.",
+                "fn(value) + 4"
+              ],
+              "explanation": "The wrapper adds the bonus to the original result.",
+              "xp_reward": 10,
+              "options": [
+                "print(fn)",
+                "fn(value) == value",
+                "pass",
+                "fn(value) + 4"
+              ],
+              "correct_answer": "fn(value) + 4"
+            },
+            {
+              "id": "decorators-step-2-predict",
+              "type": "output_prediction",
+              "question": "Cove pickers recount crates before dawn. For build a parameterized decorator, what value is displayed?",
+              "hints": [
+                "Run the example in your head from the top.",
+                "The last line is what gets displayed.",
+                "36"
+              ],
+              "explanation": "The Decorator with Arguments program displays that value.",
+              "xp_reward": 10,
+              "starter_code": "def bonus(fn):\n    def wrapped(value):\n        return fn(value) + 4\n    return wrapped\n@bonus\ndef base(value):\n    return value\nprint(base(32))\n",
+              "options": [
+                "40",
+                "36",
+                "none",
+                "0"
+              ],
+              "correct_answer": "36"
+            },
+            {
+              "id": "decorators-step-2-order",
+              "type": "ordering",
+              "question": "Cove pickers recount crates before dawn. For build a parameterized decorator, build the line that adds the bonus before handing the result back.",
+              "hints": [
+                "Start at the left of the example.",
+                "Keep the example order.",
+                "return fn ( value )"
+              ],
+              "explanation": "return fn(value) calls the wrapped function.",
+              "xp_reward": 10,
+              "options": [
+                "return",
+                "fn",
+                "(",
+                "value",
+                ")",
+                "print"
+              ],
+              "correct_answer": [
+                "return",
+                "fn",
+                "(",
+                "value",
+                ")"
+              ]
+            },
+            {
+              "id": "decorators-step-2-fill",
+              "type": "fill_blank",
+              "question": "Cove pickers recount crates before dawn. For build a parameterized decorator, fill the blank so the line adds the bonus before handing the result back.",
+              "hints": [
+                "The blank is the missing piece of the example.",
+                "The example uses that piece.",
+                "+"
+              ],
+              "explanation": "Plus adds the bonus.",
+              "xp_reward": 10,
+              "starter_code": "return fn(value) ___ extra\n",
+              "options": [
+                "-",
+                "+",
+                "*",
+                "=="
+              ],
+              "correct_answer": "+"
+            },
+            {
+              "id": "decorators-step-2-bug",
+              "type": "debugging",
+              "question": "Cove pickers recount crates before dawn. For build a parameterized decorator, which line does a different job than the example?",
+              "hints": [
+                "The other lines match the example.",
+                "One line is the odd one.",
+                "Line 3"
+              ],
+              "explanation": "The wrapper subtracts the bonus.",
+              "xp_reward": 10,
+              "starter_code": "def bonus(fn):\n    def wrapped(value):\n        return fn(value) - extra\n    return wrapped\nextra = 3\n@bonus\ndef base(value):\n    return value\nprint(base(32))\n",
+              "correct_answer": "3"
+            },
+            {
+              "id": "decorators-step-2-predict-2",
+              "type": "output_prediction",
+              "question": "Cove pickers recount crates before dawn. For build a parameterized decorator, what does the second run display?",
+              "hints": [
+                "Apply the same steps to the new value.",
+                "The display comes from the last line.",
+                "40"
+              ],
+              "explanation": "The second Decorator with Arguments program displays that value.",
+              "xp_reward": 10,
+              "starter_code": "def bonus(fn):\n    def wrapped(value):\n        return fn(value) + 8\n    return wrapped\n@bonus\ndef base(value):\n    return value\nprint(base(32))\n",
+              "options": [
+                "36",
+                "none",
+                "0",
+                "40"
+              ],
+              "correct_answer": "40"
+            },
+            {
+              "id": "decorators-step-2-write",
+              "type": "code",
+              "question": "Cove pickers recount crates before dawn. For build a parameterized decorator, fill the blank so the program prints the result.",
+              "hints": [
+                "The blank is the missing piece.",
+                "Print the value that piece produces.",
+                "label = base(32)"
+              ],
+              "explanation": "The wrapped result is what gets printed.",
+              "xp_reward": 10,
+              "starter_code": "def bonus(fn):\n    def wrapped(value):\n        return fn(value) + 4\n    return wrapped\n@bonus\ndef base(value):\n    return value\nlabel = ___\nprint(label)\n",
+              "solution_code": "def bonus(fn):\n    def wrapped(value):\n        return fn(value) + 4\n    return wrapped\n@bonus\ndef base(value):\n    return value\nlabel = base(32)\nprint(label)\n",
+              "tests": [
+                {
+                  "name": "decorators-step-2-prints",
+                  "description": "The wrapped result is what gets printed.",
+                  "expected_stdout": "36\n",
+                  "required": true
+                }
+              ]
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "decorators-01",
-      "title": "3. Memoize Decorator (Concept Challenge)",
-      "description": "Finish `memoize`, `wrapper`, `add`. Cache function results by args so repeated calls are cheap. The test checks that `add(2, 3)` equals `5`.",
+      "title": "Practice Memoize Decorator",
+      "description": "Finish memoize, wrapper, add. Cache function results by args so repeated calls are cheap. The test checks that add(2, 3) equals 5.",
       "order": 88,
       "difficulty": "intermediate",
       "duration_minutes": 8,
@@ -110,7 +442,7 @@
         "functions"
       ],
       "learning_objectives": [
-        "Cache return values keyed by arguments"
+        "Plaza pickers recount crates before dawn, and cache return values keyed by arguments."
       ],
       "starter_code": "def memoize(fn):\n    cache = {}\n    def wrapper(*args):\n        # TODO: return cached value or compute and store\n        pass\n    return wrapper\n\n@memoize\ndef add(a, b):\n    return a + b\n",
       "solution_code": "def memoize(fn):\n    cache = {}\n    def wrapper(*args):\n        if args not in cache:\n            cache[args] = fn(*args)\n        return cache[args]\n    wrapper.cache = cache\n    return wrapper\n\n@memoize\ndef add(a, b):\n    return a + b\n",
@@ -131,12 +463,180 @@
         "url": "https://docs.python.org/3/library/functools.html#functools.cache",
         "license": "Python documentation license (PSF)"
       },
-      "xp_reward": 25
+      "xp_reward": 25,
+      "player_mode": "micro",
+      "sublessons": [
+        {
+          "id": "decorators-01-micro",
+          "title": "Practice Memoize Decorator",
+          "description": "",
+          "order": 1,
+          "exercises": [
+            {
+              "id": "decorators-01-teach",
+              "type": "teach",
+              "question": "Plaza pickers recount crates before dawn, and cache return values keyed by arguments.",
+              "hints": [
+                "Read the one job this step is practicing.",
+                "The example is about Memoize Decorator.",
+                "cache[value] = fn(value)"
+              ],
+              "explanation": "Plaza pickers recount crates before dawn, and cache return values keyed by arguments.",
+              "xp_reward": 0,
+              "worked_example": "cache[value] = fn(value)"
+            },
+            {
+              "id": "decorators-01-mcq",
+              "type": "mcq",
+              "question": "Plaza pickers recount crates before dawn. For cache return values keyed by arguments, which line reuses the stored result for a repeated call?",
+              "hints": [
+                "Compare each line with the example.",
+                "One line matches the example.",
+                "cache[value] = fn(value)"
+              ],
+              "explanation": "The cache returns the stored result on the second call.",
+              "xp_reward": 10,
+              "options": [
+                "cache == value",
+                "print(cache)",
+                "pass",
+                "cache[value] = fn(value)"
+              ],
+              "correct_answer": "cache[value] = fn(value)"
+            },
+            {
+              "id": "decorators-01-predict",
+              "type": "output_prediction",
+              "question": "Plaza pickers recount crates before dawn. For cache return values keyed by arguments, what value is displayed?",
+              "hints": [
+                "Run the example in your head from the top.",
+                "The last line is what gets displayed.",
+                "120"
+              ],
+              "explanation": "The Memoize Decorator program displays that value.",
+              "xp_reward": 10,
+              "starter_code": "def memo(fn):\n    cache = {}\n    def wrapped(value):\n        if value not in cache:\n            cache[value] = fn(value)\n        return cache[value]\n    return wrapped\n@memo\ndef double(value):\n    return value * 2\nprint(double(30) + double(30))\n",
+              "options": [
+                "124",
+                "0",
+                "none",
+                "120"
+              ],
+              "correct_answer": "120"
+            },
+            {
+              "id": "decorators-01-order",
+              "type": "ordering",
+              "question": "Plaza pickers recount crates before dawn. For cache return values keyed by arguments, build the line that reuses the stored result for a repeated call.",
+              "hints": [
+                "Start at the left of the example.",
+                "Keep the example order.",
+                "cache [ value ] = fn(value)"
+              ],
+              "explanation": "cache[value] = fn(value) stores the result.",
+              "xp_reward": 10,
+              "options": [
+                "cache",
+                "[",
+                "value",
+                "]",
+                "=",
+                "fn(value)",
+                "=="
+              ],
+              "correct_answer": [
+                "cache",
+                "[",
+                "value",
+                "]",
+                "=",
+                "fn(value)"
+              ]
+            },
+            {
+              "id": "decorators-01-fill",
+              "type": "fill_blank",
+              "question": "Plaza pickers recount crates before dawn. For cache return values keyed by arguments, fill the blank so the line reuses the stored result for a repeated call.",
+              "hints": [
+                "The blank is the missing piece of the example.",
+                "The example uses that piece.",
+                "*"
+              ],
+              "explanation": "The star doubles the stored input.",
+              "xp_reward": 10,
+              "starter_code": "return value ___ 2\n",
+              "options": [
+                "+",
+                "-",
+                "==",
+                "*"
+              ],
+              "correct_answer": "*"
+            },
+            {
+              "id": "decorators-01-bug",
+              "type": "debugging",
+              "question": "Plaza pickers recount crates before dawn. For cache return values keyed by arguments, which line does a different job than the example?",
+              "hints": [
+                "The other lines match the example.",
+                "One line is the odd one.",
+                "Line 5"
+              ],
+              "explanation": "The cache stores zero instead of the result.",
+              "xp_reward": 10,
+              "starter_code": "def memo(fn):\n    cache = {}\n    def wrapped(value):\n        if value not in cache:\n            cache[value] = 0\n        return cache[value]\n    return wrapped\n@memo\ndef double(value):\n    return value * 2\nprint(double(30))\n",
+              "correct_answer": "5"
+            },
+            {
+              "id": "decorators-01-predict-2",
+              "type": "output_prediction",
+              "question": "Plaza pickers recount crates before dawn. For cache return values keyed by arguments, what does the second run display?",
+              "hints": [
+                "Apply the same steps to the new value.",
+                "The display comes from the last line.",
+                "124"
+              ],
+              "explanation": "The second Memoize Decorator program displays that value.",
+              "xp_reward": 10,
+              "starter_code": "def memo(fn):\n    cache = {}\n    def wrapped(value):\n        if value not in cache:\n            cache[value] = fn(value)\n        return cache[value]\n    return wrapped\n@memo\ndef double(value):\n    return value * 2\nprint(double(31) + double(31))\n",
+              "options": [
+                "120",
+                "none",
+                "124",
+                "0"
+              ],
+              "correct_answer": "124"
+            },
+            {
+              "id": "decorators-01-write",
+              "type": "code",
+              "question": "Plaza pickers recount crates before dawn. For cache return values keyed by arguments, fill the blank so the program prints the result.",
+              "hints": [
+                "The blank is the missing piece.",
+                "Print the value that piece produces.",
+                "label = double(30)"
+              ],
+              "explanation": "The cached result is what gets printed.",
+              "xp_reward": 10,
+              "starter_code": "def memo(fn):\n    cache = {}\n    def wrapped(value):\n        if value not in cache:\n            cache[value] = fn(value)\n        return cache[value]\n    return wrapped\n@memo\ndef double(value):\n    return value * 2\nlabel = ___\nprint(label)\n",
+              "solution_code": "def memo(fn):\n    cache = {}\n    def wrapped(value):\n        if value not in cache:\n            cache[value] = fn(value)\n        return cache[value]\n    return wrapped\n@memo\ndef double(value):\n    return value * 2\nlabel = double(30)\nprint(label)\n",
+              "tests": [
+                {
+                  "name": "decorators-01-prints",
+                  "description": "The cached result is what gets printed.",
+                  "expected_stdout": "60\n",
+                  "required": true
+                }
+              ]
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "decorators-practice-1",
-      "title": "4. Call Counter (Practice)",
-      "description": "Implement `count_calls` that tracks how many times a function was invoked via `.calls`. The test checks that `inc(1)` equals `2`; `inc(2)` equals `3`.",
+      "title": "Call Counter",
+      "description": "Implement count_calls that tracks how many times a function was invoked via .calls. The test checks that inc(1) equals 2; inc(2) equals 3.",
       "order": 89,
       "difficulty": "intermediate",
       "duration_minutes": 6,
@@ -150,7 +650,7 @@
         "functions"
       ],
       "learning_objectives": [
-        "Attach state to a wrapper function"
+        "Marsh pickers recount crates before dawn, and attach state to a wrapper function."
       ],
       "starter_code": "def count_calls(fn):\n    def wrapper(*args, **kwargs):\n        # TODO: increment wrapper.calls and call fn\n        pass\n    wrapper.calls = 0\n    return wrapper\n\n@count_calls\ndef inc(x):\n    return x + 1\n",
       "solution_code": "def count_calls(fn):\n    def wrapper(*args, **kwargs):\n        wrapper.calls += 1\n        return fn(*args, **kwargs)\n    wrapper.calls = 0\n    return wrapper\n\n@count_calls\ndef inc(x):\n    return x + 1\n",
@@ -171,12 +671,178 @@
         "url": "https://docs.python.org/3/reference/compound_stmts.html#function-definitions",
         "license": "Python documentation license (PSF)"
       },
-      "xp_reward": 15
+      "xp_reward": 15,
+      "player_mode": "micro",
+      "sublessons": [
+        {
+          "id": "decorators-practice-1-micro",
+          "title": "Call Counter",
+          "description": "",
+          "order": 1,
+          "exercises": [
+            {
+              "id": "decorators-practice-1-teach",
+              "type": "teach",
+              "question": "Marsh pickers recount crates before dawn, and attach state to a wrapper function.",
+              "hints": [
+                "Read the one job this step is practicing.",
+                "The example is about Call Counter.",
+                "wrapped.calls + 1"
+              ],
+              "explanation": "Marsh pickers recount crates before dawn, and attach state to a wrapper function.",
+              "xp_reward": 0,
+              "worked_example": "wrapped.calls + 1"
+            },
+            {
+              "id": "decorators-practice-1-mcq",
+              "type": "mcq",
+              "question": "Marsh pickers recount crates before dawn. For attach state to a wrapper function, which line counts how many times the wrapper runs?",
+              "hints": [
+                "Compare each line with the example.",
+                "One line matches the example.",
+                "wrapped.calls + 1"
+              ],
+              "explanation": "Each call adds one to the wrapper tally.",
+              "xp_reward": 10,
+              "options": [
+                "wrapped.calls == 1",
+                "print(calls)",
+                "pass",
+                "wrapped.calls + 1"
+              ],
+              "correct_answer": "wrapped.calls + 1"
+            },
+            {
+              "id": "decorators-practice-1-predict",
+              "type": "output_prediction",
+              "question": "Marsh pickers recount crates before dawn. For attach state to a wrapper function, what value is displayed?",
+              "hints": [
+                "Run the example in your head from the top.",
+                "The last line is what gets displayed.",
+                "60"
+              ],
+              "explanation": "The Call Counter program displays that value.",
+              "xp_reward": 10,
+              "starter_code": "def count_calls(fn):\n    def wrapped(value):\n        wrapped.calls = wrapped.calls + 1\n        return fn(value)\n    wrapped.calls = 0\n    return wrapped\n@count_calls\ndef echo(value):\n    return value\necho(30)\necho(30)\nprint(echo.calls * 30)\n",
+              "options": [
+                "30",
+                "none",
+                "0",
+                "60"
+              ],
+              "correct_answer": "60"
+            },
+            {
+              "id": "decorators-practice-1-order",
+              "type": "ordering",
+              "question": "Marsh pickers recount crates before dawn. For attach state to a wrapper function, build the line that counts how many times the wrapper runs.",
+              "hints": [
+                "Start at the left of the example.",
+                "Keep the example order.",
+                "seen = calls + 1"
+              ],
+              "explanation": "seen = calls + 1 records one more call.",
+              "xp_reward": 10,
+              "options": [
+                "seen",
+                "=",
+                "calls",
+                "+",
+                "1",
+                "=="
+              ],
+              "correct_answer": [
+                "seen",
+                "=",
+                "calls",
+                "+",
+                "1"
+              ]
+            },
+            {
+              "id": "decorators-practice-1-fill",
+              "type": "fill_blank",
+              "question": "Marsh pickers recount crates before dawn. For attach state to a wrapper function, fill the blank so the line counts how many times the wrapper runs.",
+              "hints": [
+                "The blank is the missing piece of the example.",
+                "The example uses that piece.",
+                "+"
+              ],
+              "explanation": "Plus records one more call.",
+              "xp_reward": 10,
+              "starter_code": "wrapped.calls = wrapped.calls ___ 1\n",
+              "options": [
+                "-",
+                "*",
+                "==",
+                "+"
+              ],
+              "correct_answer": "+"
+            },
+            {
+              "id": "decorators-practice-1-bug",
+              "type": "debugging",
+              "question": "Marsh pickers recount crates before dawn. For attach state to a wrapper function, which line does a different job than the example?",
+              "hints": [
+                "The other lines match the example.",
+                "One line is the odd one.",
+                "Line 3"
+              ],
+              "explanation": "The tally adds zero, so the call is not recorded.",
+              "xp_reward": 10,
+              "starter_code": "def count_calls(fn):\n    def wrapped(value):\n        wrapped.calls = wrapped.calls + 0\n        return fn(value)\n    wrapped.calls = 0\n    return wrapped\n@count_calls\ndef echo(value):\n    return value\necho(30)\nprint(echo.calls)\n",
+              "correct_answer": "3"
+            },
+            {
+              "id": "decorators-practice-1-predict-2",
+              "type": "output_prediction",
+              "question": "Marsh pickers recount crates before dawn. For attach state to a wrapper function, what does the second run display?",
+              "hints": [
+                "Apply the same steps to the new value.",
+                "The display comes from the last line.",
+                "30"
+              ],
+              "explanation": "The second Call Counter program displays that value.",
+              "xp_reward": 10,
+              "starter_code": "def count_calls(fn):\n    def wrapped(value):\n        wrapped.calls = wrapped.calls + 1\n        return fn(value)\n    wrapped.calls = 0\n    return wrapped\n@count_calls\ndef echo(value):\n    return value\necho(30)\nprint(echo.calls * 30)\n",
+              "options": [
+                "60",
+                "none",
+                "30",
+                "0"
+              ],
+              "correct_answer": "30"
+            },
+            {
+              "id": "decorators-practice-1-write",
+              "type": "code",
+              "question": "Marsh pickers recount crates before dawn. For attach state to a wrapper function, fill the blank so the program prints the result.",
+              "hints": [
+                "The blank is the missing piece.",
+                "Print the value that piece produces.",
+                "label = echo.calls"
+              ],
+              "explanation": "The call tally is what gets printed.",
+              "xp_reward": 10,
+              "starter_code": "def count_calls(fn):\n    def wrapped(value):\n        wrapped.calls = wrapped.calls + 1\n        return fn(value)\n    wrapped.calls = 0\n    return wrapped\n@count_calls\ndef echo(value):\n    return value\necho(30)\necho(30)\nlabel = ___\nprint(label)\n",
+              "solution_code": "def count_calls(fn):\n    def wrapped(value):\n        wrapped.calls = wrapped.calls + 1\n        return fn(value)\n    wrapped.calls = 0\n    return wrapped\n@count_calls\ndef echo(value):\n    return value\necho(30)\necho(30)\nlabel = echo.calls\nprint(label)\n",
+              "tests": [
+                {
+                  "name": "decorators-practice-1-prints",
+                  "description": "The call tally is what gets printed.",
+                  "expected_stdout": "2\n",
+                  "required": true
+                }
+              ]
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "decorators-checkpoint",
-      "title": "5. Unit 18 Checkpoint: Decorators",
-      "description": "Implement `ensure_non_negative` that raises ValueError if the first argument is negative. The test checks that `double(3)` equals `6`; invalid input raises `ValueError`.",
+      "title": "Practice Unit 18 Checkpoint Decorators",
+      "description": "Implement ensure_non_negative that raises ValueError if the first argument is negative. The test checks that double(3) equals 6; invalid input raises ValueError.",
       "order": 90,
       "difficulty": "intermediate",
       "duration_minutes": 10,
@@ -190,7 +856,7 @@
         "exceptions"
       ],
       "learning_objectives": [
-        "Validate arguments inside a decorator"
+        "Harbor crews recount crates before dawn, and validate arguments inside a decorator."
       ],
       "starter_code": "def ensure_non_negative(fn):\n    def wrapper(x, *args, **kwargs):\n        # TODO: raise ValueError if x < 0 else call fn\n        pass\n    return wrapper\n\n@ensure_non_negative\ndef double(x):\n    return x * 2\n",
       "solution_code": "def ensure_non_negative(fn):\n    def wrapper(x, *args, **kwargs):\n        if x < 0:\n            raise ValueError('negative')\n        return fn(x, *args, **kwargs)\n    return wrapper\n\n@ensure_non_negative\ndef double(x):\n    return x * 2\n",
@@ -211,7 +877,175 @@
         "url": "https://docs.python.org/3/reference/compound_stmts.html#function-definitions",
         "license": "Python documentation license (PSF)"
       },
-      "xp_reward": 40
+      "xp_reward": 40,
+      "player_mode": "micro",
+      "sublessons": [
+        {
+          "id": "decorators-checkpoint-micro",
+          "title": "Practice Unit 18 Checkpoint Decorators",
+          "description": "",
+          "order": 1,
+          "exercises": [
+            {
+              "id": "decorators-checkpoint-teach",
+              "type": "teach",
+              "question": "Harbor crews recount crates before dawn, and validate arguments inside a decorator.",
+              "hints": [
+                "Read the one job this step is practicing.",
+                "The example is about Unit 18 Checkpoint Decorators.",
+                "if value <= 0: return 90"
+              ],
+              "explanation": "Harbor crews recount crates before dawn, and validate arguments inside a decorator.",
+              "xp_reward": 0,
+              "worked_example": "if value <= 0: return 90"
+            },
+            {
+              "id": "decorators-checkpoint-mcq",
+              "type": "mcq",
+              "question": "Harbor crews recount crates before dawn. For validate arguments inside a decorator, which line rejects a non-positive argument before the call?",
+              "hints": [
+                "Compare each line with the example.",
+                "One line matches the example.",
+                "value <= 0"
+              ],
+              "explanation": "The guard returns early when the argument is not positive.",
+              "xp_reward": 10,
+              "options": [
+                "print(value)",
+                "value == 0",
+                "value <= 0",
+                "pass"
+              ],
+              "correct_answer": "value <= 0"
+            },
+            {
+              "id": "decorators-checkpoint-predict",
+              "type": "output_prediction",
+              "question": "Harbor crews recount crates before dawn. For validate arguments inside a decorator, what value is displayed?",
+              "hints": [
+                "Run the example in your head from the top.",
+                "The last line is what gets displayed.",
+                "37"
+              ],
+              "explanation": "The Unit 18 Checkpoint Decorators program displays that value.",
+              "xp_reward": 10,
+              "starter_code": "def positive(fn):\n    def wrapped(value):\n        if value <= 0:\n            return 90\n        return fn(value)\n    return wrapped\n@positive\ndef echo(value):\n    return value\nprint(echo(37))\n",
+              "options": [
+                "90",
+                "37",
+                "none",
+                "0"
+              ],
+              "correct_answer": "37"
+            },
+            {
+              "id": "decorators-checkpoint-order",
+              "type": "ordering",
+              "question": "Harbor crews recount crates before dawn. For validate arguments inside a decorator, build the line that rejects a non-positive argument before the call.",
+              "hints": [
+                "Start at the left of the example.",
+                "Keep the example order.",
+                "if value <= 0: return 90"
+              ],
+              "explanation": "if value <= 0: return 90 rejects the bad argument.",
+              "xp_reward": 10,
+              "options": [
+                "if",
+                "value",
+                "<=",
+                "0:",
+                "return",
+                "90",
+                "=="
+              ],
+              "correct_answer": [
+                "if",
+                "value",
+                "<=",
+                "0:",
+                "return",
+                "90"
+              ]
+            },
+            {
+              "id": "decorators-checkpoint-fill",
+              "type": "fill_blank",
+              "question": "Harbor crews recount crates before dawn. For validate arguments inside a decorator, fill the blank so the line rejects a non-positive argument before the call.",
+              "hints": [
+                "The blank is the missing piece of the example.",
+                "The example uses that piece.",
+                "<="
+              ],
+              "explanation": "The check includes zero.",
+              "xp_reward": 10,
+              "starter_code": "if value ___ 0:\n    label = 1\n",
+              "options": [
+                "<",
+                "<=",
+                "==",
+                ">"
+              ],
+              "correct_answer": "<="
+            },
+            {
+              "id": "decorators-checkpoint-bug",
+              "type": "debugging",
+              "question": "Harbor crews recount crates before dawn. For validate arguments inside a decorator, which line does a different job than the example?",
+              "hints": [
+                "The other lines match the example.",
+                "One line is the odd one.",
+                "Line 3"
+              ],
+              "explanation": "The guard rejects positive arguments.",
+              "xp_reward": 10,
+              "starter_code": "def positive(fn):\n    def wrapped(value):\n        if value > 0:\n            return 90\n        return fn(value)\n    return wrapped\n@positive\ndef echo(value):\n    return value\nprint(echo(37))\n",
+              "correct_answer": "3"
+            },
+            {
+              "id": "decorators-checkpoint-predict-2",
+              "type": "output_prediction",
+              "question": "Harbor crews recount crates before dawn. For validate arguments inside a decorator, what does the second run display?",
+              "hints": [
+                "Apply the same steps to the new value.",
+                "The display comes from the last line.",
+                "90"
+              ],
+              "explanation": "The second Unit 18 Checkpoint Decorators program displays that value.",
+              "xp_reward": 10,
+              "starter_code": "def positive(fn):\n    def wrapped(value):\n        if value <= 0:\n            return 90\n        return fn(value)\n    return wrapped\n@positive\ndef echo(value):\n    return value\nprint(echo(0))\n",
+              "options": [
+                "37",
+                "none",
+                "0",
+                "90"
+              ],
+              "correct_answer": "90"
+            },
+            {
+              "id": "decorators-checkpoint-write",
+              "type": "code",
+              "question": "Harbor crews recount crates before dawn. For validate arguments inside a decorator, fill the blank so the program prints the result.",
+              "hints": [
+                "The blank is the missing piece.",
+                "Print the value that piece produces.",
+                "label = echo(37)"
+              ],
+              "explanation": "The accepted argument is what gets printed.",
+              "xp_reward": 10,
+              "starter_code": "def positive(fn):\n    def wrapped(value):\n        if value <= 0:\n            return 90\n        return fn(value)\n    return wrapped\n@positive\ndef echo(value):\n    return value\nlabel = ___\nprint(label)\n",
+              "solution_code": "def positive(fn):\n    def wrapped(value):\n        if value <= 0:\n            return 90\n        return fn(value)\n    return wrapped\n@positive\ndef echo(value):\n    return value\nlabel = echo(37)\nprint(label)\n",
+              "tests": [
+                {
+                  "name": "decorators-checkpoint-prints",
+                  "description": "The accepted argument is what gets printed.",
+                  "expected_stdout": "37\n",
+                  "required": true
+                }
+              ]
+            }
+          ]
+        }
+      ]
     }
   ]
 }

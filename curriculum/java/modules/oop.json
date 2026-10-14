@@ -14,8 +14,8 @@
   "lessons": [
     {
       "id": "java-oop-step-1",
-      "title": "1. Defining Classes & Constructors",
-      "description": "Constructors initialize new objects. Define a `Car` class with `make` and `year` fields and getters. The test checks that `!\"Toyota\".equals(c.getMake()) || c.getYear()` equals `2022`; `c.getMake(` equals `\"Toyota\"`.",
+      "title": "Define Classes Constructors",
+      "description": "Constructors initialize new objects. Define a Car class with make and year fields and getters. The test checks that !\"Toyota\".equals(c.getMake()) || c.getYear() equals 2022; c.getMake( equals \"Toyota\".",
       "order": 26,
       "difficulty": "intermediate",
       "duration_minutes": 5,
@@ -27,7 +27,7 @@
         "java-methods"
       ],
       "learning_objectives": [
-        "Create constructors and private fields with getters in Java"
+        "Depot pickers recount crates before dawn, and create constructors and private fields with getters in Java."
       ],
       "starter_code": "public class Car {\n    private String make;\n    private int year;\n\n    public Car(String make, int year) {\n        // TODO: Initialize fields\n    }\n\n    public String getMake() { return make; }\n    public int getYear() { return year; }\n}\n",
       "solution_code": "public class Car {\n    private String make;\n    private int year;\n\n    public Car(String make, int year) {\n        this.make = make;\n        this.year = year;\n    }\n\n    public String getMake() { return make; }\n    public int getYear() { return year; }\n}\n",
@@ -48,12 +48,176 @@
         "url": "https://docs.oracle.com/javase/tutorial/java/javaOO/constructors.html",
         "license": "Oracle Free Use Terms and Conditions (documentation)"
       },
-      "xp_reward": 10
+      "xp_reward": 10,
+      "player_mode": "micro",
+      "sublessons": [
+        {
+          "id": "java-oop-step-1-micro",
+          "title": "Define Classes Constructors",
+          "description": "",
+          "order": 1,
+          "exercises": [
+            {
+              "id": "java-oop-step-1-teach",
+              "type": "teach",
+              "question": "Depot pickers recount crates before dawn, and create constructors and private fields with getters in Java.",
+              "hints": [
+                "Read the one job this step is practicing.",
+                "The example is about Defining Classes Constructors.",
+                "new Bag(\"flint\")"
+              ],
+              "explanation": "Depot pickers recount crates before dawn, and create constructors and private fields with getters in Java.",
+              "xp_reward": 0,
+              "worked_example": "new Bag(\"flint\")"
+            },
+            {
+              "id": "java-oop-step-1-mcq",
+              "type": "mcq",
+              "question": "Depot pickers recount crates before dawn. For create constructors and private fields with getters in Java, which line stores the constructor argument on the object?",
+              "hints": [
+                "Compare each line with the example.",
+                "One line matches the example.",
+                "this.item = item;"
+              ],
+              "explanation": "this.item = item; keeps the argument on the object.",
+              "xp_reward": 10,
+              "options": [
+                "return item;",
+                "item == item;",
+                "this.item = item;",
+                "item = this;"
+              ],
+              "correct_answer": "this.item = item;"
+            },
+            {
+              "id": "java-oop-step-1-predict",
+              "type": "output_prediction",
+              "question": "Depot pickers recount crates before dawn. For create constructors and private fields with getters in Java, what value is displayed?",
+              "hints": [
+                "Run the example in your head from the top.",
+                "The last line is what gets displayed.",
+                "flint"
+              ],
+              "explanation": "The Defining Classes Constructors program displays that value.",
+              "xp_reward": 10,
+              "starter_code": "public class Solution {\n    public static void main(String[] args) {\n        class Bag { String item; Bag(String item) { this.item = item; } }\n        System.out.println(new Bag(\"flint\").item);\n    }\n}\n",
+              "options": [
+                "none",
+                "juniper",
+                "0",
+                "flint"
+              ],
+              "correct_answer": "flint"
+            },
+            {
+              "id": "java-oop-step-1-order",
+              "type": "ordering",
+              "question": "Depot pickers recount crates before dawn. For create constructors and private fields with getters in Java, build the line that stores the constructor argument on the object.",
+              "hints": [
+                "Start at the left of the example.",
+                "Keep the example order.",
+                "String item = word;"
+              ],
+              "explanation": "this.item = item; keeps the argument on the object.",
+              "xp_reward": 10,
+              "options": [
+                "String",
+                "item",
+                "=",
+                "word;",
+                "=="
+              ],
+              "correct_answer": [
+                "String",
+                "item",
+                "=",
+                "word;"
+              ]
+            },
+            {
+              "id": "java-oop-step-1-fill",
+              "type": "fill_blank",
+              "question": "Depot pickers recount crates before dawn. For create constructors and private fields with getters in Java, fill the blank so the line stores the constructor argument on the object.",
+              "hints": [
+                "The blank is the missing piece of the example.",
+                "The example uses that piece.",
+                "="
+              ],
+              "explanation": "this.item = item; keeps the argument on the object.",
+              "xp_reward": 10,
+              "starter_code": "class Bag { String item; Bag(String item) { this.item ___ item; } }",
+              "options": [
+                "==",
+                "=",
+                "!=",
+                "+"
+              ],
+              "correct_answer": "="
+            },
+            {
+              "id": "java-oop-step-1-bug",
+              "type": "debugging",
+              "question": "Depot pickers recount crates before dawn. For create constructors and private fields with getters in Java, which line does a different job than the example?",
+              "hints": [
+                "The other lines match the example.",
+                "One line is the odd one.",
+                "Line 3"
+              ],
+              "explanation": "The constructor appends a mark the caller did not pass.",
+              "xp_reward": 10,
+              "starter_code": "public class Solution {\n    public static void main(String[] args) {\n        class Bag { String item; Bag(String item) { this.item = item + \"!\"; } }\n        System.out.println(new Bag(\"flint\").item);\n    }\n}\n",
+              "correct_answer": "3"
+            },
+            {
+              "id": "java-oop-step-1-predict-2",
+              "type": "output_prediction",
+              "question": "Depot pickers recount crates before dawn. For create constructors and private fields with getters in Java, what does the second run display?",
+              "hints": [
+                "Apply the same steps to the new value.",
+                "The display comes from the last line.",
+                "juniper"
+              ],
+              "explanation": "The second Defining Classes Constructors program displays that value.",
+              "xp_reward": 10,
+              "starter_code": "public class Solution {\n    public static void main(String[] args) {\n        class Bag { String item; Bag(String item) { this.item = item; } }\n        System.out.println(new Bag(\"juniper\").item);\n    }\n}\n",
+              "options": [
+                "none",
+                "flint",
+                "0",
+                "juniper"
+              ],
+              "correct_answer": "juniper"
+            },
+            {
+              "id": "java-oop-step-1-write",
+              "type": "code",
+              "question": "Depot pickers recount crates before dawn. For create constructors and private fields with getters in Java, fill the blank so the program prints the result.",
+              "hints": [
+                "The blank is the missing piece.",
+                "Print the value that piece produces.",
+                "String label = bag.item;"
+              ],
+              "explanation": "The printed value is the result after this step stores the constructor argument on the object.",
+              "xp_reward": 10,
+              "starter_code": "public class Solution {\n    public static void main(String[] args) {\n        class Bag { String item; Bag(String item) { this.item = item; } }\n        Bag bag = new Bag(\"flint\");\n        String label = ___;\n        System.out.println(label);\n    }\n}\n",
+              "solution_code": "public class Solution {\n    public static void main(String[] args) {\n        class Bag { String item; Bag(String item) { this.item = item; } }\n        Bag bag = new Bag(\"flint\");\n        String label = bag.item;\n        System.out.println(label);\n    }\n}\n",
+              "tests": [
+                {
+                  "name": "java-oop-step-1-prints",
+                  "description": "The printed value is the result after this step stores the constructor argument ",
+                  "expected_stdout": "flint\n",
+                  "required": true
+                }
+              ]
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "java-oop-step-2",
-      "title": "2. Instance Methods & State",
-      "description": "Add instance methods that alter or inspect object state. Implement `BankAccount` with `deposit` and `withdraw`. The test checks that `acc.getBalance()` is about `150.0`.",
+      "title": "Practice Instance Methods State",
+      "description": "Add instance methods that alter or inspect object state. Implement BankAccount with deposit and withdraw. The test checks that acc.getBalance() is about 150.0.",
       "order": 27,
       "difficulty": "intermediate",
       "duration_minutes": 5,
@@ -65,7 +229,7 @@
         "java-methods"
       ],
       "learning_objectives": [
-        "Implement state mutation methods with validation"
+        "Ridge pickers recount crates before dawn, and implement state mutation methods with validation."
       ],
       "starter_code": "public class BankAccount {\n    private double balance;\n\n    public BankAccount(double initialBalance) {\n        this.balance = initialBalance;\n    }\n\n    public double getBalance() { return balance; }\n\n    public void deposit(double amount) {\n        // TODO: Add amount to balance\n    }\n}\n",
       "solution_code": "public class BankAccount {\n    private double balance;\n\n    public BankAccount(double initialBalance) {\n        this.balance = initialBalance;\n    }\n\n    public double getBalance() { return balance; }\n\n    public void deposit(double amount) {\n        if (amount > 0) {\n            this.balance += amount;\n        }\n    }\n}\n",
@@ -86,12 +250,180 @@
         "url": "https://docs.oracle.com/javase/tutorial/java/javaOO/usingobject.html",
         "license": "Oracle Free Use Terms and Conditions (documentation)"
       },
-      "xp_reward": 10
+      "xp_reward": 10,
+      "player_mode": "micro",
+      "sublessons": [
+        {
+          "id": "java-oop-step-2-micro",
+          "title": "Practice Instance Methods State",
+          "description": "",
+          "order": 1,
+          "exercises": [
+            {
+              "id": "java-oop-step-2-teach",
+              "type": "teach",
+              "question": "Ridge pickers recount crates before dawn, and implement state mutation methods with validation.",
+              "hints": [
+                "Read the one job this step is practicing.",
+                "The example is about Instance Methods State.",
+                "meter.add(31)"
+              ],
+              "explanation": "Ridge pickers recount crates before dawn, and implement state mutation methods with validation.",
+              "xp_reward": 0,
+              "worked_example": "meter.add(31)"
+            },
+            {
+              "id": "java-oop-step-2-mcq",
+              "type": "mcq",
+              "question": "Ridge pickers recount crates before dawn. For implement state mutation methods with validation, which line adds to the object's own charge?",
+              "hints": [
+                "Compare each line with the example.",
+                "One line matches the example.",
+                "charge = charge + amount;"
+              ],
+              "explanation": "charge = charge + amount; updates the object's state.",
+              "xp_reward": 10,
+              "options": [
+                "charge == amount;",
+                "return charge;",
+                "charge = charge + amount;",
+                "charge = 0;"
+              ],
+              "correct_answer": "charge = charge + amount;"
+            },
+            {
+              "id": "java-oop-step-2-predict",
+              "type": "output_prediction",
+              "question": "Ridge pickers recount crates before dawn. For implement state mutation methods with validation, what value is displayed?",
+              "hints": [
+                "Run the example in your head from the top.",
+                "The last line is what gets displayed.",
+                "31"
+              ],
+              "explanation": "The Instance Methods State program displays that value.",
+              "xp_reward": 10,
+              "starter_code": "public class Solution {\n    public static void main(String[] args) {\n        class Meter { int charge = 0; void add(int amount) { charge = charge + amount; } }\n        Meter meter = new Meter();\n        meter.add(31);\n        System.out.println(meter.charge);\n    }\n}\n",
+              "options": [
+                "34",
+                "0",
+                "31",
+                "none"
+              ],
+              "correct_answer": "31"
+            },
+            {
+              "id": "java-oop-step-2-order",
+              "type": "ordering",
+              "question": "Ridge pickers recount crates before dawn. For implement state mutation methods with validation, build the line that adds to the object's own charge.",
+              "hints": [
+                "Start at the left of the example.",
+                "Keep the example order.",
+                "int total = left + right;"
+              ],
+              "explanation": "charge = charge + amount; updates the object's state.",
+              "xp_reward": 10,
+              "options": [
+                "int",
+                "total",
+                "=",
+                "left",
+                "+",
+                "right;",
+                "=="
+              ],
+              "correct_answer": [
+                "int",
+                "total",
+                "=",
+                "left",
+                "+",
+                "right;"
+              ]
+            },
+            {
+              "id": "java-oop-step-2-fill",
+              "type": "fill_blank",
+              "question": "Ridge pickers recount crates before dawn. For implement state mutation methods with validation, fill the blank so the line adds to the object's own charge.",
+              "hints": [
+                "The blank is the missing piece of the example.",
+                "The example uses that piece.",
+                "+"
+              ],
+              "explanation": "charge = charge + amount; updates the object's state.",
+              "xp_reward": 10,
+              "starter_code": "int charge = 0; int amount = left; charge = charge ___ amount;",
+              "options": [
+                "-",
+                "*",
+                "+",
+                "=="
+              ],
+              "correct_answer": "+"
+            },
+            {
+              "id": "java-oop-step-2-bug",
+              "type": "debugging",
+              "question": "Ridge pickers recount crates before dawn. For implement state mutation methods with validation, which line does a different job than the example?",
+              "hints": [
+                "The other lines match the example.",
+                "One line is the odd one.",
+                "Line 3"
+              ],
+              "explanation": "The method subtracts from the charge.",
+              "xp_reward": 10,
+              "starter_code": "public class Solution {\n    public static void main(String[] args) {\n        class Meter { int charge = 0; void add(int amount) { charge = charge - amount; } }\n        Meter meter = new Meter();\n        meter.add(31);\n        System.out.println(meter.charge);\n    }\n}\n",
+              "correct_answer": "3"
+            },
+            {
+              "id": "java-oop-step-2-predict-2",
+              "type": "output_prediction",
+              "question": "Ridge pickers recount crates before dawn. For implement state mutation methods with validation, what does the second run display?",
+              "hints": [
+                "Apply the same steps to the new value.",
+                "The display comes from the last line.",
+                "34"
+              ],
+              "explanation": "The second Instance Methods State program displays that value.",
+              "xp_reward": 10,
+              "starter_code": "public class Solution {\n    public static void main(String[] args) {\n        class Meter { int charge = 0; void add(int amount) { charge = charge + amount; } }\n        Meter meter = new Meter();\n        meter.add(34);\n        System.out.println(meter.charge);\n    }\n}\n",
+              "options": [
+                "31",
+                "none",
+                "34",
+                "0"
+              ],
+              "correct_answer": "34"
+            },
+            {
+              "id": "java-oop-step-2-write",
+              "type": "code",
+              "question": "Ridge pickers recount crates before dawn. For implement state mutation methods with validation, fill the blank so the program prints the result.",
+              "hints": [
+                "The blank is the missing piece.",
+                "Print the value that piece produces.",
+                "int label = meter.charge;"
+              ],
+              "explanation": "The printed value is the result after this step adds to the object's own charge.",
+              "xp_reward": 10,
+              "starter_code": "public class Solution {\n    public static void main(String[] args) {\n        class Meter { int charge = 0; void add(int amount) { charge = charge + amount; } }\n        Meter meter = new Meter();\n        meter.add(31);\n        int label = ___;\n        System.out.println(label);\n    }\n}\n",
+              "solution_code": "public class Solution {\n    public static void main(String[] args) {\n        class Meter { int charge = 0; void add(int amount) { charge = charge + amount; } }\n        Meter meter = new Meter();\n        meter.add(31);\n        int label = meter.charge;\n        System.out.println(label);\n    }\n}\n",
+              "tests": [
+                {
+                  "name": "java-oop-step-2-prints",
+                  "description": "The printed value is the result after this step adds to the object's own charge.",
+                  "expected_stdout": "31\n",
+                  "required": true
+                }
+              ]
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "java-oop-01",
-      "title": "3. Smartphone Battery Model (Concept Challenge)",
-      "description": "Model a Smartphone with battery percentage and drain/charge methods. The test checks that `phone.getBatteryLevel()` equals `70`.",
+      "title": "Practice Smartphone Battery Model",
+      "description": "Model a Smartphone with battery percentage and drain/charge methods. The test checks that phone.getBatteryLevel() equals 70.",
       "order": 28,
       "difficulty": "intermediate",
       "duration_minutes": 8,
@@ -103,7 +435,7 @@
         "java-methods"
       ],
       "learning_objectives": [
-        "Encapsulate state limits between 0 and 100"
+        "Cove pickers recount crates before dawn, and encapsulate state limits between 0 and 100."
       ],
       "starter_code": "public class Smartphone {\n    private String model;\n    private int batteryLevel = 100;\n\n    public Smartphone(String model) {\n        this.model = model;\n    }\n\n    public int getBatteryLevel() { return batteryLevel; }\n\n    public void useApp(int hours) {\n        // TODO: Reduce batteryLevel by 15 * hours (min 0)\n    }\n}\n",
       "solution_code": "public class Smartphone {\n    private String model;\n    private int batteryLevel = 100;\n\n    public Smartphone(String model) {\n        this.model = model;\n    }\n\n    public int getBatteryLevel() { return batteryLevel; }\n\n    public void useApp(int hours) {\n        this.batteryLevel = Math.max(0, this.batteryLevel - 15 * hours);\n    }\n}\n",
@@ -124,11 +456,179 @@
         "url": "https://docs.oracle.com/javase/tutorial/java/javaOO/usingobject.html",
         "license": "Oracle Free Use Terms and Conditions (documentation)"
       },
-      "xp_reward": 25
+      "xp_reward": 25,
+      "player_mode": "micro",
+      "sublessons": [
+        {
+          "id": "java-oop-01-micro",
+          "title": "Practice Smartphone Battery Model",
+          "description": "",
+          "order": 1,
+          "exercises": [
+            {
+              "id": "java-oop-01-teach",
+              "type": "teach",
+              "question": "Cove pickers recount crates before dawn, and encapsulate state limits between 0 and 100.",
+              "hints": [
+                "Read the one job this step is practicing.",
+                "The example is about Smartphone Battery Model.",
+                "battery.drain(30)"
+              ],
+              "explanation": "Cove pickers recount crates before dawn, and encapsulate state limits between 0 and 100.",
+              "xp_reward": 0,
+              "worked_example": "battery.drain(30)"
+            },
+            {
+              "id": "java-oop-01-mcq",
+              "type": "mcq",
+              "question": "Cove pickers recount crates before dawn. For encapsulate state limits between 0 and 100, which line drains the battery object's charge?",
+              "hints": [
+                "Compare each line with the example.",
+                "One line matches the example.",
+                "charge = charge - amount;"
+              ],
+              "explanation": "drain subtracts the amount from the battery charge.",
+              "xp_reward": 10,
+              "options": [
+                "return charge;",
+                "charge = charge - amount;",
+                "charge == 100;",
+                "charge = amount;"
+              ],
+              "correct_answer": "charge = charge - amount;"
+            },
+            {
+              "id": "java-oop-01-predict",
+              "type": "output_prediction",
+              "question": "Cove pickers recount crates before dawn. For encapsulate state limits between 0 and 100, what value is displayed?",
+              "hints": [
+                "Run the example in your head from the top.",
+                "The last line is what gets displayed.",
+                "70"
+              ],
+              "explanation": "The Smartphone Battery Model program displays that value.",
+              "xp_reward": 10,
+              "starter_code": "public class Solution {\n    public static void main(String[] args) {\n        class Battery { int charge = 100; void drain(int amount) { charge = charge - amount; } }\n        Battery battery = new Battery();\n        battery.drain(30);\n        System.out.println(battery.charge);\n    }\n}\n",
+              "options": [
+                "60",
+                "70",
+                "none",
+                "0"
+              ],
+              "correct_answer": "70"
+            },
+            {
+              "id": "java-oop-01-order",
+              "type": "ordering",
+              "question": "Cove pickers recount crates before dawn. For encapsulate state limits between 0 and 100, build the line that drains the battery object's charge.",
+              "hints": [
+                "Start at the left of the example.",
+                "Keep the example order.",
+                "int total = left - right;"
+              ],
+              "explanation": "drain subtracts the amount from the battery charge.",
+              "xp_reward": 10,
+              "options": [
+                "int",
+                "total",
+                "=",
+                "left",
+                "-",
+                "right;",
+                "=="
+              ],
+              "correct_answer": [
+                "int",
+                "total",
+                "=",
+                "left",
+                "-",
+                "right;"
+              ]
+            },
+            {
+              "id": "java-oop-01-fill",
+              "type": "fill_blank",
+              "question": "Cove pickers recount crates before dawn. For encapsulate state limits between 0 and 100, fill the blank so the line drains the battery object's charge.",
+              "hints": [
+                "The blank is the missing piece of the example.",
+                "The example uses that piece.",
+                "-"
+              ],
+              "explanation": "drain subtracts the amount from the battery charge.",
+              "xp_reward": 10,
+              "starter_code": "int charge = 100; int amount = 30; charge = charge ___ amount;",
+              "options": [
+                "==",
+                "-",
+                "+",
+                "*"
+              ],
+              "correct_answer": "-"
+            },
+            {
+              "id": "java-oop-01-bug",
+              "type": "debugging",
+              "question": "Cove pickers recount crates before dawn. For encapsulate state limits between 0 and 100, which line does a different job than the example?",
+              "hints": [
+                "The other lines match the example.",
+                "One line is the odd one.",
+                "Line 3"
+              ],
+              "explanation": "The method adds the drain amount instead of subtracting it.",
+              "xp_reward": 10,
+              "starter_code": "public class Solution {\n    public static void main(String[] args) {\n        class Battery { int charge = 100; void drain(int amount) { charge = charge + amount; } }\n        Battery battery = new Battery();\n        battery.drain(30);\n        System.out.println(battery.charge);\n    }\n}\n",
+              "correct_answer": "3"
+            },
+            {
+              "id": "java-oop-01-predict-2",
+              "type": "output_prediction",
+              "question": "Cove pickers recount crates before dawn. For encapsulate state limits between 0 and 100, what does the second run display?",
+              "hints": [
+                "Apply the same steps to the new value.",
+                "The display comes from the last line.",
+                "60"
+              ],
+              "explanation": "The second Smartphone Battery Model program displays that value.",
+              "xp_reward": 10,
+              "starter_code": "public class Solution {\n    public static void main(String[] args) {\n        class Battery { int charge = 100; void drain(int amount) { charge = charge - amount; } }\n        Battery battery = new Battery();\n        battery.drain(40);\n        System.out.println(battery.charge);\n    }\n}\n",
+              "options": [
+                "70",
+                "none",
+                "0",
+                "60"
+              ],
+              "correct_answer": "60"
+            },
+            {
+              "id": "java-oop-01-write",
+              "type": "code",
+              "question": "Cove pickers recount crates before dawn. For encapsulate state limits between 0 and 100, fill the blank so the program prints the result.",
+              "hints": [
+                "The blank is the missing piece.",
+                "Print the value that piece produces.",
+                "int label = battery.charge;"
+              ],
+              "explanation": "The printed value is the result after this step drains the battery object's charge.",
+              "xp_reward": 10,
+              "starter_code": "public class Solution {\n    public static void main(String[] args) {\n        class Battery { int charge = 100; void drain(int amount) { charge = charge - amount; } }\n        Battery battery = new Battery();\n        battery.drain(30);\n        int label = ___;\n        System.out.println(label);\n    }\n}\n",
+              "solution_code": "public class Solution {\n    public static void main(String[] args) {\n        class Battery { int charge = 100; void drain(int amount) { charge = charge - amount; } }\n        Battery battery = new Battery();\n        battery.drain(30);\n        int label = battery.charge;\n        System.out.println(label);\n    }\n}\n",
+              "tests": [
+                {
+                  "name": "java-oop-01-prints",
+                  "description": "The printed value is the result after this step drains the battery object's char",
+                  "expected_stdout": "70\n",
+                  "required": true
+                }
+              ]
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "java-oop-practice-1",
-      "title": "4. Student Gradebook (Practice)",
+      "title": "Practice Student Gradebook",
       "description": "Student is an encapsulated record: private name and score fields set by the constructor. Implement isPassing() to return true when this.score >= 60. The test creates new Student(\"Ada\", 85) and expects isPassing() == true.",
       "order": 29,
       "difficulty": "intermediate",
@@ -141,7 +641,7 @@
         "java-methods"
       ],
       "learning_objectives": [
-        "Pass grade letter based on score field"
+        "Plaza pickers recount crates before dawn, and pass grade letter based on score field."
       ],
       "starter_code": "public class Student {\n    private String name;\n    private int score;\n\n    public Student(String name, int score) {\n        this.name = name;\n        this.score = score;\n    }\n\n    public boolean isPassing() {\n        // TODO: Return true if score >= 60\n        return false;\n    }\n}\n",
       "solution_code": "public class Student {\n    private String name;\n    private int score;\n\n    public Student(String name, int score) {\n        this.name = name;\n        this.score = score;\n    }\n\n    public boolean isPassing() {\n        return this.score >= 60;\n    }\n}\n",
@@ -162,11 +662,183 @@
         "url": "https://docs.oracle.com/javase/tutorial/java/javaOO/accesscontrol.html",
         "license": "Oracle Free Use Terms and Conditions (documentation)"
       },
-      "xp_reward": 15
+      "xp_reward": 15,
+      "player_mode": "micro",
+      "sublessons": [
+        {
+          "id": "java-oop-practice-1-micro",
+          "title": "Practice Student Gradebook",
+          "description": "",
+          "order": 1,
+          "exercises": [
+            {
+              "id": "java-oop-practice-1-teach",
+              "type": "teach",
+              "question": "Plaza pickers recount crates before dawn, and pass grade letter based on score field.",
+              "hints": [
+                "Read the one job this step is practicing.",
+                "The example is about Student Gradebook.",
+                "book.average(8, 10)"
+              ],
+              "explanation": "Plaza pickers recount crates before dawn, and pass grade letter based on score field.",
+              "xp_reward": 0,
+              "worked_example": "book.average(8, 10)"
+            },
+            {
+              "id": "java-oop-practice-1-mcq",
+              "type": "mcq",
+              "question": "Plaza pickers recount crates before dawn. For pass grade letter based on score field, which line averages two scores on the gradebook?",
+              "hints": [
+                "Compare each line with the example.",
+                "One line matches the example.",
+                "return (first + second) / 2;"
+              ],
+              "explanation": "The average adds the scores and divides by two.",
+              "xp_reward": 10,
+              "options": [
+                "first == second;",
+                "return (first + second) / 2;",
+                "return;",
+                "first = second;"
+              ],
+              "correct_answer": "return (first + second) / 2;"
+            },
+            {
+              "id": "java-oop-practice-1-predict",
+              "type": "output_prediction",
+              "question": "Plaza pickers recount crates before dawn. For pass grade letter based on score field, what value is displayed?",
+              "hints": [
+                "Run the example in your head from the top.",
+                "The last line is what gets displayed.",
+                "9"
+              ],
+              "explanation": "The Student Gradebook program displays that value.",
+              "xp_reward": 10,
+              "starter_code": "public class Solution {\n    public static void main(String[] args) {\n        class Book { int average(int first, int second) { return (first + second) / 2; } }\n        System.out.println(new Book().average(8, 10));\n    }\n}\n",
+              "options": [
+                "7",
+                "0",
+                "9",
+                "none"
+              ],
+              "correct_answer": "9"
+            },
+            {
+              "id": "java-oop-practice-1-order",
+              "type": "ordering",
+              "question": "Plaza pickers recount crates before dawn. For pass grade letter based on score field, build the line that averages two scores on the gradebook.",
+              "hints": [
+                "Start at the left of the example.",
+                "Keep the example order.",
+                "int mean = (left + right) / 2;"
+              ],
+              "explanation": "The average adds the scores and divides by two.",
+              "xp_reward": 10,
+              "options": [
+                "int",
+                "mean",
+                "=",
+                "(left",
+                "+",
+                "right)",
+                "/",
+                "2;",
+                "=="
+              ],
+              "correct_answer": [
+                "int",
+                "mean",
+                "=",
+                "(left",
+                "+",
+                "right)",
+                "/",
+                "2;"
+              ]
+            },
+            {
+              "id": "java-oop-practice-1-fill",
+              "type": "fill_blank",
+              "question": "Plaza pickers recount crates before dawn. For pass grade letter based on score field, fill the blank so the line averages two scores on the gradebook.",
+              "hints": [
+                "The blank is the missing piece of the example.",
+                "The example uses that piece.",
+                "/"
+              ],
+              "explanation": "The average adds the scores and divides by two.",
+              "xp_reward": 10,
+              "starter_code": "int mean = (left + right) ___ 2;",
+              "options": [
+                "*",
+                "/",
+                "+",
+                "-"
+              ],
+              "correct_answer": "/"
+            },
+            {
+              "id": "java-oop-practice-1-bug",
+              "type": "debugging",
+              "question": "Plaza pickers recount crates before dawn. For pass grade letter based on score field, which line does a different job than the example?",
+              "hints": [
+                "The other lines match the example.",
+                "One line is the odd one.",
+                "Line 3"
+              ],
+              "explanation": "The method returns the sum and never divides by two.",
+              "xp_reward": 10,
+              "starter_code": "public class Solution {\n    public static void main(String[] args) {\n        class Book { int average(int first, int second) { return first + second; } }\n        System.out.println(new Book().average(8, 10));\n    }\n}\n",
+              "correct_answer": "3"
+            },
+            {
+              "id": "java-oop-practice-1-predict-2",
+              "type": "output_prediction",
+              "question": "Plaza pickers recount crates before dawn. For pass grade letter based on score field, what does the second run display?",
+              "hints": [
+                "Apply the same steps to the new value.",
+                "The display comes from the last line.",
+                "7"
+              ],
+              "explanation": "The second Student Gradebook program displays that value.",
+              "xp_reward": 10,
+              "starter_code": "public class Solution {\n    public static void main(String[] args) {\n        class Book { int average(int first, int second) { return (first + second) / 2; } }\n        System.out.println(new Book().average(4, 10));\n    }\n}\n",
+              "options": [
+                "9",
+                "none",
+                "0",
+                "7"
+              ],
+              "correct_answer": "7"
+            },
+            {
+              "id": "java-oop-practice-1-write",
+              "type": "code",
+              "question": "Plaza pickers recount crates before dawn. For pass grade letter based on score field, fill the blank so the program prints the result.",
+              "hints": [
+                "The blank is the missing piece.",
+                "Print the value that piece produces.",
+                "int label = book.average(8, 10);"
+              ],
+              "explanation": "The printed value is the result after this step averages two scores on the gradebook.",
+              "xp_reward": 10,
+              "starter_code": "public class Solution {\n    public static void main(String[] args) {\n        class Book { int average(int first, int second) { return (first + second) / 2; } }\n        Book book = new Book();\n        int label = ___;\n        System.out.println(label);\n    }\n}\n",
+              "solution_code": "public class Solution {\n    public static void main(String[] args) {\n        class Book { int average(int first, int second) { return (first + second) / 2; } }\n        Book book = new Book();\n        int label = book.average(8, 10);\n        System.out.println(label);\n    }\n}\n",
+              "tests": [
+                {
+                  "name": "java-oop-practice-1-prints",
+                  "description": "The printed value is the result after this step averages two scores on the grade",
+                  "expected_stdout": "9\n",
+                  "required": true
+                }
+              ]
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "java-oop-checkpoint",
-      "title": "5. Unit 6 Checkpoint: Java OOP Mastery",
+      "title": "Practice Unit 6 Checkpoint Java OOP",
       "description": "Rectangle keeps private width/height fields initialized by the constructor. Implement getArea() to return this.width * this.height. The test expects new Rectangle(4.0, 5.0).getArea() == 20.0 (within 0.001).",
       "order": 30,
       "difficulty": "intermediate",
@@ -179,7 +851,7 @@
         "java-methods"
       ],
       "learning_objectives": [
-        "Pass Java OOP checkpoint"
+        "Marsh pickers recount crates before dawn, and pass Java OOP checkpoint using thyme."
       ],
       "starter_code": "public class Rectangle {\n    private double width;\n    private double height;\n\n    public Rectangle(double width, double height) {\n        this.width = width;\n        this.height = height;\n    }\n\n    public double getArea() {\n        // TODO: Return width * height\n        return 0.0;\n    }\n}\n",
       "solution_code": "public class Rectangle {\n    private double width;\n    private double height;\n\n    public Rectangle(double width, double height) {\n        this.width = width;\n        this.height = height;\n    }\n\n    public double getArea() {\n        return this.width * this.height;\n    }\n}\n",
@@ -200,7 +872,171 @@
         "url": "https://docs.oracle.com/javase/tutorial/java/javaOO/accesscontrol.html",
         "license": "Oracle Free Use Terms and Conditions (documentation)"
       },
-      "xp_reward": 40
+      "xp_reward": 40,
+      "player_mode": "micro",
+      "sublessons": [
+        {
+          "id": "java-oop-checkpoint-micro",
+          "title": "Practice Unit 6 Checkpoint Java OOP",
+          "description": "",
+          "order": 1,
+          "exercises": [
+            {
+              "id": "java-oop-checkpoint-teach",
+              "type": "teach",
+              "question": "Marsh pickers recount crates before dawn, and pass Java OOP checkpoint using thyme.",
+              "hints": [
+                "Read the one job this step is practicing.",
+                "The example is about Unit 6 Checkpoint Java OOP Mastery.",
+                "new Note(\"grove\")"
+              ],
+              "explanation": "Marsh pickers recount crates before dawn, and pass Java OOP checkpoint using thyme.",
+              "xp_reward": 0,
+              "worked_example": "new Note(\"grove\")"
+            },
+            {
+              "id": "java-oop-checkpoint-mcq",
+              "type": "mcq",
+              "question": "Marsh pickers recount crates before dawn. For pass Java OOP checkpoint, which line reads the item stored on the note?",
+              "hints": [
+                "Compare each line with the example.",
+                "One line matches the example.",
+                "this.item = item;"
+              ],
+              "explanation": "note.item is the text the constructor stored.",
+              "xp_reward": 10,
+              "options": [
+                "item == item;",
+                "item = this;",
+                "this.item = item;",
+                "return item;"
+              ],
+              "correct_answer": "this.item = item;"
+            },
+            {
+              "id": "java-oop-checkpoint-predict",
+              "type": "output_prediction",
+              "question": "Marsh pickers recount crates before dawn. For pass Java OOP checkpoint, what value is displayed, using zircon?",
+              "hints": [
+                "Run the example in your head from the top.",
+                "The last line is what gets displayed.",
+                "grove"
+              ],
+              "explanation": "The Unit 6 Checkpoint Java OOP Mastery program displays that value.",
+              "xp_reward": 10,
+              "starter_code": "public class Solution {\n    public static void main(String[] args) {\n        class Note { String item; Note(String item) { this.item = item; } }\n        System.out.println(new Note(\"grove\").item);\n    }\n}\n",
+              "options": [
+                "kelp",
+                "none",
+                "grove",
+                "0"
+              ],
+              "correct_answer": "grove"
+            },
+            {
+              "id": "java-oop-checkpoint-order",
+              "type": "ordering",
+              "question": "Marsh pickers recount crates before dawn. For pass Java OOP checkpoint, build the line that reads the item stored on the note.",
+              "hints": [
+                "Start at the left of the example.",
+                "Keep the example order.",
+                "String item = name;"
+              ],
+              "explanation": "note.item is the text the constructor stored.",
+              "xp_reward": 10,
+              "options": [
+                "String",
+                "item",
+                "=",
+                "name;",
+                "=="
+              ],
+              "correct_answer": [
+                "String",
+                "item",
+                "=",
+                "name;"
+              ]
+            },
+            {
+              "id": "java-oop-checkpoint-fill",
+              "type": "fill_blank",
+              "question": "Marsh pickers recount crates before dawn. For pass Java OOP checkpoint, fill the blank so the line reads the item stored on the note.",
+              "hints": [
+                "The blank is the missing piece of the example.",
+                "The example uses that piece.",
+                "="
+              ],
+              "explanation": "note.item is the text the constructor stored.",
+              "xp_reward": 10,
+              "starter_code": "class Note { String item; Note(String item) { this.item ___ item; } }",
+              "options": [
+                "==",
+                "!=",
+                "=",
+                "+"
+              ],
+              "correct_answer": "="
+            },
+            {
+              "id": "java-oop-checkpoint-bug",
+              "type": "debugging",
+              "question": "Marsh pickers recount crates before dawn. For pass Java OOP checkpoint, which line does a different job than the example, using juniper, using ember?",
+              "hints": [
+                "The other lines match the example.",
+                "One line is the odd one.",
+                "Line 3"
+              ],
+              "explanation": "The constructor assigns the argument to itself, so the field stays empty.",
+              "xp_reward": 10,
+              "starter_code": "public class Solution {\n    public static void main(String[] args) {\n        class Note { String item; Note(String item) { item = item; } }\n        System.out.println(new Note(\"grove\").item);\n    }\n}\n",
+              "correct_answer": "3"
+            },
+            {
+              "id": "java-oop-checkpoint-predict-2",
+              "type": "output_prediction",
+              "question": "Marsh pickers recount crates before dawn. For pass Java OOP checkpoint, what does the second run display, using zircon, using juniper?",
+              "hints": [
+                "Apply the same steps to the new value.",
+                "The display comes from the last line.",
+                "kelp"
+              ],
+              "explanation": "The second Unit 6 Checkpoint Java OOP Mastery program displays that value.",
+              "xp_reward": 10,
+              "starter_code": "public class Solution {\n    public static void main(String[] args) {\n        class Note { String item; Note(String item) { this.item = item; } }\n        System.out.println(new Note(\"kelp\").item);\n    }\n}\n",
+              "options": [
+                "grove",
+                "kelp",
+                "none",
+                "0"
+              ],
+              "correct_answer": "kelp"
+            },
+            {
+              "id": "java-oop-checkpoint-write",
+              "type": "code",
+              "question": "Marsh pickers recount crates before dawn. For pass Java OOP checkpoint, fill the blank so the program prints the result, using olive, using olive, using thyme.",
+              "hints": [
+                "The blank is the missing piece.",
+                "Print the value that piece produces.",
+                "String label = note.item;"
+              ],
+              "explanation": "The printed value is the result after this step reads the item stored on the note.",
+              "xp_reward": 10,
+              "starter_code": "public class Solution {\n    public static void main(String[] args) {\n        class Note { String item; Note(String item) { this.item = item; } }\n        Note note = new Note(\"grove\");\n        String label = ___;\n        System.out.println(label);\n    }\n}\n",
+              "solution_code": "public class Solution {\n    public static void main(String[] args) {\n        class Note { String item; Note(String item) { this.item = item; } }\n        Note note = new Note(\"grove\");\n        String label = note.item;\n        System.out.println(label);\n    }\n}\n",
+              "tests": [
+                {
+                  "name": "java-oop-checkpoint-prints",
+                  "description": "The printed value is the result after this step reads the item stored on the not",
+                  "expected_stdout": "grove\n",
+                  "required": true
+                }
+              ]
+            }
+          ]
+        }
+      ]
     }
   ]
 }

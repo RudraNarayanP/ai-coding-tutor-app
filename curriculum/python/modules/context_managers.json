@@ -15,8 +15,8 @@
   "lessons": [
     {
       "id": "context-managers-step-1",
-      "title": "1. with and contextlib",
-      "description": "Implement a context manager class `TempValue` that temporarily sets an attribute and restores it. The test checks that `Box().x` equals `99`; `Box().x` equals `1`.",
+      "title": "Practice with and contextlib",
+      "description": "Implement a context manager class TempValue that temporarily sets an attribute and restores it. The test checks that Box().x equals 99; Box().x equals 1.",
       "order": 91,
       "difficulty": "intermediate",
       "duration_minutes": 5,
@@ -30,7 +30,7 @@
         "classes"
       ],
       "learning_objectives": [
-        "Implement __enter__/__exit__"
+        "Mesa pickers recount crates before dawn, and implement enter exit."
       ],
       "starter_code": "class TempValue:\n    def __init__(self, obj, attr, value):\n        self.obj = obj\n        self.attr = attr\n        self.value = value\n        self._old = None\n\n    def __enter__(self):\n        # TODO: save old value, set new, return self\n        pass\n\n    def __exit__(self, *args):\n        # TODO: restore old value\n        pass\n",
       "solution_code": "class TempValue:\n    def __init__(self, obj, attr, value):\n        self.obj = obj\n        self.attr = attr\n        self.value = value\n        self._old = None\n\n    def __enter__(self):\n        self._old = getattr(self.obj, self.attr)\n        setattr(self.obj, self.attr, self.value)\n        return self\n\n    def __exit__(self, *args):\n        setattr(self.obj, self.attr, self._old)\n",
@@ -51,12 +51,178 @@
         "url": "https://docs.python.org/3/reference/datamodel.html#with-statement-context-managers",
         "license": "Python documentation license (PSF)"
       },
-      "xp_reward": 10
+      "xp_reward": 10,
+      "player_mode": "micro",
+      "sublessons": [
+        {
+          "id": "context-managers-step-1-micro",
+          "title": "Practice with and contextlib",
+          "description": "",
+          "order": 1,
+          "exercises": [
+            {
+              "id": "context-managers-step-1-teach",
+              "type": "teach",
+              "question": "Mesa pickers recount crates before dawn, and implement enter exit.",
+              "hints": [
+                "Read the one job this step is practicing.",
+                "The example is about with and contextlib.",
+                "with Door() as state:"
+              ],
+              "explanation": "Mesa pickers recount crates before dawn, and implement enter exit.",
+              "xp_reward": 0,
+              "worked_example": "with Door() as state:"
+            },
+            {
+              "id": "context-managers-step-1-mcq",
+              "type": "mcq",
+              "question": "Mesa pickers recount crates before dawn. For implement enter exit, which line shows the value handed out of the managed block?",
+              "hints": [
+                "Compare each line with the example.",
+                "One line matches the example.",
+                "return self"
+              ],
+              "explanation": "__enter__ hands the value to the with line.",
+              "xp_reward": 10,
+              "options": [
+                "with Door() as state",
+                "return self",
+                "state == Door",
+                "print(Door)"
+              ],
+              "correct_answer": "return self"
+            },
+            {
+              "id": "context-managers-step-1-predict",
+              "type": "output_prediction",
+              "question": "Mesa pickers recount crates before dawn. For implement enter exit, what value is displayed?",
+              "hints": [
+                "Run the example in your head from the top.",
+                "The last line is what gets displayed.",
+                "58"
+              ],
+              "explanation": "The with and contextlib program displays that value.",
+              "xp_reward": 10,
+              "starter_code": "class Door:\n    def __enter__(self):\n        return 57\n    def __exit__(self, *args):\n        return False\nwith Door() as state:\n    print(state + 1)\n",
+              "options": [
+                "62",
+                "58",
+                "none",
+                "0"
+              ],
+              "correct_answer": "58"
+            },
+            {
+              "id": "context-managers-step-1-order",
+              "type": "ordering",
+              "question": "Mesa pickers recount crates before dawn. For implement enter exit, build the line that shows the value handed out of the managed block.",
+              "hints": [
+                "Start at the left of the example.",
+                "Keep the example order.",
+                "with Door() as state: pass"
+              ],
+              "explanation": "with Door() as state: opens the managed block.",
+              "xp_reward": 10,
+              "options": [
+                "with",
+                "Door()",
+                "as",
+                "state:",
+                "pass",
+                "if"
+              ],
+              "correct_answer": [
+                "with",
+                "Door()",
+                "as",
+                "state:",
+                "pass"
+              ]
+            },
+            {
+              "id": "context-managers-step-1-fill",
+              "type": "fill_blank",
+              "question": "Mesa pickers recount crates before dawn. For implement enter exit, fill the blank so the line shows the value handed out of the managed block.",
+              "hints": [
+                "The blank is the missing piece of the example.",
+                "The example uses that piece.",
+                "+"
+              ],
+              "explanation": "Plus adds one to the handed-out value.",
+              "xp_reward": 10,
+              "starter_code": "bonus = state ___ 1\n",
+              "options": [
+                "-",
+                "==",
+                "*",
+                "+"
+              ],
+              "correct_answer": "+"
+            },
+            {
+              "id": "context-managers-step-1-bug",
+              "type": "debugging",
+              "question": "Mesa pickers recount crates before dawn. For implement enter exit, which line does a different job than the example?",
+              "hints": [
+                "The other lines match the example.",
+                "One line is the odd one.",
+                "Line 3"
+              ],
+              "explanation": "__enter__ hands out zero instead of the reading.",
+              "xp_reward": 10,
+              "starter_code": "class Door:\n    def __enter__(self):\n        return 0\n    def __exit__(self, *args):\n        return False\nwith Door() as state:\n    print(state + 57)\n",
+              "correct_answer": "3"
+            },
+            {
+              "id": "context-managers-step-1-predict-2",
+              "type": "output_prediction",
+              "question": "Mesa pickers recount crates before dawn. For implement enter exit, what does the second run display?",
+              "hints": [
+                "Apply the same steps to the new value.",
+                "The display comes from the last line.",
+                "62"
+              ],
+              "explanation": "The second with and contextlib program displays that value.",
+              "xp_reward": 10,
+              "starter_code": "class Door:\n    def __enter__(self):\n        return 61\n    def __exit__(self, *args):\n        return False\nwith Door() as state:\n    print(state + 1)\n",
+              "options": [
+                "58",
+                "none",
+                "62",
+                "0"
+              ],
+              "correct_answer": "62"
+            },
+            {
+              "id": "context-managers-step-1-write",
+              "type": "code",
+              "question": "Mesa pickers recount crates before dawn. For implement enter exit, fill the blank so the program prints the result.",
+              "hints": [
+                "The blank is the missing piece.",
+                "Print the value that piece produces.",
+                "label = state"
+              ],
+              "explanation": "The handed-out value is what gets printed.",
+              "xp_reward": 10,
+              "starter_code": "class Door:\n    def __enter__(self):\n        return 57\n    def __exit__(self, *args):\n        return False\nwith Door() as state:\n    label = ___\nprint(label)\n",
+              "solution_code": "class Door:\n    def __enter__(self):\n        return 57\n    def __exit__(self, *args):\n        return False\nwith Door() as state:\n    label = state\nprint(label)\n",
+              "tests": [
+                {
+                  "name": "context-managers-step-1-prints",
+                  "description": "The handed-out value is what gets printed.",
+                  "expected_stdout": "57\n",
+                  "required": true
+                }
+              ]
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "context-managers-step-2",
-      "title": "2. contextlib.contextmanager",
-      "description": "Finish `opened_list`, a context manager that yields a fresh list and clears that list when the block ends. The test appends `1` inside the block, checks the list equals `[1]` there, and checks it equals `[]` afterwards.",
+      "title": "Practice contextlib contextmanager",
+      "description": "Finish opened_list, a context manager that yields a fresh list and clears that list when the block ends. The test appends 1 inside the block, checks the list equals [1] there, and checks it equals [] afterwards.",
       "order": 92,
       "difficulty": "intermediate",
       "duration_minutes": 5,
@@ -70,7 +236,7 @@
         "decorators"
       ],
       "learning_objectives": [
-        "Use contextlib.contextmanager"
+        "Orchard pickers recount crates before dawn, and use contextlib."
       ],
       "starter_code": "from contextlib import contextmanager\n\n@contextmanager\ndef opened_list():\n    data = []\n    # TODO: yield data, then clear it in finally\n    yield data\n",
       "solution_code": "from contextlib import contextmanager\n\n@contextmanager\ndef opened_list():\n    data = []\n    try:\n        yield data\n    finally:\n        data.clear()\n",
@@ -91,12 +257,176 @@
         "url": "https://docs.python.org/3/library/contextlib.html#contextlib.contextmanager",
         "license": "Python documentation license (PSF)"
       },
-      "xp_reward": 10
+      "xp_reward": 10,
+      "player_mode": "micro",
+      "sublessons": [
+        {
+          "id": "context-managers-step-2-micro",
+          "title": "Practice contextlib contextmanager",
+          "description": "",
+          "order": 1,
+          "exercises": [
+            {
+              "id": "context-managers-step-2-teach",
+              "type": "teach",
+              "question": "Orchard pickers recount crates before dawn, and use contextlib.",
+              "hints": [
+                "Read the one job this step is practicing.",
+                "The example is about contextlib contextmanager.",
+                "yield reading"
+              ],
+              "explanation": "Orchard pickers recount crates before dawn, and use contextlib.",
+              "xp_reward": 0,
+              "worked_example": "yield reading"
+            },
+            {
+              "id": "context-managers-step-2-mcq",
+              "type": "mcq",
+              "question": "Orchard pickers recount crates before dawn. For use contextlib, which line yields the reading into the managed block?",
+              "hints": [
+                "Compare each line with the example.",
+                "One line matches the example.",
+                "yield reading"
+              ],
+              "explanation": "yield hands the reading to the with line.",
+              "xp_reward": 10,
+              "options": [
+                "return reading",
+                "print(reading)",
+                "yield reading",
+                "pass"
+              ],
+              "correct_answer": "yield reading"
+            },
+            {
+              "id": "context-managers-step-2-predict",
+              "type": "output_prediction",
+              "question": "Orchard pickers recount crates before dawn. For use contextlib, what value is displayed?",
+              "hints": [
+                "Run the example in your head from the top.",
+                "The last line is what gets displayed.",
+                "60"
+              ],
+              "explanation": "The contextlib contextmanager program displays that value.",
+              "xp_reward": 10,
+              "starter_code": "from contextlib import contextmanager\n@contextmanager\ndef door():\n    yield 58\nwith door() as state:\n    print(state + 2)\n",
+              "options": [
+                "63",
+                "60",
+                "none",
+                "0"
+              ],
+              "correct_answer": "60"
+            },
+            {
+              "id": "context-managers-step-2-order",
+              "type": "ordering",
+              "question": "Orchard pickers recount crates before dawn. For use contextlib, build the line that yields the reading into the managed block.",
+              "hints": [
+                "Start at the left of the example.",
+                "Keep the example order.",
+                "def door(): yield value"
+              ],
+              "explanation": "def door(): yield value hands the reading out.",
+              "xp_reward": 10,
+              "options": [
+                "def",
+                "door():",
+                "yield",
+                "value",
+                "return"
+              ],
+              "correct_answer": [
+                "def",
+                "door():",
+                "yield",
+                "value"
+              ]
+            },
+            {
+              "id": "context-managers-step-2-fill",
+              "type": "fill_blank",
+              "question": "Orchard pickers recount crates before dawn. For use contextlib, fill the blank so the line yields the reading into the managed block.",
+              "hints": [
+                "The blank is the missing piece of the example.",
+                "The example uses that piece.",
+                "+"
+              ],
+              "explanation": "Plus adds two to the yielded reading.",
+              "xp_reward": 10,
+              "starter_code": "bonus = state ___ 2\n",
+              "options": [
+                "==",
+                "*",
+                "-",
+                "+"
+              ],
+              "correct_answer": "+"
+            },
+            {
+              "id": "context-managers-step-2-bug",
+              "type": "debugging",
+              "question": "Orchard pickers recount crates before dawn. For use contextlib, which line does a different job than the example?",
+              "hints": [
+                "The other lines match the example.",
+                "One line is the odd one.",
+                "Line 4"
+              ],
+              "explanation": "The generator returns instead of yielding a reading.",
+              "xp_reward": 10,
+              "starter_code": "from contextlib import contextmanager\n@contextmanager\ndef door():\n    return\nwith door() as state:\n    print(state)\n",
+              "correct_answer": "4"
+            },
+            {
+              "id": "context-managers-step-2-predict-2",
+              "type": "output_prediction",
+              "question": "Orchard pickers recount crates before dawn. For use contextlib, what does the second run display?",
+              "hints": [
+                "Apply the same steps to the new value.",
+                "The display comes from the last line.",
+                "63"
+              ],
+              "explanation": "The second contextlib contextmanager program displays that value.",
+              "xp_reward": 10,
+              "starter_code": "from contextlib import contextmanager\n@contextmanager\ndef door():\n    yield 61\nwith door() as state:\n    print(state + 2)\n",
+              "options": [
+                "60",
+                "63",
+                "none",
+                "0"
+              ],
+              "correct_answer": "63"
+            },
+            {
+              "id": "context-managers-step-2-write",
+              "type": "code",
+              "question": "Orchard pickers recount crates before dawn. For use contextlib, fill the blank so the program prints the result.",
+              "hints": [
+                "The blank is the missing piece.",
+                "Print the value that piece produces.",
+                "label = state"
+              ],
+              "explanation": "The yielded reading is what gets printed.",
+              "xp_reward": 10,
+              "starter_code": "from contextlib import contextmanager\n@contextmanager\ndef door():\n    yield 58\nwith door() as state:\n    label = ___\nprint(label)\n",
+              "solution_code": "from contextlib import contextmanager\n@contextmanager\ndef door():\n    yield 58\nwith door() as state:\n    label = state\nprint(label)\n",
+              "tests": [
+                {
+                  "name": "context-managers-step-2-prints",
+                  "description": "The yielded reading is what gets printed.",
+                  "expected_stdout": "58\n",
+                  "required": true
+                }
+              ]
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "context-managers-01",
-      "title": "3. Timing Context (Concept Challenge)",
-      "description": "Finish `Timer` so `elapsed` is how many seconds passed inside the `with` block. The test checks that `elapsed` is at least `0` after the block.",
+      "title": "Practice Timing Context",
+      "description": "Finish Timer so elapsed is how many seconds passed inside the with block. The test checks that elapsed is at least 0 after the block.",
       "order": 93,
       "difficulty": "intermediate",
       "duration_minutes": 8,
@@ -110,7 +440,7 @@
         "classes"
       ],
       "learning_objectives": [
-        "Measure wall time across enter/exit"
+        "Quarry pickers recount crates before dawn, and measure wall time across enter exit."
       ],
       "starter_code": "import time\n\nclass Timer:\n    def __init__(self):\n        self.elapsed = 0.0\n        self._start = None\n\n    def __enter__(self):\n        # TODO: record start time\n        pass\n\n    def __exit__(self, *args):\n        # TODO: set self.elapsed\n        pass\n",
       "solution_code": "import time\n\nclass Timer:\n    def __init__(self):\n        self.elapsed = 0.0\n        self._start = None\n\n    def __enter__(self):\n        self._start = time.perf_counter()\n        return self\n\n    def __exit__(self, *args):\n        self.elapsed = time.perf_counter() - self._start\n",
@@ -131,12 +461,178 @@
         "url": "https://docs.python.org/3/reference/datamodel.html#with-statement-context-managers",
         "license": "Python documentation license (PSF)"
       },
-      "xp_reward": 25
+      "xp_reward": 25,
+      "player_mode": "micro",
+      "sublessons": [
+        {
+          "id": "context-managers-01-micro",
+          "title": "Practice Timing Context",
+          "description": "",
+          "order": 1,
+          "exercises": [
+            {
+              "id": "context-managers-01-teach",
+              "type": "teach",
+              "question": "Quarry pickers recount crates before dawn, and measure wall time across enter exit.",
+              "hints": [
+                "Read the one job this step is practicing.",
+                "The example is about Timing Context.",
+                "end - mark"
+              ],
+              "explanation": "Quarry pickers recount crates before dawn, and measure wall time across enter exit.",
+              "xp_reward": 0,
+              "worked_example": "end - mark"
+            },
+            {
+              "id": "context-managers-01-mcq",
+              "type": "mcq",
+              "question": "Quarry pickers recount crates before dawn. For measure wall time across enter exit, which line shows how far the end sits past the mark?",
+              "hints": [
+                "Compare each line with the example.",
+                "One line matches the example.",
+                "end - mark"
+              ],
+              "explanation": "end - mark is the elapsed gap.",
+              "xp_reward": 10,
+              "options": [
+                "end + mark",
+                "end - mark",
+                "end == mark",
+                "print(mark)"
+              ],
+              "correct_answer": "end - mark"
+            },
+            {
+              "id": "context-managers-01-predict",
+              "type": "output_prediction",
+              "question": "Quarry pickers recount crates before dawn. For measure wall time across enter exit, what value is displayed?",
+              "hints": [
+                "Run the example in your head from the top.",
+                "The last line is what gets displayed.",
+                "46"
+              ],
+              "explanation": "The Timing Context program displays that value.",
+              "xp_reward": 10,
+              "starter_code": "class Timer:\n    def __enter__(self):\n        self.mark = 10\n        return self\n    def __exit__(self, *args):\n        return False\nwith Timer() as timer:\n    print(56 - timer.mark)\n",
+              "options": [
+                "51",
+                "46",
+                "none",
+                "0"
+              ],
+              "correct_answer": "46"
+            },
+            {
+              "id": "context-managers-01-order",
+              "type": "ordering",
+              "question": "Quarry pickers recount crates before dawn. For measure wall time across enter exit, build the line that shows how far the end sits past the mark.",
+              "hints": [
+                "Start at the left of the example.",
+                "Keep the example order.",
+                "elapsed = end - start"
+              ],
+              "explanation": "elapsed = end - start is the gap.",
+              "xp_reward": 10,
+              "options": [
+                "elapsed",
+                "=",
+                "end",
+                "-",
+                "start",
+                "+"
+              ],
+              "correct_answer": [
+                "elapsed",
+                "=",
+                "end",
+                "-",
+                "start"
+              ]
+            },
+            {
+              "id": "context-managers-01-fill",
+              "type": "fill_blank",
+              "question": "Quarry pickers recount crates before dawn. For measure wall time across enter exit, fill the blank so the line shows how far the end sits past the mark.",
+              "hints": [
+                "The blank is the missing piece of the example.",
+                "The example uses that piece.",
+                "-"
+              ],
+              "explanation": "Minus finds the gap.",
+              "xp_reward": 10,
+              "starter_code": "elapsed = end ___ start\n",
+              "options": [
+                "*",
+                "==",
+                "-",
+                "+"
+              ],
+              "correct_answer": "-"
+            },
+            {
+              "id": "context-managers-01-bug",
+              "type": "debugging",
+              "question": "Quarry pickers recount crates before dawn. For measure wall time across enter exit, which line does a different job than the example?",
+              "hints": [
+                "The other lines match the example.",
+                "One line is the odd one.",
+                "Line 8"
+              ],
+              "explanation": "The print adds the mark instead of subtracting it.",
+              "xp_reward": 10,
+              "starter_code": "class Timer:\n    def __enter__(self):\n        self.mark = 10\n        return self\n    def __exit__(self, *args):\n        return False\nwith Timer() as timer:\n    print(56 + timer.mark)\n",
+              "correct_answer": "8"
+            },
+            {
+              "id": "context-managers-01-predict-2",
+              "type": "output_prediction",
+              "question": "Quarry pickers recount crates before dawn. For measure wall time across enter exit, what does the second run display?",
+              "hints": [
+                "Apply the same steps to the new value.",
+                "The display comes from the last line.",
+                "51"
+              ],
+              "explanation": "The second Timing Context program displays that value.",
+              "xp_reward": 10,
+              "starter_code": "class Timer:\n    def __enter__(self):\n        self.mark = 10\n        return self\n    def __exit__(self, *args):\n        return False\nwith Timer() as timer:\n    print(61 - timer.mark)\n",
+              "options": [
+                "46",
+                "none",
+                "0",
+                "51"
+              ],
+              "correct_answer": "51"
+            },
+            {
+              "id": "context-managers-01-write",
+              "type": "code",
+              "question": "Quarry pickers recount crates before dawn. For measure wall time across enter exit, fill the blank so the program prints the result.",
+              "hints": [
+                "The blank is the missing piece.",
+                "Print the value that piece produces.",
+                "label = 56 - timer.mark"
+              ],
+              "explanation": "The elapsed gap is what gets printed.",
+              "xp_reward": 10,
+              "starter_code": "class Timer:\n    def __enter__(self):\n        self.mark = 10\n        return self\n    def __exit__(self, *args):\n        return False\nwith Timer() as timer:\n    label = ___\nprint(label)\n",
+              "solution_code": "class Timer:\n    def __enter__(self):\n        self.mark = 10\n        return self\n    def __exit__(self, *args):\n        return False\nwith Timer() as timer:\n    label = 56 - timer.mark\nprint(label)\n",
+              "tests": [
+                {
+                  "name": "context-managers-01-prints",
+                  "description": "The elapsed gap is what gets printed.",
+                  "expected_stdout": "46\n",
+                  "required": true
+                }
+              ]
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "context-managers-practice-1",
-      "title": "4. Suppress Specific Errors (Practice)",
-      "description": "Implement `suppress(exc_type)` that swallows the given exception type. The test checks that invalid input raises `TypeError`.",
+      "title": "Practice Suppress Specific Errors",
+      "description": "Implement suppress(exc_type) that swallows the given exception type. The test checks that invalid input raises TypeError.",
       "order": 94,
       "difficulty": "intermediate",
       "duration_minutes": 6,
@@ -150,7 +646,7 @@
         "exceptions"
       ],
       "learning_objectives": [
-        "Return True from __exit__ to suppress"
+        "Attic pickers recount crates before dawn, and return True from exit to suppress."
       ],
       "starter_code": "class suppress:\n    def __init__(self, exc_type):\n        self.exc_type = exc_type\n\n    def __enter__(self):\n        return self\n\n    def __exit__(self, exc_type, exc, tb):\n        # TODO: return True if exc_type is self.exc_type (or subclass)\n        pass\n",
       "solution_code": "class suppress:\n    def __init__(self, exc_type):\n        self.exc_type = exc_type\n\n    def __enter__(self):\n        return self\n\n    def __exit__(self, exc_type, exc, tb):\n        return exc_type is not None and issubclass(exc_type, self.exc_type)\n",
@@ -171,12 +667,174 @@
         "url": "https://docs.python.org/3/library/contextlib.html#contextlib.suppress",
         "license": "Python documentation license (PSF)"
       },
-      "xp_reward": 15
+      "xp_reward": 15,
+      "player_mode": "micro",
+      "sublessons": [
+        {
+          "id": "context-managers-practice-1-micro",
+          "title": "Practice Suppress Specific Errors",
+          "description": "",
+          "order": 1,
+          "exercises": [
+            {
+              "id": "context-managers-practice-1-teach",
+              "type": "teach",
+              "question": "Attic pickers recount crates before dawn, and return True from exit to suppress.",
+              "hints": [
+                "Read the one job this step is practicing.",
+                "The example is about Suppress Specific Errors.",
+                "return True"
+              ],
+              "explanation": "Attic pickers recount crates before dawn, and return True from exit to suppress.",
+              "xp_reward": 0,
+              "worked_example": "return True"
+            },
+            {
+              "id": "context-managers-practice-1-mcq",
+              "type": "mcq",
+              "question": "Attic pickers recount crates before dawn. Choose the match for this step.",
+              "hints": [
+                "Compare each line with the example.",
+                "One line matches the example.",
+                "return True"
+              ],
+              "explanation": "Returning True from __exit__ suppresses the error.",
+              "xp_reward": 10,
+              "options": [
+                "return False",
+                "return True",
+                "raise RuntimeError",
+                "print(error)"
+              ],
+              "correct_answer": "return True"
+            },
+            {
+              "id": "context-managers-practice-1-predict",
+              "type": "output_prediction",
+              "question": "Attic pickers recount crates before dawn. For return True from exit to suppress, what value is displayed?",
+              "hints": [
+                "Run the example in your head from the top.",
+                "The last line is what gets displayed.",
+                "61"
+              ],
+              "explanation": "The Suppress Specific Errors program displays that value.",
+              "xp_reward": 10,
+              "starter_code": "class Quiet:\n    def __enter__(self):\n        return self\n    def __exit__(self, exc_type, exc, tb):\n        return True\ntry:\n    with Quiet():\n        raise RuntimeError('nope')\n    print(61)\nexcept RuntimeError:\n    print(56)\n",
+              "options": [
+                "56",
+                "61",
+                "none",
+                "0"
+              ],
+              "correct_answer": "61"
+            },
+            {
+              "id": "context-managers-practice-1-order",
+              "type": "ordering",
+              "question": "Attic pickers recount crates before dawn. For return True from exit to suppress, build the line that lets the block finish when the exit asks to suppress.",
+              "hints": [
+                "Start at the left of the example.",
+                "Keep the example order.",
+                "flag = True"
+              ],
+              "explanation": "flag = True is the suppress signal.",
+              "xp_reward": 10,
+              "options": [
+                "flag",
+                "=",
+                "True",
+                "False"
+              ],
+              "correct_answer": [
+                "flag",
+                "=",
+                "True"
+              ]
+            },
+            {
+              "id": "context-managers-practice-1-fill",
+              "type": "fill_blank",
+              "question": "Attic pickers recount crates before dawn. For return True from exit to suppress, fill the blank so the line lets the block finish when the exit asks to suppress.",
+              "hints": [
+                "The blank is the missing piece of the example.",
+                "The example uses that piece.",
+                "+"
+              ],
+              "explanation": "Plus adds five after the block finishes.",
+              "xp_reward": 10,
+              "starter_code": "bonus = reading ___ 5\n",
+              "options": [
+                "-",
+                "+",
+                "*",
+                "=="
+              ],
+              "correct_answer": "+"
+            },
+            {
+              "id": "context-managers-practice-1-bug",
+              "type": "debugging",
+              "question": "Attic pickers recount crates before dawn. For return True from exit to suppress, which line does a different job than the example?",
+              "hints": [
+                "The other lines match the example.",
+                "One line is the odd one.",
+                "Line 5"
+              ],
+              "explanation": "__exit__ lets the error escape.",
+              "xp_reward": 10,
+              "starter_code": "class Quiet:\n    def __enter__(self):\n        return self\n    def __exit__(self, exc_type, exc, tb):\n        return False\nprint(1)\n",
+              "correct_answer": "5"
+            },
+            {
+              "id": "context-managers-practice-1-predict-2",
+              "type": "output_prediction",
+              "question": "Attic pickers recount crates before dawn. For return True from exit to suppress, what does the second run display?",
+              "hints": [
+                "Apply the same steps to the new value.",
+                "The display comes from the last line.",
+                "56"
+              ],
+              "explanation": "The second Suppress Specific Errors program displays that value.",
+              "xp_reward": 10,
+              "starter_code": "class Quiet:\n    def __enter__(self):\n        return self\n    def __exit__(self, exc_type, exc, tb):\n        return False\ntry:\n    with Quiet():\n        raise RuntimeError('nope')\n    print(61)\nexcept RuntimeError:\n    print(56)\n",
+              "options": [
+                "61",
+                "0",
+                "none",
+                "56"
+              ],
+              "correct_answer": "56"
+            },
+            {
+              "id": "context-managers-practice-1-write",
+              "type": "code",
+              "question": "Attic pickers recount crates before dawn. For return True from exit to suppress, fill the blank so the program prints the result.",
+              "hints": [
+                "The blank is the missing piece.",
+                "Print the value that piece produces.",
+                "label = 56"
+              ],
+              "explanation": "The finished-block reading is what gets printed.",
+              "xp_reward": 10,
+              "starter_code": "class Quiet:\n    def __enter__(self):\n        return self\n    def __exit__(self, exc_type, exc, tb):\n        return True\ntry:\n    with Quiet():\n        raise RuntimeError('nope')\n    label = ___\nexcept RuntimeError:\n    label = 0\nprint(label)\n",
+              "solution_code": "class Quiet:\n    def __enter__(self):\n        return self\n    def __exit__(self, exc_type, exc, tb):\n        return True\ntry:\n    with Quiet():\n        raise RuntimeError('nope')\n    label = 56\nexcept RuntimeError:\n    label = 0\nprint(label)\n",
+              "tests": [
+                {
+                  "name": "context-managers-practice-1-prints",
+                  "description": "The finished-block reading is what gets printed.",
+                  "expected_stdout": "56\n",
+                  "required": true
+                }
+              ]
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "context-managers-checkpoint",
-      "title": "5. Unit 19 Checkpoint: Context Managers",
-      "description": "Implement `locked(flag_dict)` that sets flag_dict['locked']=True on enter and False on exit. The test checks that `flags['locked']` is true; `flags['locked']` is false.",
+      "title": "Practice Unit 19 Checkpoint Context Managers",
+      "description": "Implement locked(flag_dict) that sets flag_dict['locked']=True on enter and False on exit. The test checks that flags['locked'] is true; flags['locked'] is false.",
       "order": 95,
       "difficulty": "intermediate",
       "duration_minutes": 10,
@@ -190,7 +848,7 @@
         "dictionaries"
       ],
       "learning_objectives": [
-        "Manage a boolean lock flag"
+        "Depot pickers recount crates before dawn, and manage a boolean lock flag."
       ],
       "starter_code": "class locked:\n    def __init__(self, flag_dict):\n        self.flag_dict = flag_dict\n\n    def __enter__(self):\n        # TODO: set locked True\n        pass\n\n    def __exit__(self, *args):\n        # TODO: set locked False\n        pass\n",
       "solution_code": "class locked:\n    def __init__(self, flag_dict):\n        self.flag_dict = flag_dict\n\n    def __enter__(self):\n        self.flag_dict['locked'] = True\n        return self\n\n    def __exit__(self, *args):\n        self.flag_dict['locked'] = False\n",
@@ -211,7 +869,169 @@
         "url": "https://docs.python.org/3/reference/datamodel.html#with-statement-context-managers",
         "license": "Python documentation license (PSF)"
       },
-      "xp_reward": 40
+      "xp_reward": 40,
+      "player_mode": "micro",
+      "sublessons": [
+        {
+          "id": "context-managers-checkpoint-micro",
+          "title": "Practice Unit 19 Checkpoint Context Managers",
+          "description": "",
+          "order": 1,
+          "exercises": [
+            {
+              "id": "context-managers-checkpoint-teach",
+              "type": "teach",
+              "question": "Depot pickers recount crates before dawn, and manage a boolean lock flag.",
+              "hints": [
+                "Read the one job this step is practicing.",
+                "The example is about Unit 19 Checkpoint Context Managers.",
+                "self.open = 1"
+              ],
+              "explanation": "Depot pickers recount crates before dawn, and manage a boolean lock flag.",
+              "xp_reward": 0,
+              "worked_example": "self.open = 1"
+            },
+            {
+              "id": "context-managers-checkpoint-mcq",
+              "type": "mcq",
+              "question": "Depot pickers recount crates before dawn. For manage a boolean lock flag, which line shows the flag while the lock is held?",
+              "hints": [
+                "Compare each line with the example.",
+                "One line matches the example.",
+                "self.open = 1"
+              ],
+              "explanation": "Inside the block the flag is on.",
+              "xp_reward": 10,
+              "options": [
+                "self.open == 1",
+                "print(self)",
+                "self.open = 1",
+                "return 0"
+              ],
+              "correct_answer": "self.open = 1"
+            },
+            {
+              "id": "context-managers-checkpoint-predict",
+              "type": "output_prediction",
+              "question": "Depot pickers recount crates before dawn. For manage a boolean lock flag, what value is displayed?",
+              "hints": [
+                "Run the example in your head from the top.",
+                "The last line is what gets displayed.",
+                "24"
+              ],
+              "explanation": "The Unit 19 Checkpoint Context Managers program displays that value.",
+              "xp_reward": 10,
+              "starter_code": "class Lock:\n    def __init__(self):\n        self.open = 0\n    def __enter__(self):\n        self.open = 1\n        return self\n    def __exit__(self, *args):\n        self.open = 0\n        return False\nlock = Lock()\nwith lock:\n    held = lock.open\nprint(held * 23 + held)\n",
+              "options": [
+                "23",
+                "0",
+                "24",
+                "none"
+              ],
+              "correct_answer": "24"
+            },
+            {
+              "id": "context-managers-checkpoint-order",
+              "type": "ordering",
+              "question": "Depot pickers recount crates before dawn. For manage a boolean lock flag, build the line that shows the flag while the lock is held.",
+              "hints": [
+                "Start at the left of the example.",
+                "Keep the example order.",
+                "self.open = 1"
+              ],
+              "explanation": "self.open = 1 turns the flag on.",
+              "xp_reward": 10,
+              "options": [
+                "self.open",
+                "=",
+                "1",
+                "=="
+              ],
+              "correct_answer": [
+                "self.open",
+                "=",
+                "1"
+              ]
+            },
+            {
+              "id": "context-managers-checkpoint-fill",
+              "type": "fill_blank",
+              "question": "Depot pickers recount crates before dawn. For manage a boolean lock flag, fill the blank so the line shows the flag while the lock is held.",
+              "hints": [
+                "The blank is the missing piece of the example.",
+                "The example uses that piece.",
+                "+"
+              ],
+              "explanation": "Plus adds the flag after the scaled reading.",
+              "xp_reward": 10,
+              "starter_code": "shown = held * reading ___ held\n",
+              "options": [
+                "-",
+                "*",
+                "+",
+                "=="
+              ],
+              "correct_answer": "+"
+            },
+            {
+              "id": "context-managers-checkpoint-bug",
+              "type": "debugging",
+              "question": "Depot pickers recount crates before dawn. For manage a boolean lock flag, which line does a different job than the example?",
+              "hints": [
+                "The other lines match the example.",
+                "One line is the odd one.",
+                "Line 5"
+              ],
+              "explanation": "The flag is set to five instead of on.",
+              "xp_reward": 10,
+              "starter_code": "class Lock:\n    def __init__(self):\n        self.open = 0\n    def __enter__(self):\n        self.open = 5\n        return self\n    def __exit__(self, *args):\n        self.open = 0\n        return False\nlock = Lock()\nwith lock:\n    held = lock.open\nprint(held)\n",
+              "correct_answer": "5"
+            },
+            {
+              "id": "context-managers-checkpoint-predict-2",
+              "type": "output_prediction",
+              "question": "Depot pickers recount crates before dawn. For manage a boolean lock flag, what does the second run display?",
+              "hints": [
+                "Apply the same steps to the new value.",
+                "The display comes from the last line.",
+                "23"
+              ],
+              "explanation": "The second Unit 19 Checkpoint Context Managers program displays that value.",
+              "xp_reward": 10,
+              "starter_code": "class Lock:\n    def __init__(self):\n        self.open = 0\n    def __enter__(self):\n        self.open = 1\n        return self\n    def __exit__(self, *args):\n        self.open = 0\n        return False\nlock = Lock()\nwith lock:\n    held = lock.open\nheld = lock.open\nprint(held * 23 + 23)\n",
+              "options": [
+                "24",
+                "23",
+                "none",
+                "0"
+              ],
+              "correct_answer": "23"
+            },
+            {
+              "id": "context-managers-checkpoint-write",
+              "type": "code",
+              "question": "Depot pickers recount crates before dawn. For manage a boolean lock flag, fill the blank so the program prints the result.",
+              "hints": [
+                "The blank is the missing piece.",
+                "Print the value that piece produces.",
+                "label = lock.open"
+              ],
+              "explanation": "The held flag is what gets printed.",
+              "xp_reward": 10,
+              "starter_code": "class Lock:\n    def __init__(self):\n        self.open = 0\n    def __enter__(self):\n        self.open = 1\n        return self\n    def __exit__(self, *args):\n        self.open = 0\n        return False\nlock = Lock()\nwith lock:\n    label = ___\nprint(label)\n",
+              "solution_code": "class Lock:\n    def __init__(self):\n        self.open = 0\n    def __enter__(self):\n        self.open = 1\n        return self\n    def __exit__(self, *args):\n        self.open = 0\n        return False\nlock = Lock()\nwith lock:\n    label = lock.open\nprint(label)\n",
+              "tests": [
+                {
+                  "name": "context-managers-checkpoint-prints",
+                  "description": "The held flag is what gets printed.",
+                  "expected_stdout": "1\n",
+                  "required": true
+                }
+              ]
+            }
+          ]
+        }
+      ]
     }
   ]
 }

@@ -14,8 +14,8 @@
   "lessons": [
     {
       "id": "ts-03",
-      "title": "3. Generic Data Structures",
-      "description": "Generics are types which take parameters. Implement a generic class Box<T> that stores a private value field assigned in the constructor and a getValue(): T method returning it. Declare the field explicitly (constructor parameter-property shorthand is not plain erasable TypeScript). Tests build Box<number> and Box<string>. The test checks that `n.getValue()` equals `= 42`; `s.getValue()` equals `= 'x'`; `n.getValue()` equals `42`.",
+      "title": "Practice Generic Data Structures",
+      "description": "Generics are types which take parameters. Implement a generic class Box<T> that stores a private value field assigned in the constructor and a getValue(): T method returning it. Declare the field explicitly (constructor parameter-property shorthand is not plain erasable TypeScript). Tests build Box<number> and Box<string>. The test checks that n.getValue() equals = 42; s.getValue() equals = 'x'; n.getValue() equals 42.",
       "order": 3,
       "difficulty": "intermediate",
       "duration_minutes": 5,
@@ -40,9 +40,7 @@
         ]
       },
       "learning_objectives": [
-        "Define generic classes that take a type parameter <T>",
-        "Initialize class fields in the constructor",
-        "Return typed values from instance methods"
+        "Orchard clerks recount crates before dawn, and define generic classes that take a type parameter T."
       ],
       "source": {
         "name": "TypeScript Handbook — Generics — 'types which take parameters'",
@@ -52,35 +50,180 @@
       "xp_reward": 10,
       "sublessons": [
         {
-          "id": "ts-generics-sub",
-          "title": "Select the valid declarations",
+          "id": "ts-03-micro",
+          "title": "Practice Generic Data Structures",
+          "description": "",
           "order": 1,
           "exercises": [
             {
-              "id": "ts-generics-multi-1",
-              "type": "select_multiple",
-              "question": "This lesson's `Box<T>` must stay in plain erasable TypeScript: the field is declared on the class and assigned in the constructor. Select every declaration the lesson allows.",
+              "id": "ts-03-teach",
+              "type": "teach",
+              "question": "Orchard clerks recount crates before dawn, and define generic classes that take a type parameter T.",
+              "hints": [
+                "Read the one job this step is practicing.",
+                "The example is about Generic Data Structures.",
+                "return items[0];"
+              ],
+              "explanation": "Orchard clerks recount crates before dawn, and define generic classes that take a type parameter T.",
+              "xp_reward": 0,
+              "worked_example": "return items[0];"
+            },
+            {
+              "id": "ts-03-mcq",
+              "type": "mcq",
+              "question": "Orchard clerks recount crates before dawn. For define generic classes that take a type parameter T, which line returns the first item from a generic list?",
+              "hints": [
+                "Compare each line with the example.",
+                "One line matches the example.",
+                "function first<T>(items: T[]): T { return items[0]; }"
+              ],
+              "explanation": "first returns items[0] for whatever type the list holds.",
+              "xp_reward": 10,
               "options": [
-                "private value: T; declared on the class",
-                "this.value = value inside the constructor",
-                "getValue(): T returning the stored value",
-                "constructor(private value: T) parameter-property shorthand"
+                "items == items;",
+                "function first<T>(items: T[]): T { return items[0]; }",
+                "console.log(items);",
+                "return;"
+              ],
+              "correct_answer": "function first<T>(items: T[]): T { return items[0]; }"
+            },
+            {
+              "id": "ts-03-predict",
+              "type": "output_prediction",
+              "question": "Orchard clerks recount crates before dawn. For define generic classes that take a type parameter T, what value is displayed?",
+              "hints": [
+                "Run the example in your head from the top.",
+                "The last line is what gets displayed.",
+                "25"
+              ],
+              "explanation": "The Generic Data Structures program displays that value.",
+              "xp_reward": 10,
+              "starter_code": "function first<T>(items: T[]): T { return items[0]; }\nconst items = [25, 2, 3];\nconsole.log(first(items));\n",
+              "options": [
+                "amber",
+                "25",
+                "none",
+                "0"
+              ],
+              "correct_answer": "25"
+            },
+            {
+              "id": "ts-03-order",
+              "type": "ordering",
+              "question": "Orchard clerks recount crates before dawn. For define generic classes that take a type parameter T, build the line that returns the first item from a generic list.",
+              "hints": [
+                "Start at the left of the example.",
+                "Keep the example order.",
+                "function first<T>(items: T[]): T { return items[0]; }"
+              ],
+              "explanation": "first returns items[0] for whatever type the list holds.",
+              "xp_reward": 10,
+              "options": [
+                "function",
+                "first<T>(items:",
+                "T[]):",
+                "T",
+                "{",
+                "return",
+                "items[0];",
+                "}",
+                "any"
               ],
               "correct_answer": [
-                "private value: T; declared on the class",
-                "this.value = value inside the constructor",
-                "getValue(): T returning the stored value"
+                "function",
+                "first<T>(items:",
+                "T[]):",
+                "T",
+                "{",
+                "return",
+                "items[0];",
+                "}"
+              ]
+            },
+            {
+              "id": "ts-03-fill",
+              "type": "fill_blank",
+              "question": "Orchard clerks recount crates before dawn. For define generic classes that take a type parameter T, fill the blank so the line returns the first item from a generic list.",
+              "hints": [
+                "The blank is the missing piece of the example.",
+                "The example uses that piece.",
+                "0"
               ],
-              "explanation": "Parameter-property shorthand is TypeScript-only syntax that no erasable-syntax runtime understands, so the field has to be declared and assigned explicitly.",
-              "xp_reward": 10
+              "explanation": "first returns items[0] for whatever type the list holds.",
+              "xp_reward": 10,
+              "starter_code": "function first<T>(items: T[]): T { return items[___]; }\n",
+              "options": [
+                "1",
+                "0",
+                "2",
+                "9"
+              ],
+              "correct_answer": "0"
+            },
+            {
+              "id": "ts-03-bug",
+              "type": "debugging",
+              "question": "Orchard clerks recount crates before dawn. For define generic classes that take a type parameter T, which line does a different job than the example?",
+              "hints": [
+                "The other lines match the example.",
+                "One line is the odd one.",
+                "Line 1"
+              ],
+              "explanation": "The function returns the second item instead of the first.",
+              "xp_reward": 10,
+              "starter_code": "function first<T>(items: T[]): T { return items[1]; }\nconsole.log(first([25, 2]));\n",
+              "correct_answer": "1"
+            },
+            {
+              "id": "ts-03-predict-2",
+              "type": "output_prediction",
+              "question": "Orchard clerks recount crates before dawn. For define generic classes that take a type parameter T, what does the second run display?",
+              "hints": [
+                "Apply the same steps to the new value.",
+                "The display comes from the last line.",
+                "amber"
+              ],
+              "explanation": "The second Generic Data Structures program displays that value.",
+              "xp_reward": 10,
+              "starter_code": "function first<T>(items: T[]): T { return items[0]; }\nconst items = [\"amber\", \"ember\"];\nconsole.log(first(items));\n",
+              "options": [
+                "25",
+                "none",
+                "0",
+                "amber"
+              ],
+              "correct_answer": "amber"
+            },
+            {
+              "id": "ts-03-write",
+              "type": "code",
+              "question": "Orchard clerks recount crates before dawn. For define generic classes that take a type parameter T, fill the blank so the program prints the result.",
+              "hints": [
+                "The blank is the missing piece.",
+                "Print the value that piece produces.",
+                "const label = first(items);"
+              ],
+              "explanation": "The printed value is the result after this step returns the first item from a generic list.",
+              "xp_reward": 10,
+              "starter_code": "function first<T>(items: T[]): T { return items[0]; }\nconst items = [25, 2, 3];\nconst label = ___;\nconsole.log(label);\n",
+              "solution_code": "function first<T>(items: T[]): T { return items[0]; }\nconst items = [25, 2, 3];\nconst label = first(items);\nconsole.log(label);\n",
+              "tests": [
+                {
+                  "name": "ts-03-prints",
+                  "description": "The printed value is the result after this step returns the first item from a ge",
+                  "expected_stdout": "25\n",
+                  "required": true
+                }
+              ]
             }
           ]
         }
-      ]
+      ],
+      "player_mode": "micro"
     },
     {
       "id": "ts-06",
-      "title": "6. The Identity Function with Generics",
+      "title": "Practice The Identity Function with Generics",
       "description": "The 'Hello World of Generics' is the identity function: a generic function identity<T>(arg: T): T that returns whatever is passed in, keeping the caller's type. Implement and export it (no type assertions needed - the parameter already has type T). The test calls it with <number> and <string>.",
       "order": 6,
       "difficulty": "beginner",
@@ -94,9 +237,7 @@
       ],
       "prerequisites": [],
       "learning_objectives": [
-        "Write a generic function with a type parameter <T>",
-        "Let the caller supply (or infer) the type argument",
-        "Return values typed T from generic functions"
+        "Quarry clerks recount crates before dawn, and write a generic function with a type parameter T."
       ],
       "source": {
         "name": "TypeScript Handbook — Generics — 'Hello World of Generics' (the identity function)",
@@ -117,7 +258,179 @@
           "test_identity"
         ]
       },
-      "xp_reward": 10
+      "xp_reward": 10,
+      "player_mode": "micro",
+      "sublessons": [
+        {
+          "id": "ts-06-micro",
+          "title": "Practice The Identity Function with Generics",
+          "description": "",
+          "order": 1,
+          "exercises": [
+            {
+              "id": "ts-06-teach",
+              "type": "teach",
+              "question": "Quarry clerks recount crates before dawn, and write a generic function with a type parameter T.",
+              "hints": [
+                "Read the one job this step is practicing.",
+                "The example is about The Identity Function with Generics.",
+                "return value;"
+              ],
+              "explanation": "Quarry clerks recount crates before dawn, and write a generic function with a type parameter T.",
+              "xp_reward": 0,
+              "worked_example": "return value;"
+            },
+            {
+              "id": "ts-06-mcq",
+              "type": "mcq",
+              "question": "Quarry clerks recount crates before dawn. For write a generic function with a type parameter T, which line returns the same value from a generic identity?",
+              "hints": [
+                "Compare each line with the example.",
+                "One line matches the example.",
+                "function identity<T>(value: T): T { return value; }"
+              ],
+              "explanation": "identity returns the argument unchanged.",
+              "xp_reward": 10,
+              "options": [
+                "value == value;",
+                "function identity<T>(value: T): T { return value; }",
+                "console.log(value);",
+                "return;"
+              ],
+              "correct_answer": "function identity<T>(value: T): T { return value; }"
+            },
+            {
+              "id": "ts-06-predict",
+              "type": "output_prediction",
+              "question": "Quarry clerks recount crates before dawn. For write a generic function with a type parameter T, what value is displayed?",
+              "hints": [
+                "Run the example in your head from the top.",
+                "The last line is what gets displayed.",
+                "28"
+              ],
+              "explanation": "The The Identity Function with Generics program displays that value.",
+              "xp_reward": 10,
+              "starter_code": "function identity<T>(value: T): T { return value; }\nconsole.log(identity(28));\n",
+              "options": [
+                "delta",
+                "28",
+                "none",
+                "0"
+              ],
+              "correct_answer": "28"
+            },
+            {
+              "id": "ts-06-order",
+              "type": "ordering",
+              "question": "Quarry clerks recount crates before dawn. For write a generic function with a type parameter T, build the line that returns the same value from a generic identity.",
+              "hints": [
+                "Start at the left of the example.",
+                "Keep the example order.",
+                "function identity<T>(value: T): T { return value; }"
+              ],
+              "explanation": "identity returns the argument unchanged.",
+              "xp_reward": 10,
+              "options": [
+                "function",
+                "identity<T>(value:",
+                "T):",
+                "T",
+                "{",
+                "return",
+                "value;",
+                "}",
+                "any"
+              ],
+              "correct_answer": [
+                "function",
+                "identity<T>(value:",
+                "T):",
+                "T",
+                "{",
+                "return",
+                "value;",
+                "}"
+              ]
+            },
+            {
+              "id": "ts-06-fill",
+              "type": "fill_blank",
+              "question": "Quarry clerks recount crates before dawn. Choose the match for this step.",
+              "hints": [
+                "The blank is the missing piece of the example.",
+                "The example uses that piece.",
+                "value"
+              ],
+              "explanation": "identity returns the argument unchanged.",
+              "xp_reward": 10,
+              "starter_code": "function identity<T>(value: T): T { return ___; }\n",
+              "options": [
+                "T",
+                "identity",
+                "value",
+                "null"
+              ],
+              "correct_answer": "value"
+            },
+            {
+              "id": "ts-06-bug",
+              "type": "debugging",
+              "question": "Quarry clerks recount crates before dawn. For write a generic function with a type parameter T, which line does a different job than the example?",
+              "hints": [
+                "The other lines match the example.",
+                "One line is the odd one.",
+                "Line 2"
+              ],
+              "explanation": "The print adds one after identity already returned the value.",
+              "xp_reward": 10,
+              "starter_code": "function identity<T>(value: T): T { return value; }\nconsole.log(identity(28) + 1);\n",
+              "correct_answer": "2"
+            },
+            {
+              "id": "ts-06-predict-2",
+              "type": "output_prediction",
+              "question": "Quarry clerks recount crates before dawn. For write a generic function with a type parameter T, what does the second run display?",
+              "hints": [
+                "Apply the same steps to the new value.",
+                "The display comes from the last line.",
+                "delta"
+              ],
+              "explanation": "The second The Identity Function with Generics program displays that value.",
+              "xp_reward": 10,
+              "starter_code": "function identity<T>(value: T): T { return value; }\nconsole.log(identity(\"delta\"));\n",
+              "options": [
+                "28",
+                "none",
+                "0",
+                "delta"
+              ],
+              "correct_answer": "delta"
+            },
+            {
+              "id": "ts-06-write",
+              "type": "code",
+              "question": "Quarry clerks recount crates before dawn. For write a generic function with a type parameter T, fill the blank so the program prints the result.",
+              "hints": [
+                "The blank is the missing piece.",
+                "Print the value that piece produces.",
+                "const label = identity(28);"
+              ],
+              "explanation": "The printed value is the result after this step returns the same value from a generic identity.",
+              "xp_reward": 10,
+              "starter_code": "function identity<T>(value: T): T { return value; }\nconst label = ___;\nconsole.log(label);\n",
+              "solution_code": "function identity<T>(value: T): T { return value; }\nconst label = identity(28);\nconsole.log(label);\n",
+              "tests": [
+                {
+                  "name": "ts-06-prints",
+                  "description": "The printed value is the result after this step returns the same value from a ge",
+                  "expected_stdout": "28\n",
+                  "required": true
+                }
+              ]
+            }
+          ]
+        }
+      ]
     }
   ]
 }

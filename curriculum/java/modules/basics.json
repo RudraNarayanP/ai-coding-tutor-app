@@ -12,8 +12,8 @@
   "lessons": [
     {
       "id": "java-variables-step-1",
-      "title": "1. Hello Java & String Variables",
-      "description": "Welcome to Java! Java is a strongly-typed, object-oriented language. Create a class `Solution` with a static method `getLanguage()` returning \"Java\". The test checks that `Solution.getLanguage(` equals `\"Java\"`.",
+      "title": "Practice Hello Java String Variables",
+      "description": "Welcome to Java! Java is a strongly-typed, object-oriented language. Create a class Solution with a static method getLanguage() returning \"Java\". The test checks that Solution.getLanguage( equals \"Java\".",
       "order": 1,
       "difficulty": "beginner",
       "duration_minutes": 5,
@@ -26,7 +26,7 @@
       ],
       "prerequisites": [],
       "learning_objectives": [
-        "Declare a Java class and return a String literal"
+        "Depot clerks recount crates before dawn, and declare a Java class and return a String literal."
       ],
       "starter_code": "public class Solution {\n    public static String getLanguage() {\n        // TODO: return the name of the language\n        return null;\n    }\n}\n",
       "solution_code": "public class Solution {\n    public static String getLanguage() {\n        return \"Java\";\n    }\n}\n",
@@ -44,60 +44,163 @@
       },
       "sublessons": [
         {
-          "id": "java-var-sub-1",
-          "title": "Java Basics & String Types",
+          "id": "java-variables-step-1-micro",
+          "title": "Practice Hello Java String Variables",
+          "description": "",
           "order": 1,
           "exercises": [
             {
-              "id": "java-ex-1a",
-              "type": "mcq",
-              "question": "Which keyword sends a value back to the caller of a Java method?",
-              "options": [
-                "yield",
-                "output",
-                "return",
-                "send"
+              "id": "java-variables-step-1-teach",
+              "type": "teach",
+              "question": "Depot clerks recount crates before dawn, and declare a Java class and return a String literal.",
+              "hints": [
+                "Read the one job this step is practicing.",
+                "The example is about Hello Java String Variables.",
+                "String item = \"zircon\";"
               ],
-              "correct_answer": "return",
-              "xp_reward": 10,
-              "explanation": "In Java, the 'return' keyword sends a result back from a method."
+              "explanation": "Depot clerks recount crates before dawn, and declare a Java class and return a String literal.",
+              "xp_reward": 0,
+              "worked_example": "String item = \"zircon\";"
             },
             {
-              "id": "java-ex-1b",
-              "type": "fill_blank",
-              "question": "Complete the return statement so the method gives back the language name:",
-              "starter_code": "return ___;",
-              "blanks": [
-                "\"Java\""
+              "id": "java-variables-step-1-mcq",
+              "type": "mcq",
+              "question": "Depot clerks recount crates before dawn. For declare a Java class and return a String literal, which line stores text in a String variable?",
+              "hints": [
+                "Compare each line with the example.",
+                "One line matches the example.",
+                "String item = word;"
+              ],
+              "explanation": "String item = word; stores the text.",
+              "xp_reward": 10,
+              "options": [
+                "return item;",
+                "String item = word;",
+                "System.exit(0);",
+                "item == word;"
+              ],
+              "correct_answer": "String item = word;"
+            },
+            {
+              "id": "java-variables-step-1-predict",
+              "type": "output_prediction",
+              "question": "Depot clerks recount crates before dawn. For declare a Java class and return a String literal, what value is displayed?",
+              "hints": [
+                "Run the example in your head from the top.",
+                "The last line is what gets displayed.",
+                "zircon"
+              ],
+              "explanation": "The Hello Java String Variables program displays that value.",
+              "xp_reward": 10,
+              "starter_code": "public class Solution {\n    public static void main(String[] args) {\n        String item = \"zircon\";\n        System.out.println(item);\n    }\n}\n",
+              "options": [
+                "delta",
+                "none",
+                "zircon",
+                "0"
+              ],
+              "correct_answer": "zircon"
+            },
+            {
+              "id": "java-variables-step-1-order",
+              "type": "ordering",
+              "question": "Depot clerks recount crates before dawn. For declare a Java class and return a String literal, build the line that stores text in a String variable.",
+              "hints": [
+                "Start at the left of the example.",
+                "Keep the example order.",
+                "String item = word;"
+              ],
+              "explanation": "String item = word; stores the text.",
+              "xp_reward": 10,
+              "options": [
+                "String",
+                "item",
+                "=",
+                "word;",
+                "=="
               ],
               "correct_answer": [
-                "\"Java\""
-              ],
-              "xp_reward": 10,
-              "explanation": "Java String literals use double quotes, e.g., \"Java\"."
-            }
-          ]
-        },
-        {
-          "id": "java-var-sub-2",
-          "title": "Method Implementation",
-          "order": 2,
-          "exercises": [
+                "String",
+                "item",
+                "=",
+                "word;"
+              ]
+            },
             {
-              "id": "java-ex-2a",
+              "id": "java-variables-step-1-fill",
+              "type": "fill_blank",
+              "question": "Depot clerks recount crates before dawn. For declare a Java class and return a String literal, fill the blank so the line stores text in a String variable.",
+              "hints": [
+                "The blank is the missing piece of the example.",
+                "The example uses that piece.",
+                "word"
+              ],
+              "explanation": "String item = word; stores the text.",
+              "xp_reward": 10,
+              "starter_code": "String item = ___;",
+              "options": [
+                "left",
+                "count",
+                "name",
+                "word"
+              ],
+              "correct_answer": "word"
+            },
+            {
+              "id": "java-variables-step-1-bug",
+              "type": "debugging",
+              "question": "Depot clerks recount crates before dawn. For declare a Java class and return a String literal, which line does a different job than the example?",
+              "hints": [
+                "The other lines match the example.",
+                "One line is the odd one.",
+                "Line 4"
+              ],
+              "explanation": "The print appends a mark that was not stored in the variable.",
+              "xp_reward": 10,
+              "starter_code": "public class Solution {\n    public static void main(String[] args) {\n        String item = \"zircon\";\n        System.out.println(item + \"!\");\n    }\n}\n",
+              "correct_answer": "4"
+            },
+            {
+              "id": "java-variables-step-1-predict-2",
+              "type": "output_prediction",
+              "question": "Depot clerks recount crates before dawn. For declare a Java class and return a String literal, what does the second run display?",
+              "hints": [
+                "Apply the same steps to the new value.",
+                "The display comes from the last line.",
+                "delta"
+              ],
+              "explanation": "The second Hello Java String Variables program displays that value.",
+              "xp_reward": 10,
+              "starter_code": "public class Solution {\n    public static void main(String[] args) {\n        String item = \"delta\";\n        System.out.println(item);\n    }\n}\n",
+              "options": [
+                "zircon",
+                "delta",
+                "none",
+                "0"
+              ],
+              "correct_answer": "delta"
+            },
+            {
+              "id": "java-variables-step-1-write",
               "type": "code",
-              "title": "Implement getLanguage()",
-              "question": "Implement static method getLanguage() returning 'Java'.",
-              "starter_code": "public class Solution {\n    public static String getLanguage() {\n        return \"\";\n    }\n}\n",
-              "solution_code": "public class Solution {\n    public static String getLanguage() {\n        return \"Java\";\n    }\n}\n",
+              "question": "Depot clerks recount crates before dawn. For declare a Java class and return a String literal, fill the blank so the program prints the result.",
+              "hints": [
+                "The blank is the missing piece.",
+                "Print the value that piece produces.",
+                "String label = item;"
+              ],
+              "explanation": "The printed value is the result after this step stores text in a String variable.",
+              "xp_reward": 10,
+              "starter_code": "public class Solution {\n    public static void main(String[] args) {\n        String item = \"zircon\";\n        String label = ___;\n        System.out.println(label);\n    }\n}\n",
+              "solution_code": "public class Solution {\n    public static void main(String[] args) {\n        String item = \"zircon\";\n        String label = item;\n        System.out.println(label);\n    }\n}\n",
               "tests": [
                 {
-                  "name": "test_get_language",
-                  "test_code": "if (!Solution.getLanguage().equals(\"Java\")) throw new AssertionError();",
+                  "name": "java-variables-step-1-prints",
+                  "description": "The printed value is the result after this step stores text in a String variable",
+                  "expected_stdout": "zircon\n",
                   "required": true
                 }
-              ],
-              "xp_reward": 15
+              ]
             }
           ]
         }
@@ -139,12 +242,13 @@
         "url": "https://docs.oracle.com/javase/tutorial/java/javaOO/methods.html",
         "license": "Oracle Free Use Terms and Conditions (documentation)"
       },
-      "xp_reward": 10
+      "xp_reward": 10,
+      "player_mode": "micro"
     },
     {
       "id": "java-variables-step-2",
-      "title": "2. Integers & Arithmetic",
-      "description": "In Java, integers use the `int` primitive type. Create a method `calculateTotal(int price, int quantity)` returning `price * quantity`. The test checks that `Solution.calculateTotal(15, 3)` equals `45`.",
+      "title": "Practice Integers Arithmetic",
+      "description": "In Java, integers use the int primitive type. Create a method calculateTotal(int price, int quantity) returning price * quantity. The test checks that Solution.calculateTotal(15, 3) equals 45.",
       "order": 2,
       "difficulty": "beginner",
       "duration_minutes": 5,
@@ -157,7 +261,7 @@
       ],
       "prerequisites": [],
       "learning_objectives": [
-        "Use primitive int type and arithmetic in Java"
+        "Ridge clerks recount crates before dawn, and use primitive int type and arithmetic in Java."
       ],
       "starter_code": "public class Solution {\n    public static int calculateTotal(int price, int quantity) {\n        // TODO: return the total cost\n        return 0;\n    }\n}\n",
       "solution_code": "public class Solution {\n    public static int calculateTotal(int price, int quantity) {\n        return price * quantity;\n    }\n}\n",
@@ -181,12 +285,180 @@
         "url": "https://docs.oracle.com/javase/tutorial/java/nutsandbolts/variables.html",
         "license": "Oracle Free Use Terms and Conditions (documentation)"
       },
-      "xp_reward": 10
+      "xp_reward": 10,
+      "player_mode": "micro",
+      "sublessons": [
+        {
+          "id": "java-variables-step-2-micro",
+          "title": "Practice Integers Arithmetic",
+          "description": "",
+          "order": 1,
+          "exercises": [
+            {
+              "id": "java-variables-step-2-teach",
+              "type": "teach",
+              "question": "Ridge clerks recount crates before dawn, and use primitive int type and arithmetic in Java.",
+              "hints": [
+                "Read the one job this step is practicing.",
+                "The example is about Integers Arithmetic.",
+                "int left = 50;"
+              ],
+              "explanation": "Ridge clerks recount crates before dawn, and use primitive int type and arithmetic in Java.",
+              "xp_reward": 0,
+              "worked_example": "int left = 50;"
+            },
+            {
+              "id": "java-variables-step-2-mcq",
+              "type": "mcq",
+              "question": "Ridge clerks recount crates before dawn. For use primitive int type and arithmetic in Java, which line stores the sum of two integers?",
+              "hints": [
+                "Compare each line with the example.",
+                "One line matches the example.",
+                "int total = left + right;"
+              ],
+              "explanation": "int total = left + right; stores the sum.",
+              "xp_reward": 10,
+              "options": [
+                "return left;",
+                "left == right;",
+                "total == left;",
+                "int total = left + right;"
+              ],
+              "correct_answer": "int total = left + right;"
+            },
+            {
+              "id": "java-variables-step-2-predict",
+              "type": "output_prediction",
+              "question": "Ridge clerks recount crates before dawn. For use primitive int type and arithmetic in Java, what value is displayed?",
+              "hints": [
+                "Run the example in your head from the top.",
+                "The last line is what gets displayed.",
+                "55"
+              ],
+              "explanation": "The Integers Arithmetic program displays that value.",
+              "xp_reward": 10,
+              "starter_code": "public class Solution {\n    public static void main(String[] args) {\n        int left = 50;\n        int right = 5;\n        System.out.println(left + right);\n    }\n}\n",
+              "options": [
+                "59",
+                "0",
+                "none",
+                "55"
+              ],
+              "correct_answer": "55"
+            },
+            {
+              "id": "java-variables-step-2-order",
+              "type": "ordering",
+              "question": "Ridge clerks recount crates before dawn. For use primitive int type and arithmetic in Java, build the line that stores the sum of two integers.",
+              "hints": [
+                "Start at the left of the example.",
+                "Keep the example order.",
+                "int total = left + right;"
+              ],
+              "explanation": "int total = left + right; stores the sum.",
+              "xp_reward": 10,
+              "options": [
+                "int",
+                "total",
+                "=",
+                "left",
+                "+",
+                "right;",
+                "=="
+              ],
+              "correct_answer": [
+                "int",
+                "total",
+                "=",
+                "left",
+                "+",
+                "right;"
+              ]
+            },
+            {
+              "id": "java-variables-step-2-fill",
+              "type": "fill_blank",
+              "question": "Ridge clerks recount crates before dawn. For use primitive int type and arithmetic in Java, fill the blank so the line stores the sum of two integers.",
+              "hints": [
+                "The blank is the missing piece of the example.",
+                "The example uses that piece.",
+                "+"
+              ],
+              "explanation": "int total = left + right; stores the sum.",
+              "xp_reward": 10,
+              "starter_code": "int total = left ___ right;",
+              "options": [
+                "==",
+                "+",
+                "-",
+                "*"
+              ],
+              "correct_answer": "+"
+            },
+            {
+              "id": "java-variables-step-2-bug",
+              "type": "debugging",
+              "question": "Ridge clerks recount crates before dawn. For use primitive int type and arithmetic in Java, which line does a different job than the example?",
+              "hints": [
+                "The other lines match the example.",
+                "One line is the odd one.",
+                "Line 5"
+              ],
+              "explanation": "The print subtracts instead of adding.",
+              "xp_reward": 10,
+              "starter_code": "public class Solution {\n    public static void main(String[] args) {\n        int left = 50;\n        int right = 5;\n        System.out.println(left - right);\n    }\n}\n",
+              "correct_answer": "5"
+            },
+            {
+              "id": "java-variables-step-2-predict-2",
+              "type": "output_prediction",
+              "question": "Ridge clerks recount crates before dawn. For use primitive int type and arithmetic in Java, what does the second run display?",
+              "hints": [
+                "Apply the same steps to the new value.",
+                "The display comes from the last line.",
+                "59"
+              ],
+              "explanation": "The second Integers Arithmetic program displays that value.",
+              "xp_reward": 10,
+              "starter_code": "public class Solution {\n    public static void main(String[] args) {\n        int left = 50;\n        int right = 9;\n        System.out.println(left + right);\n    }\n}\n",
+              "options": [
+                "55",
+                "0",
+                "59",
+                "none"
+              ],
+              "correct_answer": "59"
+            },
+            {
+              "id": "java-variables-step-2-write",
+              "type": "code",
+              "question": "Ridge clerks recount crates before dawn. For use primitive int type and arithmetic in Java, fill the blank so the program prints the result.",
+              "hints": [
+                "The blank is the missing piece.",
+                "Print the value that piece produces.",
+                "int label = left + right;"
+              ],
+              "explanation": "The printed value is the result after this step stores the sum of two integers.",
+              "xp_reward": 10,
+              "starter_code": "public class Solution {\n    public static void main(String[] args) {\n        int left = 50;\n        int right = 5;\n        int label = ___;\n        System.out.println(label);\n    }\n}\n",
+              "solution_code": "public class Solution {\n    public static void main(String[] args) {\n        int left = 50;\n        int right = 5;\n        int label = left + right;\n        System.out.println(label);\n    }\n}\n",
+              "tests": [
+                {
+                  "name": "java-variables-step-2-prints",
+                  "description": "The printed value is the result after this step stores the sum of two integers.",
+                  "expected_stdout": "55\n",
+                  "required": true
+                }
+              ]
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "java-variables-01",
-      "title": "3. Coffee Shop Order Billing",
-      "description": "Finish `calculateBill`. Calculate total order cost including sales tax: multiply `itemPrice` by `count`, then apply `taxRate` as a fraction. The test checks that `bill` is about `8.80`.",
+      "title": "Practice Coffee Shop Order Billing",
+      "description": "Finish calculateBill. Calculate total order cost including sales tax: multiply itemPrice by count, then apply taxRate as a fraction. The test checks that bill is about 8.80.",
       "order": 3,
       "difficulty": "beginner",
       "duration_minutes": 8,
@@ -199,7 +471,7 @@
       ],
       "prerequisites": [],
       "learning_objectives": [
-        "Combine double primitive math and casting in Java"
+        "Cove clerks recount crates before dawn, and combine double primitive math and casting in Java."
       ],
       "starter_code": "public class Solution {\n    public static double calculateBill(double itemPrice, int count, double taxRate) {\n        // TODO: return the bill total including tax\n        return 0.0;\n    }\n}\n",
       "solution_code": "public class Solution {\n    public static double calculateBill(double itemPrice, int count, double taxRate) {\n        return (itemPrice * count) * (1.0 + taxRate);\n    }\n}\n",
@@ -220,12 +492,180 @@
         "url": "https://docs.oracle.com/javase/tutorial/java/nutsandbolts/operators.html",
         "license": "Oracle Free Use Terms and Conditions (documentation)"
       },
-      "xp_reward": 25
+      "xp_reward": 25,
+      "player_mode": "micro",
+      "sublessons": [
+        {
+          "id": "java-variables-01-micro",
+          "title": "Practice Coffee Shop Order Billing",
+          "description": "",
+          "order": 1,
+          "exercises": [
+            {
+              "id": "java-variables-01-teach",
+              "type": "teach",
+              "question": "Cove clerks recount crates before dawn, and combine double primitive math and casting in Java.",
+              "hints": [
+                "Read the one job this step is practicing.",
+                "The example is about Coffee Shop Order Billing.",
+                "int price = 48;"
+              ],
+              "explanation": "Cove clerks recount crates before dawn, and combine double primitive math and casting in Java.",
+              "xp_reward": 0,
+              "worked_example": "int price = 48;"
+            },
+            {
+              "id": "java-variables-01-mcq",
+              "type": "mcq",
+              "question": "Cove clerks recount crates before dawn. For combine double primitive math and casting in Java, which line multiplies price by quantity?",
+              "hints": [
+                "Compare each line with the example.",
+                "One line matches the example.",
+                "int total = price * quantity;"
+              ],
+              "explanation": "price * quantity is the bill.",
+              "xp_reward": 10,
+              "options": [
+                "price == quantity;",
+                "return price;",
+                "int total = price * quantity;",
+                "total == price;"
+              ],
+              "correct_answer": "int total = price * quantity;"
+            },
+            {
+              "id": "java-variables-01-predict",
+              "type": "output_prediction",
+              "question": "Cove clerks recount crates before dawn. For combine double primitive math and casting in Java, what value is displayed?",
+              "hints": [
+                "Run the example in your head from the top.",
+                "The last line is what gets displayed.",
+                "144"
+              ],
+              "explanation": "The Coffee Shop Order Billing program displays that value.",
+              "xp_reward": 10,
+              "starter_code": "public class Solution {\n    public static void main(String[] args) {\n        int price = 48;\n        int quantity = 3;\n        System.out.println(price * quantity);\n    }\n}\n",
+              "options": [
+                "0",
+                "192",
+                "none",
+                "144"
+              ],
+              "correct_answer": "144"
+            },
+            {
+              "id": "java-variables-01-order",
+              "type": "ordering",
+              "question": "Cove clerks recount crates before dawn. For combine double primitive math and casting in Java, build the line that multiplies price by quantity.",
+              "hints": [
+                "Start at the left of the example.",
+                "Keep the example order.",
+                "int total = left * right;"
+              ],
+              "explanation": "price * quantity is the bill.",
+              "xp_reward": 10,
+              "options": [
+                "int",
+                "total",
+                "=",
+                "left",
+                "*",
+                "right;",
+                "=="
+              ],
+              "correct_answer": [
+                "int",
+                "total",
+                "=",
+                "left",
+                "*",
+                "right;"
+              ]
+            },
+            {
+              "id": "java-variables-01-fill",
+              "type": "fill_blank",
+              "question": "Cove clerks recount crates before dawn. For combine double primitive math and casting in Java, fill the blank so the line multiplies price by quantity.",
+              "hints": [
+                "The blank is the missing piece of the example.",
+                "The example uses that piece.",
+                "*"
+              ],
+              "explanation": "price * quantity is the bill.",
+              "xp_reward": 10,
+              "starter_code": "int total = left ___ right;",
+              "options": [
+                "+",
+                "-",
+                "*",
+                "=="
+              ],
+              "correct_answer": "*"
+            },
+            {
+              "id": "java-variables-01-bug",
+              "type": "debugging",
+              "question": "Cove clerks recount crates before dawn. For combine double primitive math and casting in Java, which line does a different job than the example?",
+              "hints": [
+                "The other lines match the example.",
+                "One line is the odd one.",
+                "Line 5"
+              ],
+              "explanation": "The print adds the quantity instead of multiplying.",
+              "xp_reward": 10,
+              "starter_code": "public class Solution {\n    public static void main(String[] args) {\n        int price = 48;\n        int quantity = 3;\n        System.out.println(price + quantity);\n    }\n}\n",
+              "correct_answer": "5"
+            },
+            {
+              "id": "java-variables-01-predict-2",
+              "type": "output_prediction",
+              "question": "Cove clerks recount crates before dawn. For combine double primitive math and casting in Java, what does the second run display?",
+              "hints": [
+                "Apply the same steps to the new value.",
+                "The display comes from the last line.",
+                "192"
+              ],
+              "explanation": "The second Coffee Shop Order Billing program displays that value.",
+              "xp_reward": 10,
+              "starter_code": "public class Solution {\n    public static void main(String[] args) {\n        int price = 48;\n        int quantity = 4;\n        System.out.println(price * quantity);\n    }\n}\n",
+              "options": [
+                "0",
+                "144",
+                "none",
+                "192"
+              ],
+              "correct_answer": "192"
+            },
+            {
+              "id": "java-variables-01-write",
+              "type": "code",
+              "question": "Cove clerks recount crates before dawn. For combine double primitive math and casting in Java, fill the blank so the program prints the result.",
+              "hints": [
+                "The blank is the missing piece.",
+                "Print the value that piece produces.",
+                "int label = price * quantity;"
+              ],
+              "explanation": "The printed value is the result after this step multiplies price by quantity.",
+              "xp_reward": 10,
+              "starter_code": "public class Solution {\n    public static void main(String[] args) {\n        int price = 48;\n        int quantity = 3;\n        int label = ___;\n        System.out.println(label);\n    }\n}\n",
+              "solution_code": "public class Solution {\n    public static void main(String[] args) {\n        int price = 48;\n        int quantity = 3;\n        int label = price * quantity;\n        System.out.println(label);\n    }\n}\n",
+              "tests": [
+                {
+                  "name": "java-variables-01-prints",
+                  "description": "The printed value is the result after this step multiplies price by quantity.",
+                  "expected_stdout": "144\n",
+                  "required": true
+                }
+              ]
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "java-variables-practice-1",
-      "title": "4. Temperature Conversion (Practice)",
-      "description": "Finish `fahrenheitToCelsius`. Convert Fahrenheit temperature to Celsius using `(fahrenheit - 32) * 5 / 9`. The test checks that `c` is about `100.0`.",
+      "title": "Practice Temperature Conversion",
+      "description": "Finish fahrenheitToCelsius. Convert Fahrenheit temperature to Celsius using (fahrenheit - 32) * 5 / 9. The test checks that c is about 100.0.",
       "order": 4,
       "difficulty": "beginner",
       "duration_minutes": 6,
@@ -238,7 +678,7 @@
       ],
       "prerequisites": [],
       "learning_objectives": [
-        "Apply formula (F - 32) * 5/9 using doubles"
+        "Plaza clerks recount crates before dawn, and apply formula 5 9 using doubles."
       ],
       "starter_code": "public class Solution {\n    public static double fahrenheitToCelsius(double fahrenheit) {\n        // TODO: return the temperature in Celsius\n        return 0.0;\n    }\n}\n",
       "solution_code": "public class Solution {\n    public static double fahrenheitToCelsius(double fahrenheit) {\n        return (fahrenheit - 32.0) * 5.0 / 9.0;\n    }\n}\n",
@@ -259,12 +699,188 @@
         "url": "https://docs.oracle.com/javase/tutorial/java/nutsandbolts/operators.html",
         "license": "Oracle Free Use Terms and Conditions (documentation)"
       },
-      "xp_reward": 15
+      "xp_reward": 15,
+      "player_mode": "micro",
+      "sublessons": [
+        {
+          "id": "java-variables-practice-1-micro",
+          "title": "Practice Temperature Conversion",
+          "description": "",
+          "order": 1,
+          "exercises": [
+            {
+              "id": "java-variables-practice-1-teach",
+              "type": "teach",
+              "question": "Plaza clerks recount crates before dawn, and apply formula 5 9 using doubles.",
+              "hints": [
+                "Read the one job this step is practicing.",
+                "The example is about Temperature Conversion.",
+                "int celsius = 10;"
+              ],
+              "explanation": "Plaza clerks recount crates before dawn, and apply formula 5 9 using doubles.",
+              "xp_reward": 0,
+              "worked_example": "int celsius = 10;"
+            },
+            {
+              "id": "java-variables-practice-1-mcq",
+              "type": "mcq",
+              "question": "Plaza clerks recount crates before dawn. For apply formula 5 9 using doubles, which line converts Celsius to Fahrenheit with integer math?",
+              "hints": [
+                "Compare each line with the example.",
+                "One line matches the example.",
+                "int fahrenheit = (celsius * 9 / 5) + 32;"
+              ],
+              "explanation": "(celsius * 9 / 5) + 32 converts the temperature.",
+              "xp_reward": 10,
+              "options": [
+                "celsius == 32;",
+                "return celsius;",
+                "int fahrenheit = (celsius * 9 / 5) + 32;",
+                "fahrenheit == celsius;"
+              ],
+              "correct_answer": "int fahrenheit = (celsius * 9 / 5) + 32;"
+            },
+            {
+              "id": "java-variables-practice-1-predict",
+              "type": "output_prediction",
+              "question": "Plaza clerks recount crates before dawn. For apply formula 5 9 using doubles, what value is displayed?",
+              "hints": [
+                "Run the example in your head from the top.",
+                "The last line is what gets displayed.",
+                "50"
+              ],
+              "explanation": "The Temperature Conversion program displays that value.",
+              "xp_reward": 10,
+              "starter_code": "public class Solution {\n    public static void main(String[] args) {\n        int celsius = 10;\n        System.out.println((celsius * 9 / 5) + 32);\n    }\n}\n",
+              "options": [
+                "68",
+                "none",
+                "50",
+                "0"
+              ],
+              "correct_answer": "50"
+            },
+            {
+              "id": "java-variables-practice-1-order",
+              "type": "ordering",
+              "question": "Plaza clerks recount crates before dawn. For apply formula 5 9 using doubles, build the line that converts Celsius to Fahrenheit with integer math.",
+              "hints": [
+                "Start at the left of the example.",
+                "Keep the example order.",
+                "int fahrenheit = (left * 9 / 5) + 32;"
+              ],
+              "explanation": "(celsius * 9 / 5) + 32 converts the temperature.",
+              "xp_reward": 10,
+              "options": [
+                "int",
+                "fahrenheit",
+                "=",
+                "(left",
+                "*",
+                "9",
+                "/",
+                "5)",
+                "+",
+                "32;",
+                "=="
+              ],
+              "correct_answer": [
+                "int",
+                "fahrenheit",
+                "=",
+                "(left",
+                "*",
+                "9",
+                "/",
+                "5)",
+                "+",
+                "32;"
+              ]
+            },
+            {
+              "id": "java-variables-practice-1-fill",
+              "type": "fill_blank",
+              "question": "Plaza clerks recount crates before dawn. For apply formula 5 9 using doubles, fill the blank so the line converts Celsius to Fahrenheit with integer math.",
+              "hints": [
+                "The blank is the missing piece of the example.",
+                "The example uses that piece.",
+                "*"
+              ],
+              "explanation": "(celsius * 9 / 5) + 32 converts the temperature.",
+              "xp_reward": 10,
+              "starter_code": "int fahrenheit = (left ___ 9 / 5) + 32;",
+              "options": [
+                "/",
+                "*",
+                "+",
+                "-"
+              ],
+              "correct_answer": "*"
+            },
+            {
+              "id": "java-variables-practice-1-bug",
+              "type": "debugging",
+              "question": "Plaza clerks recount crates before dawn. For apply formula 5 9 using doubles, which line does a different job than the example?",
+              "hints": [
+                "The other lines match the example.",
+                "One line is the odd one.",
+                "Line 4"
+              ],
+              "explanation": "The formula adds 9 instead of multiplying by 9.",
+              "xp_reward": 10,
+              "starter_code": "public class Solution {\n    public static void main(String[] args) {\n        int celsius = 10;\n        System.out.println((celsius + 9 / 5) + 32);\n    }\n}\n",
+              "correct_answer": "4"
+            },
+            {
+              "id": "java-variables-practice-1-predict-2",
+              "type": "output_prediction",
+              "question": "Plaza clerks recount crates before dawn. For apply formula 5 9 using doubles, what does the second run display?",
+              "hints": [
+                "Apply the same steps to the new value.",
+                "The display comes from the last line.",
+                "68"
+              ],
+              "explanation": "The second Temperature Conversion program displays that value.",
+              "xp_reward": 10,
+              "starter_code": "public class Solution {\n    public static void main(String[] args) {\n        int celsius = 20;\n        System.out.println((celsius * 9 / 5) + 32);\n    }\n}\n",
+              "options": [
+                "50",
+                "68",
+                "none",
+                "0"
+              ],
+              "correct_answer": "68"
+            },
+            {
+              "id": "java-variables-practice-1-write",
+              "type": "code",
+              "question": "Plaza clerks recount crates before dawn. For apply formula 5 9 using doubles, fill the blank so the program prints the result.",
+              "hints": [
+                "The blank is the missing piece.",
+                "Print the value that piece produces.",
+                "int label = (celsius * 9 / 5) + 32;"
+              ],
+              "explanation": "The printed value is the result after this step converts Celsius to Fahrenheit with integer math.",
+              "xp_reward": 10,
+              "starter_code": "public class Solution {\n    public static void main(String[] args) {\n        int celsius = 10;\n        int label = ___;\n        System.out.println(label);\n    }\n}\n",
+              "solution_code": "public class Solution {\n    public static void main(String[] args) {\n        int celsius = 10;\n        int label = (celsius * 9 / 5) + 32;\n        System.out.println(label);\n    }\n}\n",
+              "tests": [
+                {
+                  "name": "java-variables-practice-1-prints",
+                  "description": "The printed value is the result after this step converts Celsius to Fahrenheit w",
+                  "expected_stdout": "50\n",
+                  "required": true
+                }
+              ]
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "java-variables-checkpoint",
-      "title": "5. Section 1 Checkpoint: Java Foundations Mastery",
-      "description": "Finish `Solution.square` so it returns `n * n`. The test checks that `Solution.square(7)` equals `49`.",
+      "title": "Practice Section 1 Checkpoint Java Foundations",
+      "description": "Finish Solution.square so it returns n * n. The test checks that Solution.square(7) equals 49.",
       "order": 5,
       "difficulty": "beginner",
       "duration_minutes": 10,
@@ -277,7 +893,7 @@
       ],
       "prerequisites": [],
       "learning_objectives": [
-        "Return n squared from Solution.square"
+        "Marsh clerks recount crates before dawn, and return n squared from Solution."
       ],
       "starter_code": "public class Solution {\n    public static int square(int n) {\n        // TODO: Return n * n\n        return 0;\n    }\n}\n",
       "solution_code": "public class Solution {\n    public static int square(int n) {\n        return n * n;\n    }\n}\n",
@@ -327,7 +943,175 @@
         "url": "https://docs.oracle.com/javase/tutorial/java/nutsandbolts/operators.html",
         "license": "Oracle Free Use Terms and Conditions (documentation)"
       },
-      "xp_reward": 40
+      "xp_reward": 40,
+      "player_mode": "micro",
+      "sublessons": [
+        {
+          "id": "java-variables-checkpoint-micro",
+          "title": "Practice Section 1 Checkpoint Java Foundations",
+          "description": "",
+          "order": 1,
+          "exercises": [
+            {
+              "id": "java-variables-checkpoint-teach",
+              "type": "teach",
+              "question": "Marsh clerks recount crates before dawn, and return n squared from Solution.",
+              "hints": [
+                "Read the one job this step is practicing.",
+                "The example is about Section 1 Checkpoint Java Foundations Mastery.",
+                "int left = 55;"
+              ],
+              "explanation": "Marsh clerks recount crates before dawn, and return n squared from Solution.",
+              "xp_reward": 0,
+              "worked_example": "int left = 55;"
+            },
+            {
+              "id": "java-variables-checkpoint-mcq",
+              "type": "mcq",
+              "question": "Marsh clerks recount crates before dawn. For return n squared from Solution, which line stores twice the integer?",
+              "hints": [
+                "Compare each line with the example.",
+                "One line matches the example.",
+                "int total = left * 2;"
+              ],
+              "explanation": "left * 2 stores twice the value.",
+              "xp_reward": 10,
+              "options": [
+                "left == 2;",
+                "total == left;",
+                "int total = left * 2;",
+                "return left;"
+              ],
+              "correct_answer": "int total = left * 2;"
+            },
+            {
+              "id": "java-variables-checkpoint-predict",
+              "type": "output_prediction",
+              "question": "Marsh clerks recount crates before dawn. For return n squared from Solution, what value is displayed?",
+              "hints": [
+                "Run the example in your head from the top.",
+                "The last line is what gets displayed.",
+                "110"
+              ],
+              "explanation": "The Section 1 Checkpoint Java Foundations Mastery program displays that value.",
+              "xp_reward": 10,
+              "starter_code": "public class Solution {\n    public static void main(String[] args) {\n        int left = 55;\n        System.out.println(left * 2);\n    }\n}\n",
+              "options": [
+                "116",
+                "none",
+                "0",
+                "110"
+              ],
+              "correct_answer": "110"
+            },
+            {
+              "id": "java-variables-checkpoint-order",
+              "type": "ordering",
+              "question": "Marsh clerks recount crates before dawn. For return n squared from Solution, build the line that stores twice the integer.",
+              "hints": [
+                "Start at the left of the example.",
+                "Keep the example order.",
+                "int total = left * 2;"
+              ],
+              "explanation": "left * 2 stores twice the value.",
+              "xp_reward": 10,
+              "options": [
+                "int",
+                "total",
+                "=",
+                "left",
+                "*",
+                "2;",
+                "=="
+              ],
+              "correct_answer": [
+                "int",
+                "total",
+                "=",
+                "left",
+                "*",
+                "2;"
+              ]
+            },
+            {
+              "id": "java-variables-checkpoint-fill",
+              "type": "fill_blank",
+              "question": "Marsh clerks recount crates before dawn. For return n squared from Solution, fill the blank so the line stores twice the integer.",
+              "hints": [
+                "The blank is the missing piece of the example.",
+                "The example uses that piece.",
+                "*"
+              ],
+              "explanation": "left * 2 stores twice the value.",
+              "xp_reward": 10,
+              "starter_code": "int total = left ___ 2;",
+              "options": [
+                "+",
+                "*",
+                "==",
+                "-"
+              ],
+              "correct_answer": "*"
+            },
+            {
+              "id": "java-variables-checkpoint-bug",
+              "type": "debugging",
+              "question": "Marsh clerks recount crates before dawn. For return n squared from Solution, which line does a different job than the example?",
+              "hints": [
+                "The other lines match the example.",
+                "One line is the odd one.",
+                "Line 4"
+              ],
+              "explanation": "The print adds two instead of doubling.",
+              "xp_reward": 10,
+              "starter_code": "public class Solution {\n    public static void main(String[] args) {\n        int left = 55;\n        System.out.println(left + 2);\n    }\n}\n",
+              "correct_answer": "4"
+            },
+            {
+              "id": "java-variables-checkpoint-predict-2",
+              "type": "output_prediction",
+              "question": "Marsh clerks recount crates before dawn. For return n squared from Solution, what does the second run display?",
+              "hints": [
+                "Apply the same steps to the new value.",
+                "The display comes from the last line.",
+                "116"
+              ],
+              "explanation": "The second Section 1 Checkpoint Java Foundations Mastery program displays that value.",
+              "xp_reward": 10,
+              "starter_code": "public class Solution {\n    public static void main(String[] args) {\n        int left = 58;\n        System.out.println(left * 2);\n    }\n}\n",
+              "options": [
+                "110",
+                "none",
+                "116",
+                "0"
+              ],
+              "correct_answer": "116"
+            },
+            {
+              "id": "java-variables-checkpoint-write",
+              "type": "code",
+              "question": "Marsh clerks recount crates before dawn. For return n squared from Solution, fill the blank so the program prints the result.",
+              "hints": [
+                "The blank is the missing piece.",
+                "Print the value that piece produces.",
+                "int label = left * 2;"
+              ],
+              "explanation": "The printed value is the result after this step stores twice the integer.",
+              "xp_reward": 10,
+              "starter_code": "public class Solution {\n    public static void main(String[] args) {\n        int left = 55;\n        int label = ___;\n        System.out.println(label);\n    }\n}\n",
+              "solution_code": "public class Solution {\n    public static void main(String[] args) {\n        int left = 55;\n        int label = left * 2;\n        System.out.println(label);\n    }\n}\n",
+              "tests": [
+                {
+                  "name": "java-variables-checkpoint-prints",
+                  "description": "The printed value is the result after this step stores twice the integer.",
+                  "expected_stdout": "110\n",
+                  "required": true
+                }
+              ]
+            }
+          ]
+        }
+      ]
     }
   ]
 }

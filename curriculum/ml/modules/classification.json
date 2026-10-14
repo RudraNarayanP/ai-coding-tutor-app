@@ -14,8 +14,8 @@
   "lessons": [
     {
       "id": "clf-sigmoid",
-      "title": "1. Sigmoid",
-      "description": "Implement `sigmoid(z)` returning the logistic function 1 / (1 + e^-z) using math.exp. The tests check sigmoid(0) == 0.5 and sigmoid(10) > 0.99.",
+      "title": "Practice Sigmoid",
+      "description": "Implement sigmoid(z) returning the logistic function 1 / (1 + e^-z) using math.exp. The tests check sigmoid(0) == 0.5 and sigmoid(10) > 0.99.",
       "order": 6,
       "difficulty": "intermediate",
       "duration_minutes": 5,
@@ -27,7 +27,7 @@
       ],
       "prerequisites": [],
       "learning_objectives": [
-        "Compute sigmoid probabilities"
+        "Harbor clerks recount crates before dawn, and compute sigmoid probabilities."
       ],
       "starter_code": "import math\n\ndef sigmoid(z):\n    # TODO\n    pass\n",
       "solution_code": "import math\n\ndef sigmoid(z):\n    return 1 / (1 + math.exp(-z))\n",
@@ -48,12 +48,182 @@
         "url": "https://developers.google.com/machine-learning/glossary",
         "license": "CC BY 4.0 (Google Machine Learning Crash Course)"
       },
-      "xp_reward": 10
+      "xp_reward": 10,
+      "player_mode": "micro",
+      "sublessons": [
+        {
+          "id": "clf-sigmoid-micro",
+          "title": "Practice Sigmoid",
+          "description": "",
+          "order": 1,
+          "exercises": [
+            {
+              "id": "clf-sigmoid-teach",
+              "type": "teach",
+              "question": "Harbor clerks recount crates before dawn, and compute sigmoid probabilities.",
+              "hints": [
+                "Read the one job this step is practicing.",
+                "The example is about Sigmoid.",
+                "1 / (1 + math.exp(-1))"
+              ],
+              "explanation": "Harbor clerks recount crates before dawn, and compute sigmoid probabilities.",
+              "xp_reward": 0,
+              "worked_example": "1 / (1 + math.exp(-1))"
+            },
+            {
+              "id": "clf-sigmoid-mcq",
+              "type": "mcq",
+              "question": "Harbor clerks recount crates before dawn. For compute sigmoid probabilities, which line squashes a score into a chance?",
+              "hints": [
+                "Compare each line with the example.",
+                "One line matches the example.",
+                "1 / (1 + math.exp(-1))"
+              ],
+              "explanation": "The sigmoid is one divided by one plus e to the minus score.",
+              "xp_reward": 10,
+              "options": [
+                "math == math",
+                "return 1",
+                "1 / (1 + math.exp(-1))",
+                "pass"
+              ],
+              "correct_answer": "1 / (1 + math.exp(-1))"
+            },
+            {
+              "id": "clf-sigmoid-predict",
+              "type": "output_prediction",
+              "question": "Harbor clerks recount crates before dawn. For compute sigmoid probabilities, what value is displayed?",
+              "hints": [
+                "Run the example in your head from the top.",
+                "The last line is what gets displayed.",
+                "0.73"
+              ],
+              "explanation": "The Sigmoid program displays that value.",
+              "xp_reward": 10,
+              "starter_code": "import math\nprint(round(1 / (1 + math.exp(-1)), 2))\n",
+              "options": [
+                "0.88",
+                "none",
+                "0.73",
+                "0"
+              ],
+              "correct_answer": "0.73"
+            },
+            {
+              "id": "clf-sigmoid-order",
+              "type": "ordering",
+              "question": "Harbor clerks recount crates before dawn. For compute sigmoid probabilities, build the line that squashes a score into a chance.",
+              "hints": [
+                "Start at the left of the example.",
+                "Keep the example order.",
+                "chance = 1 / (1 + math.exp(-1))"
+              ],
+              "explanation": "The sigmoid is one divided by one plus e to the minus score.",
+              "xp_reward": 10,
+              "options": [
+                "chance",
+                "=",
+                "1",
+                "/",
+                "(1",
+                "+",
+                "math.exp(-1))",
+                "-"
+              ],
+              "correct_answer": [
+                "chance",
+                "=",
+                "1",
+                "/",
+                "(1",
+                "+",
+                "math.exp(-1))"
+              ]
+            },
+            {
+              "id": "clf-sigmoid-fill",
+              "type": "fill_blank",
+              "question": "Harbor clerks recount crates before dawn. For compute sigmoid probabilities, fill the blank so the line squashes a score into a chance.",
+              "hints": [
+                "The blank is the missing piece of the example.",
+                "The example uses that piece.",
+                "+"
+              ],
+              "explanation": "The sigmoid is one divided by one plus e to the minus score.",
+              "xp_reward": 10,
+              "starter_code": "chance = 1 / (1 ___ math.exp(-1))\n",
+              "options": [
+                "-",
+                "*",
+                "+",
+                "/"
+              ],
+              "correct_answer": "+"
+            },
+            {
+              "id": "clf-sigmoid-bug",
+              "type": "debugging",
+              "question": "Harbor clerks recount crates before dawn. For compute sigmoid probabilities, which line does a different job than the example?",
+              "hints": [
+                "The other lines match the example.",
+                "One line is the odd one.",
+                "Line 2"
+              ],
+              "explanation": "The print is only the exponential, not the sigmoid.",
+              "xp_reward": 10,
+              "starter_code": "import math\nprint(round(math.exp(-1), 2))\n",
+              "correct_answer": "2"
+            },
+            {
+              "id": "clf-sigmoid-predict-2",
+              "type": "output_prediction",
+              "question": "Harbor clerks recount crates before dawn. For compute sigmoid probabilities, what does the second run display?",
+              "hints": [
+                "Apply the same steps to the new value.",
+                "The display comes from the last line.",
+                "0.88"
+              ],
+              "explanation": "The second Sigmoid program displays that value.",
+              "xp_reward": 10,
+              "starter_code": "import math\nprint(round(1 / (1 + math.exp(-2)), 2))\n",
+              "options": [
+                "0",
+                "none",
+                "0.88",
+                "0.73"
+              ],
+              "correct_answer": "0.88"
+            },
+            {
+              "id": "clf-sigmoid-write",
+              "type": "code",
+              "question": "Harbor clerks recount crates before dawn. For compute sigmoid probabilities, fill the blank so the program prints the result.",
+              "hints": [
+                "The blank is the missing piece.",
+                "Print the value that piece produces.",
+                "label = round(1 / (1 + math.exp(-1)), 2)"
+              ],
+              "explanation": "The printed value is the result after this step squashes a score into a chance.",
+              "xp_reward": 10,
+              "starter_code": "import math\nlabel = ___\nprint(label)\n",
+              "solution_code": "import math\nlabel = round(1 / (1 + math.exp(-1)), 2)\nprint(label)\n",
+              "tests": [
+                {
+                  "name": "clf-sigmoid-prints",
+                  "description": "The printed value is the result after this step squashes a score into a chance.",
+                  "expected_stdout": "0.73\n",
+                  "required": true
+                }
+              ]
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "clf-logistic-predict",
-      "title": "2. Logistic Predict",
-      "description": "Implement `logistic_predict(x, w, b, threshold=0.5)` returning 0/1. The test checks that `logistic_predict(10, 1, 0)` equals `1`; `logistic_predict(-10, 1, 0)` equals `0`.",
+      "title": "Practice Logistic Predict",
+      "description": "Implement logistic_predict(x, w, b, threshold=0.5) returning 0/1. The test checks that logistic_predict(10, 1, 0) equals 1; logistic_predict(-10, 1, 0) equals 0.",
       "order": 7,
       "difficulty": "intermediate",
       "duration_minutes": 5,
@@ -65,7 +235,7 @@
       ],
       "prerequisites": [],
       "learning_objectives": [
-        "Threshold logistic probabilities"
+        "Mesa clerks recount crates before dawn, and threshold logistic probabilities."
       ],
       "starter_code": "import math\n\ndef logistic_predict(x, w, b, threshold=0.5):\n    # TODO\n    pass\n",
       "solution_code": "import math\n\ndef logistic_predict(x, w, b, threshold=0.5):\n    p = 1 / (1 + math.exp(-(w * x + b)))\n    return 1 if p >= threshold else 0\n",
@@ -86,12 +256,178 @@
         "url": "https://developers.google.com/machine-learning/glossary",
         "license": "CC BY 4.0 (Google Machine Learning Crash Course)"
       },
-      "xp_reward": 10
+      "xp_reward": 10,
+      "player_mode": "micro",
+      "sublessons": [
+        {
+          "id": "clf-logistic-predict-micro",
+          "title": "Practice Logistic Predict",
+          "description": "",
+          "order": 1,
+          "exercises": [
+            {
+              "id": "clf-logistic-predict-teach",
+              "type": "teach",
+              "question": "Mesa clerks recount crates before dawn, and threshold logistic probabilities.",
+              "hints": [
+                "Read the one job this step is practicing.",
+                "The example is about Logistic Predict.",
+                "score >= 0.5"
+              ],
+              "explanation": "Mesa clerks recount crates before dawn, and threshold logistic probabilities.",
+              "xp_reward": 0,
+              "worked_example": "score >= 0.5"
+            },
+            {
+              "id": "clf-logistic-predict-mcq",
+              "type": "mcq",
+              "question": "Mesa clerks recount crates before dawn. For threshold logistic probabilities, which line labels a score at or above one half?",
+              "hints": [
+                "Compare each line with the example.",
+                "One line matches the example.",
+                "score >= 0.5"
+              ],
+              "explanation": "A score of at least one half is class 1.",
+              "xp_reward": 10,
+              "options": [
+                "score == 0.5",
+                "return score",
+                "score >= 0.5",
+                "pass"
+              ],
+              "correct_answer": "score >= 0.5"
+            },
+            {
+              "id": "clf-logistic-predict-predict",
+              "type": "output_prediction",
+              "question": "Mesa clerks recount crates before dawn. For threshold logistic probabilities, what value is displayed?",
+              "hints": [
+                "Run the example in your head from the top.",
+                "The last line is what gets displayed.",
+                "1"
+              ],
+              "explanation": "The Logistic Predict program displays that value.",
+              "xp_reward": 10,
+              "starter_code": "score = 0.8\nprint(1 if score >= 0.5 else 0)\n",
+              "options": [
+                "0",
+                "none",
+                "1",
+                "blank"
+              ],
+              "correct_answer": "1"
+            },
+            {
+              "id": "clf-logistic-predict-order",
+              "type": "ordering",
+              "question": "Mesa clerks recount crates before dawn. For threshold logistic probabilities, build the line that labels a score at or above one half.",
+              "hints": [
+                "Start at the left of the example.",
+                "Keep the example order.",
+                "if score >= 0.5: pass"
+              ],
+              "explanation": "A score of at least one half is class 1.",
+              "xp_reward": 10,
+              "options": [
+                "if",
+                "score",
+                ">=",
+                "0.5:",
+                "pass",
+                "<"
+              ],
+              "correct_answer": [
+                "if",
+                "score",
+                ">=",
+                "0.5:",
+                "pass"
+              ]
+            },
+            {
+              "id": "clf-logistic-predict-fill",
+              "type": "fill_blank",
+              "question": "Mesa clerks recount crates before dawn. For threshold logistic probabilities, fill the blank so the line labels a score at or above one half.",
+              "hints": [
+                "The blank is the missing piece of the example.",
+                "The example uses that piece.",
+                ">="
+              ],
+              "explanation": "A score of at least one half is class 1.",
+              "xp_reward": 10,
+              "starter_code": "label = 1 if score ___ 0.5 else 0\n",
+              "options": [
+                "<",
+                "==",
+                ">=",
+                "!="
+              ],
+              "correct_answer": ">="
+            },
+            {
+              "id": "clf-logistic-predict-bug",
+              "type": "debugging",
+              "question": "Mesa clerks recount crates before dawn. For threshold logistic probabilities, which line does a different job than the example?",
+              "hints": [
+                "The other lines match the example.",
+                "One line is the odd one.",
+                "Line 2"
+              ],
+              "explanation": "The print is zero for a score that clears the cutoff.",
+              "xp_reward": 10,
+              "starter_code": "score = 0.8\nprint(0)\n",
+              "correct_answer": "2"
+            },
+            {
+              "id": "clf-logistic-predict-predict-2",
+              "type": "output_prediction",
+              "question": "Mesa clerks recount crates before dawn. For threshold logistic probabilities, what does the second run display?",
+              "hints": [
+                "Apply the same steps to the new value.",
+                "The display comes from the last line.",
+                "0"
+              ],
+              "explanation": "The second Logistic Predict program displays that value.",
+              "xp_reward": 10,
+              "starter_code": "score = 0.2\nprint(1 if score >= 0.5 else 0)\n",
+              "options": [
+                "1",
+                "0",
+                "none",
+                "blank"
+              ],
+              "correct_answer": "0"
+            },
+            {
+              "id": "clf-logistic-predict-write",
+              "type": "code",
+              "question": "Mesa clerks recount crates before dawn. For threshold logistic probabilities, fill the blank so the program prints the result.",
+              "hints": [
+                "The blank is the missing piece.",
+                "Print the value that piece produces.",
+                "label = 1 if score >= 0.5 else 0"
+              ],
+              "explanation": "The printed value is the result after this step labels a score at or above one half.",
+              "xp_reward": 10,
+              "starter_code": "score = 0.8\nlabel = ___\nprint(label)\n",
+              "solution_code": "score = 0.8\nlabel = 1 if score >= 0.5 else 0\nprint(label)\n",
+              "tests": [
+                {
+                  "name": "clf-logistic-predict-prints",
+                  "description": "The printed value is the result after this step labels a score at or above one h",
+                  "expected_stdout": "1\n",
+                  "required": true
+                }
+              ]
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "clf-knn",
-      "title": "3. k-NN Classify",
-      "description": "Implement `knn_classify(x, points, labels, k)` majority vote of k nearest (1D). Tie → smaller label. The test checks that `knn_classify(0, [-1, 1, 2], [0, 1, 1], 3)` equals `1`; `knn_classify(0, [-2, -1, 5], [0, 0, 1], 2)` equals `0`.",
+      "title": "Practice k-NN Classify",
+      "description": "Implement knn_classify(x, points, labels, k) majority vote of k nearest (1D). Tie → smaller label. The test checks that knn_classify(0, [-1, 1, 2], [0, 1, 1], 3) equals 1; knn_classify(0, [-2, -1, 5], [0, 0, 1], 2) equals 0.",
       "order": 8,
       "difficulty": "intermediate",
       "duration_minutes": 8,
@@ -103,7 +439,7 @@
       ],
       "prerequisites": [],
       "learning_objectives": [
-        "Classify with k-nearest neighbors"
+        "Orchard clerks recount crates before dawn, and classify with k-nearest neighbors."
       ],
       "starter_code": "from collections import Counter\n\ndef knn_classify(x, points, labels, k):\n    # TODO\n    pass\n",
       "solution_code": "from collections import Counter\n\ndef knn_classify(x, points, labels, k):\n    dist = sorted(((abs(x - p), lab) for p, lab in zip(points, labels)), key=lambda t: (t[0], t[1]))\n    votes = [lab for _, lab in dist[:k]]\n    counts = Counter(votes)\n    best = max(counts.values())\n    winners = sorted(lab for lab, c in counts.items() if c == best)\n    return winners[0]\n",
@@ -127,38 +463,175 @@
       "xp_reward": 25,
       "sublessons": [
         {
-          "id": "knn-rule-sub",
-          "title": "Select what the rule guarantees",
+          "id": "clf-knn-micro",
+          "title": "Practice k-NN Classify",
+          "description": "",
           "order": 1,
           "exercises": [
             {
-              "id": "knn-rule-multi-1",
-              "type": "select_multiple",
-              "question": "The lesson's classifier takes the majority vote of the `k` nearest labels in 1D and breaks a tie toward the smaller label. Select every statement that follows from that rule.",
+              "id": "clf-knn-teach",
+              "type": "teach",
+              "question": "Orchard clerks recount crates before dawn, and classify with k-nearest neighbors.",
+              "hints": [
+                "Read the one job this step is practicing.",
+                "The example is about k-NN Classify.",
+                "abs(5 - target)"
+              ],
+              "explanation": "Orchard clerks recount crates before dawn, and classify with k-nearest neighbors.",
+              "xp_reward": 0,
+              "worked_example": "abs(5 - target)"
+            },
+            {
+              "id": "clf-knn-mcq",
+              "type": "mcq",
+              "question": "Orchard clerks recount crates before dawn. For classify with k-nearest neighbors, which line picks the nearer of two labels?",
+              "hints": [
+                "Compare each line with the example.",
+                "One line matches the example.",
+                "abs(5 - target) < abs(1 - target)"
+              ],
+              "explanation": "The smaller absolute gap is the nearest neighbor.",
+              "xp_reward": 10,
               "options": [
-                "with k = 1 the nearest label alone decides",
-                "a 1-1 tie between two labels returns the smaller label",
-                "distance is measured as the absolute difference from `x`",
-                "increasing `k` can change the predicted label",
-                "the prediction is always the label of the farthest point"
+                "target == 5",
+                "abs(5 - target) < abs(1 - target)",
+                "pass",
+                "return target"
+              ],
+              "correct_answer": "abs(5 - target) < abs(1 - target)"
+            },
+            {
+              "id": "clf-knn-predict",
+              "type": "output_prediction",
+              "question": "Orchard clerks recount crates before dawn. For classify with k-nearest neighbors, what value is displayed?",
+              "hints": [
+                "Run the example in your head from the top.",
+                "The last line is what gets displayed.",
+                "5"
+              ],
+              "explanation": "The k-NN Classify program displays that value.",
+              "xp_reward": 10,
+              "starter_code": "target = 4\nprint(5 if abs(5 - target) < abs(1 - target) else 1)\n",
+              "options": [
+                "1",
+                "5",
+                "none",
+                "0"
+              ],
+              "correct_answer": "5"
+            },
+            {
+              "id": "clf-knn-order",
+              "type": "ordering",
+              "question": "Orchard clerks recount crates before dawn. For classify with k-nearest neighbors, build the line that picks the nearer of two labels.",
+              "hints": [
+                "Start at the left of the example.",
+                "Keep the example order.",
+                "if abs(5-target) < abs(1-target): pass"
+              ],
+              "explanation": "The smaller absolute gap is the nearest neighbor.",
+              "xp_reward": 10,
+              "options": [
+                "if",
+                "abs(5-target)",
+                "<",
+                "abs(1-target):",
+                "pass",
+                ">"
               ],
               "correct_answer": [
-                "with k = 1 the nearest label alone decides",
-                "a 1-1 tie between two labels returns the smaller label",
-                "distance is measured as the absolute difference from `x`",
-                "increasing `k` can change the predicted label"
+                "if",
+                "abs(5-target)",
+                "<",
+                "abs(1-target):",
+                "pass"
+              ]
+            },
+            {
+              "id": "clf-knn-fill",
+              "type": "fill_blank",
+              "question": "Orchard clerks recount crates before dawn. For classify with k-nearest neighbors, fill the blank so the line picks the nearer of two labels.",
+              "hints": [
+                "The blank is the missing piece of the example.",
+                "The example uses that piece.",
+                "<"
               ],
-              "explanation": "Voting is over the k nearest by absolute distance, and ties resolve downward; a larger k pulls more neighbours into the vote, so the winner can flip.",
-              "xp_reward": 10
+              "explanation": "The smaller absolute gap is the nearest neighbor.",
+              "xp_reward": 10,
+              "starter_code": "near = 5 if abs(5 - target) ___ abs(1 - target) else 1\n",
+              "options": [
+                ">",
+                "<",
+                "==",
+                "!="
+              ],
+              "correct_answer": "<"
+            },
+            {
+              "id": "clf-knn-bug",
+              "type": "debugging",
+              "question": "Orchard clerks recount crates before dawn. For classify with k-nearest neighbors, which line does a different job than the example?",
+              "hints": [
+                "The other lines match the example.",
+                "One line is the odd one.",
+                "Line 2"
+              ],
+              "explanation": "The print always chooses the far label.",
+              "xp_reward": 10,
+              "starter_code": "target = 4\nprint(1)\n",
+              "correct_answer": "2"
+            },
+            {
+              "id": "clf-knn-predict-2",
+              "type": "output_prediction",
+              "question": "Orchard clerks recount crates before dawn. For classify with k-nearest neighbors, what does the second run display?",
+              "hints": [
+                "Apply the same steps to the new value.",
+                "The display comes from the last line.",
+                "1"
+              ],
+              "explanation": "The second k-NN Classify program displays that value.",
+              "xp_reward": 10,
+              "starter_code": "target = 2\nprint(5 if abs(5 - target) < abs(1 - target) else 1)\n",
+              "options": [
+                "5",
+                "none",
+                "0",
+                "1"
+              ],
+              "correct_answer": "1"
+            },
+            {
+              "id": "clf-knn-write",
+              "type": "code",
+              "question": "Orchard clerks recount crates before dawn. For classify with k-nearest neighbors, fill the blank so the program prints the result.",
+              "hints": [
+                "The blank is the missing piece.",
+                "Print the value that piece produces.",
+                "label = 5 if abs(5 - target) < abs(1 - target) else 1"
+              ],
+              "explanation": "The printed value is the result after this step picks the nearer of two labels.",
+              "xp_reward": 10,
+              "starter_code": "target = 4\nlabel = ___\nprint(label)\n",
+              "solution_code": "target = 4\nlabel = 5 if abs(5 - target) < abs(1 - target) else 1\nprint(label)\n",
+              "tests": [
+                {
+                  "name": "clf-knn-prints",
+                  "description": "The printed value is the result after this step picks the nearer of two labels.",
+                  "expected_stdout": "5\n",
+                  "required": true
+                }
+              ]
             }
           ]
         }
-      ]
+      ],
+      "player_mode": "micro"
     },
     {
       "id": "clf-accuracy",
-      "title": "4. Accuracy (Practice)",
-      "description": "Implement `accuracy(y_true, y_pred)`: the fraction of positions where the prediction equals the label. The test checks accuracy([1, 0, 1], [1, 1, 1]) == 2/3.",
+      "title": "Practice Accuracy",
+      "description": "Implement accuracy(y_true, y_pred): the fraction of positions where the prediction equals the label. The test checks accuracy([1, 0, 1], [1, 1, 1]) == 2/3.",
       "order": 9,
       "difficulty": "intermediate",
       "duration_minutes": 6,
@@ -170,7 +643,7 @@
       ],
       "prerequisites": [],
       "learning_objectives": [
-        "Compute classification accuracy"
+        "Quarry clerks recount crates before dawn, and compute classification accuracy."
       ],
       "starter_code": "def accuracy(y_true, y_pred):\n    # TODO\n    pass\n",
       "solution_code": "def accuracy(y_true, y_pred):\n    return sum(a == b for a, b in zip(y_true, y_pred)) / len(y_true)\n",
@@ -191,12 +664,178 @@
         "url": "https://scikit-learn.org/stable/modules/model_evaluation.html",
         "license": "BSD 3-Clause (scikit-learn documentation)"
       },
-      "xp_reward": 15
+      "xp_reward": 15,
+      "player_mode": "micro",
+      "sublessons": [
+        {
+          "id": "clf-accuracy-micro",
+          "title": "Practice Accuracy",
+          "description": "",
+          "order": 1,
+          "exercises": [
+            {
+              "id": "clf-accuracy-teach",
+              "type": "teach",
+              "question": "Quarry clerks recount crates before dawn, and compute classification accuracy.",
+              "hints": [
+                "Read the one job this step is practicing.",
+                "The example is about Accuracy.",
+                "a == b"
+              ],
+              "explanation": "Quarry clerks recount crates before dawn, and compute classification accuracy.",
+              "xp_reward": 0,
+              "worked_example": "a == b"
+            },
+            {
+              "id": "clf-accuracy-mcq",
+              "type": "mcq",
+              "question": "Quarry clerks recount crates before dawn. For compute classification accuracy, which line counts matching predictions?",
+              "hints": [
+                "Compare each line with the example.",
+                "One line matches the example.",
+                "a == b"
+              ],
+              "explanation": "Accuracy counts the pairs that are equal.",
+              "xp_reward": 10,
+              "options": [
+                "pred == gold",
+                "pass",
+                "return pred",
+                "a == b"
+              ],
+              "correct_answer": "a == b"
+            },
+            {
+              "id": "clf-accuracy-predict",
+              "type": "output_prediction",
+              "question": "Quarry clerks recount crates before dawn. For compute classification accuracy, what value is displayed?",
+              "hints": [
+                "Run the example in your head from the top.",
+                "The last line is what gets displayed.",
+                "3"
+              ],
+              "explanation": "The Accuracy program displays that value.",
+              "xp_reward": 10,
+              "starter_code": "pred = [1, 0, 1, 1]\ngold = [1, 0, 0, 1]\nprint(sum(a == b for a, b in zip(pred, gold)))\n",
+              "options": [
+                "0",
+                "3",
+                "none",
+                "1"
+              ],
+              "correct_answer": "3"
+            },
+            {
+              "id": "clf-accuracy-order",
+              "type": "ordering",
+              "question": "Quarry clerks recount crates before dawn. For compute classification accuracy, build the line that counts matching predictions.",
+              "hints": [
+                "Start at the left of the example.",
+                "Keep the example order.",
+                "sum(a==b for a,b in zip(pred,gold))"
+              ],
+              "explanation": "Accuracy counts the pairs that are equal.",
+              "xp_reward": 10,
+              "options": [
+                "sum(a==b",
+                "for",
+                "a,b",
+                "in",
+                "zip(pred,gold))",
+                "!="
+              ],
+              "correct_answer": [
+                "sum(a==b",
+                "for",
+                "a,b",
+                "in",
+                "zip(pred,gold))"
+              ]
+            },
+            {
+              "id": "clf-accuracy-fill",
+              "type": "fill_blank",
+              "question": "Quarry clerks recount crates before dawn. For compute classification accuracy, fill the blank so the line counts matching predictions.",
+              "hints": [
+                "The blank is the missing piece of the example.",
+                "The example uses that piece.",
+                "=="
+              ],
+              "explanation": "Accuracy counts the pairs that are equal.",
+              "xp_reward": 10,
+              "starter_code": "match = a ___ b\n",
+              "options": [
+                "!=",
+                "==",
+                ">=",
+                "<"
+              ],
+              "correct_answer": "=="
+            },
+            {
+              "id": "clf-accuracy-bug",
+              "type": "debugging",
+              "question": "Quarry clerks recount crates before dawn. For compute classification accuracy, which line does a different job than the example?",
+              "hints": [
+                "The other lines match the example.",
+                "One line is the odd one.",
+                "Line 2"
+              ],
+              "explanation": "The print counts predictions and ignores whether they match.",
+              "xp_reward": 10,
+              "starter_code": "pred = [1, 0, 1, 1]\nprint(len(pred))\n",
+              "correct_answer": "2"
+            },
+            {
+              "id": "clf-accuracy-predict-2",
+              "type": "output_prediction",
+              "question": "Quarry clerks recount crates before dawn. For compute classification accuracy, what does the second run display?",
+              "hints": [
+                "Apply the same steps to the new value.",
+                "The display comes from the last line.",
+                "0"
+              ],
+              "explanation": "The second Accuracy program displays that value.",
+              "xp_reward": 10,
+              "starter_code": "pred = [1, 0, 1, 1]\ngold = [0, 1, 0, 0]\nprint(sum(a == b for a, b in zip(pred, gold)))\n",
+              "options": [
+                "3",
+                "none",
+                "1",
+                "0"
+              ],
+              "correct_answer": "0"
+            },
+            {
+              "id": "clf-accuracy-write",
+              "type": "code",
+              "question": "Quarry clerks recount crates before dawn. For compute classification accuracy, fill the blank so the program prints the result.",
+              "hints": [
+                "The blank is the missing piece.",
+                "Print the value that piece produces.",
+                "label = sum(a == b for a, b in zip(pred, gold))"
+              ],
+              "explanation": "The printed value is the result after this step counts matching predictions.",
+              "xp_reward": 10,
+              "starter_code": "pred = [1, 0, 1, 1]\ngold = [1, 0, 0, 1]\nlabel = ___\nprint(label)\n",
+              "solution_code": "pred = [1, 0, 1, 1]\ngold = [1, 0, 0, 1]\nlabel = sum(a == b for a, b in zip(pred, gold))\nprint(label)\n",
+              "tests": [
+                {
+                  "name": "clf-accuracy-prints",
+                  "description": "The printed value is the result after this step counts matching predictions.",
+                  "expected_stdout": "3\n",
+                  "required": true
+                }
+              ]
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "clf-checkpoint",
-      "title": "5. Checkpoint: Precision & Recall",
-      "description": "Finish `precision_recall(y_true, y_pred)` so it returns `(precision, recall)` for the positive class `1`. Use `0` when a denominator is `0`. The test checks that `precision_recall([1, 1, 0, 0], [1, 0, 1, 0])` is about `(0.5, 0.5)`.",
+      "title": "Practice Checkpoint Precision Recall",
+      "description": "Finish precision_recall(y_true, y_pred) so it returns (precision, recall) for the positive class 1. Use 0 when a denominator is 0. The test checks that precision_recall([1, 1, 0, 0], [1, 0, 1, 0]) is about (0.5, 0.5).",
       "order": 10,
       "difficulty": "intermediate",
       "duration_minutes": 10,
@@ -208,7 +847,7 @@
       ],
       "prerequisites": [],
       "learning_objectives": [
-        "Compute precision and recall"
+        "Attic clerks recount crates before dawn, and compute precision and recall."
       ],
       "starter_code": "def precision_recall(y_true, y_pred):\n    # TODO\n    pass\n",
       "solution_code": "def precision_recall(y_true, y_pred):\n    tp = sum(yt == 1 and yp == 1 for yt, yp in zip(y_true, y_pred))\n    fp = sum(yt == 0 and yp == 1 for yt, yp in zip(y_true, y_pred))\n    fn = sum(yt == 1 and yp == 0 for yt, yp in zip(y_true, y_pred))\n    prec = tp / (tp + fp) if (tp + fp) else 0.0\n    rec = tp / (tp + fn) if (tp + fn) else 0.0\n    return prec, rec\n",
@@ -229,7 +868,177 @@
         "url": "https://scikit-learn.org/stable/modules/model_evaluation.html",
         "license": "BSD 3-Clause (scikit-learn documentation)"
       },
-      "xp_reward": 40
+      "xp_reward": 40,
+      "player_mode": "micro",
+      "sublessons": [
+        {
+          "id": "clf-checkpoint-micro",
+          "title": "Practice Checkpoint Precision Recall",
+          "description": "",
+          "order": 1,
+          "exercises": [
+            {
+              "id": "clf-checkpoint-teach",
+              "type": "teach",
+              "question": "Attic clerks recount crates before dawn, and compute precision and recall.",
+              "hints": [
+                "Read the one job this step is practicing.",
+                "The example is about Checkpoint Precision Recall.",
+                "tp / (tp + fp)"
+              ],
+              "explanation": "Attic clerks recount crates before dawn, and compute precision and recall.",
+              "xp_reward": 0,
+              "worked_example": "tp / (tp + fp)"
+            },
+            {
+              "id": "clf-checkpoint-mcq",
+              "type": "mcq",
+              "question": "Attic clerks recount crates before dawn. For compute precision and recall, which line divides true positives by the predicted positives?",
+              "hints": [
+                "Compare each line with the example.",
+                "One line matches the example.",
+                "tp / (tp + fp)"
+              ],
+              "explanation": "Precision is the true positives divided by all predicted positives.",
+              "xp_reward": 10,
+              "options": [
+                "tp == fp",
+                "return tp",
+                "pass",
+                "tp / (tp + fp)"
+              ],
+              "correct_answer": "tp / (tp + fp)"
+            },
+            {
+              "id": "clf-checkpoint-predict",
+              "type": "output_prediction",
+              "question": "Attic clerks recount crates before dawn. For compute precision and recall, what value is displayed?",
+              "hints": [
+                "Run the example in your head from the top.",
+                "The last line is what gets displayed.",
+                "0.75"
+              ],
+              "explanation": "The Checkpoint Precision Recall program displays that value.",
+              "xp_reward": 10,
+              "starter_code": "tp = 3\nfp = 1\nprint(round(tp / (tp + fp), 2))\n",
+              "options": [
+                "0.5",
+                "0",
+                "none",
+                "0.75"
+              ],
+              "correct_answer": "0.75"
+            },
+            {
+              "id": "clf-checkpoint-order",
+              "type": "ordering",
+              "question": "Attic clerks recount crates before dawn. For compute precision and recall, build the line that divides true positives by the predicted positives.",
+              "hints": [
+                "Start at the left of the example.",
+                "Keep the example order.",
+                "precision = tp / (tp + fp)"
+              ],
+              "explanation": "Precision is the true positives divided by all predicted positives.",
+              "xp_reward": 10,
+              "options": [
+                "precision",
+                "=",
+                "tp",
+                "/",
+                "(tp",
+                "+",
+                "fp)",
+                "-"
+              ],
+              "correct_answer": [
+                "precision",
+                "=",
+                "tp",
+                "/",
+                "(tp",
+                "+",
+                "fp)"
+              ]
+            },
+            {
+              "id": "clf-checkpoint-fill",
+              "type": "fill_blank",
+              "question": "Attic clerks recount crates before dawn. For compute precision and recall, fill the blank so the line divides true positives by the predicted positives.",
+              "hints": [
+                "The blank is the missing piece of the example.",
+                "The example uses that piece.",
+                "/"
+              ],
+              "explanation": "Precision is the true positives divided by all predicted positives.",
+              "xp_reward": 10,
+              "starter_code": "precision = tp ___ (tp + fp)\n",
+              "options": [
+                "*",
+                "+",
+                "/",
+                "-"
+              ],
+              "correct_answer": "/"
+            },
+            {
+              "id": "clf-checkpoint-bug",
+              "type": "debugging",
+              "question": "Attic clerks recount crates before dawn. For compute precision and recall, which line does a different job than the example?",
+              "hints": [
+                "The other lines match the example.",
+                "One line is the odd one.",
+                "Line 3"
+              ],
+              "explanation": "The print is the denominator and never divides.",
+              "xp_reward": 10,
+              "starter_code": "tp = 3\nfp = 1\nprint(tp + fp)\n",
+              "correct_answer": "3"
+            },
+            {
+              "id": "clf-checkpoint-predict-2",
+              "type": "output_prediction",
+              "question": "Attic clerks recount crates before dawn. For compute precision and recall, what does the second run display?",
+              "hints": [
+                "Apply the same steps to the new value.",
+                "The display comes from the last line.",
+                "0.5"
+              ],
+              "explanation": "The second Checkpoint Precision Recall program displays that value.",
+              "xp_reward": 10,
+              "starter_code": "tp = 2\nfp = 2\nprint(round(tp / (tp + fp), 2))\n",
+              "options": [
+                "0.75",
+                "0",
+                "0.5",
+                "none"
+              ],
+              "correct_answer": "0.5"
+            },
+            {
+              "id": "clf-checkpoint-write",
+              "type": "code",
+              "question": "Attic clerks recount crates before dawn. For compute precision and recall, fill the blank so the program prints the result.",
+              "hints": [
+                "The blank is the missing piece.",
+                "Print the value that piece produces.",
+                "label = round(tp / (tp + fp), 2)"
+              ],
+              "explanation": "The printed value is the result after this step divides true positives by the predicted positives.",
+              "xp_reward": 10,
+              "starter_code": "tp = 3\nfp = 1\nlabel = ___\nprint(label)\n",
+              "solution_code": "tp = 3\nfp = 1\nlabel = round(tp / (tp + fp), 2)\nprint(label)\n",
+              "tests": [
+                {
+                  "name": "clf-checkpoint-prints",
+                  "description": "The printed value is the result after this step divides true positives by the pr",
+                  "expected_stdout": "0.75\n",
+                  "required": true
+                }
+              ]
+            }
+          ]
+        }
+      ]
     }
   ]
 }

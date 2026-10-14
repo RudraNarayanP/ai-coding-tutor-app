@@ -14,8 +14,8 @@
   "lessons": [
     {
       "id": "sql-05",
-      "title": "5. INSERT, UPDATE, DELETE",
-      "description": "Insert a course with title `AI Web Apps`, category `Web`, and price `0.0`, then select that row back. The test checks that the inserted title is `AI Web Apps`.",
+      "title": "Practice INSERT, UPDATE, DELETE",
+      "description": "Insert a course with title AI Web Apps, category Web, and price 0.0, then select that row back. The test checks that the inserted title is AI Web Apps.",
       "order": 5,
       "difficulty": "beginner",
       "duration_minutes": 5,
@@ -45,11 +45,177 @@
         "license": "Public domain (SQLite documentation)"
       },
       "learning_objectives": [
-        "Add rows with INSERT INTO ... VALUES",
-        "Modify existing rows with UPDATE ... SET ... WHERE",
-        "Remove rows with DELETE FROM ... WHERE"
+        "Mesa potters recount crates before dawn, and add rows with INSERT INTO."
       ],
-      "xp_reward": 10
+      "xp_reward": 10,
+      "player_mode": "micro",
+      "sublessons": [
+        {
+          "id": "sql-05-micro",
+          "title": "Practice INSERT, UPDATE, DELETE",
+          "description": "",
+          "order": 1,
+          "exercises": [
+            {
+              "id": "sql-05-teach",
+              "type": "teach",
+              "question": "Mesa potters recount crates before dawn, and add rows with INSERT INTO.",
+              "hints": [
+                "Read the one job this step is practicing.",
+                "The example is about INSERT, UPDATE, DELETE.",
+                "UPDATE products SET stock = 90 WHERE id = 4;"
+              ],
+              "explanation": "Mesa potters recount crates before dawn, and add rows with INSERT INTO.",
+              "xp_reward": 0,
+              "worked_example": "UPDATE products SET stock = 90 WHERE id = 4;"
+            },
+            {
+              "id": "sql-05-mcq",
+              "type": "mcq",
+              "question": "Mesa potters recount crates before dawn. For add rows with INSERT INTO, which line updates one product stock and shows the new value?",
+              "hints": [
+                "Compare each line with the example.",
+                "One line matches the example.",
+                "UPDATE products SET stock = 90 WHERE id = 4"
+              ],
+              "explanation": "UPDATE changes the stored stock, and the select shows it.",
+              "xp_reward": 10,
+              "options": [
+                "DROP TABLE products",
+                "UPDATE products SET stock = 90 WHERE id = 4",
+                "INSERT INTO missing",
+                "stock == stock"
+              ],
+              "correct_answer": "UPDATE products SET stock = 90 WHERE id = 4"
+            },
+            {
+              "id": "sql-05-predict",
+              "type": "output_prediction",
+              "question": "Mesa potters recount crates before dawn. For add rows with INSERT INTO, what value is displayed?",
+              "hints": [
+                "Run the example in your head from the top.",
+                "The last line is what gets displayed.",
+                "┌───────┐\n│ stock │\n├───────┤\n│ 90    │\n└───────┘"
+              ],
+              "explanation": "The INSERT, UPDATE, DELETE program displays that value.",
+              "xp_reward": 10,
+              "starter_code": "UPDATE products SET stock = 90 WHERE id = 4;\nSELECT stock FROM products WHERE id = 4;\n",
+              "options": [
+                "┌───────┐\n│ stock │\n├───────┤\n│ 80    │\n└───────┘",
+                "none",
+                "0",
+                "┌───────┐\n│ stock │\n├───────┤\n│ 90    │\n└───────┘"
+              ],
+              "correct_answer": "┌───────┐\n│ stock │\n├───────┤\n│ 90    │\n└───────┘"
+            },
+            {
+              "id": "sql-05-order",
+              "type": "ordering",
+              "question": "Mesa potters recount crates before dawn. For add rows with INSERT INTO, build the line that updates one product stock and shows the new value.",
+              "hints": [
+                "Start at the left of the example.",
+                "Keep the example order.",
+                "UPDATE products SET stock=90 WHERE id=4"
+              ],
+              "explanation": "UPDATE changes the stored stock, and the select shows it.",
+              "xp_reward": 10,
+              "options": [
+                "UPDATE",
+                "products",
+                "SET",
+                "stock=90",
+                "WHERE",
+                "id=4",
+                "DROP"
+              ],
+              "correct_answer": [
+                "UPDATE",
+                "products",
+                "SET",
+                "stock=90",
+                "WHERE",
+                "id=4"
+              ]
+            },
+            {
+              "id": "sql-05-fill",
+              "type": "fill_blank",
+              "question": "Mesa potters recount crates before dawn. For add rows with INSERT INTO, fill the blank so the line updates one product stock and shows the new value.",
+              "hints": [
+                "The blank is the missing piece of the example.",
+                "The example uses that piece.",
+                "="
+              ],
+              "explanation": "UPDATE changes the stored stock, and the select shows it.",
+              "xp_reward": 10,
+              "starter_code": "UPDATE products SET stock ___ 90 WHERE id = 4;",
+              "options": [
+                "!=",
+                ">",
+                "<",
+                "="
+              ],
+              "correct_answer": "="
+            },
+            {
+              "id": "sql-05-bug",
+              "type": "debugging",
+              "question": "Mesa potters recount crates before dawn. For add rows with INSERT INTO, which line does a different job than the example?",
+              "hints": [
+                "The other lines match the example.",
+                "One line is the odd one.",
+                "Line 1"
+              ],
+              "explanation": "The update stores zero instead of the new stock.",
+              "xp_reward": 10,
+              "starter_code": "UPDATE products SET stock = 0 WHERE id = 4;\nSELECT stock FROM products WHERE id = 4;",
+              "correct_answer": "1"
+            },
+            {
+              "id": "sql-05-predict-2",
+              "type": "output_prediction",
+              "question": "Mesa potters recount crates before dawn. For add rows with INSERT INTO, what does the second run display?",
+              "hints": [
+                "Apply the same steps to the new value.",
+                "The display comes from the last line.",
+                "┌───────┐\n│ stock │\n├───────┤\n│ 80    │\n└───────┘"
+              ],
+              "explanation": "The second INSERT, UPDATE, DELETE program displays that value.",
+              "xp_reward": 10,
+              "starter_code": "UPDATE products SET stock = 80 WHERE id = 4;\nSELECT stock FROM products WHERE id = 4;\n",
+              "options": [
+                "┌───────┐\n│ stock │\n├───────┤\n│ 90    │\n└───────┘",
+                "0",
+                "┌───────┐\n│ stock │\n├───────┤\n│ 80    │\n└───────┘",
+                "none"
+              ],
+              "correct_answer": "┌───────┐\n│ stock │\n├───────┤\n│ 80    │\n└───────┘"
+            },
+            {
+              "id": "sql-05-write",
+              "type": "code",
+              "question": "Mesa potters recount crates before dawn. For add rows with INSERT INTO, fill the blank so the program prints the result.",
+              "hints": [
+                "The blank is the missing piece.",
+                "Print the value that piece produces.",
+                "UPDATE products SET stock = 90 WHERE id = 4;"
+              ],
+              "explanation": "The query result is what this step updates one product stock and shows the new value.",
+              "xp_reward": 10,
+              "starter_code": "UPDATE products SET stock = ___ WHERE id = 4;\nSELECT stock FROM products WHERE id = 4;\n",
+              "solution_code": "UPDATE products SET stock = 90 WHERE id = 4;\nSELECT stock FROM products WHERE id = 4;\n",
+              "tests": [
+                {
+                  "name": "sql-05-prints",
+                  "description": "The query result is what this step updates one product stock and shows the new v",
+                  "expected_stdout": "┌───────┐\n│ stock │\n├───────┤\n│ 90    │\n└───────┘",
+                  "required": true
+                }
+              ]
+            }
+          ]
+        }
+      ]
     }
   ]
 }

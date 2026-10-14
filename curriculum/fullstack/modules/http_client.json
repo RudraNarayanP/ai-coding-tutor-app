@@ -12,8 +12,8 @@
   "lessons": [
     {
       "id": "fs-url-join",
-      "title": "1. Join URL Paths",
-      "description": "Implement `join_url(base, path)` avoiding double/missing slashes. The test checks that `join_url('https://api.com/', '/v1/users')` equals `'https://api.com/v1/users'`; `join_url('https://api.com', 'v1')` equals `'https://api.com/v1'`.",
+      "title": "Join URL Paths",
+      "description": "Implement join_url(base, path) avoiding double/missing slashes. The test checks that join_url('https://api.com/', '/v1/users') equals 'https://api.com/v1/users'; join_url('https://api.com', 'v1') equals 'https://api.com/v1'.",
       "order": 1,
       "difficulty": "intermediate",
       "duration_minutes": 5,
@@ -25,7 +25,7 @@
       ],
       "prerequisites": [],
       "learning_objectives": [
-        "Build API URLs safely"
+        "Harbor potters recount crates before dawn, and build API URLs safely."
       ],
       "starter_code": "def join_url(base, path):\n    # TODO\n    pass\n",
       "solution_code": "def join_url(base, path):\n    return base.rstrip('/') + '/' + path.lstrip('/')\n",
@@ -46,12 +46,174 @@
         "url": "https://docs.python.org/3/library/stdtypes.html#string-methods",
         "license": "Python documentation license (PSF)"
       },
-      "xp_reward": 10
+      "xp_reward": 10,
+      "player_mode": "micro",
+      "sublessons": [
+        {
+          "id": "fs-url-join-micro",
+          "title": "Join URL Paths",
+          "description": "",
+          "order": 1,
+          "exercises": [
+            {
+              "id": "fs-url-join-teach",
+              "type": "teach",
+              "question": "Harbor potters recount crates before dawn, and build API URLs safely.",
+              "hints": [
+                "Read the one job this step is practicing.",
+                "The example is about Join URL Paths.",
+                "'/'.join(parts)"
+              ],
+              "explanation": "Harbor potters recount crates before dawn, and build API URLs safely.",
+              "xp_reward": 0,
+              "worked_example": "'/'.join(parts)"
+            },
+            {
+              "id": "fs-url-join-mcq",
+              "type": "mcq",
+              "question": "Harbor potters recount crates before dawn. For build API URLs safely, which line counts the slashes in the joined path?",
+              "hints": [
+                "Compare each line with the example.",
+                "One line matches the example.",
+                "'/'.join(parts)"
+              ],
+              "explanation": "join puts a slash between the path parts.",
+              "xp_reward": 10,
+              "options": [
+                "parts == parts",
+                "return parts",
+                "'/'.join(parts)",
+                "pass"
+              ],
+              "correct_answer": "'/'.join(parts)"
+            },
+            {
+              "id": "fs-url-join-predict",
+              "type": "output_prediction",
+              "question": "Harbor potters recount crates before dawn. For build API URLs safely, what value is displayed?",
+              "hints": [
+                "Run the example in your head from the top.",
+                "The last line is what gets displayed.",
+                "2"
+              ],
+              "explanation": "The Join URL Paths program displays that value.",
+              "xp_reward": 10,
+              "starter_code": "parts = ['api', 'v1', 'delta']\nprint('/'.join(parts).count('/'))\n",
+              "options": [
+                "1",
+                "none",
+                "2",
+                "0"
+              ],
+              "correct_answer": "2"
+            },
+            {
+              "id": "fs-url-join-order",
+              "type": "ordering",
+              "question": "Harbor potters recount crates before dawn. For build API URLs safely, build the line that counts the slashes in the joined path.",
+              "hints": [
+                "Start at the left of the example.",
+                "Keep the example order.",
+                "path = '/'.join(parts)"
+              ],
+              "explanation": "join puts a slash between the path parts.",
+              "xp_reward": 10,
+              "options": [
+                "path",
+                "=",
+                "'/'.join(parts)",
+                "+"
+              ],
+              "correct_answer": [
+                "path",
+                "=",
+                "'/'.join(parts)"
+              ]
+            },
+            {
+              "id": "fs-url-join-fill",
+              "type": "fill_blank",
+              "question": "Harbor potters recount crates before dawn. For build API URLs safely, fill the blank so the line counts the slashes in the joined path.",
+              "hints": [
+                "The blank is the missing piece of the example.",
+                "The example uses that piece.",
+                "'/'"
+              ],
+              "explanation": "join puts a slash between the path parts.",
+              "xp_reward": 10,
+              "starter_code": "path = ___ .join(parts)\n",
+              "options": [
+                "','",
+                "'-'",
+                "'/'",
+                "''"
+              ],
+              "correct_answer": "'/'"
+            },
+            {
+              "id": "fs-url-join-bug",
+              "type": "debugging",
+              "question": "Harbor potters recount crates before dawn. For build API URLs safely, which line does a different job than the example?",
+              "hints": [
+                "The other lines match the example.",
+                "One line is the odd one.",
+                "Line 2"
+              ],
+              "explanation": "The print counts parts and never joins them.",
+              "xp_reward": 10,
+              "starter_code": "parts = ['api', 'delta']\nprint(len(parts))\n",
+              "correct_answer": "2"
+            },
+            {
+              "id": "fs-url-join-predict-2",
+              "type": "output_prediction",
+              "question": "Harbor potters recount crates before dawn. For build API URLs safely, what does the second run display?",
+              "hints": [
+                "Apply the same steps to the new value.",
+                "The display comes from the last line.",
+                "1"
+              ],
+              "explanation": "The second Join URL Paths program displays that value.",
+              "xp_reward": 10,
+              "starter_code": "parts = ['api', 'delta']\nprint('/'.join(parts).count('/'))\n",
+              "options": [
+                "2",
+                "1",
+                "none",
+                "0"
+              ],
+              "correct_answer": "1"
+            },
+            {
+              "id": "fs-url-join-write",
+              "type": "code",
+              "question": "Harbor potters recount crates before dawn. For build API URLs safely, fill the blank so the program prints the result.",
+              "hints": [
+                "The blank is the missing piece.",
+                "Print the value that piece produces.",
+                "label = '/'.join(parts).count('/')"
+              ],
+              "explanation": "The printed value is the result after this step counts the slashes in the joined path.",
+              "xp_reward": 10,
+              "starter_code": "parts = ['api', 'v1', 'delta']\nlabel = ___\nprint(label)\n",
+              "solution_code": "parts = ['api', 'v1', 'delta']\nlabel = '/'.join(parts).count('/')\nprint(label)\n",
+              "tests": [
+                {
+                  "name": "fs-url-join-prints",
+                  "description": "The printed value is the result after this step counts the slashes in the joined",
+                  "expected_stdout": "2\n",
+                  "required": true
+                }
+              ]
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "fs-query-string",
-      "title": "2. Encode Query String",
-      "description": "Implement `query_string(params)` as sorted k=v pairs with urllib.parse.quote. The test checks that `query_string({'b': 2, 'a': 1})` equals `'a=1&b=2'`.",
+      "title": "Encode Query String",
+      "description": "Implement query_string(params) as sorted k=v pairs with urllib.parse.quote. The test checks that query_string({'b': 2, 'a': 1}) equals 'a=1&b=2'.",
       "order": 2,
       "difficulty": "intermediate",
       "duration_minutes": 5,
@@ -63,7 +225,7 @@
       ],
       "prerequisites": [],
       "learning_objectives": [
-        "Encode query parameters"
+        "Mesa potters recount crates before dawn, and encode query parameters."
       ],
       "starter_code": "from urllib.parse import quote\n\ndef query_string(params):\n    # TODO\n    pass\n",
       "solution_code": "from urllib.parse import quote\n\ndef query_string(params):\n    parts = []\n    for k in sorted(params):\n        parts.append(quote(str(k), safe='') + '=' + quote(str(params[k]), safe=''))\n    return '&'.join(parts)\n",
@@ -84,12 +246,174 @@
         "url": "https://docs.python.org/3/library/urllib.parse.html",
         "license": "Python documentation license (PSF)"
       },
-      "xp_reward": 10
+      "xp_reward": 10,
+      "player_mode": "micro",
+      "sublessons": [
+        {
+          "id": "fs-query-string-micro",
+          "title": "Encode Query String",
+          "description": "",
+          "order": 1,
+          "exercises": [
+            {
+              "id": "fs-query-string-teach",
+              "type": "teach",
+              "question": "Mesa potters recount crates before dawn, and encode query parameters.",
+              "hints": [
+                "Read the one job this step is practicing.",
+                "The example is about Encode Query String.",
+                "urlencode(pairs)"
+              ],
+              "explanation": "Mesa potters recount crates before dawn, and encode query parameters.",
+              "xp_reward": 0,
+              "worked_example": "urlencode(pairs)"
+            },
+            {
+              "id": "fs-query-string-mcq",
+              "type": "mcq",
+              "question": "Mesa potters recount crates before dawn. For encode query parameters, which line counts the keys in the query string?",
+              "hints": [
+                "Compare each line with the example.",
+                "One line matches the example.",
+                "urlencode(pairs)"
+              ],
+              "explanation": "urlencode turns the pairs into a query string.",
+              "xp_reward": 10,
+              "options": [
+                "pairs == pairs",
+                "return pairs",
+                "urlencode(pairs)",
+                "pass"
+              ],
+              "correct_answer": "urlencode(pairs)"
+            },
+            {
+              "id": "fs-query-string-predict",
+              "type": "output_prediction",
+              "question": "Mesa potters recount crates before dawn. For encode query parameters, what value is displayed?",
+              "hints": [
+                "Run the example in your head from the top.",
+                "The last line is what gets displayed.",
+                "1"
+              ],
+              "explanation": "The Encode Query String program displays that value.",
+              "xp_reward": 10,
+              "starter_code": "from urllib.parse import urlencode\npairs = {'q': 'linen'}\nprint(urlencode(pairs).count('='))\n",
+              "options": [
+                "2",
+                "1",
+                "none",
+                "0"
+              ],
+              "correct_answer": "1"
+            },
+            {
+              "id": "fs-query-string-order",
+              "type": "ordering",
+              "question": "Mesa potters recount crates before dawn. For encode query parameters, build the line that counts the keys in the query string.",
+              "hints": [
+                "Start at the left of the example.",
+                "Keep the example order.",
+                "text = urlencode(pairs)"
+              ],
+              "explanation": "urlencode turns the pairs into a query string.",
+              "xp_reward": 10,
+              "options": [
+                "text",
+                "=",
+                "urlencode(pairs)",
+                "=="
+              ],
+              "correct_answer": [
+                "text",
+                "=",
+                "urlencode(pairs)"
+              ]
+            },
+            {
+              "id": "fs-query-string-fill",
+              "type": "fill_blank",
+              "question": "Mesa potters recount crates before dawn. For encode query parameters, fill the blank so the line counts the keys in the query string.",
+              "hints": [
+                "The blank is the missing piece of the example.",
+                "The example uses that piece.",
+                "urlencode"
+              ],
+              "explanation": "urlencode turns the pairs into a query string.",
+              "xp_reward": 10,
+              "starter_code": "text = ___(pairs)\n",
+              "options": [
+                "len",
+                "urlencode",
+                "str",
+                "list"
+              ],
+              "correct_answer": "urlencode"
+            },
+            {
+              "id": "fs-query-string-bug",
+              "type": "debugging",
+              "question": "Mesa potters recount crates before dawn. For encode query parameters, which line does a different job than the example?",
+              "hints": [
+                "The other lines match the example.",
+                "One line is the odd one.",
+                "Line 3"
+              ],
+              "explanation": "The print counts the dictionary before encoding.",
+              "xp_reward": 10,
+              "starter_code": "from urllib.parse import urlencode\npairs = {'q': 'linen'}\nprint(len(pairs))\n",
+              "correct_answer": "3"
+            },
+            {
+              "id": "fs-query-string-predict-2",
+              "type": "output_prediction",
+              "question": "Mesa potters recount crates before dawn. For encode query parameters, what does the second run display?",
+              "hints": [
+                "Apply the same steps to the new value.",
+                "The display comes from the last line.",
+                "2"
+              ],
+              "explanation": "The second Encode Query String program displays that value.",
+              "xp_reward": 10,
+              "starter_code": "from urllib.parse import urlencode\npairs = {'q': 'linen', 'page': '2'}\nprint(urlencode(pairs).count('='))\n",
+              "options": [
+                "1",
+                "none",
+                "0",
+                "2"
+              ],
+              "correct_answer": "2"
+            },
+            {
+              "id": "fs-query-string-write",
+              "type": "code",
+              "question": "Mesa potters recount crates before dawn. For encode query parameters, fill the blank so the program prints the result.",
+              "hints": [
+                "The blank is the missing piece.",
+                "Print the value that piece produces.",
+                "label = urlencode(pairs).count('=')"
+              ],
+              "explanation": "The printed value is the result after this step counts the keys in the query string.",
+              "xp_reward": 10,
+              "starter_code": "from urllib.parse import urlencode\npairs = {'q': 'linen'}\nlabel = ___\nprint(label)\n",
+              "solution_code": "from urllib.parse import urlencode\npairs = {'q': 'linen'}\nlabel = urlencode(pairs).count('=')\nprint(label)\n",
+              "tests": [
+                {
+                  "name": "fs-query-string-prints",
+                  "description": "The printed value is the result after this step counts the keys in the query str",
+                  "expected_stdout": "1\n",
+                  "required": true
+                }
+              ]
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "fs-parse-json",
-      "title": "3. Parse JSON Response",
-      "description": "Implement `parse_json_response(body, status)` returning dict; raise ValueError if status>=400. The test checks that `parse_json_response('{\"ok\": true}', 200)` equals `{'ok': True}`; invalid input raises `ValueError`.",
+      "title": "Parse JSON Response",
+      "description": "Implement parse_json_response(body, status) returning dict; raise ValueError if status>=400. The test checks that parse_json_response('{\"ok\": true}', 200) equals {'ok': True}; invalid input raises ValueError.",
       "order": 3,
       "difficulty": "intermediate",
       "duration_minutes": 8,
@@ -101,7 +425,7 @@
       ],
       "prerequisites": [],
       "learning_objectives": [
-        "Parse JSON HTTP responses"
+        "Orchard potters recount crates before dawn, and parse JSON HTTP responses."
       ],
       "starter_code": "import json\n\ndef parse_json_response(body, status):\n    # TODO\n    pass\n",
       "solution_code": "import json\n\ndef parse_json_response(body, status):\n    if status >= 400:\n        raise ValueError('http ' + str(status))\n    return json.loads(body)\n",
@@ -122,12 +446,174 @@
         "url": "https://developer.mozilla.org/en-US/docs/Web/HTTP/Reference/Status",
         "license": "CC0 1.0 Universal (MDN Web Docs)"
       },
-      "xp_reward": 25
+      "xp_reward": 25,
+      "player_mode": "micro",
+      "sublessons": [
+        {
+          "id": "fs-parse-json-micro",
+          "title": "Parse JSON Response",
+          "description": "",
+          "order": 1,
+          "exercises": [
+            {
+              "id": "fs-parse-json-teach",
+              "type": "teach",
+              "question": "Orchard potters recount crates before dawn, and parse JSON HTTP responses.",
+              "hints": [
+                "Read the one job this step is practicing.",
+                "The example is about Parse JSON Response.",
+                "json.loads(raw)"
+              ],
+              "explanation": "Orchard potters recount crates before dawn, and parse JSON HTTP responses.",
+              "xp_reward": 0,
+              "worked_example": "json.loads(raw)"
+            },
+            {
+              "id": "fs-parse-json-mcq",
+              "type": "mcq",
+              "question": "Orchard potters recount crates before dawn. For parse JSON HTTP responses, which line reads the ok field from the response?",
+              "hints": [
+                "Compare each line with the example.",
+                "One line matches the example.",
+                "json.loads(raw)"
+              ],
+              "explanation": "loads turns the response text into a dictionary.",
+              "xp_reward": 10,
+              "options": [
+                "raw == raw",
+                "pass",
+                "json.loads(raw)",
+                "return raw"
+              ],
+              "correct_answer": "json.loads(raw)"
+            },
+            {
+              "id": "fs-parse-json-predict",
+              "type": "output_prediction",
+              "question": "Orchard potters recount crates before dawn. For parse JSON HTTP responses, what value is displayed?",
+              "hints": [
+                "Run the example in your head from the top.",
+                "The last line is what gets displayed.",
+                "58"
+              ],
+              "explanation": "The Parse JSON Response program displays that value.",
+              "xp_reward": 10,
+              "starter_code": "import json\nraw = '{\"ok\": 58}'\nprint(json.loads(raw)['ok'])\n",
+              "options": [
+                "61",
+                "58",
+                "none",
+                "0"
+              ],
+              "correct_answer": "58"
+            },
+            {
+              "id": "fs-parse-json-order",
+              "type": "ordering",
+              "question": "Orchard potters recount crates before dawn. For parse JSON HTTP responses, build the line that reads the ok field from the response.",
+              "hints": [
+                "Start at the left of the example.",
+                "Keep the example order.",
+                "data = json.loads(raw)"
+              ],
+              "explanation": "loads turns the response text into a dictionary.",
+              "xp_reward": 10,
+              "options": [
+                "data",
+                "=",
+                "json.loads(raw)",
+                "=="
+              ],
+              "correct_answer": [
+                "data",
+                "=",
+                "json.loads(raw)"
+              ]
+            },
+            {
+              "id": "fs-parse-json-fill",
+              "type": "fill_blank",
+              "question": "Orchard potters recount crates before dawn. For parse JSON HTTP responses, fill the blank so the line reads the ok field from the response.",
+              "hints": [
+                "The blank is the missing piece of the example.",
+                "The example uses that piece.",
+                "loads"
+              ],
+              "explanation": "loads turns the response text into a dictionary.",
+              "xp_reward": 10,
+              "starter_code": "data = json.___(raw)\n",
+              "options": [
+                "dumps",
+                "load",
+                "loads",
+                "dump"
+              ],
+              "correct_answer": "loads"
+            },
+            {
+              "id": "fs-parse-json-bug",
+              "type": "debugging",
+              "question": "Orchard potters recount crates before dawn. For parse JSON HTTP responses, which line does a different job than the example?",
+              "hints": [
+                "The other lines match the example.",
+                "One line is the odd one.",
+                "Line 3"
+              ],
+              "explanation": "The print shows a brace and never parses the response.",
+              "xp_reward": 10,
+              "starter_code": "import json\nraw = '{\"ok\": 58}'\nprint(raw[0])\n",
+              "correct_answer": "3"
+            },
+            {
+              "id": "fs-parse-json-predict-2",
+              "type": "output_prediction",
+              "question": "Orchard potters recount crates before dawn. For parse JSON HTTP responses, what does the second run display?",
+              "hints": [
+                "Apply the same steps to the new value.",
+                "The display comes from the last line.",
+                "61"
+              ],
+              "explanation": "The second Parse JSON Response program displays that value.",
+              "xp_reward": 10,
+              "starter_code": "import json\nraw = '{\"ok\": 61}'\nprint(json.loads(raw)['ok'])\n",
+              "options": [
+                "58",
+                "61",
+                "none",
+                "0"
+              ],
+              "correct_answer": "61"
+            },
+            {
+              "id": "fs-parse-json-write",
+              "type": "code",
+              "question": "Orchard potters recount crates before dawn. For parse JSON HTTP responses, fill the blank so the program prints the result.",
+              "hints": [
+                "The blank is the missing piece.",
+                "Print the value that piece produces.",
+                "label = json.loads(raw)['ok']"
+              ],
+              "explanation": "The printed value is the result after this step reads the ok field from the response.",
+              "xp_reward": 10,
+              "starter_code": "import json\nraw = '{\"ok\": 58}'\nlabel = ___\nprint(label)\n",
+              "solution_code": "import json\nraw = '{\"ok\": 58}'\nlabel = json.loads(raw)['ok']\nprint(label)\n",
+              "tests": [
+                {
+                  "name": "fs-parse-json-prints",
+                  "description": "The printed value is the result after this step reads the ok field from the resp",
+                  "expected_stdout": "58\n",
+                  "required": true
+                }
+              ]
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "fs-headers",
-      "title": "4. Merge Headers (Practice)",
-      "description": "Implement `merge_headers(base, extra)` — extra wins on conflicts. The test checks that `merge_headers({'A': '1'}, {'A': '2', 'B': '3'})` equals `{'A': '2', 'B': '3'}`.",
+      "title": "Merge Headers",
+      "description": "Implement merge_headers(base, extra) — extra wins on conflicts. The test checks that merge_headers({'A': '1'}, {'A': '2', 'B': '3'}) equals {'A': '2', 'B': '3'}.",
       "order": 4,
       "difficulty": "intermediate",
       "duration_minutes": 6,
@@ -139,7 +625,7 @@
       ],
       "prerequisites": [],
       "learning_objectives": [
-        "Merge HTTP headers"
+        "Quarry potters recount crates before dawn, and merge HTTP headers."
       ],
       "starter_code": "def merge_headers(base, extra):\n    # TODO\n    pass\n",
       "solution_code": "def merge_headers(base, extra):\n    out = dict(base)\n    out.update(extra)\n    return out\n",
@@ -163,35 +649,173 @@
       "xp_reward": 15,
       "sublessons": [
         {
-          "id": "fs-headers-order-1-sub",
-          "title": "Order the steps",
+          "id": "fs-headers-micro",
+          "title": "Merge Headers",
+          "description": "",
           "order": 1,
           "exercises": [
             {
-              "id": "fs-headers-order-1",
-              "type": "ordering",
-              "question": "Put the steps of `4. Merge Headers (Practice)` back in order. Each line depends on the one before it.",
+              "id": "fs-headers-teach",
+              "type": "teach",
+              "question": "Quarry potters recount crates before dawn, and merge HTTP headers.",
+              "hints": [
+                "Read the one job this step is practicing.",
+                "The example is about Merge Headers.",
+                "{**base, **extra}"
+              ],
+              "explanation": "Quarry potters recount crates before dawn, and merge HTTP headers.",
+              "xp_reward": 0,
+              "worked_example": "{**base, **extra}"
+            },
+            {
+              "id": "fs-headers-mcq",
+              "type": "mcq",
+              "question": "Quarry potters recount crates before dawn. For merge HTTP headers, which line counts the headers after the merge?",
+              "hints": [
+                "Compare each line with the example.",
+                "One line matches the example.",
+                "{**base, **extra}"
+              ],
+              "explanation": "Spreading both dictionaries merges the headers.",
+              "xp_reward": 10,
               "options": [
-                "out.update(extra)",
-                "return out",
-                "out = dict(base)"
+                "base == extra",
+                "return base",
+                "{**base, **extra}",
+                "pass"
+              ],
+              "correct_answer": "{**base, **extra}"
+            },
+            {
+              "id": "fs-headers-predict",
+              "type": "output_prediction",
+              "question": "Quarry potters recount crates before dawn. For merge HTTP headers, what value is displayed?",
+              "hints": [
+                "Run the example in your head from the top.",
+                "The last line is what gets displayed.",
+                "2"
+              ],
+              "explanation": "The Merge Headers program displays that value.",
+              "xp_reward": 10,
+              "starter_code": "base = {'Accept': 'json'}\nextra = {'Auth': 'thyme'}\nmerged = {**base, **extra}\nprint(len(merged))\n",
+              "options": [
+                "1",
+                "none",
+                "2",
+                "0"
+              ],
+              "correct_answer": "2"
+            },
+            {
+              "id": "fs-headers-order",
+              "type": "ordering",
+              "question": "Quarry potters recount crates before dawn. For merge HTTP headers, build the line that counts the headers after the merge.",
+              "hints": [
+                "Start at the left of the example.",
+                "Keep the example order.",
+                "merged = {**base, **extra}"
+              ],
+              "explanation": "Spreading both dictionaries merges the headers.",
+              "xp_reward": 10,
+              "options": [
+                "merged",
+                "=",
+                "{**base,",
+                "**extra}",
+                "=="
               ],
               "correct_answer": [
-                "out = dict(base)",
-                "out.update(extra)",
-                "return out"
+                "merged",
+                "=",
+                "{**base,",
+                "**extra}"
+              ]
+            },
+            {
+              "id": "fs-headers-fill",
+              "type": "fill_blank",
+              "question": "Quarry potters recount crates before dawn. For merge HTTP headers, fill the blank so the line counts the headers after the merge.",
+              "hints": [
+                "The blank is the missing piece of the example.",
+                "The example uses that piece.",
+                "**"
               ],
-              "explanation": "The order the solution in “4. Merge Headers (Practice)” actually runs in.",
-              "xp_reward": 10
+              "explanation": "Spreading both dictionaries merges the headers.",
+              "xp_reward": 10,
+              "starter_code": "merged = {**base, ___extra}\n",
+              "options": [
+                "*",
+                "+",
+                "**",
+                "-"
+              ],
+              "correct_answer": "**"
+            },
+            {
+              "id": "fs-headers-bug",
+              "type": "debugging",
+              "question": "Quarry potters recount crates before dawn. For merge HTTP headers, which line does a different job than the example?",
+              "hints": [
+                "The other lines match the example.",
+                "One line is the odd one.",
+                "Line 3"
+              ],
+              "explanation": "The print counts the original headers and ignores the extra ones.",
+              "xp_reward": 10,
+              "starter_code": "base = {'Accept': 'json'}\nextra = {'Auth': 'thyme'}\nprint(len(base))\n",
+              "correct_answer": "3"
+            },
+            {
+              "id": "fs-headers-predict-2",
+              "type": "output_prediction",
+              "question": "Quarry potters recount crates before dawn. For merge HTTP headers, what does the second run display?",
+              "hints": [
+                "Apply the same steps to the new value.",
+                "The display comes from the last line.",
+                "1"
+              ],
+              "explanation": "The second Merge Headers program displays that value.",
+              "xp_reward": 10,
+              "starter_code": "base = {'Accept': 'json'}\nextra = {}\nmerged = {**base, **extra}\nprint(len(merged))\n",
+              "options": [
+                "2",
+                "1",
+                "none",
+                "0"
+              ],
+              "correct_answer": "1"
+            },
+            {
+              "id": "fs-headers-write",
+              "type": "code",
+              "question": "Quarry potters recount crates before dawn. For merge HTTP headers, fill the blank so the program prints the result.",
+              "hints": [
+                "The blank is the missing piece.",
+                "Print the value that piece produces.",
+                "label = len(merged)"
+              ],
+              "explanation": "The printed value is the result after this step counts the headers after the merge.",
+              "xp_reward": 10,
+              "starter_code": "base = {'Accept': 'json'}\nextra = {'Auth': 'thyme'}\nmerged = {**base, **extra}\nlabel = ___\nprint(label)\n",
+              "solution_code": "base = {'Accept': 'json'}\nextra = {'Auth': 'thyme'}\nmerged = {**base, **extra}\nlabel = len(merged)\nprint(label)\n",
+              "tests": [
+                {
+                  "name": "fs-headers-prints",
+                  "description": "The printed value is the result after this step counts the headers after the mer",
+                  "expected_stdout": "2\n",
+                  "required": true
+                }
+              ]
             }
           ]
         }
-      ]
+      ],
+      "player_mode": "micro"
     },
     {
       "id": "fs-http-checkpoint",
-      "title": "5. Checkpoint: Build Request",
-      "description": "Implement `build_request(method, url, headers=None, json_body=None)` returning method/url/headers/body. The test checks that `build_request('post', '/x', json_body={'a': 1})['method']` equals `'POST'`; `build_request('post', '/x', json_body={'a': 1})['headers']['Content-Type']` contains `'application/json'`; `build_request('post', '/x', json_body={'a': 1})['body']` contains `'\"a\"'`.",
+      "title": "Practice Checkpoint Build Request",
+      "description": "Implement build_request(method, url, headers=None, json_body=None) returning method/url/headers/body. The test checks that build_request('post', '/x', json_body={'a': 1})['method'] equals 'POST'; build_request('post', '/x', json_body={'a': 1})['headers']['Content-Type'] contains 'application/json'; build_request('post', '/x', json_body={'a': 1})['body'] contains '\"a\"'.",
       "order": 5,
       "difficulty": "intermediate",
       "duration_minutes": 10,
@@ -203,7 +827,7 @@
       ],
       "prerequisites": [],
       "learning_objectives": [
-        "Assemble HTTP request objects"
+        "Attic potters recount crates before dawn, and assemble HTTP request objects."
       ],
       "starter_code": "import json\n\ndef build_request(method, url, headers=None, json_body=None):\n    # TODO\n    pass\n",
       "solution_code": "import json\n\ndef build_request(method, url, headers=None, json_body=None):\n    hdrs = dict(headers or {})\n    body = None\n    if json_body is not None:\n        body = json.dumps(json_body)\n        hdrs.setdefault('Content-Type', 'application/json')\n    return {'method': method.upper(), 'url': url, 'headers': hdrs, 'body': body}\n",
@@ -224,7 +848,169 @@
         "url": "https://docs.python.org/3/library/json.html",
         "license": "Python documentation license (PSF)"
       },
-      "xp_reward": 40
+      "xp_reward": 40,
+      "player_mode": "micro",
+      "sublessons": [
+        {
+          "id": "fs-http-checkpoint-micro",
+          "title": "Practice Checkpoint Build Request",
+          "description": "",
+          "order": 1,
+          "exercises": [
+            {
+              "id": "fs-http-checkpoint-teach",
+              "type": "teach",
+              "question": "Attic potters recount crates before dawn, and assemble HTTP request objects.",
+              "hints": [
+                "Read the one job this step is practicing.",
+                "The example is about Checkpoint Build Request.",
+                "req['method']"
+              ],
+              "explanation": "Attic potters recount crates before dawn, and assemble HTTP request objects.",
+              "xp_reward": 0,
+              "worked_example": "req['method']"
+            },
+            {
+              "id": "fs-http-checkpoint-mcq",
+              "type": "mcq",
+              "question": "Attic potters recount crates before dawn. For assemble HTTP request objects, which line reads the method on the request?",
+              "hints": [
+                "Compare each line with the example.",
+                "One line matches the example.",
+                "req['method']"
+              ],
+              "explanation": "The method field says how the request is sent.",
+              "xp_reward": 10,
+              "options": [
+                "req == req",
+                "return req",
+                "req['method']",
+                "pass"
+              ],
+              "correct_answer": "req['method']"
+            },
+            {
+              "id": "fs-http-checkpoint-predict",
+              "type": "output_prediction",
+              "question": "Attic potters recount crates before dawn. For assemble HTTP request objects, what value is displayed?",
+              "hints": [
+                "Run the example in your head from the top.",
+                "The last line is what gets displayed.",
+                "GET"
+              ],
+              "explanation": "The Checkpoint Build Request program displays that value.",
+              "xp_reward": 10,
+              "starter_code": "req = {'method': 'GET', 'path': '/thyme'}\nprint(req['method'])\n",
+              "options": [
+                "POST",
+                "none",
+                "GET",
+                "0"
+              ],
+              "correct_answer": "GET"
+            },
+            {
+              "id": "fs-http-checkpoint-order",
+              "type": "ordering",
+              "question": "Attic potters recount crates before dawn. For assemble HTTP request objects, build the line that reads the method on the request.",
+              "hints": [
+                "Start at the left of the example.",
+                "Keep the example order.",
+                "method = req['method']"
+              ],
+              "explanation": "The method field says how the request is sent.",
+              "xp_reward": 10,
+              "options": [
+                "method",
+                "=",
+                "req['method']",
+                "=="
+              ],
+              "correct_answer": [
+                "method",
+                "=",
+                "req['method']"
+              ]
+            },
+            {
+              "id": "fs-http-checkpoint-fill",
+              "type": "fill_blank",
+              "question": "Attic potters recount crates before dawn. For assemble HTTP request objects, fill the blank so the line reads the method on the request.",
+              "hints": [
+                "The blank is the missing piece of the example.",
+                "The example uses that piece.",
+                "'method'"
+              ],
+              "explanation": "The method field says how the request is sent.",
+              "xp_reward": 10,
+              "starter_code": "method = req[___]\n",
+              "options": [
+                "'path'",
+                "'ok'",
+                "'method'",
+                "'id'"
+              ],
+              "correct_answer": "'method'"
+            },
+            {
+              "id": "fs-http-checkpoint-bug",
+              "type": "debugging",
+              "question": "Attic potters recount crates before dawn. For assemble HTTP request objects, which line does a different job than the example?",
+              "hints": [
+                "The other lines match the example.",
+                "One line is the odd one.",
+                "Line 2"
+              ],
+              "explanation": "The print shows the path instead of the method.",
+              "xp_reward": 10,
+              "starter_code": "req = {'method': 'GET', 'path': '/thyme'}\nprint(req['path'])\n",
+              "correct_answer": "2"
+            },
+            {
+              "id": "fs-http-checkpoint-predict-2",
+              "type": "output_prediction",
+              "question": "Attic potters recount crates before dawn. For assemble HTTP request objects, what does the second run display?",
+              "hints": [
+                "Apply the same steps to the new value.",
+                "The display comes from the last line.",
+                "POST"
+              ],
+              "explanation": "The second Checkpoint Build Request program displays that value.",
+              "xp_reward": 10,
+              "starter_code": "req = {'method': 'POST', 'path': '/thyme'}\nprint(req['method'])\n",
+              "options": [
+                "GET",
+                "POST",
+                "none",
+                "0"
+              ],
+              "correct_answer": "POST"
+            },
+            {
+              "id": "fs-http-checkpoint-write",
+              "type": "code",
+              "question": "Attic potters recount crates before dawn. For assemble HTTP request objects, fill the blank so the program prints the result.",
+              "hints": [
+                "The blank is the missing piece.",
+                "Print the value that piece produces.",
+                "label = req['method']"
+              ],
+              "explanation": "The printed value is the result after this step reads the method on the request.",
+              "xp_reward": 10,
+              "starter_code": "req = {'method': 'GET', 'path': '/thyme'}\nlabel = ___\nprint(label)\n",
+              "solution_code": "req = {'method': 'GET', 'path': '/thyme'}\nlabel = req['method']\nprint(label)\n",
+              "tests": [
+                {
+                  "name": "fs-http-checkpoint-prints",
+                  "description": "The printed value is the result after this step reads the method on the request.",
+                  "expected_stdout": "GET\n",
+                  "required": true
+                }
+              ]
+            }
+          ]
+        }
+      ]
     }
   ]
 }

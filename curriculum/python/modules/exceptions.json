@@ -14,8 +14,8 @@
   "lessons": [
     {
       "id": "exceptions-step-1",
-      "title": "1. Raising and Catching Exceptions",
-      "description": "Use `try`/`except` to catch errors and `raise` to signal invalid input. Implement `safe_divide(a, b)` that returns None when dividing by zero. The test checks that `safe_divide(10, 2)` equals `5.0`; `safe_divide(1, 0)` is None.",
+      "title": "Practice Raising and Catching Exceptions",
+      "description": "Use try/except to catch errors and raise to signal invalid input. Implement safe_divide(a, b) that returns None when dividing by zero. The test checks that safe_divide(10, 2) equals 5.0; safe_divide(1, 0) is None.",
       "order": 71,
       "difficulty": "intermediate",
       "duration_minutes": 5,
@@ -29,7 +29,7 @@
         "classes"
       ],
       "learning_objectives": [
-        "Catch ZeroDivisionError and return None"
+        "Ridge crews recount crates before dawn, and catch ZeroDivisionError and return None."
       ],
       "starter_code": "def safe_divide(a, b):\n    # TODO: return a/b, or None if b is 0\n    pass\n",
       "solution_code": "def safe_divide(a, b):\n    try:\n        return a / b\n    except ZeroDivisionError:\n        return None\n",
@@ -54,12 +54,180 @@
         "url": "https://docs.python.org/3/tutorial/errors.html#handling-exceptions",
         "license": "Python documentation license (PSF)"
       },
-      "xp_reward": 10
+      "xp_reward": 10,
+      "player_mode": "micro",
+      "sublessons": [
+        {
+          "id": "exceptions-step-1-micro",
+          "title": "Practice Raising and Catching Exceptions",
+          "description": "",
+          "order": 1,
+          "exercises": [
+            {
+              "id": "exceptions-step-1-teach",
+              "type": "teach",
+              "question": "Ridge crews recount crates before dawn, and catch ZeroDivisionError and return None.",
+              "hints": [
+                "Read the one job this step is practicing.",
+                "The example is about Raising and Catching Exceptions.",
+                "except ZeroDivisionError"
+              ],
+              "explanation": "Ridge crews recount crates before dawn, and catch ZeroDivisionError and return None.",
+              "xp_reward": 0,
+              "worked_example": "except ZeroDivisionError"
+            },
+            {
+              "id": "exceptions-step-1-mcq",
+              "type": "mcq",
+              "question": "Ridge crews recount crates before dawn. For catch ZeroDivisionError and return None, which line returns a fallback when the divisor is zero?",
+              "hints": [
+                "Compare each line with the example.",
+                "One line matches the example.",
+                "except ZeroDivisionError"
+              ],
+              "explanation": "The except branch runs for ZeroDivisionError.",
+              "xp_reward": 10,
+              "options": [
+                "except KeyError",
+                "return value",
+                "print(value)",
+                "except ZeroDivisionError"
+              ],
+              "correct_answer": "except ZeroDivisionError"
+            },
+            {
+              "id": "exceptions-step-1-predict",
+              "type": "output_prediction",
+              "question": "Ridge crews recount crates before dawn. For catch ZeroDivisionError and return None, what value is displayed?",
+              "hints": [
+                "Run the example in your head from the top.",
+                "The last line is what gets displayed.",
+                "49"
+              ],
+              "explanation": "The Raising and Catching Exceptions program displays that value.",
+              "xp_reward": 10,
+              "starter_code": "def safe(value):\n    try:\n        return 43 // value\n    except ZeroDivisionError:\n        return 49\nprint(safe(0))\n",
+              "options": [
+                "21",
+                "none",
+                "0",
+                "49"
+              ],
+              "correct_answer": "49"
+            },
+            {
+              "id": "exceptions-step-1-order",
+              "type": "ordering",
+              "question": "Ridge crews recount crates before dawn. For catch ZeroDivisionError and return None, build the line that returns a fallback when the divisor is zero.",
+              "hints": [
+                "Start at the left of the example.",
+                "Keep the example order.",
+                "def safe(value): return left // value"
+              ],
+              "explanation": "return left // value is the division.",
+              "xp_reward": 10,
+              "options": [
+                "def",
+                "safe(value):",
+                "return",
+                "left",
+                "//",
+                "value",
+                "%"
+              ],
+              "correct_answer": [
+                "def",
+                "safe(value):",
+                "return",
+                "left",
+                "//",
+                "value"
+              ]
+            },
+            {
+              "id": "exceptions-step-1-fill",
+              "type": "fill_blank",
+              "question": "Ridge crews recount crates before dawn. For catch ZeroDivisionError and return None, fill the blank so the line returns a fallback when the divisor is zero.",
+              "hints": [
+                "The blank is the missing piece of the example.",
+                "The example uses that piece.",
+                "//"
+              ],
+              "explanation": "The double slash divides and drops the remainder.",
+              "xp_reward": 10,
+              "starter_code": "return 43 ___ value\n",
+              "options": [
+                "/",
+                "%",
+                "+",
+                "//"
+              ],
+              "correct_answer": "//"
+            },
+            {
+              "id": "exceptions-step-1-bug",
+              "type": "debugging",
+              "question": "Ridge crews recount crates before dawn. For catch ZeroDivisionError and return None, which line does a different job than the example?",
+              "hints": [
+                "The other lines match the example.",
+                "One line is the odd one.",
+                "Line 4"
+              ],
+              "explanation": "The except watches the wrong error.",
+              "xp_reward": 10,
+              "starter_code": "def safe(value):\n    try:\n        return 43 // value\n    except KeyError:\n        return 49\nprint(safe(0))\n",
+              "correct_answer": "4"
+            },
+            {
+              "id": "exceptions-step-1-predict-2",
+              "type": "output_prediction",
+              "question": "Ridge crews recount crates before dawn. For catch ZeroDivisionError and return None, what does the second run display?",
+              "hints": [
+                "Apply the same steps to the new value.",
+                "The display comes from the last line.",
+                "21"
+              ],
+              "explanation": "The second Raising and Catching Exceptions program displays that value.",
+              "xp_reward": 10,
+              "starter_code": "def safe(value):\n    try:\n        return 43 // value\n    except ZeroDivisionError:\n        return 49\nprint(safe(2))\n",
+              "options": [
+                "49",
+                "none",
+                "21",
+                "0"
+              ],
+              "correct_answer": "21"
+            },
+            {
+              "id": "exceptions-step-1-write",
+              "type": "code",
+              "question": "Ridge crews recount crates before dawn. For catch ZeroDivisionError and return None, fill the blank so the program prints the result.",
+              "hints": [
+                "The blank is the missing piece.",
+                "Print the value that piece produces.",
+                "label = safe(0)"
+              ],
+              "explanation": "The fallback is what gets printed.",
+              "xp_reward": 10,
+              "starter_code": "def safe(value):\n    try:\n        return 43 // value\n    except ZeroDivisionError:\n        return 49\nlabel = ___\nprint(label)\n",
+              "solution_code": "def safe(value):\n    try:\n        return 43 // value\n    except ZeroDivisionError:\n        return 49\nlabel = safe(0)\nprint(label)\n",
+              "tests": [
+                {
+                  "name": "exceptions-step-1-prints",
+                  "description": "The fallback is what gets printed.",
+                  "expected_stdout": "49\n",
+                  "required": true
+                }
+              ]
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "exceptions-step-2",
-      "title": "2. Custom Exception Classes",
-      "description": "Finish `set_age`. Subclass `Exception` to create domain-specific errors. Raise `InvalidAgeError` when age is negative. The test checks that `set_age(21)` equals `21`; invalid input raises `InvalidAgeError`.",
+      "title": "Practice Custom Exception Classes",
+      "description": "Finish set_age. Subclass Exception to create domain-specific errors. Raise InvalidAgeError when age is negative. The test checks that set_age(21) equals 21; invalid input raises InvalidAgeError.",
       "order": 72,
       "difficulty": "intermediate",
       "duration_minutes": 5,
@@ -73,7 +241,7 @@
         "classes"
       ],
       "learning_objectives": [
-        "Define and raise a custom exception"
+        "Cove crews recount crates before dawn, and define and raise a custom exception."
       ],
       "starter_code": "class InvalidAgeError(Exception):\n    pass\n\ndef set_age(age):\n    # TODO: raise InvalidAgeError if age < 0, else return age\n    pass\n",
       "solution_code": "class InvalidAgeError(Exception):\n    pass\n\ndef set_age(age):\n    if age < 0:\n        raise InvalidAgeError(f'age must be >= 0, got {age}')\n    return age\n",
@@ -94,12 +262,178 @@
         "url": "https://docs.python.org/3/tutorial/errors.html#defining-and-naming-exceptions",
         "license": "Python documentation license (PSF)"
       },
-      "xp_reward": 10
+      "xp_reward": 10,
+      "player_mode": "micro",
+      "sublessons": [
+        {
+          "id": "exceptions-step-2-micro",
+          "title": "Practice Custom Exception Classes",
+          "description": "",
+          "order": 1,
+          "exercises": [
+            {
+              "id": "exceptions-step-2-teach",
+              "type": "teach",
+              "question": "Cove crews recount crates before dawn, and define and raise a custom exception.",
+              "hints": [
+                "Read the one job this step is practicing.",
+                "The example is about Custom Exception Classes.",
+                "raise Boom('stop')"
+              ],
+              "explanation": "Cove crews recount crates before dawn, and define and raise a custom exception.",
+              "xp_reward": 0,
+              "worked_example": "raise Boom('stop')"
+            },
+            {
+              "id": "exceptions-step-2-mcq",
+              "type": "mcq",
+              "question": "Cove crews recount crates before dawn. For define and raise a custom exception, which line handles the custom error and shows a reading?",
+              "hints": [
+                "Compare each line with the example.",
+                "One line matches the example.",
+                "raise Boom('stop')"
+              ],
+              "explanation": "except Boom catches the raised Boom.",
+              "xp_reward": 10,
+              "options": [
+                "print(Boom)",
+                "raise Boom('stop')",
+                "pass",
+                "Boom == stop"
+              ],
+              "correct_answer": "raise Boom('stop')"
+            },
+            {
+              "id": "exceptions-step-2-predict",
+              "type": "output_prediction",
+              "question": "Cove crews recount crates before dawn. For define and raise a custom exception, what value is displayed?",
+              "hints": [
+                "Run the example in your head from the top.",
+                "The last line is what gets displayed.",
+                "47"
+              ],
+              "explanation": "The Custom Exception Classes program displays that value.",
+              "xp_reward": 10,
+              "starter_code": "class Boom(Exception):\n    pass\ntry:\n    raise Boom('stop')\nexcept Boom:\n    print(47)\n",
+              "options": [
+                "52",
+                "47",
+                "none",
+                "0"
+              ],
+              "correct_answer": "47"
+            },
+            {
+              "id": "exceptions-step-2-order",
+              "type": "ordering",
+              "question": "Cove crews recount crates before dawn. For define and raise a custom exception, build the line that handles the custom error and shows a reading.",
+              "hints": [
+                "Start at the left of the example.",
+                "Keep the example order.",
+                "raise Boom ( 'stop' )"
+              ],
+              "explanation": "raise Boom('stop') raises the custom error.",
+              "xp_reward": 10,
+              "options": [
+                "raise",
+                "Boom",
+                "(",
+                "'stop'",
+                ")",
+                "return"
+              ],
+              "correct_answer": [
+                "raise",
+                "Boom",
+                "(",
+                "'stop'",
+                ")"
+              ]
+            },
+            {
+              "id": "exceptions-step-2-fill",
+              "type": "fill_blank",
+              "question": "Cove crews recount crates before dawn. For define and raise a custom exception, fill the blank so the line handles the custom error and shows a reading.",
+              "hints": [
+                "The blank is the missing piece of the example.",
+                "The example uses that piece.",
+                "+"
+              ],
+              "explanation": "Plus builds the reading shown after the catch.",
+              "xp_reward": 10,
+              "starter_code": "shown = 44 ___ 3\n",
+              "options": [
+                "-",
+                "+",
+                "*",
+                "=="
+              ],
+              "correct_answer": "+"
+            },
+            {
+              "id": "exceptions-step-2-bug",
+              "type": "debugging",
+              "question": "Cove crews recount crates before dawn. For define and raise a custom exception, which line does a different job than the example?",
+              "hints": [
+                "The other lines match the example.",
+                "One line is the odd one.",
+                "Line 5"
+              ],
+              "explanation": "The except watches the wrong error.",
+              "xp_reward": 10,
+              "starter_code": "class Boom(Exception):\n    pass\ntry:\n    raise Boom('stop')\nexcept KeyError:\n    print(44)\n",
+              "correct_answer": "5"
+            },
+            {
+              "id": "exceptions-step-2-predict-2",
+              "type": "output_prediction",
+              "question": "Cove crews recount crates before dawn. For define and raise a custom exception, what does the second run display?",
+              "hints": [
+                "Apply the same steps to the new value.",
+                "The display comes from the last line.",
+                "52"
+              ],
+              "explanation": "The second Custom Exception Classes program displays that value.",
+              "xp_reward": 10,
+              "starter_code": "class Boom(Exception):\n    pass\ntry:\n    raise Boom('stop')\nexcept Boom:\n    print(52)\n",
+              "options": [
+                "47",
+                "none",
+                "0",
+                "52"
+              ],
+              "correct_answer": "52"
+            },
+            {
+              "id": "exceptions-step-2-write",
+              "type": "code",
+              "question": "Cove crews recount crates before dawn. For define and raise a custom exception, fill the blank so the program prints the result.",
+              "hints": [
+                "The blank is the missing piece.",
+                "Print the value that piece produces.",
+                "label = 44"
+              ],
+              "explanation": "The caught-branch reading is what gets printed.",
+              "xp_reward": 10,
+              "starter_code": "class Boom(Exception):\n    pass\ntry:\n    raise Boom('stop')\nexcept Boom:\n    label = ___\nprint(label)\n",
+              "solution_code": "class Boom(Exception):\n    pass\ntry:\n    raise Boom('stop')\nexcept Boom:\n    label = 44\nprint(label)\n",
+              "tests": [
+                {
+                  "name": "exceptions-step-2-prints",
+                  "description": "The caught-branch reading is what gets printed.",
+                  "expected_stdout": "44\n",
+                  "required": true
+                }
+              ]
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "exceptions-01",
-      "title": "3. Retry with Backoff (Concept Challenge)",
-      "description": "Implement `retry_call(fn, retries)` that calls `fn` up to `retries` times, returning the first success or re-raising the last exception. The test checks that `retry_call(flaky, retries=3)` equals `'ok'`; `calls['n']` equals `3`; invalid input raises `RuntimeError`.",
+      "title": "Practice Retry with Backoff",
+      "description": "Implement retry_call(fn, retries) that calls fn up to retries times, returning the first success or re-raising the last exception. The test checks that retry_call(flaky, retries=3) equals 'ok'; calls['n'] equals 3; invalid input raises RuntimeError.",
       "order": 73,
       "difficulty": "intermediate",
       "duration_minutes": 8,
@@ -113,7 +447,7 @@
         "classes"
       ],
       "learning_objectives": [
-        "Retry a failing callable and propagate the final error"
+        "Plaza crews recount crates before dawn, and retry a failing callable and propagate the final error."
       ],
       "starter_code": "def retry_call(fn, retries=3):\n    # TODO: call fn() up to retries times; return result; re-raise last exception\n    pass\n",
       "solution_code": "def retry_call(fn, retries=3):\n    last = None\n    for _ in range(retries):\n        try:\n            return fn()\n        except Exception as exc:\n            last = exc\n    raise last\n",
@@ -140,12 +474,178 @@
         "url": "https://docs.python.org/3/tutorial/errors.html#raising-exceptions",
         "license": "Python documentation license (PSF)"
       },
-      "xp_reward": 25
+      "xp_reward": 25,
+      "player_mode": "micro",
+      "sublessons": [
+        {
+          "id": "exceptions-01-micro",
+          "title": "Practice Retry with Backoff",
+          "description": "",
+          "order": 1,
+          "exercises": [
+            {
+              "id": "exceptions-01-teach",
+              "type": "teach",
+              "question": "Plaza crews recount crates before dawn, and retry a failing callable and propagate the final error.",
+              "hints": [
+                "Read the one job this step is practicing.",
+                "The example is about Retry with Backoff.",
+                "left_tries - 1"
+              ],
+              "explanation": "Plaza crews recount crates before dawn, and retry a failing callable and propagate the final error.",
+              "xp_reward": 0,
+              "worked_example": "left_tries - 1"
+            },
+            {
+              "id": "exceptions-01-mcq",
+              "type": "mcq",
+              "question": "Plaza crews recount crates before dawn. For retry a failing callable and propagate the final error, which line tries again until the call can return the goal?",
+              "hints": [
+                "Compare each line with the example.",
+                "One line matches the example.",
+                "left_tries - 1"
+              ],
+              "explanation": "Each RuntimeError spends one try.",
+              "xp_reward": 10,
+              "options": [
+                "print(goal)",
+                "pass",
+                "left_tries == 1",
+                "left_tries - 1"
+              ],
+              "correct_answer": "left_tries - 1"
+            },
+            {
+              "id": "exceptions-01-predict",
+              "type": "output_prediction",
+              "question": "Plaza crews recount crates before dawn. For retry a failing callable and propagate the final error, what value is displayed?",
+              "hints": [
+                "Run the example in your head from the top.",
+                "The last line is what gets displayed.",
+                "42"
+              ],
+              "explanation": "The Retry with Backoff program displays that value.",
+              "xp_reward": 10,
+              "starter_code": "def attempt(goal):\n    left_tries = 3\n    while left_tries:\n        try:\n            if left_tries > 1:\n                raise RuntimeError('again')\n            return goal\n        except RuntimeError:\n            left_tries = left_tries - 1\n    return 0\nprint(attempt(42))\n",
+              "options": [
+                "46",
+                "none",
+                "0",
+                "42"
+              ],
+              "correct_answer": "42"
+            },
+            {
+              "id": "exceptions-01-order",
+              "type": "ordering",
+              "question": "Plaza crews recount crates before dawn. For retry a failing callable and propagate the final error, build the line that tries again until the call can return the goal.",
+              "hints": [
+                "Start at the left of the example.",
+                "Keep the example order.",
+                "raise RuntimeError ( 'again' )"
+              ],
+              "explanation": "raise RuntimeError('again') spends a try.",
+              "xp_reward": 10,
+              "options": [
+                "raise",
+                "RuntimeError",
+                "(",
+                "'again'",
+                ")",
+                "return"
+              ],
+              "correct_answer": [
+                "raise",
+                "RuntimeError",
+                "(",
+                "'again'",
+                ")"
+              ]
+            },
+            {
+              "id": "exceptions-01-fill",
+              "type": "fill_blank",
+              "question": "Plaza crews recount crates before dawn. For retry a failing callable and propagate the final error, fill the blank so the line tries again until the call can return the goal.",
+              "hints": [
+                "The blank is the missing piece of the example.",
+                "The example uses that piece.",
+                "-"
+              ],
+              "explanation": "Minus spends one try.",
+              "xp_reward": 10,
+              "starter_code": "left_tries = left_tries ___ 1\n",
+              "options": [
+                "+",
+                "*",
+                "==",
+                "-"
+              ],
+              "correct_answer": "-"
+            },
+            {
+              "id": "exceptions-01-bug",
+              "type": "debugging",
+              "question": "Plaza crews recount crates before dawn. For retry a failing callable and propagate the final error, which line does a different job than the example?",
+              "hints": [
+                "The other lines match the example.",
+                "One line is the odd one.",
+                "Line 5"
+              ],
+              "explanation": "The threshold never matches, so no retry happens.",
+              "xp_reward": 10,
+              "starter_code": "def attempt(goal):\n    left_tries = 3\n    while left_tries:\n        try:\n            if left_tries > 5:\n                raise RuntimeError('again')\n            return goal\n        except RuntimeError:\n            left_tries = left_tries - 1\n    return 0\nprint(attempt(42))\n",
+              "correct_answer": "5"
+            },
+            {
+              "id": "exceptions-01-predict-2",
+              "type": "output_prediction",
+              "question": "Plaza crews recount crates before dawn. For retry a failing callable and propagate the final error, what does the second run display?",
+              "hints": [
+                "Apply the same steps to the new value.",
+                "The display comes from the last line.",
+                "46"
+              ],
+              "explanation": "The second Retry with Backoff program displays that value.",
+              "xp_reward": 10,
+              "starter_code": "def attempt(goal):\n    left_tries = 3\n    while left_tries:\n        try:\n            if left_tries > 1:\n                raise RuntimeError('again')\n            return goal\n        except RuntimeError:\n            left_tries = left_tries - 1\n    return 0\nprint(attempt(46))\n",
+              "options": [
+                "42",
+                "0",
+                "46",
+                "none"
+              ],
+              "correct_answer": "46"
+            },
+            {
+              "id": "exceptions-01-write",
+              "type": "code",
+              "question": "Plaza crews recount crates before dawn. For retry a failing callable and propagate the final error, fill the blank so the program prints the result.",
+              "hints": [
+                "The blank is the missing piece.",
+                "Print the value that piece produces.",
+                "label = attempt(42)"
+              ],
+              "explanation": "The goal reached after retries is what gets printed.",
+              "xp_reward": 10,
+              "starter_code": "def attempt(goal):\n    left_tries = 3\n    while left_tries:\n        try:\n            if left_tries > 1:\n                raise RuntimeError('again')\n            return goal\n        except RuntimeError:\n            left_tries = left_tries - 1\n    return 0\nlabel = ___\nprint(label)\n",
+              "solution_code": "def attempt(goal):\n    left_tries = 3\n    while left_tries:\n        try:\n            if left_tries > 1:\n                raise RuntimeError('again')\n            return goal\n        except RuntimeError:\n            left_tries = left_tries - 1\n    return 0\nlabel = attempt(42)\nprint(label)\n",
+              "tests": [
+                {
+                  "name": "exceptions-01-prints",
+                  "description": "The goal reached after retries is what gets printed.",
+                  "expected_stdout": "42\n",
+                  "required": true
+                }
+              ]
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "exceptions-practice-1",
-      "title": "4. Parse Int Safely (Practice)",
-      "description": "Write `parse_ints(values)` that converts strings to ints, skipping values that raise `ValueError`. The test checks that `parse_ints(['1', 'x', '3'])` equals `[1, 3]`.",
+      "title": "Parse Int Safely",
+      "description": "Write parse_ints(values) that converts strings to ints, skipping values that raise ValueError. The test checks that parse_ints(['1', 'x', '3']) equals [1, 3].",
       "order": 74,
       "difficulty": "intermediate",
       "duration_minutes": 6,
@@ -159,7 +659,7 @@
         "classes"
       ],
       "learning_objectives": [
-        "Skip invalid conversions with try/except"
+        "Marsh crews recount crates before dawn, and skip invalid conversions with try except."
       ],
       "starter_code": "def parse_ints(values):\n    # TODO: return list of ints; ignore ValueError on int(v)\n    pass\n",
       "solution_code": "def parse_ints(values):\n    result = []\n    for v in values:\n        try:\n            result.append(int(v))\n        except ValueError:\n            continue\n    return result\n",
@@ -180,12 +680,178 @@
         "url": "https://docs.python.org/3/tutorial/errors.html#handling-exceptions",
         "license": "Python documentation license (PSF)"
       },
-      "xp_reward": 15
+      "xp_reward": 15,
+      "player_mode": "micro",
+      "sublessons": [
+        {
+          "id": "exceptions-practice-1-micro",
+          "title": "Parse Int Safely",
+          "description": "",
+          "order": 1,
+          "exercises": [
+            {
+              "id": "exceptions-practice-1-teach",
+              "type": "teach",
+              "question": "Marsh crews recount crates before dawn, and skip invalid conversions with try except.",
+              "hints": [
+                "Read the one job this step is practicing.",
+                "The example is about Parse Int Safely.",
+                "except ValueError"
+              ],
+              "explanation": "Marsh crews recount crates before dawn, and skip invalid conversions with try except.",
+              "xp_reward": 0,
+              "worked_example": "except ValueError"
+            },
+            {
+              "id": "exceptions-practice-1-mcq",
+              "type": "mcq",
+              "question": "Marsh crews recount crates before dawn. For skip invalid conversions with try except, which line returns the fallback when the text is not a whole number?",
+              "hints": [
+                "Compare each line with the example.",
+                "One line matches the example.",
+                "except ValueError"
+              ],
+              "explanation": "ValueError means the text could not be converted.",
+              "xp_reward": 10,
+              "options": [
+                "except KeyError",
+                "return text",
+                "print(text)",
+                "except ValueError"
+              ],
+              "correct_answer": "except ValueError"
+            },
+            {
+              "id": "exceptions-practice-1-predict",
+              "type": "output_prediction",
+              "question": "Marsh crews recount crates before dawn. For skip invalid conversions with try except, what value is displayed?",
+              "hints": [
+                "Run the example in your head from the top.",
+                "The last line is what gets displayed.",
+                "42"
+              ],
+              "explanation": "The Parse Int Safely program displays that value.",
+              "xp_reward": 10,
+              "starter_code": "def parse(text):\n    try:\n        return int(text)\n    except ValueError:\n        return 42\nprint(parse('nope'))\n",
+              "options": [
+                "46",
+                "none",
+                "0",
+                "42"
+              ],
+              "correct_answer": "42"
+            },
+            {
+              "id": "exceptions-practice-1-order",
+              "type": "ordering",
+              "question": "Marsh crews recount crates before dawn. For skip invalid conversions with try except, build the line that returns the fallback when the text is not a whole number.",
+              "hints": [
+                "Start at the left of the example.",
+                "Keep the example order.",
+                "return int ( text )"
+              ],
+              "explanation": "return int(text) converts the text.",
+              "xp_reward": 10,
+              "options": [
+                "return",
+                "int",
+                "(",
+                "text",
+                ")",
+                "str"
+              ],
+              "correct_answer": [
+                "return",
+                "int",
+                "(",
+                "text",
+                ")"
+              ]
+            },
+            {
+              "id": "exceptions-practice-1-fill",
+              "type": "fill_blank",
+              "question": "Marsh crews recount crates before dawn. For skip invalid conversions with try except, fill the blank so the line returns the fallback when the text is not a whole number.",
+              "hints": [
+                "The blank is the missing piece of the example.",
+                "The example uses that piece.",
+                "+"
+              ],
+              "explanation": "Plus adds one after a successful conversion.",
+              "xp_reward": 10,
+              "starter_code": "shown = parsed ___ 1\n",
+              "options": [
+                "-",
+                "==",
+                "*",
+                "+"
+              ],
+              "correct_answer": "+"
+            },
+            {
+              "id": "exceptions-practice-1-bug",
+              "type": "debugging",
+              "question": "Marsh crews recount crates before dawn. For skip invalid conversions with try except, which line does a different job than the example?",
+              "hints": [
+                "The other lines match the example.",
+                "One line is the odd one.",
+                "Line 4"
+              ],
+              "explanation": "The except watches the wrong error.",
+              "xp_reward": 10,
+              "starter_code": "def parse(text):\n    try:\n        return int(text)\n    except KeyError:\n        return 42\nprint(parse('nope'))\n",
+              "correct_answer": "4"
+            },
+            {
+              "id": "exceptions-practice-1-predict-2",
+              "type": "output_prediction",
+              "question": "Marsh crews recount crates before dawn. For skip invalid conversions with try except, what does the second run display?",
+              "hints": [
+                "Apply the same steps to the new value.",
+                "The display comes from the last line.",
+                "46"
+              ],
+              "explanation": "The second Parse Int Safely program displays that value.",
+              "xp_reward": 10,
+              "starter_code": "def parse(text):\n    try:\n        return int(text)\n    except ValueError:\n        return 42\nprint(parse('46'))\n",
+              "options": [
+                "42",
+                "0",
+                "46",
+                "none"
+              ],
+              "correct_answer": "46"
+            },
+            {
+              "id": "exceptions-practice-1-write",
+              "type": "code",
+              "question": "Marsh crews recount crates before dawn. For skip invalid conversions with try except, fill the blank so the program prints the result.",
+              "hints": [
+                "The blank is the missing piece.",
+                "Print the value that piece produces.",
+                "label = parse('nope')"
+              ],
+              "explanation": "The fallback is what gets printed.",
+              "xp_reward": 10,
+              "starter_code": "def parse(text):\n    try:\n        return int(text)\n    except ValueError:\n        return 42\nlabel = ___\nprint(label)\n",
+              "solution_code": "def parse(text):\n    try:\n        return int(text)\n    except ValueError:\n        return 42\nlabel = parse('nope')\nprint(label)\n",
+              "tests": [
+                {
+                  "name": "exceptions-practice-1-prints",
+                  "description": "The fallback is what gets printed.",
+                  "expected_stdout": "42\n",
+                  "required": true
+                }
+              ]
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "exceptions-checkpoint",
-      "title": "5. Unit 15 Checkpoint: Exceptions Mastery",
-      "description": "Implement `read_config(data)` that raises `KeyError` wrapped as `ValueError('missing key')` when 'host' is absent. The test checks that `read_config({'host': 'localhost'})` equals `'localhost'`; invalid input raises `ValueError`.",
+      "title": "Practice Unit 15 Checkpoint Exceptions Mastery",
+      "description": "Implement read_config(data) that raises KeyError wrapped as ValueError('missing key') when 'host' is absent. The test checks that read_config({'host': 'localhost'}) equals 'localhost'; invalid input raises ValueError.",
       "order": 75,
       "difficulty": "intermediate",
       "duration_minutes": 10,
@@ -199,7 +865,7 @@
         "classes"
       ],
       "learning_objectives": [
-        "Translate KeyError into a clearer ValueError"
+        "Harbor archivists recount crates before dawn, and translate KeyError into a clearer ValueError."
       ],
       "starter_code": "def read_config(data):\n    # TODO: return the host from data, raising ValueError if absent\n    pass\n",
       "solution_code": "def read_config(data):\n    try:\n        return data['host']\n    except KeyError:\n        raise ValueError('missing key')\n",
@@ -220,7 +886,173 @@
         "url": "https://docs.python.org/3/tutorial/errors.html#raising-exceptions",
         "license": "Python documentation license (PSF)"
       },
-      "xp_reward": 40
+      "xp_reward": 40,
+      "player_mode": "micro",
+      "sublessons": [
+        {
+          "id": "exceptions-checkpoint-micro",
+          "title": "Practice Unit 15 Checkpoint Exceptions Mastery",
+          "description": "",
+          "order": 1,
+          "exercises": [
+            {
+              "id": "exceptions-checkpoint-teach",
+              "type": "teach",
+              "question": "Harbor archivists recount crates before dawn, and translate KeyError into a clearer ValueError.",
+              "hints": [
+                "Read the one job this step is practicing.",
+                "The example is about Unit 15 Checkpoint Exceptions Mastery.",
+                "except KeyError"
+              ],
+              "explanation": "Harbor archivists recount crates before dawn, and translate KeyError into a clearer ValueError.",
+              "xp_reward": 0,
+              "worked_example": "except KeyError"
+            },
+            {
+              "id": "exceptions-checkpoint-mcq",
+              "type": "mcq",
+              "question": "Harbor archivists recount crates before dawn. For translate KeyError into a clearer ValueError, which line returns a clear fallback when the name is missing?",
+              "hints": [
+                "Compare each line with the example.",
+                "One line matches the example.",
+                "except KeyError"
+              ],
+              "explanation": "KeyError means that name was never stored.",
+              "xp_reward": 10,
+              "options": [
+                "except ValueError",
+                "except KeyError",
+                "return pairs",
+                "print(key)"
+              ],
+              "correct_answer": "except KeyError"
+            },
+            {
+              "id": "exceptions-checkpoint-predict",
+              "type": "output_prediction",
+              "question": "Harbor archivists recount crates before dawn. For translate KeyError into a clearer ValueError, what value is displayed?",
+              "hints": [
+                "Run the example in your head from the top.",
+                "The last line is what gets displayed.",
+                "53"
+              ],
+              "explanation": "The Unit 15 Checkpoint Exceptions Mastery program displays that value.",
+              "xp_reward": 10,
+              "starter_code": "def lookup(pairs, key):\n    try:\n        return pairs[key]\n    except KeyError:\n        return 53\nprint(lookup({'a': 49}, 'missing'))\n",
+              "options": [
+                "49",
+                "53",
+                "none",
+                "0"
+              ],
+              "correct_answer": "53"
+            },
+            {
+              "id": "exceptions-checkpoint-order",
+              "type": "ordering",
+              "question": "Harbor archivists recount crates before dawn. For translate KeyError into a clearer ValueError, build the line that returns a clear fallback when the name is missing.",
+              "hints": [
+                "Start at the left of the example.",
+                "Keep the example order.",
+                "raise ValueError ( 'missing' )"
+              ],
+              "explanation": "raise ValueError('missing') replaces the lookup error.",
+              "xp_reward": 10,
+              "options": [
+                "raise",
+                "ValueError",
+                "(",
+                "'missing'",
+                ")",
+                "return"
+              ],
+              "correct_answer": [
+                "raise",
+                "ValueError",
+                "(",
+                "'missing'",
+                ")"
+              ]
+            },
+            {
+              "id": "exceptions-checkpoint-fill",
+              "type": "fill_blank",
+              "question": "Harbor archivists recount crates before dawn. For translate KeyError into a clearer ValueError, fill the blank so the line returns a clear fallback when the name is missing.",
+              "hints": [
+                "The blank is the missing piece of the example.",
+                "The example uses that piece.",
+                "+"
+              ],
+              "explanation": "Plus builds the fallback reading.",
+              "xp_reward": 10,
+              "starter_code": "shown = 49 ___ 4\n",
+              "options": [
+                "-",
+                "+",
+                "*",
+                "=="
+              ],
+              "correct_answer": "+"
+            },
+            {
+              "id": "exceptions-checkpoint-bug",
+              "type": "debugging",
+              "question": "Harbor archivists recount crates before dawn. For translate KeyError into a clearer ValueError, which line does a different job than the example?",
+              "hints": [
+                "The other lines match the example.",
+                "One line is the odd one.",
+                "Line 4"
+              ],
+              "explanation": "The except watches the wrong error.",
+              "xp_reward": 10,
+              "starter_code": "def lookup(pairs, key):\n    try:\n        return pairs[key]\n    except TypeError:\n        return 53\nprint(lookup({'a': 49}, 'missing'))\n",
+              "correct_answer": "4"
+            },
+            {
+              "id": "exceptions-checkpoint-predict-2",
+              "type": "output_prediction",
+              "question": "Harbor archivists recount crates before dawn. For translate KeyError into a clearer ValueError, what does the second run display?",
+              "hints": [
+                "Apply the same steps to the new value.",
+                "The display comes from the last line.",
+                "49"
+              ],
+              "explanation": "The second Unit 15 Checkpoint Exceptions Mastery program displays that value.",
+              "xp_reward": 10,
+              "starter_code": "def lookup(pairs, key):\n    try:\n        return pairs[key]\n    except KeyError:\n        return 53\nprint(lookup({'a': 49}, 'a'))\n",
+              "options": [
+                "53",
+                "none",
+                "0",
+                "49"
+              ],
+              "correct_answer": "49"
+            },
+            {
+              "id": "exceptions-checkpoint-write",
+              "type": "code",
+              "question": "Harbor archivists recount crates before dawn. For translate KeyError into a clearer ValueError, fill the blank so the program prints the result.",
+              "hints": [
+                "The blank is the missing piece.",
+                "Print the value that piece produces.",
+                "label = lookup({'a': 49}, 'missing')"
+              ],
+              "explanation": "The missing-name fallback is what gets printed.",
+              "xp_reward": 10,
+              "starter_code": "def lookup(pairs, key):\n    try:\n        return pairs[key]\n    except KeyError:\n        return 53\nlabel = ___\nprint(label)\n",
+              "solution_code": "def lookup(pairs, key):\n    try:\n        return pairs[key]\n    except KeyError:\n        return 53\nlabel = lookup({'a': 49}, 'missing')\nprint(label)\n",
+              "tests": [
+                {
+                  "name": "exceptions-checkpoint-prints",
+                  "description": "The missing-name fallback is what gets printed.",
+                  "expected_stdout": "53\n",
+                  "required": true
+                }
+              ]
+            }
+          ]
+        }
+      ]
     }
   ]
 }

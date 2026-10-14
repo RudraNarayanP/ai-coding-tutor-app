@@ -14,8 +14,8 @@
   "lessons": [
     {
       "id": "list-methods-step-1",
-      "title": "1. Adding & Removing Elements (`.append()`, `.insert()`, `.pop()`)",
-      "description": "Finish `manage_queue(queue, person)`. Add `person` to the end of the list with `.append`, then return the list. `manage_queue([\"Alice\"], \"Bob\")` equals `[\"Alice\", \"Bob\"]`. The test checks that `manage_queue([\"Alice\"], \"Bob\")` equals `[\"Alice\", \"Bob\"]`.",
+      "title": "Add Removing Elements, insert, pop",
+      "description": "Finish manage_queue(queue, person). Add person to the end of the list with .append, then return the list. manage_queue([\"Alice\"], \"Bob\") equals [\"Alice\", \"Bob\"]. The test checks that manage_queue([\"Alice\"], \"Bob\") equals [\"Alice\", \"Bob\"].",
       "order": 41,
       "difficulty": "beginner",
       "duration_minutes": 5,
@@ -27,7 +27,7 @@
         "lists"
       ],
       "learning_objectives": [
-        "Mutate lists using append, insert, and pop"
+        "Harbor runners recount crates before dawn, and mutate lists using append, insert, and pop."
       ],
       "starter_code": "def manage_queue(queue, person):\n    # TODO: queue.append(person); return queue\n    pass\n",
       "tests": [
@@ -48,12 +48,180 @@
         "url": "https://docs.python.org/3/tutorial/datastructures.html",
         "license": "Python documentation license (PSF)"
       },
-      "xp_reward": 10
+      "xp_reward": 10,
+      "player_mode": "micro",
+      "sublessons": [
+        {
+          "id": "list-methods-step-1-micro",
+          "title": "Add Removing Elements, insert, pop",
+          "description": "",
+          "order": 1,
+          "exercises": [
+            {
+              "id": "list-methods-step-1-teach",
+              "type": "teach",
+              "question": "Harbor runners recount crates before dawn, and mutate lists using append, insert, and pop.",
+              "hints": [
+                "Read the one job this step is practicing.",
+                "The example is about Adding Removing Elements, insert, pop.",
+                "items.append(reading)"
+              ],
+              "explanation": "Harbor runners recount crates before dawn, and mutate lists using append, insert, and pop.",
+              "xp_reward": 0,
+              "worked_example": "items.append(reading)"
+            },
+            {
+              "id": "list-methods-step-1-mcq",
+              "type": "mcq",
+              "question": "Harbor runners recount crates before dawn. For mutate lists using append, insert, and pop, which line adds the stored readings after one more is attached?",
+              "hints": [
+                "Compare each line with the example.",
+                "One line matches the example.",
+                "items.append(reading)"
+              ],
+              "explanation": "append stores the new reading at the end.",
+              "xp_reward": 10,
+              "options": [
+                "items[0]",
+                "len(items)",
+                "items.append(reading)",
+                "items + 1"
+              ],
+              "correct_answer": "items.append(reading)"
+            },
+            {
+              "id": "list-methods-step-1-predict",
+              "type": "output_prediction",
+              "question": "Harbor runners recount crates before dawn. For mutate lists using append, insert, and pop, what value is displayed?",
+              "hints": [
+                "Run the example in your head from the top.",
+                "The last line is what gets displayed.",
+                "42"
+              ],
+              "explanation": "The Adding Removing Elements, insert, pop program displays that value.",
+              "xp_reward": 10,
+              "starter_code": "items = [38]\nitems.append(4)\nprint(sum(items))\n",
+              "options": [
+                "46",
+                "none",
+                "42",
+                "0"
+              ],
+              "correct_answer": "42"
+            },
+            {
+              "id": "list-methods-step-1-order",
+              "type": "ordering",
+              "question": "Harbor runners recount crates before dawn. For mutate lists using append, insert, and pop, build the line that adds the stored readings after one more is attached.",
+              "hints": [
+                "Start at the left of the example.",
+                "Keep the example order.",
+                "items . append ( reading )"
+              ],
+              "explanation": "items.append(reading) stores the new reading.",
+              "xp_reward": 10,
+              "options": [
+                "items",
+                ".",
+                "append",
+                "(",
+                "reading",
+                ")",
+                "pop"
+              ],
+              "correct_answer": [
+                "items",
+                ".",
+                "append",
+                "(",
+                "reading",
+                ")"
+              ]
+            },
+            {
+              "id": "list-methods-step-1-fill",
+              "type": "fill_blank",
+              "question": "Harbor runners recount crates before dawn. For mutate lists using append, insert, and pop, fill the blank so the line adds the stored readings after one more is attached.",
+              "hints": [
+                "The blank is the missing piece of the example.",
+                "The example uses that piece.",
+                "+"
+              ],
+              "explanation": "Plus adds the stored readings.",
+              "xp_reward": 10,
+              "starter_code": "total = left ___ right\n",
+              "options": [
+                "-",
+                "*",
+                "+",
+                "=="
+              ],
+              "correct_answer": "+"
+            },
+            {
+              "id": "list-methods-step-1-bug",
+              "type": "debugging",
+              "question": "Harbor runners recount crates before dawn. For mutate lists using append, insert, and pop, which line does a different job than the example?",
+              "hints": [
+                "The other lines match the example.",
+                "One line is the odd one.",
+                "Line 2"
+              ],
+              "explanation": "Zero is attached instead of the reading.",
+              "xp_reward": 10,
+              "starter_code": "items = [38]\nitems.append(0)\nprint(sum(items))\n",
+              "correct_answer": "2"
+            },
+            {
+              "id": "list-methods-step-1-predict-2",
+              "type": "output_prediction",
+              "question": "Harbor runners recount crates before dawn. For mutate lists using append, insert, and pop, what does the second run display?",
+              "hints": [
+                "Apply the same steps to the new value.",
+                "The display comes from the last line.",
+                "46"
+              ],
+              "explanation": "The second Adding Removing Elements, insert, pop program displays that value.",
+              "xp_reward": 10,
+              "starter_code": "items = [38]\nitems.append(4)\nitems.append(4)\nprint(sum(items))\n",
+              "options": [
+                "42",
+                "0",
+                "none",
+                "46"
+              ],
+              "correct_answer": "46"
+            },
+            {
+              "id": "list-methods-step-1-write",
+              "type": "code",
+              "question": "Harbor runners recount crates before dawn. For mutate lists using append, insert, and pop, fill the blank so the program prints the result.",
+              "hints": [
+                "The blank is the missing piece.",
+                "Print the value that piece produces.",
+                "label = sum(items)"
+              ],
+              "explanation": "The stored total is what gets printed.",
+              "xp_reward": 10,
+              "starter_code": "items = [38]\nitems.append(4)\nlabel = ___\nprint(label)\n",
+              "solution_code": "items = [38]\nitems.append(4)\nlabel = sum(items)\nprint(label)\n",
+              "tests": [
+                {
+                  "name": "list-methods-step-1-prints",
+                  "description": "The stored total is what gets printed.",
+                  "expected_stdout": "42\n",
+                  "required": true
+                }
+              ]
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "list-methods-step-2",
-      "title": "2. Searching & Sorting (`.index()`, `.count()`, `sorted()`)",
-      "description": "Finish `count_and_sort(numbers, target)`. Return a tuple: how many times `target` appears, and a new list of the numbers in sorted order. `count_and_sort([3, 1, 3, 2], 3)` equals `(2, [1, 2, 3, 3])`. The test checks that `count_and_sort([3, 1, 3, 2], 3)` equals `(2, [1, 2, 3, 3])`.",
+      "title": "Search Sorting, count, sorted",
+      "description": "Finish count_and_sort(numbers, target). Return a tuple: how many times target appears, and a new list of the numbers in sorted order. count_and_sort([3, 1, 3, 2], 3) equals (2, [1, 2, 3, 3]). The test checks that count_and_sort([3, 1, 3, 2], 3) equals (2, [1, 2, 3, 3]).",
       "order": 42,
       "difficulty": "beginner",
       "duration_minutes": 5,
@@ -65,7 +233,7 @@
         "lists"
       ],
       "learning_objectives": [
-        "Search and sort lists"
+        "Mesa runners recount crates before dawn, and search and sort lists."
       ],
       "starter_code": "def count_and_sort(lst, target):\n    # TODO: return how often target appears, and the sorted list\n    pass\n",
       "tests": [
@@ -86,12 +254,180 @@
         "url": "https://docs.python.org/3/tutorial/datastructures.html#sorting-lists",
         "license": "Python documentation license (PSF)"
       },
-      "xp_reward": 10
+      "xp_reward": 10,
+      "player_mode": "micro",
+      "sublessons": [
+        {
+          "id": "list-methods-step-2-micro",
+          "title": "Search Sorting, count, sorted",
+          "description": "",
+          "order": 1,
+          "exercises": [
+            {
+              "id": "list-methods-step-2-teach",
+              "type": "teach",
+              "question": "Mesa runners recount crates before dawn, and search and sort lists.",
+              "hints": [
+                "Read the one job this step is practicing.",
+                "The example is about Searching Sorting, count, sorted.",
+                "sorted(items)"
+              ],
+              "explanation": "Mesa runners recount crates before dawn, and search and sort lists.",
+              "xp_reward": 0,
+              "worked_example": "sorted(items)"
+            },
+            {
+              "id": "list-methods-step-2-mcq",
+              "type": "mcq",
+              "question": "Mesa runners recount crates before dawn. For search and sort lists, which line shows a reading from the sorted order?",
+              "hints": [
+                "Compare each line with the example.",
+                "One line matches the example.",
+                "sorted(items)"
+              ],
+              "explanation": "sorted(items) orders the readings from small to large.",
+              "xp_reward": 10,
+              "options": [
+                "items[0]",
+                "items.append(0)",
+                "print(items)",
+                "sorted(items)"
+              ],
+              "correct_answer": "sorted(items)"
+            },
+            {
+              "id": "list-methods-step-2-predict",
+              "type": "output_prediction",
+              "question": "Mesa runners recount crates before dawn. For search and sort lists, what value is displayed?",
+              "hints": [
+                "Run the example in your head from the top.",
+                "The last line is what gets displayed.",
+                "39"
+              ],
+              "explanation": "The Searching Sorting, count, sorted program displays that value.",
+              "xp_reward": 10,
+              "starter_code": "items = [44, 39, 41]\nprint(sorted(items)[0])\n",
+              "options": [
+                "none",
+                "0",
+                "44",
+                "39"
+              ],
+              "correct_answer": "39"
+            },
+            {
+              "id": "list-methods-step-2-order",
+              "type": "ordering",
+              "question": "Mesa runners recount crates before dawn. For search and sort lists, build the line that shows a reading from the sorted order.",
+              "hints": [
+                "Start at the left of the example.",
+                "Keep the example order.",
+                "ordered = sorted ( items )"
+              ],
+              "explanation": "ordered = sorted(items) stores the ordered readings.",
+              "xp_reward": 10,
+              "options": [
+                "ordered",
+                "=",
+                "sorted",
+                "(",
+                "items",
+                ")",
+                "reversed"
+              ],
+              "correct_answer": [
+                "ordered",
+                "=",
+                "sorted",
+                "(",
+                "items",
+                ")"
+              ]
+            },
+            {
+              "id": "list-methods-step-2-fill",
+              "type": "fill_blank",
+              "question": "Mesa runners recount crates before dawn. For search and sort lists, fill the blank so the line shows a reading from the sorted order.",
+              "hints": [
+                "The blank is the missing piece of the example.",
+                "The example uses that piece.",
+                "<"
+              ],
+              "explanation": "The first sorted reading is smaller than the next.",
+              "xp_reward": 10,
+              "starter_code": "if ordered[0] ___ ordered[1]:\n    label = 1\n",
+              "options": [
+                "+",
+                "-",
+                "*",
+                "<"
+              ],
+              "correct_answer": "<"
+            },
+            {
+              "id": "list-methods-step-2-bug",
+              "type": "debugging",
+              "question": "Mesa runners recount crates before dawn. For search and sort lists, which line does a different job than the example?",
+              "hints": [
+                "The other lines match the example.",
+                "One line is the odd one.",
+                "Line 2"
+              ],
+              "explanation": "The order is reversed, so the first reading is the large one.",
+              "xp_reward": 10,
+              "starter_code": "items = [44, 39, 41]\nprint(sorted(items, reverse=True)[0])\n",
+              "correct_answer": "2"
+            },
+            {
+              "id": "list-methods-step-2-predict-2",
+              "type": "output_prediction",
+              "question": "Mesa runners recount crates before dawn. For search and sort lists, what does the second run display?",
+              "hints": [
+                "Apply the same steps to the new value.",
+                "The display comes from the last line.",
+                "44"
+              ],
+              "explanation": "The second Searching Sorting, count, sorted program displays that value.",
+              "xp_reward": 10,
+              "starter_code": "items = [44, 39, 41]\nprint(sorted(items)[-1])\n",
+              "options": [
+                "39",
+                "0",
+                "44",
+                "none"
+              ],
+              "correct_answer": "44"
+            },
+            {
+              "id": "list-methods-step-2-write",
+              "type": "code",
+              "question": "Mesa runners recount crates before dawn. For search and sort lists, fill the blank so the program prints the result.",
+              "hints": [
+                "The blank is the missing piece.",
+                "Print the value that piece produces.",
+                "label = ordered[0]"
+              ],
+              "explanation": "The smallest reading is what gets printed.",
+              "xp_reward": 10,
+              "starter_code": "items = [44, 39, 41]\nordered = sorted(items)\nlabel = ___\nprint(label)\n",
+              "solution_code": "items = [44, 39, 41]\nordered = sorted(items)\nlabel = ordered[0]\nprint(label)\n",
+              "tests": [
+                {
+                  "name": "list-methods-step-2-prints",
+                  "description": "The smallest reading is what gets printed.",
+                  "expected_stdout": "39\n",
+                  "required": true
+                }
+              ]
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "list-methods-01",
-      "title": "3. Chaitana's Colossal Coaster (Concept Challenge)",
-      "description": "Finish `add_me_to_the_queue`, `find_my_friend`, `add_me_with_my_friends`, `remove_the_mean_person` and 3 more. Manage coaster queues using `.append()`, `.insert()`, `.remove()`, `.pop()`, `.count()`, `.index()`, and `sorted()`. The test checks that `add_me_to_the_queue(['Tony', 'Bob'], ['Natasha', 'Steven'], 1, 'Riri')` equals `['Tony', 'Bob', 'Riri']`; `find_my_friend(['Natasha', 'Steve', 'TChalla'], 'Steve')` equals `1`; `add_me_with_my_friends(['Natasha', 'Steve', 'TChalla'], 1, 'Wanda')` equals `['Natasha', 'Wanda', 'Steve', 'TChalla']`.",
+      "title": "Practice Chaitana's Colossal Coaster",
+      "description": "Finish add_me_to_the_queue, find_my_friend, add_me_with_my_friends, remove_the_mean_person and 3 more. Manage coaster queues using .append(), .insert(), .remove(), .pop(), .count(), .index(), and sorted(). The test checks that add_me_to_the_queue(['Tony', 'Bob'], ['Natasha', 'Steven'], 1, 'Riri') equals ['Tony', 'Bob', 'Riri']; find_my_friend(['Natasha', 'Steve', 'TChalla'], 'Steve') equals 1; add_me_with_my_friends(['Natasha', 'Steve', 'TChalla'], 1, 'Wanda') equals ['Natasha', 'Wanda', 'Steve', 'TChalla'].",
       "order": 43,
       "difficulty": "beginner",
       "duration_minutes": 8,
@@ -103,9 +439,7 @@
         "lists"
       ],
       "learning_objectives": [
-        "Add elements with .append() and .insert()",
-        "Remove elements with .remove() and .pop()",
-        "Count occurrences with .count() and sort with sorted()"
+        "Orchard runners recount crates before dawn, and add elements with."
       ],
       "starter_code": "def add_me_to_the_queue(express_queue, normal_queue, ticket_type, person_name):\n    \"\"\"Append person to the appropriate queue and return it.\"\"\"\n    pass\n\ndef find_my_friend(queue, friend_name):\n    \"\"\"Return the index of friend_name in queue.\"\"\"\n    pass\n\ndef add_me_with_my_friends(queue, index, person_name):\n    \"\"\"Insert person_name at index and return queue.\"\"\"\n    pass\n\ndef remove_the_mean_person(queue, person_name):\n    \"\"\"Remove first occurrence of person_name and return queue.\"\"\"\n    pass\n\ndef how_many_namefellows(queue, person_name):\n    \"\"\"Return count of person_name occurrences.\"\"\"\n    pass\n\ndef remove_the_last_person(queue):\n    \"\"\"Remove and return last person.\"\"\"\n    pass\n\ndef sorted_names(queue):\n    \"\"\"Return alphabetically sorted copy of queue.\"\"\"\n    pass\n",
       "tests": [
@@ -162,12 +496,184 @@
         "license": "MIT"
       },
       "solution_code": "def add_me_to_the_queue(express_queue, normal_queue, ticket_type, person_name):\n    \"\"\"Append person to the appropriate queue and return it.\"\"\"\n    queue = express_queue if ticket_type == 1 else normal_queue\n    queue.append(person_name)\n    return queue\n\n\ndef find_my_friend(queue, friend_name):\n    \"\"\"Return the index of friend_name in queue.\"\"\"\n    return queue.index(friend_name)\n\n\ndef add_me_with_my_friends(queue, index, person_name):\n    \"\"\"Insert person_name at index and return queue.\"\"\"\n    queue.insert(index, person_name)\n    return queue\n\n\ndef remove_the_mean_person(queue, person_name):\n    \"\"\"Remove first occurrence of person_name and return queue.\"\"\"\n    queue.remove(person_name)\n    return queue\n\n\ndef how_many_namefellows(queue, person_name):\n    \"\"\"Return count of person_name occurrences.\"\"\"\n    return queue.count(person_name)\n\n\ndef remove_the_last_person(queue):\n    \"\"\"Remove and return last person.\"\"\"\n    return queue.pop()\n\n\ndef sorted_names(queue):\n    \"\"\"Return alphabetically sorted copy of queue.\"\"\"\n    return sorted(queue)\n",
-      "xp_reward": 25
+      "xp_reward": 25,
+      "player_mode": "micro",
+      "sublessons": [
+        {
+          "id": "list-methods-01-micro",
+          "title": "Practice Chaitana's Colossal Coaster",
+          "description": "",
+          "order": 1,
+          "exercises": [
+            {
+              "id": "list-methods-01-teach",
+              "type": "teach",
+              "question": "Orchard runners recount crates before dawn, and add elements with.",
+              "hints": [
+                "Read the one job this step is practicing.",
+                "The example is about Chaitana's Colossal Coaster.",
+                "items.insert(0, reading)"
+              ],
+              "explanation": "Orchard runners recount crates before dawn, and add elements with.",
+              "xp_reward": 0,
+              "worked_example": "items.insert(0, reading)"
+            },
+            {
+              "id": "list-methods-01-mcq",
+              "type": "mcq",
+              "question": "Orchard runners recount crates before dawn. For add elements with, which line adds the readings after one is placed at the front?",
+              "hints": [
+                "Compare each line with the example.",
+                "One line matches the example.",
+                "items.insert(0, reading)"
+              ],
+              "explanation": "insert(0, reading) places the reading at the front.",
+              "xp_reward": 10,
+              "options": [
+                "items.append(0)",
+                "items.insert(0, reading)",
+                "print(items)",
+                "items[0] == reading"
+              ],
+              "correct_answer": "items.insert(0, reading)"
+            },
+            {
+              "id": "list-methods-01-predict",
+              "type": "output_prediction",
+              "question": "Orchard runners recount crates before dawn. For add elements with, what value is displayed?",
+              "hints": [
+                "Run the example in your head from the top.",
+                "The last line is what gets displayed.",
+                "41"
+              ],
+              "explanation": "The Chaitana's Colossal Coaster program displays that value.",
+              "xp_reward": 10,
+              "starter_code": "items = [4]\nitems.insert(0, 37)\nprint(sum(items))\n",
+              "options": [
+                "none",
+                "45",
+                "41",
+                "0"
+              ],
+              "correct_answer": "41"
+            },
+            {
+              "id": "list-methods-01-order",
+              "type": "ordering",
+              "question": "Orchard runners recount crates before dawn. For add elements with, build the line that adds the readings after one is placed at the front.",
+              "hints": [
+                "Start at the left of the example.",
+                "Keep the example order.",
+                "items . insert ( 0 , reading )"
+              ],
+              "explanation": "items.insert(0, reading) places the reading first.",
+              "xp_reward": 10,
+              "options": [
+                "items",
+                ".",
+                "insert",
+                "(",
+                "0",
+                ",",
+                "reading",
+                ")",
+                "append"
+              ],
+              "correct_answer": [
+                "items",
+                ".",
+                "insert",
+                "(",
+                "0",
+                ",",
+                "reading",
+                ")"
+              ]
+            },
+            {
+              "id": "list-methods-01-fill",
+              "type": "fill_blank",
+              "question": "Orchard runners recount crates before dawn. For add elements with, fill the blank so the line adds the readings after one is placed at the front.",
+              "hints": [
+                "The blank is the missing piece of the example.",
+                "The example uses that piece.",
+                "+"
+              ],
+              "explanation": "Plus adds the stored readings.",
+              "xp_reward": 10,
+              "starter_code": "total = left ___ right\n",
+              "options": [
+                "*",
+                "==",
+                "-",
+                "+"
+              ],
+              "correct_answer": "+"
+            },
+            {
+              "id": "list-methods-01-bug",
+              "type": "debugging",
+              "question": "Orchard runners recount crates before dawn. For add elements with, which line does a different job than the example?",
+              "hints": [
+                "The other lines match the example.",
+                "One line is the odd one.",
+                "Line 2"
+              ],
+              "explanation": "The reading is placed after the old front.",
+              "xp_reward": 10,
+              "starter_code": "items = [4]\nitems.insert(1, 37)\nprint(items[0])\n",
+              "correct_answer": "2"
+            },
+            {
+              "id": "list-methods-01-predict-2",
+              "type": "output_prediction",
+              "question": "Orchard runners recount crates before dawn. For add elements with, what does the second run display?",
+              "hints": [
+                "Apply the same steps to the new value.",
+                "The display comes from the last line.",
+                "45"
+              ],
+              "explanation": "The second Chaitana's Colossal Coaster program displays that value.",
+              "xp_reward": 10,
+              "starter_code": "items = [4, 4]\nitems.insert(0, 37)\nprint(sum(items))\n",
+              "options": [
+                "41",
+                "45",
+                "none",
+                "0"
+              ],
+              "correct_answer": "45"
+            },
+            {
+              "id": "list-methods-01-write",
+              "type": "code",
+              "question": "Orchard runners recount crates before dawn. For add elements with, fill the blank so the program prints the result.",
+              "hints": [
+                "The blank is the missing piece.",
+                "Print the value that piece produces.",
+                "label = sum(items)"
+              ],
+              "explanation": "The stored total is what gets printed.",
+              "xp_reward": 10,
+              "starter_code": "items = [4]\nitems.insert(0, 37)\nlabel = ___\nprint(label)\n",
+              "solution_code": "items = [4]\nitems.insert(0, 37)\nlabel = sum(items)\nprint(label)\n",
+              "tests": [
+                {
+                  "name": "list-methods-01-prints",
+                  "description": "The stored total is what gets printed.",
+                  "expected_stdout": "41\n",
+                  "required": true
+                }
+              ]
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "list-methods-practice-1",
-      "title": "4. Task Stack (Practice)",
-      "description": "Finish `process_task`. Implement a task stack: add tasks with `.append()`, process the top task with `.pop()`. The test checks that `process_task([\"task1\", \"task2\"])` equals `\"task2\"`.",
+      "title": "Practice Task Stack",
+      "description": "Finish process_task. Implement a task stack: add tasks with .append(), process the top task with .pop(). The test checks that process_task([\"task1\", \"task2\"]) equals \"task2\".",
       "order": 44,
       "difficulty": "beginner",
       "duration_minutes": 6,
@@ -179,7 +685,7 @@
         "lists"
       ],
       "learning_objectives": [
-        "Implement LIFO stack with list methods"
+        "Quarry runners recount crates before dawn, and implement LIFO stack with list methods."
       ],
       "starter_code": "def process_task(task_stack):\n    # TODO: Return task_stack.pop() if task_stack else None\n    pass\n",
       "tests": [
@@ -200,12 +706,178 @@
         "url": "https://docs.python.org/3/tutorial/datastructures.html",
         "license": "Python documentation license (PSF)"
       },
-      "xp_reward": 15
+      "xp_reward": 15,
+      "player_mode": "micro",
+      "sublessons": [
+        {
+          "id": "list-methods-practice-1-micro",
+          "title": "Practice Task Stack",
+          "description": "",
+          "order": 1,
+          "exercises": [
+            {
+              "id": "list-methods-practice-1-teach",
+              "type": "teach",
+              "question": "Quarry runners recount crates before dawn, and implement LIFO stack with list methods.",
+              "hints": [
+                "Read the one job this step is practicing.",
+                "The example is about Task Stack.",
+                "items.pop()"
+              ],
+              "explanation": "Quarry runners recount crates before dawn, and implement LIFO stack with list methods.",
+              "xp_reward": 0,
+              "worked_example": "items.pop()"
+            },
+            {
+              "id": "list-methods-practice-1-mcq",
+              "type": "mcq",
+              "question": "Quarry runners recount crates before dawn. For implement LIFO stack with list methods, which line shows the new top after the last reading is removed?",
+              "hints": [
+                "Compare each line with the example.",
+                "One line matches the example.",
+                "items.pop()"
+              ],
+              "explanation": "pop() removes the last reading.",
+              "xp_reward": 10,
+              "options": [
+                "items.append(0)",
+                "items[0]",
+                "items.pop()",
+                "len(items)"
+              ],
+              "correct_answer": "items.pop()"
+            },
+            {
+              "id": "list-methods-practice-1-predict",
+              "type": "output_prediction",
+              "question": "Quarry runners recount crates before dawn. For implement LIFO stack with list methods, what value is displayed?",
+              "hints": [
+                "Run the example in your head from the top.",
+                "The last line is what gets displayed.",
+                "41"
+              ],
+              "explanation": "The Task Stack program displays that value.",
+              "xp_reward": 10,
+              "starter_code": "items = [37, 4, 43]\nitems.pop()\nprint(items[-1] + 37)\n",
+              "options": [
+                "74",
+                "none",
+                "41",
+                "0"
+              ],
+              "correct_answer": "41"
+            },
+            {
+              "id": "list-methods-practice-1-order",
+              "type": "ordering",
+              "question": "Quarry runners recount crates before dawn. For implement LIFO stack with list methods, build the line that shows the new top after the last reading is removed.",
+              "hints": [
+                "Start at the left of the example.",
+                "Keep the example order.",
+                "items . pop ( )"
+              ],
+              "explanation": "items.pop() removes the last reading.",
+              "xp_reward": 10,
+              "options": [
+                "items",
+                ".",
+                "pop",
+                "(",
+                ")",
+                "append"
+              ],
+              "correct_answer": [
+                "items",
+                ".",
+                "pop",
+                "(",
+                ")"
+              ]
+            },
+            {
+              "id": "list-methods-practice-1-fill",
+              "type": "fill_blank",
+              "question": "Quarry runners recount crates before dawn. For implement LIFO stack with list methods, fill the blank so the line shows the new top after the last reading is removed.",
+              "hints": [
+                "The blank is the missing piece of the example.",
+                "The example uses that piece.",
+                "+"
+              ],
+              "explanation": "Plus adds the base reading to the new top.",
+              "xp_reward": 10,
+              "starter_code": "shown = top ___ left\n",
+              "options": [
+                "-",
+                "*",
+                "+",
+                "=="
+              ],
+              "correct_answer": "+"
+            },
+            {
+              "id": "list-methods-practice-1-bug",
+              "type": "debugging",
+              "question": "Quarry runners recount crates before dawn. For implement LIFO stack with list methods, which line does a different job than the example?",
+              "hints": [
+                "The other lines match the example.",
+                "One line is the odd one.",
+                "Line 2"
+              ],
+              "explanation": "A reading is attached instead of removed.",
+              "xp_reward": 10,
+              "starter_code": "items = [37, 4]\nitems.append(37)\nprint(items[-1])\n",
+              "correct_answer": "2"
+            },
+            {
+              "id": "list-methods-practice-1-predict-2",
+              "type": "output_prediction",
+              "question": "Quarry runners recount crates before dawn. For implement LIFO stack with list methods, what does the second run display?",
+              "hints": [
+                "Apply the same steps to the new value.",
+                "The display comes from the last line.",
+                "74"
+              ],
+              "explanation": "The second Task Stack program displays that value.",
+              "xp_reward": 10,
+              "starter_code": "items = [37, 4, 43]\nitems.pop()\nitems.pop()\nprint(items[-1] + 37)\n",
+              "options": [
+                "41",
+                "74",
+                "none",
+                "0"
+              ],
+              "correct_answer": "74"
+            },
+            {
+              "id": "list-methods-practice-1-write",
+              "type": "code",
+              "question": "Quarry runners recount crates before dawn. For implement LIFO stack with list methods, fill the blank so the program prints the result.",
+              "hints": [
+                "The blank is the missing piece.",
+                "Print the value that piece produces.",
+                "label = items[-1] + 37"
+              ],
+              "explanation": "The new top plus the base reading is what gets printed.",
+              "xp_reward": 10,
+              "starter_code": "items = [37, 4, 43]\nitems.pop()\nlabel = ___\nprint(label)\n",
+              "solution_code": "items = [37, 4, 43]\nitems.pop()\nlabel = items[-1] + 37\nprint(label)\n",
+              "tests": [
+                {
+                  "name": "list-methods-practice-1-prints",
+                  "description": "The new top plus the base reading is what gets printed.",
+                  "expected_stdout": "41\n",
+                  "required": true
+                }
+              ]
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "list-methods-checkpoint",
-      "title": "5. Unit 9 Checkpoint: List Methods Mastery",
-      "description": "reverse_and_sort(lst) must return a NEW list with the numbers sorted from largest to smallest — use sorted(lst, reverse=True) so the original list stays unchanged. The test checks that `reverse_and_sort([1, 4, 2, 8])` equals `[8, 4, 2, 1]`.",
+      "title": "Practice Unit 9 Checkpoint List Methods",
+      "description": "reverse_and_sort(lst) must return a NEW list with the numbers sorted from largest to smallest — use sorted(lst, reverse=True) so the original list stays unchanged. The test checks that reverse_and_sort([1, 4, 2, 8]) equals [8, 4, 2, 1].",
       "order": 45,
       "difficulty": "beginner",
       "duration_minutes": 10,
@@ -217,7 +889,7 @@
         "lists"
       ],
       "learning_objectives": [
-        "Pass list methods evaluation"
+        "Attic runners recount crates before dawn, and pass list methods evaluation."
       ],
       "starter_code": "def reverse_and_sort(lst):\n    # TODO: return a new list ordered from largest to smallest\n    pass\n",
       "tests": [
@@ -238,7 +910,175 @@
         "url": "https://docs.python.org/3/howto/sorting.html",
         "license": "Python documentation license (PSF)"
       },
-      "xp_reward": 40
+      "xp_reward": 40,
+      "player_mode": "micro",
+      "sublessons": [
+        {
+          "id": "list-methods-checkpoint-micro",
+          "title": "Practice Unit 9 Checkpoint List Methods",
+          "description": "",
+          "order": 1,
+          "exercises": [
+            {
+              "id": "list-methods-checkpoint-teach",
+              "type": "teach",
+              "question": "Attic runners recount crates before dawn, and pass list methods evaluation.",
+              "hints": [
+                "Read the one job this step is practicing.",
+                "The example is about Unit 9 Checkpoint List Methods Mastery.",
+                "items.count(reading)"
+              ],
+              "explanation": "Attic runners recount crates before dawn, and pass list methods evaluation.",
+              "xp_reward": 0,
+              "worked_example": "items.count(reading)"
+            },
+            {
+              "id": "list-methods-checkpoint-mcq",
+              "type": "mcq",
+              "question": "Attic runners recount crates before dawn. For pass list methods evaluation, which line scales the base reading by how often it appears?",
+              "hints": [
+                "Compare each line with the example.",
+                "One line matches the example.",
+                "items.count(reading)"
+              ],
+              "explanation": "count(reading) is how many times that reading is stored.",
+              "xp_reward": 10,
+              "options": [
+                "items[0]",
+                "len(items)",
+                "items + 1",
+                "items.count(reading)"
+              ],
+              "correct_answer": "items.count(reading)"
+            },
+            {
+              "id": "list-methods-checkpoint-predict",
+              "type": "output_prediction",
+              "question": "Attic runners recount crates before dawn. For pass list methods evaluation, what value is displayed?",
+              "hints": [
+                "Run the example in your head from the top.",
+                "The last line is what gets displayed.",
+                "88"
+              ],
+              "explanation": "The Unit 9 Checkpoint List Methods Mastery program displays that value.",
+              "xp_reward": 10,
+              "starter_code": "items = [44, 4, 44]\nprint(items.count(44) * 44)\n",
+              "options": [
+                "44",
+                "none",
+                "0",
+                "88"
+              ],
+              "correct_answer": "88"
+            },
+            {
+              "id": "list-methods-checkpoint-order",
+              "type": "ordering",
+              "question": "Attic runners recount crates before dawn. For pass list methods evaluation, build the line that scales the base reading by how often it appears.",
+              "hints": [
+                "Start at the left of the example.",
+                "Keep the example order.",
+                "seen = items.count ( reading )"
+              ],
+              "explanation": "seen = items.count(reading) stores the tally.",
+              "xp_reward": 10,
+              "options": [
+                "seen",
+                "=",
+                "items.count",
+                "(",
+                "reading",
+                ")",
+                "len"
+              ],
+              "correct_answer": [
+                "seen",
+                "=",
+                "items.count",
+                "(",
+                "reading",
+                ")"
+              ]
+            },
+            {
+              "id": "list-methods-checkpoint-fill",
+              "type": "fill_blank",
+              "question": "Attic runners recount crates before dawn. For pass list methods evaluation, fill the blank so the line scales the base reading by how often it appears.",
+              "hints": [
+                "The blank is the missing piece of the example.",
+                "The example uses that piece.",
+                "*"
+              ],
+              "explanation": "The star scales the base reading by the tally.",
+              "xp_reward": 10,
+              "starter_code": "shown = seen ___ left\n",
+              "options": [
+                "+",
+                "-",
+                "==",
+                "*"
+              ],
+              "correct_answer": "*"
+            },
+            {
+              "id": "list-methods-checkpoint-bug",
+              "type": "debugging",
+              "question": "Attic runners recount crates before dawn. For pass list methods evaluation, which line does a different job than the example?",
+              "hints": [
+                "The other lines match the example.",
+                "One line is the odd one.",
+                "Line 2"
+              ],
+              "explanation": "The tally counts the other reading.",
+              "xp_reward": 10,
+              "starter_code": "items = [44, 4, 44]\nprint(items.count(4) * 44)\n",
+              "correct_answer": "2"
+            },
+            {
+              "id": "list-methods-checkpoint-predict-2",
+              "type": "output_prediction",
+              "question": "Attic runners recount crates before dawn. For pass list methods evaluation, what does the second run display?",
+              "hints": [
+                "Apply the same steps to the new value.",
+                "The display comes from the last line.",
+                "44"
+              ],
+              "explanation": "The second Unit 9 Checkpoint List Methods Mastery program displays that value.",
+              "xp_reward": 10,
+              "starter_code": "items = [44, 4, 4]\nprint(items.count(44) * 44)\n",
+              "options": [
+                "88",
+                "none",
+                "44",
+                "0"
+              ],
+              "correct_answer": "44"
+            },
+            {
+              "id": "list-methods-checkpoint-write",
+              "type": "code",
+              "question": "Attic runners recount crates before dawn. For pass list methods evaluation, fill the blank so the program prints the result.",
+              "hints": [
+                "The blank is the missing piece.",
+                "Print the value that piece produces.",
+                "label = items.count(44) * 44"
+              ],
+              "explanation": "The scaled tally is what gets printed.",
+              "xp_reward": 10,
+              "starter_code": "items = [44, 4, 44]\nlabel = ___\nprint(label)\n",
+              "solution_code": "items = [44, 4, 44]\nlabel = items.count(44) * 44\nprint(label)\n",
+              "tests": [
+                {
+                  "name": "list-methods-checkpoint-prints",
+                  "description": "The scaled tally is what gets printed.",
+                  "expected_stdout": "88\n",
+                  "required": true
+                }
+              ]
+            }
+          ]
+        }
+      ]
     }
   ]
 }

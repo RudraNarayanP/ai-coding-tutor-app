@@ -14,8 +14,8 @@
   "lessons": [
     {
       "id": "js-04",
-      "title": "4. Node.js & Application Foundations",
-      "description": "Checkpoint: implement `createServerConfig(port = 8080)` using a default parameter (default function parameters initialize named parameters when no value is passed) and return the shorthand object { port, env: 'development' }. Tests check createServerConfig(3000).port === 3000, createServerConfig().port === 8080, and env === 'development'.",
+      "title": "Practice Node js Application Foundations",
+      "description": "Checkpoint: implement createServerConfig(port = 8080) using a default parameter (default function parameters initialize named parameters when no value is passed) and return the shorthand object { port, env: 'development' }. Tests check createServerConfig(3000).port === 3000, createServerConfig().port === 8080, and env === 'development'.",
       "order": 4,
       "difficulty": "intermediate",
       "duration_minutes": 10,
@@ -41,21 +41,185 @@
         ]
       },
       "learning_objectives": [
-        "Use default parameter values for optional arguments",
-        "Use shorthand property names in object literals",
-        "Apply core JavaScript syntax under checkpoint conditions"
+        "Depot clerks recount crates before dawn, and use default parameter values for optional arguments."
       ],
       "source": {
         "name": "MDN Web Docs — Functions — Default parameters: 'allow named parameters to be initialized with default values if no value or undefined is passed'",
         "url": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Functions/Default_parameters",
         "license": "CC0 1.0 Universal (MDN Web Docs)"
       },
-      "xp_reward": 40
+      "xp_reward": 40,
+      "player_mode": "micro",
+      "sublessons": [
+        {
+          "id": "js-04-micro",
+          "title": "Practice Node js Application Foundations",
+          "description": "",
+          "order": 1,
+          "exercises": [
+            {
+              "id": "js-04-teach",
+              "type": "teach",
+              "question": "Depot clerks recount crates before dawn, and use default parameter values for optional arguments.",
+              "hints": [
+                "Read the one job this step is practicing.",
+                "The example is about Node js Application Foundations.",
+                "module.exports = { version };"
+              ],
+              "explanation": "Depot clerks recount crates before dawn, and use default parameter values for optional arguments.",
+              "xp_reward": 0,
+              "worked_example": "module.exports = { version };"
+            },
+            {
+              "id": "js-04-mcq",
+              "type": "mcq",
+              "question": "Depot clerks recount crates before dawn. For use default parameter values for optional arguments, which line stores the version and exports that object?",
+              "hints": [
+                "Compare each line with the example.",
+                "One line matches the example.",
+                "module.exports = { version };"
+              ],
+              "explanation": "module.exports = { version }; stores the export.",
+              "xp_reward": 10,
+              "options": [
+                "console.log(version);",
+                "module.exports = { version };",
+                "version == version;",
+                "return version;"
+              ],
+              "correct_answer": "module.exports = { version };"
+            },
+            {
+              "id": "js-04-predict",
+              "type": "output_prediction",
+              "question": "Depot clerks recount crates before dawn. For use default parameter values for optional arguments, what value is displayed?",
+              "hints": [
+                "Run the example in your head from the top.",
+                "The last line is what gets displayed.",
+                "56"
+              ],
+              "explanation": "The Node js Application Foundations program displays that value.",
+              "xp_reward": 10,
+              "starter_code": "const version = 56;\nmodule.exports = { version };\nconsole.log(version);\n",
+              "options": [
+                "59",
+                "0",
+                "none",
+                "56"
+              ],
+              "correct_answer": "56"
+            },
+            {
+              "id": "js-04-order",
+              "type": "ordering",
+              "question": "Depot clerks recount crates before dawn. For use default parameter values for optional arguments, build the line that stores the version and exports that object.",
+              "hints": [
+                "Start at the left of the example.",
+                "Keep the example order.",
+                "module.exports = { version };"
+              ],
+              "explanation": "module.exports = { version }; stores the export.",
+              "xp_reward": 10,
+              "options": [
+                "module.exports",
+                "=",
+                "{",
+                "version",
+                "};",
+                "=="
+              ],
+              "correct_answer": [
+                "module.exports",
+                "=",
+                "{",
+                "version",
+                "};"
+              ]
+            },
+            {
+              "id": "js-04-fill",
+              "type": "fill_blank",
+              "question": "Depot clerks recount crates before dawn. For use default parameter values for optional arguments, fill the blank so the line stores the version and exports that object.",
+              "hints": [
+                "The blank is the missing piece of the example.",
+                "The example uses that piece.",
+                "="
+              ],
+              "explanation": "module.exports = { version }; stores the export.",
+              "xp_reward": 10,
+              "starter_code": "const version = 56;\nmodule.exports ___ { version };\n",
+              "options": [
+                "==",
+                "=",
+                "!=",
+                "+"
+              ],
+              "correct_answer": "="
+            },
+            {
+              "id": "js-04-bug",
+              "type": "debugging",
+              "question": "Depot clerks recount crates before dawn. For use default parameter values for optional arguments, which line does a different job than the example?",
+              "hints": [
+                "The other lines match the example.",
+                "One line is the odd one.",
+                "Line 2"
+              ],
+              "explanation": "The export line compares the object instead of storing it.",
+              "xp_reward": 10,
+              "starter_code": "const version = 56;\nmodule.exports == { version };\nconsole.log(version);\n",
+              "correct_answer": "2"
+            },
+            {
+              "id": "js-04-predict-2",
+              "type": "output_prediction",
+              "question": "Depot clerks recount crates before dawn. For use default parameter values for optional arguments, what does the second run display?",
+              "hints": [
+                "Apply the same steps to the new value.",
+                "The display comes from the last line.",
+                "59"
+              ],
+              "explanation": "The second Node js Application Foundations program displays that value.",
+              "xp_reward": 10,
+              "starter_code": "const version = 59;\nmodule.exports = { version };\nconsole.log(version);\n",
+              "options": [
+                "56",
+                "none",
+                "0",
+                "59"
+              ],
+              "correct_answer": "59"
+            },
+            {
+              "id": "js-04-write",
+              "type": "code",
+              "question": "Depot clerks recount crates before dawn. For use default parameter values for optional arguments, fill the blank so the program prints the result.",
+              "hints": [
+                "The blank is the missing piece.",
+                "Print the value that piece produces.",
+                "const label = version;"
+              ],
+              "explanation": "The printed value is the result after this step stores the version and exports that object.",
+              "xp_reward": 10,
+              "starter_code": "const version = 56;\nmodule.exports = { version };\nconst label = ___;\nconsole.log(label);\n",
+              "solution_code": "const version = 56;\nmodule.exports = { version };\nconst label = version;\nconsole.log(label);\n",
+              "tests": [
+                {
+                  "name": "js-04-prints",
+                  "description": "The printed value is the result after this step stores the version and exports t",
+                  "expected_stdout": "56\n",
+                  "required": true
+                }
+              ]
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "js-07",
-      "title": "7. ES Modules: import & export",
-      "description": "Modules provide top-level scoping — nothing is global unless explicitly exported. Replace the placeholders: export a const appName with the value 'Patchwork' and export a function formatTitle(title) that returns a template literal: `${title} - ${appName}` (note the hyphen and spaces). The test imports your module as an ES module.",
+      "title": "Practice ES Modules import export",
+      "description": "Modules provide top-level scoping — nothing is global unless explicitly exported. Replace the placeholders: export a const appName with the value 'Patchwork' and export a function formatTitle(title) that returns a template literal: ${title} - ${appName} (note the hyphen and spaces). The test imports your module as an ES module.",
       "order": 7,
       "difficulty": "beginner",
       "duration_minutes": 6,
@@ -68,9 +232,7 @@
       ],
       "prerequisites": [],
       "learning_objectives": [
-        "Export named bindings with ES module syntax",
-        "Use template literals to compose strings",
-        "Know that module scope is not global scope"
+        "Ridge clerks recount crates before dawn, and export named bindings with ES module syntax."
       ],
       "source": {
         "name": "MDN Web Docs — Guide — JavaScript modules: 'Modules provide top-level scoping'",
@@ -91,7 +253,173 @@
           "test_es_module_exports"
         ]
       },
-      "xp_reward": 15
+      "xp_reward": 15,
+      "player_mode": "micro",
+      "sublessons": [
+        {
+          "id": "js-07-micro",
+          "title": "Practice ES Modules import export",
+          "description": "",
+          "order": 1,
+          "exercises": [
+            {
+              "id": "js-07-teach",
+              "type": "teach",
+              "question": "Ridge clerks recount crates before dawn, and export named bindings with ES module syntax.",
+              "hints": [
+                "Read the one job this step is practicing.",
+                "The example is about ES Modules import export.",
+                "export const label = 1;"
+              ],
+              "explanation": "Ridge clerks recount crates before dawn, and export named bindings with ES module syntax.",
+              "xp_reward": 0,
+              "worked_example": "export const label = 1;"
+            },
+            {
+              "id": "js-07-mcq",
+              "type": "mcq",
+              "question": "Ridge clerks recount crates before dawn. For export named bindings with ES module syntax, which line prints the label that an export would share?",
+              "hints": [
+                "Compare each line with the example.",
+                "One line matches the example.",
+                "export const label = 1;"
+              ],
+              "explanation": "export const label shares a binding from the module.",
+              "xp_reward": 10,
+              "options": [
+                "return label;",
+                "console.log(label);",
+                "label == 1;",
+                "export const label = 1;"
+              ],
+              "correct_answer": "export const label = 1;"
+            },
+            {
+              "id": "js-07-predict",
+              "type": "output_prediction",
+              "question": "Ridge clerks recount crates before dawn. For export named bindings with ES module syntax, what value is displayed?",
+              "hints": [
+                "Run the example in your head from the top.",
+                "The last line is what gets displayed.",
+                "thyme"
+              ],
+              "explanation": "The ES Modules import export program displays that value.",
+              "xp_reward": 10,
+              "starter_code": "const labelValue = \"thyme\";\nconsole.log(labelValue);\n",
+              "options": [
+                "yarrow",
+                "thyme",
+                "none",
+                "0"
+              ],
+              "correct_answer": "thyme"
+            },
+            {
+              "id": "js-07-order",
+              "type": "ordering",
+              "question": "Ridge clerks recount crates before dawn. For export named bindings with ES module syntax, build the line that prints the label that an export would share.",
+              "hints": [
+                "Start at the left of the example.",
+                "Keep the example order.",
+                "export const label = 1;"
+              ],
+              "explanation": "export const label shares a binding from the module.",
+              "xp_reward": 10,
+              "options": [
+                "export",
+                "const",
+                "label",
+                "=",
+                "1;",
+                "import"
+              ],
+              "correct_answer": [
+                "export",
+                "const",
+                "label",
+                "=",
+                "1;"
+              ]
+            },
+            {
+              "id": "js-07-fill",
+              "type": "fill_blank",
+              "question": "Ridge clerks recount crates before dawn. For export named bindings with ES module syntax, fill the blank so the line prints the label that an export would share.",
+              "hints": [
+                "The blank is the missing piece of the example.",
+                "The example uses that piece.",
+                "const"
+              ],
+              "explanation": "export const label shares a binding from the module.",
+              "xp_reward": 10,
+              "starter_code": "export ___ label = 1;\n",
+              "options": [
+                "let",
+                "const",
+                "function",
+                "var"
+              ],
+              "correct_answer": "const"
+            },
+            {
+              "id": "js-07-bug",
+              "type": "debugging",
+              "question": "Ridge clerks recount crates before dawn. For export named bindings with ES module syntax, which line does a different job than the example?",
+              "hints": [
+                "The other lines match the example.",
+                "One line is the odd one.",
+                "Line 2"
+              ],
+              "explanation": "The print adds an exclamation mark the export does not include.",
+              "xp_reward": 10,
+              "starter_code": "const labelValue = \"thyme\";\nconsole.log(labelValue + \"!\");\n",
+              "correct_answer": "2"
+            },
+            {
+              "id": "js-07-predict-2",
+              "type": "output_prediction",
+              "question": "Ridge clerks recount crates before dawn. For export named bindings with ES module syntax, what does the second run display?",
+              "hints": [
+                "Apply the same steps to the new value.",
+                "The display comes from the last line.",
+                "yarrow"
+              ],
+              "explanation": "The second ES Modules import export program displays that value.",
+              "xp_reward": 10,
+              "starter_code": "const labelValue = \"yarrow\";\nconsole.log(labelValue);\n",
+              "options": [
+                "thyme",
+                "none",
+                "0",
+                "yarrow"
+              ],
+              "correct_answer": "yarrow"
+            },
+            {
+              "id": "js-07-write",
+              "type": "code",
+              "question": "Ridge clerks recount crates before dawn. For export named bindings with ES module syntax, fill the blank so the program prints the result.",
+              "hints": [
+                "The blank is the missing piece.",
+                "Print the value that piece produces.",
+                "const label = labelValue;"
+              ],
+              "explanation": "The printed value is the result after this step prints the label that an export would share.",
+              "xp_reward": 10,
+              "starter_code": "const labelValue = \"thyme\";\nconst label = ___;\nconsole.log(label);\n",
+              "solution_code": "const labelValue = \"thyme\";\nconst label = labelValue;\nconsole.log(label);\n",
+              "tests": [
+                {
+                  "name": "js-07-prints",
+                  "description": "The printed value is the result after this step prints the label that an export ",
+                  "expected_stdout": "thyme\n",
+                  "required": true
+                }
+              ]
+            }
+          ]
+        }
+      ]
     }
   ]
 }

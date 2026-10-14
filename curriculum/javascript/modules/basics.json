@@ -12,8 +12,8 @@
   "lessons": [
     {
       "id": "js-01",
-      "title": "1. Modern JavaScript Variables & Functions",
-      "description": "An arrow function expression has a shorter syntax compared to function expressions. Implement `calculateTotal(price, tax)` as a `const` arrow function returning `price + price * tax`, and export it with `module.exports = { calculateTotal }`. The tests check calculateTotal(100, 0.1) === 110 and calculateTotal(50, 0.2) === 60.",
+      "title": "Practice Modern JavaScript Variables Functions",
+      "description": "An arrow function expression has a shorter syntax compared to function expressions. Implement calculateTotal(price, tax) as a const arrow function returning price + price * tax, and export it with module.exports = { calculateTotal }. The tests check calculateTotal(100, 0.1) === 110 and calculateTotal(50, 0.2) === 60.",
       "order": 1,
       "difficulty": "beginner",
       "duration_minutes": 5,
@@ -40,42 +40,189 @@
       },
       "sublessons": [
         {
-          "id": "js-sub-1",
-          "title": "const vs let",
+          "id": "js-01-micro",
+          "title": "Practice Modern JavaScript Variables Functions",
+          "description": "",
           "order": 1,
           "exercises": [
             {
-              "id": "js-ex-1",
-              "type": "mcq",
-              "question": "Which keyword defines block-scoped variables that cannot be reassigned?",
-              "options": [
-                "let",
-                "var",
-                "function",
-                "const"
+              "id": "js-01-teach",
+              "type": "teach",
+              "question": "Orchard clerks recount crates before dawn, and declare constants with const.",
+              "hints": [
+                "Read the one job this step is practicing.",
+                "The example is about Modern JavaScript Variables Functions.",
+                "const double = (value) => value * 2;"
               ],
-              "correct_answer": "const",
-              "explanation": "const is block-scoped and cannot be reassigned; let can be.",
-              "xp_reward": 10
+              "explanation": "Orchard clerks recount crates before dawn, and declare constants with const.",
+              "xp_reward": 0,
+              "worked_example": "const double = (value) => value * 2;"
+            },
+            {
+              "id": "js-01-mcq",
+              "type": "mcq",
+              "question": "Orchard clerks recount crates before dawn. For declare constants with const, which line returns twice the input from an arrow function?",
+              "hints": [
+                "Compare each line with the example.",
+                "One line matches the example.",
+                "const double = (value) => value * 2;"
+              ],
+              "explanation": "const double = (value) => value * 2; doubles the input.",
+              "xp_reward": 10,
+              "options": [
+                "return value;",
+                "value == value;",
+                "console.log(value);",
+                "const double = (value) => value * 2;"
+              ],
+              "correct_answer": "const double = (value) => value * 2;"
+            },
+            {
+              "id": "js-01-predict",
+              "type": "output_prediction",
+              "question": "Orchard clerks recount crates before dawn. For declare constants with const, what value is displayed?",
+              "hints": [
+                "Run the example in your head from the top.",
+                "The last line is what gets displayed.",
+                "53"
+              ],
+              "explanation": "The Modern JavaScript Variables Functions program displays that value.",
+              "xp_reward": 10,
+              "starter_code": "const double = (value) => value * 2;\nconsole.log(53);\n",
+              "options": [
+                "56",
+                "53",
+                "none",
+                "0"
+              ],
+              "correct_answer": "53"
+            },
+            {
+              "id": "js-01-order",
+              "type": "ordering",
+              "question": "Orchard clerks recount crates before dawn. For declare constants with const, build the line that returns twice the input from an arrow function.",
+              "hints": [
+                "Start at the left of the example.",
+                "Keep the example order.",
+                "const double = (value) => value * 2;"
+              ],
+              "explanation": "const double = (value) => value * 2; doubles the input.",
+              "xp_reward": 10,
+              "options": [
+                "const",
+                "double",
+                "=",
+                "(value)",
+                "=>",
+                "value",
+                "*",
+                "2;",
+                "=="
+              ],
+              "correct_answer": [
+                "const",
+                "double",
+                "=",
+                "(value)",
+                "=>",
+                "value",
+                "*",
+                "2;"
+              ]
+            },
+            {
+              "id": "js-01-fill",
+              "type": "fill_blank",
+              "question": "Orchard clerks recount crates before dawn. For declare constants with const, fill the blank so the line returns twice the input from an arrow function.",
+              "hints": [
+                "The blank is the missing piece of the example.",
+                "The example uses that piece.",
+                "*"
+              ],
+              "explanation": "const double = (value) => value * 2; doubles the input.",
+              "xp_reward": 10,
+              "starter_code": "const double = (value) => value ___ 2;\n",
+              "options": [
+                "+",
+                "*",
+                "==",
+                "-"
+              ],
+              "correct_answer": "*"
+            },
+            {
+              "id": "js-01-bug",
+              "type": "debugging",
+              "question": "Orchard clerks recount crates before dawn. For declare constants with const, which line does a different job than the example?",
+              "hints": [
+                "The other lines match the example.",
+                "One line is the odd one.",
+                "Line 1"
+              ],
+              "explanation": "The arrow adds two instead of multiplying.",
+              "xp_reward": 10,
+              "starter_code": "const double = (value) => value + 2;\nconsole.log(double(53));\n",
+              "correct_answer": "1"
+            },
+            {
+              "id": "js-01-predict-2",
+              "type": "output_prediction",
+              "question": "Orchard clerks recount crates before dawn. For declare constants with const, what does the second run display?",
+              "hints": [
+                "Apply the same steps to the new value.",
+                "The display comes from the last line.",
+                "56"
+              ],
+              "explanation": "The second Modern JavaScript Variables Functions program displays that value.",
+              "xp_reward": 10,
+              "starter_code": "const double = (value) => value * 2;\nconsole.log(56);\n",
+              "options": [
+                "53",
+                "none",
+                "0",
+                "56"
+              ],
+              "correct_answer": "56"
+            },
+            {
+              "id": "js-01-write",
+              "type": "code",
+              "question": "Orchard clerks recount crates before dawn. For declare constants with const, fill the blank so the program prints the result.",
+              "hints": [
+                "The blank is the missing piece.",
+                "Print the value that piece produces.",
+                "const label = double(53);"
+              ],
+              "explanation": "The printed value is the result after this step returns twice the input from an arrow function.",
+              "xp_reward": 10,
+              "starter_code": "const double = (value) => value * 2;\nconst label = ___;\nconsole.log(label);\n",
+              "solution_code": "const double = (value) => value * 2;\nconst label = double(53);\nconsole.log(label);\n",
+              "tests": [
+                {
+                  "name": "js-01-prints",
+                  "description": "The printed value is the result after this step returns twice the input from an ",
+                  "expected_stdout": "106\n",
+                  "required": true
+                }
+              ]
             }
           ]
         }
       ],
       "learning_objectives": [
-        "Declare constants with const (block-scoped, no reassignment)",
-        "Write arrow functions as compact expressions",
-        "Export functions with module.exports"
+        "Orchard clerks recount crates before dawn, and declare constants with const."
       ],
       "source": {
         "name": "MDN Web Docs — Functions guide — 'An arrow function expression has a shorter syntax compared to function expressions'",
         "url": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Functions",
         "license": "CC0 1.0 Universal (MDN Web Docs)"
       },
-      "xp_reward": 10
+      "xp_reward": 10,
+      "player_mode": "micro"
     },
     {
       "id": "js-05",
-      "title": "5. Mapping Over Arrays",
+      "title": "Map Over Arrays",
       "description": "Array.prototype.map() returns a new array containing the results of invoking a function on every element in the calling array. Implement doubleAll(numbers) as an arrow function returning a new array with every value doubled via map, exported with module.exports. The test checks doubleAll([1, 2, 3]) produces [2, 4, 6].",
       "order": 5,
       "difficulty": "beginner",
@@ -89,9 +236,7 @@
       ],
       "prerequisites": [],
       "learning_objectives": [
-        "Transform every array element with map()",
-        "Understand that map returns a NEW array",
-        "Compose arrow functions with built-in array methods"
+        "Quarry clerks recount crates before dawn, and transform every array element with map."
       ],
       "source": {
         "name": "MDN Web Docs — GlobalObjects — Array.prototype.map(): 'Returns a new array containing the results of invoking a function on every element'",
@@ -115,27 +260,170 @@
       "xp_reward": 10,
       "sublessons": [
         {
-          "id": "js-05-mcq-1-sub",
-          "title": "What map gives back",
+          "id": "js-05-micro",
+          "title": "Map Over Arrays",
+          "description": "",
           "order": 1,
           "exercises": [
             {
-              "id": "js-05-mcq-1",
-              "type": "mcq",
-              "question": "What does `numbers.map(double)` return?",
-              "options": [
-                "the original array, changed in place",
-                "a single accumulated total",
-                "a brand new array holding each transformed value",
-                "undefined, because the callback has no return value"
+              "id": "js-05-teach",
+              "type": "teach",
+              "question": "Quarry clerks recount crates before dawn, and transform every array element with map.",
+              "hints": [
+                "Read the one job this step is practicing.",
+                "The example is about Mapping Over Arrays.",
+                "numbers.map((item) => item * 2)"
               ],
-              "correct_answer": "a brand new array holding each transformed value",
-              "explanation": "`map` never mutates its receiver: it builds and returns a new array of the callback's results.",
-              "xp_reward": 10
+              "explanation": "Quarry clerks recount crates before dawn, and transform every array element with map.",
+              "xp_reward": 0,
+              "worked_example": "numbers.map((item) => item * 2)"
+            },
+            {
+              "id": "js-05-mcq",
+              "type": "mcq",
+              "question": "Quarry clerks recount crates before dawn. For transform every array element with map, which line builds a new array by mapping every item?",
+              "hints": [
+                "Compare each line with the example.",
+                "One line matches the example.",
+                "numbers.map((item) => item * 2)"
+              ],
+              "explanation": "map calls the arrow on every item and keeps the new array.",
+              "xp_reward": 10,
+              "options": [
+                "numbers == numbers;",
+                "console.log(numbers);",
+                "numbers.map((item) => item * 2)",
+                "return numbers;"
+              ],
+              "correct_answer": "numbers.map((item) => item * 2)"
+            },
+            {
+              "id": "js-05-predict",
+              "type": "output_prediction",
+              "question": "Quarry clerks recount crates before dawn. For transform every array element with map, what value is displayed?",
+              "hints": [
+                "Run the example in your head from the top.",
+                "The last line is what gets displayed.",
+                "114,4"
+              ],
+              "explanation": "The Mapping Over Arrays program displays that value.",
+              "xp_reward": 10,
+              "starter_code": "const numbers = [57, 2];\nconsole.log(numbers.map((item) => item * 2).join(\",\"));\n",
+              "options": [
+                "114,8",
+                "none",
+                "114,4",
+                "0"
+              ],
+              "correct_answer": "114,4"
+            },
+            {
+              "id": "js-05-order",
+              "type": "ordering",
+              "question": "Quarry clerks recount crates before dawn. For transform every array element with map, build the line that builds a new array by mapping every item.",
+              "hints": [
+                "Start at the left of the example.",
+                "Keep the example order.",
+                "numbers.map((item) => item * 2)"
+              ],
+              "explanation": "map calls the arrow on every item and keeps the new array.",
+              "xp_reward": 10,
+              "options": [
+                "numbers.map((item)",
+                "=>",
+                "item",
+                "*",
+                "2)",
+                "=="
+              ],
+              "correct_answer": [
+                "numbers.map((item)",
+                "=>",
+                "item",
+                "*",
+                "2)"
+              ]
+            },
+            {
+              "id": "js-05-fill",
+              "type": "fill_blank",
+              "question": "Quarry clerks recount crates before dawn. For transform every array element with map, fill the blank so the line builds a new array by mapping every item.",
+              "hints": [
+                "The blank is the missing piece of the example.",
+                "The example uses that piece.",
+                "*"
+              ],
+              "explanation": "map calls the arrow on every item and keeps the new array.",
+              "xp_reward": 10,
+              "starter_code": "const numbers = [57, 2];\nconst label = numbers.map((item) => item ___ 2);\n",
+              "options": [
+                "+",
+                "-",
+                "*",
+                "=="
+              ],
+              "correct_answer": "*"
+            },
+            {
+              "id": "js-05-bug",
+              "type": "debugging",
+              "question": "Quarry clerks recount crates before dawn. For transform every array element with map, which line does a different job than the example?",
+              "hints": [
+                "The other lines match the example.",
+                "One line is the odd one.",
+                "Line 2"
+              ],
+              "explanation": "The mapper adds two instead of doubling.",
+              "xp_reward": 10,
+              "starter_code": "const numbers = [57, 2];\nconsole.log(numbers.map((item) => item + 2).join(\",\"));\n",
+              "correct_answer": "2"
+            },
+            {
+              "id": "js-05-predict-2",
+              "type": "output_prediction",
+              "question": "Quarry clerks recount crates before dawn. For transform every array element with map, what does the second run display?",
+              "hints": [
+                "Apply the same steps to the new value.",
+                "The display comes from the last line.",
+                "114,8"
+              ],
+              "explanation": "The second Mapping Over Arrays program displays that value.",
+              "xp_reward": 10,
+              "starter_code": "const numbers = [57, 4];\nconsole.log(numbers.map((item) => item * 2).join(\",\"));\n",
+              "options": [
+                "none",
+                "114,8",
+                "0",
+                "114,4"
+              ],
+              "correct_answer": "114,8"
+            },
+            {
+              "id": "js-05-write",
+              "type": "code",
+              "question": "Quarry clerks recount crates before dawn. For transform every array element with map, fill the blank so the program prints the result.",
+              "hints": [
+                "The blank is the missing piece.",
+                "Print the value that piece produces.",
+                "const label = numbers.map((item) => item * 2).join(\",\");"
+              ],
+              "explanation": "The printed value is the result after this step builds a new array by mapping every item.",
+              "xp_reward": 10,
+              "starter_code": "const numbers = [57, 2];\nconst label = ___;\nconsole.log(label);\n",
+              "solution_code": "const numbers = [57, 2];\nconst label = numbers.map((item) => item * 2).join(\",\");\nconsole.log(label);\n",
+              "tests": [
+                {
+                  "name": "js-05-prints",
+                  "description": "The printed value is the result after this step builds a new array by mapping ev",
+                  "expected_stdout": "114,4\n",
+                  "required": true
+                }
+              ]
             }
           ]
         }
-      ]
+      ],
+      "player_mode": "micro"
     }
   ]
 }

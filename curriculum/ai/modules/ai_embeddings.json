@@ -14,8 +14,8 @@
   "lessons": [
     {
       "id": "ai-emb-dot",
-      "title": "9. Embedding Dot Product",
-      "description": "Implement `emb_dot(a, b)` for equal-length float lists. The test checks that `emb_dot([1, 2], [3, 4])` equals `11`.",
+      "title": "Practice Embedding Dot Product",
+      "description": "Implement emb_dot(a, b) for equal-length float lists. The test checks that emb_dot([1, 2], [3, 4]) equals 11.",
       "order": 9,
       "difficulty": "intermediate",
       "duration_minutes": 5,
@@ -27,7 +27,7 @@
       ],
       "prerequisites": [],
       "learning_objectives": [
-        "Score embedding similarity via dot product"
+        "Harbor clerks recount crates before dawn, and score embedding similarity via dot product."
       ],
       "starter_code": "def emb_dot(a, b):\n    # TODO\n    pass\n",
       "solution_code": "def emb_dot(a, b):\n    return sum(x * y for x, y in zip(a, b))\n",
@@ -48,12 +48,186 @@
         "url": "https://d2l.ai/chapter_preliminaries/linear-algebra.html",
         "license": "Apache 2.0 (Dive into Deep Learning book)"
       },
-      "xp_reward": 10
+      "xp_reward": 10,
+      "player_mode": "micro",
+      "sublessons": [
+        {
+          "id": "ai-emb-dot-micro",
+          "title": "Practice Embedding Dot Product",
+          "description": "",
+          "order": 1,
+          "exercises": [
+            {
+              "id": "ai-emb-dot-teach",
+              "type": "teach",
+              "question": "Harbor clerks recount crates before dawn, and score embedding similarity via dot product.",
+              "hints": [
+                "Read the one job this step is practicing.",
+                "The example is about Embedding Dot Product.",
+                "a * b"
+              ],
+              "explanation": "Harbor clerks recount crates before dawn, and score embedding similarity via dot product.",
+              "xp_reward": 0,
+              "worked_example": "a * b"
+            },
+            {
+              "id": "ai-emb-dot-mcq",
+              "type": "mcq",
+              "question": "Harbor clerks recount crates before dawn. For score embedding similarity via dot product, which line adds the pairwise products of two embeddings?",
+              "hints": [
+                "Compare each line with the example.",
+                "One line matches the example.",
+                "a * b"
+              ],
+              "explanation": "The embedding dot product adds the paired products.",
+              "xp_reward": 10,
+              "options": [
+                "left == right",
+                "a * b",
+                "return left",
+                "pass"
+              ],
+              "correct_answer": "a * b"
+            },
+            {
+              "id": "ai-emb-dot-predict",
+              "type": "output_prediction",
+              "question": "Harbor clerks recount crates before dawn. For score embedding similarity via dot product, what value is displayed?",
+              "hints": [
+                "Run the example in your head from the top.",
+                "The last line is what gets displayed.",
+                "175"
+              ],
+              "explanation": "The Embedding Dot Product program displays that value.",
+              "xp_reward": 10,
+              "starter_code": "left = [1, 2, 3]\nright = [4, 0, 57]\nprint(sum(a * b for a, b in zip(left, right)))\n",
+              "options": [
+                "184",
+                "175",
+                "none",
+                "0"
+              ],
+              "correct_answer": "175"
+            },
+            {
+              "id": "ai-emb-dot-order",
+              "type": "ordering",
+              "question": "Harbor clerks recount crates before dawn. For score embedding similarity via dot product, build the line that adds the pairwise products of two embeddings.",
+              "hints": [
+                "Start at the left of the example.",
+                "Keep the example order.",
+                "total = sum(a*b for a, b in zip(left, right))"
+              ],
+              "explanation": "The embedding dot product adds the paired products.",
+              "xp_reward": 10,
+              "options": [
+                "total",
+                "=",
+                "sum(a*b",
+                "for",
+                "a,",
+                "b",
+                "in",
+                "zip(left,",
+                "right))",
+                "+"
+              ],
+              "correct_answer": [
+                "total",
+                "=",
+                "sum(a*b",
+                "for",
+                "a,",
+                "b",
+                "in",
+                "zip(left,",
+                "right))"
+              ]
+            },
+            {
+              "id": "ai-emb-dot-fill",
+              "type": "fill_blank",
+              "question": "Harbor clerks recount crates before dawn. For score embedding similarity via dot product, fill the blank so the line adds the pairwise products of two embeddings.",
+              "hints": [
+                "The blank is the missing piece of the example.",
+                "The example uses that piece.",
+                "*"
+              ],
+              "explanation": "The embedding dot product adds the paired products.",
+              "xp_reward": 10,
+              "starter_code": "pair = a ___ b\n",
+              "options": [
+                "+",
+                "*",
+                "-",
+                "=="
+              ],
+              "correct_answer": "*"
+            },
+            {
+              "id": "ai-emb-dot-bug",
+              "type": "debugging",
+              "question": "Harbor clerks recount crates before dawn. For score embedding similarity via dot product, which line does a different job than the example?",
+              "hints": [
+                "The other lines match the example.",
+                "One line is the odd one.",
+                "Line 3"
+              ],
+              "explanation": "The print sums one vector and ignores the other.",
+              "xp_reward": 10,
+              "starter_code": "left = [1, 2]\nright = [4, 0]\nprint(sum(left))\n",
+              "correct_answer": "3"
+            },
+            {
+              "id": "ai-emb-dot-predict-2",
+              "type": "output_prediction",
+              "question": "Harbor clerks recount crates before dawn. For score embedding similarity via dot product, what does the second run display?",
+              "hints": [
+                "Apply the same steps to the new value.",
+                "The display comes from the last line.",
+                "184"
+              ],
+              "explanation": "The second Embedding Dot Product program displays that value.",
+              "xp_reward": 10,
+              "starter_code": "left = [1, 2, 3]\nright = [4, 0, 60]\nprint(sum(a * b for a, b in zip(left, right)))\n",
+              "options": [
+                "175",
+                "none",
+                "0",
+                "184"
+              ],
+              "correct_answer": "184"
+            },
+            {
+              "id": "ai-emb-dot-write",
+              "type": "code",
+              "question": "Harbor clerks recount crates before dawn. For score embedding similarity via dot product, fill the blank so the program prints the result.",
+              "hints": [
+                "The blank is the missing piece.",
+                "Print the value that piece produces.",
+                "label = sum(a * b for a, b in zip(left, right))"
+              ],
+              "explanation": "The printed value is the result after this step adds the pairwise products of two embeddings.",
+              "xp_reward": 10,
+              "starter_code": "left = [1, 2, 3]\nright = [4, 0, 57]\nlabel = ___\nprint(label)\n",
+              "solution_code": "left = [1, 2, 3]\nright = [4, 0, 57]\nlabel = sum(a * b for a, b in zip(left, right))\nprint(label)\n",
+              "tests": [
+                {
+                  "name": "ai-emb-dot-prints",
+                  "description": "The printed value is the result after this step adds the pairwise products of tw",
+                  "expected_stdout": "175\n",
+                  "required": true
+                }
+              ]
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "ai-emb-cosine",
-      "title": "10. Cosine Ranking",
-      "description": "Implement `most_similar(query, corpus)` returning index of max cosine similarity. The test checks that `most_similar([1, 0], [[0, 1], [1, 0], [0.5, 0.5]])` equals `1`.",
+      "title": "Practice Cosine Ranking",
+      "description": "Implement most_similar(query, corpus) returning index of max cosine similarity. The test checks that most_similar([1, 0], [[0, 1], [1, 0], [0.5, 0.5]]) equals 1.",
       "order": 10,
       "difficulty": "intermediate",
       "duration_minutes": 5,
@@ -65,7 +239,7 @@
       ],
       "prerequisites": [],
       "learning_objectives": [
-        "Rank embeddings by cosine similarity"
+        "Mesa clerks recount crates before dawn, and rank embeddings by cosine similarity."
       ],
       "starter_code": "import math\n\ndef most_similar(query, corpus):\n    # TODO\n    pass\n",
       "solution_code": "import math\n\ndef most_similar(query, corpus):\n    def cos(a, b):\n        dot = sum(x * y for x, y in zip(a, b))\n        na = math.sqrt(sum(x * x for x in a))\n        nb = math.sqrt(sum(x * x for x in b))\n        if na == 0 or nb == 0:\n            return -1.0\n        return dot / (na * nb)\n    best_i, best = 0, -2.0\n    for i, v in enumerate(corpus):\n        s = cos(query, v)\n        if s > best:\n            best, best_i = s, i\n    return best_i\n",
@@ -86,12 +260,176 @@
         "url": "https://developers.google.com/machine-learning/clustering/dnn-clustering/supervised-similarity",
         "license": "CC BY 4.0 (Google Machine Learning Crash Course)"
       },
-      "xp_reward": 10
+      "xp_reward": 10,
+      "player_mode": "micro",
+      "sublessons": [
+        {
+          "id": "ai-emb-cosine-micro",
+          "title": "Practice Cosine Ranking",
+          "description": "",
+          "order": 1,
+          "exercises": [
+            {
+              "id": "ai-emb-cosine-teach",
+              "type": "teach",
+              "question": "Mesa clerks recount crates before dawn, and rank embeddings by cosine similarity.",
+              "hints": [
+                "Read the one job this step is practicing.",
+                "The example is about Cosine Ranking.",
+                "max(scores, key=scores.get)"
+              ],
+              "explanation": "Mesa clerks recount crates before dawn, and rank embeddings by cosine similarity.",
+              "xp_reward": 0,
+              "worked_example": "max(scores, key=scores.get)"
+            },
+            {
+              "id": "ai-emb-cosine-mcq",
+              "type": "mcq",
+              "question": "Mesa clerks recount crates before dawn. For rank embeddings by cosine similarity, which line picks the label with the higher score?",
+              "hints": [
+                "Compare each line with the example.",
+                "One line matches the example.",
+                "max(scores, key=scores.get)"
+              ],
+              "explanation": "The highest cosine score is the nearest label.",
+              "xp_reward": 10,
+              "options": [
+                "pass",
+                "return scores",
+                "max(scores, key=scores.get)",
+                "scores == scores"
+              ],
+              "correct_answer": "max(scores, key=scores.get)"
+            },
+            {
+              "id": "ai-emb-cosine-predict",
+              "type": "output_prediction",
+              "question": "Mesa clerks recount crates before dawn. For rank embeddings by cosine similarity, what value is displayed?",
+              "hints": [
+                "Run the example in your head from the top.",
+                "The last line is what gets displayed.",
+                "quartz"
+              ],
+              "explanation": "The Cosine Ranking program displays that value.",
+              "xp_reward": 10,
+              "starter_code": "scores = {'quartz': 3, 'other': 1}\nprint(max(scores, key=scores.get))\n",
+              "options": [
+                "other",
+                "none",
+                "0",
+                "quartz"
+              ],
+              "correct_answer": "quartz"
+            },
+            {
+              "id": "ai-emb-cosine-order",
+              "type": "ordering",
+              "question": "Mesa clerks recount crates before dawn. For rank embeddings by cosine similarity, build the line that picks the label with the higher score.",
+              "hints": [
+                "Start at the left of the example.",
+                "Keep the example order.",
+                "best = max(scores, key=scores.get)"
+              ],
+              "explanation": "The highest cosine score is the nearest label.",
+              "xp_reward": 10,
+              "options": [
+                "best",
+                "=",
+                "max(scores,",
+                "key=scores.get)",
+                "min"
+              ],
+              "correct_answer": [
+                "best",
+                "=",
+                "max(scores,",
+                "key=scores.get)"
+              ]
+            },
+            {
+              "id": "ai-emb-cosine-fill",
+              "type": "fill_blank",
+              "question": "Mesa clerks recount crates before dawn. For rank embeddings by cosine similarity, fill the blank so the line picks the label with the higher score.",
+              "hints": [
+                "The blank is the missing piece of the example.",
+                "The example uses that piece.",
+                "max"
+              ],
+              "explanation": "The highest cosine score is the nearest label.",
+              "xp_reward": 10,
+              "starter_code": "best = ___(scores, key=scores.get)\n",
+              "options": [
+                "min",
+                "sum",
+                "len",
+                "max"
+              ],
+              "correct_answer": "max"
+            },
+            {
+              "id": "ai-emb-cosine-bug",
+              "type": "debugging",
+              "question": "Mesa clerks recount crates before dawn. For rank embeddings by cosine similarity, which line does a different job than the example?",
+              "hints": [
+                "The other lines match the example.",
+                "One line is the odd one.",
+                "Line 2"
+              ],
+              "explanation": "The print names the lower score.",
+              "xp_reward": 10,
+              "starter_code": "scores = {'quartz': 3, 'other': 1}\nprint('other')\n",
+              "correct_answer": "2"
+            },
+            {
+              "id": "ai-emb-cosine-predict-2",
+              "type": "output_prediction",
+              "question": "Mesa clerks recount crates before dawn. For rank embeddings by cosine similarity, what does the second run display?",
+              "hints": [
+                "Apply the same steps to the new value.",
+                "The display comes from the last line.",
+                "other"
+              ],
+              "explanation": "The second Cosine Ranking program displays that value.",
+              "xp_reward": 10,
+              "starter_code": "scores = {'quartz': 1, 'other': 4}\nprint(max(scores, key=scores.get))\n",
+              "options": [
+                "quartz",
+                "none",
+                "other",
+                "0"
+              ],
+              "correct_answer": "other"
+            },
+            {
+              "id": "ai-emb-cosine-write",
+              "type": "code",
+              "question": "Mesa clerks recount crates before dawn. For rank embeddings by cosine similarity, fill the blank so the program prints the result.",
+              "hints": [
+                "The blank is the missing piece.",
+                "Print the value that piece produces.",
+                "label = max(scores, key=scores.get)"
+              ],
+              "explanation": "The printed value is the result after this step picks the label with the higher score.",
+              "xp_reward": 10,
+              "starter_code": "scores = {'quartz': 3, 'other': 1}\nlabel = ___\nprint(label)\n",
+              "solution_code": "scores = {'quartz': 3, 'other': 1}\nlabel = max(scores, key=scores.get)\nprint(label)\n",
+              "tests": [
+                {
+                  "name": "ai-emb-cosine-prints",
+                  "description": "The printed value is the result after this step picks the label with the higher ",
+                  "expected_stdout": "quartz\n",
+                  "required": true
+                }
+              ]
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "ai-emb-topk",
-      "title": "11. Top-K Retrieval",
-      "description": "Implement `topk(query, corpus, k)` returning indices of k highest dots, highest first. The test checks that `topk([1, 0], [[1, 0], [0, 1], [2, 0]], 2)` equals `[2, 0]`.",
+      "title": "Practice Top-K Retrieval",
+      "description": "Implement topk(query, corpus, k) returning indices of k highest dots, highest first. The test checks that topk([1, 0], [[1, 0], [0, 1], [2, 0]], 2) equals [2, 0].",
       "order": 11,
       "difficulty": "intermediate",
       "duration_minutes": 8,
@@ -103,7 +441,7 @@
       ],
       "prerequisites": [],
       "learning_objectives": [
-        "Retrieve top-k similar vectors"
+        "Orchard clerks recount crates before dawn, and retrieve top-k similar vectors."
       ],
       "starter_code": "def topk(query, corpus, k):\n    # TODO\n    pass\n",
       "solution_code": "def topk(query, corpus, k):\n    scored = [(sum(a * b for a, b in zip(query, v)), i) for i, v in enumerate(corpus)]\n    scored.sort(key=lambda t: (-t[0], t[1]))\n    return [i for _, i in scored[:k]]\n",
@@ -127,35 +465,173 @@
       "xp_reward": 25,
       "sublessons": [
         {
-          "id": "ai-emb-topk-order-1-sub",
-          "title": "Order the steps",
+          "id": "ai-emb-topk-micro",
+          "title": "Practice Top-K Retrieval",
+          "description": "",
           "order": 1,
           "exercises": [
             {
-              "id": "ai-emb-topk-order-1",
-              "type": "ordering",
-              "question": "Put the steps of `11. Top-K Retrieval` back in order. Each line depends on the one before it.",
+              "id": "ai-emb-topk-teach",
+              "type": "teach",
+              "question": "Orchard clerks recount crates before dawn, and retrieve top-k similar vectors.",
+              "hints": [
+                "Read the one job this step is practicing.",
+                "The example is about Top-K Retrieval.",
+                "sorted(scores, reverse=True)"
+              ],
+              "explanation": "Orchard clerks recount crates before dawn, and retrieve top-k similar vectors.",
+              "xp_reward": 0,
+              "worked_example": "sorted(scores, reverse=True)"
+            },
+            {
+              "id": "ai-emb-topk-mcq",
+              "type": "mcq",
+              "question": "Orchard clerks recount crates before dawn. For retrieve top-k similar vectors, which line reads the second highest score?",
+              "hints": [
+                "Compare each line with the example.",
+                "One line matches the example.",
+                "sorted(scores, reverse=True)"
+              ],
+              "explanation": "Sorting descending puts the top scores first.",
+              "xp_reward": 10,
               "options": [
-                "return [i for _, i in scored[:k]]",
-                "scored = [(sum(a * b for a, b in zip(query, v)), i) for i, v in enumerate(corpus)]",
-                "scored.sort(key=lambda t: (-t[0], t[1]))"
+                "scores == scores",
+                "return scores",
+                "pass",
+                "sorted(scores, reverse=True)"
+              ],
+              "correct_answer": "sorted(scores, reverse=True)"
+            },
+            {
+              "id": "ai-emb-topk-predict",
+              "type": "output_prediction",
+              "question": "Orchard clerks recount crates before dawn. For retrieve top-k similar vectors, what value is displayed?",
+              "hints": [
+                "Run the example in your head from the top.",
+                "The last line is what gets displayed.",
+                "4"
+              ],
+              "explanation": "The Top-K Retrieval program displays that value.",
+              "xp_reward": 10,
+              "starter_code": "scores = [5, 1, 4, 2]\nprint(sorted(scores, reverse=True)[1])\n",
+              "options": [
+                "5",
+                "none",
+                "0",
+                "4"
+              ],
+              "correct_answer": "4"
+            },
+            {
+              "id": "ai-emb-topk-order",
+              "type": "ordering",
+              "question": "Orchard clerks recount crates before dawn. For retrieve top-k similar vectors, build the line that reads the second highest score.",
+              "hints": [
+                "Start at the left of the example.",
+                "Keep the example order.",
+                "ranked = sorted(scores, reverse=True)"
+              ],
+              "explanation": "Sorting descending puts the top scores first.",
+              "xp_reward": 10,
+              "options": [
+                "ranked",
+                "=",
+                "sorted(scores,",
+                "reverse=True)",
+                "False"
               ],
               "correct_answer": [
-                "scored = [(sum(a * b for a, b in zip(query, v)), i) for i, v in enumerate(corpus)]",
-                "scored.sort(key=lambda t: (-t[0], t[1]))",
-                "return [i for _, i in scored[:k]]"
+                "ranked",
+                "=",
+                "sorted(scores,",
+                "reverse=True)"
+              ]
+            },
+            {
+              "id": "ai-emb-topk-fill",
+              "type": "fill_blank",
+              "question": "Orchard clerks recount crates before dawn. For retrieve top-k similar vectors, fill the blank so the line reads the second highest score.",
+              "hints": [
+                "The blank is the missing piece of the example.",
+                "The example uses that piece.",
+                "True"
               ],
-              "explanation": "The order the solution in “11. Top-K Retrieval” actually runs in.",
-              "xp_reward": 10
+              "explanation": "Sorting descending puts the top scores first.",
+              "xp_reward": 10,
+              "starter_code": "ranked = sorted(scores, reverse=___)\n",
+              "options": [
+                "False",
+                "0",
+                "None",
+                "True"
+              ],
+              "correct_answer": "True"
+            },
+            {
+              "id": "ai-emb-topk-bug",
+              "type": "debugging",
+              "question": "Orchard clerks recount crates before dawn. For retrieve top-k similar vectors, which line does a different job than the example?",
+              "hints": [
+                "The other lines match the example.",
+                "One line is the odd one.",
+                "Line 2"
+              ],
+              "explanation": "The print takes the first stored score, not the ranked one.",
+              "xp_reward": 10,
+              "starter_code": "scores = [5, 1, 4, 2]\nprint(scores[0])\n",
+              "correct_answer": "2"
+            },
+            {
+              "id": "ai-emb-topk-predict-2",
+              "type": "output_prediction",
+              "question": "Orchard clerks recount crates before dawn. For retrieve top-k similar vectors, what does the second run display?",
+              "hints": [
+                "Apply the same steps to the new value.",
+                "The display comes from the last line.",
+                "5"
+              ],
+              "explanation": "The second Top-K Retrieval program displays that value.",
+              "xp_reward": 10,
+              "starter_code": "scores = [5, 9, 4, 2]\nprint(sorted(scores, reverse=True)[1])\n",
+              "options": [
+                "4",
+                "none",
+                "5",
+                "0"
+              ],
+              "correct_answer": "5"
+            },
+            {
+              "id": "ai-emb-topk-write",
+              "type": "code",
+              "question": "Orchard clerks recount crates before dawn. For retrieve top-k similar vectors, fill the blank so the program prints the result.",
+              "hints": [
+                "The blank is the missing piece.",
+                "Print the value that piece produces.",
+                "label = sorted(scores, reverse=True)[1]"
+              ],
+              "explanation": "The printed value is the result after this step reads the second highest score.",
+              "xp_reward": 10,
+              "starter_code": "scores = [5, 1, 4, 2]\nlabel = ___\nprint(label)\n",
+              "solution_code": "scores = [5, 1, 4, 2]\nlabel = sorted(scores, reverse=True)[1]\nprint(label)\n",
+              "tests": [
+                {
+                  "name": "ai-emb-topk-prints",
+                  "description": "The printed value is the result after this step reads the second highest score.",
+                  "expected_stdout": "4\n",
+                  "required": true
+                }
+              ]
             }
           ]
         }
-      ]
+      ],
+      "player_mode": "micro"
     },
     {
       "id": "ai-emb-meanpool",
-      "title": "12. Mean Pool Tokens (Practice)",
-      "description": "Implement `mean_pool(token_vecs)` averaging equal-length vectors. The test checks that `mean_pool([[1, 2], [3, 4]])` equals `[2.0, 3.0]`.",
+      "title": "Practice Mean Pool Tokens",
+      "description": "Implement mean_pool(token_vecs) averaging equal-length vectors. The test checks that mean_pool([[1, 2], [3, 4]]) equals [2.0, 3.0].",
       "order": 12,
       "difficulty": "intermediate",
       "duration_minutes": 6,
@@ -167,7 +643,7 @@
       ],
       "prerequisites": [],
       "learning_objectives": [
-        "Mean-pool token embeddings"
+        "Quarry clerks recount crates before dawn, and mean-pool token embeddings."
       ],
       "starter_code": "def mean_pool(token_vecs):\n    # TODO\n    pass\n",
       "solution_code": "def mean_pool(token_vecs):\n    dim = len(token_vecs[0])\n    n = len(token_vecs)\n    return [sum(v[d] for v in token_vecs) / n for d in range(dim)]\n",
@@ -188,12 +664,182 @@
         "url": "https://d2l.ai/chapter_preliminaries/linear-algebra.html",
         "license": "Apache 2.0 (Dive into Deep Learning book)"
       },
-      "xp_reward": 15
+      "xp_reward": 15,
+      "player_mode": "micro",
+      "sublessons": [
+        {
+          "id": "ai-emb-meanpool-micro",
+          "title": "Practice Mean Pool Tokens",
+          "description": "",
+          "order": 1,
+          "exercises": [
+            {
+              "id": "ai-emb-meanpool-teach",
+              "type": "teach",
+              "question": "Quarry clerks recount crates before dawn, and mean-pool token embeddings.",
+              "hints": [
+                "Read the one job this step is practicing.",
+                "The example is about Mean Pool Tokens.",
+                "(vecs[0][0] + vecs[1][0]) // 2"
+              ],
+              "explanation": "Quarry clerks recount crates before dawn, and mean-pool token embeddings.",
+              "xp_reward": 0,
+              "worked_example": "(vecs[0][0] + vecs[1][0]) // 2"
+            },
+            {
+              "id": "ai-emb-meanpool-mcq",
+              "type": "mcq",
+              "question": "Quarry clerks recount crates before dawn. For mean-pool token embeddings, which line averages the first column of the vectors?",
+              "hints": [
+                "Compare each line with the example.",
+                "One line matches the example.",
+                "(vecs[0][0] + vecs[1][0]) // 2"
+              ],
+              "explanation": "Mean pooling averages the matching positions.",
+              "xp_reward": 10,
+              "options": [
+                "vecs == vecs",
+                "return vecs",
+                "(vecs[0][0] + vecs[1][0]) // 2",
+                "pass"
+              ],
+              "correct_answer": "(vecs[0][0] + vecs[1][0]) // 2"
+            },
+            {
+              "id": "ai-emb-meanpool-predict",
+              "type": "output_prediction",
+              "question": "Quarry clerks recount crates before dawn. For mean-pool token embeddings, what value is displayed?",
+              "hints": [
+                "Run the example in your head from the top.",
+                "The last line is what gets displayed.",
+                "3"
+              ],
+              "explanation": "The Mean Pool Tokens program displays that value.",
+              "xp_reward": 10,
+              "starter_code": "vecs = [[2, 4], [4, 8]]\nprint((vecs[0][0] + vecs[1][0]) // 2)\n",
+              "options": [
+                "5",
+                "3",
+                "0",
+                "none"
+              ],
+              "correct_answer": "3"
+            },
+            {
+              "id": "ai-emb-meanpool-order",
+              "type": "ordering",
+              "question": "Quarry clerks recount crates before dawn. For mean-pool token embeddings, build the line that averages the first column of the vectors.",
+              "hints": [
+                "Start at the left of the example.",
+                "Keep the example order.",
+                "pooled = (vecs[0][0] + vecs[1][0]) // 2"
+              ],
+              "explanation": "Mean pooling averages the matching positions.",
+              "xp_reward": 10,
+              "options": [
+                "pooled",
+                "=",
+                "(vecs[0][0]",
+                "+",
+                "vecs[1][0])",
+                "//",
+                "2",
+                "/"
+              ],
+              "correct_answer": [
+                "pooled",
+                "=",
+                "(vecs[0][0]",
+                "+",
+                "vecs[1][0])",
+                "//",
+                "2"
+              ]
+            },
+            {
+              "id": "ai-emb-meanpool-fill",
+              "type": "fill_blank",
+              "question": "Quarry clerks recount crates before dawn. For mean-pool token embeddings, fill the blank so the line averages the first column of the vectors.",
+              "hints": [
+                "The blank is the missing piece of the example.",
+                "The example uses that piece.",
+                "//"
+              ],
+              "explanation": "Mean pooling averages the matching positions.",
+              "xp_reward": 10,
+              "starter_code": "pooled = (vecs[0][0] + vecs[1][0]) ___ 2\n",
+              "options": [
+                "/",
+                "%",
+                "//",
+                "*"
+              ],
+              "correct_answer": "//"
+            },
+            {
+              "id": "ai-emb-meanpool-bug",
+              "type": "debugging",
+              "question": "Quarry clerks recount crates before dawn. For mean-pool token embeddings, which line does a different job than the example?",
+              "hints": [
+                "The other lines match the example.",
+                "One line is the odd one.",
+                "Line 2"
+              ],
+              "explanation": "The print keeps the first vector and never averages.",
+              "xp_reward": 10,
+              "starter_code": "vecs = [[2, 4], [4, 8]]\nprint(vecs[0][0])\n",
+              "correct_answer": "2"
+            },
+            {
+              "id": "ai-emb-meanpool-predict-2",
+              "type": "output_prediction",
+              "question": "Quarry clerks recount crates before dawn. For mean-pool token embeddings, what does the second run display?",
+              "hints": [
+                "Apply the same steps to the new value.",
+                "The display comes from the last line.",
+                "5"
+              ],
+              "explanation": "The second Mean Pool Tokens program displays that value.",
+              "xp_reward": 10,
+              "starter_code": "vecs = [[2, 4], [8, 8]]\nprint((vecs[0][0] + vecs[1][0]) // 2)\n",
+              "options": [
+                "3",
+                "5",
+                "none",
+                "0"
+              ],
+              "correct_answer": "5"
+            },
+            {
+              "id": "ai-emb-meanpool-write",
+              "type": "code",
+              "question": "Quarry clerks recount crates before dawn. For mean-pool token embeddings, fill the blank so the program prints the result.",
+              "hints": [
+                "The blank is the missing piece.",
+                "Print the value that piece produces.",
+                "label = (vecs[0][0] + vecs[1][0]) // 2"
+              ],
+              "explanation": "The printed value is the result after this step averages the first column of the vectors.",
+              "xp_reward": 10,
+              "starter_code": "vecs = [[2, 4], [4, 8]]\nlabel = ___\nprint(label)\n",
+              "solution_code": "vecs = [[2, 4], [4, 8]]\nlabel = (vecs[0][0] + vecs[1][0]) // 2\nprint(label)\n",
+              "tests": [
+                {
+                  "name": "ai-emb-meanpool-prints",
+                  "description": "The printed value is the result after this step averages the first column of the",
+                  "expected_stdout": "3\n",
+                  "required": true
+                }
+              ]
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "ai-emb-checkpoint",
-      "title": "13. Checkpoint: Softmax Scores",
-      "description": "Implement `softmax(xs)` for a list of floats. The test checks that `softmax([0, 0])[0]` equals `0.5`; `sum(softmax([1, 2, 3]))` equals `1.0`.",
+      "title": "Practice Checkpoint Softmax Scores",
+      "description": "Implement softmax(xs) for a list of floats. The test checks that softmax([0, 0])[0] equals 0.5; sum(softmax([1, 2, 3])) equals 1.0.",
       "order": 13,
       "difficulty": "intermediate",
       "duration_minutes": 10,
@@ -205,7 +851,7 @@
       ],
       "prerequisites": [],
       "learning_objectives": [
-        "Convert scores to softmax probabilities"
+        "Attic clerks recount crates before dawn, and convert scores to softmax probabilities."
       ],
       "starter_code": "import math\n\ndef softmax(xs):\n    # TODO\n    pass\n",
       "solution_code": "import math\n\ndef softmax(xs):\n    m = max(xs)\n    exps = [math.exp(x - m) for x in xs]\n    s = sum(exps)\n    return [e / s for e in exps]\n",
@@ -229,32 +875,170 @@
       "xp_reward": 40,
       "sublessons": [
         {
-          "id": "ai-emb-checkpoint-order-1-sub",
-          "title": "Order the steps",
+          "id": "ai-emb-checkpoint-micro",
+          "title": "Practice Checkpoint Softmax Scores",
+          "description": "",
           "order": 1,
           "exercises": [
             {
-              "id": "ai-emb-checkpoint-order-1",
-              "type": "ordering",
-              "question": "Put the steps of `13. Checkpoint: Softmax Scores` back in order. Each line depends on the one before it.",
+              "id": "ai-emb-checkpoint-teach",
+              "type": "teach",
+              "question": "Attic clerks recount crates before dawn, and convert scores to softmax probabilities.",
+              "hints": [
+                "Read the one job this step is practicing.",
+                "The example is about Checkpoint Softmax Scores.",
+                "exps[1] / sum(exps)"
+              ],
+              "explanation": "Attic clerks recount crates before dawn, and convert scores to softmax probabilities.",
+              "xp_reward": 0,
+              "worked_example": "exps[1] / sum(exps)"
+            },
+            {
+              "id": "ai-emb-checkpoint-mcq",
+              "type": "mcq",
+              "question": "Attic clerks recount crates before dawn. For convert scores to softmax probabilities, which line reads the larger softmax share?",
+              "hints": [
+                "Compare each line with the example.",
+                "One line matches the example.",
+                "exps[1] / sum(exps)"
+              ],
+              "explanation": "Softmax divides each exponential by the sum of exponentials.",
+              "xp_reward": 10,
               "options": [
-                "return [e / s for e in exps]",
-                "m = max(xs)",
-                "exps = [math.exp(x - m) for x in xs]",
-                "s = sum(exps)"
+                "xs == xs",
+                "return xs",
+                "pass",
+                "exps[1] / sum(exps)"
+              ],
+              "correct_answer": "exps[1] / sum(exps)"
+            },
+            {
+              "id": "ai-emb-checkpoint-predict",
+              "type": "output_prediction",
+              "question": "Attic clerks recount crates before dawn. For convert scores to softmax probabilities, what value is displayed?",
+              "hints": [
+                "Run the example in your head from the top.",
+                "The last line is what gets displayed.",
+                "0.73"
+              ],
+              "explanation": "The Checkpoint Softmax Scores program displays that value.",
+              "xp_reward": 10,
+              "starter_code": "import math\nxs = [1, 2]\nexps = [math.exp(x) for x in xs]\nprint(round(exps[1] / sum(exps), 2))\n",
+              "options": [
+                "0",
+                "none",
+                "0.73",
+                "0.88"
+              ],
+              "correct_answer": "0.73"
+            },
+            {
+              "id": "ai-emb-checkpoint-order",
+              "type": "ordering",
+              "question": "Attic clerks recount crates before dawn. For convert scores to softmax probabilities, build the line that reads the larger softmax share.",
+              "hints": [
+                "Start at the left of the example.",
+                "Keep the example order.",
+                "share = exps[1] / sum(exps)"
+              ],
+              "explanation": "Softmax divides each exponential by the sum of exponentials.",
+              "xp_reward": 10,
+              "options": [
+                "share",
+                "=",
+                "exps[1]",
+                "/",
+                "sum(exps)",
+                "*"
               ],
               "correct_answer": [
-                "m = max(xs)",
-                "exps = [math.exp(x - m) for x in xs]",
-                "s = sum(exps)",
-                "return [e / s for e in exps]"
+                "share",
+                "=",
+                "exps[1]",
+                "/",
+                "sum(exps)"
+              ]
+            },
+            {
+              "id": "ai-emb-checkpoint-fill",
+              "type": "fill_blank",
+              "question": "Attic clerks recount crates before dawn. For convert scores to softmax probabilities, fill the blank so the line reads the larger softmax share.",
+              "hints": [
+                "The blank is the missing piece of the example.",
+                "The example uses that piece.",
+                "/"
               ],
-              "explanation": "The order the solution in “13. Checkpoint: Softmax Scores” actually runs in.",
-              "xp_reward": 10
+              "explanation": "Softmax divides each exponential by the sum of exponentials.",
+              "xp_reward": 10,
+              "starter_code": "share = exps[1] ___ sum(exps)\n",
+              "options": [
+                "*",
+                "+",
+                "-",
+                "/"
+              ],
+              "correct_answer": "/"
+            },
+            {
+              "id": "ai-emb-checkpoint-bug",
+              "type": "debugging",
+              "question": "Attic clerks recount crates before dawn. For convert scores to softmax probabilities, which line does a different job than the example?",
+              "hints": [
+                "The other lines match the example.",
+                "One line is the odd one.",
+                "Line 3"
+              ],
+              "explanation": "The print shows the raw score instead of its softmax share.",
+              "xp_reward": 10,
+              "starter_code": "import math\nxs = [1, 2]\nprint(xs[1])\n",
+              "correct_answer": "3"
+            },
+            {
+              "id": "ai-emb-checkpoint-predict-2",
+              "type": "output_prediction",
+              "question": "Attic clerks recount crates before dawn. For convert scores to softmax probabilities, what does the second run display?",
+              "hints": [
+                "Apply the same steps to the new value.",
+                "The display comes from the last line.",
+                "0.88"
+              ],
+              "explanation": "The second Checkpoint Softmax Scores program displays that value.",
+              "xp_reward": 10,
+              "starter_code": "import math\nxs = [1, 3]\nexps = [math.exp(x) for x in xs]\nprint(round(exps[1] / sum(exps), 2))\n",
+              "options": [
+                "none",
+                "0.73",
+                "0.88",
+                "0"
+              ],
+              "correct_answer": "0.88"
+            },
+            {
+              "id": "ai-emb-checkpoint-write",
+              "type": "code",
+              "question": "Attic clerks recount crates before dawn. For convert scores to softmax probabilities, fill the blank so the program prints the result.",
+              "hints": [
+                "The blank is the missing piece.",
+                "Print the value that piece produces.",
+                "label = round(exps[1] / sum(exps), 2)"
+              ],
+              "explanation": "The printed value is the result after this step reads the larger softmax share.",
+              "xp_reward": 10,
+              "starter_code": "import math\nxs = [1, 2]\nexps = [math.exp(x) for x in xs]\nlabel = ___\nprint(label)\n",
+              "solution_code": "import math\nxs = [1, 2]\nexps = [math.exp(x) for x in xs]\nlabel = round(exps[1] / sum(exps), 2)\nprint(label)\n",
+              "tests": [
+                {
+                  "name": "ai-emb-checkpoint-prints",
+                  "description": "The printed value is the result after this step reads the larger softmax share.",
+                  "expected_stdout": "0.73\n",
+                  "required": true
+                }
+              ]
             }
           ]
         }
-      ]
+      ],
+      "player_mode": "micro"
     }
   ]
 }

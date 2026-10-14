@@ -15,8 +15,8 @@
   "lessons": [
     {
       "id": "classes-step-1",
-      "title": "1. Defining a Class & __init__",
-      "description": "In Python, classes are defined using the `class` keyword. The `__init__` constructor initializes object attributes. Create a `Wizard` class with `name` and `health` attributes. The test checks that `Wizard(\"Gandalf\", 120).name` equals `\"Gandalf\"`; `Wizard(\"Gandalf\", 120).health` equals `120`.",
+      "title": "Define a Class init",
+      "description": "In Python, classes are defined using the class keyword. The __init__ constructor initializes object attributes. Create a Wizard class with name and health attributes. The test checks that Wizard(\"Gandalf\", 120).name equals \"Gandalf\"; Wizard(\"Gandalf\", 120).health equals 120.",
       "order": 66,
       "difficulty": "intermediate",
       "duration_minutes": 5,
@@ -28,7 +28,7 @@
         "functions"
       ],
       "learning_objectives": [
-        "Define a class with an __init__ constructor method"
+        "Quarry clerks recount crates before dawn, and define a class with an init constructor method."
       ],
       "starter_code": "class Wizard:\n    def __init__(self, name, health=100):\n        # TODO: Assign self.name and self.health\n        pass\n",
       "solution_code": "class Wizard:\n    def __init__(self, name, health=100):\n        self.name = name\n        self.health = health\n",
@@ -53,12 +53,174 @@
         "url": "https://docs.python.org/3/tutorial/classes.html#instantiation",
         "license": "Python documentation license (PSF)"
       },
-      "xp_reward": 10
+      "xp_reward": 10,
+      "player_mode": "micro",
+      "sublessons": [
+        {
+          "id": "classes-step-1-micro",
+          "title": "Define a Class init",
+          "description": "",
+          "order": 1,
+          "exercises": [
+            {
+              "id": "classes-step-1-teach",
+              "type": "teach",
+              "question": "Quarry clerks recount crates before dawn, and define a class with an init constructor method.",
+              "hints": [
+                "Read the one job this step is practicing.",
+                "The example is about Defining a Class init.",
+                "self.item = item"
+              ],
+              "explanation": "Quarry clerks recount crates before dawn, and define a class with an init constructor method.",
+              "xp_reward": 0,
+              "worked_example": "self.item = item"
+            },
+            {
+              "id": "classes-step-1-mcq",
+              "type": "mcq",
+              "question": "Quarry clerks recount crates before dawn. For define a class with an init constructor method, which line stores the reading on the new object?",
+              "hints": [
+                "Compare each line with the example.",
+                "One line matches the example.",
+                "self.item = item"
+              ],
+              "explanation": "self.item = item keeps the reading on the object.",
+              "xp_reward": 10,
+              "options": [
+                "item == self",
+                "print(item)",
+                "self.item = item",
+                "return item"
+              ],
+              "correct_answer": "self.item = item"
+            },
+            {
+              "id": "classes-step-1-predict",
+              "type": "output_prediction",
+              "question": "Quarry clerks recount crates before dawn. For define a class with an init constructor method, what value is displayed?",
+              "hints": [
+                "Run the example in your head from the top.",
+                "The last line is what gets displayed.",
+                "23"
+              ],
+              "explanation": "The Defining a Class init program displays that value.",
+              "xp_reward": 10,
+              "starter_code": "class Bag:\n    def __init__(self, item):\n        self.item = item\nprint(Bag(23).item)\n",
+              "options": [
+                "27",
+                "none",
+                "23",
+                "0"
+              ],
+              "correct_answer": "23"
+            },
+            {
+              "id": "classes-step-1-order",
+              "type": "ordering",
+              "question": "Quarry clerks recount crates before dawn. For define a class with an init constructor method, build the line that stores the reading on the new object.",
+              "hints": [
+                "Start at the left of the example.",
+                "Keep the example order.",
+                "self.item = item"
+              ],
+              "explanation": "self.item = item stores the reading.",
+              "xp_reward": 10,
+              "options": [
+                "self.item",
+                "=",
+                "item",
+                "=="
+              ],
+              "correct_answer": [
+                "self.item",
+                "=",
+                "item"
+              ]
+            },
+            {
+              "id": "classes-step-1-fill",
+              "type": "fill_blank",
+              "question": "Quarry clerks recount crates before dawn. For define a class with an init constructor method, fill the blank so the line stores the reading on the new object.",
+              "hints": [
+                "The blank is the missing piece of the example.",
+                "The example uses that piece.",
+                "="
+              ],
+              "explanation": "One equals sign stores the reading.",
+              "xp_reward": 10,
+              "starter_code": "self.item ___ item\n",
+              "options": [
+                "==",
+                "!=",
+                "=",
+                "+"
+              ],
+              "correct_answer": "="
+            },
+            {
+              "id": "classes-step-1-bug",
+              "type": "debugging",
+              "question": "Quarry clerks recount crates before dawn. For define a class with an init constructor method, which line does a different job than the example?",
+              "hints": [
+                "The other lines match the example.",
+                "One line is the odd one.",
+                "Line 3"
+              ],
+              "explanation": "The constructor compares, so the reading is never stored.",
+              "xp_reward": 10,
+              "starter_code": "class Bag:\n    def __init__(self, item):\n        self.item == item\nprint(0)\n",
+              "correct_answer": "3"
+            },
+            {
+              "id": "classes-step-1-predict-2",
+              "type": "output_prediction",
+              "question": "Quarry clerks recount crates before dawn. For define a class with an init constructor method, what does the second run display?",
+              "hints": [
+                "Apply the same steps to the new value.",
+                "The display comes from the last line.",
+                "27"
+              ],
+              "explanation": "The second Defining a Class init program displays that value.",
+              "xp_reward": 10,
+              "starter_code": "class Bag:\n    def __init__(self, item):\n        self.item = item\nprint(Bag(27).item)\n",
+              "options": [
+                "0",
+                "none",
+                "27",
+                "23"
+              ],
+              "correct_answer": "27"
+            },
+            {
+              "id": "classes-step-1-write",
+              "type": "code",
+              "question": "Quarry clerks recount crates before dawn. For define a class with an init constructor method, fill the blank so the program prints the result.",
+              "hints": [
+                "The blank is the missing piece.",
+                "Print the value that piece produces.",
+                "label = bag.item"
+              ],
+              "explanation": "The stored reading is what gets printed.",
+              "xp_reward": 10,
+              "starter_code": "class Bag:\n    def __init__(self, item):\n        self.item = item\nbag = Bag(23)\nlabel = ___\nprint(label)\n",
+              "solution_code": "class Bag:\n    def __init__(self, item):\n        self.item = item\nbag = Bag(23)\nlabel = bag.item\nprint(label)\n",
+              "tests": [
+                {
+                  "name": "classes-step-1-prints",
+                  "description": "The stored reading is what gets printed.",
+                  "expected_stdout": "23\n",
+                  "required": true
+                }
+              ]
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "classes-step-2",
-      "title": "2. Instance Methods",
-      "description": "Instance methods take `self` as their first parameter and can modify or read instance state. Add a `take_damage(amount)` method to `Wizard`. The test checks that `Wizard(\"Merlin\", 100).health` equals `70`.",
+      "title": "Practice Instance Methods",
+      "description": "Instance methods take self as their first parameter and can modify or read instance state. Add a take_damage(amount) method to Wizard. The test checks that Wizard(\"Merlin\", 100).health equals 70.",
       "order": 67,
       "difficulty": "intermediate",
       "duration_minutes": 5,
@@ -70,7 +232,7 @@
         "functions"
       ],
       "learning_objectives": [
-        "Define instance methods that modify instance attributes"
+        "Attic clerks recount crates before dawn, and define instance methods that modify instance attributes."
       ],
       "starter_code": "class Wizard:\n    def __init__(self, name, health=100):\n        self.name = name\n        self.health = health\n\n    def take_damage(self, amount):\n        # TODO: Subtract amount from self.health\n        pass\n",
       "solution_code": "class Wizard:\n    def __init__(self, name, health=100):\n        self.name = name\n        self.health = health\n\n    def take_damage(self, amount):\n        self.health = max(0, self.health - amount)\n",
@@ -94,12 +256,176 @@
         "url": "https://docs.python.org/3/tutorial/classes.html#user-defined-objects",
         "license": "Python documentation license (PSF)"
       },
-      "xp_reward": 10
+      "xp_reward": 10,
+      "player_mode": "micro",
+      "sublessons": [
+        {
+          "id": "classes-step-2-micro",
+          "title": "Practice Instance Methods",
+          "description": "",
+          "order": 1,
+          "exercises": [
+            {
+              "id": "classes-step-2-teach",
+              "type": "teach",
+              "question": "Attic clerks recount crates before dawn, and define instance methods that modify instance attributes.",
+              "hints": [
+                "Read the one job this step is practicing.",
+                "The example is about Instance Methods.",
+                "return self.item * 2"
+              ],
+              "explanation": "Attic clerks recount crates before dawn, and define instance methods that modify instance attributes.",
+              "xp_reward": 0,
+              "worked_example": "return self.item * 2"
+            },
+            {
+              "id": "classes-step-2-mcq",
+              "type": "mcq",
+              "question": "Attic clerks recount crates before dawn. For define instance methods that modify instance attributes, which line hands back twice the stored reading?",
+              "hints": [
+                "Compare each line with the example.",
+                "One line matches the example.",
+                "return self.item * 2"
+              ],
+              "explanation": "return self.item * 2 hands the doubled reading back.",
+              "xp_reward": 10,
+              "options": [
+                "pass",
+                "print(self)",
+                "return self.item * 2",
+                "self.item == item"
+              ],
+              "correct_answer": "return self.item * 2"
+            },
+            {
+              "id": "classes-step-2-predict",
+              "type": "output_prediction",
+              "question": "Attic clerks recount crates before dawn. For define instance methods that modify instance attributes, what value is displayed?",
+              "hints": [
+                "Run the example in your head from the top.",
+                "The last line is what gets displayed.",
+                "48"
+              ],
+              "explanation": "The Instance Methods program displays that value.",
+              "xp_reward": 10,
+              "starter_code": "class Bag:\n    def __init__(self, item):\n        self.item = item\n    def doubled(self):\n        return self.item * 2\nprint(Bag(24).doubled())\n",
+              "options": [
+                "56",
+                "none",
+                "0",
+                "48"
+              ],
+              "correct_answer": "48"
+            },
+            {
+              "id": "classes-step-2-order",
+              "type": "ordering",
+              "question": "Attic clerks recount crates before dawn. For define instance methods that modify instance attributes, build the line that hands back twice the stored reading.",
+              "hints": [
+                "Start at the left of the example.",
+                "Keep the example order.",
+                "return self.item * 2"
+              ],
+              "explanation": "return self.item * 2 hands back twice the reading.",
+              "xp_reward": 10,
+              "options": [
+                "return",
+                "self.item",
+                "*",
+                "2",
+                "print"
+              ],
+              "correct_answer": [
+                "return",
+                "self.item",
+                "*",
+                "2"
+              ]
+            },
+            {
+              "id": "classes-step-2-fill",
+              "type": "fill_blank",
+              "question": "Attic clerks recount crates before dawn. For define instance methods that modify instance attributes, fill the blank so the line hands back twice the stored reading.",
+              "hints": [
+                "The blank is the missing piece of the example.",
+                "The example uses that piece.",
+                "*"
+              ],
+              "explanation": "The star doubles the stored reading.",
+              "xp_reward": 10,
+              "starter_code": "return self.item ___ 2\n",
+              "options": [
+                "+",
+                "-",
+                "==",
+                "*"
+              ],
+              "correct_answer": "*"
+            },
+            {
+              "id": "classes-step-2-bug",
+              "type": "debugging",
+              "question": "Attic clerks recount crates before dawn. For define instance methods that modify instance attributes, which line does a different job than the example?",
+              "hints": [
+                "The other lines match the example.",
+                "One line is the odd one.",
+                "Line 5"
+              ],
+              "explanation": "The method displays the product, so the caller receives nothing useful.",
+              "xp_reward": 10,
+              "starter_code": "class Bag:\n    def __init__(self, item):\n        self.item = item\n    def doubled(self):\n        print(self.item * 2)\nprint(Bag(24).doubled())\n",
+              "correct_answer": "5"
+            },
+            {
+              "id": "classes-step-2-predict-2",
+              "type": "output_prediction",
+              "question": "Attic clerks recount crates before dawn. For define instance methods that modify instance attributes, what does the second run display?",
+              "hints": [
+                "Apply the same steps to the new value.",
+                "The display comes from the last line.",
+                "56"
+              ],
+              "explanation": "The second Instance Methods program displays that value.",
+              "xp_reward": 10,
+              "starter_code": "class Bag:\n    def __init__(self, item):\n        self.item = item\n    def doubled(self):\n        return self.item * 2\nprint(Bag(28).doubled())\n",
+              "options": [
+                "48",
+                "none",
+                "56",
+                "0"
+              ],
+              "correct_answer": "56"
+            },
+            {
+              "id": "classes-step-2-write",
+              "type": "code",
+              "question": "Attic clerks recount crates before dawn. For define instance methods that modify instance attributes, fill the blank so the program prints the result.",
+              "hints": [
+                "The blank is the missing piece.",
+                "Print the value that piece produces.",
+                "label = bag.doubled()"
+              ],
+              "explanation": "The handed-back product is what gets printed.",
+              "xp_reward": 10,
+              "starter_code": "class Bag:\n    def __init__(self, item):\n        self.item = item\n    def doubled(self):\n        return self.item * 2\nbag = Bag(24)\nlabel = ___\nprint(label)\n",
+              "solution_code": "class Bag:\n    def __init__(self, item):\n        self.item = item\n    def doubled(self):\n        return self.item * 2\nbag = Bag(24)\nlabel = bag.doubled()\nprint(label)\n",
+              "tests": [
+                {
+                  "name": "classes-step-2-prints",
+                  "description": "The handed-back product is what gets printed.",
+                  "expected_stdout": "48\n",
+                  "required": true
+                }
+              ]
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "classes-01",
-      "title": "3. Space Station Life Support (Concept Challenge)",
-      "description": "Finish `add_crew_member`, `consume_oxygen`. Model a SpaceStation with crew count, oxygen level, and life support methods. The test checks that `SpaceStation(\"ISS\", 2).crew` equals `[\"Alice\"]`; `SpaceStation(\"ISS\", 5).oxygen_level` equals `80`.",
+      "title": "Practice Space Station Life Support",
+      "description": "Finish add_crew_member, consume_oxygen. Model a SpaceStation with crew count, oxygen level, and life support methods. The test checks that SpaceStation(\"ISS\", 2).crew equals [\"Alice\"]; SpaceStation(\"ISS\", 5).oxygen_level equals 80.",
       "order": 68,
       "difficulty": "intermediate",
       "duration_minutes": 8,
@@ -111,7 +437,7 @@
         "functions"
       ],
       "learning_objectives": [
-        "Build a complete class modeling real-world system state"
+        "Depot clerks recount crates before dawn, and build a complete class modeling real-world system state."
       ],
       "starter_code": "class SpaceStation:\n    def __init__(self, name, crew_capacity):\n        self.name = name\n        self.crew_capacity = crew_capacity\n        self.crew = []\n        self.oxygen_level = 100\n\n    def add_crew_member(self, member_name):\n        # TODO: Add member_name to self.crew if len(self.crew) < self.crew_capacity\n        pass\n\n    def consume_oxygen(self, hours):\n        # TODO: Deduct 2 * len(self.crew) * hours from self.oxygen_level\n        pass\n",
       "solution_code": "class SpaceStation:\n    def __init__(self, name, crew_capacity):\n        self.name = name\n        self.crew_capacity = crew_capacity\n        self.crew = []\n        self.oxygen_level = 100\n\n    def add_crew_member(self, member_name):\n        if len(self.crew) < self.crew_capacity:\n            self.crew.append(member_name)\n            return True\n        return False\n\n    def consume_oxygen(self, hours):\n        self.oxygen_level = max(0, self.oxygen_level - 2 * len(self.crew) * hours)\n",
@@ -138,12 +464,174 @@
         "url": "https://docs.python.org/3/tutorial/classes.html",
         "license": "Python documentation license (PSF)"
       },
-      "xp_reward": 25
+      "xp_reward": 25,
+      "player_mode": "micro",
+      "sublessons": [
+        {
+          "id": "classes-01-micro",
+          "title": "Practice Space Station Life Support",
+          "description": "",
+          "order": 1,
+          "exercises": [
+            {
+              "id": "classes-01-teach",
+              "type": "teach",
+              "question": "Depot clerks recount crates before dawn, and build a complete class modeling real-world system state.",
+              "hints": [
+                "Read the one job this step is practicing.",
+                "The example is about Space Station Life Support.",
+                "self.item = item"
+              ],
+              "explanation": "Depot clerks recount crates before dawn, and build a complete class modeling real-world system state.",
+              "xp_reward": 0,
+              "worked_example": "self.item = item"
+            },
+            {
+              "id": "classes-01-mcq",
+              "type": "mcq",
+              "question": "Depot clerks recount crates before dawn. For build a complete class modeling real-world system state, which line stores the reading on the new object?",
+              "hints": [
+                "Compare each line with the example.",
+                "One line matches the example.",
+                "self.item = item"
+              ],
+              "explanation": "self.item = item keeps the reading on the object.",
+              "xp_reward": 10,
+              "options": [
+                "item == self",
+                "print(item)",
+                "self.item = item",
+                "return item"
+              ],
+              "correct_answer": "self.item = item"
+            },
+            {
+              "id": "classes-01-predict",
+              "type": "output_prediction",
+              "question": "Depot clerks recount crates before dawn. For build a complete class modeling real-world system state, what value is displayed?",
+              "hints": [
+                "Run the example in your head from the top.",
+                "The last line is what gets displayed.",
+                "25"
+              ],
+              "explanation": "The Space Station Life Support program displays that value.",
+              "xp_reward": 10,
+              "starter_code": "class Bag:\n    def __init__(self, item):\n        self.item = item\nprint(Bag(25).item)\n",
+              "options": [
+                "29",
+                "none",
+                "25",
+                "0"
+              ],
+              "correct_answer": "25"
+            },
+            {
+              "id": "classes-01-order",
+              "type": "ordering",
+              "question": "Depot clerks recount crates before dawn. For build a complete class modeling real-world system state, build the line that stores the reading on the new object.",
+              "hints": [
+                "Start at the left of the example.",
+                "Keep the example order.",
+                "self.item = item"
+              ],
+              "explanation": "self.item = item stores the reading.",
+              "xp_reward": 10,
+              "options": [
+                "self.item",
+                "=",
+                "item",
+                "=="
+              ],
+              "correct_answer": [
+                "self.item",
+                "=",
+                "item"
+              ]
+            },
+            {
+              "id": "classes-01-fill",
+              "type": "fill_blank",
+              "question": "Depot clerks recount crates before dawn. For build a complete class modeling real-world system state, fill the blank so the line stores the reading on the new object.",
+              "hints": [
+                "The blank is the missing piece of the example.",
+                "The example uses that piece.",
+                "="
+              ],
+              "explanation": "One equals sign stores the reading.",
+              "xp_reward": 10,
+              "starter_code": "self.item ___ item\n",
+              "options": [
+                "==",
+                "!=",
+                "=",
+                "+"
+              ],
+              "correct_answer": "="
+            },
+            {
+              "id": "classes-01-bug",
+              "type": "debugging",
+              "question": "Depot clerks recount crates before dawn. For build a complete class modeling real-world system state, which line does a different job than the example?",
+              "hints": [
+                "The other lines match the example.",
+                "One line is the odd one.",
+                "Line 3"
+              ],
+              "explanation": "The constructor compares, so the reading is never stored.",
+              "xp_reward": 10,
+              "starter_code": "class Bag:\n    def __init__(self, item):\n        self.item == item\nprint(0)\n",
+              "correct_answer": "3"
+            },
+            {
+              "id": "classes-01-predict-2",
+              "type": "output_prediction",
+              "question": "Depot clerks recount crates before dawn. For build a complete class modeling real-world system state, what does the second run display?",
+              "hints": [
+                "Apply the same steps to the new value.",
+                "The display comes from the last line.",
+                "29"
+              ],
+              "explanation": "The second Space Station Life Support program displays that value.",
+              "xp_reward": 10,
+              "starter_code": "class Bag:\n    def __init__(self, item):\n        self.item = item\nprint(Bag(29).item)\n",
+              "options": [
+                "25",
+                "29",
+                "none",
+                "0"
+              ],
+              "correct_answer": "29"
+            },
+            {
+              "id": "classes-01-write",
+              "type": "code",
+              "question": "Depot clerks recount crates before dawn. For build a complete class modeling real-world system state, fill the blank so the program prints the result.",
+              "hints": [
+                "The blank is the missing piece.",
+                "Print the value that piece produces.",
+                "label = bag.item"
+              ],
+              "explanation": "The stored reading is what gets printed.",
+              "xp_reward": 10,
+              "starter_code": "class Bag:\n    def __init__(self, item):\n        self.item = item\nbag = Bag(25)\nlabel = ___\nprint(label)\n",
+              "solution_code": "class Bag:\n    def __init__(self, item):\n        self.item = item\nbag = Bag(25)\nlabel = bag.item\nprint(label)\n",
+              "tests": [
+                {
+                  "name": "classes-01-prints",
+                  "description": "The stored reading is what gets printed.",
+                  "expected_stdout": "25\n",
+                  "required": true
+                }
+              ]
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "classes-practice-1",
-      "title": "4. Bank Account Transaction Log (Practice)",
-      "description": "Implement a `BankAccount` class with `deposit`, `withdraw`, and balance history. The test checks that `BankAccount(\"Charlie\", 100).balance` equals `150`; `BankAccount(\"Charlie\", 100).balance` equals `120`; `BankAccount(\"Charlie\", 100).withdraw(30)` is true.",
+      "title": "Practice Bank Account Transaction Log",
+      "description": "Implement a BankAccount class with deposit, withdraw, and balance history. The test checks that BankAccount(\"Charlie\", 100).balance equals 150; BankAccount(\"Charlie\", 100).balance equals 120; BankAccount(\"Charlie\", 100).withdraw(30) is true.",
       "order": 69,
       "difficulty": "intermediate",
       "duration_minutes": 6,
@@ -155,7 +643,7 @@
         "functions"
       ],
       "learning_objectives": [
-        "Encapsulate state and transaction logic in a class"
+        "Ridge clerks recount crates before dawn, and encapsulate state and transaction logic in a class."
       ],
       "starter_code": "class BankAccount:\n    def __init__(self, owner, balance=0):\n        self.owner = owner\n        self.balance = balance\n\n    def deposit(self, amount):\n        # TODO: Add amount to balance and return new balance\n        pass\n\n    def withdraw(self, amount):\n        # TODO: Subtract amount from balance if sufficient funds exist, return True, else False\n        pass\n",
       "solution_code": "class BankAccount:\n    def __init__(self, owner, balance=0):\n        self.owner = owner\n        self.balance = balance\n\n    def deposit(self, amount):\n        self.balance += amount\n        return self.balance\n\n    def withdraw(self, amount):\n        if self.balance >= amount:\n            self.balance -= amount\n            return True\n        return False\n",
@@ -176,12 +664,178 @@
         "url": "https://docs.python.org/3/tutorial/classes.html#user-defined-objects",
         "license": "Python documentation license (PSF)"
       },
-      "xp_reward": 15
+      "xp_reward": 15,
+      "player_mode": "micro",
+      "sublessons": [
+        {
+          "id": "classes-practice-1-micro",
+          "title": "Practice Bank Account Transaction Log",
+          "description": "",
+          "order": 1,
+          "exercises": [
+            {
+              "id": "classes-practice-1-teach",
+              "type": "teach",
+              "question": "Ridge clerks recount crates before dawn, and encapsulate state and transaction logic in a class.",
+              "hints": [
+                "Read the one job this step is practicing.",
+                "The example is about Bank Account Transaction Log.",
+                "self.balance = self.balance + amount"
+              ],
+              "explanation": "Ridge clerks recount crates before dawn, and encapsulate state and transaction logic in a class.",
+              "xp_reward": 0,
+              "worked_example": "self.balance = self.balance + amount"
+            },
+            {
+              "id": "classes-practice-1-mcq",
+              "type": "mcq",
+              "question": "Ridge clerks recount crates before dawn. For encapsulate state and transaction logic in a class, which line adds the deposit and hands back the new balance?",
+              "hints": [
+                "Compare each line with the example.",
+                "One line matches the example.",
+                "self.balance + amount"
+              ],
+              "explanation": "self.balance + amount is the updated balance.",
+              "xp_reward": 10,
+              "options": [
+                "pass",
+                "self.balance + amount",
+                "print(amount)",
+                "self.balance == amount"
+              ],
+              "correct_answer": "self.balance + amount"
+            },
+            {
+              "id": "classes-practice-1-predict",
+              "type": "output_prediction",
+              "question": "Ridge clerks recount crates before dawn. For encapsulate state and transaction logic in a class, what value is displayed?",
+              "hints": [
+                "Run the example in your head from the top.",
+                "The last line is what gets displayed.",
+                "26"
+              ],
+              "explanation": "The Bank Account Transaction Log program displays that value.",
+              "xp_reward": 10,
+              "starter_code": "class Account:\n    def __init__(self, balance):\n        self.balance = balance\n    def deposit(self, amount):\n        self.balance = self.balance + amount\n        return self.balance\nprint(Account(22).deposit(4))\n",
+              "options": [
+                "28",
+                "none",
+                "26",
+                "0"
+              ],
+              "correct_answer": "26"
+            },
+            {
+              "id": "classes-practice-1-order",
+              "type": "ordering",
+              "question": "Ridge clerks recount crates before dawn. For encapsulate state and transaction logic in a class, build the line that adds the deposit and hands back the new balance.",
+              "hints": [
+                "Start at the left of the example.",
+                "Keep the example order.",
+                "updated = balance + amount"
+              ],
+              "explanation": "updated = balance + amount stores the deposit.",
+              "xp_reward": 10,
+              "options": [
+                "updated",
+                "=",
+                "balance",
+                "+",
+                "amount",
+                "=="
+              ],
+              "correct_answer": [
+                "updated",
+                "=",
+                "balance",
+                "+",
+                "amount"
+              ]
+            },
+            {
+              "id": "classes-practice-1-fill",
+              "type": "fill_blank",
+              "question": "Ridge clerks recount crates before dawn. For encapsulate state and transaction logic in a class, fill the blank so the line adds the deposit and hands back the new balance.",
+              "hints": [
+                "The blank is the missing piece of the example.",
+                "The example uses that piece.",
+                "+"
+              ],
+              "explanation": "Plus adds the deposit.",
+              "xp_reward": 10,
+              "starter_code": "self.balance = self.balance ___ amount\n",
+              "options": [
+                "*",
+                "+",
+                "-",
+                "=="
+              ],
+              "correct_answer": "+"
+            },
+            {
+              "id": "classes-practice-1-bug",
+              "type": "debugging",
+              "question": "Ridge clerks recount crates before dawn. For encapsulate state and transaction logic in a class, which line does a different job than the example?",
+              "hints": [
+                "The other lines match the example.",
+                "One line is the odd one.",
+                "Line 5"
+              ],
+              "explanation": "The method subtracts the deposit.",
+              "xp_reward": 10,
+              "starter_code": "class Account:\n    def __init__(self, balance):\n        self.balance = balance\n    def deposit(self, amount):\n        self.balance = self.balance - amount\n        return self.balance\nprint(Account(22).deposit(4))\n",
+              "correct_answer": "5"
+            },
+            {
+              "id": "classes-practice-1-predict-2",
+              "type": "output_prediction",
+              "question": "Ridge clerks recount crates before dawn. For encapsulate state and transaction logic in a class, what does the second run display?",
+              "hints": [
+                "Apply the same steps to the new value.",
+                "The display comes from the last line.",
+                "28"
+              ],
+              "explanation": "The second Bank Account Transaction Log program displays that value.",
+              "xp_reward": 10,
+              "starter_code": "class Account:\n    def __init__(self, balance):\n        self.balance = balance\n    def deposit(self, amount):\n        self.balance = self.balance + amount\n        return self.balance\nprint(Account(22).deposit(6))\n",
+              "options": [
+                "26",
+                "28",
+                "none",
+                "0"
+              ],
+              "correct_answer": "28"
+            },
+            {
+              "id": "classes-practice-1-write",
+              "type": "code",
+              "question": "Ridge clerks recount crates before dawn. For encapsulate state and transaction logic in a class, fill the blank so the program prints the result.",
+              "hints": [
+                "The blank is the missing piece.",
+                "Print the value that piece produces.",
+                "label = account.deposit(4)"
+              ],
+              "explanation": "The updated balance is what gets printed.",
+              "xp_reward": 10,
+              "starter_code": "class Account:\n    def __init__(self, balance):\n        self.balance = balance\n    def deposit(self, amount):\n        self.balance = self.balance + amount\n        return self.balance\naccount = Account(22)\nlabel = ___\nprint(label)\n",
+              "solution_code": "class Account:\n    def __init__(self, balance):\n        self.balance = balance\n    def deposit(self, amount):\n        self.balance = self.balance + amount\n        return self.balance\naccount = Account(22)\nlabel = account.deposit(4)\nprint(label)\n",
+              "tests": [
+                {
+                  "name": "classes-practice-1-prints",
+                  "description": "The updated balance is what gets printed.",
+                  "expected_stdout": "26\n",
+                  "required": true
+                }
+              ]
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "classes-checkpoint",
-      "title": "5. Unit 14 Checkpoint: Classes Mastery",
-      "description": "Finish `Rectangle.area`. It should return `width * height` for that rectangle. The test builds `Rectangle(4, 5)` and checks that `area()` equals `20`.",
+      "title": "Practice Unit 14 Checkpoint Classes Mastery",
+      "description": "Finish Rectangle.area. It should return width * height for that rectangle. The test builds Rectangle(4, 5) and checks that area() equals 20.",
       "order": 70,
       "difficulty": "intermediate",
       "duration_minutes": 10,
@@ -193,7 +847,7 @@
         "functions"
       ],
       "learning_objectives": [
-        "Pass object-oriented class mastery checkpoint"
+        "Cove clerks recount crates before dawn, and pass object-oriented class mastery checkpoint."
       ],
       "starter_code": "class Rectangle:\n    def __init__(self, width, height):\n        self.width = width\n        self.height = height\n\n    def area(self):\n        # TODO: Return width * height\n        pass\n",
       "solution_code": "class Rectangle:\n    def __init__(self, width, height):\n        self.width = width\n        self.height = height\n\n    def area(self):\n        return self.width * self.height\n",
@@ -214,7 +868,169 @@
         "url": "https://docs.python.org/3/tutorial/classes.html#instantiation",
         "license": "Python documentation license (PSF)"
       },
-      "xp_reward": 40
+      "xp_reward": 40,
+      "player_mode": "micro",
+      "sublessons": [
+        {
+          "id": "classes-checkpoint-micro",
+          "title": "Practice Unit 14 Checkpoint Classes Mastery",
+          "description": "",
+          "order": 1,
+          "exercises": [
+            {
+              "id": "classes-checkpoint-teach",
+              "type": "teach",
+              "question": "Cove clerks recount crates before dawn, and pass object-oriented class mastery checkpoint.",
+              "hints": [
+                "Read the one job this step is practicing.",
+                "The example is about Unit 14 Checkpoint Classes Mastery.",
+                "self.item = item"
+              ],
+              "explanation": "Cove clerks recount crates before dawn, and pass object-oriented class mastery checkpoint.",
+              "xp_reward": 0,
+              "worked_example": "self.item = item"
+            },
+            {
+              "id": "classes-checkpoint-mcq",
+              "type": "mcq",
+              "question": "Cove clerks recount crates before dawn. For pass object-oriented class mastery checkpoint, which line stores the reading on the new object?",
+              "hints": [
+                "Compare each line with the example.",
+                "One line matches the example.",
+                "self.item = item"
+              ],
+              "explanation": "self.item = item keeps the reading on the object.",
+              "xp_reward": 10,
+              "options": [
+                "item == self",
+                "print(item)",
+                "return item",
+                "self.item = item"
+              ],
+              "correct_answer": "self.item = item"
+            },
+            {
+              "id": "classes-checkpoint-predict",
+              "type": "output_prediction",
+              "question": "Cove clerks recount crates before dawn. For pass object-oriented class mastery checkpoint, what value is displayed?",
+              "hints": [
+                "Run the example in your head from the top.",
+                "The last line is what gets displayed.",
+                "35"
+              ],
+              "explanation": "The Unit 14 Checkpoint Classes Mastery program displays that value.",
+              "xp_reward": 10,
+              "starter_code": "class Bag:\n    def __init__(self, item):\n        self.item = item\nprint(Bag(35).item)\n",
+              "options": [
+                "39",
+                "none",
+                "0",
+                "35"
+              ],
+              "correct_answer": "35"
+            },
+            {
+              "id": "classes-checkpoint-order",
+              "type": "ordering",
+              "question": "Cove clerks recount crates before dawn. For pass object-oriented class mastery checkpoint, build the line that stores the reading on the new object.",
+              "hints": [
+                "Start at the left of the example.",
+                "Keep the example order.",
+                "self.item = item"
+              ],
+              "explanation": "self.item = item stores the reading.",
+              "xp_reward": 10,
+              "options": [
+                "self.item",
+                "=",
+                "item",
+                "=="
+              ],
+              "correct_answer": [
+                "self.item",
+                "=",
+                "item"
+              ]
+            },
+            {
+              "id": "classes-checkpoint-fill",
+              "type": "fill_blank",
+              "question": "Cove clerks recount crates before dawn. For pass object-oriented class mastery checkpoint, fill the blank so the line stores the reading on the new object.",
+              "hints": [
+                "The blank is the missing piece of the example.",
+                "The example uses that piece.",
+                "="
+              ],
+              "explanation": "One equals sign stores the reading.",
+              "xp_reward": 10,
+              "starter_code": "self.item ___ item\n",
+              "options": [
+                "==",
+                "!=",
+                "+",
+                "="
+              ],
+              "correct_answer": "="
+            },
+            {
+              "id": "classes-checkpoint-bug",
+              "type": "debugging",
+              "question": "Cove clerks recount crates before dawn. For pass object-oriented class mastery checkpoint, which line does a different job than the example?",
+              "hints": [
+                "The other lines match the example.",
+                "One line is the odd one.",
+                "Line 3"
+              ],
+              "explanation": "The constructor compares, so the reading is never stored.",
+              "xp_reward": 10,
+              "starter_code": "class Bag:\n    def __init__(self, item):\n        self.item == item\nprint(0)\n",
+              "correct_answer": "3"
+            },
+            {
+              "id": "classes-checkpoint-predict-2",
+              "type": "output_prediction",
+              "question": "Cove clerks recount crates before dawn. For pass object-oriented class mastery checkpoint, what does the second run display?",
+              "hints": [
+                "Apply the same steps to the new value.",
+                "The display comes from the last line.",
+                "39"
+              ],
+              "explanation": "The second Unit 14 Checkpoint Classes Mastery program displays that value.",
+              "xp_reward": 10,
+              "starter_code": "class Bag:\n    def __init__(self, item):\n        self.item = item\nprint(Bag(39).item)\n",
+              "options": [
+                "0",
+                "35",
+                "none",
+                "39"
+              ],
+              "correct_answer": "39"
+            },
+            {
+              "id": "classes-checkpoint-write",
+              "type": "code",
+              "question": "Cove clerks recount crates before dawn. For pass object-oriented class mastery checkpoint, fill the blank so the program prints the result.",
+              "hints": [
+                "The blank is the missing piece.",
+                "Print the value that piece produces.",
+                "label = bag.item"
+              ],
+              "explanation": "The stored reading is what gets printed.",
+              "xp_reward": 10,
+              "starter_code": "class Bag:\n    def __init__(self, item):\n        self.item = item\nbag = Bag(35)\nlabel = ___\nprint(label)\n",
+              "solution_code": "class Bag:\n    def __init__(self, item):\n        self.item = item\nbag = Bag(35)\nlabel = bag.item\nprint(label)\n",
+              "tests": [
+                {
+                  "name": "classes-checkpoint-prints",
+                  "description": "The stored reading is what gets printed.",
+                  "expected_stdout": "35\n",
+                  "required": true
+                }
+              ]
+            }
+          ]
+        }
+      ]
     }
   ]
 }

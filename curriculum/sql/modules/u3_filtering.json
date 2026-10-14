@@ -14,8 +14,8 @@
   "lessons": [
     {
       "id": "sql-03",
-      "title": "3. Filtering Records with WHERE",
-      "description": "Query the products whose `price` is greater than 100. The test checks that the prices you return are `299.0`, `350.0`, and `1299.99`.",
+      "title": "Filter Records with WHERE",
+      "description": "Query the products whose price is greater than 100. The test checks that the prices you return are 299.0, 350.0, and 1299.99.",
       "order": 3,
       "difficulty": "beginner",
       "duration_minutes": 5,
@@ -46,51 +46,181 @@
         "license": "Public domain (SQLite documentation)"
       },
       "learning_objectives": [
-        "Filter rows with WHERE and comparison operators",
-        "Match sets and ranges with IN and BETWEEN",
-        "Find text patterns with LIKE"
+        "Marsh clerks recount crates before dawn, and filter rows with WHERE and comparison operators."
       ],
       "xp_reward": 10,
       "sublessons": [
         {
-          "id": "sql-03-match-1-sub",
-          "title": "Match clause to purpose",
+          "id": "sql-03-micro",
+          "title": "Filter Records with WHERE",
+          "description": "",
           "order": 1,
           "exercises": [
             {
-              "id": "sql-03-match-1",
-              "type": "matching",
-              "question": "Match each SQL clause to the job it does in a query.",
-              "pairs": [
-                {
-                  "left": "WHERE",
-                  "right": "keeps only the rows that pass a test"
-                },
-                {
-                  "left": "LIKE",
-                  "right": "matches a text pattern with % and _"
-                },
-                {
-                  "left": "IN",
-                  "right": "matches any value from a listed set"
-                },
-                {
-                  "left": "BETWEEN",
-                  "right": "matches values inside a range"
-                }
+              "id": "sql-03-teach",
+              "type": "teach",
+              "question": "Marsh clerks recount crates before dawn, and filter rows with WHERE and comparison operators.",
+              "hints": [
+                "Read the one job this step is practicing.",
+                "The example is about Filtering Records with WHERE.",
+                "WHERE stock < 20"
               ],
-              "correct_answer": {
-                "WHERE": "keeps only the rows that pass a test",
-                "LIKE": "matches a text pattern with % and _",
-                "IN": "matches any value from a listed set",
-                "BETWEEN": "matches values inside a range"
-              },
-              "explanation": "All four filter rows; they differ in *how* a row is matched — a test, a pattern, a set, or a range.",
-              "xp_reward": 15
+              "explanation": "Marsh clerks recount crates before dawn, and filter rows with WHERE and comparison operators.",
+              "xp_reward": 0,
+              "worked_example": "WHERE stock < 20"
+            },
+            {
+              "id": "sql-03-mcq",
+              "type": "mcq",
+              "question": "Marsh clerks recount crates before dawn. For filter rows with WHERE and comparison operators, which line keeps products whose stock is below 20?",
+              "hints": [
+                "Compare each line with the example.",
+                "One line matches the example.",
+                "SELECT name FROM products WHERE stock < 20"
+              ],
+              "explanation": "WHERE stock < 20 keeps the low-stock names.",
+              "xp_reward": 10,
+              "options": [
+                "INSERT INTO products",
+                "DROP TABLE products",
+                "SELECT name FROM products WHERE stock < 20",
+                "stock == stock"
+              ],
+              "correct_answer": "SELECT name FROM products WHERE stock < 20"
+            },
+            {
+              "id": "sql-03-predict",
+              "type": "output_prediction",
+              "question": "Marsh clerks recount crates before dawn. For filter rows with WHERE and comparison operators, what value is displayed?",
+              "hints": [
+                "Run the example in your head from the top.",
+                "The last line is what gets displayed.",
+                "┌─────────────────┐\n│ name            │\n├─────────────────┤\n│ Ergonomic Chair │\n│ Laptop Pro      │\n│ Monitor 27-inch │\n└─────────────────┘"
+              ],
+              "explanation": "The Filtering Records with WHERE program displays that value.",
+              "xp_reward": 10,
+              "starter_code": "SELECT name FROM products WHERE stock < 20 ORDER BY name;\n",
+              "options": [
+                "┌─────────────────────┐\n│ name                │\n├─────────────────────┤\n│ Ergonomic Chair     │\n│ Laptop Pro          │\n│ Mechanical Keyboard │\n│ Monitor 27-inch     │\n└─────────────────────┘",
+                "┌─────────────────┐\n│ name            │\n├─────────────────┤\n│ Ergonomic Chair │\n│ Laptop Pro      │\n│ Monitor 27-inch │\n└─────────────────┘",
+                "0",
+                "none"
+              ],
+              "correct_answer": "┌─────────────────┐\n│ name            │\n├─────────────────┤\n│ Ergonomic Chair │\n│ Laptop Pro      │\n│ Monitor 27-inch │\n└─────────────────┘"
+            },
+            {
+              "id": "sql-03-order",
+              "type": "ordering",
+              "question": "Marsh clerks recount crates before dawn. For filter rows with WHERE and comparison operators, build the line that keeps products whose stock is below 20.",
+              "hints": [
+                "Start at the left of the example.",
+                "Keep the example order.",
+                "SELECT name FROM products WHERE stock < 20"
+              ],
+              "explanation": "WHERE stock < 20 keeps the low-stock names.",
+              "xp_reward": 10,
+              "options": [
+                "SELECT",
+                "name",
+                "FROM",
+                "products",
+                "WHERE",
+                "stock",
+                "<",
+                "20",
+                "DROP"
+              ],
+              "correct_answer": [
+                "SELECT",
+                "name",
+                "FROM",
+                "products",
+                "WHERE",
+                "stock",
+                "<",
+                "20"
+              ]
+            },
+            {
+              "id": "sql-03-fill",
+              "type": "fill_blank",
+              "question": "Marsh clerks recount crates before dawn. For filter rows with WHERE and comparison operators, fill the blank so the line keeps products whose stock is below 20.",
+              "hints": [
+                "The blank is the missing piece of the example.",
+                "The example uses that piece.",
+                "<"
+              ],
+              "explanation": "WHERE stock < 20 keeps the low-stock names.",
+              "xp_reward": 10,
+              "starter_code": "SELECT name FROM products WHERE stock ___ 20;",
+              "options": [
+                ">",
+                "<",
+                "=",
+                "!="
+              ],
+              "correct_answer": "<"
+            },
+            {
+              "id": "sql-03-bug",
+              "type": "debugging",
+              "question": "Marsh clerks recount crates before dawn. For filter rows with WHERE and comparison operators, which line does a different job than the example?",
+              "hints": [
+                "The other lines match the example.",
+                "One line is the odd one.",
+                "Line 1"
+              ],
+              "explanation": "The filter keeps high stock instead of low stock.",
+              "xp_reward": 10,
+              "starter_code": "SELECT name FROM products WHERE stock > 20;",
+              "correct_answer": "1"
+            },
+            {
+              "id": "sql-03-predict-2",
+              "type": "output_prediction",
+              "question": "Marsh clerks recount crates before dawn. For filter rows with WHERE and comparison operators, what does the second run display?",
+              "hints": [
+                "Apply the same steps to the new value.",
+                "The display comes from the last line.",
+                "┌─────────────────────┐\n│ name                │\n├─────────────────────┤\n│ Ergonomic Chair     │\n│ Laptop Pro          │\n│ Mechanical Keyboard │\n│ Monitor 27-inch     │\n└─────────────────────┘"
+              ],
+              "explanation": "The second Filtering Records with WHERE program displays that value.",
+              "xp_reward": 10,
+              "starter_code": "SELECT name FROM products WHERE stock < 50 ORDER BY name;\n",
+              "options": [
+                "┌─────────────────┐\n│ name            │\n├─────────────────┤\n│ Ergonomic Chair │\n│ Laptop Pro      │\n│ Monitor 27-inch │\n└─────────────────┘",
+                "none",
+                "0",
+                "┌─────────────────────┐\n│ name                │\n├─────────────────────┤\n│ Ergonomic Chair     │\n│ Laptop Pro          │\n│ Mechanical Keyboard │\n│ Monitor 27-inch     │\n└─────────────────────┘"
+              ],
+              "correct_answer": "┌─────────────────────┐\n│ name                │\n├─────────────────────┤\n│ Ergonomic Chair     │\n│ Laptop Pro          │\n│ Mechanical Keyboard │\n│ Monitor 27-inch     │\n└─────────────────────┘"
+            },
+            {
+              "id": "sql-03-write",
+              "type": "code",
+              "question": "Marsh clerks recount crates before dawn. For filter rows with WHERE and comparison operators, fill the blank so the program prints the result.",
+              "hints": [
+                "The blank is the missing piece.",
+                "Print the value that piece produces.",
+                "SELECT name FROM products WHERE stock < 20 ORDER BY name;"
+              ],
+              "explanation": "The query result is what this step keeps products whose stock is below 20.",
+              "xp_reward": 10,
+              "starter_code": "SELECT name FROM products WHERE stock ___ 20 ORDER BY name;\n",
+              "solution_code": "SELECT name FROM products WHERE stock < 20 ORDER BY name;\n",
+              "tests": [
+                {
+                  "name": "sql-03-prints",
+                  "description": "The query result is what this step keeps products whose stock is below 20.",
+                  "expected_stdout": "┌─────────────────┐\n│ name            │\n├─────────────────┤\n│ Ergonomic Chair │\n│ Laptop Pro      │\n│ Monitor 27-inch │\n└─────────────────┘",
+                  "required": true
+                }
+              ]
             }
           ]
         }
-      ]
+      ],
+      "player_mode": "micro"
     }
   ]
 }

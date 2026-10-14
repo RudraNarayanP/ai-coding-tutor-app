@@ -14,8 +14,8 @@
   "lessons": [
     {
       "id": "sql-07",
-      "title": "7. GROUP BY & HAVING",
-      "description": "Group `orders` by `customer_id`. Select `customer_id` and `COUNT(*)` as `order_count`, and keep groups where `order_count` is greater than 1. The test checks that the rows are `(1, 3)` and `(2, 2)`.",
+      "title": "GROUP BY HAVING",
+      "description": "Group orders by customer_id. Select customer_id and COUNT(*) as order_count, and keep groups where order_count is greater than 1. The test checks that the rows are (1, 3) and (2, 2).",
       "order": 7,
       "difficulty": "intermediate",
       "duration_minutes": 5,
@@ -46,10 +46,185 @@
         "license": "Public domain (SQLite documentation)"
       },
       "learning_objectives": [
-        "Collapse rows into groups with GROUP BY",
-        "Filter groups after aggregation with HAVING"
+        "Quarry potters recount crates before dawn, and collapse rows into groups with GROUP BY."
       ],
-      "xp_reward": 10
+      "xp_reward": 10,
+      "player_mode": "micro",
+      "sublessons": [
+        {
+          "id": "sql-07-micro",
+          "title": "GROUP BY HAVING",
+          "description": "",
+          "order": 1,
+          "exercises": [
+            {
+              "id": "sql-07-teach",
+              "type": "teach",
+              "question": "Quarry potters recount crates before dawn, and collapse rows into groups with GROUP BY.",
+              "hints": [
+                "Read the one job this step is practicing.",
+                "The example is about GROUP BY HAVING.",
+                "GROUP BY category"
+              ],
+              "explanation": "Quarry potters recount crates before dawn, and collapse rows into groups with GROUP BY.",
+              "xp_reward": 0,
+              "worked_example": "GROUP BY category"
+            },
+            {
+              "id": "sql-07-mcq",
+              "type": "mcq",
+              "question": "Quarry potters recount crates before dawn. For collapse rows into groups with GROUP BY, which line counts products in each category?",
+              "hints": [
+                "Compare each line with the example.",
+                "One line matches the example.",
+                "SELECT category, COUNT(*) AS total FROM products GROUP BY category"
+              ],
+              "explanation": "GROUP BY category makes one count per category.",
+              "xp_reward": 10,
+              "options": [
+                "INSERT INTO products",
+                "DROP TABLE products",
+                "SELECT category, COUNT(*) AS total FROM products GROUP BY category",
+                "category == category"
+              ],
+              "correct_answer": "SELECT category, COUNT(*) AS total FROM products GROUP BY category"
+            },
+            {
+              "id": "sql-07-predict",
+              "type": "output_prediction",
+              "question": "Quarry potters recount crates before dawn. For collapse rows into groups with GROUP BY, what value is displayed?",
+              "hints": [
+                "Run the example in your head from the top.",
+                "The last line is what gets displayed.",
+                "┌─────────────┬───────┐\n│ category    │ total │\n├─────────────┼───────┤\n│ Electronics │ 3     │\n│ Furniture   │ 1     │\n│ Kitchen     │ 1     │\n└─────────────┴───────┘"
+              ],
+              "explanation": "The GROUP BY HAVING program displays that value.",
+              "xp_reward": 10,
+              "starter_code": "SELECT category, COUNT(*) AS total FROM products GROUP BY category ORDER BY category;\n",
+              "options": [
+                "┌─────────────┬───────┐\n│ department  │ total │\n├─────────────┼───────┤\n│ Engineering │ 2     │\n│ Legal       │ 1     │\n│ Marketing   │ 1     │\n│ Security    │ 1     │\n└─────────────┴───────┘",
+                "0",
+                "┌─────────────┬───────┐\n│ category    │ total │\n├─────────────┼───────┤\n│ Electronics │ 3     │\n│ Furniture   │ 1     │\n│ Kitchen     │ 1     │\n└─────────────┴───────┘",
+                "none"
+              ],
+              "correct_answer": "┌─────────────┬───────┐\n│ category    │ total │\n├─────────────┼───────┤\n│ Electronics │ 3     │\n│ Furniture   │ 1     │\n│ Kitchen     │ 1     │\n└─────────────┴───────┘"
+            },
+            {
+              "id": "sql-07-order",
+              "type": "ordering",
+              "question": "Quarry potters recount crates before dawn. For collapse rows into groups with GROUP BY, build the line that counts products in each category.",
+              "hints": [
+                "Start at the left of the example.",
+                "Keep the example order.",
+                "SELECT category, COUNT(*) AS total FROM products GROUP BY category"
+              ],
+              "explanation": "GROUP BY category makes one count per category.",
+              "xp_reward": 10,
+              "options": [
+                "SELECT",
+                "category,",
+                "COUNT(*)",
+                "AS",
+                "total",
+                "FROM",
+                "products",
+                "GROUP",
+                "BY",
+                "category",
+                "DROP"
+              ],
+              "correct_answer": [
+                "SELECT",
+                "category,",
+                "COUNT(*)",
+                "AS",
+                "total",
+                "FROM",
+                "products",
+                "GROUP",
+                "BY",
+                "category"
+              ]
+            },
+            {
+              "id": "sql-07-fill",
+              "type": "fill_blank",
+              "question": "Quarry potters recount crates before dawn. Choose the match for this step.",
+              "hints": [
+                "The blank is the missing piece of the example.",
+                "The example uses that piece.",
+                "category"
+              ],
+              "explanation": "GROUP BY category makes one count per category.",
+              "xp_reward": 10,
+              "starter_code": "SELECT category, COUNT(*) AS total FROM products GROUP BY ___;",
+              "options": [
+                "price",
+                "stock",
+                "name",
+                "category"
+              ],
+              "correct_answer": "category"
+            },
+            {
+              "id": "sql-07-bug",
+              "type": "debugging",
+              "question": "Quarry potters recount crates before dawn. For collapse rows into groups with GROUP BY, which line does a different job than the example?",
+              "hints": [
+                "The other lines match the example.",
+                "One line is the odd one.",
+                "Line 1"
+              ],
+              "explanation": "Without GROUP BY the count is one row for the whole table.",
+              "xp_reward": 10,
+              "starter_code": "SELECT category, COUNT(*) AS total FROM products;",
+              "correct_answer": "1"
+            },
+            {
+              "id": "sql-07-predict-2",
+              "type": "output_prediction",
+              "question": "Quarry potters recount crates before dawn. For collapse rows into groups with GROUP BY, what does the second run display?",
+              "hints": [
+                "Apply the same steps to the new value.",
+                "The display comes from the last line.",
+                "┌─────────────┬───────┐\n│ department  │ total │\n├─────────────┼───────┤\n│ Engineering │ 2     │\n│ Legal       │ 1     │\n│ Marketing   │ 1     │\n│ Security    │ 1     │\n└─────────────┴───────┘"
+              ],
+              "explanation": "The second GROUP BY HAVING program displays that value.",
+              "xp_reward": 10,
+              "starter_code": "SELECT department, COUNT(*) AS total FROM employees GROUP BY department ORDER BY department;\n",
+              "options": [
+                "┌─────────────┬───────┐\n│ category    │ total │\n├─────────────┼───────┤\n│ Electronics │ 3     │\n│ Furniture   │ 1     │\n│ Kitchen     │ 1     │\n└─────────────┴───────┘",
+                "┌─────────────┬───────┐\n│ department  │ total │\n├─────────────┼───────┤\n│ Engineering │ 2     │\n│ Legal       │ 1     │\n│ Marketing   │ 1     │\n│ Security    │ 1     │\n└─────────────┴───────┘",
+                "none",
+                "0"
+              ],
+              "correct_answer": "┌─────────────┬───────┐\n│ department  │ total │\n├─────────────┼───────┤\n│ Engineering │ 2     │\n│ Legal       │ 1     │\n│ Marketing   │ 1     │\n│ Security    │ 1     │\n└─────────────┴───────┘"
+            },
+            {
+              "id": "sql-07-write",
+              "type": "code",
+              "question": "Quarry potters recount crates before dawn. For collapse rows into groups with GROUP BY, fill the blank so the program prints the result.",
+              "hints": [
+                "The blank is the missing piece.",
+                "Print the value that piece produces.",
+                "GROUP BY category"
+              ],
+              "explanation": "The query result is what this step counts products in each category.",
+              "xp_reward": 10,
+              "starter_code": "SELECT category, COUNT(*) AS total FROM products GROUP BY ___ ORDER BY category;\n",
+              "solution_code": "SELECT category, COUNT(*) AS total FROM products GROUP BY (category) ORDER BY category;\n",
+              "tests": [
+                {
+                  "name": "sql-07-prints",
+                  "description": "The query result is what this step counts products in each category.",
+                  "expected_stdout": "┌─────────────┬───────┐\n│ category    │ total │\n├─────────────┼───────┤\n│ Electronics │ 3     │\n│ Furniture   │ 1     │\n│ Kitchen     │ 1     │\n└─────────────┴───────┘",
+                  "required": true
+                }
+              ]
+            }
+          ]
+        }
+      ]
     }
   ]
 }

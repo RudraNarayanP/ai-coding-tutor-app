@@ -14,8 +14,8 @@
   "lessons": [
     {
       "id": "sql-08",
-      "title": "8. Relational JOINs",
-      "description": "Join `customers` to `orders` on `customers.id = orders.customer_id`. Select the customer name and `total_amount`. The test checks that you get at least 5 rows and the first column is `name`.",
+      "title": "Practice Relational JOINs",
+      "description": "Join customers to orders on customers.id = orders.customer_id. Select the customer name and total_amount. The test checks that you get at least 5 rows and the first column is name.",
       "order": 8,
       "difficulty": "intermediate",
       "duration_minutes": 5,
@@ -45,10 +45,185 @@
         "license": "Public domain (SQLite documentation)"
       },
       "learning_objectives": [
-        "Combine rows from two tables with INNER JOIN ... ON",
-        "Use table aliases to keep join queries readable"
+        "Attic potters recount crates before dawn, and combine rows from two tables with INNER JOIN."
       ],
-      "xp_reward": 10
+      "xp_reward": 10,
+      "player_mode": "micro",
+      "sublessons": [
+        {
+          "id": "sql-08-micro",
+          "title": "Practice Relational JOINs",
+          "description": "",
+          "order": 1,
+          "exercises": [
+            {
+              "id": "sql-08-teach",
+              "type": "teach",
+              "question": "Attic potters recount crates before dawn, and combine rows from two tables with INNER JOIN.",
+              "hints": [
+                "Read the one job this step is practicing.",
+                "The example is about Relational JOINs.",
+                "JOIN orders ON customers.id = orders.customer_id"
+              ],
+              "explanation": "Attic potters recount crates before dawn, and combine rows from two tables with INNER JOIN.",
+              "xp_reward": 0,
+              "worked_example": "JOIN orders ON customers.id = orders.customer_id"
+            },
+            {
+              "id": "sql-08-mcq",
+              "type": "mcq",
+              "question": "Attic potters recount crates before dawn. For combine rows from two tables with INNER JOIN, which line finds the customer on one order?",
+              "hints": [
+                "Compare each line with the example.",
+                "One line matches the example.",
+                "SELECT customers.name FROM customers JOIN orders ON customers.id = orders.customer_id"
+              ],
+              "explanation": "JOIN matches customers.id to orders.customer_id.",
+              "xp_reward": 10,
+              "options": [
+                "DROP TABLE orders",
+                "INSERT INTO orders",
+                "name == name",
+                "SELECT customers.name FROM customers JOIN orders ON customers.id = orders.customer_id"
+              ],
+              "correct_answer": "SELECT customers.name FROM customers JOIN orders ON customers.id = orders.customer_id"
+            },
+            {
+              "id": "sql-08-predict",
+              "type": "output_prediction",
+              "question": "Attic potters recount crates before dawn. For combine rows from two tables with INNER JOIN, what value is displayed?",
+              "hints": [
+                "Run the example in your head from the top.",
+                "The last line is what gets displayed.",
+                "┌───────────┐\n│ name      │\n├───────────┤\n│ Bob Jones │\n└───────────┘"
+              ],
+              "explanation": "The Relational JOINs program displays that value.",
+              "xp_reward": 10,
+              "starter_code": "SELECT customers.name FROM customers JOIN orders ON customers.id = orders.customer_id WHERE orders.id = 103;\n",
+              "options": [
+                "┌───────────────┐\n│ name          │\n├───────────────┤\n│ Carol Danvers │\n└───────────────┘",
+                "none",
+                "0",
+                "┌───────────┐\n│ name      │\n├───────────┤\n│ Bob Jones │\n└───────────┘"
+              ],
+              "correct_answer": "┌───────────┐\n│ name      │\n├───────────┤\n│ Bob Jones │\n└───────────┘"
+            },
+            {
+              "id": "sql-08-order",
+              "type": "ordering",
+              "question": "Attic potters recount crates before dawn. For combine rows from two tables with INNER JOIN, build the line that finds the customer on one order.",
+              "hints": [
+                "Start at the left of the example.",
+                "Keep the example order.",
+                "SELECT customers.name FROM customers JOIN orders ON customers.id = orders.customer_id"
+              ],
+              "explanation": "JOIN matches customers.id to orders.customer_id.",
+              "xp_reward": 10,
+              "options": [
+                "SELECT",
+                "customers.name",
+                "FROM",
+                "customers",
+                "JOIN",
+                "orders",
+                "ON",
+                "customers.id",
+                "=",
+                "orders.customer_id",
+                "DROP"
+              ],
+              "correct_answer": [
+                "SELECT",
+                "customers.name",
+                "FROM",
+                "customers",
+                "JOIN",
+                "orders",
+                "ON",
+                "customers.id",
+                "=",
+                "orders.customer_id"
+              ]
+            },
+            {
+              "id": "sql-08-fill",
+              "type": "fill_blank",
+              "question": "Attic potters recount crates before dawn. For combine rows from two tables with INNER JOIN, fill the blank so the line finds the customer on one order.",
+              "hints": [
+                "The blank is the missing piece of the example.",
+                "The example uses that piece.",
+                "="
+              ],
+              "explanation": "JOIN matches customers.id to orders.customer_id.",
+              "xp_reward": 10,
+              "starter_code": "SELECT customers.name FROM customers JOIN orders ON customers.id ___ orders.customer_id;",
+              "options": [
+                "!=",
+                ">",
+                "<",
+                "="
+              ],
+              "correct_answer": "="
+            },
+            {
+              "id": "sql-08-bug",
+              "type": "debugging",
+              "question": "Attic potters recount crates before dawn. For combine rows from two tables with INNER JOIN, which line does a different job than the example?",
+              "hints": [
+                "The other lines match the example.",
+                "One line is the odd one.",
+                "Line 1"
+              ],
+              "explanation": "The filter asks for an order that is not in the table.",
+              "xp_reward": 10,
+              "starter_code": "SELECT customers.name FROM customers JOIN orders ON customers.id = orders.customer_id WHERE orders.id = 999;",
+              "correct_answer": "1"
+            },
+            {
+              "id": "sql-08-predict-2",
+              "type": "output_prediction",
+              "question": "Attic potters recount crates before dawn. For combine rows from two tables with INNER JOIN, what does the second run display?",
+              "hints": [
+                "Apply the same steps to the new value.",
+                "The display comes from the last line.",
+                "┌───────────────┐\n│ name          │\n├───────────────┤\n│ Carol Danvers │\n└───────────────┘"
+              ],
+              "explanation": "The second Relational JOINs program displays that value.",
+              "xp_reward": 10,
+              "starter_code": "SELECT customers.name FROM customers JOIN orders ON customers.id = orders.customer_id WHERE orders.id = 104;\n",
+              "options": [
+                "┌───────────┐\n│ name      │\n├───────────┤\n│ Bob Jones │\n└───────────┘",
+                "none",
+                "┌───────────────┐\n│ name          │\n├───────────────┤\n│ Carol Danvers │\n└───────────────┘",
+                "0"
+              ],
+              "correct_answer": "┌───────────────┐\n│ name          │\n├───────────────┤\n│ Carol Danvers │\n└───────────────┘"
+            },
+            {
+              "id": "sql-08-write",
+              "type": "code",
+              "question": "Attic potters recount crates before dawn. For combine rows from two tables with INNER JOIN, fill the blank so the program prints the result.",
+              "hints": [
+                "The blank is the missing piece.",
+                "Print the value that piece produces.",
+                "WHERE orders.id = 103"
+              ],
+              "explanation": "The query result is what this step finds the customer on one order.",
+              "xp_reward": 10,
+              "starter_code": "SELECT customers.name FROM customers JOIN orders ON customers.id = orders.customer_id WHERE orders.id = ___;\n",
+              "solution_code": "SELECT customers.name FROM customers JOIN orders ON customers.id = orders.customer_id WHERE orders.id = 103;\n",
+              "tests": [
+                {
+                  "name": "sql-08-prints",
+                  "description": "The query result is what this step finds the customer on one order.",
+                  "expected_stdout": "┌───────────┐\n│ name      │\n├───────────┤\n│ Bob Jones │\n└───────────┘",
+                  "required": true
+                }
+              ]
+            }
+          ]
+        }
+      ]
     }
   ]
 }

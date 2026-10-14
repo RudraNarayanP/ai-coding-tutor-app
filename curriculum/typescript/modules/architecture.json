@@ -14,8 +14,8 @@
   "lessons": [
     {
       "id": "ts-04",
-      "title": "4. Enterprise Application Architecture",
-      "description": "Checkpoint: export interface ApiResponse<T> { data: T; status: number; } and implement the generic function wrapData<T>(data: T): ApiResponse<T> returning { data, status: 200 }. Tests wrap both a number and an object and check status plus data for each. The test checks that `num.status` equals `= 200 || num.data !== 5`; `res.status` equals `= 200 || !res.data.ok`; `num.status` equals `200 || num.data !== 5`.",
+      "title": "Practice Enterprise Application Architecture",
+      "description": "Checkpoint: export interface ApiResponse<T> { data: T; status: number; } and implement the generic function wrapData<T>(data: T): ApiResponse<T> returning { data, status: 200 }. Tests wrap both a number and an object and check status plus data for each. The test checks that num.status equals = 200 || num.data !== 5; res.status equals = 200 || !res.data.ok; num.status equals 200 || num.data !== 5.",
       "order": 4,
       "difficulty": "advanced",
       "duration_minutes": 10,
@@ -41,21 +41,199 @@
         ]
       },
       "learning_objectives": [
-        "Combine interfaces and generics in API types",
-        "Write generic functions with type parameters",
-        "Apply TypeScript foundations under checkpoint conditions"
+        "Harbor clerks recount crates before dawn, and combine interfaces and generics in API types."
       ],
       "source": {
         "name": "TypeScript Handbook — Generics — working with generic classes and functions",
         "url": "https://www.typescriptlang.org/docs/handbook/2/generics.html",
         "license": "CC BY 4.0 (TypeScript documentation)"
       },
-      "xp_reward": 45
+      "xp_reward": 45,
+      "player_mode": "micro",
+      "sublessons": [
+        {
+          "id": "ts-04-micro",
+          "title": "Practice Enterprise Application Architecture",
+          "description": "",
+          "order": 1,
+          "exercises": [
+            {
+              "id": "ts-04-teach",
+              "type": "teach",
+              "question": "Harbor clerks recount crates before dawn, and combine interfaces and generics in API types.",
+              "hints": [
+                "Read the one job this step is practicing.",
+                "The example is about Enterprise Application Architecture.",
+                "return price + tax;"
+              ],
+              "explanation": "Harbor clerks recount crates before dawn, and combine interfaces and generics in API types.",
+              "xp_reward": 0,
+              "worked_example": "return price + tax;"
+            },
+            {
+              "id": "ts-04-mcq",
+              "type": "mcq",
+              "question": "Harbor clerks recount crates before dawn. For combine interfaces and generics in API types, which line adds a typed price and tax in one function?",
+              "hints": [
+                "Compare each line with the example.",
+                "One line matches the example.",
+                "return price + tax;"
+              ],
+              "explanation": "The function returns price plus tax.",
+              "xp_reward": 10,
+              "options": [
+                "price == tax;",
+                "console.log(price);",
+                "return price + tax;",
+                "return;"
+              ],
+              "correct_answer": "return price + tax;"
+            },
+            {
+              "id": "ts-04-predict",
+              "type": "output_prediction",
+              "question": "Harbor clerks recount crates before dawn. For combine interfaces and generics in API types, what value is displayed?",
+              "hints": [
+                "Run the example in your head from the top.",
+                "The last line is what gets displayed.",
+                "31"
+              ],
+              "explanation": "The Enterprise Application Architecture program displays that value.",
+              "xp_reward": 10,
+              "starter_code": "function total(price: number, tax: number): number { return price + tax; }\nconsole.log(total(26, 5));\n",
+              "options": [
+                "35",
+                "none",
+                "31",
+                "0"
+              ],
+              "correct_answer": "31"
+            },
+            {
+              "id": "ts-04-order",
+              "type": "ordering",
+              "question": "Harbor clerks recount crates before dawn. For combine interfaces and generics in API types, build the line that adds a typed price and tax in one function.",
+              "hints": [
+                "Start at the left of the example.",
+                "Keep the example order.",
+                "function total(price: number, tax: number): number { return price + tax; }"
+              ],
+              "explanation": "The function returns price plus tax.",
+              "xp_reward": 10,
+              "options": [
+                "function",
+                "total(price:",
+                "number,",
+                "tax:",
+                "number):",
+                "number",
+                "{",
+                "return",
+                "price",
+                "+",
+                "tax;",
+                "}",
+                "=="
+              ],
+              "correct_answer": [
+                "function",
+                "total(price:",
+                "number,",
+                "tax:",
+                "number):",
+                "number",
+                "{",
+                "return",
+                "price",
+                "+",
+                "tax;",
+                "}"
+              ]
+            },
+            {
+              "id": "ts-04-fill",
+              "type": "fill_blank",
+              "question": "Harbor clerks recount crates before dawn. For combine interfaces and generics in API types, fill the blank so the line adds a typed price and tax in one function.",
+              "hints": [
+                "The blank is the missing piece of the example.",
+                "The example uses that piece.",
+                "+"
+              ],
+              "explanation": "The function returns price plus tax.",
+              "xp_reward": 10,
+              "starter_code": "function total(price: number, tax: number): number { return price ___ tax; }\n",
+              "options": [
+                "-",
+                "*",
+                "+",
+                "=="
+              ],
+              "correct_answer": "+"
+            },
+            {
+              "id": "ts-04-bug",
+              "type": "debugging",
+              "question": "Harbor clerks recount crates before dawn. For combine interfaces and generics in API types, which line does a different job than the example?",
+              "hints": [
+                "The other lines match the example.",
+                "One line is the odd one.",
+                "Line 1"
+              ],
+              "explanation": "The function subtracts the tax instead of adding it.",
+              "xp_reward": 10,
+              "starter_code": "function total(price: number, tax: number): number { return price - tax; }\nconsole.log(total(26, 5));\n",
+              "correct_answer": "1"
+            },
+            {
+              "id": "ts-04-predict-2",
+              "type": "output_prediction",
+              "question": "Harbor clerks recount crates before dawn. For combine interfaces and generics in API types, what does the second run display?",
+              "hints": [
+                "Apply the same steps to the new value.",
+                "The display comes from the last line.",
+                "35"
+              ],
+              "explanation": "The second Enterprise Application Architecture program displays that value.",
+              "xp_reward": 10,
+              "starter_code": "function total(price: number, tax: number): number { return price + tax; }\nconsole.log(total(26, 9));\n",
+              "options": [
+                "31",
+                "35",
+                "none",
+                "0"
+              ],
+              "correct_answer": "35"
+            },
+            {
+              "id": "ts-04-write",
+              "type": "code",
+              "question": "Harbor clerks recount crates before dawn. For combine interfaces and generics in API types, fill the blank so the program prints the result.",
+              "hints": [
+                "The blank is the missing piece.",
+                "Print the value that piece produces.",
+                "const label = total(26, 5);"
+              ],
+              "explanation": "The printed value is the result after this step adds a typed price and tax in one function.",
+              "xp_reward": 10,
+              "starter_code": "function total(price: number, tax: number): number { return price + tax; }\nconst label = ___;\nconsole.log(label);\n",
+              "solution_code": "function total(price: number, tax: number): number { return price + tax; }\nconst label = total(26, 5);\nconsole.log(label);\n",
+              "tests": [
+                {
+                  "name": "ts-04-prints",
+                  "description": "The printed value is the result after this step adds a typed price and tax in on",
+                  "expected_stdout": "31\n",
+                  "required": true
+                }
+              ]
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "ts-07",
-      "title": "7. Readonly Fields in Classes",
-      "description": "Class fields may be prefixed with the readonly modifier, which prevents assignments to the field outside of the constructor. Export a class Server with `readonly port: number` initialized in the constructor and a method portAddress(): string returning `http://localhost:${this.port}`. Tests construct Server(8080) and check both the field and the address. The test checks that `s.port` equals `= 8080`; `s.portAddress()` equals `= 'http://localhost:8080'`; `s.port` equals `8080`.",
+      "title": "Practice Readonly Fields in Classes",
+      "description": "Class fields may be prefixed with the readonly modifier, which prevents assignments to the field outside of the constructor. Export a class Server with readonly port: number initialized in the constructor and a method portAddress(): string returning http://localhost:${this.port}. Tests construct Server(8080) and check both the field and the address. The test checks that s.port equals = 8080; s.portAddress() equals = 'http://localhost:8080'; s.port equals 8080.",
       "order": 7,
       "difficulty": "beginner",
       "duration_minutes": 6,
@@ -68,9 +246,7 @@
       ],
       "prerequisites": [],
       "learning_objectives": [
-        "Mark class fields readonly and initialize them in the constructor",
-        "Expose computed accessors as class methods",
-        "Use template literals inside class methods"
+        "Mesa clerks recount crates before dawn, and mark class fields readonly and initialize them in the constructor."
       ],
       "source": {
         "name": "TypeScript Handbook — Classes — readonly modifier: 'prevents assignments to the field outside of the constructor'",
@@ -91,7 +267,169 @@
           "test_readonly_server"
         ]
       },
-      "xp_reward": 15
+      "xp_reward": 15,
+      "player_mode": "micro",
+      "sublessons": [
+        {
+          "id": "ts-07-micro",
+          "title": "Practice Readonly Fields in Classes",
+          "description": "",
+          "order": 1,
+          "exercises": [
+            {
+              "id": "ts-07-teach",
+              "type": "teach",
+              "question": "Mesa clerks recount crates before dawn, and mark class fields readonly and initialize them in the constructor.",
+              "hints": [
+                "Read the one job this step is practicing.",
+                "The example is about Readonly Fields in Classes.",
+                "new Bag(\"ember\").item"
+              ],
+              "explanation": "Mesa clerks recount crates before dawn, and mark class fields readonly and initialize them in the constructor.",
+              "xp_reward": 0,
+              "worked_example": "new Bag(\"ember\").item"
+            },
+            {
+              "id": "ts-07-mcq",
+              "type": "mcq",
+              "question": "Mesa clerks recount crates before dawn. For mark class fields readonly and initialize them in the constructor, which line reads the readonly item stored by the constructor?",
+              "hints": [
+                "Compare each line with the example.",
+                "One line matches the example.",
+                "this.item = item;"
+              ],
+              "explanation": "this.item = item; stores the constructor argument.",
+              "xp_reward": 10,
+              "options": [
+                "item == item;",
+                "console.log(item);",
+                "return item;",
+                "this.item = item;"
+              ],
+              "correct_answer": "this.item = item;"
+            },
+            {
+              "id": "ts-07-predict",
+              "type": "output_prediction",
+              "question": "Mesa clerks recount crates before dawn. For mark class fields readonly and initialize them in the constructor, what value is displayed?",
+              "hints": [
+                "Run the example in your head from the top.",
+                "The last line is what gets displayed.",
+                "ember"
+              ],
+              "explanation": "The Readonly Fields in Classes program displays that value.",
+              "xp_reward": 10,
+              "starter_code": "class Bag { readonly item: string; constructor(item: string) { this.item = item; } }\nconsole.log(new Bag(\"ember\").item);\n",
+              "options": [
+                "ivory",
+                "none",
+                "ember",
+                "0"
+              ],
+              "correct_answer": "ember"
+            },
+            {
+              "id": "ts-07-order",
+              "type": "ordering",
+              "question": "Mesa clerks recount crates before dawn. For mark class fields readonly and initialize them in the constructor, build the line that reads the readonly item stored by the constructor.",
+              "hints": [
+                "Start at the left of the example.",
+                "Keep the example order.",
+                "this.item = item;"
+              ],
+              "explanation": "this.item = item; stores the constructor argument.",
+              "xp_reward": 10,
+              "options": [
+                "this.item",
+                "=",
+                "item;",
+                "=="
+              ],
+              "correct_answer": [
+                "this.item",
+                "=",
+                "item;"
+              ]
+            },
+            {
+              "id": "ts-07-fill",
+              "type": "fill_blank",
+              "question": "Mesa clerks recount crates before dawn. For mark class fields readonly and initialize them in the constructor, fill the blank so the line reads the readonly item stored by the constructor.",
+              "hints": [
+                "The blank is the missing piece of the example.",
+                "The example uses that piece.",
+                "="
+              ],
+              "explanation": "this.item = item; stores the constructor argument.",
+              "xp_reward": 10,
+              "starter_code": "class Bag { item: string; constructor(item: string) { this.item ___ item; } }\n",
+              "options": [
+                "==",
+                "!=",
+                "=",
+                "+"
+              ],
+              "correct_answer": "="
+            },
+            {
+              "id": "ts-07-bug",
+              "type": "debugging",
+              "question": "Mesa clerks recount crates before dawn. For mark class fields readonly and initialize them in the constructor, which line does a different job than the example?",
+              "hints": [
+                "The other lines match the example.",
+                "One line is the odd one.",
+                "Line 1"
+              ],
+              "explanation": "The constructor appends a mark the caller did not pass.",
+              "xp_reward": 10,
+              "starter_code": "class Bag { item: string; constructor(item: string) { this.item = item + \"!\"; } }\nconsole.log(new Bag(\"ember\").item);\n",
+              "correct_answer": "1"
+            },
+            {
+              "id": "ts-07-predict-2",
+              "type": "output_prediction",
+              "question": "Mesa clerks recount crates before dawn. For mark class fields readonly and initialize them in the constructor, what does the second run display?",
+              "hints": [
+                "Apply the same steps to the new value.",
+                "The display comes from the last line.",
+                "ivory"
+              ],
+              "explanation": "The second Readonly Fields in Classes program displays that value.",
+              "xp_reward": 10,
+              "starter_code": "class Bag { readonly item: string; constructor(item: string) { this.item = item; } }\nconsole.log(new Bag(\"ivory\").item);\n",
+              "options": [
+                "ember",
+                "ivory",
+                "none",
+                "0"
+              ],
+              "correct_answer": "ivory"
+            },
+            {
+              "id": "ts-07-write",
+              "type": "code",
+              "question": "Mesa clerks recount crates before dawn. For mark class fields readonly and initialize them in the constructor, fill the blank so the program prints the result.",
+              "hints": [
+                "The blank is the missing piece.",
+                "Print the value that piece produces.",
+                "const label = new Bag(\"ember\").item;"
+              ],
+              "explanation": "The printed value is the result after this step reads the readonly item stored by the constructor.",
+              "xp_reward": 10,
+              "starter_code": "class Bag { readonly item: string; constructor(item: string) { this.item = item; } }\nconst label = ___;\nconsole.log(label);\n",
+              "solution_code": "class Bag { readonly item: string; constructor(item: string) { this.item = item; } }\nconst label = new Bag(\"ember\").item;\nconsole.log(label);\n",
+              "tests": [
+                {
+                  "name": "ts-07-prints",
+                  "description": "The printed value is the result after this step reads the readonly item stored b",
+                  "expected_stdout": "ember\n",
+                  "required": true
+                }
+              ]
+            }
+          ]
+        }
+      ]
     }
   ]
 }

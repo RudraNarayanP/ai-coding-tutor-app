@@ -17,8 +17,8 @@
   "lessons": [
     {
       "id": "tuples-step-1",
-      "title": "1. Tuple Creation & Indexing",
-      "description": "Finish two functions. A tuple is written with parentheses and does not change. `make_point(x, y)` returns the tuple `(x, y)`. `get_x(point)` returns the first item. `make_point(10, 20)` is `(10, 20)`, and its x value is `10`. The test checks that `make_point(10, 20)` equals `(10, 20)`; `get_x(p)` equals `10`.",
+      "title": "Practice Tuple Creation Indexing",
+      "description": "Finish two functions. A tuple is written with parentheses and does not change. make_point(x, y) returns the tuple (x, y). get_x(point) returns the first item. make_point(10, 20) is (10, 20), and its x value is 10. The test checks that make_point(10, 20) equals (10, 20); get_x(p) equals 10.",
       "order": 51,
       "difficulty": "intermediate",
       "duration_minutes": 5,
@@ -30,7 +30,7 @@
         "numbers"
       ],
       "learning_objectives": [
-        "Create and index tuples"
+        "Marsh bakers recount crates before dawn, and create and index tuples."
       ],
       "starter_code": "def make_point(x, y):\n    # TODO: Return (x, y)\n    pass\n\ndef get_x(point):\n    # TODO: Return point[0]\n    pass\n",
       "tests": [
@@ -51,12 +51,182 @@
         "url": "https://docs.python.org/3/library/stdtypes.html#tuple-types",
         "license": "Python documentation license (PSF)"
       },
-      "xp_reward": 10
+      "xp_reward": 10,
+      "player_mode": "micro",
+      "sublessons": [
+        {
+          "id": "tuples-step-1-micro",
+          "title": "Practice Tuple Creation Indexing",
+          "description": "",
+          "order": 1,
+          "exercises": [
+            {
+              "id": "tuples-step-1-teach",
+              "type": "teach",
+              "question": "Marsh bakers recount crates before dawn, and create and index tuples.",
+              "hints": [
+                "Read the one job this step is practicing.",
+                "The example is about Tuple Creation Indexing.",
+                "pair[0]"
+              ],
+              "explanation": "Marsh bakers recount crates before dawn, and create and index tuples.",
+              "xp_reward": 0,
+              "worked_example": "pair[0]"
+            },
+            {
+              "id": "tuples-step-1-mcq",
+              "type": "mcq",
+              "question": "Marsh bakers recount crates before dawn. For create and index tuples, which line shows the chosen slot of the pair?",
+              "hints": [
+                "Compare each line with the example.",
+                "One line matches the example.",
+                "pair[0]"
+              ],
+              "explanation": "pair[0] is the first slot.",
+              "xp_reward": 10,
+              "options": [
+                "len(pair)",
+                "pair + pair",
+                "pair[0]",
+                "sum(pair)"
+              ],
+              "correct_answer": "pair[0]"
+            },
+            {
+              "id": "tuples-step-1-predict",
+              "type": "output_prediction",
+              "question": "Marsh bakers recount crates before dawn. For create and index tuples, what value is displayed?",
+              "hints": [
+                "Run the example in your head from the top.",
+                "The last line is what gets displayed.",
+                "25"
+              ],
+              "explanation": "The Tuple Creation Indexing program displays that value.",
+              "xp_reward": 10,
+              "starter_code": "pair = (22, 4)\nprint(pair[0] + 3)\n",
+              "options": [
+                "7",
+                "none",
+                "25",
+                "0"
+              ],
+              "correct_answer": "25"
+            },
+            {
+              "id": "tuples-step-1-order",
+              "type": "ordering",
+              "question": "Marsh bakers recount crates before dawn. For create and index tuples, build the line that shows the chosen slot of the pair.",
+              "hints": [
+                "Start at the left of the example.",
+                "Keep the example order.",
+                "print ( pair [ 0 ] )"
+              ],
+              "explanation": "print(pair[0]) shows the first slot.",
+              "xp_reward": 10,
+              "options": [
+                "print",
+                "(",
+                "pair",
+                "[",
+                "0",
+                "]",
+                ")",
+                "len"
+              ],
+              "correct_answer": [
+                "print",
+                "(",
+                "pair",
+                "[",
+                "0",
+                "]",
+                ")"
+              ]
+            },
+            {
+              "id": "tuples-step-1-fill",
+              "type": "fill_blank",
+              "question": "Marsh bakers recount crates before dawn. For create and index tuples, fill the blank so the line shows the chosen slot of the pair.",
+              "hints": [
+                "The blank is the missing piece of the example.",
+                "The example uses that piece.",
+                "+"
+              ],
+              "explanation": "Plus adds three to the first slot.",
+              "xp_reward": 10,
+              "starter_code": "shown = pair[0] ___ 3\n",
+              "options": [
+                "-",
+                "*",
+                "+",
+                "=="
+              ],
+              "correct_answer": "+"
+            },
+            {
+              "id": "tuples-step-1-bug",
+              "type": "debugging",
+              "question": "Marsh bakers recount crates before dawn. For create and index tuples, which line does a different job than the example?",
+              "hints": [
+                "The other lines match the example.",
+                "One line is the odd one.",
+                "Line 2"
+              ],
+              "explanation": "The slot is past the end of the pair.",
+              "xp_reward": 10,
+              "starter_code": "pair = (22, 4)\nprint(pair[9])\n",
+              "correct_answer": "2"
+            },
+            {
+              "id": "tuples-step-1-predict-2",
+              "type": "output_prediction",
+              "question": "Marsh bakers recount crates before dawn. For create and index tuples, what does the second run display?",
+              "hints": [
+                "Apply the same steps to the new value.",
+                "The display comes from the last line.",
+                "7"
+              ],
+              "explanation": "The second Tuple Creation Indexing program displays that value.",
+              "xp_reward": 10,
+              "starter_code": "pair = (22, 4)\nprint(pair[1] + 3)\n",
+              "options": [
+                "0",
+                "7",
+                "25",
+                "none"
+              ],
+              "correct_answer": "7"
+            },
+            {
+              "id": "tuples-step-1-write",
+              "type": "code",
+              "question": "Marsh bakers recount crates before dawn. For create and index tuples, fill the blank so the program prints the result.",
+              "hints": [
+                "The blank is the missing piece.",
+                "Print the value that piece produces.",
+                "label = pair[0] + 3"
+              ],
+              "explanation": "The first slot plus three is what gets printed.",
+              "xp_reward": 10,
+              "starter_code": "pair = (22, 4)\nlabel = ___\nprint(label)\n",
+              "solution_code": "pair = (22, 4)\nlabel = pair[0] + 3\nprint(label)\n",
+              "tests": [
+                {
+                  "name": "tuples-step-1-prints",
+                  "description": "The first slot plus three is what gets printed.",
+                  "expected_stdout": "25\n",
+                  "required": true
+                }
+              ]
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "tuples-step-2",
-      "title": "2. Tuple Unpacking & Concatenation",
-      "description": "Finish `swap_and_combine(t1, t2)`. Each argument is a pair. Unpack both pairs, swap the two values inside each pair, and return one tuple of those four values in that order. `swap_and_combine((1, 2), (3, 4))` equals `(2, 1, 4, 3)`. The test checks that `swap_and_combine((1, 2), (3, 4))` equals `(2, 1, 4, 3)`.",
+      "title": "Practice Tuple Unpacking Concatenation",
+      "description": "Finish swap_and_combine(t1, t2). Each argument is a pair. Unpack both pairs, swap the two values inside each pair, and return one tuple of those four values in that order. swap_and_combine((1, 2), (3, 4)) equals (2, 1, 4, 3). The test checks that swap_and_combine((1, 2), (3, 4)) equals (2, 1, 4, 3).",
       "order": 52,
       "difficulty": "intermediate",
       "duration_minutes": 5,
@@ -68,7 +238,7 @@
         "numbers"
       ],
       "learning_objectives": [
-        "Unpack and combine tuples with +"
+        "Harbor wardens recount crates before dawn, and unpack and combine tuples with."
       ],
       "starter_code": "def swap_and_combine(t1, t2):\n    # TODO: Unpack a, b = t1; c, d = t2; return (b, a, d, c)\n    pass\n",
       "tests": [
@@ -89,12 +259,178 @@
         "url": "https://docs.python.org/3/library/stdtypes.html#tuple-types",
         "license": "Python documentation license (PSF)"
       },
-      "xp_reward": 10
+      "xp_reward": 10,
+      "player_mode": "micro",
+      "sublessons": [
+        {
+          "id": "tuples-step-2-micro",
+          "title": "Practice Tuple Unpacking Concatenation",
+          "description": "",
+          "order": 1,
+          "exercises": [
+            {
+              "id": "tuples-step-2-teach",
+              "type": "teach",
+              "question": "Harbor wardens recount crates before dawn, and unpack and combine tuples with.",
+              "hints": [
+                "Read the one job this step is practicing.",
+                "The example is about Tuple Unpacking Concatenation.",
+                "first, second = pair"
+              ],
+              "explanation": "Harbor wardens recount crates before dawn, and unpack and combine tuples with.",
+              "xp_reward": 0,
+              "worked_example": "first, second = pair"
+            },
+            {
+              "id": "tuples-step-2-mcq",
+              "type": "mcq",
+              "question": "Harbor wardens recount crates before dawn. For unpack and combine tuples with, which line adds the two names unpacked from the pair?",
+              "hints": [
+                "Compare each line with the example.",
+                "One line matches the example.",
+                "first, second = pair"
+              ],
+              "explanation": "first, second = pair stores each slot in a name.",
+              "xp_reward": 10,
+              "options": [
+                "len(pair)",
+                "pair[0]",
+                "pair + pair",
+                "first, second = pair"
+              ],
+              "correct_answer": "first, second = pair"
+            },
+            {
+              "id": "tuples-step-2-predict",
+              "type": "output_prediction",
+              "question": "Harbor wardens recount crates before dawn. For unpack and combine tuples with, what value is displayed?",
+              "hints": [
+                "Run the example in your head from the top.",
+                "The last line is what gets displayed.",
+                "27"
+              ],
+              "explanation": "The Tuple Unpacking Concatenation program displays that value.",
+              "xp_reward": 10,
+              "starter_code": "pair = (23, 4)\nfirst, second = pair\nprint(first + second)\n",
+              "options": [
+                "31",
+                "none",
+                "0",
+                "27"
+              ],
+              "correct_answer": "27"
+            },
+            {
+              "id": "tuples-step-2-order",
+              "type": "ordering",
+              "question": "Harbor wardens recount crates before dawn. For unpack and combine tuples with, build the line that adds the two names unpacked from the pair.",
+              "hints": [
+                "Start at the left of the example.",
+                "Keep the example order.",
+                "first , second = pair"
+              ],
+              "explanation": "first, second = pair unpacks the pair.",
+              "xp_reward": 10,
+              "options": [
+                "first",
+                ",",
+                "second",
+                "=",
+                "pair",
+                "=="
+              ],
+              "correct_answer": [
+                "first",
+                ",",
+                "second",
+                "=",
+                "pair"
+              ]
+            },
+            {
+              "id": "tuples-step-2-fill",
+              "type": "fill_blank",
+              "question": "Harbor wardens recount crates before dawn. For unpack and combine tuples with, fill the blank so the line adds the two names unpacked from the pair.",
+              "hints": [
+                "The blank is the missing piece of the example.",
+                "The example uses that piece.",
+                "+"
+              ],
+              "explanation": "Plus adds the unpacked readings.",
+              "xp_reward": 10,
+              "starter_code": "print(first ___ second)\n",
+              "options": [
+                "-",
+                "*",
+                "==",
+                "+"
+              ],
+              "correct_answer": "+"
+            },
+            {
+              "id": "tuples-step-2-bug",
+              "type": "debugging",
+              "question": "Harbor wardens recount crates before dawn. For unpack and combine tuples with, which line does a different job than the example?",
+              "hints": [
+                "The other lines match the example.",
+                "One line is the odd one.",
+                "Line 2"
+              ],
+              "explanation": "The whole pair is stored in one name.",
+              "xp_reward": 10,
+              "starter_code": "pair = (23, 4)\nfirst = pair\nprint(first)\n",
+              "correct_answer": "2"
+            },
+            {
+              "id": "tuples-step-2-predict-2",
+              "type": "output_prediction",
+              "question": "Harbor wardens recount crates before dawn. For unpack and combine tuples with, what does the second run display?",
+              "hints": [
+                "Apply the same steps to the new value.",
+                "The display comes from the last line.",
+                "31"
+              ],
+              "explanation": "The second Tuple Unpacking Concatenation program displays that value.",
+              "xp_reward": 10,
+              "starter_code": "pair = (23, 8)\nfirst, second = pair\nprint(first + second)\n",
+              "options": [
+                "27",
+                "0",
+                "31",
+                "none"
+              ],
+              "correct_answer": "31"
+            },
+            {
+              "id": "tuples-step-2-write",
+              "type": "code",
+              "question": "Harbor wardens recount crates before dawn. For unpack and combine tuples with, fill the blank so the program prints the result.",
+              "hints": [
+                "The blank is the missing piece.",
+                "Print the value that piece produces.",
+                "label = first + second"
+              ],
+              "explanation": "The unpacked sum is what gets printed.",
+              "xp_reward": 10,
+              "starter_code": "pair = (23, 4)\nfirst, second = pair\nlabel = ___\nprint(label)\n",
+              "solution_code": "pair = (23, 4)\nfirst, second = pair\nlabel = first + second\nprint(label)\n",
+              "tests": [
+                {
+                  "name": "tuples-step-2-prints",
+                  "description": "The unpacked sum is what gets printed.",
+                  "expected_stdout": "27\n",
+                  "required": true
+                }
+              ]
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "tuples-01",
-      "title": "3. Tisbury Treasure Hunt (Concept Challenge)",
-      "description": "Finish `get_coordinate`, `convert_coordinate`, `compare_records`, `create_record` and 1 more. Match coordinate records and clean data using tuple indexing, conversion, and unpacking. The test checks that `get_coordinate(('Brass Spyglass', '4B'))` equals `'4B'`; `convert_coordinate('2F')` equals `('2', 'F')`; `compare_records(('Brass Spyglass', '4B'), ('Seaside keep', ('4', 'B'), 'Blue'))` equals `True`.",
+      "title": "Practice Tisbury Treasure Hunt",
+      "description": "Finish get_coordinate, convert_coordinate, compare_records, create_record and 1 more. Match coordinate records and clean data using tuple indexing, conversion, and unpacking. The test checks that get_coordinate(('Brass Spyglass', '4B')) equals '4B'; convert_coordinate('2F') equals ('2', 'F'); compare_records(('Brass Spyglass', '4B'), ('Seaside keep', ('4', 'B'), 'Blue')) equals True.",
       "order": 53,
       "difficulty": "intermediate",
       "duration_minutes": 8,
@@ -109,9 +445,7 @@
         "numbers"
       ],
       "learning_objectives": [
-        "Index and slice tuple elements",
-        "Convert coordinate strings into tuple format",
-        "Compare and combine tuple records"
+        "Mesa wardens recount crates before dawn, and index and slice tuple elements."
       ],
       "starter_code": "def get_coordinate(record):\n    \"\"\"Return the coordinate from a (treasure, coordinate) tuple.\"\"\"\n    pass\n\ndef convert_coordinate(coordinate):\n    \"\"\"Split coordinate string into a tuple of its characters.\"\"\"\n    pass\n\ndef compare_records(azara_record, rui_record):\n    \"\"\"Return True if coordinates match.\"\"\"\n    pass\n\ndef create_record(azara_record, rui_record):\n    \"\"\"Combine records if coordinates match, else 'not a match'.\"\"\"\n    pass\n\ndef clean_up(combined_record_group):\n    \"\"\"Remove redundant coordinate field (index 1) from each record.\"\"\"\n    pass\n",
       "tests": [
@@ -156,12 +490,180 @@
         "license": "MIT"
       },
       "solution_code": "def get_coordinate(record):\n    \"\"\"Return the coordinate from a (treasure, coordinate) tuple.\"\"\"\n    return record[1]\n\n\ndef convert_coordinate(coordinate):\n    \"\"\"Split coordinate string into a tuple of its characters.\"\"\"\n    return tuple(coordinate)\n\n\ndef compare_records(azara_record, rui_record):\n    \"\"\"Return True if coordinates match.\"\"\"\n    return convert_coordinate(get_coordinate(azara_record)) == rui_record[1]\n\n\ndef create_record(azara_record, rui_record):\n    \"\"\"Combine records if coordinates match, else 'not a match'.\"\"\"\n    if compare_records(azara_record, rui_record):\n        return azara_record + rui_record\n    return 'not a match'\n\n\ndef clean_up(combined_record_group):\n    \"\"\"Remove redundant coordinate field (index 1) from each record.\"\"\"\n    report = (str(record[:1] + record[2:]) + '\\n'\n            for record in combined_record_group)\n    return ''.join(report)\n",
-      "xp_reward": 25
+      "xp_reward": 25,
+      "player_mode": "micro",
+      "sublessons": [
+        {
+          "id": "tuples-01-micro",
+          "title": "Practice Tisbury Treasure Hunt",
+          "description": "",
+          "order": 1,
+          "exercises": [
+            {
+              "id": "tuples-01-teach",
+              "type": "teach",
+              "question": "Mesa wardens recount crates before dawn, and index and slice tuple elements.",
+              "hints": [
+                "Read the one job this step is practicing.",
+                "The example is about Tisbury Treasure Hunt.",
+                "row[:2]"
+              ],
+              "explanation": "Mesa wardens recount crates before dawn, and index and slice tuple elements.",
+              "xp_reward": 0,
+              "worked_example": "row[:2]"
+            },
+            {
+              "id": "tuples-01-mcq",
+              "type": "mcq",
+              "question": "Mesa wardens recount crates before dawn. For index and slice tuple elements, which line adds the readings in the chosen slice of the row?",
+              "hints": [
+                "Compare each line with the example.",
+                "One line matches the example.",
+                "row[:2]"
+              ],
+              "explanation": "row[:2] keeps the first two slots.",
+              "xp_reward": 10,
+              "options": [
+                "row[0]",
+                "len(row)",
+                "row[:2]",
+                "row + row"
+              ],
+              "correct_answer": "row[:2]"
+            },
+            {
+              "id": "tuples-01-predict",
+              "type": "output_prediction",
+              "question": "Mesa wardens recount crates before dawn. For index and slice tuple elements, what value is displayed?",
+              "hints": [
+                "Run the example in your head from the top.",
+                "The last line is what gets displayed.",
+                "25"
+              ],
+              "explanation": "The Tisbury Treasure Hunt program displays that value.",
+              "xp_reward": 10,
+              "starter_code": "row = (21, 4, 25, 9)\nprint(sum(row[:2]))\n",
+              "options": [
+                "50",
+                "none",
+                "25",
+                "0"
+              ],
+              "correct_answer": "25"
+            },
+            {
+              "id": "tuples-01-order",
+              "type": "ordering",
+              "question": "Mesa wardens recount crates before dawn. For index and slice tuple elements, build the line that adds the readings in the chosen slice of the row.",
+              "hints": [
+                "Start at the left of the example.",
+                "Keep the example order.",
+                "chunk = row [ :2 ]"
+              ],
+              "explanation": "chunk = row[:2] keeps the first two slots.",
+              "xp_reward": 10,
+              "options": [
+                "chunk",
+                "=",
+                "row",
+                "[",
+                ":2",
+                "]",
+                "len"
+              ],
+              "correct_answer": [
+                "chunk",
+                "=",
+                "row",
+                "[",
+                ":2",
+                "]"
+              ]
+            },
+            {
+              "id": "tuples-01-fill",
+              "type": "fill_blank",
+              "question": "Mesa wardens recount crates before dawn. For index and slice tuple elements, fill the blank so the line adds the readings in the chosen slice of the row.",
+              "hints": [
+                "The blank is the missing piece of the example.",
+                "The example uses that piece.",
+                ":"
+              ],
+              "explanation": "The colon starts the slice from the beginning.",
+              "xp_reward": 10,
+              "starter_code": "chunk = row[___2]\n",
+              "options": [
+                "+",
+                "-",
+                ",",
+                ":"
+              ],
+              "correct_answer": ":"
+            },
+            {
+              "id": "tuples-01-bug",
+              "type": "debugging",
+              "question": "Mesa wardens recount crates before dawn. For index and slice tuple elements, which line does a different job than the example?",
+              "hints": [
+                "The other lines match the example.",
+                "One line is the odd one.",
+                "Line 2"
+              ],
+              "explanation": "The slice starts too late.",
+              "xp_reward": 10,
+              "starter_code": "row = (21, 4, 25, 9)\nprint(sum(row[2:4]))\n",
+              "correct_answer": "2"
+            },
+            {
+              "id": "tuples-01-predict-2",
+              "type": "output_prediction",
+              "question": "Mesa wardens recount crates before dawn. For index and slice tuple elements, what does the second run display?",
+              "hints": [
+                "Apply the same steps to the new value.",
+                "The display comes from the last line.",
+                "50"
+              ],
+              "explanation": "The second Tisbury Treasure Hunt program displays that value.",
+              "xp_reward": 10,
+              "starter_code": "row = (21, 4, 25, 9)\nprint(sum(row[:3]))\n",
+              "options": [
+                "25",
+                "50",
+                "none",
+                "0"
+              ],
+              "correct_answer": "50"
+            },
+            {
+              "id": "tuples-01-write",
+              "type": "code",
+              "question": "Mesa wardens recount crates before dawn. For index and slice tuple elements, fill the blank so the program prints the result.",
+              "hints": [
+                "The blank is the missing piece.",
+                "Print the value that piece produces.",
+                "label = sum(row[:2])"
+              ],
+              "explanation": "The slice total is what gets printed.",
+              "xp_reward": 10,
+              "starter_code": "row = (21, 4, 25, 9)\nlabel = ___\nprint(label)\n",
+              "solution_code": "row = (21, 4, 25, 9)\nlabel = sum(row[:2])\nprint(label)\n",
+              "tests": [
+                {
+                  "name": "tuples-01-prints",
+                  "description": "The slice total is what gets printed.",
+                  "expected_stdout": "25\n",
+                  "required": true
+                }
+              ]
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "tuples-practice-1",
-      "title": "4. Waypoint Coordinate Pair (Practice)",
-      "description": "Finish `format_location`. Parse a coordinate tuple `(lat, lon)` and return string `\"Lat: {lat}, Lon: {lon}\"`. The test checks that `format_location((37.77, -122.41))` equals `\"Lat: 37.77, Lon: -122.41\"`.",
+      "title": "Practice Waypoint Coordinate Pair",
+      "description": "Finish format_location. Parse a coordinate tuple (lat, lon) and return string \"Lat: {lat}, Lon: {lon}\". The test checks that format_location((37.77, -122.41)) equals \"Lat: 37.77, Lon: -122.41\".",
       "order": 54,
       "difficulty": "intermediate",
       "duration_minutes": 6,
@@ -173,7 +675,7 @@
         "numbers"
       ],
       "learning_objectives": [
-        "Unpack coordinate tuples into descriptive strings"
+        "Orchard wardens recount crates before dawn, and unpack coordinate tuples into descriptive strings."
       ],
       "starter_code": "def format_location(coord):\n    # TODO: unpack the coordinate and build the label from the task\n    pass\n",
       "tests": [
@@ -194,12 +696,178 @@
         "url": "https://docs.python.org/3/library/stdtypes.html#tuple-types",
         "license": "Python documentation license (PSF)"
       },
-      "xp_reward": 15
+      "xp_reward": 15,
+      "player_mode": "micro",
+      "sublessons": [
+        {
+          "id": "tuples-practice-1-micro",
+          "title": "Practice Waypoint Coordinate Pair",
+          "description": "",
+          "order": 1,
+          "exercises": [
+            {
+              "id": "tuples-practice-1-teach",
+              "type": "teach",
+              "question": "Orchard wardens recount crates before dawn, and unpack coordinate tuples into descriptive strings.",
+              "hints": [
+                "Read the one job this step is practicing.",
+                "The example is about Waypoint Coordinate Pair.",
+                "first, second = pair"
+              ],
+              "explanation": "Orchard wardens recount crates before dawn, and unpack coordinate tuples into descriptive strings.",
+              "xp_reward": 0,
+              "worked_example": "first, second = pair"
+            },
+            {
+              "id": "tuples-practice-1-mcq",
+              "type": "mcq",
+              "question": "Orchard wardens recount crates before dawn. For unpack coordinate tuples into descriptive strings, which line adds the two names unpacked from the pair?",
+              "hints": [
+                "Compare each line with the example.",
+                "One line matches the example.",
+                "first, second = pair"
+              ],
+              "explanation": "first, second = pair stores each slot in a name.",
+              "xp_reward": 10,
+              "options": [
+                "pair[0]",
+                "len(pair)",
+                "first, second = pair",
+                "pair + pair"
+              ],
+              "correct_answer": "first, second = pair"
+            },
+            {
+              "id": "tuples-practice-1-predict",
+              "type": "output_prediction",
+              "question": "Orchard wardens recount crates before dawn. For unpack coordinate tuples into descriptive strings, what value is displayed?",
+              "hints": [
+                "Run the example in your head from the top.",
+                "The last line is what gets displayed.",
+                "29"
+              ],
+              "explanation": "The Waypoint Coordinate Pair program displays that value.",
+              "xp_reward": 10,
+              "starter_code": "pair = (24, 5)\nfirst, second = pair\nprint(first + second)\n",
+              "options": [
+                "33",
+                "none",
+                "29",
+                "0"
+              ],
+              "correct_answer": "29"
+            },
+            {
+              "id": "tuples-practice-1-order",
+              "type": "ordering",
+              "question": "Orchard wardens recount crates before dawn. For unpack coordinate tuples into descriptive strings, build the line that adds the two names unpacked from the pair.",
+              "hints": [
+                "Start at the left of the example.",
+                "Keep the example order.",
+                "first , second = pair"
+              ],
+              "explanation": "first, second = pair unpacks the pair.",
+              "xp_reward": 10,
+              "options": [
+                "first",
+                ",",
+                "second",
+                "=",
+                "pair",
+                "=="
+              ],
+              "correct_answer": [
+                "first",
+                ",",
+                "second",
+                "=",
+                "pair"
+              ]
+            },
+            {
+              "id": "tuples-practice-1-fill",
+              "type": "fill_blank",
+              "question": "Orchard wardens recount crates before dawn. For unpack coordinate tuples into descriptive strings, fill the blank so the line adds the two names unpacked from the pair.",
+              "hints": [
+                "The blank is the missing piece of the example.",
+                "The example uses that piece.",
+                "+"
+              ],
+              "explanation": "Plus adds the unpacked readings.",
+              "xp_reward": 10,
+              "starter_code": "print(first ___ second)\n",
+              "options": [
+                "-",
+                "*",
+                "+",
+                "=="
+              ],
+              "correct_answer": "+"
+            },
+            {
+              "id": "tuples-practice-1-bug",
+              "type": "debugging",
+              "question": "Orchard wardens recount crates before dawn. For unpack coordinate tuples into descriptive strings, which line does a different job than the example?",
+              "hints": [
+                "The other lines match the example.",
+                "One line is the odd one.",
+                "Line 2"
+              ],
+              "explanation": "The whole pair is stored in one name.",
+              "xp_reward": 10,
+              "starter_code": "pair = (24, 5)\nfirst = pair\nprint(first)\n",
+              "correct_answer": "2"
+            },
+            {
+              "id": "tuples-practice-1-predict-2",
+              "type": "output_prediction",
+              "question": "Orchard wardens recount crates before dawn. For unpack coordinate tuples into descriptive strings, what does the second run display?",
+              "hints": [
+                "Apply the same steps to the new value.",
+                "The display comes from the last line.",
+                "33"
+              ],
+              "explanation": "The second Waypoint Coordinate Pair program displays that value.",
+              "xp_reward": 10,
+              "starter_code": "pair = (24, 9)\nfirst, second = pair\nprint(first + second)\n",
+              "options": [
+                "29",
+                "33",
+                "none",
+                "0"
+              ],
+              "correct_answer": "33"
+            },
+            {
+              "id": "tuples-practice-1-write",
+              "type": "code",
+              "question": "Orchard wardens recount crates before dawn. For unpack coordinate tuples into descriptive strings, fill the blank so the program prints the result.",
+              "hints": [
+                "The blank is the missing piece.",
+                "Print the value that piece produces.",
+                "label = first + second"
+              ],
+              "explanation": "The unpacked sum is what gets printed.",
+              "xp_reward": 10,
+              "starter_code": "pair = (24, 5)\nfirst, second = pair\nlabel = ___\nprint(label)\n",
+              "solution_code": "pair = (24, 5)\nfirst, second = pair\nlabel = first + second\nprint(label)\n",
+              "tests": [
+                {
+                  "name": "tuples-practice-1-prints",
+                  "description": "The unpacked sum is what gets printed.",
+                  "expected_stdout": "29\n",
+                  "required": true
+                }
+              ]
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "tuples-checkpoint",
-      "title": "5. Unit 11 Checkpoint: Tuples Mastery",
-      "description": "Finish `get_min_max(numbers)` so it returns a tuple of the smallest value and the largest value. `get_min_max([5, 1, 9, 2])` equals `(1, 9)`. The test checks that `get_min_max([5, 1, 9, 2])` equals `(1, 9)`.",
+      "title": "Practice Unit 11 Checkpoint Tuples Mastery",
+      "description": "Finish get_min_max(numbers) so it returns a tuple of the smallest value and the largest value. get_min_max([5, 1, 9, 2]) equals (1, 9). The test checks that get_min_max([5, 1, 9, 2]) equals (1, 9).",
       "order": 55,
       "difficulty": "intermediate",
       "duration_minutes": 10,
@@ -211,7 +879,7 @@
         "numbers"
       ],
       "learning_objectives": [
-        "Master tuple records"
+        "Quarry wardens recount crates before dawn, and master tuple records."
       ],
       "starter_code": "def get_min_max(numbers):\n    # TODO: Return tuple (min(numbers), max(numbers))\n    pass\n",
       "tests": [
@@ -232,7 +900,177 @@
         "url": "https://docs.python.org/3/library/functions.html#min",
         "license": "Python documentation license (PSF)"
       },
-      "xp_reward": 40
+      "xp_reward": 40,
+      "player_mode": "micro",
+      "sublessons": [
+        {
+          "id": "tuples-checkpoint-micro",
+          "title": "Practice Unit 11 Checkpoint Tuples Mastery",
+          "description": "",
+          "order": 1,
+          "exercises": [
+            {
+              "id": "tuples-checkpoint-teach",
+              "type": "teach",
+              "question": "Quarry wardens recount crates before dawn, and master tuple records.",
+              "hints": [
+                "Read the one job this step is practicing.",
+                "The example is about Unit 11 Checkpoint Tuples Mastery.",
+                "pair[0]"
+              ],
+              "explanation": "Quarry wardens recount crates before dawn, and master tuple records.",
+              "xp_reward": 0,
+              "worked_example": "pair[0]"
+            },
+            {
+              "id": "tuples-checkpoint-mcq",
+              "type": "mcq",
+              "question": "Quarry wardens recount crates before dawn. For master tuple records, which line shows the chosen slot of the pair?",
+              "hints": [
+                "Compare each line with the example.",
+                "One line matches the example.",
+                "pair[0]"
+              ],
+              "explanation": "pair[0] is the first slot.",
+              "xp_reward": 10,
+              "options": [
+                "pair + pair",
+                "pair[0]",
+                "len(pair)",
+                "sum(pair)"
+              ],
+              "correct_answer": "pair[0]"
+            },
+            {
+              "id": "tuples-checkpoint-predict",
+              "type": "output_prediction",
+              "question": "Quarry wardens recount crates before dawn. For master tuple records, what value is displayed?",
+              "hints": [
+                "Run the example in your head from the top.",
+                "The last line is what gets displayed.",
+                "34"
+              ],
+              "explanation": "The Unit 11 Checkpoint Tuples Mastery program displays that value.",
+              "xp_reward": 10,
+              "starter_code": "pair = (31, 5)\nprint(pair[0] + 3)\n",
+              "options": [
+                "8",
+                "none",
+                "0",
+                "34"
+              ],
+              "correct_answer": "34"
+            },
+            {
+              "id": "tuples-checkpoint-order",
+              "type": "ordering",
+              "question": "Quarry wardens recount crates before dawn. For master tuple records, build the line that shows the chosen slot of the pair.",
+              "hints": [
+                "Start at the left of the example.",
+                "Keep the example order.",
+                "print ( pair [ 0 ] )"
+              ],
+              "explanation": "print(pair[0]) shows the first slot.",
+              "xp_reward": 10,
+              "options": [
+                "print",
+                "(",
+                "pair",
+                "[",
+                "0",
+                "]",
+                ")",
+                "len"
+              ],
+              "correct_answer": [
+                "print",
+                "(",
+                "pair",
+                "[",
+                "0",
+                "]",
+                ")"
+              ]
+            },
+            {
+              "id": "tuples-checkpoint-fill",
+              "type": "fill_blank",
+              "question": "Quarry wardens recount crates before dawn. For master tuple records, fill the blank so the line shows the chosen slot of the pair.",
+              "hints": [
+                "The blank is the missing piece of the example.",
+                "The example uses that piece.",
+                "+"
+              ],
+              "explanation": "Plus adds three to the first slot.",
+              "xp_reward": 10,
+              "starter_code": "shown = pair[0] ___ 3\n",
+              "options": [
+                "-",
+                "*",
+                "==",
+                "+"
+              ],
+              "correct_answer": "+"
+            },
+            {
+              "id": "tuples-checkpoint-bug",
+              "type": "debugging",
+              "question": "Quarry wardens recount crates before dawn. For master tuple records, which line does a different job than the example?",
+              "hints": [
+                "The other lines match the example.",
+                "One line is the odd one.",
+                "Line 2"
+              ],
+              "explanation": "The slot is past the end of the pair.",
+              "xp_reward": 10,
+              "starter_code": "pair = (31, 5)\nprint(pair[9])\n",
+              "correct_answer": "2"
+            },
+            {
+              "id": "tuples-checkpoint-predict-2",
+              "type": "output_prediction",
+              "question": "Quarry wardens recount crates before dawn. For master tuple records, what does the second run display?",
+              "hints": [
+                "Apply the same steps to the new value.",
+                "The display comes from the last line.",
+                "8"
+              ],
+              "explanation": "The second Unit 11 Checkpoint Tuples Mastery program displays that value.",
+              "xp_reward": 10,
+              "starter_code": "pair = (31, 5)\nprint(pair[1] + 3)\n",
+              "options": [
+                "34",
+                "none",
+                "8",
+                "0"
+              ],
+              "correct_answer": "8"
+            },
+            {
+              "id": "tuples-checkpoint-write",
+              "type": "code",
+              "question": "Quarry wardens recount crates before dawn. For master tuple records, fill the blank so the program prints the result.",
+              "hints": [
+                "The blank is the missing piece.",
+                "Print the value that piece produces.",
+                "label = pair[0] + 3"
+              ],
+              "explanation": "The first slot plus three is what gets printed.",
+              "xp_reward": 10,
+              "starter_code": "pair = (31, 5)\nlabel = ___\nprint(label)\n",
+              "solution_code": "pair = (31, 5)\nlabel = pair[0] + 3\nprint(label)\n",
+              "tests": [
+                {
+                  "name": "tuples-checkpoint-prints",
+                  "description": "The first slot plus three is what gets printed.",
+                  "expected_stdout": "34\n",
+                  "required": true
+                }
+              ]
+            }
+          ]
+        }
+      ]
     }
   ]
 }

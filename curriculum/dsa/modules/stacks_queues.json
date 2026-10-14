@@ -14,8 +14,8 @@
   "lessons": [
     {
       "id": "stacks-queues-step-1",
-      "title": "1. Stack with a List",
-      "description": "Implement `Stack` with push, pop, and peek using a Python list (end is top). The test checks that `Stack().peek()` equals `2`; `Stack().pop()` equals `2`; `len(s)` equals `1`.",
+      "title": "Practice Stack with a List",
+      "description": "Implement Stack with push, pop, and peek using a Python list (end is top). The test checks that Stack().peek() equals 2; Stack().pop() equals 2; len(s) equals 1.",
       "order": 6,
       "difficulty": "intermediate",
       "duration_minutes": 5,
@@ -29,7 +29,7 @@
         "big-o"
       ],
       "learning_objectives": [
-        "Model LIFO with list append/pop"
+        "Depot pickers recount crates before dawn, and model LIFO with list append pop."
       ],
       "starter_code": "class Stack:\n    def __init__(self):\n        self._data = []\n\n    def push(self, value):\n        # TODO\n        pass\n\n    def pop(self):\n        # TODO: raise IndexError if empty\n        pass\n\n    def peek(self):\n        # TODO\n        pass\n\n    def __len__(self):\n        return len(self._data)\n",
       "solution_code": "class Stack:\n    def __init__(self):\n        self._data = []\n\n    def push(self, value):\n        self._data.append(value)\n\n    def pop(self):\n        if not self._data:\n            raise IndexError('empty')\n        return self._data.pop()\n\n    def peek(self):\n        if not self._data:\n            raise IndexError('empty')\n        return self._data[-1]\n\n    def __len__(self):\n        return len(self._data)\n",
@@ -50,12 +50,170 @@
         "url": "https://docs.python.org/3/tutorial/datastructures.html#using-lists-as-stacks",
         "license": "Python documentation license (PSF)"
       },
-      "xp_reward": 10
+      "xp_reward": 10,
+      "player_mode": "micro",
+      "sublessons": [
+        {
+          "id": "stacks-queues-step-1-micro",
+          "title": "Practice Stack with a List",
+          "description": "",
+          "order": 1,
+          "exercises": [
+            {
+              "id": "stacks-queues-step-1-teach",
+              "type": "teach",
+              "question": "Depot pickers recount crates before dawn, and model LIFO with list append pop.",
+              "hints": [
+                "Read the one job this step is practicing.",
+                "The example is about Stack with a List.",
+                "stack.pop()"
+              ],
+              "explanation": "Depot pickers recount crates before dawn, and model LIFO with list append pop.",
+              "xp_reward": 0,
+              "worked_example": "stack.pop()"
+            },
+            {
+              "id": "stacks-queues-step-1-mcq",
+              "type": "mcq",
+              "question": "Depot pickers recount crates before dawn. For model LIFO with list append pop, which line pops the value pushed last?",
+              "hints": [
+                "Compare each line with the example.",
+                "One line matches the example.",
+                "stack.pop()"
+              ],
+              "explanation": "pop removes the value that was pushed last.",
+              "xp_reward": 10,
+              "options": [
+                "stack == stack",
+                "stack.pop()",
+                "return stack",
+                "pass"
+              ],
+              "correct_answer": "stack.pop()"
+            },
+            {
+              "id": "stacks-queues-step-1-predict",
+              "type": "output_prediction",
+              "question": "Depot pickers recount crates before dawn. For model LIFO with list append pop, what value is displayed?",
+              "hints": [
+                "Run the example in your head from the top.",
+                "The last line is what gets displayed.",
+                "other"
+              ],
+              "explanation": "The Stack with a List program displays that value.",
+              "xp_reward": 10,
+              "starter_code": "stack = []\nstack.append('quartz')\nstack.append('other')\nprint(stack.pop())\n",
+              "options": [
+                "quartz",
+                "other",
+                "none",
+                "0"
+              ],
+              "correct_answer": "other"
+            },
+            {
+              "id": "stacks-queues-step-1-order",
+              "type": "ordering",
+              "question": "Depot pickers recount crates before dawn. For model LIFO with list append pop, build the line that pops the value pushed last.",
+              "hints": [
+                "Start at the left of the example.",
+                "Keep the example order.",
+                "stack.pop()"
+              ],
+              "explanation": "pop removes the value that was pushed last.",
+              "xp_reward": 10,
+              "options": [
+                "stack.pop()",
+                "append"
+              ],
+              "correct_answer": [
+                "stack.pop()"
+              ]
+            },
+            {
+              "id": "stacks-queues-step-1-fill",
+              "type": "fill_blank",
+              "question": "Depot pickers recount crates before dawn. For model LIFO with list append pop, fill the blank so the line pops the value pushed last.",
+              "hints": [
+                "The blank is the missing piece of the example.",
+                "The example uses that piece.",
+                "pop()"
+              ],
+              "explanation": "pop removes the value that was pushed last.",
+              "xp_reward": 10,
+              "starter_code": "top = stack.___\n",
+              "options": [
+                "append(1)",
+                "pop()",
+                "clear()",
+                "sort()"
+              ],
+              "correct_answer": "pop()"
+            },
+            {
+              "id": "stacks-queues-step-1-bug",
+              "type": "debugging",
+              "question": "Depot pickers recount crates before dawn. For model LIFO with list append pop, which line does a different job than the example?",
+              "hints": [
+                "The other lines match the example.",
+                "One line is the odd one.",
+                "Line 2"
+              ],
+              "explanation": "The print reads the first value, which is the oldest one.",
+              "xp_reward": 10,
+              "starter_code": "stack = ['quartz', 'other']\nprint(stack[0])\n",
+              "correct_answer": "2"
+            },
+            {
+              "id": "stacks-queues-step-1-predict-2",
+              "type": "output_prediction",
+              "question": "Depot pickers recount crates before dawn. For model LIFO with list append pop, what does the second run display?",
+              "hints": [
+                "Apply the same steps to the new value.",
+                "The display comes from the last line.",
+                "quartz"
+              ],
+              "explanation": "The second Stack with a List program displays that value.",
+              "xp_reward": 10,
+              "starter_code": "stack = []\nstack.append('quartz')\nprint(stack.pop())\n",
+              "options": [
+                "other",
+                "none",
+                "0",
+                "quartz"
+              ],
+              "correct_answer": "quartz"
+            },
+            {
+              "id": "stacks-queues-step-1-write",
+              "type": "code",
+              "question": "Depot pickers recount crates before dawn. For model LIFO with list append pop, fill the blank so the program prints the result.",
+              "hints": [
+                "The blank is the missing piece.",
+                "Print the value that piece produces.",
+                "label = stack.pop()"
+              ],
+              "explanation": "The printed value is the result after this step pops the value pushed last.",
+              "xp_reward": 10,
+              "starter_code": "stack = []\nstack.append('quartz')\nstack.append('other')\nlabel = ___\nprint(label)\n",
+              "solution_code": "stack = []\nstack.append('quartz')\nstack.append('other')\nlabel = stack.pop()\nprint(label)\n",
+              "tests": [
+                {
+                  "name": "stacks-queues-step-1-prints",
+                  "description": "The printed value is the result after this step pops the value pushed last.",
+                  "expected_stdout": "other\n",
+                  "required": true
+                }
+              ]
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "stacks-queues-step-2",
-      "title": "2. Queue with collections.deque",
-      "description": "Implement `Queue` with enqueue/dequeue using `collections.deque`. The test checks that `Queue().dequeue()` equals `'a'`; `len(q)` equals `1`.",
+      "title": "Practice Queue with collections deque",
+      "description": "Implement Queue with enqueue/dequeue using collections.deque. The test checks that Queue().dequeue() equals 'a'; len(q) equals 1.",
       "order": 7,
       "difficulty": "intermediate",
       "duration_minutes": 5,
@@ -69,7 +227,7 @@
         "big-o"
       ],
       "learning_objectives": [
-        "Model FIFO with deque"
+        "Ridge pickers recount crates before dawn, and model FIFO with deque."
       ],
       "starter_code": "from collections import deque\n\nclass Queue:\n    def __init__(self):\n        self._data = deque()\n\n    def enqueue(self, value):\n        # TODO\n        pass\n\n    def dequeue(self):\n        # TODO: raise IndexError if empty\n        pass\n\n    def __len__(self):\n        return len(self._data)\n",
       "solution_code": "from collections import deque\n\nclass Queue:\n    def __init__(self):\n        self._data = deque()\n\n    def enqueue(self, value):\n        self._data.append(value)\n\n    def dequeue(self):\n        if not self._data:\n            raise IndexError('empty')\n        return self._data.popleft()\n\n    def __len__(self):\n        return len(self._data)\n",
@@ -90,12 +248,170 @@
         "url": "https://docs.python.org/3/library/collections.html#collections.deque",
         "license": "Python documentation license (PSF)"
       },
-      "xp_reward": 10
+      "xp_reward": 10,
+      "player_mode": "micro",
+      "sublessons": [
+        {
+          "id": "stacks-queues-step-2-micro",
+          "title": "Practice Queue with collections deque",
+          "description": "",
+          "order": 1,
+          "exercises": [
+            {
+              "id": "stacks-queues-step-2-teach",
+              "type": "teach",
+              "question": "Ridge pickers recount crates before dawn, and model FIFO with deque.",
+              "hints": [
+                "Read the one job this step is practicing.",
+                "The example is about Queue with collections deque.",
+                "queue.popleft()"
+              ],
+              "explanation": "Ridge pickers recount crates before dawn, and model FIFO with deque.",
+              "xp_reward": 0,
+              "worked_example": "queue.popleft()"
+            },
+            {
+              "id": "stacks-queues-step-2-mcq",
+              "type": "mcq",
+              "question": "Ridge pickers recount crates before dawn. For model FIFO with deque, which line removes the value that has waited longest?",
+              "hints": [
+                "Compare each line with the example.",
+                "One line matches the example.",
+                "queue.popleft()"
+              ],
+              "explanation": "popleft removes the value at the front of the queue.",
+              "xp_reward": 10,
+              "options": [
+                "queue == queue",
+                "return queue",
+                "queue.popleft()",
+                "pass"
+              ],
+              "correct_answer": "queue.popleft()"
+            },
+            {
+              "id": "stacks-queues-step-2-predict",
+              "type": "output_prediction",
+              "question": "Ridge pickers recount crates before dawn. For model FIFO with deque, what value is displayed?",
+              "hints": [
+                "Run the example in your head from the top.",
+                "The last line is what gets displayed.",
+                "sage"
+              ],
+              "explanation": "The Queue with collections deque program displays that value.",
+              "xp_reward": 10,
+              "starter_code": "from collections import deque\nqueue = deque(['sage', 'other'])\nprint(queue.popleft())\n",
+              "options": [
+                "other",
+                "none",
+                "sage",
+                "0"
+              ],
+              "correct_answer": "sage"
+            },
+            {
+              "id": "stacks-queues-step-2-order",
+              "type": "ordering",
+              "question": "Ridge pickers recount crates before dawn. For model FIFO with deque, build the line that removes the value that has waited longest.",
+              "hints": [
+                "Start at the left of the example.",
+                "Keep the example order.",
+                "queue.popleft()"
+              ],
+              "explanation": "popleft removes the value at the front of the queue.",
+              "xp_reward": 10,
+              "options": [
+                "queue.popleft()",
+                "pop"
+              ],
+              "correct_answer": [
+                "queue.popleft()"
+              ]
+            },
+            {
+              "id": "stacks-queues-step-2-fill",
+              "type": "fill_blank",
+              "question": "Ridge pickers recount crates before dawn. For model FIFO with deque, fill the blank so the line removes the value that has waited longest.",
+              "hints": [
+                "The blank is the missing piece of the example.",
+                "The example uses that piece.",
+                "popleft()"
+              ],
+              "explanation": "popleft removes the value at the front of the queue.",
+              "xp_reward": 10,
+              "starter_code": "front = queue.___\n",
+              "options": [
+                "pop()",
+                "append(1)",
+                "popleft()",
+                "clear()"
+              ],
+              "correct_answer": "popleft()"
+            },
+            {
+              "id": "stacks-queues-step-2-bug",
+              "type": "debugging",
+              "question": "Ridge pickers recount crates before dawn. For model FIFO with deque, which line does a different job than the example?",
+              "hints": [
+                "The other lines match the example.",
+                "One line is the odd one.",
+                "Line 3"
+              ],
+              "explanation": "pop removes the newest value, which is stack order.",
+              "xp_reward": 10,
+              "starter_code": "from collections import deque\nqueue = deque(['sage', 'other'])\nprint(queue.pop())\n",
+              "correct_answer": "3"
+            },
+            {
+              "id": "stacks-queues-step-2-predict-2",
+              "type": "output_prediction",
+              "question": "Ridge pickers recount crates before dawn. For model FIFO with deque, what does the second run display?",
+              "hints": [
+                "Apply the same steps to the new value.",
+                "The display comes from the last line.",
+                "other"
+              ],
+              "explanation": "The second Queue with collections deque program displays that value.",
+              "xp_reward": 10,
+              "starter_code": "from collections import deque\nqueue = deque(['other', 'sage'])\nprint(queue.popleft())\n",
+              "options": [
+                "sage",
+                "other",
+                "none",
+                "0"
+              ],
+              "correct_answer": "other"
+            },
+            {
+              "id": "stacks-queues-step-2-write",
+              "type": "code",
+              "question": "Ridge pickers recount crates before dawn. For model FIFO with deque, fill the blank so the program prints the result.",
+              "hints": [
+                "The blank is the missing piece.",
+                "Print the value that piece produces.",
+                "label = queue.popleft()"
+              ],
+              "explanation": "The printed value is the result after this step removes the value that has waited longest.",
+              "xp_reward": 10,
+              "starter_code": "from collections import deque\nqueue = deque(['sage', 'other'])\nlabel = ___\nprint(label)\n",
+              "solution_code": "from collections import deque\nqueue = deque(['sage', 'other'])\nlabel = queue.popleft()\nprint(label)\n",
+              "tests": [
+                {
+                  "name": "stacks-queues-step-2-prints",
+                  "description": "The printed value is the result after this step removes the value that has waite",
+                  "expected_stdout": "sage\n",
+                  "required": true
+                }
+              ]
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "stacks-queues-01",
-      "title": "3. Balanced Parentheses (Concept Challenge)",
-      "description": "Finish `is_balanced`. Use a stack to check whether brackets in a string are balanced. The test checks that `is_balanced('([]{})')` is true; `is_balanced('([)]')` is false; `is_balanced('(')` is false.",
+      "title": "Practice Balanced Parentheses",
+      "description": "Finish is_balanced. Use a stack to check whether brackets in a string are balanced. The test checks that is_balanced('([]{})') is true; is_balanced('([)]') is false; is_balanced('(') is false.",
       "order": 8,
       "difficulty": "intermediate",
       "duration_minutes": 8,
@@ -109,7 +425,7 @@
         "big-o"
       ],
       "learning_objectives": [
-        "Match opening/closing brackets with a stack"
+        "Cove pickers recount crates before dawn, and match opening closing brackets with a stack."
       ],
       "starter_code": "def is_balanced(s):\n    # TODO: return True if (), [], {} are balanced\n    pass\n",
       "solution_code": "def is_balanced(s):\n    pairs = {')': '(', ']': '[', '}': '{'}\n    stack = []\n    for ch in s:\n        if ch in '([{':\n            stack.append(ch)\n        elif ch in pairs:\n            if not stack or stack[-1] != pairs[ch]:\n                return False\n            stack.pop()\n    return not stack\n",
@@ -130,12 +446,170 @@
         "url": "https://docs.python.org/3/tutorial/datastructures.html#using-lists-as-stacks",
         "license": "Python documentation license (PSF)"
       },
-      "xp_reward": 25
+      "xp_reward": 25,
+      "player_mode": "micro",
+      "sublessons": [
+        {
+          "id": "stacks-queues-01-micro",
+          "title": "Practice Balanced Parentheses",
+          "description": "",
+          "order": 1,
+          "exercises": [
+            {
+              "id": "stacks-queues-01-teach",
+              "type": "teach",
+              "question": "Cove pickers recount crates before dawn, and match opening closing brackets with a stack.",
+              "hints": [
+                "Read the one job this step is practicing.",
+                "The example is about Balanced Parentheses.",
+                "ch == '('"
+              ],
+              "explanation": "Cove pickers recount crates before dawn, and match opening closing brackets with a stack.",
+              "xp_reward": 0,
+              "worked_example": "ch == '('"
+            },
+            {
+              "id": "stacks-queues-01-mcq",
+              "type": "mcq",
+              "question": "Cove pickers recount crates before dawn. For match opening closing brackets with a stack, which line reports whether the parentheses are balanced?",
+              "hints": [
+                "Compare each line with the example.",
+                "One line matches the example.",
+                "if ch == '(': stack.append(ch)"
+              ],
+              "explanation": "An opening parenthesis is pushed and a closing one pops it.",
+              "xp_reward": 10,
+              "options": [
+                "ch == ch",
+                "if ch == '(': stack.append(ch)",
+                "return text",
+                "pass"
+              ],
+              "correct_answer": "if ch == '(': stack.append(ch)"
+            },
+            {
+              "id": "stacks-queues-01-predict",
+              "type": "output_prediction",
+              "question": "Cove pickers recount crates before dawn. For match opening closing brackets with a stack, what value is displayed?",
+              "hints": [
+                "Run the example in your head from the top.",
+                "The last line is what gets displayed.",
+                "1"
+              ],
+              "explanation": "The Balanced Parentheses program displays that value.",
+              "xp_reward": 10,
+              "starter_code": "def balanced(text):\n    stack = []\n    for ch in text:\n        if ch == '(':\n            stack.append(ch)\n        elif ch == ')':\n            if not stack:\n                return 0\n            stack.pop()\n    return int(not stack)\nprint(balanced('(())'))\n",
+              "options": [
+                "0",
+                "1",
+                "none",
+                "blank"
+              ],
+              "correct_answer": "1"
+            },
+            {
+              "id": "stacks-queues-01-order",
+              "type": "ordering",
+              "question": "Cove pickers recount crates before dawn. For match opening closing brackets with a stack, build the line that reports whether the parentheses are balanced.",
+              "hints": [
+                "Start at the left of the example.",
+                "Keep the example order.",
+                "stack.append(ch)"
+              ],
+              "explanation": "An opening parenthesis is pushed and a closing one pops it.",
+              "xp_reward": 10,
+              "options": [
+                "stack.append(ch)",
+                "pop"
+              ],
+              "correct_answer": [
+                "stack.append(ch)"
+              ]
+            },
+            {
+              "id": "stacks-queues-01-fill",
+              "type": "fill_blank",
+              "question": "Cove pickers recount crates before dawn. For match opening closing brackets with a stack, fill the blank so the line reports whether the parentheses are balanced.",
+              "hints": [
+                "The blank is the missing piece of the example.",
+                "The example uses that piece.",
+                "=="
+              ],
+              "explanation": "An opening parenthesis is pushed and a closing one pops it.",
+              "xp_reward": 10,
+              "starter_code": "if ch ___ '(':\n    stack.append(ch)\n",
+              "options": [
+                "!=",
+                "==",
+                ">=",
+                "<"
+              ],
+              "correct_answer": "=="
+            },
+            {
+              "id": "stacks-queues-01-bug",
+              "type": "debugging",
+              "question": "Cove pickers recount crates before dawn. For match opening closing brackets with a stack, which line does a different job than the example?",
+              "hints": [
+                "The other lines match the example.",
+                "One line is the odd one.",
+                "Line 2"
+              ],
+              "explanation": "The function always returns one and never checks the text.",
+              "xp_reward": 10,
+              "starter_code": "def balanced(text):\n    return 1\nprint(balanced('(()'))\n",
+              "correct_answer": "2"
+            },
+            {
+              "id": "stacks-queues-01-predict-2",
+              "type": "output_prediction",
+              "question": "Cove pickers recount crates before dawn. For match opening closing brackets with a stack, what does the second run display?",
+              "hints": [
+                "Apply the same steps to the new value.",
+                "The display comes from the last line.",
+                "0"
+              ],
+              "explanation": "The second Balanced Parentheses program displays that value.",
+              "xp_reward": 10,
+              "starter_code": "def balanced(text):\n    stack = []\n    for ch in text:\n        if ch == '(':\n            stack.append(ch)\n        elif ch == ')':\n            if not stack:\n                return 0\n            stack.pop()\n    return int(not stack)\nprint(balanced('(()'))\n",
+              "options": [
+                "1",
+                "none",
+                "blank",
+                "0"
+              ],
+              "correct_answer": "0"
+            },
+            {
+              "id": "stacks-queues-01-write",
+              "type": "code",
+              "question": "Cove pickers recount crates before dawn. For match opening closing brackets with a stack, fill the blank so the program prints the result.",
+              "hints": [
+                "The blank is the missing piece.",
+                "Print the value that piece produces.",
+                "label = balanced('(())')"
+              ],
+              "explanation": "The printed value is the result after this step reports whether the parentheses are balanced.",
+              "xp_reward": 10,
+              "starter_code": "def balanced(text):\n    stack = []\n    for ch in text:\n        if ch == '(':\n            stack.append(ch)\n        elif ch == ')':\n            if not stack:\n                return 0\n            stack.pop()\n    return int(not stack)\nlabel = ___\nprint(label)\n",
+              "solution_code": "def balanced(text):\n    stack = []\n    for ch in text:\n        if ch == '(':\n            stack.append(ch)\n        elif ch == ')':\n            if not stack:\n                return 0\n            stack.pop()\n    return int(not stack)\nlabel = balanced('(())')\nprint(label)\n",
+              "tests": [
+                {
+                  "name": "stacks-queues-01-prints",
+                  "description": "The printed value is the result after this step reports whether the parentheses ",
+                  "expected_stdout": "1\n",
+                  "required": true
+                }
+              ]
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "stacks-queues-practice-1",
-      "title": "4. Reverse with a Stack (Practice)",
-      "description": "Finish `reverse_list`. Reverse a list by pushing all items then popping them. The test checks that `reverse_list([1, 2, 3])` equals `[3, 2, 1]`.",
+      "title": "Practice Reverse with a Stack",
+      "description": "Finish reverse_list. Reverse a list by pushing all items then popping them. The test checks that reverse_list([1, 2, 3]) equals [3, 2, 1].",
       "order": 9,
       "difficulty": "intermediate",
       "duration_minutes": 6,
@@ -149,7 +623,7 @@
         "big-o"
       ],
       "learning_objectives": [
-        "Reverse via LIFO"
+        "Plaza pickers recount crates before dawn, and reverse via LIFO."
       ],
       "starter_code": "def reverse_list(items):\n    # TODO: reverse using an explicit stack list\n    pass\n",
       "solution_code": "def reverse_list(items):\n    stack = list(items)\n    out = []\n    while stack:\n        out.append(stack.pop())\n    return out\n",
@@ -170,12 +644,174 @@
         "url": "https://docs.python.org/3/tutorial/datastructures.html#using-lists-as-stacks",
         "license": "Python documentation license (PSF)"
       },
-      "xp_reward": 15
+      "xp_reward": 15,
+      "player_mode": "micro",
+      "sublessons": [
+        {
+          "id": "stacks-queues-practice-1-micro",
+          "title": "Practice Reverse with a Stack",
+          "description": "",
+          "order": 1,
+          "exercises": [
+            {
+              "id": "stacks-queues-practice-1-teach",
+              "type": "teach",
+              "question": "Plaza pickers recount crates before dawn, and reverse via LIFO.",
+              "hints": [
+                "Read the one job this step is practicing.",
+                "The example is about Reverse with a Stack.",
+                "stack.pop()"
+              ],
+              "explanation": "Plaza pickers recount crates before dawn, and reverse via LIFO.",
+              "xp_reward": 0,
+              "worked_example": "stack.pop()"
+            },
+            {
+              "id": "stacks-queues-practice-1-mcq",
+              "type": "mcq",
+              "question": "Plaza pickers recount crates before dawn. For reverse via LIFO, which line reverses text with a stack?",
+              "hints": [
+                "Compare each line with the example.",
+                "One line matches the example.",
+                "out = out + stack.pop()"
+              ],
+              "explanation": "Popping the stack writes the letters in reverse.",
+              "xp_reward": 10,
+              "options": [
+                "pass",
+                "out == text",
+                "out = out + stack.pop()",
+                "return text"
+              ],
+              "correct_answer": "out = out + stack.pop()"
+            },
+            {
+              "id": "stacks-queues-practice-1-predict",
+              "type": "output_prediction",
+              "question": "Plaza pickers recount crates before dawn. For reverse via LIFO, what value is displayed?",
+              "hints": [
+                "Run the example in your head from the top.",
+                "The last line is what gets displayed.",
+                "elbbep"
+              ],
+              "explanation": "The Reverse with a Stack program displays that value.",
+              "xp_reward": 10,
+              "starter_code": "text = 'pebble'\nstack = []\nfor ch in text:\n    stack.append(ch)\nout = ''\nwhile stack:\n    out = out + stack.pop()\nprint(out)\n",
+              "options": [
+                "none",
+                "elbbep",
+                "0",
+                "emyht"
+              ],
+              "correct_answer": "elbbep"
+            },
+            {
+              "id": "stacks-queues-practice-1-order",
+              "type": "ordering",
+              "question": "Plaza pickers recount crates before dawn. For reverse via LIFO, build the line that reverses text with a stack.",
+              "hints": [
+                "Start at the left of the example.",
+                "Keep the example order.",
+                "out= out+ stack.pop()"
+              ],
+              "explanation": "Popping the stack writes the letters in reverse.",
+              "xp_reward": 10,
+              "options": [
+                "out=",
+                "out+",
+                "stack.pop()",
+                "=="
+              ],
+              "correct_answer": [
+                "out=",
+                "out+",
+                "stack.pop()"
+              ]
+            },
+            {
+              "id": "stacks-queues-practice-1-fill",
+              "type": "fill_blank",
+              "question": "Plaza pickers recount crates before dawn. For reverse via LIFO, fill the blank so the line reverses text with a stack.",
+              "hints": [
+                "The blank is the missing piece of the example.",
+                "The example uses that piece.",
+                "+"
+              ],
+              "explanation": "Popping the stack writes the letters in reverse.",
+              "xp_reward": 10,
+              "starter_code": "out = out ___ stack.pop()\n",
+              "options": [
+                "-",
+                "+",
+                "*",
+                "=="
+              ],
+              "correct_answer": "+"
+            },
+            {
+              "id": "stacks-queues-practice-1-bug",
+              "type": "debugging",
+              "question": "Plaza pickers recount crates before dawn. For reverse via LIFO, which line does a different job than the example?",
+              "hints": [
+                "The other lines match the example.",
+                "One line is the odd one.",
+                "Line 2"
+              ],
+              "explanation": "The print shows the original text and never reverses it.",
+              "xp_reward": 10,
+              "starter_code": "text = 'pebble'\nprint(text)\n",
+              "correct_answer": "2"
+            },
+            {
+              "id": "stacks-queues-practice-1-predict-2",
+              "type": "output_prediction",
+              "question": "Plaza pickers recount crates before dawn. For reverse via LIFO, what does the second run display?",
+              "hints": [
+                "Apply the same steps to the new value.",
+                "The display comes from the last line.",
+                "emyht"
+              ],
+              "explanation": "The second Reverse with a Stack program displays that value.",
+              "xp_reward": 10,
+              "starter_code": "text = 'thyme'\nstack = []\nfor ch in text:\n    stack.append(ch)\nout = ''\nwhile stack:\n    out = out + stack.pop()\nprint(out)\n",
+              "options": [
+                "elbbep",
+                "0",
+                "none",
+                "emyht"
+              ],
+              "correct_answer": "emyht"
+            },
+            {
+              "id": "stacks-queues-practice-1-write",
+              "type": "code",
+              "question": "Plaza pickers recount crates before dawn. For reverse via LIFO, fill the blank so the program prints the result.",
+              "hints": [
+                "The blank is the missing piece.",
+                "Print the value that piece produces.",
+                "label = out"
+              ],
+              "explanation": "The printed value is the result after this step reverses text with a stack.",
+              "xp_reward": 10,
+              "starter_code": "text = 'pebble'\nstack = []\nfor ch in text:\n    stack.append(ch)\nout = ''\nwhile stack:\n    out = out + stack.pop()\nlabel = ___\nprint(label)\n",
+              "solution_code": "text = 'pebble'\nstack = []\nfor ch in text:\n    stack.append(ch)\nout = ''\nwhile stack:\n    out = out + stack.pop()\nlabel = out\nprint(label)\n",
+              "tests": [
+                {
+                  "name": "stacks-queues-practice-1-prints",
+                  "description": "The printed value is the result after this step reverses text with a stack.",
+                  "expected_stdout": "elbbep\n",
+                  "required": true
+                }
+              ]
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "stacks-queues-checkpoint",
-      "title": "5. Unit 2 Checkpoint: Stacks & Queues",
-      "description": "Implement `moving_average(values, k)` using a queue window of size k; return list of averages. The test checks that `moving_average([1, 2, 3, 4], 2)` equals `[1.5, 2.5, 3.5]`.",
+      "title": "Practice Unit 2 Checkpoint Stacks Queues",
+      "description": "Implement moving_average(values, k) using a queue window of size k; return list of averages. The test checks that moving_average([1, 2, 3, 4], 2) equals [1.5, 2.5, 3.5].",
       "order": 10,
       "difficulty": "intermediate",
       "duration_minutes": 10,
@@ -189,7 +825,7 @@
         "big-o"
       ],
       "learning_objectives": [
-        "Sliding window with a queue"
+        "Marsh pickers recount crates before dawn, and sliding window with a queue."
       ],
       "starter_code": "from collections import deque\n\ndef moving_average(values, k):\n    # TODO: return averages of each window of size k\n    pass\n",
       "solution_code": "from collections import deque\n\ndef moving_average(values, k):\n    window = deque()\n    total = 0\n    result = []\n    for v in values:\n        window.append(v)\n        total += v\n        if len(window) > k:\n            total -= window.popleft()\n        if len(window) == k:\n            result.append(total / k)\n    return result\n",
@@ -210,7 +846,165 @@
         "url": "https://docs.python.org/3/library/collections.html#collections.deque",
         "license": "Python documentation license (PSF)"
       },
-      "xp_reward": 40
+      "xp_reward": 40,
+      "player_mode": "micro",
+      "sublessons": [
+        {
+          "id": "stacks-queues-checkpoint-micro",
+          "title": "Practice Unit 2 Checkpoint Stacks Queues",
+          "description": "",
+          "order": 1,
+          "exercises": [
+            {
+              "id": "stacks-queues-checkpoint-teach",
+              "type": "teach",
+              "question": "Marsh pickers recount crates before dawn, and sliding window with a queue.",
+              "hints": [
+                "Read the one job this step is practicing.",
+                "The example is about Unit 2 Checkpoint Stacks Queues.",
+                "stack.append(item)"
+              ],
+              "explanation": "Marsh pickers recount crates before dawn, and sliding window with a queue.",
+              "xp_reward": 0,
+              "worked_example": "stack.append(item)"
+            },
+            {
+              "id": "stacks-queues-checkpoint-mcq",
+              "type": "mcq",
+              "question": "Marsh pickers recount crates before dawn. For sliding window with a queue, which line counts the values pushed on the stack?",
+              "hints": [
+                "Compare each line with the example.",
+                "One line matches the example.",
+                "stack.append(item)"
+              ],
+              "explanation": "append stores one more value.",
+              "xp_reward": 10,
+              "options": [
+                "item == item",
+                "return stack",
+                "stack.append(item)",
+                "pass"
+              ],
+              "correct_answer": "stack.append(item)"
+            },
+            {
+              "id": "stacks-queues-checkpoint-predict",
+              "type": "output_prediction",
+              "question": "Marsh pickers recount crates before dawn. For sliding window with a queue, what value is displayed?",
+              "hints": [
+                "Run the example in your head from the top.",
+                "The last line is what gets displayed.",
+                "3"
+              ],
+              "explanation": "The Unit 2 Checkpoint Stacks Queues program displays that value.",
+              "xp_reward": 10,
+              "starter_code": "stack = []\nfor item in range(3):\n    stack.append(item)\nprint(len(stack))\n",
+              "options": [
+                "0",
+                "none",
+                "5",
+                "3"
+              ],
+              "correct_answer": "3"
+            },
+            {
+              "id": "stacks-queues-checkpoint-order",
+              "type": "ordering",
+              "question": "Marsh pickers recount crates before dawn. For sliding window with a queue, build the line that counts the values pushed on the stack.",
+              "hints": [
+                "Start at the left of the example.",
+                "Keep the example order.",
+                "stack.append(item)"
+              ],
+              "explanation": "append stores one more value.",
+              "xp_reward": 10,
+              "options": [
+                "stack.append(item)",
+                "pop"
+              ],
+              "correct_answer": [
+                "stack.append(item)"
+              ]
+            },
+            {
+              "id": "stacks-queues-checkpoint-fill",
+              "type": "fill_blank",
+              "question": "Marsh pickers recount crates before dawn. For sliding window with a queue, fill the blank so the line counts the values pushed on the stack.",
+              "hints": [
+                "The blank is the missing piece of the example.",
+                "The example uses that piece.",
+                "append"
+              ],
+              "explanation": "append stores one more value.",
+              "xp_reward": 10,
+              "starter_code": "stack.___(item)\n",
+              "options": [
+                "pop",
+                "clear",
+                "append",
+                "sort"
+              ],
+              "correct_answer": "append"
+            },
+            {
+              "id": "stacks-queues-checkpoint-bug",
+              "type": "debugging",
+              "question": "Marsh pickers recount crates before dawn. For sliding window with a queue, which line does a different job than the example?",
+              "hints": [
+                "The other lines match the example.",
+                "One line is the odd one.",
+                "Line 4"
+              ],
+              "explanation": "The print shows the first value instead of the count.",
+              "xp_reward": 10,
+              "starter_code": "stack = []\nfor item in range(3):\n    stack.append(item)\nprint(stack[0])\n",
+              "correct_answer": "4"
+            },
+            {
+              "id": "stacks-queues-checkpoint-predict-2",
+              "type": "output_prediction",
+              "question": "Marsh pickers recount crates before dawn. For sliding window with a queue, what does the second run display?",
+              "hints": [
+                "Apply the same steps to the new value.",
+                "The display comes from the last line.",
+                "5"
+              ],
+              "explanation": "The second Unit 2 Checkpoint Stacks Queues program displays that value.",
+              "xp_reward": 10,
+              "starter_code": "stack = []\nfor item in range(5):\n    stack.append(item)\nprint(len(stack))\n",
+              "options": [
+                "3",
+                "5",
+                "none",
+                "0"
+              ],
+              "correct_answer": "5"
+            },
+            {
+              "id": "stacks-queues-checkpoint-write",
+              "type": "code",
+              "question": "Marsh pickers recount crates before dawn. For sliding window with a queue, fill the blank so the program prints the result.",
+              "hints": [
+                "The blank is the missing piece.",
+                "Print the value that piece produces.",
+                "label = len(stack)"
+              ],
+              "explanation": "The printed value is the result after this step counts the values pushed on the stack.",
+              "xp_reward": 10,
+              "starter_code": "stack = []\nfor item in range(3):\n    stack.append(item)\nlabel = ___\nprint(label)\n",
+              "solution_code": "stack = []\nfor item in range(3):\n    stack.append(item)\nlabel = len(stack)\nprint(label)\n",
+              "tests": [
+                {
+                  "name": "stacks-queues-checkpoint-prints",
+                  "description": "The printed value is the result after this step counts the values pushed on the ",
+                  "expected_stdout": "3\n",
+                  "required": true
+                }
+              ]
+            }
+          ]
+        }
+      ]
     }
   ]
 }

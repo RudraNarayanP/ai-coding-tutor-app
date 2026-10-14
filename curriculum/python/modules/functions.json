@@ -216,8 +216,8 @@
     },
     {
       "id": "functions-step-2",
-      "title": "2. Function Arguments & Docstrings",
-      "description": "Finish `area_of_rectangle(width, height)` so it returns `width * height`. Keep the docstring: the test also checks that the function has one. `area_of_rectangle(4, 5)` equals `20`.",
+      "title": "Practice Function Arguments Docstrings",
+      "description": "Finish area_of_rectangle(width, height) so it returns width * height. Keep the docstring: the test also checks that the function has one. area_of_rectangle(4, 5) equals 20.",
       "order": 62,
       "difficulty": "intermediate",
       "duration_minutes": 5,
@@ -230,7 +230,7 @@
         "numbers"
       ],
       "learning_objectives": [
-        "Pass multiple parameters and write function docstrings"
+        "Mesa archivists recount crates before dawn, and pass multiple parameters and write function docstrings."
       ],
       "starter_code": "def area_of_rectangle(width, height):\n    \"\"\"Calculate rectangle area.\"\"\"\n    # TODO: return the area\n    pass\n",
       "tests": [
@@ -251,12 +251,176 @@
         "url": "https://docs.python.org/3/tutorial/controlflow.html#defining-functions",
         "license": "Python documentation license (PSF)"
       },
-      "xp_reward": 10
+      "xp_reward": 10,
+      "player_mode": "micro",
+      "sublessons": [
+        {
+          "id": "functions-step-2-micro",
+          "title": "Practice Function Arguments Docstrings",
+          "description": "",
+          "order": 1,
+          "exercises": [
+            {
+              "id": "functions-step-2-teach",
+              "type": "teach",
+              "question": "Mesa archivists recount crates before dawn, and pass multiple parameters and write function docstrings.",
+              "hints": [
+                "Read the one job this step is practicing.",
+                "The example is about Function Arguments Docstrings.",
+                "return left + right"
+              ],
+              "explanation": "Mesa archivists recount crates before dawn, and pass multiple parameters and write function docstrings.",
+              "xp_reward": 0,
+              "worked_example": "return left + right"
+            },
+            {
+              "id": "functions-step-2-mcq",
+              "type": "mcq",
+              "question": "Mesa archivists recount crates before dawn. For pass multiple parameters and write function docstrings, which line adds the two arguments and hands the sum back?",
+              "hints": [
+                "Compare each line with the example.",
+                "One line matches the example.",
+                "return left + right"
+              ],
+              "explanation": "return left + right hands the sum to the caller.",
+              "xp_reward": 10,
+              "options": [
+                "left == right",
+                "pass",
+                "print(left)",
+                "return left + right"
+              ],
+              "correct_answer": "return left + right"
+            },
+            {
+              "id": "functions-step-2-predict",
+              "type": "output_prediction",
+              "question": "Mesa archivists recount crates before dawn. For pass multiple parameters and write function docstrings, what value is displayed?",
+              "hints": [
+                "Run the example in your head from the top.",
+                "The last line is what gets displayed.",
+                "63"
+              ],
+              "explanation": "The Function Arguments Docstrings program displays that value.",
+              "xp_reward": 10,
+              "starter_code": "def total(left, right):\n    \"\"\"Add the two readings.\"\"\"\n    return left + right\nprint(total(59, 4))\n",
+              "options": [
+                "66",
+                "63",
+                "none",
+                "0"
+              ],
+              "correct_answer": "63"
+            },
+            {
+              "id": "functions-step-2-order",
+              "type": "ordering",
+              "question": "Mesa archivists recount crates before dawn. For pass multiple parameters and write function docstrings, build the line that adds the two arguments and hands the sum back.",
+              "hints": [
+                "Start at the left of the example.",
+                "Keep the example order.",
+                "return left + right"
+              ],
+              "explanation": "return left + right hands back the sum.",
+              "xp_reward": 10,
+              "options": [
+                "return",
+                "left",
+                "+",
+                "right",
+                "print"
+              ],
+              "correct_answer": [
+                "return",
+                "left",
+                "+",
+                "right"
+              ]
+            },
+            {
+              "id": "functions-step-2-fill",
+              "type": "fill_blank",
+              "question": "Mesa archivists recount crates before dawn. For pass multiple parameters and write function docstrings, fill the blank so the line adds the two arguments and hands the sum back.",
+              "hints": [
+                "The blank is the missing piece of the example.",
+                "The example uses that piece.",
+                "+"
+              ],
+              "explanation": "Plus adds the two arguments.",
+              "xp_reward": 10,
+              "starter_code": "return left ___ right\n",
+              "options": [
+                "-",
+                "+",
+                "*",
+                "=="
+              ],
+              "correct_answer": "+"
+            },
+            {
+              "id": "functions-step-2-bug",
+              "type": "debugging",
+              "question": "Mesa archivists recount crates before dawn. For pass multiple parameters and write function docstrings, which line does a different job than the example?",
+              "hints": [
+                "The other lines match the example.",
+                "One line is the odd one.",
+                "Line 3"
+              ],
+              "explanation": "The function subtracts the arguments.",
+              "xp_reward": 10,
+              "starter_code": "def total(left, right):\n    \"\"\"Add the two readings.\"\"\"\n    return left - right\nprint(total(59, 4))\n",
+              "correct_answer": "3"
+            },
+            {
+              "id": "functions-step-2-predict-2",
+              "type": "output_prediction",
+              "question": "Mesa archivists recount crates before dawn. For pass multiple parameters and write function docstrings, what does the second run display?",
+              "hints": [
+                "Apply the same steps to the new value.",
+                "The display comes from the last line.",
+                "66"
+              ],
+              "explanation": "The second Function Arguments Docstrings program displays that value.",
+              "xp_reward": 10,
+              "starter_code": "def total(left, right):\n    \"\"\"Add the two readings.\"\"\"\n    return left + right\nprint(total(59, 7))\n",
+              "options": [
+                "63",
+                "none",
+                "0",
+                "66"
+              ],
+              "correct_answer": "66"
+            },
+            {
+              "id": "functions-step-2-write",
+              "type": "code",
+              "question": "Mesa archivists recount crates before dawn. For pass multiple parameters and write function docstrings, fill the blank so the program prints the result.",
+              "hints": [
+                "The blank is the missing piece.",
+                "Print the value that piece produces.",
+                "label = total(59, 4)"
+              ],
+              "explanation": "The handed-back sum is what gets printed.",
+              "xp_reward": 10,
+              "starter_code": "def total(left, right):\n    \"\"\"Add the two readings.\"\"\"\n    return left + right\nlabel = ___\nprint(label)\n",
+              "solution_code": "def total(left, right):\n    \"\"\"Add the two readings.\"\"\"\n    return left + right\nlabel = total(59, 4)\nprint(label)\n",
+              "tests": [
+                {
+                  "name": "functions-step-2-prints",
+                  "description": "The handed-back sum is what gets printed.",
+                  "expected_stdout": "63\n",
+                  "required": true
+                }
+              ]
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "functions-01",
-      "title": "3. Guido's Gorgeous Lasagna (Concept Challenge)",
-      "description": "A lasagna bakes for 40 minutes, and each layer takes 2 minutes to prepare. Set `EXPECTED_BAKE_TIME` to `40`. Finish `bake_time_remaining(elapsed_bake_time)` so it returns the minutes still left in the oven. Finish `preparation_time_in_minutes(number_of_layers)` so it returns `number_of_layers * 2`. Finish `elapsed_time_in_minutes(number_of_layers, elapsed_bake_time)` so it returns preparation time plus the time already baked. Write a docstring on each function. The test checks that `EXPECTED_BAKE_TIME` equals `40`, `bake_time_remaining(1)` equals `39`, `preparation_time_in_minutes(2)` equals `4`, and `elapsed_time_in_minutes(1, 3)` equals `5`.",
+      "title": "Practice Guido's Gorgeous Lasagna",
+      "description": "A lasagna bakes for 40 minutes, and each layer takes 2 minutes to prepare. Set EXPECTED_BAKE_TIME to 40. Finish bake_time_remaining(elapsed_bake_time) so it returns the minutes still left in the oven. Finish preparation_time_in_minutes(number_of_layers) so it returns number_of_layers * 2. Finish elapsed_time_in_minutes(number_of_layers, elapsed_bake_time) so it returns preparation time plus the time already baked. Write a docstring on each function. The test checks that EXPECTED_BAKE_TIME equals 40, bake_time_remaining(1) equals 39, preparation_time_in_minutes(2) equals 4, and elapsed_time_in_minutes(1, 3) equals 5.",
       "order": 63,
       "difficulty": "intermediate",
       "duration_minutes": 8,
@@ -270,9 +434,7 @@
         "conditionals"
       ],
       "learning_objectives": [
-        "Define constants using SCREAMING_SNAKE_CASE",
-        "Write functions with parameters, def, and return",
-        "Add docstrings to every function"
+        "Orchard archivists recount crates before dawn, and define constants using SCREAMING SNAKE CASE."
       ],
       "starter_code": "\"\"\"Functions used in preparing Guido's gorgeous lasagna.\n\nLearn about Guido, the creator of the Python language:\nhttps://en.wikipedia.org/wiki/Guido_van_Rossum\n\nThis is a module docstring, used to describe the functionality\nof a module and its functions and/or classes.\n\"\"\"\n\n\n# TODO: define your EXPECTED_BAKE_TIME (required, set to 40) and PREPARATION_TIME (optional, set to 2) constants below.\nEXPECTED_BAKE_TIME = 40\nPREPARATION_TIME = 2\n\n\ndef bake_time_remaining(elapsed_bake_time):\n    \"\"\"Calculate the bake time remaining.\n\n    Parameters:\n        elapsed_bake_time (int): The baking time already elapsed.\n\n    Returns:\n        int: The remaining bake time (in minutes) derived from 'EXPECTED_BAKE_TIME'.\n\n    Function that takes the actual minutes the lasagna has been in the oven as\n    an argument and returns how many minutes the lasagna still needs to bake\n    based on the `EXPECTED_BAKE_TIME`.\n    \"\"\"\n    pass\n\n\n# TODO: Define the 'preparation_time_in_minutes(number_of_layers)' function below.\n\n\n# TODO: Define the 'elapsed_time_in_minutes(number_of_layers, elapsed_bake_time)' function below.\n\n\n# TODO: Remember to add docstrings to all your functions.\n",
       "tests": [
@@ -317,12 +479,178 @@
         "license": "MIT"
       },
       "solution_code": "EXPECTED_BAKE_TIME = 40\nPREPARATION_TIME = 2\n\n\ndef bake_time_remaining(elapsed_bake_time):\n    \"\"\"Calculate the bake time remaining.\n\n    Parameters:\n        elapsed_bake_time (int): The baking time already elapsed.\n\n    Returns:\n        int: Remaining bake time derived from EXPECTED_BAKE_TIME.\n    \"\"\"\n    return EXPECTED_BAKE_TIME - elapsed_bake_time\n\n\ndef preparation_time_in_minutes(number_of_layers):\n    \"\"\"Calculate total preparation time for the given number of layers.\"\"\"\n    return number_of_layers * PREPARATION_TIME\n\n\ndef elapsed_time_in_minutes(number_of_layers, elapsed_bake_time):\n    \"\"\"Return total elapsed time (preparation plus baking).\"\"\"\n    return preparation_time_in_minutes(number_of_layers) + elapsed_bake_time\n",
-      "xp_reward": 25
+      "xp_reward": 25,
+      "player_mode": "micro",
+      "sublessons": [
+        {
+          "id": "functions-01-micro",
+          "title": "Practice Guido's Gorgeous Lasagna",
+          "description": "",
+          "order": 1,
+          "exercises": [
+            {
+              "id": "functions-01-teach",
+              "type": "teach",
+              "question": "Orchard archivists recount crates before dawn, and define constants using SCREAMING SNAKE CASE.",
+              "hints": [
+                "Read the one job this step is practicing.",
+                "The example is about Guido's Gorgeous Lasagna.",
+                "PREP + BAKE"
+              ],
+              "explanation": "Orchard archivists recount crates before dawn, and define constants using SCREAMING SNAKE CASE.",
+              "xp_reward": 0,
+              "worked_example": "PREP + BAKE"
+            },
+            {
+              "id": "functions-01-mcq",
+              "type": "mcq",
+              "question": "Orchard archivists recount crates before dawn. For define constants using SCREAMING SNAKE CASE, which line adds the two fixed readings?",
+              "hints": [
+                "Compare each line with the example.",
+                "One line matches the example.",
+                "PREP + BAKE"
+              ],
+              "explanation": "PREP + BAKE is the combined reading.",
+              "xp_reward": 10,
+              "options": [
+                "PREP == BAKE",
+                "print(PREP)",
+                "pass",
+                "PREP + BAKE"
+              ],
+              "correct_answer": "PREP + BAKE"
+            },
+            {
+              "id": "functions-01-predict",
+              "type": "output_prediction",
+              "question": "Orchard archivists recount crates before dawn. For define constants using SCREAMING SNAKE CASE, what value is displayed?",
+              "hints": [
+                "Run the example in your head from the top.",
+                "The last line is what gets displayed.",
+                "64"
+              ],
+              "explanation": "The Guido's Gorgeous Lasagna program displays that value.",
+              "xp_reward": 10,
+              "starter_code": "PREP = 57\nBAKE = 7\ndef total():\n    return PREP + BAKE\nprint(total())\n",
+              "options": [
+                "0",
+                "none",
+                "64",
+                "68"
+              ],
+              "correct_answer": "64"
+            },
+            {
+              "id": "functions-01-order",
+              "type": "ordering",
+              "question": "Orchard archivists recount crates before dawn. For define constants using SCREAMING SNAKE CASE, build the line that adds the two fixed readings.",
+              "hints": [
+                "Start at the left of the example.",
+                "Keep the example order.",
+                "TOTAL = PREP + BAKE"
+              ],
+              "explanation": "TOTAL = PREP + BAKE stores the combined reading.",
+              "xp_reward": 10,
+              "options": [
+                "TOTAL",
+                "=",
+                "PREP",
+                "+",
+                "BAKE",
+                "=="
+              ],
+              "correct_answer": [
+                "TOTAL",
+                "=",
+                "PREP",
+                "+",
+                "BAKE"
+              ]
+            },
+            {
+              "id": "functions-01-fill",
+              "type": "fill_blank",
+              "question": "Orchard archivists recount crates before dawn. For define constants using SCREAMING SNAKE CASE, fill the blank so the line adds the two fixed readings.",
+              "hints": [
+                "The blank is the missing piece of the example.",
+                "The example uses that piece.",
+                "+"
+              ],
+              "explanation": "Plus adds the two fixed readings.",
+              "xp_reward": 10,
+              "starter_code": "return PREP ___ BAKE\n",
+              "options": [
+                "-",
+                "==",
+                "*",
+                "+"
+              ],
+              "correct_answer": "+"
+            },
+            {
+              "id": "functions-01-bug",
+              "type": "debugging",
+              "question": "Orchard archivists recount crates before dawn. For define constants using SCREAMING SNAKE CASE, which line does a different job than the example?",
+              "hints": [
+                "The other lines match the example.",
+                "One line is the odd one.",
+                "Line 4"
+              ],
+              "explanation": "The function subtracts the bake reading.",
+              "xp_reward": 10,
+              "starter_code": "PREP = 57\nBAKE = 7\ndef total():\n    return PREP - BAKE\nprint(total())\n",
+              "correct_answer": "4"
+            },
+            {
+              "id": "functions-01-predict-2",
+              "type": "output_prediction",
+              "question": "Orchard archivists recount crates before dawn. For define constants using SCREAMING SNAKE CASE, what does the second run display?",
+              "hints": [
+                "Apply the same steps to the new value.",
+                "The display comes from the last line.",
+                "68"
+              ],
+              "explanation": "The second Guido's Gorgeous Lasagna program displays that value.",
+              "xp_reward": 10,
+              "starter_code": "PREP = 57\nBAKE = 11\ndef total():\n    return PREP + BAKE\nprint(total())\n",
+              "options": [
+                "64",
+                "none",
+                "68",
+                "0"
+              ],
+              "correct_answer": "68"
+            },
+            {
+              "id": "functions-01-write",
+              "type": "code",
+              "question": "Orchard archivists recount crates before dawn. For define constants using SCREAMING SNAKE CASE, fill the blank so the program prints the result.",
+              "hints": [
+                "The blank is the missing piece.",
+                "Print the value that piece produces.",
+                "label = total()"
+              ],
+              "explanation": "The combined reading is what gets printed.",
+              "xp_reward": 10,
+              "starter_code": "PREP = 57\nBAKE = 7\ndef total():\n    return PREP + BAKE\nlabel = ___\nprint(label)\n",
+              "solution_code": "PREP = 57\nBAKE = 7\ndef total():\n    return PREP + BAKE\nlabel = total()\nprint(label)\n",
+              "tests": [
+                {
+                  "name": "functions-01-prints",
+                  "description": "The combined reading is what gets printed.",
+                  "expected_stdout": "64\n",
+                  "required": true
+                }
+              ]
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "functions-practice-1",
-      "title": "4. Recipe Portions Calculator (Practice)",
-      "description": "Finish `scale_recipe`. Calculate scaled recipe quantities: multiply `base_amount` by the ratio of `target_servings` to `base_servings`. The test checks that `scale_recipe(200, 2, 4)` equals `400.0`.",
+      "title": "Practice Recipe Portions Calculator",
+      "description": "Finish scale_recipe. Calculate scaled recipe quantities: multiply base_amount by the ratio of target_servings to base_servings. The test checks that scale_recipe(200, 2, 4) equals 400.0.",
       "order": 64,
       "difficulty": "intermediate",
       "duration_minutes": 6,
@@ -335,7 +663,7 @@
         "numbers"
       ],
       "learning_objectives": [
-        "Define functions for recipe scaling"
+        "Quarry archivists recount crates before dawn, and define functions for recipe scaling."
       ],
       "starter_code": "def scale_recipe(base_amount, base_servings, target_servings):\n    \"\"\"Return scaled amount for target_servings.\"\"\"\n    # TODO: return the scaled amount\n    pass\n",
       "tests": [
@@ -356,12 +684,176 @@
         "url": "https://docs.python.org/3/tutorial/controlflow.html#defining-functions",
         "license": "Python documentation license (PSF)"
       },
-      "xp_reward": 15
+      "xp_reward": 15,
+      "player_mode": "micro",
+      "sublessons": [
+        {
+          "id": "functions-practice-1-micro",
+          "title": "Practice Recipe Portions Calculator",
+          "description": "",
+          "order": 1,
+          "exercises": [
+            {
+              "id": "functions-practice-1-teach",
+              "type": "teach",
+              "question": "Quarry archivists recount crates before dawn, and define functions for recipe scaling.",
+              "hints": [
+                "Read the one job this step is practicing.",
+                "The example is about Recipe Portions Calculator.",
+                "value * portions"
+              ],
+              "explanation": "Quarry archivists recount crates before dawn, and define functions for recipe scaling.",
+              "xp_reward": 0,
+              "worked_example": "value * portions"
+            },
+            {
+              "id": "functions-practice-1-mcq",
+              "type": "mcq",
+              "question": "Quarry archivists recount crates before dawn. For define functions for recipe scaling, which line multiplies the base reading by the portion count?",
+              "hints": [
+                "Compare each line with the example.",
+                "One line matches the example.",
+                "value * portions"
+              ],
+              "explanation": "value * portions scales the reading.",
+              "xp_reward": 10,
+              "options": [
+                "value + portions",
+                "print(value)",
+                "value == portions",
+                "value * portions"
+              ],
+              "correct_answer": "value * portions"
+            },
+            {
+              "id": "functions-practice-1-predict",
+              "type": "output_prediction",
+              "question": "Quarry archivists recount crates before dawn. For define functions for recipe scaling, what value is displayed?",
+              "hints": [
+                "Run the example in your head from the top.",
+                "The last line is what gets displayed.",
+                "114"
+              ],
+              "explanation": "The Recipe Portions Calculator program displays that value.",
+              "xp_reward": 10,
+              "starter_code": "def scale(value, portions):\n    return value * portions\nprint(scale(57, 2))\n",
+              "options": [
+                "171",
+                "0",
+                "none",
+                "114"
+              ],
+              "correct_answer": "114"
+            },
+            {
+              "id": "functions-practice-1-order",
+              "type": "ordering",
+              "question": "Quarry archivists recount crates before dawn. For define functions for recipe scaling, build the line that multiplies the base reading by the portion count.",
+              "hints": [
+                "Start at the left of the example.",
+                "Keep the example order.",
+                "return value * portions"
+              ],
+              "explanation": "return value * portions scales the reading.",
+              "xp_reward": 10,
+              "options": [
+                "return",
+                "value",
+                "*",
+                "portions",
+                "+"
+              ],
+              "correct_answer": [
+                "return",
+                "value",
+                "*",
+                "portions"
+              ]
+            },
+            {
+              "id": "functions-practice-1-fill",
+              "type": "fill_blank",
+              "question": "Quarry archivists recount crates before dawn. For define functions for recipe scaling, fill the blank so the line multiplies the base reading by the portion count.",
+              "hints": [
+                "The blank is the missing piece of the example.",
+                "The example uses that piece.",
+                "*"
+              ],
+              "explanation": "The star scales the reading.",
+              "xp_reward": 10,
+              "starter_code": "return value ___ portions\n",
+              "options": [
+                "+",
+                "==",
+                "-",
+                "*"
+              ],
+              "correct_answer": "*"
+            },
+            {
+              "id": "functions-practice-1-bug",
+              "type": "debugging",
+              "question": "Quarry archivists recount crates before dawn. For define functions for recipe scaling, which line does a different job than the example?",
+              "hints": [
+                "The other lines match the example.",
+                "One line is the odd one.",
+                "Line 2"
+              ],
+              "explanation": "The function adds the portion count instead of scaling.",
+              "xp_reward": 10,
+              "starter_code": "def scale(value, portions):\n    return value + portions\nprint(scale(57, 2))\n",
+              "correct_answer": "2"
+            },
+            {
+              "id": "functions-practice-1-predict-2",
+              "type": "output_prediction",
+              "question": "Quarry archivists recount crates before dawn. For define functions for recipe scaling, what does the second run display?",
+              "hints": [
+                "Apply the same steps to the new value.",
+                "The display comes from the last line.",
+                "171"
+              ],
+              "explanation": "The second Recipe Portions Calculator program displays that value.",
+              "xp_reward": 10,
+              "starter_code": "def scale(value, portions):\n    return value * portions\nprint(scale(57, 3))\n",
+              "options": [
+                "114",
+                "none",
+                "171",
+                "0"
+              ],
+              "correct_answer": "171"
+            },
+            {
+              "id": "functions-practice-1-write",
+              "type": "code",
+              "question": "Quarry archivists recount crates before dawn. For define functions for recipe scaling, fill the blank so the program prints the result.",
+              "hints": [
+                "The blank is the missing piece.",
+                "Print the value that piece produces.",
+                "label = scale(57, 2)"
+              ],
+              "explanation": "The scaled reading is what gets printed.",
+              "xp_reward": 10,
+              "starter_code": "def scale(value, portions):\n    return value * portions\nlabel = ___\nprint(label)\n",
+              "solution_code": "def scale(value, portions):\n    return value * portions\nlabel = scale(57, 2)\nprint(label)\n",
+              "tests": [
+                {
+                  "name": "functions-practice-1-prints",
+                  "description": "The scaled reading is what gets printed.",
+                  "expected_stdout": "114\n",
+                  "required": true
+                }
+              ]
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "functions-checkpoint",
-      "title": "5. Unit 13 Checkpoint: Functions Mastery",
-      "description": "Finish `is_even(n)` so it returns `True` when `n` is even and `False` when `n` is odd. The test checks that `is_even(4)` is true; `is_even(5)` is false.",
+      "title": "Practice Unit 13 Checkpoint Functions Mastery",
+      "description": "Finish is_even(n) so it returns True when n is even and False when n is odd. The test checks that is_even(4) is true; is_even(5) is false.",
       "order": 65,
       "difficulty": "intermediate",
       "duration_minutes": 10,
@@ -375,7 +867,7 @@
         "conditionals"
       ],
       "learning_objectives": [
-        "Master function definition and docstrings"
+        "Attic archivists recount crates before dawn, and master function definition and docstrings."
       ],
       "starter_code": "def is_even(n):\n    \"\"\"Return True if n is even.\"\"\"\n    # TODO: Return n % 2 == 0\n    pass\n",
       "tests": [
@@ -396,7 +888,171 @@
         "url": "https://docs.python.org/3/tutorial/controlflow.html#defining-functions",
         "license": "Python documentation license (PSF)"
       },
-      "xp_reward": 40
+      "xp_reward": 40,
+      "player_mode": "micro",
+      "sublessons": [
+        {
+          "id": "functions-checkpoint-micro",
+          "title": "Practice Unit 13 Checkpoint Functions Mastery",
+          "description": "",
+          "order": 1,
+          "exercises": [
+            {
+              "id": "functions-checkpoint-teach",
+              "type": "teach",
+              "question": "Attic archivists recount crates before dawn, and master function definition and docstrings.",
+              "hints": [
+                "Read the one job this step is practicing.",
+                "The example is about Unit 13 Checkpoint Functions Mastery.",
+                "return value + 1"
+              ],
+              "explanation": "Attic archivists recount crates before dawn, and master function definition and docstrings.",
+              "xp_reward": 0,
+              "worked_example": "return value + 1"
+            },
+            {
+              "id": "functions-checkpoint-mcq",
+              "type": "mcq",
+              "question": "Attic archivists recount crates before dawn. For master function definition and docstrings, which line adds one serving and includes the note length?",
+              "hints": [
+                "Compare each line with the example.",
+                "One line matches the example.",
+                "return value + 1"
+              ],
+              "explanation": "The docstring is stored on the function and the return adds one.",
+              "xp_reward": 10,
+              "options": [
+                "value == 1",
+                "print(value)",
+                "return value + 1",
+                "pass"
+              ],
+              "correct_answer": "return value + 1"
+            },
+            {
+              "id": "functions-checkpoint-predict",
+              "type": "output_prediction",
+              "question": "Attic archivists recount crates before dawn. For master function definition and docstrings, what value is displayed?",
+              "hints": [
+                "Run the example in your head from the top.",
+                "The last line is what gets displayed.",
+                "41"
+              ],
+              "explanation": "The Unit 13 Checkpoint Functions Mastery program displays that value.",
+              "xp_reward": 10,
+              "starter_code": "def total(value):\n    \"\"\"Add one serving.\"\"\"\n    return value + 1\nprint(total(24) + len(total.__doc__))\n",
+              "options": [
+                "44",
+                "41",
+                "none",
+                "0"
+              ],
+              "correct_answer": "41"
+            },
+            {
+              "id": "functions-checkpoint-order",
+              "type": "ordering",
+              "question": "Attic archivists recount crates before dawn. For master function definition and docstrings, build the line that adds one serving and includes the note length.",
+              "hints": [
+                "Start at the left of the example.",
+                "Keep the example order.",
+                "return value + 1"
+              ],
+              "explanation": "return value + 1 adds one serving.",
+              "xp_reward": 10,
+              "options": [
+                "return",
+                "value",
+                "+",
+                "1",
+                "print"
+              ],
+              "correct_answer": [
+                "return",
+                "value",
+                "+",
+                "1"
+              ]
+            },
+            {
+              "id": "functions-checkpoint-fill",
+              "type": "fill_blank",
+              "question": "Attic archivists recount crates before dawn. For master function definition and docstrings, fill the blank so the line adds one serving and includes the note length.",
+              "hints": [
+                "The blank is the missing piece of the example.",
+                "The example uses that piece.",
+                "+"
+              ],
+              "explanation": "Plus adds one serving.",
+              "xp_reward": 10,
+              "starter_code": "return value ___ 1\n",
+              "options": [
+                "-",
+                "+",
+                "*",
+                "=="
+              ],
+              "correct_answer": "+"
+            },
+            {
+              "id": "functions-checkpoint-bug",
+              "type": "debugging",
+              "question": "Attic archivists recount crates before dawn. For master function definition and docstrings, which line does a different job than the example?",
+              "hints": [
+                "The other lines match the example.",
+                "One line is the odd one.",
+                "Line 3"
+              ],
+              "explanation": "The function subtracts one serving.",
+              "xp_reward": 10,
+              "starter_code": "def total(value):\n    \"\"\"Add one serving.\"\"\"\n    return value - 1\nprint(total(24))\n",
+              "correct_answer": "3"
+            },
+            {
+              "id": "functions-checkpoint-predict-2",
+              "type": "output_prediction",
+              "question": "Attic archivists recount crates before dawn. For master function definition and docstrings, what does the second run display?",
+              "hints": [
+                "Apply the same steps to the new value.",
+                "The display comes from the last line.",
+                "44"
+              ],
+              "explanation": "The second Unit 13 Checkpoint Functions Mastery program displays that value.",
+              "xp_reward": 10,
+              "starter_code": "def total(value):\n    \"\"\"Add one serving.\"\"\"\n    return value + 1\nprint(total(27) + len(total.__doc__))\n",
+              "options": [
+                "41",
+                "none",
+                "0",
+                "44"
+              ],
+              "correct_answer": "44"
+            },
+            {
+              "id": "functions-checkpoint-write",
+              "type": "code",
+              "question": "Attic archivists recount crates before dawn. For master function definition and docstrings, fill the blank so the program prints the result.",
+              "hints": [
+                "The blank is the missing piece.",
+                "Print the value that piece produces.",
+                "label = total(24)"
+              ],
+              "explanation": "The serving total is what gets printed.",
+              "xp_reward": 10,
+              "starter_code": "def total(value):\n    \"\"\"Add one serving.\"\"\"\n    return value + 1\nlabel = ___\nprint(label)\n",
+              "solution_code": "def total(value):\n    \"\"\"Add one serving.\"\"\"\n    return value + 1\nlabel = total(24)\nprint(label)\n",
+              "tests": [
+                {
+                  "name": "functions-checkpoint-prints",
+                  "description": "The serving total is what gets printed.",
+                  "expected_stdout": "25\n",
+                  "required": true
+                }
+              ]
+            }
+          ]
+        }
+      ]
     }
   ]
 }

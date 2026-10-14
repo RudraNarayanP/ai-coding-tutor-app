@@ -14,8 +14,8 @@
   "lessons": [
     {
       "id": "metrics-mae",
-      "title": "1. MAE",
-      "description": "Implement `mae(y_true, y_pred)` returning the mean of the absolute differences (mean absolute error). The test checks mae([1, 3], [2, 3]) == 0.5.",
+      "title": "Practice MAE",
+      "description": "Implement mae(y_true, y_pred) returning the mean of the absolute differences (mean absolute error). The test checks mae([1, 3], [2, 3]) == 0.5.",
       "order": 11,
       "difficulty": "intermediate",
       "duration_minutes": 5,
@@ -27,7 +27,7 @@
       ],
       "prerequisites": [],
       "learning_objectives": [
-        "Compute mean absolute error"
+        "Harbor potters recount crates before dawn, and compute mean absolute error."
       ],
       "starter_code": "def mae(y_true, y_pred):\n    # TODO\n    pass\n",
       "solution_code": "def mae(y_true, y_pred):\n    return sum(abs(a - b) for a, b in zip(y_true, y_pred)) / len(y_true)\n",
@@ -48,12 +48,182 @@
         "url": "https://scikit-learn.org/stable/modules/model_evaluation.html",
         "license": "BSD 3-Clause (scikit-learn documentation)"
       },
-      "xp_reward": 10
+      "xp_reward": 10,
+      "player_mode": "micro",
+      "sublessons": [
+        {
+          "id": "metrics-mae-micro",
+          "title": "Practice MAE",
+          "description": "",
+          "order": 1,
+          "exercises": [
+            {
+              "id": "metrics-mae-teach",
+              "type": "teach",
+              "question": "Harbor potters recount crates before dawn, and compute mean absolute error.",
+              "hints": [
+                "Read the one job this step is practicing.",
+                "The example is about MAE.",
+                "abs(item)"
+              ],
+              "explanation": "Harbor potters recount crates before dawn, and compute mean absolute error.",
+              "xp_reward": 0,
+              "worked_example": "abs(item)"
+            },
+            {
+              "id": "metrics-mae-mcq",
+              "type": "mcq",
+              "question": "Harbor potters recount crates before dawn. For compute mean absolute error, which line averages the absolute errors?",
+              "hints": [
+                "Compare each line with the example.",
+                "One line matches the example.",
+                "abs(item)"
+              ],
+              "explanation": "Mean absolute error averages the absolute gaps.",
+              "xp_reward": 10,
+              "options": [
+                "item == item",
+                "return errors",
+                "abs(item)",
+                "pass"
+              ],
+              "correct_answer": "abs(item)"
+            },
+            {
+              "id": "metrics-mae-predict",
+              "type": "output_prediction",
+              "question": "Harbor potters recount crates before dawn. For compute mean absolute error, what value is displayed?",
+              "hints": [
+                "Run the example in your head from the top.",
+                "The last line is what gets displayed.",
+                "2"
+              ],
+              "explanation": "The MAE program displays that value.",
+              "xp_reward": 10,
+              "starter_code": "errors = [1, -3]\nprint(sum(abs(item) for item in errors) // len(errors))\n",
+              "options": [
+                "3",
+                "0",
+                "2",
+                "none"
+              ],
+              "correct_answer": "2"
+            },
+            {
+              "id": "metrics-mae-order",
+              "type": "ordering",
+              "question": "Harbor potters recount crates before dawn. For compute mean absolute error, build the line that averages the absolute errors.",
+              "hints": [
+                "Start at the left of the example.",
+                "Keep the example order.",
+                "total = sum(abs(item) for item in errors)"
+              ],
+              "explanation": "Mean absolute error averages the absolute gaps.",
+              "xp_reward": 10,
+              "options": [
+                "total",
+                "=",
+                "sum(abs(item)",
+                "for",
+                "item",
+                "in",
+                "errors)",
+                "max"
+              ],
+              "correct_answer": [
+                "total",
+                "=",
+                "sum(abs(item)",
+                "for",
+                "item",
+                "in",
+                "errors)"
+              ]
+            },
+            {
+              "id": "metrics-mae-fill",
+              "type": "fill_blank",
+              "question": "Harbor potters recount crates before dawn. Choose the match for this step, using linen.",
+              "hints": [
+                "The blank is the missing piece of the example.",
+                "The example uses that piece.",
+                "abs"
+              ],
+              "explanation": "Mean absolute error averages the absolute gaps.",
+              "xp_reward": 10,
+              "starter_code": "gap = ___(item)\n",
+              "options": [
+                "int",
+                "round",
+                "abs",
+                "len"
+              ],
+              "correct_answer": "abs"
+            },
+            {
+              "id": "metrics-mae-bug",
+              "type": "debugging",
+              "question": "Harbor potters recount crates before dawn. For compute mean absolute error, which line does a different job than the example?",
+              "hints": [
+                "The other lines match the example.",
+                "One line is the odd one.",
+                "Line 2"
+              ],
+              "explanation": "The signed errors cancel instead of becoming distances.",
+              "xp_reward": 10,
+              "starter_code": "errors = [1, -3]\nprint(sum(errors) // len(errors))\n",
+              "correct_answer": "2"
+            },
+            {
+              "id": "metrics-mae-predict-2",
+              "type": "output_prediction",
+              "question": "Harbor potters recount crates before dawn. For compute mean absolute error, what does the second run display?",
+              "hints": [
+                "Apply the same steps to the new value.",
+                "The display comes from the last line.",
+                "3"
+              ],
+              "explanation": "The second MAE program displays that value.",
+              "xp_reward": 10,
+              "starter_code": "errors = [2, -4]\nprint(sum(abs(item) for item in errors) // len(errors))\n",
+              "options": [
+                "2",
+                "3",
+                "none",
+                "0"
+              ],
+              "correct_answer": "3"
+            },
+            {
+              "id": "metrics-mae-write",
+              "type": "code",
+              "question": "Harbor potters recount crates before dawn. For compute mean absolute error, fill the blank so the program prints the result.",
+              "hints": [
+                "The blank is the missing piece.",
+                "Print the value that piece produces.",
+                "label = sum(abs(item) for item in errors) // len(errors)"
+              ],
+              "explanation": "The printed value is the result after this step averages the absolute errors.",
+              "xp_reward": 10,
+              "starter_code": "errors = [1, -3]\nlabel = ___\nprint(label)\n",
+              "solution_code": "errors = [1, -3]\nlabel = sum(abs(item) for item in errors) // len(errors)\nprint(label)\n",
+              "tests": [
+                {
+                  "name": "metrics-mae-prints",
+                  "description": "The printed value is the result after this step averages the absolute errors.",
+                  "expected_stdout": "2\n",
+                  "required": true
+                }
+              ]
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "metrics-bce",
-      "title": "2. Binary Cross-Entropy",
-      "description": "Implement `bce(y, p)` for single label y in {0,1} and prob p clipped to [1e-9, 1-1e-9]. The test checks that `bce(1, 0.8)` equals `-__import__('math').log(0.8)`.",
+      "title": "Practice Binary Cross-Entropy",
+      "description": "Implement bce(y, p) for single label y in {0,1} and prob p clipped to [1e-9, 1-1e-9]. The test checks that bce(1, 0.8) equals -__import__('math').log(0.8).",
       "order": 12,
       "difficulty": "intermediate",
       "duration_minutes": 5,
@@ -65,7 +235,7 @@
       ],
       "prerequisites": [],
       "learning_objectives": [
-        "Compute binary cross-entropy"
+        "Mesa potters recount crates before dawn, and compute binary cross-entropy."
       ],
       "starter_code": "import math\n\ndef bce(y, p):\n    # TODO\n    pass\n",
       "solution_code": "import math\n\ndef bce(y, p):\n    p = min(max(p, 1e-9), 1 - 1e-9)\n    return -(y * math.log(p) + (1 - y) * math.log(1 - p))\n",
@@ -86,12 +256,174 @@
         "url": "https://developers.google.com/machine-learning/crash-course/logistic-regression/loss-regularization",
         "license": "CC BY 4.0 (Google Machine Learning Crash Course)"
       },
-      "xp_reward": 10
+      "xp_reward": 10,
+      "player_mode": "micro",
+      "sublessons": [
+        {
+          "id": "metrics-bce-micro",
+          "title": "Practice Binary Cross-Entropy",
+          "description": "",
+          "order": 1,
+          "exercises": [
+            {
+              "id": "metrics-bce-teach",
+              "type": "teach",
+              "question": "Mesa potters recount crates before dawn, and compute binary cross-entropy.",
+              "hints": [
+                "Read the one job this step is practicing.",
+                "The example is about Binary Cross-Entropy.",
+                "-math.log(0.8)"
+              ],
+              "explanation": "Mesa potters recount crates before dawn, and compute binary cross-entropy.",
+              "xp_reward": 0,
+              "worked_example": "-math.log(0.8)"
+            },
+            {
+              "id": "metrics-bce-mcq",
+              "type": "mcq",
+              "question": "Mesa potters recount crates before dawn. For compute binary cross-entropy, which line reads the penalty of a confident wrong chance?",
+              "hints": [
+                "Compare each line with the example.",
+                "One line matches the example.",
+                "-math.log(0.8)"
+              ],
+              "explanation": "Binary cross-entropy uses the negative log of the predicted chance.",
+              "xp_reward": 10,
+              "options": [
+                "math == math",
+                "return 0",
+                "-math.log(0.8)",
+                "pass"
+              ],
+              "correct_answer": "-math.log(0.8)"
+            },
+            {
+              "id": "metrics-bce-predict",
+              "type": "output_prediction",
+              "question": "Mesa potters recount crates before dawn. For compute binary cross-entropy, what value is displayed?",
+              "hints": [
+                "Run the example in your head from the top.",
+                "The last line is what gets displayed.",
+                "0.22"
+              ],
+              "explanation": "The Binary Cross-Entropy program displays that value.",
+              "xp_reward": 10,
+              "starter_code": "import math\nprint(round(-math.log(0.8), 2))\n",
+              "options": [
+                "0.51",
+                "none",
+                "0.22",
+                "0"
+              ],
+              "correct_answer": "0.22"
+            },
+            {
+              "id": "metrics-bce-order",
+              "type": "ordering",
+              "question": "Mesa potters recount crates before dawn. For compute binary cross-entropy, build the line that reads the penalty of a confident wrong chance.",
+              "hints": [
+                "Start at the left of the example.",
+                "Keep the example order.",
+                "loss = -math.log(0.8)"
+              ],
+              "explanation": "Binary cross-entropy uses the negative log of the predicted chance.",
+              "xp_reward": 10,
+              "options": [
+                "loss",
+                "=",
+                "-math.log(0.8)",
+                "+"
+              ],
+              "correct_answer": [
+                "loss",
+                "=",
+                "-math.log(0.8)"
+              ]
+            },
+            {
+              "id": "metrics-bce-fill",
+              "type": "fill_blank",
+              "question": "Mesa potters recount crates before dawn. Choose the match for this step, using quartz.",
+              "hints": [
+                "The blank is the missing piece of the example.",
+                "The example uses that piece.",
+                "-"
+              ],
+              "explanation": "Binary cross-entropy uses the negative log of the predicted chance.",
+              "xp_reward": 10,
+              "starter_code": "loss = ___math.log(0.8)\n",
+              "options": [
+                "+",
+                "*",
+                "-",
+                "/"
+              ],
+              "correct_answer": "-"
+            },
+            {
+              "id": "metrics-bce-bug",
+              "type": "debugging",
+              "question": "Mesa potters recount crates before dawn. For compute binary cross-entropy, which line does a different job than the example?",
+              "hints": [
+                "The other lines match the example.",
+                "One line is the odd one.",
+                "Line 2"
+              ],
+              "explanation": "The print drops the leading minus, so the penalty has the wrong sign.",
+              "xp_reward": 10,
+              "starter_code": "import math\nprint(round(math.log(0.8), 2))\n",
+              "correct_answer": "2"
+            },
+            {
+              "id": "metrics-bce-predict-2",
+              "type": "output_prediction",
+              "question": "Mesa potters recount crates before dawn. For compute binary cross-entropy, what does the second run display?",
+              "hints": [
+                "Apply the same steps to the new value.",
+                "The display comes from the last line.",
+                "0.51"
+              ],
+              "explanation": "The second Binary Cross-Entropy program displays that value.",
+              "xp_reward": 10,
+              "starter_code": "import math\nprint(round(-math.log(0.6), 2))\n",
+              "options": [
+                "0.22",
+                "0.51",
+                "none",
+                "0"
+              ],
+              "correct_answer": "0.51"
+            },
+            {
+              "id": "metrics-bce-write",
+              "type": "code",
+              "question": "Mesa potters recount crates before dawn. For compute binary cross-entropy, fill the blank so the program prints the result.",
+              "hints": [
+                "The blank is the missing piece.",
+                "Print the value that piece produces.",
+                "label = round(-math.log(0.8), 2)"
+              ],
+              "explanation": "The printed value is the result after this step reads the penalty of a confident wrong chance.",
+              "xp_reward": 10,
+              "starter_code": "import math\nlabel = ___\nprint(label)\n",
+              "solution_code": "import math\nlabel = round(-math.log(0.8), 2)\nprint(label)\n",
+              "tests": [
+                {
+                  "name": "metrics-bce-prints",
+                  "description": "The printed value is the result after this step reads the penalty of a confident",
+                  "expected_stdout": "0.22\n",
+                  "required": true
+                }
+              ]
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "metrics-f1",
-      "title": "3. F1 Score",
-      "description": "Implement `f1(precision, recall)`. Return 0 if both 0. The test checks that `f1(0, 0)` equals `0.0`; `f1(0.5, 0.5)` equals `0.5`.",
+      "title": "Practice F1 Score",
+      "description": "Implement f1(precision, recall). Return 0 if both 0. The test checks that f1(0, 0) equals 0.0; f1(0.5, 0.5) equals 0.5.",
       "order": 13,
       "difficulty": "intermediate",
       "duration_minutes": 8,
@@ -103,7 +435,7 @@
       ],
       "prerequisites": [],
       "learning_objectives": [
-        "Compute F1 from precision/recall"
+        "Orchard potters recount crates before dawn, and compute F1 from precision recall."
       ],
       "starter_code": "def f1(precision, recall):\n    # TODO\n    pass\n",
       "solution_code": "def f1(precision, recall):\n    if precision + recall == 0:\n        return 0.0\n    return 2 * precision * recall / (precision + recall)\n",
@@ -124,12 +456,178 @@
         "url": "https://scikit-learn.org/stable/modules/model_evaluation.html",
         "license": "BSD 3-Clause (scikit-learn documentation)"
       },
-      "xp_reward": 25
+      "xp_reward": 25,
+      "player_mode": "micro",
+      "sublessons": [
+        {
+          "id": "metrics-f1-micro",
+          "title": "Practice F1 Score",
+          "description": "",
+          "order": 1,
+          "exercises": [
+            {
+              "id": "metrics-f1-teach",
+              "type": "teach",
+              "question": "Orchard potters recount crates before dawn, and compute F1 from precision recall.",
+              "hints": [
+                "Read the one job this step is practicing.",
+                "The example is about F1 Score.",
+                "2 * precision * recall"
+              ],
+              "explanation": "Orchard potters recount crates before dawn, and compute F1 from precision recall.",
+              "xp_reward": 0,
+              "worked_example": "2 * precision * recall"
+            },
+            {
+              "id": "metrics-f1-mcq",
+              "type": "mcq",
+              "question": "Orchard potters recount crates before dawn. For compute F1 from precision recall, which line balances precision and recall?",
+              "hints": [
+                "Compare each line with the example.",
+                "One line matches the example.",
+                "2 * precision * recall / (precision + recall)"
+              ],
+              "explanation": "F1 is the balanced combination of precision and recall.",
+              "xp_reward": 10,
+              "options": [
+                "precision == recall",
+                "return precision",
+                "2 * precision * recall / (precision + recall)",
+                "pass"
+              ],
+              "correct_answer": "2 * precision * recall / (precision + recall)"
+            },
+            {
+              "id": "metrics-f1-predict",
+              "type": "output_prediction",
+              "question": "Orchard potters recount crates before dawn. For compute F1 from precision recall, what value is displayed?",
+              "hints": [
+                "Run the example in your head from the top.",
+                "The last line is what gets displayed.",
+                "0.67"
+              ],
+              "explanation": "The F1 Score program displays that value.",
+              "xp_reward": 10,
+              "starter_code": "precision = 0.5\nrecall = 1.0\nprint(round(2 * precision * recall / (precision + recall), 2))\n",
+              "options": [
+                "0",
+                "1.0",
+                "none",
+                "0.67"
+              ],
+              "correct_answer": "0.67"
+            },
+            {
+              "id": "metrics-f1-order",
+              "type": "ordering",
+              "question": "Orchard potters recount crates before dawn. For compute F1 from precision recall, build the line that balances precision and recall.",
+              "hints": [
+                "Start at the left of the example.",
+                "Keep the example order.",
+                "score = 2*precision*recall / (precision+recall)"
+              ],
+              "explanation": "F1 is the balanced combination of precision and recall.",
+              "xp_reward": 10,
+              "options": [
+                "score",
+                "=",
+                "2*precision*recall",
+                "/",
+                "(precision+recall)",
+                "-"
+              ],
+              "correct_answer": [
+                "score",
+                "=",
+                "2*precision*recall",
+                "/",
+                "(precision+recall)"
+              ]
+            },
+            {
+              "id": "metrics-f1-fill",
+              "type": "fill_blank",
+              "question": "Orchard potters recount crates before dawn. For compute F1 from precision recall, fill the blank so the line balances precision and recall.",
+              "hints": [
+                "The blank is the missing piece of the example.",
+                "The example uses that piece.",
+                "*"
+              ],
+              "explanation": "F1 is the balanced combination of precision and recall.",
+              "xp_reward": 10,
+              "starter_code": "score = 2 * precision ___ recall / (precision + recall)\n",
+              "options": [
+                "+",
+                "-",
+                "*",
+                "/"
+              ],
+              "correct_answer": "*"
+            },
+            {
+              "id": "metrics-f1-bug",
+              "type": "debugging",
+              "question": "Orchard potters recount crates before dawn. For compute F1 from precision recall, which line does a different job than the example?",
+              "hints": [
+                "The other lines match the example.",
+                "One line is the odd one.",
+                "Line 3"
+              ],
+              "explanation": "The print adds the two scores and never balances them.",
+              "xp_reward": 10,
+              "starter_code": "precision = 0.5\nrecall = 1.0\nprint(precision + recall)\n",
+              "correct_answer": "3"
+            },
+            {
+              "id": "metrics-f1-predict-2",
+              "type": "output_prediction",
+              "question": "Orchard potters recount crates before dawn. For compute F1 from precision recall, what does the second run display?",
+              "hints": [
+                "Apply the same steps to the new value.",
+                "The display comes from the last line.",
+                "1.0"
+              ],
+              "explanation": "The second F1 Score program displays that value.",
+              "xp_reward": 10,
+              "starter_code": "precision = 1.0\nrecall = 1.0\nprint(round(2 * precision * recall / (precision + recall), 2))\n",
+              "options": [
+                "0.67",
+                "1.0",
+                "none",
+                "0"
+              ],
+              "correct_answer": "1.0"
+            },
+            {
+              "id": "metrics-f1-write",
+              "type": "code",
+              "question": "Orchard potters recount crates before dawn. For compute F1 from precision recall, fill the blank so the program prints the result.",
+              "hints": [
+                "The blank is the missing piece.",
+                "Print the value that piece produces.",
+                "label = round(2 * precision * recall / (precision + recall), 2)"
+              ],
+              "explanation": "The printed value is the result after this step balances precision and recall.",
+              "xp_reward": 10,
+              "starter_code": "precision = 0.5\nrecall = 1.0\nlabel = ___\nprint(label)\n",
+              "solution_code": "precision = 0.5\nrecall = 1.0\nlabel = round(2 * precision * recall / (precision + recall), 2)\nprint(label)\n",
+              "tests": [
+                {
+                  "name": "metrics-f1-prints",
+                  "description": "The printed value is the result after this step balances precision and recall.",
+                  "expected_stdout": "0.67\n",
+                  "required": true
+                }
+              ]
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "metrics-confusion",
-      "title": "4. Confusion Counts (Practice)",
-      "description": "Implement `confusion(y_true, y_pred)` returning dict with tp,fp,tn,fn for positive=1. The test checks that `confusion([1, 0, 1, 0], [1, 1, 0, 0])` equals `{'tp': 1, 'fp': 1, 'tn': 1, 'fn': 1}`.",
+      "title": "Practice Confusion Counts",
+      "description": "Implement confusion(y_true, y_pred) returning dict with tp,fp,tn,fn for positive=1. The test checks that confusion([1, 0, 1, 0], [1, 1, 0, 0]) equals {'tp': 1, 'fp': 1, 'tn': 1, 'fn': 1}.",
       "order": 14,
       "difficulty": "intermediate",
       "duration_minutes": 6,
@@ -141,7 +639,7 @@
       ],
       "prerequisites": [],
       "learning_objectives": [
-        "Build a confusion matrix"
+        "Quarry potters recount crates before dawn, and build a confusion matrix."
       ],
       "starter_code": "def confusion(y_true, y_pred):\n    # TODO\n    pass\n",
       "solution_code": "def confusion(y_true, y_pred):\n    tp = fp = tn = fn = 0\n    for yt, yp in zip(y_true, y_pred):\n        if yt == 1 and yp == 1:\n            tp += 1\n        elif yt == 0 and yp == 1:\n            fp += 1\n        elif yt == 0 and yp == 0:\n            tn += 1\n        else:\n            fn += 1\n    return {'tp': tp, 'fp': fp, 'tn': tn, 'fn': fn}\n",
@@ -165,49 +663,175 @@
       "xp_reward": 15,
       "sublessons": [
         {
-          "id": "confusion-match-sub",
-          "title": "Match each count",
+          "id": "metrics-confusion-micro",
+          "title": "Practice Confusion Counts",
+          "description": "",
           "order": 1,
           "exercises": [
             {
-              "id": "confusion-match-1",
-              "type": "matching",
-              "question": "`confusion(y_true, y_pred)` counts four cases with positive = 1. Match each case to the branch that produces it.",
-              "pairs": [
-                {
-                  "left": "true positive",
-                  "right": "actual 1 and predicted 1"
-                },
-                {
-                  "left": "false positive",
-                  "right": "actual 0 but predicted 1"
-                },
-                {
-                  "left": "true negative",
-                  "right": "actual 0 and predicted 0"
-                },
-                {
-                  "left": "false negative",
-                  "right": "actual 1 but predicted 0"
-                }
+              "id": "metrics-confusion-teach",
+              "type": "teach",
+              "question": "Quarry potters recount crates before dawn, and build a confusion matrix.",
+              "hints": [
+                "Read the one job this step is practicing.",
+                "The example is about Confusion Counts.",
+                "g == 1 and p == 1"
               ],
-              "correct_answer": {
-                "true positive": "actual 1 and predicted 1",
-                "false positive": "actual 0 but predicted 1",
-                "true negative": "actual 0 and predicted 0",
-                "false negative": "actual 1 but predicted 0"
-              },
-              "explanation": "The first word says whether the prediction was right; the second says which class was predicted.",
-              "xp_reward": 10
+              "explanation": "Quarry potters recount crates before dawn, and build a confusion matrix.",
+              "xp_reward": 0,
+              "worked_example": "g == 1 and p == 1"
+            },
+            {
+              "id": "metrics-confusion-mcq",
+              "type": "mcq",
+              "question": "Quarry potters recount crates before dawn. For build a confusion matrix, which line counts true positives?",
+              "hints": [
+                "Compare each line with the example.",
+                "One line matches the example.",
+                "g == 1 and p == 1"
+              ],
+              "explanation": "A true positive is a gold 1 that was also predicted 1.",
+              "xp_reward": 10,
+              "options": [
+                "g == p",
+                "return gold",
+                "pass",
+                "g == 1 and p == 1"
+              ],
+              "correct_answer": "g == 1 and p == 1"
+            },
+            {
+              "id": "metrics-confusion-predict",
+              "type": "output_prediction",
+              "question": "Quarry potters recount crates before dawn. For build a confusion matrix, what value is displayed?",
+              "hints": [
+                "Run the example in your head from the top.",
+                "The last line is what gets displayed.",
+                "1"
+              ],
+              "explanation": "The Confusion Counts program displays that value.",
+              "xp_reward": 10,
+              "starter_code": "gold = [1, 1, 0, 0]\npred = [1, 0, 0, 1]\nprint(sum(g == 1 and p == 1 for g, p in zip(gold, pred)))\n",
+              "options": [
+                "2",
+                "none",
+                "0",
+                "1"
+              ],
+              "correct_answer": "1"
+            },
+            {
+              "id": "metrics-confusion-order",
+              "type": "ordering",
+              "question": "Quarry potters recount crates before dawn. For build a confusion matrix, build the line that counts true positives.",
+              "hints": [
+                "Start at the left of the example.",
+                "Keep the example order.",
+                "if g==1 and p==1: pass"
+              ],
+              "explanation": "A true positive is a gold 1 that was also predicted 1.",
+              "xp_reward": 10,
+              "options": [
+                "if",
+                "g==1",
+                "and",
+                "p==1:",
+                "pass",
+                "or"
+              ],
+              "correct_answer": [
+                "if",
+                "g==1",
+                "and",
+                "p==1:",
+                "pass"
+              ]
+            },
+            {
+              "id": "metrics-confusion-fill",
+              "type": "fill_blank",
+              "question": "Quarry potters recount crates before dawn. For build a confusion matrix, fill the blank so the line counts true positives.",
+              "hints": [
+                "The blank is the missing piece of the example.",
+                "The example uses that piece.",
+                "and"
+              ],
+              "explanation": "A true positive is a gold 1 that was also predicted 1.",
+              "xp_reward": 10,
+              "starter_code": "hit = g == 1 ___ p == 1\n",
+              "options": [
+                "or",
+                "==",
+                "!=",
+                "and"
+              ],
+              "correct_answer": "and"
+            },
+            {
+              "id": "metrics-confusion-bug",
+              "type": "debugging",
+              "question": "Quarry potters recount crates before dawn. For build a confusion matrix, which line does a different job than the example?",
+              "hints": [
+                "The other lines match the example.",
+                "One line is the odd one.",
+                "Line 2"
+              ],
+              "explanation": "The print counts gold labels and ignores the predictions.",
+              "xp_reward": 10,
+              "starter_code": "gold = [1, 1, 0, 0]\nprint(sum(gold))\n",
+              "correct_answer": "2"
+            },
+            {
+              "id": "metrics-confusion-predict-2",
+              "type": "output_prediction",
+              "question": "Quarry potters recount crates before dawn. For build a confusion matrix, what does the second run display?",
+              "hints": [
+                "Apply the same steps to the new value.",
+                "The display comes from the last line.",
+                "2"
+              ],
+              "explanation": "The second Confusion Counts program displays that value.",
+              "xp_reward": 10,
+              "starter_code": "gold = [1, 1, 0, 0]\npred = [1, 1, 0, 0]\nprint(sum(g == 1 and p == 1 for g, p in zip(gold, pred)))\n",
+              "options": [
+                "1",
+                "2",
+                "0",
+                "none"
+              ],
+              "correct_answer": "2"
+            },
+            {
+              "id": "metrics-confusion-write",
+              "type": "code",
+              "question": "Quarry potters recount crates before dawn. For build a confusion matrix, fill the blank so the program prints the result.",
+              "hints": [
+                "The blank is the missing piece.",
+                "Print the value that piece produces.",
+                "label = sum(g == 1 and p == 1 for g, p in zip(gold, pred))"
+              ],
+              "explanation": "The printed value is the result after this step counts true positives.",
+              "xp_reward": 10,
+              "starter_code": "gold = [1, 1, 0, 0]\npred = [1, 0, 0, 1]\nlabel = ___\nprint(label)\n",
+              "solution_code": "gold = [1, 1, 0, 0]\npred = [1, 0, 0, 1]\nlabel = sum(g == 1 and p == 1 for g, p in zip(gold, pred))\nprint(label)\n",
+              "tests": [
+                {
+                  "name": "metrics-confusion-prints",
+                  "description": "The printed value is the result after this step counts true positives.",
+                  "expected_stdout": "1\n",
+                  "required": true
+                }
+              ]
             }
           ]
         }
-      ]
+      ],
+      "player_mode": "micro"
     },
     {
       "id": "metrics-checkpoint",
-      "title": "5. Checkpoint: Threshold Sweep",
-      "description": "Implement `best_threshold(scores, labels)` choosing threshold in scores that maximizes accuracy. Ties → lower threshold. The test checks that `best_threshold([0.1, 0.4, 0.6, 0.9], [0, 0, 1, 1])` equals `0.6`.",
+      "title": "Practice Checkpoint Threshold Sweep",
+      "description": "Implement best_threshold(scores, labels) choosing threshold in scores that maximizes accuracy. Ties → lower threshold. The test checks that best_threshold([0.1, 0.4, 0.6, 0.9], [0, 0, 1, 1]) equals 0.6.",
       "order": 15,
       "difficulty": "intermediate",
       "duration_minutes": 10,
@@ -219,7 +843,7 @@
       ],
       "prerequisites": [],
       "learning_objectives": [
-        "Tune decision thresholds"
+        "Attic potters recount crates before dawn, and tune decision thresholds."
       ],
       "starter_code": "def best_threshold(scores, labels):\n    # TODO\n    pass\n",
       "solution_code": "def best_threshold(scores, labels):\n    candidates = sorted(set(scores))\n    best_thr, best_acc = candidates[0], -1.0\n    for thr in candidates:\n        preds = [1 if s >= thr else 0 for s in scores]\n        acc = sum(p == y for p, y in zip(preds, labels)) / len(labels)\n        if acc > best_acc or (acc == best_acc and thr < best_thr):\n            best_acc = acc\n            best_thr = thr\n    return best_thr\n",
@@ -240,7 +864,173 @@
         "url": "https://scikit-learn.org/stable/modules/model_evaluation.html",
         "license": "BSD 3-Clause (scikit-learn documentation)"
       },
-      "xp_reward": 40
+      "xp_reward": 40,
+      "player_mode": "micro",
+      "sublessons": [
+        {
+          "id": "metrics-checkpoint-micro",
+          "title": "Practice Checkpoint Threshold Sweep",
+          "description": "",
+          "order": 1,
+          "exercises": [
+            {
+              "id": "metrics-checkpoint-teach",
+              "type": "teach",
+              "question": "Attic potters recount crates before dawn, and tune decision thresholds.",
+              "hints": [
+                "Read the one job this step is practicing.",
+                "The example is about Checkpoint Threshold Sweep.",
+                "score >= cutoff"
+              ],
+              "explanation": "Attic potters recount crates before dawn, and tune decision thresholds.",
+              "xp_reward": 0,
+              "worked_example": "score >= cutoff"
+            },
+            {
+              "id": "metrics-checkpoint-mcq",
+              "type": "mcq",
+              "question": "Attic potters recount crates before dawn. For tune decision thresholds, which line counts scores at or above the cutoff?",
+              "hints": [
+                "Compare each line with the example.",
+                "One line matches the example.",
+                "score >= cutoff"
+              ],
+              "explanation": "The sweep keeps scores at or above the cutoff.",
+              "xp_reward": 10,
+              "options": [
+                "score == cutoff",
+                "return scores",
+                "pass",
+                "score >= cutoff"
+              ],
+              "correct_answer": "score >= cutoff"
+            },
+            {
+              "id": "metrics-checkpoint-predict",
+              "type": "output_prediction",
+              "question": "Attic potters recount crates before dawn. For tune decision thresholds, what value is displayed?",
+              "hints": [
+                "Run the example in your head from the top.",
+                "The last line is what gets displayed.",
+                "1"
+              ],
+              "explanation": "The Checkpoint Threshold Sweep program displays that value.",
+              "xp_reward": 10,
+              "starter_code": "scores = [0.2, 0.8]\ncutoff = 0.5\nprint(sum(score >= cutoff for score in scores))\n",
+              "options": [
+                "2",
+                "none",
+                "0",
+                "1"
+              ],
+              "correct_answer": "1"
+            },
+            {
+              "id": "metrics-checkpoint-order",
+              "type": "ordering",
+              "question": "Attic potters recount crates before dawn. For tune decision thresholds, build the line that counts scores at or above the cutoff.",
+              "hints": [
+                "Start at the left of the example.",
+                "Keep the example order.",
+                "if score >= cutoff: pass"
+              ],
+              "explanation": "The sweep keeps scores at or above the cutoff.",
+              "xp_reward": 10,
+              "options": [
+                "if",
+                "score",
+                ">=",
+                "cutoff:",
+                "pass",
+                "<"
+              ],
+              "correct_answer": [
+                "if",
+                "score",
+                ">=",
+                "cutoff:",
+                "pass"
+              ]
+            },
+            {
+              "id": "metrics-checkpoint-fill",
+              "type": "fill_blank",
+              "question": "Attic potters recount crates before dawn. For tune decision thresholds, fill the blank so the line counts scores at or above the cutoff.",
+              "hints": [
+                "The blank is the missing piece of the example.",
+                "The example uses that piece.",
+                ">="
+              ],
+              "explanation": "The sweep keeps scores at or above the cutoff.",
+              "xp_reward": 10,
+              "starter_code": "keep = score ___ cutoff\n",
+              "options": [
+                "<",
+                "==",
+                "!=",
+                ">="
+              ],
+              "correct_answer": ">="
+            },
+            {
+              "id": "metrics-checkpoint-bug",
+              "type": "debugging",
+              "question": "Attic potters recount crates before dawn. For tune decision thresholds, which line does a different job than the example?",
+              "hints": [
+                "The other lines match the example.",
+                "One line is the odd one.",
+                "Line 2"
+              ],
+              "explanation": "The print counts every score and ignores the cutoff.",
+              "xp_reward": 10,
+              "starter_code": "scores = [0.2, 0.8]\nprint(len(scores))\n",
+              "correct_answer": "2"
+            },
+            {
+              "id": "metrics-checkpoint-predict-2",
+              "type": "output_prediction",
+              "question": "Attic potters recount crates before dawn. For tune decision thresholds, what does the second run display?",
+              "hints": [
+                "Apply the same steps to the new value.",
+                "The display comes from the last line.",
+                "2"
+              ],
+              "explanation": "The second Checkpoint Threshold Sweep program displays that value.",
+              "xp_reward": 10,
+              "starter_code": "scores = [0.2, 0.8]\ncutoff = 0.1\nprint(sum(score >= cutoff for score in scores))\n",
+              "options": [
+                "1",
+                "none",
+                "2",
+                "0"
+              ],
+              "correct_answer": "2"
+            },
+            {
+              "id": "metrics-checkpoint-write",
+              "type": "code",
+              "question": "Attic potters recount crates before dawn. For tune decision thresholds, fill the blank so the program prints the result.",
+              "hints": [
+                "The blank is the missing piece.",
+                "Print the value that piece produces.",
+                "label = sum(score >= cutoff for score in scores)"
+              ],
+              "explanation": "The printed value is the result after this step counts scores at or above the cutoff.",
+              "xp_reward": 10,
+              "starter_code": "scores = [0.2, 0.8]\ncutoff = 0.5\nlabel = ___\nprint(label)\n",
+              "solution_code": "scores = [0.2, 0.8]\ncutoff = 0.5\nlabel = sum(score >= cutoff for score in scores)\nprint(label)\n",
+              "tests": [
+                {
+                  "name": "metrics-checkpoint-prints",
+                  "description": "The printed value is the result after this step counts scores at or above the cu",
+                  "expected_stdout": "1\n",
+                  "required": true
+                }
+              ]
+            }
+          ]
+        }
+      ]
     }
   ]
 }

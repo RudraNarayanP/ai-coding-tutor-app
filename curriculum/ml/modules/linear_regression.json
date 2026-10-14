@@ -12,8 +12,8 @@
   "lessons": [
     {
       "id": "linreg-predict",
-      "title": "1. Linear Prediction",
-      "description": "Implement `predict(x, w, b)` = w*x + b for scalars. The test checks that `predict(2, 3, 1)` equals `7`.",
+      "title": "Practice Linear Prediction",
+      "description": "Implement predict(x, w, b) = w*x + b for scalars. The test checks that predict(2, 3, 1) equals 7.",
       "order": 1,
       "difficulty": "intermediate",
       "duration_minutes": 5,
@@ -25,7 +25,7 @@
       ],
       "prerequisites": [],
       "learning_objectives": [
-        "Compute linear predictions"
+        "Depot clerks recount crates before dawn, and compute linear predictions."
       ],
       "starter_code": "def predict(x, w, b):\n    # TODO\n    pass\n",
       "solution_code": "def predict(x, w, b):\n    return w * x + b\n",
@@ -46,12 +46,182 @@
         "url": "https://developers.google.com/machine-learning/crash-course/linear-regression",
         "license": "CC BY 4.0 (Google Machine Learning Crash Course)"
       },
-      "xp_reward": 10
+      "xp_reward": 10,
+      "player_mode": "micro",
+      "sublessons": [
+        {
+          "id": "linreg-predict-micro",
+          "title": "Practice Linear Prediction",
+          "description": "",
+          "order": 1,
+          "exercises": [
+            {
+              "id": "linreg-predict-teach",
+              "type": "teach",
+              "question": "Depot clerks recount crates before dawn, and compute linear predictions.",
+              "hints": [
+                "Read the one job this step is practicing.",
+                "The example is about Linear Prediction.",
+                "2 * x + 1"
+              ],
+              "explanation": "Depot clerks recount crates before dawn, and compute linear predictions.",
+              "xp_reward": 0,
+              "worked_example": "2 * x + 1"
+            },
+            {
+              "id": "linreg-predict-mcq",
+              "type": "mcq",
+              "question": "Depot clerks recount crates before dawn. For compute linear predictions, which line computes intercept plus slope times x?",
+              "hints": [
+                "Compare each line with the example.",
+                "One line matches the example.",
+                "2 * x + 1"
+              ],
+              "explanation": "The line is intercept plus slope times x.",
+              "xp_reward": 10,
+              "options": [
+                "x == 1",
+                "return x",
+                "pass",
+                "2 * x + 1"
+              ],
+              "correct_answer": "2 * x + 1"
+            },
+            {
+              "id": "linreg-predict-predict",
+              "type": "output_prediction",
+              "question": "Depot clerks recount crates before dawn. For compute linear predictions, what value is displayed?",
+              "hints": [
+                "Run the example in your head from the top.",
+                "The last line is what gets displayed.",
+                "87"
+              ],
+              "explanation": "The Linear Prediction program displays that value.",
+              "xp_reward": 10,
+              "starter_code": "x = 43\nprint(2 * x + 1)\n",
+              "options": [
+                "93",
+                "none",
+                "0",
+                "87"
+              ],
+              "correct_answer": "87"
+            },
+            {
+              "id": "linreg-predict-order",
+              "type": "ordering",
+              "question": "Depot clerks recount crates before dawn. For compute linear predictions, build the line that computes intercept plus slope times x.",
+              "hints": [
+                "Start at the left of the example.",
+                "Keep the example order.",
+                "y = 2 * x + 1"
+              ],
+              "explanation": "The line is intercept plus slope times x.",
+              "xp_reward": 10,
+              "options": [
+                "y",
+                "=",
+                "2",
+                "*",
+                "x",
+                "+",
+                "1",
+                "-"
+              ],
+              "correct_answer": [
+                "y",
+                "=",
+                "2",
+                "*",
+                "x",
+                "+",
+                "1"
+              ]
+            },
+            {
+              "id": "linreg-predict-fill",
+              "type": "fill_blank",
+              "question": "Depot clerks recount crates before dawn. For compute linear predictions, fill the blank so the line computes intercept plus slope times x.",
+              "hints": [
+                "The blank is the missing piece of the example.",
+                "The example uses that piece.",
+                "*"
+              ],
+              "explanation": "The line is intercept plus slope times x.",
+              "xp_reward": 10,
+              "starter_code": "y = 2 ___ x + 1\n",
+              "options": [
+                "+",
+                "-",
+                "/",
+                "*"
+              ],
+              "correct_answer": "*"
+            },
+            {
+              "id": "linreg-predict-bug",
+              "type": "debugging",
+              "question": "Depot clerks recount crates before dawn. For compute linear predictions, which line does a different job than the example?",
+              "hints": [
+                "The other lines match the example.",
+                "One line is the odd one.",
+                "Line 2"
+              ],
+              "explanation": "The print adds one and never multiplies by the slope.",
+              "xp_reward": 10,
+              "starter_code": "x = 43\nprint(x + 1)\n",
+              "correct_answer": "2"
+            },
+            {
+              "id": "linreg-predict-predict-2",
+              "type": "output_prediction",
+              "question": "Depot clerks recount crates before dawn. For compute linear predictions, what does the second run display?",
+              "hints": [
+                "Apply the same steps to the new value.",
+                "The display comes from the last line.",
+                "93"
+              ],
+              "explanation": "The second Linear Prediction program displays that value.",
+              "xp_reward": 10,
+              "starter_code": "x = 46\nprint(2 * x + 1)\n",
+              "options": [
+                "87",
+                "none",
+                "93",
+                "0"
+              ],
+              "correct_answer": "93"
+            },
+            {
+              "id": "linreg-predict-write",
+              "type": "code",
+              "question": "Depot clerks recount crates before dawn. For compute linear predictions, fill the blank so the program prints the result.",
+              "hints": [
+                "The blank is the missing piece.",
+                "Print the value that piece produces.",
+                "label = 2 * x + 1"
+              ],
+              "explanation": "The printed value is the result after this step computes intercept plus slope times x.",
+              "xp_reward": 10,
+              "starter_code": "x = 43\nlabel = ___\nprint(label)\n",
+              "solution_code": "x = 43\nlabel = 2 * x + 1\nprint(label)\n",
+              "tests": [
+                {
+                  "name": "linreg-predict-prints",
+                  "description": "The printed value is the result after this step computes intercept plus slope ti",
+                  "expected_stdout": "87\n",
+                  "required": true
+                }
+              ]
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "linreg-mse",
-      "title": "2. Mean Squared Error",
-      "description": "Implement `mse(y_true, y_pred)` returning the mean of the squared residuals (mean squared error). The test checks mse([1, 2], [1, 4]) == 2.0.",
+      "title": "Practice Mean Squared Error",
+      "description": "Implement mse(y_true, y_pred) returning the mean of the squared residuals (mean squared error). The test checks mse([1, 2], [1, 4]) == 2.0.",
       "order": 2,
       "difficulty": "intermediate",
       "duration_minutes": 5,
@@ -63,7 +233,7 @@
       ],
       "prerequisites": [],
       "learning_objectives": [
-        "Compute MSE loss"
+        "Ridge clerks recount crates before dawn, and compute MSE loss."
       ],
       "starter_code": "def mse(y_true, y_pred):\n    # TODO\n    pass\n",
       "solution_code": "def mse(y_true, y_pred):\n    n = len(y_true)\n    return sum((a - b) ** 2 for a, b in zip(y_true, y_pred)) / n\n",
@@ -84,12 +254,180 @@
         "url": "https://scikit-learn.org/stable/modules/model_evaluation.html",
         "license": "BSD 3-Clause (scikit-learn documentation)"
       },
-      "xp_reward": 10
+      "xp_reward": 10,
+      "player_mode": "micro",
+      "sublessons": [
+        {
+          "id": "linreg-mse-micro",
+          "title": "Practice Mean Squared Error",
+          "description": "",
+          "order": 1,
+          "exercises": [
+            {
+              "id": "linreg-mse-teach",
+              "type": "teach",
+              "question": "Ridge clerks recount crates before dawn, and compute MSE loss.",
+              "hints": [
+                "Read the one job this step is practicing.",
+                "The example is about Mean Squared Error.",
+                "item * item"
+              ],
+              "explanation": "Ridge clerks recount crates before dawn, and compute MSE loss.",
+              "xp_reward": 0,
+              "worked_example": "item * item"
+            },
+            {
+              "id": "linreg-mse-mcq",
+              "type": "mcq",
+              "question": "Ridge clerks recount crates before dawn. For compute MSE loss, which line averages the squared errors?",
+              "hints": [
+                "Compare each line with the example.",
+                "One line matches the example.",
+                "item * item"
+              ],
+              "explanation": "Mean squared error averages the squared gaps.",
+              "xp_reward": 10,
+              "options": [
+                "item == item",
+                "item * item",
+                "return errors",
+                "pass"
+              ],
+              "correct_answer": "item * item"
+            },
+            {
+              "id": "linreg-mse-predict",
+              "type": "output_prediction",
+              "question": "Ridge clerks recount crates before dawn. For compute MSE loss, what value is displayed?",
+              "hints": [
+                "Run the example in your head from the top.",
+                "The last line is what gets displayed.",
+                "5"
+              ],
+              "explanation": "The Mean Squared Error program displays that value.",
+              "xp_reward": 10,
+              "starter_code": "errors = [1, 3]\nprint(sum(item * item for item in errors) // len(errors))\n",
+              "options": [
+                "10",
+                "5",
+                "none",
+                "0"
+              ],
+              "correct_answer": "5"
+            },
+            {
+              "id": "linreg-mse-order",
+              "type": "ordering",
+              "question": "Ridge clerks recount crates before dawn. For compute MSE loss, build the line that averages the squared errors.",
+              "hints": [
+                "Start at the left of the example.",
+                "Keep the example order.",
+                "loss= sum(item*item for err in errors)//len(errors)"
+              ],
+              "explanation": "Mean squared error averages the squared gaps.",
+              "xp_reward": 10,
+              "options": [
+                "loss=",
+                "sum(item*item",
+                "for",
+                "err",
+                "in",
+                "errors)//len(errors)",
+                "+"
+              ],
+              "correct_answer": [
+                "loss=",
+                "sum(item*item",
+                "for",
+                "err",
+                "in",
+                "errors)//len(errors)"
+              ]
+            },
+            {
+              "id": "linreg-mse-fill",
+              "type": "fill_blank",
+              "question": "Ridge clerks recount crates before dawn. For compute MSE loss, fill the blank so the line averages the squared errors.",
+              "hints": [
+                "The blank is the missing piece of the example.",
+                "The example uses that piece.",
+                "*"
+              ],
+              "explanation": "Mean squared error averages the squared gaps.",
+              "xp_reward": 10,
+              "starter_code": "square = item ___ item\n",
+              "options": [
+                "+",
+                "*",
+                "-",
+                "/"
+              ],
+              "correct_answer": "*"
+            },
+            {
+              "id": "linreg-mse-bug",
+              "type": "debugging",
+              "question": "Ridge clerks recount crates before dawn. For compute MSE loss, which line does a different job than the example?",
+              "hints": [
+                "The other lines match the example.",
+                "One line is the odd one.",
+                "Line 2"
+              ],
+              "explanation": "The average uses raw errors, so the signs are not squared away.",
+              "xp_reward": 10,
+              "starter_code": "errors = [1, 3]\nprint(sum(errors) // len(errors))\n",
+              "correct_answer": "2"
+            },
+            {
+              "id": "linreg-mse-predict-2",
+              "type": "output_prediction",
+              "question": "Ridge clerks recount crates before dawn. For compute MSE loss, what does the second run display?",
+              "hints": [
+                "Apply the same steps to the new value.",
+                "The display comes from the last line.",
+                "10"
+              ],
+              "explanation": "The second Mean Squared Error program displays that value.",
+              "xp_reward": 10,
+              "starter_code": "errors = [2, 4]\nprint(sum(item * item for item in errors) // len(errors))\n",
+              "options": [
+                "5",
+                "none",
+                "0",
+                "10"
+              ],
+              "correct_answer": "10"
+            },
+            {
+              "id": "linreg-mse-write",
+              "type": "code",
+              "question": "Ridge clerks recount crates before dawn. For compute MSE loss, fill the blank so the program prints the result.",
+              "hints": [
+                "The blank is the missing piece.",
+                "Print the value that piece produces.",
+                "label = sum(item * item for item in errors) // len(errors)"
+              ],
+              "explanation": "The printed value is the result after this step averages the squared errors.",
+              "xp_reward": 10,
+              "starter_code": "errors = [1, 3]\nlabel = ___\nprint(label)\n",
+              "solution_code": "errors = [1, 3]\nlabel = sum(item * item for item in errors) // len(errors)\nprint(label)\n",
+              "tests": [
+                {
+                  "name": "linreg-mse-prints",
+                  "description": "The printed value is the result after this step averages the squared errors.",
+                  "expected_stdout": "5\n",
+                  "required": true
+                }
+              ]
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "linreg-gd-step",
-      "title": "3. Gradient Descent Step",
-      "description": "Finish `gd_step(xs, ys, w, b, lr)` so it takes one gradient step for `y ≈ w*x + b` and returns `(w_new, b_new)`. The test checks that `gd_step([1.0], [2.0], 0.0, 0.0, 0.1)` is about `(0.4, 0.4)`.",
+      "title": "Practice Gradient Descent Step",
+      "description": "Finish gd_step(xs, ys, w, b, lr) so it takes one gradient step for y ≈ w*x + b and returns (w_new, b_new). The test checks that gd_step([1.0], [2.0], 0.0, 0.0, 0.1) is about (0.4, 0.4).",
       "order": 3,
       "difficulty": "intermediate",
       "duration_minutes": 8,
@@ -101,7 +439,7 @@
       ],
       "prerequisites": [],
       "learning_objectives": [
-        "Take one GD step for linear regression"
+        "Cove clerks recount crates before dawn, and take one GD step for linear regression."
       ],
       "starter_code": "def gd_step(xs, ys, w, b, lr):\n    # TODO\n    pass\n",
       "solution_code": "def gd_step(xs, ys, w, b, lr):\n    n = len(xs)\n    dw = sum((w * x + b - y) * x for x, y in zip(xs, ys)) * 2 / n\n    db = sum((w * x + b - y) for x, y in zip(xs, ys)) * 2 / n\n    return w - lr * dw, b - lr * db\n",
@@ -122,12 +460,182 @@
         "url": "https://developers.google.com/machine-learning/crash-course/linear-regression/gradient-descent",
         "license": "CC BY 4.0 (Google Machine Learning Crash Course)"
       },
-      "xp_reward": 25
+      "xp_reward": 25,
+      "player_mode": "micro",
+      "sublessons": [
+        {
+          "id": "linreg-gd-step-micro",
+          "title": "Practice Gradient Descent Step",
+          "description": "",
+          "order": 1,
+          "exercises": [
+            {
+              "id": "linreg-gd-step-teach",
+              "type": "teach",
+              "question": "Cove clerks recount crates before dawn, and take one GD step for linear regression.",
+              "hints": [
+                "Read the one job this step is practicing.",
+                "The example is about Gradient Descent Step.",
+                "weight - rate * grad"
+              ],
+              "explanation": "Cove clerks recount crates before dawn, and take one GD step for linear regression.",
+              "xp_reward": 0,
+              "worked_example": "weight - rate * grad"
+            },
+            {
+              "id": "linreg-gd-step-mcq",
+              "type": "mcq",
+              "question": "Cove clerks recount crates before dawn. For take one GD step for linear regression, which line steps the weight against the gradient?",
+              "hints": [
+                "Compare each line with the example.",
+                "One line matches the example.",
+                "weight - rate * grad"
+              ],
+              "explanation": "Gradient descent subtracts the rate times the gradient.",
+              "xp_reward": 10,
+              "options": [
+                "return weight",
+                "weight == grad",
+                "weight - rate * grad",
+                "pass"
+              ],
+              "correct_answer": "weight - rate * grad"
+            },
+            {
+              "id": "linreg-gd-step-predict",
+              "type": "output_prediction",
+              "question": "Cove clerks recount crates before dawn. For take one GD step for linear regression, what value is displayed?",
+              "hints": [
+                "Run the example in your head from the top.",
+                "The last line is what gets displayed.",
+                "8"
+              ],
+              "explanation": "The Gradient Descent Step program displays that value.",
+              "xp_reward": 10,
+              "starter_code": "weight = 10\ngrad = 2\nrate = 1\nprint(weight - rate * grad)\n",
+              "options": [
+                "6",
+                "none",
+                "8",
+                "0"
+              ],
+              "correct_answer": "8"
+            },
+            {
+              "id": "linreg-gd-step-order",
+              "type": "ordering",
+              "question": "Cove clerks recount crates before dawn. For take one GD step for linear regression, build the line that steps the weight against the gradient.",
+              "hints": [
+                "Start at the left of the example.",
+                "Keep the example order.",
+                "next = weight - rate * grad"
+              ],
+              "explanation": "Gradient descent subtracts the rate times the gradient.",
+              "xp_reward": 10,
+              "options": [
+                "next",
+                "=",
+                "weight",
+                "-",
+                "rate",
+                "*",
+                "grad",
+                "+"
+              ],
+              "correct_answer": [
+                "next",
+                "=",
+                "weight",
+                "-",
+                "rate",
+                "*",
+                "grad"
+              ]
+            },
+            {
+              "id": "linreg-gd-step-fill",
+              "type": "fill_blank",
+              "question": "Cove clerks recount crates before dawn. For take one GD step for linear regression, fill the blank so the line steps the weight against the gradient.",
+              "hints": [
+                "The blank is the missing piece of the example.",
+                "The example uses that piece.",
+                "-"
+              ],
+              "explanation": "Gradient descent subtracts the rate times the gradient.",
+              "xp_reward": 10,
+              "starter_code": "next = weight ___ rate * grad\n",
+              "options": [
+                "+",
+                "*",
+                "-",
+                "/"
+              ],
+              "correct_answer": "-"
+            },
+            {
+              "id": "linreg-gd-step-bug",
+              "type": "debugging",
+              "question": "Cove clerks recount crates before dawn. For take one GD step for linear regression, which line does a different job than the example?",
+              "hints": [
+                "The other lines match the example.",
+                "One line is the odd one.",
+                "Line 3"
+              ],
+              "explanation": "The step adds the gradient and walks uphill.",
+              "xp_reward": 10,
+              "starter_code": "weight = 10\ngrad = 2\nprint(weight + 2)\n",
+              "correct_answer": "3"
+            },
+            {
+              "id": "linreg-gd-step-predict-2",
+              "type": "output_prediction",
+              "question": "Cove clerks recount crates before dawn. For take one GD step for linear regression, what does the second run display?",
+              "hints": [
+                "Apply the same steps to the new value.",
+                "The display comes from the last line.",
+                "6"
+              ],
+              "explanation": "The second Gradient Descent Step program displays that value.",
+              "xp_reward": 10,
+              "starter_code": "weight = 10\ngrad = 2\nrate = 2\nprint(weight - rate * grad)\n",
+              "options": [
+                "8",
+                "6",
+                "none",
+                "0"
+              ],
+              "correct_answer": "6"
+            },
+            {
+              "id": "linreg-gd-step-write",
+              "type": "code",
+              "question": "Cove clerks recount crates before dawn. For take one GD step for linear regression, fill the blank so the program prints the result.",
+              "hints": [
+                "The blank is the missing piece.",
+                "Print the value that piece produces.",
+                "label = weight - rate * grad"
+              ],
+              "explanation": "The printed value is the result after this step steps the weight against the gradient.",
+              "xp_reward": 10,
+              "starter_code": "weight = 10\ngrad = 2\nrate = 1\nlabel = ___\nprint(label)\n",
+              "solution_code": "weight = 10\ngrad = 2\nrate = 1\nlabel = weight - rate * grad\nprint(label)\n",
+              "tests": [
+                {
+                  "name": "linreg-gd-step-prints",
+                  "description": "The printed value is the result after this step steps the weight against the gra",
+                  "expected_stdout": "8\n",
+                  "required": true
+                }
+              ]
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "linreg-closed-form",
-      "title": "4. Closed-Form Slope (Practice)",
-      "description": "Implement `fit_slope(xs, ys)` for y=w*x (no intercept): w = sum(x*y)/sum(x*x). The test checks that `fit_slope([1, 2, 3], [2, 4, 6])` equals `2.0`.",
+      "title": "Practice Closed-Form Slope",
+      "description": "Implement fit_slope(xs, ys) for y=w*x (no intercept): w = sum(x*y)/sum(x*x). The test checks that fit_slope([1, 2, 3], [2, 4, 6]) equals 2.0.",
       "order": 4,
       "difficulty": "intermediate",
       "duration_minutes": 6,
@@ -139,7 +647,7 @@
       ],
       "prerequisites": [],
       "learning_objectives": [
-        "Fit slope via normal equation"
+        "Plaza clerks recount crates before dawn, and fit slope via normal equation."
       ],
       "starter_code": "def fit_slope(xs, ys):\n    # TODO\n    pass\n",
       "solution_code": "def fit_slope(xs, ys):\n    return sum(x * y for x, y in zip(xs, ys)) / sum(x * x for x in xs)\n",
@@ -160,12 +668,178 @@
         "url": "https://developers.google.com/machine-learning/crash-course/linear-regression",
         "license": "CC BY 4.0 (Google Machine Learning Crash Course)"
       },
-      "xp_reward": 15
+      "xp_reward": 15,
+      "player_mode": "micro",
+      "sublessons": [
+        {
+          "id": "linreg-closed-form-micro",
+          "title": "Practice Closed-Form Slope",
+          "description": "",
+          "order": 1,
+          "exercises": [
+            {
+              "id": "linreg-closed-form-teach",
+              "type": "teach",
+              "question": "Plaza clerks recount crates before dawn, and fit slope via normal equation.",
+              "hints": [
+                "Read the one job this step is practicing.",
+                "The example is about Closed-Form Slope.",
+                "rise // run"
+              ],
+              "explanation": "Plaza clerks recount crates before dawn, and fit slope via normal equation.",
+              "xp_reward": 0,
+              "worked_example": "rise // run"
+            },
+            {
+              "id": "linreg-closed-form-mcq",
+              "type": "mcq",
+              "question": "Plaza clerks recount crates before dawn. For fit slope via normal equation, which line reads the slope between two points?",
+              "hints": [
+                "Compare each line with the example.",
+                "One line matches the example.",
+                "rise // run"
+              ],
+              "explanation": "Slope is the rise divided by the run.",
+              "xp_reward": 10,
+              "options": [
+                "rise == run",
+                "return rise",
+                "rise // run",
+                "pass"
+              ],
+              "correct_answer": "rise // run"
+            },
+            {
+              "id": "linreg-closed-form-predict",
+              "type": "output_prediction",
+              "question": "Plaza clerks recount crates before dawn. For fit slope via normal equation, what value is displayed?",
+              "hints": [
+                "Run the example in your head from the top.",
+                "The last line is what gets displayed.",
+                "3"
+              ],
+              "explanation": "The Closed-Form Slope program displays that value.",
+              "xp_reward": 10,
+              "starter_code": "rise = (51 + 3) - 51\nrun = 1\nprint(rise // run)\n",
+              "options": [
+                "none",
+                "5",
+                "3",
+                "0"
+              ],
+              "correct_answer": "3"
+            },
+            {
+              "id": "linreg-closed-form-order",
+              "type": "ordering",
+              "question": "Plaza clerks recount crates before dawn. For fit slope via normal equation, build the line that reads the slope between two points.",
+              "hints": [
+                "Start at the left of the example.",
+                "Keep the example order.",
+                "slope = rise // run"
+              ],
+              "explanation": "Slope is the rise divided by the run.",
+              "xp_reward": 10,
+              "options": [
+                "slope",
+                "=",
+                "rise",
+                "//",
+                "run",
+                "/"
+              ],
+              "correct_answer": [
+                "slope",
+                "=",
+                "rise",
+                "//",
+                "run"
+              ]
+            },
+            {
+              "id": "linreg-closed-form-fill",
+              "type": "fill_blank",
+              "question": "Plaza clerks recount crates before dawn. For fit slope via normal equation, fill the blank so the line reads the slope between two points.",
+              "hints": [
+                "The blank is the missing piece of the example.",
+                "The example uses that piece.",
+                "//"
+              ],
+              "explanation": "Slope is the rise divided by the run.",
+              "xp_reward": 10,
+              "starter_code": "slope = rise ___ run\n",
+              "options": [
+                "/",
+                "%",
+                "//",
+                "*"
+              ],
+              "correct_answer": "//"
+            },
+            {
+              "id": "linreg-closed-form-bug",
+              "type": "debugging",
+              "question": "Plaza clerks recount crates before dawn. For fit slope via normal equation, which line does a different job than the example?",
+              "hints": [
+                "The other lines match the example.",
+                "One line is the odd one.",
+                "Line 2"
+              ],
+              "explanation": "The print changes the rise and never divides by the run.",
+              "xp_reward": 10,
+              "starter_code": "rise = 3\nprint(rise + 1)\n",
+              "correct_answer": "2"
+            },
+            {
+              "id": "linreg-closed-form-predict-2",
+              "type": "output_prediction",
+              "question": "Plaza clerks recount crates before dawn. For fit slope via normal equation, what does the second run display?",
+              "hints": [
+                "Apply the same steps to the new value.",
+                "The display comes from the last line.",
+                "5"
+              ],
+              "explanation": "The second Closed-Form Slope program displays that value.",
+              "xp_reward": 10,
+              "starter_code": "rise = (51 + 5) - 51\nrun = 1\nprint(rise // run)\n",
+              "options": [
+                "3",
+                "5",
+                "none",
+                "0"
+              ],
+              "correct_answer": "5"
+            },
+            {
+              "id": "linreg-closed-form-write",
+              "type": "code",
+              "question": "Plaza clerks recount crates before dawn. For fit slope via normal equation, fill the blank so the program prints the result.",
+              "hints": [
+                "The blank is the missing piece.",
+                "Print the value that piece produces.",
+                "label = rise // run"
+              ],
+              "explanation": "The printed value is the result after this step reads the slope between two points.",
+              "xp_reward": 10,
+              "starter_code": "rise = (51 + 3) - 51\nrun = 1\nlabel = ___\nprint(label)\n",
+              "solution_code": "rise = (51 + 3) - 51\nrun = 1\nlabel = rise // run\nprint(label)\n",
+              "tests": [
+                {
+                  "name": "linreg-closed-form-prints",
+                  "description": "The printed value is the result after this step reads the slope between two poin",
+                  "expected_stdout": "3\n",
+                  "required": true
+                }
+              ]
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "linreg-checkpoint",
-      "title": "5. Checkpoint: R² Score",
-      "description": "Implement `r2(y_true, y_pred)`. Return 0 if total sum of squares is 0. The test checks that `r2([1, 2, 3], [1, 2, 3])` equals `1.0`; `r2([1, 2, 3], [2, 2, 2])` equals `0.0`.",
+      "title": "Practice Checkpoint R Score",
+      "description": "Implement r2(y_true, y_pred). Return 0 if total sum of squares is 0. The test checks that r2([1, 2, 3], [1, 2, 3]) equals 1.0; r2([1, 2, 3], [2, 2, 2]) equals 0.0.",
       "order": 5,
       "difficulty": "intermediate",
       "duration_minutes": 10,
@@ -177,7 +851,7 @@
       ],
       "prerequisites": [],
       "learning_objectives": [
-        "Evaluate with R-squared"
+        "Marsh clerks recount crates before dawn, and evaluate with R-squared."
       ],
       "starter_code": "def r2(y_true, y_pred):\n    # TODO\n    pass\n",
       "solution_code": "def r2(y_true, y_pred):\n    mean_y = sum(y_true) / len(y_true)\n    ss_tot = sum((y - mean_y) ** 2 for y in y_true)\n    ss_res = sum((a - b) ** 2 for a, b in zip(y_true, y_pred))\n    if ss_tot == 0:\n        return 0.0\n    return 1 - ss_res / ss_tot\n",
@@ -198,7 +872,177 @@
         "url": "https://developers.google.com/machine-learning/glossary/metrics",
         "license": "CC BY 4.0 (Google Machine Learning Crash Course)"
       },
-      "xp_reward": 40
+      "xp_reward": 40,
+      "player_mode": "micro",
+      "sublessons": [
+        {
+          "id": "linreg-checkpoint-micro",
+          "title": "Practice Checkpoint R Score",
+          "description": "",
+          "order": 1,
+          "exercises": [
+            {
+              "id": "linreg-checkpoint-teach",
+              "type": "teach",
+              "question": "Marsh clerks recount crates before dawn, and evaluate with R-squared.",
+              "hints": [
+                "Read the one job this step is practicing.",
+                "The example is about Checkpoint R Score.",
+                "1 - ss_res / ss_tot"
+              ],
+              "explanation": "Marsh clerks recount crates before dawn, and evaluate with R-squared.",
+              "xp_reward": 0,
+              "worked_example": "1 - ss_res / ss_tot"
+            },
+            {
+              "id": "linreg-checkpoint-mcq",
+              "type": "mcq",
+              "question": "Marsh clerks recount crates before dawn. For evaluate with R-squared, which line computes one minus the leftover share?",
+              "hints": [
+                "Compare each line with the example.",
+                "One line matches the example.",
+                "1 - ss_res / ss_tot"
+              ],
+              "explanation": "R squared is one minus leftover over total.",
+              "xp_reward": 10,
+              "options": [
+                "ss_res == ss_tot",
+                "return ss_res",
+                "1 - ss_res / ss_tot",
+                "pass"
+              ],
+              "correct_answer": "1 - ss_res / ss_tot"
+            },
+            {
+              "id": "linreg-checkpoint-predict",
+              "type": "output_prediction",
+              "question": "Marsh clerks recount crates before dawn. For evaluate with R-squared, what value is displayed?",
+              "hints": [
+                "Run the example in your head from the top.",
+                "The last line is what gets displayed.",
+                "0.75"
+              ],
+              "explanation": "The Checkpoint R Score program displays that value.",
+              "xp_reward": 10,
+              "starter_code": "ss_res = 2\nss_tot = 8\nprint(round(1 - ss_res / ss_tot, 2))\n",
+              "options": [
+                "0.5",
+                "none",
+                "0.75",
+                "0"
+              ],
+              "correct_answer": "0.75"
+            },
+            {
+              "id": "linreg-checkpoint-order",
+              "type": "ordering",
+              "question": "Marsh clerks recount crates before dawn. For evaluate with R-squared, build the line that computes one minus the leftover share.",
+              "hints": [
+                "Start at the left of the example.",
+                "Keep the example order.",
+                "score = 1 - ss_res / ss_tot"
+              ],
+              "explanation": "R squared is one minus leftover over total.",
+              "xp_reward": 10,
+              "options": [
+                "score",
+                "=",
+                "1",
+                "-",
+                "ss_res",
+                "/",
+                "ss_tot",
+                "+"
+              ],
+              "correct_answer": [
+                "score",
+                "=",
+                "1",
+                "-",
+                "ss_res",
+                "/",
+                "ss_tot"
+              ]
+            },
+            {
+              "id": "linreg-checkpoint-fill",
+              "type": "fill_blank",
+              "question": "Marsh clerks recount crates before dawn. Choose the match for this step.",
+              "hints": [
+                "The blank is the missing piece of the example.",
+                "The example uses that piece.",
+                "-"
+              ],
+              "explanation": "R squared is one minus leftover over total.",
+              "xp_reward": 10,
+              "starter_code": "score = 1 ___ ss_res / ss_tot\n",
+              "options": [
+                "/",
+                "+",
+                "*",
+                "-"
+              ],
+              "correct_answer": "-"
+            },
+            {
+              "id": "linreg-checkpoint-bug",
+              "type": "debugging",
+              "question": "Marsh clerks recount crates before dawn. For evaluate with R-squared, which line does a different job than the example?",
+              "hints": [
+                "The other lines match the example.",
+                "One line is the odd one.",
+                "Line 3"
+              ],
+              "explanation": "The print is the leftover share, not one minus that share.",
+              "xp_reward": 10,
+              "starter_code": "ss_res = 2\nss_tot = 8\nprint(ss_res / ss_tot)\n",
+              "correct_answer": "3"
+            },
+            {
+              "id": "linreg-checkpoint-predict-2",
+              "type": "output_prediction",
+              "question": "Marsh clerks recount crates before dawn. For evaluate with R-squared, what does the second run display?",
+              "hints": [
+                "Apply the same steps to the new value.",
+                "The display comes from the last line.",
+                "0.5"
+              ],
+              "explanation": "The second Checkpoint R Score program displays that value.",
+              "xp_reward": 10,
+              "starter_code": "ss_res = 4\nss_tot = 8\nprint(round(1 - ss_res / ss_tot, 2))\n",
+              "options": [
+                "0",
+                "0.5",
+                "0.75",
+                "none"
+              ],
+              "correct_answer": "0.5"
+            },
+            {
+              "id": "linreg-checkpoint-write",
+              "type": "code",
+              "question": "Marsh clerks recount crates before dawn. For evaluate with R-squared, fill the blank so the program prints the result.",
+              "hints": [
+                "The blank is the missing piece.",
+                "Print the value that piece produces.",
+                "label = round(1 - ss_res / ss_tot, 2)"
+              ],
+              "explanation": "The printed value is the result after this step computes one minus the leftover share.",
+              "xp_reward": 10,
+              "starter_code": "ss_res = 2\nss_tot = 8\nlabel = ___\nprint(label)\n",
+              "solution_code": "ss_res = 2\nss_tot = 8\nlabel = round(1 - ss_res / ss_tot, 2)\nprint(label)\n",
+              "tests": [
+                {
+                  "name": "linreg-checkpoint-prints",
+                  "description": "The printed value is the result after this step computes one minus the leftover ",
+                  "expected_stdout": "0.75\n",
+                  "required": true
+                }
+              ]
+            }
+          ]
+        }
+      ]
     }
   ]
 }

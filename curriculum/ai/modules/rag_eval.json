@@ -14,7 +14,7 @@
   "lessons": [
     {
       "id": "ai-03",
-      "title": "3. Storing AI Conversations & RAG Context in SQL",
+      "title": "Store AI Conversations RAG Context in",
       "description": "RAG evaluation starts by logging conversations as structured rows (later stored in a table). Implement format_conversation_log(user_id, prompt, response) returning a dict with keys 'user_id', 'prompt', 'response' and a cheap 'tokens' estimate: len(prompt.split()) + len(response.split()). Tests check the user id and that tokens > 0 for a real exchange.",
       "order": 3,
       "difficulty": "advanced",
@@ -46,11 +46,179 @@
         "license": "Python documentation license (PSF)"
       },
       "learning_objectives": [
-        "Shape conversation logs as dict rows ready for a database insert",
-        "Estimate token counts with a whitespace heuristic",
-        "Understand that RAG evaluation needs stored prompts and outputs"
+        "Cove pickers recount crates before dawn, and shape conversation logs as dict rows ready for a database insert."
       ],
-      "xp_reward": 45
+      "xp_reward": 45,
+      "player_mode": "micro",
+      "sublessons": [
+        {
+          "id": "ai-03-micro",
+          "title": "Store AI Conversations RAG Context in",
+          "description": "",
+          "order": 1,
+          "exercises": [
+            {
+              "id": "ai-03-teach",
+              "type": "teach",
+              "question": "Cove pickers recount crates before dawn, and shape conversation logs as dict rows ready for a database insert.",
+              "hints": [
+                "Read the one job this step is practicing.",
+                "The example is about Storing AI Conversations RAG Context in SQL.",
+                "SELECT body FROM notes"
+              ],
+              "explanation": "Cove pickers recount crates before dawn, and shape conversation logs as dict rows ready for a database insert.",
+              "xp_reward": 0,
+              "worked_example": "SELECT body FROM notes"
+            },
+            {
+              "id": "ai-03-mcq",
+              "type": "mcq",
+              "question": "Cove pickers recount crates before dawn. For shape conversation logs as dict rows ready for a database insert, which line reads the note stored in the table?",
+              "hints": [
+                "Compare each line with the example.",
+                "One line matches the example.",
+                "SELECT body FROM notes WHERE id = 1"
+              ],
+              "explanation": "The select reads the body stored under that id.",
+              "xp_reward": 10,
+              "options": [
+                "return notes",
+                "notes == notes",
+                "pass",
+                "SELECT body FROM notes WHERE id = 1"
+              ],
+              "correct_answer": "SELECT body FROM notes WHERE id = 1"
+            },
+            {
+              "id": "ai-03-predict",
+              "type": "output_prediction",
+              "question": "Cove pickers recount crates before dawn. For shape conversation logs as dict rows ready for a database insert, what value is displayed?",
+              "hints": [
+                "Run the example in your head from the top.",
+                "The last line is what gets displayed.",
+                "violet"
+              ],
+              "explanation": "The Storing AI Conversations RAG Context in SQL program displays that value.",
+              "xp_reward": 10,
+              "starter_code": "import sqlite3\nconn = sqlite3.connect(':memory:')\nconn.execute('CREATE TABLE notes (id INTEGER, body TEXT)')\nconn.execute('INSERT INTO notes VALUES (1, ?)', ('violet',))\nprint(conn.execute('SELECT body FROM notes WHERE id = 1').fetchone()[0])\n",
+              "options": [
+                "amber",
+                "none",
+                "violet",
+                "0"
+              ],
+              "correct_answer": "violet"
+            },
+            {
+              "id": "ai-03-order",
+              "type": "ordering",
+              "question": "Cove pickers recount crates before dawn. For shape conversation logs as dict rows ready for a database insert, build the line that reads the note stored in the table.",
+              "hints": [
+                "Start at the left of the example.",
+                "Keep the example order.",
+                "conn.execute('INSERT INTO notes VALUES (1, ?)', (body,))"
+              ],
+              "explanation": "The select reads the body stored under that id.",
+              "xp_reward": 10,
+              "options": [
+                "conn.execute('INSERT",
+                "INTO",
+                "notes",
+                "VALUES",
+                "(1,",
+                "?)',",
+                "(body,))",
+                "=="
+              ],
+              "correct_answer": [
+                "conn.execute('INSERT",
+                "INTO",
+                "notes",
+                "VALUES",
+                "(1,",
+                "?)',",
+                "(body,))"
+              ]
+            },
+            {
+              "id": "ai-03-fill",
+              "type": "fill_blank",
+              "question": "Cove pickers recount crates before dawn. For shape conversation logs as dict rows ready for a database insert, fill the blank so the line reads the note stored in the table.",
+              "hints": [
+                "The blank is the missing piece of the example.",
+                "The example uses that piece.",
+                "="
+              ],
+              "explanation": "The select reads the body stored under that id.",
+              "xp_reward": 10,
+              "starter_code": "row = conn.execute('SELECT body FROM notes WHERE id ___ 1').fetchone()\n",
+              "options": [
+                "!=",
+                ">",
+                "=",
+                "<"
+              ],
+              "correct_answer": "="
+            },
+            {
+              "id": "ai-03-bug",
+              "type": "debugging",
+              "question": "Cove pickers recount crates before dawn. For shape conversation logs as dict rows ready for a database insert, which line does a different job than the example?",
+              "hints": [
+                "The other lines match the example.",
+                "One line is the odd one.",
+                "Line 4"
+              ],
+              "explanation": "The print is zero and never reads the stored note.",
+              "xp_reward": 10,
+              "starter_code": "import sqlite3\nconn = sqlite3.connect(':memory:')\nconn.execute('CREATE TABLE notes (id INTEGER, body TEXT)')\nprint(0)\n",
+              "correct_answer": "4"
+            },
+            {
+              "id": "ai-03-predict-2",
+              "type": "output_prediction",
+              "question": "Cove pickers recount crates before dawn. For shape conversation logs as dict rows ready for a database insert, what does the second run display?",
+              "hints": [
+                "Apply the same steps to the new value.",
+                "The display comes from the last line.",
+                "amber"
+              ],
+              "explanation": "The second Storing AI Conversations RAG Context in SQL program displays that value.",
+              "xp_reward": 10,
+              "starter_code": "import sqlite3\nconn = sqlite3.connect(':memory:')\nconn.execute('CREATE TABLE notes (id INTEGER, body TEXT)')\nconn.execute('INSERT INTO notes VALUES (1, ?)', ('amber',))\nprint(conn.execute('SELECT body FROM notes WHERE id = 1').fetchone()[0])\n",
+              "options": [
+                "violet",
+                "amber",
+                "none",
+                "0"
+              ],
+              "correct_answer": "amber"
+            },
+            {
+              "id": "ai-03-write",
+              "type": "code",
+              "question": "Cove pickers recount crates before dawn. For shape conversation logs as dict rows ready for a database insert, fill the blank so the program prints the result.",
+              "hints": [
+                "The blank is the missing piece.",
+                "Print the value that piece produces.",
+                "label = conn.execute('SELECT body FROM notes WHERE id = 1').fetchone()[0]"
+              ],
+              "explanation": "The printed value is the result after this step reads the note stored in the table.",
+              "xp_reward": 10,
+              "starter_code": "import sqlite3\nconn = sqlite3.connect(':memory:')\nconn.execute('CREATE TABLE notes (id INTEGER, body TEXT)')\nconn.execute('INSERT INTO notes VALUES (1, ?)', ('violet',))\nlabel = ___\nprint(label)\n",
+              "solution_code": "import sqlite3\nconn = sqlite3.connect(':memory:')\nconn.execute('CREATE TABLE notes (id INTEGER, body TEXT)')\nconn.execute('INSERT INTO notes VALUES (1, ?)', ('violet',))\nlabel = conn.execute('SELECT body FROM notes WHERE id = 1').fetchone()[0]\nprint(label)\n",
+              "tests": [
+                {
+                  "name": "ai-03-prints",
+                  "description": "The printed value is the result after this step reads the note stored in the tab",
+                  "expected_stdout": "violet\n",
+                  "required": true
+                }
+              ]
+            }
+          ]
+        }
+      ]
     }
   ]
 }

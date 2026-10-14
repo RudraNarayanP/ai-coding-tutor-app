@@ -14,8 +14,8 @@
   "lessons": [
     {
       "id": "sql-04",
-      "title": "4. ORDER BY & LIMIT",
-      "description": "Sort products by `price` descending and keep only the top 3. The test checks that the result has exactly 3 rows.",
+      "title": "Practice ORDER BY LIMIT",
+      "description": "Sort products by price descending and keep only the top 3. The test checks that the result has exactly 3 rows.",
       "order": 4,
       "difficulty": "beginner",
       "duration_minutes": 5,
@@ -45,10 +45,179 @@
         "license": "Public domain (SQLite documentation)"
       },
       "learning_objectives": [
-        "Sort result sets with ORDER BY, descending when needed",
-        "Restrict result size with LIMIT"
+        "Harbor potters recount crates before dawn, and sort result sets with ORDER BY, descending when needed."
       ],
-      "xp_reward": 10
+      "xp_reward": 10,
+      "player_mode": "micro",
+      "sublessons": [
+        {
+          "id": "sql-04-micro",
+          "title": "Practice ORDER BY LIMIT",
+          "description": "",
+          "order": 1,
+          "exercises": [
+            {
+              "id": "sql-04-teach",
+              "type": "teach",
+              "question": "Harbor potters recount crates before dawn, and sort result sets with ORDER BY, descending when needed.",
+              "hints": [
+                "Read the one job this step is practicing.",
+                "The example is about ORDER BY LIMIT.",
+                "ORDER BY name LIMIT 1"
+              ],
+              "explanation": "Harbor potters recount crates before dawn, and sort result sets with ORDER BY, descending when needed.",
+              "xp_reward": 0,
+              "worked_example": "ORDER BY name LIMIT 1"
+            },
+            {
+              "id": "sql-04-mcq",
+              "type": "mcq",
+              "question": "Harbor potters recount crates before dawn. For sort result sets with ORDER BY, descending when needed, which line returns the first name in sorted order?",
+              "hints": [
+                "Compare each line with the example.",
+                "One line matches the example.",
+                "SELECT name FROM customers ORDER BY name LIMIT 1"
+              ],
+              "explanation": "ORDER BY name LIMIT 1 returns the first sorted name.",
+              "xp_reward": 10,
+              "options": [
+                "INSERT INTO customers",
+                "DROP TABLE customers",
+                "SELECT name FROM customers ORDER BY name LIMIT 1",
+                "name == name"
+              ],
+              "correct_answer": "SELECT name FROM customers ORDER BY name LIMIT 1"
+            },
+            {
+              "id": "sql-04-predict",
+              "type": "output_prediction",
+              "question": "Harbor potters recount crates before dawn. For sort result sets with ORDER BY, descending when needed, what value is displayed?",
+              "hints": [
+                "Run the example in your head from the top.",
+                "The last line is what gets displayed.",
+                "┌─────────────┐\n│ name        │\n├─────────────┤\n│ Alice Smith │\n└─────────────┘"
+              ],
+              "explanation": "The ORDER BY LIMIT program displays that value.",
+              "xp_reward": 10,
+              "starter_code": "SELECT name FROM customers ORDER BY name LIMIT 1;\n",
+              "options": [
+                "┌────────────┐\n│ name       │\n├────────────┤\n│ Coffee Mug │\n└────────────┘",
+                "0",
+                "┌─────────────┐\n│ name        │\n├─────────────┤\n│ Alice Smith │\n└─────────────┘",
+                "none"
+              ],
+              "correct_answer": "┌─────────────┐\n│ name        │\n├─────────────┤\n│ Alice Smith │\n└─────────────┘"
+            },
+            {
+              "id": "sql-04-order",
+              "type": "ordering",
+              "question": "Harbor potters recount crates before dawn. For sort result sets with ORDER BY, descending when needed, build the line that returns the first name in sorted order.",
+              "hints": [
+                "Start at the left of the example.",
+                "Keep the example order.",
+                "SELECT name FROM customers ORDER BY name LIMIT 1"
+              ],
+              "explanation": "ORDER BY name LIMIT 1 returns the first sorted name.",
+              "xp_reward": 10,
+              "options": [
+                "SELECT",
+                "name",
+                "FROM",
+                "customers",
+                "ORDER BY name",
+                "LIMIT",
+                "1",
+                "DROP"
+              ],
+              "correct_answer": [
+                "SELECT",
+                "name",
+                "FROM",
+                "customers",
+                "ORDER BY name",
+                "LIMIT",
+                "1"
+              ]
+            },
+            {
+              "id": "sql-04-fill",
+              "type": "fill_blank",
+              "question": "Harbor potters recount crates before dawn. For sort result sets with ORDER BY, descending when needed, fill the blank so the line returns the first name in sorted order.",
+              "hints": [
+                "The blank is the missing piece of the example.",
+                "The example uses that piece.",
+                "1"
+              ],
+              "explanation": "ORDER BY name LIMIT 1 returns the first sorted name.",
+              "xp_reward": 10,
+              "starter_code": "SELECT name FROM customers ORDER BY name LIMIT ___;",
+              "options": [
+                "2",
+                "3",
+                "1",
+                "4"
+              ],
+              "correct_answer": "1"
+            },
+            {
+              "id": "sql-04-bug",
+              "type": "debugging",
+              "question": "Harbor potters recount crates before dawn. For sort result sets with ORDER BY, descending when needed, which line does a different job than the example?",
+              "hints": [
+                "The other lines match the example.",
+                "One line is the odd one.",
+                "Line 1"
+              ],
+              "explanation": "Without LIMIT the query returns every name.",
+              "xp_reward": 10,
+              "starter_code": "SELECT name FROM customers ORDER BY name;",
+              "correct_answer": "1"
+            },
+            {
+              "id": "sql-04-predict-2",
+              "type": "output_prediction",
+              "question": "Harbor potters recount crates before dawn. For sort result sets with ORDER BY, descending when needed, what does the second run display?",
+              "hints": [
+                "Apply the same steps to the new value.",
+                "The display comes from the last line.",
+                "┌────────────┐\n│ name       │\n├────────────┤\n│ Coffee Mug │\n└────────────┘"
+              ],
+              "explanation": "The second ORDER BY LIMIT program displays that value.",
+              "xp_reward": 10,
+              "starter_code": "SELECT name FROM products ORDER BY price LIMIT 1;\n",
+              "options": [
+                "┌─────────────┐\n│ name        │\n├─────────────┤\n│ Alice Smith │\n└─────────────┘",
+                "┌────────────┐\n│ name       │\n├────────────┤\n│ Coffee Mug │\n└────────────┘",
+                "none",
+                "0"
+              ],
+              "correct_answer": "┌────────────┐\n│ name       │\n├────────────┤\n│ Coffee Mug │\n└────────────┘"
+            },
+            {
+              "id": "sql-04-write",
+              "type": "code",
+              "question": "Harbor potters recount crates before dawn. For sort result sets with ORDER BY, descending when needed, fill the blank so the program prints the result.",
+              "hints": [
+                "The blank is the missing piece.",
+                "Print the value that piece produces.",
+                "SELECT name FROM customers ORDER BY name LIMIT 1;"
+              ],
+              "explanation": "The query result is what this step returns the first name in sorted order.",
+              "xp_reward": 10,
+              "starter_code": "SELECT name FROM customers ORDER BY name LIMIT ___;\n",
+              "solution_code": "SELECT name FROM customers ORDER BY name LIMIT 1;\n",
+              "tests": [
+                {
+                  "name": "sql-04-prints",
+                  "description": "The query result is what this step returns the first name in sorted order.",
+                  "expected_stdout": "┌─────────────┐\n│ name        │\n├─────────────┤\n│ Alice Smith │\n└─────────────┘",
+                  "required": true
+                }
+              ]
+            }
+          ]
+        }
+      ]
     }
   ]
 }

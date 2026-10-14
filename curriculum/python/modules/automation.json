@@ -14,8 +14,8 @@
   "lessons": [
     {
       "id": "py-automation-01",
-      "title": "1. Script Automation & File Processing",
-      "description": "Finish `filter_log_lines`. Automate text file filtering and line processing in Python. The test checks that `filter_log_lines(['INFO: ok', 'ERROR: fail'], 'ERROR')` equals `['ERROR: fail']`.",
+      "title": "Practice Script Automation File Processing",
+      "description": "Finish filter_log_lines. Automate text file filtering and line processing in Python. The test checks that filter_log_lines(['INFO: ok', 'ERROR: fail'], 'ERROR') equals ['ERROR: fail'].",
       "order": 106,
       "difficulty": "intermediate",
       "duration_minutes": 5,
@@ -45,11 +45,187 @@
         "license": "Python documentation license (PSF)"
       },
       "learning_objectives": [
-        "Filter text lines with membership tests and list comprehensions",
-        "Process file-like line data without manual accumulator loops",
-        "Return a new list containing exactly the lines that match a keyword"
+        "Mesa clerks recount crates before dawn, and filter text lines with membership tests and list comprehensions."
       ],
-      "xp_reward": 10
+      "xp_reward": 10,
+      "player_mode": "micro",
+      "sublessons": [
+        {
+          "id": "py-automation-01-micro",
+          "title": "Practice Script Automation File Processing",
+          "description": "",
+          "order": 1,
+          "exercises": [
+            {
+              "id": "py-automation-01-teach",
+              "type": "teach",
+              "question": "Mesa clerks recount crates before dawn, and filter text lines with membership tests and list comprehensions.",
+              "hints": [
+                "Read the one job this step is practicing.",
+                "The example is about Script Automation File Processing.",
+                "item > 10"
+              ],
+              "explanation": "Mesa clerks recount crates before dawn, and filter text lines with membership tests and list comprehensions.",
+              "xp_reward": 0,
+              "worked_example": "item > 10"
+            },
+            {
+              "id": "py-automation-01-mcq",
+              "type": "mcq",
+              "question": "Mesa clerks recount crates before dawn. For filter text lines with membership tests and list comprehensions, which line keeps the values above the cutoff and adds them?",
+              "hints": [
+                "Compare each line with the example.",
+                "One line matches the example.",
+                "item > 10"
+              ],
+              "explanation": "The comprehension drops values that are not above the cutoff.",
+              "xp_reward": 10,
+              "options": [
+                "item == 10",
+                "item > 10",
+                "item = items",
+                "print(item)"
+              ],
+              "correct_answer": "item > 10"
+            },
+            {
+              "id": "py-automation-01-predict",
+              "type": "output_prediction",
+              "question": "Mesa clerks recount crates before dawn. For filter text lines with membership tests and list comprehensions, what value is displayed?",
+              "hints": [
+                "Run the example in your head from the top.",
+                "The last line is what gets displayed.",
+                "80"
+              ],
+              "explanation": "The Script Automation File Processing program displays that value.",
+              "xp_reward": 10,
+              "starter_code": "items = [1, 39, 41]\nkept = [item for item in items if item > 10]\nprint(sum(kept))\n",
+              "options": [
+                "39",
+                "80",
+                "none",
+                "0"
+              ],
+              "correct_answer": "80"
+            },
+            {
+              "id": "py-automation-01-order",
+              "type": "ordering",
+              "question": "Mesa clerks recount crates before dawn. For filter text lines with membership tests and list comprehensions, build the line that keeps the values above the cutoff and adds them.",
+              "hints": [
+                "Start at the left of the example.",
+                "Keep the example order.",
+                "rows = [ a for b in c if d ]"
+              ],
+              "explanation": "rows = [a for b in c if d] keeps the matches.",
+              "xp_reward": 10,
+              "options": [
+                "rows",
+                "=",
+                "[",
+                "a",
+                "for",
+                "b",
+                "in",
+                "c",
+                "if",
+                "d",
+                "]",
+                "while"
+              ],
+              "correct_answer": [
+                "rows",
+                "=",
+                "[",
+                "a",
+                "for",
+                "b",
+                "in",
+                "c",
+                "if",
+                "d",
+                "]"
+              ]
+            },
+            {
+              "id": "py-automation-01-fill",
+              "type": "fill_blank",
+              "question": "Mesa clerks recount crates before dawn. For filter text lines with membership tests and list comprehensions, fill the blank so the line keeps the values above the cutoff and adds them.",
+              "hints": [
+                "The blank is the missing piece of the example.",
+                "The example uses that piece.",
+                ">"
+              ],
+              "explanation": "The cutoff keeps the greater values.",
+              "xp_reward": 10,
+              "starter_code": "kept = [item for item in items if item ___ 10]\n",
+              "options": [
+                "<",
+                ">",
+                "==",
+                "!="
+              ],
+              "correct_answer": ">"
+            },
+            {
+              "id": "py-automation-01-bug",
+              "type": "debugging",
+              "question": "Mesa clerks recount crates before dawn. For filter text lines with membership tests and list comprehensions, which line does a different job than the example?",
+              "hints": [
+                "The other lines match the example.",
+                "One line is the odd one.",
+                "Line 2"
+              ],
+              "explanation": "The filter keeps the small values instead of the large ones.",
+              "xp_reward": 10,
+              "starter_code": "items = [1, 39, 41]\nkept = [item for item in items if item < 10]\nprint(sum(kept))\n",
+              "correct_answer": "2"
+            },
+            {
+              "id": "py-automation-01-predict-2",
+              "type": "output_prediction",
+              "question": "Mesa clerks recount crates before dawn. For filter text lines with membership tests and list comprehensions, what does the second run display?",
+              "hints": [
+                "Apply the same steps to the new value.",
+                "The display comes from the last line.",
+                "39"
+              ],
+              "explanation": "The second Script Automation File Processing program displays that value.",
+              "xp_reward": 10,
+              "starter_code": "items = [1, 2, 39]\nkept = [item for item in items if item > 10]\nprint(sum(kept))\n",
+              "options": [
+                "80",
+                "none",
+                "0",
+                "39"
+              ],
+              "correct_answer": "39"
+            },
+            {
+              "id": "py-automation-01-write",
+              "type": "code",
+              "question": "Mesa clerks recount crates before dawn. For filter text lines with membership tests and list comprehensions, fill the blank so the program prints the result.",
+              "hints": [
+                "The blank is the missing piece.",
+                "Print the value that piece produces.",
+                "label = sum(kept)"
+              ],
+              "explanation": "The kept total is what gets printed.",
+              "xp_reward": 10,
+              "starter_code": "items = [1, 39, 41]\nkept = [item for item in items if item > 10]\nlabel = ___\nprint(label)\n",
+              "solution_code": "items = [1, 39, 41]\nkept = [item for item in items if item > 10]\nlabel = sum(kept)\nprint(label)\n",
+              "tests": [
+                {
+                  "name": "py-automation-01-prints",
+                  "description": "The kept total is what gets printed.",
+                  "expected_stdout": "80\n",
+                  "required": true
+                }
+              ]
+            }
+          ]
+        }
+      ]
     }
   ]
 }

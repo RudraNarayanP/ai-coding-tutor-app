@@ -12,8 +12,8 @@
   "lessons": [
     {
       "id": "cpp-variables-step-1",
-      "title": "1. Meet C++",
-      "description": "Finish `get_language` so it returns the text `C++`. The test checks that `get_language()` equals `\"C++\"`.",
+      "title": "Meet C",
+      "description": "Finish get_language so it returns the text C++. The test checks that get_language() equals \"C++\".",
       "order": 1,
       "difficulty": "beginner",
       "duration_minutes": 5,
@@ -26,7 +26,7 @@
       ],
       "prerequisites": [],
       "learning_objectives": [
-        "Return the text C++ from get_language"
+        "Mesa clerks recount crates before dawn, and return the text C from get language."
       ],
       "starter_code": "#include <iostream>\n#include <string>\n\nstd::string get_language() {\n    // TODO: return the language name\n    return \"\";\n}\n",
       "solution_code": "#include <iostream>\n#include <string>\n\nstd::string get_language() {\n    return \"C++\";\n}\n",
@@ -44,72 +44,163 @@
       },
       "sublessons": [
         {
-          "id": "cpp-var-sub-1",
-          "title": "What is Programming?",
+          "id": "cpp-variables-step-1-micro",
+          "title": "Meet C",
+          "description": "",
           "order": 1,
           "exercises": [
             {
-              "id": "cpp-ex-1a",
-              "type": "mcq",
-              "question": "What does a computer program do?",
-              "options": [
-                "It gives step-by-step instructions for the computer to follow",
-                "It physically cleans the computer processor",
-                "It makes the internet faster automatically"
+              "id": "cpp-variables-step-1-teach",
+              "type": "teach",
+              "question": "Mesa clerks recount crates before dawn, and return the text C from get language.",
+              "hints": [
+                "Read the one job this step is practicing.",
+                "The example is about Meet C.",
+                "std::string item = \"ember\";"
               ],
-              "correct_answer": "It gives step-by-step instructions for the computer to follow",
-              "xp_reward": 10,
-              "explanation": "Programs are sequence of instructions written in code!"
+              "explanation": "Mesa clerks recount crates before dawn, and return the text C from get language.",
+              "xp_reward": 0,
+              "worked_example": "std::string item = \"ember\";"
             },
             {
-              "id": "cpp-ex-1b",
+              "id": "cpp-variables-step-1-mcq",
               "type": "mcq",
-              "question": "In C++, `std::cout` prints the value of what follows it. What will `std::cout << 7 + 5;` display?",
-              "options": [
-                "7 + 5",
-                "75",
-                "12",
-                "Nothing"
+              "question": "Mesa clerks recount crates before dawn. For return the text C from get language, which line stores text in a string?",
+              "hints": [
+                "Compare each line with the example.",
+                "One line matches the example.",
+                "std::string item = word;"
               ],
-              "correct_answer": "12",
+              "explanation": "std::string item = word; stores the text.",
               "xp_reward": 10,
-              "explanation": "std::cout evaluates the expression and prints the result, so 7 + 5 shows 12."
-            }
-          ]
-        },
-        {
-          "id": "cpp-var-sub-2",
-          "title": "Complete C++ Output",
-          "order": 2,
-          "exercises": [
+              "options": [
+                "item == word;",
+                "return item;",
+                "item = item;",
+                "std::string item = word;"
+              ],
+              "correct_answer": "std::string item = word;"
+            },
             {
-              "id": "cpp-ex-2a",
-              "type": "fill_blank",
-              "question": "Complete the C++ line to print 'C++': std::cout << ___ ;",
-              "blanks": [
-                "\"C++\""
+              "id": "cpp-variables-step-1-predict",
+              "type": "output_prediction",
+              "question": "Mesa clerks recount crates before dawn. For return the text C from get language, what value is displayed?",
+              "hints": [
+                "Run the example in your head from the top.",
+                "The last line is what gets displayed.",
+                "ember"
+              ],
+              "explanation": "The Meet C program displays that value.",
+              "xp_reward": 10,
+              "starter_code": "#include <iostream>\n#include <string>\n#include <vector>\n#include <algorithm>\n#include <memory>\nint main() {\n    std::string item = \"ember\";\n    std::cout << item << std::endl;\n    return 0;\n}\n",
+              "options": [
+                "ivory",
+                "none",
+                "0",
+                "ember"
+              ],
+              "correct_answer": "ember"
+            },
+            {
+              "id": "cpp-variables-step-1-order",
+              "type": "ordering",
+              "question": "Mesa clerks recount crates before dawn. For return the text C from get language, build the line that stores text in a string.",
+              "hints": [
+                "Start at the left of the example.",
+                "Keep the example order.",
+                "std::string item = word;"
+              ],
+              "explanation": "std::string item = word; stores the text.",
+              "xp_reward": 10,
+              "options": [
+                "std::string",
+                "item",
+                "=",
+                "word;",
+                "=="
               ],
               "correct_answer": [
-                "\"C++\""
-              ],
-              "xp_reward": 10,
-              "explanation": "Text in C++ is wrapped in double quotes."
+                "std::string",
+                "item",
+                "=",
+                "word;"
+              ]
             },
             {
-              "id": "cpp-ex-2b",
+              "id": "cpp-variables-step-1-fill",
+              "type": "fill_blank",
+              "question": "Mesa clerks recount crates before dawn. For return the text C from get language, fill the blank so the line stores text in a string.",
+              "hints": [
+                "The blank is the missing piece of the example.",
+                "The example uses that piece.",
+                "word"
+              ],
+              "explanation": "std::string item = word; stores the text.",
+              "xp_reward": 10,
+              "starter_code": "std::string item = ___;",
+              "options": [
+                "name",
+                "count",
+                "left",
+                "word"
+              ],
+              "correct_answer": "word"
+            },
+            {
+              "id": "cpp-variables-step-1-bug",
+              "type": "debugging",
+              "question": "Mesa clerks recount crates before dawn. For return the text C from get language, which line does a different job than the example?",
+              "hints": [
+                "The other lines match the example.",
+                "One line is the odd one.",
+                "Line 8"
+              ],
+              "explanation": "The print appends a mark that was not stored.",
+              "xp_reward": 10,
+              "starter_code": "#include <iostream>\n#include <string>\n#include <vector>\n#include <algorithm>\n#include <memory>\nint main() {\n    std::string item = \"ember\";\n    std::cout << item << \"!\" << std::endl;\n    return 0;\n}\n",
+              "correct_answer": "8"
+            },
+            {
+              "id": "cpp-variables-step-1-predict-2",
+              "type": "output_prediction",
+              "question": "Mesa clerks recount crates before dawn. For return the text C from get language, what does the second run display?",
+              "hints": [
+                "Apply the same steps to the new value.",
+                "The display comes from the last line.",
+                "ivory"
+              ],
+              "explanation": "The second Meet C program displays that value.",
+              "xp_reward": 10,
+              "starter_code": "#include <iostream>\n#include <string>\n#include <vector>\n#include <algorithm>\n#include <memory>\nint main() {\n    std::string item = \"ivory\";\n    std::cout << item << std::endl;\n    return 0;\n}\n",
+              "options": [
+                "ember",
+                "none",
+                "ivory",
+                "0"
+              ],
+              "correct_answer": "ivory"
+            },
+            {
+              "id": "cpp-variables-step-1-write",
               "type": "code",
-              "title": "Return C++ string",
-              "question": "Return the string \"C++\" from get_language().",
-              "starter_code": "#include <string>\n\nstd::string get_language() {\n    // TODO: return the language name as a string\n    return \"\";\n}\n",
-              "solution_code": "#include <string>\n\nstd::string get_language() {\n    return \"C++\";\n}\n",
+              "question": "Mesa clerks recount crates before dawn. For return the text C from get language, fill the blank so the program prints the result.",
+              "hints": [
+                "The blank is the missing piece.",
+                "Print the value that piece produces.",
+                "std::string label = item;"
+              ],
+              "explanation": "The printed value is the result after this step stores text in a string.",
+              "xp_reward": 10,
+              "starter_code": "#include <iostream>\n#include <string>\n#include <vector>\n#include <algorithm>\n#include <memory>\nint main() {\n    std::string item = \"ember\";\n    std::string label = ___;\n    std::cout << label << std::endl;\n    return 0;\n}\n",
+              "solution_code": "#include <iostream>\n#include <string>\n#include <vector>\n#include <algorithm>\n#include <memory>\nint main() {\n    std::string item = \"ember\";\n    std::string label = item;\n    std::cout << label << std::endl;\n    return 0;\n}\n",
               "tests": [
                 {
-                  "name": "test_get_language",
-                  "test_code": "assert(get_language() == \"C++\");",
+                  "name": "cpp-variables-step-1-prints",
+                  "description": "The printed value is the result after this step stores text in a string.",
+                  "expected_stdout": "ember\n",
                   "required": true
                 }
-              ],
-              "xp_reward": 15
+              ]
             }
           ]
         }
@@ -151,12 +242,13 @@
         "url": "https://en.cppreference.com/w/cpp/io/cout",
         "license": "CC BY-SA 4.0 (cppreference.com)"
       },
-      "xp_reward": 10
+      "xp_reward": 10,
+      "player_mode": "micro"
     },
     {
       "id": "cpp-variables-step-2",
-      "title": "2. Integers & Arithmetic",
-      "description": "In C++, integer calculations use fundamental types like `int`. Implement `calculate_total(int price, int quantity)`. The test checks that `calculate_total(12, 4)` equals `48`.",
+      "title": "Practice Integers Arithmetic",
+      "description": "In C++, integer calculations use fundamental types like int. Implement calculate_total(int price, int quantity). The test checks that calculate_total(12, 4) equals 48.",
       "order": 2,
       "difficulty": "beginner",
       "duration_minutes": 5,
@@ -169,7 +261,7 @@
       ],
       "prerequisites": [],
       "learning_objectives": [
-        "Use int primitive arithmetic in C++"
+        "Orchard clerks recount crates before dawn, and use int primitive arithmetic in C."
       ],
       "starter_code": "int calculate_total(int price, int quantity) {\n    // TODO: return the cost of `quantity` items at `price` each\n    return 0;\n}\n",
       "solution_code": "int calculate_total(int price, int quantity) {\n    return price * quantity;\n}\n",
@@ -193,12 +285,180 @@
         "url": "https://en.cppreference.com/w/cpp/language/types",
         "license": "CC BY-SA 4.0 (cppreference.com)"
       },
-      "xp_reward": 10
+      "xp_reward": 10,
+      "player_mode": "micro",
+      "sublessons": [
+        {
+          "id": "cpp-variables-step-2-micro",
+          "title": "Practice Integers Arithmetic",
+          "description": "",
+          "order": 1,
+          "exercises": [
+            {
+              "id": "cpp-variables-step-2-teach",
+              "type": "teach",
+              "question": "Orchard clerks recount crates before dawn, and use int primitive arithmetic in C.",
+              "hints": [
+                "Read the one job this step is practicing.",
+                "The example is about Integers Arithmetic.",
+                "int left = 35;"
+              ],
+              "explanation": "Orchard clerks recount crates before dawn, and use int primitive arithmetic in C.",
+              "xp_reward": 0,
+              "worked_example": "int left = 35;"
+            },
+            {
+              "id": "cpp-variables-step-2-mcq",
+              "type": "mcq",
+              "question": "Orchard clerks recount crates before dawn. For use int primitive arithmetic in C, which line stores the sum of two integers?",
+              "hints": [
+                "Compare each line with the example.",
+                "One line matches the example.",
+                "int total = left + right;"
+              ],
+              "explanation": "int total = left + right; stores the sum.",
+              "xp_reward": 10,
+              "options": [
+                "left == right;",
+                "int total = left + right;",
+                "return left;",
+                "total == left;"
+              ],
+              "correct_answer": "int total = left + right;"
+            },
+            {
+              "id": "cpp-variables-step-2-predict",
+              "type": "output_prediction",
+              "question": "Orchard clerks recount crates before dawn. For use int primitive arithmetic in C, what value is displayed?",
+              "hints": [
+                "Run the example in your head from the top.",
+                "The last line is what gets displayed.",
+                "40"
+              ],
+              "explanation": "The Integers Arithmetic program displays that value.",
+              "xp_reward": 10,
+              "starter_code": "#include <iostream>\n#include <string>\n#include <vector>\n#include <algorithm>\n#include <memory>\nint main() {\n    int left = 35;\n    int right = 5;\n    std::cout << (left + right) << std::endl;\n    return 0;\n}\n",
+              "options": [
+                "44",
+                "40",
+                "none",
+                "0"
+              ],
+              "correct_answer": "40"
+            },
+            {
+              "id": "cpp-variables-step-2-order",
+              "type": "ordering",
+              "question": "Orchard clerks recount crates before dawn. For use int primitive arithmetic in C, build the line that stores the sum of two integers.",
+              "hints": [
+                "Start at the left of the example.",
+                "Keep the example order.",
+                "int total = left + right;"
+              ],
+              "explanation": "int total = left + right; stores the sum.",
+              "xp_reward": 10,
+              "options": [
+                "int",
+                "total",
+                "=",
+                "left",
+                "+",
+                "right;",
+                "=="
+              ],
+              "correct_answer": [
+                "int",
+                "total",
+                "=",
+                "left",
+                "+",
+                "right;"
+              ]
+            },
+            {
+              "id": "cpp-variables-step-2-fill",
+              "type": "fill_blank",
+              "question": "Orchard clerks recount crates before dawn. For use int primitive arithmetic in C, fill the blank so the line stores the sum of two integers.",
+              "hints": [
+                "The blank is the missing piece of the example.",
+                "The example uses that piece.",
+                "+"
+              ],
+              "explanation": "int total = left + right; stores the sum.",
+              "xp_reward": 10,
+              "starter_code": "int total = left ___ right;",
+              "options": [
+                "-",
+                "+",
+                "*",
+                "=="
+              ],
+              "correct_answer": "+"
+            },
+            {
+              "id": "cpp-variables-step-2-bug",
+              "type": "debugging",
+              "question": "Orchard clerks recount crates before dawn. For use int primitive arithmetic in C, which line does a different job than the example?",
+              "hints": [
+                "The other lines match the example.",
+                "One line is the odd one.",
+                "Line 9"
+              ],
+              "explanation": "The print subtracts instead of adding.",
+              "xp_reward": 10,
+              "starter_code": "#include <iostream>\n#include <string>\n#include <vector>\n#include <algorithm>\n#include <memory>\nint main() {\n    int left = 35;\n    int right = 5;\n    std::cout << (left - right) << std::endl;\n    return 0;\n}\n",
+              "correct_answer": "9"
+            },
+            {
+              "id": "cpp-variables-step-2-predict-2",
+              "type": "output_prediction",
+              "question": "Orchard clerks recount crates before dawn. For use int primitive arithmetic in C, what does the second run display?",
+              "hints": [
+                "Apply the same steps to the new value.",
+                "The display comes from the last line.",
+                "44"
+              ],
+              "explanation": "The second Integers Arithmetic program displays that value.",
+              "xp_reward": 10,
+              "starter_code": "#include <iostream>\n#include <string>\n#include <vector>\n#include <algorithm>\n#include <memory>\nint main() {\n    int left = 35;\n    int right = 9;\n    std::cout << (left + right) << std::endl;\n    return 0;\n}\n",
+              "options": [
+                "40",
+                "none",
+                "0",
+                "44"
+              ],
+              "correct_answer": "44"
+            },
+            {
+              "id": "cpp-variables-step-2-write",
+              "type": "code",
+              "question": "Orchard clerks recount crates before dawn. For use int primitive arithmetic in C, fill the blank so the program prints the result.",
+              "hints": [
+                "The blank is the missing piece.",
+                "Print the value that piece produces.",
+                "int label = left + right;"
+              ],
+              "explanation": "The printed value is the result after this step stores the sum of two integers.",
+              "xp_reward": 10,
+              "starter_code": "#include <iostream>\n#include <string>\n#include <vector>\n#include <algorithm>\n#include <memory>\nint main() {\n    int left = 35;\n    int right = 5;\n    int label = ___;\n    std::cout << label << std::endl;\n    return 0;\n}\n",
+              "solution_code": "#include <iostream>\n#include <string>\n#include <vector>\n#include <algorithm>\n#include <memory>\nint main() {\n    int left = 35;\n    int right = 5;\n    int label = left + right;\n    std::cout << label << std::endl;\n    return 0;\n}\n",
+              "tests": [
+                {
+                  "name": "cpp-variables-step-2-prints",
+                  "description": "The printed value is the result after this step stores the sum of two integers.",
+                  "expected_stdout": "40\n",
+                  "required": true
+                }
+              ]
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "cpp-variables-01",
-      "title": "3. Rocket Payload Fuel Calculator",
-      "description": "Finish `calculate_fuel`. Calculate required rocket fuel mass in C++: fuel equals `payload_mass * distance * 0.15`. The test checks that `calculate_fuel(100.0, 50.0)` is about `750.0`.",
+      "title": "Practice Rocket Payload Fuel Calculator",
+      "description": "Finish calculate_fuel. Calculate required rocket fuel mass in C++: fuel equals payload_mass * distance * 0.15. The test checks that calculate_fuel(100.0, 50.0) is about 750.0.",
       "order": 3,
       "difficulty": "beginner",
       "duration_minutes": 8,
@@ -211,7 +471,7 @@
       ],
       "prerequisites": [],
       "learning_objectives": [
-        "Combine double variables and floating point math in C++"
+        "Quarry clerks recount crates before dawn, and combine double variables and floating point math in C."
       ],
       "starter_code": "double calculate_fuel(double payload_mass, double distance) {\n    // TODO: return the fuel mass for this payload and distance\n    return 0.0;\n}\n",
       "solution_code": "double calculate_fuel(double payload_mass, double distance) {\n    return payload_mass * distance * 0.15;\n}\n",
@@ -235,37 +495,177 @@
       "xp_reward": 25,
       "sublessons": [
         {
-          "id": "cpp-half-value-sub",
-          "title": "Select the ones that keep 2.5",
+          "id": "cpp-variables-01-micro",
+          "title": "Practice Rocket Payload Fuel Calculator",
+          "description": "",
           "order": 1,
           "exercises": [
             {
-              "id": "cpp-half-value-multi-1",
-              "type": "select_multiple",
-              "question": "Each declaration below is meant to end up holding 2.5. Select every one that actually does.",
+              "id": "cpp-variables-01-teach",
+              "type": "teach",
+              "question": "Quarry clerks recount crates before dawn, and combine double variables and floating point math in C.",
+              "hints": [
+                "Read the one job this step is practicing.",
+                "The example is about Rocket Payload Fuel Calculator.",
+                "int mass = 33;"
+              ],
+              "explanation": "Quarry clerks recount crates before dawn, and combine double variables and floating point math in C.",
+              "xp_reward": 0,
+              "worked_example": "int mass = 33;"
+            },
+            {
+              "id": "cpp-variables-01-mcq",
+              "type": "mcq",
+              "question": "Quarry clerks recount crates before dawn. For combine double variables and floating point math in C, which line multiplies mass by two for the fuel figure?",
+              "hints": [
+                "Compare each line with the example.",
+                "One line matches the example.",
+                "int fuel = mass * 2;"
+              ],
+              "explanation": "mass * 2 is the fuel figure.",
+              "xp_reward": 10,
               "options": [
-                "double x = 5.0 / 2.0;",
-                "double y = 5 / 2;",
-                "double z = 2.5;",
-                "int w = 5.0 / 2.0;",
-                "float v = 2.5f;"
+                "mass == 2;",
+                "return mass;",
+                "fuel == mass;",
+                "int fuel = mass * 2;"
+              ],
+              "correct_answer": "int fuel = mass * 2;"
+            },
+            {
+              "id": "cpp-variables-01-predict",
+              "type": "output_prediction",
+              "question": "Quarry clerks recount crates before dawn. For combine double variables and floating point math in C, what value is displayed?",
+              "hints": [
+                "Run the example in your head from the top.",
+                "The last line is what gets displayed.",
+                "66"
+              ],
+              "explanation": "The Rocket Payload Fuel Calculator program displays that value.",
+              "xp_reward": 10,
+              "starter_code": "#include <iostream>\n#include <string>\n#include <vector>\n#include <algorithm>\n#include <memory>\nint main() {\n    int mass = 33;\n    std::cout << (mass * 2) << std::endl;\n    return 0;\n}\n",
+              "options": [
+                "72",
+                "none",
+                "0",
+                "66"
+              ],
+              "correct_answer": "66"
+            },
+            {
+              "id": "cpp-variables-01-order",
+              "type": "ordering",
+              "question": "Quarry clerks recount crates before dawn. For combine double variables and floating point math in C, build the line that multiplies mass by two for the fuel figure.",
+              "hints": [
+                "Start at the left of the example.",
+                "Keep the example order.",
+                "int fuel = left * 2;"
+              ],
+              "explanation": "mass * 2 is the fuel figure.",
+              "xp_reward": 10,
+              "options": [
+                "int",
+                "fuel",
+                "=",
+                "left",
+                "*",
+                "2;",
+                "=="
               ],
               "correct_answer": [
-                "double x = 5.0 / 2.0;",
-                "double z = 2.5;",
-                "float v = 2.5f;"
+                "int",
+                "fuel",
+                "=",
+                "left",
+                "*",
+                "2;"
+              ]
+            },
+            {
+              "id": "cpp-variables-01-fill",
+              "type": "fill_blank",
+              "question": "Quarry clerks recount crates before dawn. For combine double variables and floating point math in C, fill the blank so the line multiplies mass by two for the fuel figure.",
+              "hints": [
+                "The blank is the missing piece of the example.",
+                "The example uses that piece.",
+                "*"
               ],
-              "explanation": "`5 / 2` is integer division and yields 2 before the double ever sees it, and `int w` truncates the 2.5 it is given. One operand written as a decimal is enough to make the division floating-point.",
-              "xp_reward": 10
+              "explanation": "mass * 2 is the fuel figure.",
+              "xp_reward": 10,
+              "starter_code": "int fuel = left ___ 2;",
+              "options": [
+                "+",
+                "-",
+                "/",
+                "*"
+              ],
+              "correct_answer": "*"
+            },
+            {
+              "id": "cpp-variables-01-bug",
+              "type": "debugging",
+              "question": "Quarry clerks recount crates before dawn. For combine double variables and floating point math in C, which line does a different job than the example?",
+              "hints": [
+                "The other lines match the example.",
+                "One line is the odd one.",
+                "Line 8"
+              ],
+              "explanation": "The print adds two instead of doubling the mass.",
+              "xp_reward": 10,
+              "starter_code": "#include <iostream>\n#include <string>\n#include <vector>\n#include <algorithm>\n#include <memory>\nint main() {\n    int mass = 33;\n    std::cout << (mass + 2) << std::endl;\n    return 0;\n}\n",
+              "correct_answer": "8"
+            },
+            {
+              "id": "cpp-variables-01-predict-2",
+              "type": "output_prediction",
+              "question": "Quarry clerks recount crates before dawn. For combine double variables and floating point math in C, what does the second run display?",
+              "hints": [
+                "Apply the same steps to the new value.",
+                "The display comes from the last line.",
+                "72"
+              ],
+              "explanation": "The second Rocket Payload Fuel Calculator program displays that value.",
+              "xp_reward": 10,
+              "starter_code": "#include <iostream>\n#include <string>\n#include <vector>\n#include <algorithm>\n#include <memory>\nint main() {\n    int mass = 36;\n    std::cout << (mass * 2) << std::endl;\n    return 0;\n}\n",
+              "options": [
+                "66",
+                "none",
+                "72",
+                "0"
+              ],
+              "correct_answer": "72"
+            },
+            {
+              "id": "cpp-variables-01-write",
+              "type": "code",
+              "question": "Quarry clerks recount crates before dawn. For combine double variables and floating point math in C, fill the blank so the program prints the result.",
+              "hints": [
+                "The blank is the missing piece.",
+                "Print the value that piece produces.",
+                "int label = mass * 2;"
+              ],
+              "explanation": "The printed value is the result after this step multiplies mass by two for the fuel figure.",
+              "xp_reward": 10,
+              "starter_code": "#include <iostream>\n#include <string>\n#include <vector>\n#include <algorithm>\n#include <memory>\nint main() {\n    int mass = 33;\n    int label = ___;\n    std::cout << label << std::endl;\n    return 0;\n}\n",
+              "solution_code": "#include <iostream>\n#include <string>\n#include <vector>\n#include <algorithm>\n#include <memory>\nint main() {\n    int mass = 33;\n    int label = mass * 2;\n    std::cout << label << std::endl;\n    return 0;\n}\n",
+              "tests": [
+                {
+                  "name": "cpp-variables-01-prints",
+                  "description": "The printed value is the result after this step multiplies mass by two for the f",
+                  "expected_stdout": "66\n",
+                  "required": true
+                }
+              ]
             }
           ]
         }
-      ]
+      ],
+      "player_mode": "micro"
     },
     {
       "id": "cpp-variables-practice-1",
-      "title": "4. Circle Area Calculator (Practice)",
-      "description": "Finish `circle_area`. Calculate circle area using pi * radius * radius. The test checks that `circle_area(2.0)` is about `12.56637`.",
+      "title": "Practice Circle Area Calculator",
+      "description": "Finish circle_area. Calculate circle area using pi * radius * radius. The test checks that circle_area(2.0) is about 12.56637.",
       "order": 4,
       "difficulty": "beginner",
       "duration_minutes": 6,
@@ -278,7 +678,7 @@
       ],
       "prerequisites": [],
       "learning_objectives": [
-        "Calculate geometric area in C++"
+        "Attic clerks recount crates before dawn, and calculate geometric area in C."
       ],
       "starter_code": "double circle_area(double radius) {\n    const double pi = 3.141592653589793;\n    // TODO: return the area of a circle with this radius\n    return 0.0;\n}\n",
       "solution_code": "double circle_area(double radius) {\n    const double pi = 3.141592653589793;\n    return pi * radius * radius;\n}\n",
@@ -299,11 +699,179 @@
         "url": "https://en.cppreference.com/w/cpp/language/operator_arithmetic",
         "license": "CC BY-SA 4.0 (cppreference.com)"
       },
-      "xp_reward": 15
+      "xp_reward": 15,
+      "player_mode": "micro",
+      "sublessons": [
+        {
+          "id": "cpp-variables-practice-1-micro",
+          "title": "Practice Circle Area Calculator",
+          "description": "",
+          "order": 1,
+          "exercises": [
+            {
+              "id": "cpp-variables-practice-1-teach",
+              "type": "teach",
+              "question": "Attic clerks recount crates before dawn, and calculate geometric area in C.",
+              "hints": [
+                "Read the one job this step is practicing.",
+                "The example is about Circle Area Calculator.",
+                "int radius = 3;"
+              ],
+              "explanation": "Attic clerks recount crates before dawn, and calculate geometric area in C.",
+              "xp_reward": 0,
+              "worked_example": "int radius = 3;"
+            },
+            {
+              "id": "cpp-variables-practice-1-mcq",
+              "type": "mcq",
+              "question": "Attic clerks recount crates before dawn. For calculate geometric area in C, which line computes a whole-number circle area?",
+              "hints": [
+                "Compare each line with the example.",
+                "One line matches the example.",
+                "int area = radius * radius * 3;"
+              ],
+              "explanation": "radius * radius * 3 is the whole-number area.",
+              "xp_reward": 10,
+              "options": [
+                "radius == 3;",
+                "return radius;",
+                "area == radius;",
+                "int area = radius * radius * 3;"
+              ],
+              "correct_answer": "int area = radius * radius * 3;"
+            },
+            {
+              "id": "cpp-variables-practice-1-predict",
+              "type": "output_prediction",
+              "question": "Attic clerks recount crates before dawn. For calculate geometric area in C, what value is displayed?",
+              "hints": [
+                "Run the example in your head from the top.",
+                "The last line is what gets displayed.",
+                "27"
+              ],
+              "explanation": "The Circle Area Calculator program displays that value.",
+              "xp_reward": 10,
+              "starter_code": "#include <iostream>\n#include <string>\n#include <vector>\n#include <algorithm>\n#include <memory>\nint main() {\n    int radius = 3;\n    std::cout << (radius * radius * 3) << std::endl;\n    return 0;\n}\n",
+              "options": [
+                "48",
+                "none",
+                "0",
+                "27"
+              ],
+              "correct_answer": "27"
+            },
+            {
+              "id": "cpp-variables-practice-1-order",
+              "type": "ordering",
+              "question": "Attic clerks recount crates before dawn. For calculate geometric area in C, build the line that computes a whole-number circle area.",
+              "hints": [
+                "Start at the left of the example.",
+                "Keep the example order.",
+                "int area = left * 3;"
+              ],
+              "explanation": "radius * radius * 3 is the whole-number area.",
+              "xp_reward": 10,
+              "options": [
+                "int",
+                "area",
+                "=",
+                "left",
+                "*",
+                "3;",
+                "=="
+              ],
+              "correct_answer": [
+                "int",
+                "area",
+                "=",
+                "left",
+                "*",
+                "3;"
+              ]
+            },
+            {
+              "id": "cpp-variables-practice-1-fill",
+              "type": "fill_blank",
+              "question": "Attic clerks recount crates before dawn. For calculate geometric area in C, fill the blank so the line computes a whole-number circle area.",
+              "hints": [
+                "The blank is the missing piece of the example.",
+                "The example uses that piece.",
+                "*"
+              ],
+              "explanation": "radius * radius * 3 is the whole-number area.",
+              "xp_reward": 10,
+              "starter_code": "int area = left ___ left * 3;",
+              "options": [
+                "+",
+                "-",
+                "/",
+                "*"
+              ],
+              "correct_answer": "*"
+            },
+            {
+              "id": "cpp-variables-practice-1-bug",
+              "type": "debugging",
+              "question": "Attic clerks recount crates before dawn. For calculate geometric area in C, which line does a different job than the example?",
+              "hints": [
+                "The other lines match the example.",
+                "One line is the odd one.",
+                "Line 8"
+              ],
+              "explanation": "The formula adds the radius instead of squaring it.",
+              "xp_reward": 10,
+              "starter_code": "#include <iostream>\n#include <string>\n#include <vector>\n#include <algorithm>\n#include <memory>\nint main() {\n    int radius = 3;\n    std::cout << (radius + radius * 3) << std::endl;\n    return 0;\n}\n",
+              "correct_answer": "8"
+            },
+            {
+              "id": "cpp-variables-practice-1-predict-2",
+              "type": "output_prediction",
+              "question": "Attic clerks recount crates before dawn. For calculate geometric area in C, what does the second run display?",
+              "hints": [
+                "Apply the same steps to the new value.",
+                "The display comes from the last line.",
+                "48"
+              ],
+              "explanation": "The second Circle Area Calculator program displays that value.",
+              "xp_reward": 10,
+              "starter_code": "#include <iostream>\n#include <string>\n#include <vector>\n#include <algorithm>\n#include <memory>\nint main() {\n    int radius = 4;\n    std::cout << (radius * radius * 3) << std::endl;\n    return 0;\n}\n",
+              "options": [
+                "27",
+                "0",
+                "48",
+                "none"
+              ],
+              "correct_answer": "48"
+            },
+            {
+              "id": "cpp-variables-practice-1-write",
+              "type": "code",
+              "question": "Attic clerks recount crates before dawn. For calculate geometric area in C, fill the blank so the program prints the result.",
+              "hints": [
+                "The blank is the missing piece.",
+                "Print the value that piece produces.",
+                "int label = radius * radius * 3;"
+              ],
+              "explanation": "The printed value is the result after this step computes a whole-number circle area.",
+              "xp_reward": 10,
+              "starter_code": "#include <iostream>\n#include <string>\n#include <vector>\n#include <algorithm>\n#include <memory>\nint main() {\n    int radius = 3;\n    int label = ___;\n    std::cout << label << std::endl;\n    return 0;\n}\n",
+              "solution_code": "#include <iostream>\n#include <string>\n#include <vector>\n#include <algorithm>\n#include <memory>\nint main() {\n    int radius = 3;\n    int label = radius * radius * 3;\n    std::cout << label << std::endl;\n    return 0;\n}\n",
+              "tests": [
+                {
+                  "name": "cpp-variables-practice-1-prints",
+                  "description": "The printed value is the result after this step computes a whole-number circle a",
+                  "expected_stdout": "27\n",
+                  "required": true
+                }
+              ]
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "cpp-variables-checkpoint",
-      "title": "5. Section 1 Checkpoint: C++ Foundations Mastery",
+      "title": "Practice Section 1 Checkpoint C Foundations",
       "description": "Checkpoint for variables and arithmetic: implement square(int x) returning x * x. The test asserts square(6) == 36.",
       "order": 5,
       "difficulty": "beginner",
@@ -317,7 +885,7 @@
       ],
       "prerequisites": [],
       "learning_objectives": [
-        "Pass C++ variables checkpoint"
+        "Depot clerks recount crates before dawn, and pass C variables checkpoint."
       ],
       "starter_code": "int square(int x) {\n    // TODO: Return x * x\n    return 0;\n}\n",
       "solution_code": "int square(int x) {\n    return x * x;\n}\n",
@@ -367,7 +935,175 @@
         "url": "https://en.cppreference.com/w/cpp/language/operator_arithmetic",
         "license": "CC BY-SA 4.0 (cppreference.com)"
       },
-      "xp_reward": 40
+      "xp_reward": 40,
+      "player_mode": "micro",
+      "sublessons": [
+        {
+          "id": "cpp-variables-checkpoint-micro",
+          "title": "Practice Section 1 Checkpoint C Foundations",
+          "description": "",
+          "order": 1,
+          "exercises": [
+            {
+              "id": "cpp-variables-checkpoint-teach",
+              "type": "teach",
+              "question": "Depot clerks recount crates before dawn, and pass C variables checkpoint.",
+              "hints": [
+                "Read the one job this step is practicing.",
+                "The example is about Section 1 Checkpoint C Foundations Mastery.",
+                "int left = 40;"
+              ],
+              "explanation": "Depot clerks recount crates before dawn, and pass C variables checkpoint.",
+              "xp_reward": 0,
+              "worked_example": "int left = 40;"
+            },
+            {
+              "id": "cpp-variables-checkpoint-mcq",
+              "type": "mcq",
+              "question": "Depot clerks recount crates before dawn. For pass C variables checkpoint, which line stores the product of two integers?",
+              "hints": [
+                "Compare each line with the example.",
+                "One line matches the example.",
+                "int total = left * right;"
+              ],
+              "explanation": "left * right stores the product.",
+              "xp_reward": 10,
+              "options": [
+                "left == right;",
+                "int total = left * right;",
+                "return left;",
+                "total == left;"
+              ],
+              "correct_answer": "int total = left * right;"
+            },
+            {
+              "id": "cpp-variables-checkpoint-predict",
+              "type": "output_prediction",
+              "question": "Depot clerks recount crates before dawn. For pass C variables checkpoint, what value is displayed?",
+              "hints": [
+                "Run the example in your head from the top.",
+                "The last line is what gets displayed.",
+                "120"
+              ],
+              "explanation": "The Section 1 Checkpoint C Foundations Mastery program displays that value.",
+              "xp_reward": 10,
+              "starter_code": "#include <iostream>\n#include <string>\n#include <vector>\n#include <algorithm>\n#include <memory>\nint main() {\n    int left = 40;\n    int right = 3;\n    std::cout << (left * right) << std::endl;\n    return 0;\n}\n",
+              "options": [
+                "160",
+                "120",
+                "0",
+                "none"
+              ],
+              "correct_answer": "120"
+            },
+            {
+              "id": "cpp-variables-checkpoint-order",
+              "type": "ordering",
+              "question": "Depot clerks recount crates before dawn. For pass C variables checkpoint, build the line that stores the product of two integers.",
+              "hints": [
+                "Start at the left of the example.",
+                "Keep the example order.",
+                "int total = left * right;"
+              ],
+              "explanation": "left * right stores the product.",
+              "xp_reward": 10,
+              "options": [
+                "int",
+                "total",
+                "=",
+                "left",
+                "*",
+                "right;",
+                "=="
+              ],
+              "correct_answer": [
+                "int",
+                "total",
+                "=",
+                "left",
+                "*",
+                "right;"
+              ]
+            },
+            {
+              "id": "cpp-variables-checkpoint-fill",
+              "type": "fill_blank",
+              "question": "Depot clerks recount crates before dawn. For pass C variables checkpoint, fill the blank so the line stores the product of two integers.",
+              "hints": [
+                "The blank is the missing piece of the example.",
+                "The example uses that piece.",
+                "*"
+              ],
+              "explanation": "left * right stores the product.",
+              "xp_reward": 10,
+              "starter_code": "int total = left ___ right;",
+              "options": [
+                "+",
+                "*",
+                "-",
+                "=="
+              ],
+              "correct_answer": "*"
+            },
+            {
+              "id": "cpp-variables-checkpoint-bug",
+              "type": "debugging",
+              "question": "Depot clerks recount crates before dawn. For pass C variables checkpoint, which line does a different job than the example?",
+              "hints": [
+                "The other lines match the example.",
+                "One line is the odd one.",
+                "Line 9"
+              ],
+              "explanation": "The print adds instead of multiplying.",
+              "xp_reward": 10,
+              "starter_code": "#include <iostream>\n#include <string>\n#include <vector>\n#include <algorithm>\n#include <memory>\nint main() {\n    int left = 40;\n    int right = 3;\n    std::cout << (left + right) << std::endl;\n    return 0;\n}\n",
+              "correct_answer": "9"
+            },
+            {
+              "id": "cpp-variables-checkpoint-predict-2",
+              "type": "output_prediction",
+              "question": "Depot clerks recount crates before dawn. For pass C variables checkpoint, what does the second run display?",
+              "hints": [
+                "Apply the same steps to the new value.",
+                "The display comes from the last line.",
+                "160"
+              ],
+              "explanation": "The second Section 1 Checkpoint C Foundations Mastery program displays that value.",
+              "xp_reward": 10,
+              "starter_code": "#include <iostream>\n#include <string>\n#include <vector>\n#include <algorithm>\n#include <memory>\nint main() {\n    int left = 40;\n    int right = 4;\n    std::cout << (left * right) << std::endl;\n    return 0;\n}\n",
+              "options": [
+                "none",
+                "160",
+                "0",
+                "120"
+              ],
+              "correct_answer": "160"
+            },
+            {
+              "id": "cpp-variables-checkpoint-write",
+              "type": "code",
+              "question": "Depot clerks recount crates before dawn. For pass C variables checkpoint, fill the blank so the program prints the result.",
+              "hints": [
+                "The blank is the missing piece.",
+                "Print the value that piece produces.",
+                "int label = left * right;"
+              ],
+              "explanation": "The printed value is the result after this step stores the product of two integers.",
+              "xp_reward": 10,
+              "starter_code": "#include <iostream>\n#include <string>\n#include <vector>\n#include <algorithm>\n#include <memory>\nint main() {\n    int left = 40;\n    int right = 3;\n    int label = ___;\n    std::cout << label << std::endl;\n    return 0;\n}\n",
+              "solution_code": "#include <iostream>\n#include <string>\n#include <vector>\n#include <algorithm>\n#include <memory>\nint main() {\n    int left = 40;\n    int right = 3;\n    int label = left * right;\n    std::cout << label << std::endl;\n    return 0;\n}\n",
+              "tests": [
+                {
+                  "name": "cpp-variables-checkpoint-prints",
+                  "description": "The printed value is the result after this step stores the product of two intege",
+                  "expected_stdout": "120\n",
+                  "required": true
+                }
+              ]
+            }
+          ]
+        }
+      ]
     }
   ]
 }

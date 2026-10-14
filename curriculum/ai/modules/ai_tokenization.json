@@ -14,8 +14,8 @@
   "lessons": [
     {
       "id": "ai-tok-split",
-      "title": "4. Whitespace Tokenize",
-      "description": "Implement `tokenize(text)` splitting on whitespace and dropping empties. The test checks that `tokenize(' hello world ')` equals `['hello', 'world']`.",
+      "title": "Practice Whitespace Tokenize",
+      "description": "Implement tokenize(text) splitting on whitespace and dropping empties. The test checks that tokenize(' hello world ') equals ['hello', 'world'].",
       "order": 4,
       "difficulty": "intermediate",
       "duration_minutes": 5,
@@ -27,7 +27,7 @@
       ],
       "prerequisites": [],
       "learning_objectives": [
-        "Tokenize text on whitespace"
+        "Depot potters recount crates before dawn, and tokenize text on whitespace."
       ],
       "starter_code": "def tokenize(text):\n    # TODO\n    pass\n",
       "solution_code": "def tokenize(text):\n    return [t for t in text.split() if t]\n",
@@ -48,12 +48,174 @@
         "url": "https://docs.python.org/3/library/stdtypes.html#string-methods",
         "license": "Python documentation license (PSF)"
       },
-      "xp_reward": 10
+      "xp_reward": 10,
+      "player_mode": "micro",
+      "sublessons": [
+        {
+          "id": "ai-tok-split-micro",
+          "title": "Practice Whitespace Tokenize",
+          "description": "",
+          "order": 1,
+          "exercises": [
+            {
+              "id": "ai-tok-split-teach",
+              "type": "teach",
+              "question": "Depot potters recount crates before dawn, and tokenize text on whitespace.",
+              "hints": [
+                "Read the one job this step is practicing.",
+                "The example is about Whitespace Tokenize.",
+                "text.split()"
+              ],
+              "explanation": "Depot potters recount crates before dawn, and tokenize text on whitespace.",
+              "xp_reward": 0,
+              "worked_example": "text.split()"
+            },
+            {
+              "id": "ai-tok-split-mcq",
+              "type": "mcq",
+              "question": "Depot potters recount crates before dawn. For tokenize text on whitespace, which line counts whitespace tokens?",
+              "hints": [
+                "Compare each line with the example.",
+                "One line matches the example.",
+                "text.split()"
+              ],
+              "explanation": "split on whitespace makes one token per word.",
+              "xp_reward": 10,
+              "options": [
+                "text == text",
+                "text.split()",
+                "return text",
+                "pass"
+              ],
+              "correct_answer": "text.split()"
+            },
+            {
+              "id": "ai-tok-split-predict",
+              "type": "output_prediction",
+              "question": "Depot potters recount crates before dawn. For tokenize text on whitespace, what value is displayed?",
+              "hints": [
+                "Run the example in your head from the top.",
+                "The last line is what gets displayed.",
+                "2"
+              ],
+              "explanation": "The Whitespace Tokenize program displays that value.",
+              "xp_reward": 10,
+              "starter_code": "text = 'red fox'\nprint(len(text.split()))\n",
+              "options": [
+                "3",
+                "2",
+                "none",
+                "0"
+              ],
+              "correct_answer": "2"
+            },
+            {
+              "id": "ai-tok-split-order",
+              "type": "ordering",
+              "question": "Depot potters recount crates before dawn. For tokenize text on whitespace, build the line that counts whitespace tokens.",
+              "hints": [
+                "Start at the left of the example.",
+                "Keep the example order.",
+                "tokens = text.split()"
+              ],
+              "explanation": "split on whitespace makes one token per word.",
+              "xp_reward": 10,
+              "options": [
+                "tokens",
+                "=",
+                "text.split()",
+                "=="
+              ],
+              "correct_answer": [
+                "tokens",
+                "=",
+                "text.split()"
+              ]
+            },
+            {
+              "id": "ai-tok-split-fill",
+              "type": "fill_blank",
+              "question": "Depot potters recount crates before dawn. For tokenize text on whitespace, fill the blank so the line counts whitespace tokens.",
+              "hints": [
+                "The blank is the missing piece of the example.",
+                "The example uses that piece.",
+                "split()"
+              ],
+              "explanation": "split on whitespace makes one token per word.",
+              "xp_reward": 10,
+              "starter_code": "tokens = text.___\n",
+              "options": [
+                "upper()",
+                "split()",
+                "strip()",
+                "lower()"
+              ],
+              "correct_answer": "split()"
+            },
+            {
+              "id": "ai-tok-split-bug",
+              "type": "debugging",
+              "question": "Depot potters recount crates before dawn. For tokenize text on whitespace, which line does a different job than the example?",
+              "hints": [
+                "The other lines match the example.",
+                "One line is the odd one.",
+                "Line 2"
+              ],
+              "explanation": "The print counts characters instead of words.",
+              "xp_reward": 10,
+              "starter_code": "text = 'red fox'\nprint(len(text))\n",
+              "correct_answer": "2"
+            },
+            {
+              "id": "ai-tok-split-predict-2",
+              "type": "output_prediction",
+              "question": "Depot potters recount crates before dawn. For tokenize text on whitespace, what does the second run display?",
+              "hints": [
+                "Apply the same steps to the new value.",
+                "The display comes from the last line.",
+                "3"
+              ],
+              "explanation": "The second Whitespace Tokenize program displays that value.",
+              "xp_reward": 10,
+              "starter_code": "text = 'red fox jumps'\nprint(len(text.split()))\n",
+              "options": [
+                "2",
+                "none",
+                "0",
+                "3"
+              ],
+              "correct_answer": "3"
+            },
+            {
+              "id": "ai-tok-split-write",
+              "type": "code",
+              "question": "Depot potters recount crates before dawn. For tokenize text on whitespace, fill the blank so the program prints the result.",
+              "hints": [
+                "The blank is the missing piece.",
+                "Print the value that piece produces.",
+                "label = len(text.split())"
+              ],
+              "explanation": "The printed value is the result after this step counts whitespace tokens.",
+              "xp_reward": 10,
+              "starter_code": "text = 'red fox'\nlabel = ___\nprint(label)\n",
+              "solution_code": "text = 'red fox'\nlabel = len(text.split())\nprint(label)\n",
+              "tests": [
+                {
+                  "name": "ai-tok-split-prints",
+                  "description": "The printed value is the result after this step counts whitespace tokens.",
+                  "expected_stdout": "2\n",
+                  "required": true
+                }
+              ]
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "ai-tok-lower",
-      "title": "5. Normalize Tokens",
-      "description": "Implement `normalize_tokens(tokens)` lowercasing and stripping punctuation from ends. The test checks that `normalize_tokens(['Hello!', 'WORLD.'])` equals `['hello', 'world']`.",
+      "title": "Practice Normalize Tokens",
+      "description": "Implement normalize_tokens(tokens) lowercasing and stripping punctuation from ends. The test checks that normalize_tokens(['Hello!', 'WORLD.']) equals ['hello', 'world'].",
       "order": 5,
       "difficulty": "intermediate",
       "duration_minutes": 5,
@@ -65,7 +227,7 @@
       ],
       "prerequisites": [],
       "learning_objectives": [
-        "Normalize tokens for NLP"
+        "Ridge potters recount crates before dawn, and normalize tokens for NLP."
       ],
       "starter_code": "import string\n\ndef normalize_tokens(tokens):\n    # TODO\n    pass\n",
       "solution_code": "import string\n\ndef normalize_tokens(tokens):\n    out = []\n    for t in tokens:\n        t = t.lower().strip(string.punctuation)\n        if t:\n            out.append(t)\n    return out\n",
@@ -86,12 +248,174 @@
         "url": "https://docs.python.org/3/library/stdtypes.html#string-methods",
         "license": "Python documentation license (PSF)"
       },
-      "xp_reward": 10
+      "xp_reward": 10,
+      "player_mode": "micro",
+      "sublessons": [
+        {
+          "id": "ai-tok-lower-micro",
+          "title": "Practice Normalize Tokens",
+          "description": "",
+          "order": 1,
+          "exercises": [
+            {
+              "id": "ai-tok-lower-teach",
+              "type": "teach",
+              "question": "Ridge potters recount crates before dawn, and normalize tokens for NLP.",
+              "hints": [
+                "Read the one job this step is practicing.",
+                "The example is about Normalize Tokens.",
+                "token.lower()"
+              ],
+              "explanation": "Ridge potters recount crates before dawn, and normalize tokens for NLP.",
+              "xp_reward": 0,
+              "worked_example": "token.lower()"
+            },
+            {
+              "id": "ai-tok-lower-mcq",
+              "type": "mcq",
+              "question": "Ridge potters recount crates before dawn. For normalize tokens for NLP, which line normalizes the token to lowercase?",
+              "hints": [
+                "Compare each line with the example.",
+                "One line matches the example.",
+                "token.lower()"
+              ],
+              "explanation": "lower makes the token comparable.",
+              "xp_reward": 10,
+              "options": [
+                "token == token",
+                "token.lower()",
+                "return token",
+                "pass"
+              ],
+              "correct_answer": "token.lower()"
+            },
+            {
+              "id": "ai-tok-lower-predict",
+              "type": "output_prediction",
+              "question": "Ridge potters recount crates before dawn. For normalize tokens for NLP, what value is displayed?",
+              "hints": [
+                "Run the example in your head from the top.",
+                "The last line is what gets displayed.",
+                "ember"
+              ],
+              "explanation": "The Normalize Tokens program displays that value.",
+              "xp_reward": 10,
+              "starter_code": "token = 'ember'.upper()\nprint(token.lower())\n",
+              "options": [
+                "ivory",
+                "ember",
+                "none",
+                "0"
+              ],
+              "correct_answer": "ember"
+            },
+            {
+              "id": "ai-tok-lower-order",
+              "type": "ordering",
+              "question": "Ridge potters recount crates before dawn. For normalize tokens for NLP, build the line that normalizes the token to lowercase.",
+              "hints": [
+                "Start at the left of the example.",
+                "Keep the example order.",
+                "normal = token.lower()"
+              ],
+              "explanation": "lower makes the token comparable.",
+              "xp_reward": 10,
+              "options": [
+                "normal",
+                "=",
+                "token.lower()",
+                "upper"
+              ],
+              "correct_answer": [
+                "normal",
+                "=",
+                "token.lower()"
+              ]
+            },
+            {
+              "id": "ai-tok-lower-fill",
+              "type": "fill_blank",
+              "question": "Ridge potters recount crates before dawn. For normalize tokens for NLP, fill the blank so the line normalizes the token to lowercase.",
+              "hints": [
+                "The blank is the missing piece of the example.",
+                "The example uses that piece.",
+                "lower()"
+              ],
+              "explanation": "lower makes the token comparable.",
+              "xp_reward": 10,
+              "starter_code": "normal = token.___\n",
+              "options": [
+                "upper()",
+                "lower()",
+                "title()",
+                "strip()"
+              ],
+              "correct_answer": "lower()"
+            },
+            {
+              "id": "ai-tok-lower-bug",
+              "type": "debugging",
+              "question": "Ridge potters recount crates before dawn. For normalize tokens for NLP, which line does a different job than the example?",
+              "hints": [
+                "The other lines match the example.",
+                "One line is the odd one.",
+                "Line 2"
+              ],
+              "explanation": "The print keeps the uppercase token.",
+              "xp_reward": 10,
+              "starter_code": "token = 'ember'.upper()\nprint(token)\n",
+              "correct_answer": "2"
+            },
+            {
+              "id": "ai-tok-lower-predict-2",
+              "type": "output_prediction",
+              "question": "Ridge potters recount crates before dawn. For normalize tokens for NLP, what does the second run display?",
+              "hints": [
+                "Apply the same steps to the new value.",
+                "The display comes from the last line.",
+                "ivory"
+              ],
+              "explanation": "The second Normalize Tokens program displays that value.",
+              "xp_reward": 10,
+              "starter_code": "token = 'ivory'.upper()\nprint(token.lower())\n",
+              "options": [
+                "ember",
+                "none",
+                "0",
+                "ivory"
+              ],
+              "correct_answer": "ivory"
+            },
+            {
+              "id": "ai-tok-lower-write",
+              "type": "code",
+              "question": "Ridge potters recount crates before dawn. For normalize tokens for NLP, fill the blank so the program prints the result.",
+              "hints": [
+                "The blank is the missing piece.",
+                "Print the value that piece produces.",
+                "label = token.lower()"
+              ],
+              "explanation": "The printed value is the result after this step normalizes the token to lowercase.",
+              "xp_reward": 10,
+              "starter_code": "token = 'ember'.upper()\nlabel = ___\nprint(label)\n",
+              "solution_code": "token = 'ember'.upper()\nlabel = (token.lower())\nprint(label)\n",
+              "tests": [
+                {
+                  "name": "ai-tok-lower-prints",
+                  "description": "The printed value is the result after this step normalizes the token to lowercas",
+                  "expected_stdout": "ember\n",
+                  "required": true
+                }
+              ]
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "ai-tok-vocab",
-      "title": "6. Build Vocabulary",
-      "description": "Implement `build_vocab(token_lists)` mapping tokens to sorted alphabetical ids from 0. The test checks that `build_vocab([['b', 'a'], ['a']])` equals `{'a': 0, 'b': 1}`.",
+      "title": "Build Vocabulary",
+      "description": "Implement build_vocab(token_lists) mapping tokens to sorted alphabetical ids from 0. The test checks that build_vocab([['b', 'a'], ['a']]) equals {'a': 0, 'b': 1}.",
       "order": 6,
       "difficulty": "intermediate",
       "duration_minutes": 8,
@@ -103,7 +427,7 @@
       ],
       "prerequisites": [],
       "learning_objectives": [
-        "Build a token vocabulary"
+        "Cove potters recount crates before dawn, and build a token vocabulary."
       ],
       "starter_code": "def build_vocab(token_lists):\n    # TODO\n    pass\n",
       "solution_code": "def build_vocab(token_lists):\n    uniq = sorted({t for tokens in token_lists for t in tokens})\n    return {t: i for i, t in enumerate(uniq)}\n",
@@ -124,12 +448,174 @@
         "url": "https://docs.python.org/3/library/functions.html#sorted",
         "license": "Python documentation license (PSF)"
       },
-      "xp_reward": 25
+      "xp_reward": 25,
+      "player_mode": "micro",
+      "sublessons": [
+        {
+          "id": "ai-tok-vocab-micro",
+          "title": "Build Vocabulary",
+          "description": "",
+          "order": 1,
+          "exercises": [
+            {
+              "id": "ai-tok-vocab-teach",
+              "type": "teach",
+              "question": "Cove potters recount crates before dawn, and build a token vocabulary.",
+              "hints": [
+                "Read the one job this step is practicing.",
+                "The example is about Build Vocabulary.",
+                "set(tokens)"
+              ],
+              "explanation": "Cove potters recount crates before dawn, and build a token vocabulary.",
+              "xp_reward": 0,
+              "worked_example": "set(tokens)"
+            },
+            {
+              "id": "ai-tok-vocab-mcq",
+              "type": "mcq",
+              "question": "Cove potters recount crates before dawn. For build a token vocabulary, which line counts the distinct tokens?",
+              "hints": [
+                "Compare each line with the example.",
+                "One line matches the example.",
+                "set(tokens)"
+              ],
+              "explanation": "The vocabulary keeps each token once.",
+              "xp_reward": 10,
+              "options": [
+                "tokens == tokens",
+                "set(tokens)",
+                "return tokens",
+                "pass"
+              ],
+              "correct_answer": "set(tokens)"
+            },
+            {
+              "id": "ai-tok-vocab-predict",
+              "type": "output_prediction",
+              "question": "Cove potters recount crates before dawn. For build a token vocabulary, what value is displayed?",
+              "hints": [
+                "Run the example in your head from the top.",
+                "The last line is what gets displayed.",
+                "2"
+              ],
+              "explanation": "The Build Vocabulary program displays that value.",
+              "xp_reward": 10,
+              "starter_code": "tokens = ['zircon', 'zircon', 'delta']\nprint(len(set(tokens)))\n",
+              "options": [
+                "3",
+                "2",
+                "none",
+                "0"
+              ],
+              "correct_answer": "2"
+            },
+            {
+              "id": "ai-tok-vocab-order",
+              "type": "ordering",
+              "question": "Cove potters recount crates before dawn. For build a token vocabulary, build the line that counts the distinct tokens.",
+              "hints": [
+                "Start at the left of the example.",
+                "Keep the example order.",
+                "vocab = set(tokens)"
+              ],
+              "explanation": "The vocabulary keeps each token once.",
+              "xp_reward": 10,
+              "options": [
+                "vocab",
+                "=",
+                "set(tokens)",
+                "=="
+              ],
+              "correct_answer": [
+                "vocab",
+                "=",
+                "set(tokens)"
+              ]
+            },
+            {
+              "id": "ai-tok-vocab-fill",
+              "type": "fill_blank",
+              "question": "Cove potters recount crates before dawn. For build a token vocabulary, fill the blank so the line counts the distinct tokens.",
+              "hints": [
+                "The blank is the missing piece of the example.",
+                "The example uses that piece.",
+                "set"
+              ],
+              "explanation": "The vocabulary keeps each token once.",
+              "xp_reward": 10,
+              "starter_code": "vocab = ___(tokens)\n",
+              "options": [
+                "list",
+                "set",
+                "dict",
+                "tuple"
+              ],
+              "correct_answer": "set"
+            },
+            {
+              "id": "ai-tok-vocab-bug",
+              "type": "debugging",
+              "question": "Cove potters recount crates before dawn. For build a token vocabulary, which line does a different job than the example?",
+              "hints": [
+                "The other lines match the example.",
+                "One line is the odd one.",
+                "Line 2"
+              ],
+              "explanation": "The print counts repeats instead of the vocabulary.",
+              "xp_reward": 10,
+              "starter_code": "tokens = ['zircon', 'zircon']\nprint(len(tokens))\n",
+              "correct_answer": "2"
+            },
+            {
+              "id": "ai-tok-vocab-predict-2",
+              "type": "output_prediction",
+              "question": "Cove potters recount crates before dawn. For build a token vocabulary, what does the second run display?",
+              "hints": [
+                "Apply the same steps to the new value.",
+                "The display comes from the last line.",
+                "3"
+              ],
+              "explanation": "The second Build Vocabulary program displays that value.",
+              "xp_reward": 10,
+              "starter_code": "tokens = ['zircon', 'delta', 'extra']\nprint(len(set(tokens)))\n",
+              "options": [
+                "2",
+                "none",
+                "0",
+                "3"
+              ],
+              "correct_answer": "3"
+            },
+            {
+              "id": "ai-tok-vocab-write",
+              "type": "code",
+              "question": "Cove potters recount crates before dawn. For build a token vocabulary, fill the blank so the program prints the result.",
+              "hints": [
+                "The blank is the missing piece.",
+                "Print the value that piece produces.",
+                "label = len(set(tokens))"
+              ],
+              "explanation": "The printed value is the result after this step counts the distinct tokens.",
+              "xp_reward": 10,
+              "starter_code": "tokens = ['zircon', 'zircon', 'delta']\nlabel = ___\nprint(label)\n",
+              "solution_code": "tokens = ['zircon', 'zircon', 'delta']\nlabel = len(set(tokens))\nprint(label)\n",
+              "tests": [
+                {
+                  "name": "ai-tok-vocab-prints",
+                  "description": "The printed value is the result after this step counts the distinct tokens.",
+                  "expected_stdout": "2\n",
+                  "required": true
+                }
+              ]
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "ai-tok-encode",
-      "title": "7. Encode Sequence (Practice)",
-      "description": "Implement `encode(tokens, vocab, unk_id)` mapping unknown tokens to unk_id. The test checks that `encode(['a', 'z'], {'a': 1}, 0)` equals `[1, 0]`.",
+      "title": "Encode Sequence",
+      "description": "Implement encode(tokens, vocab, unk_id) mapping unknown tokens to unk_id. The test checks that encode(['a', 'z'], {'a': 1}, 0) equals [1, 0].",
       "order": 7,
       "difficulty": "intermediate",
       "duration_minutes": 6,
@@ -141,7 +627,7 @@
       ],
       "prerequisites": [],
       "learning_objectives": [
-        "Encode tokens to ids"
+        "Plaza potters recount crates before dawn, and encode tokens to ids."
       ],
       "starter_code": "def encode(tokens, vocab, unk_id):\n    # TODO\n    pass\n",
       "solution_code": "def encode(tokens, vocab, unk_id):\n    return [vocab.get(t, unk_id) for t in tokens]\n",
@@ -162,12 +648,174 @@
         "url": "https://docs.python.org/3/library/stdtypes.html#mapping-types-dict",
         "license": "Python documentation license (PSF)"
       },
-      "xp_reward": 15
+      "xp_reward": 15,
+      "player_mode": "micro",
+      "sublessons": [
+        {
+          "id": "ai-tok-encode-micro",
+          "title": "Encode Sequence",
+          "description": "",
+          "order": 1,
+          "exercises": [
+            {
+              "id": "ai-tok-encode-teach",
+              "type": "teach",
+              "question": "Plaza potters recount crates before dawn, and encode tokens to ids.",
+              "hints": [
+                "Read the one job this step is practicing.",
+                "The example is about Encode Sequence.",
+                "vocab['yarrow']"
+              ],
+              "explanation": "Plaza potters recount crates before dawn, and encode tokens to ids.",
+              "xp_reward": 0,
+              "worked_example": "vocab['yarrow']"
+            },
+            {
+              "id": "ai-tok-encode-mcq",
+              "type": "mcq",
+              "question": "Plaza potters recount crates before dawn. For encode tokens to ids, which line looks up the token id?",
+              "hints": [
+                "Compare each line with the example.",
+                "One line matches the example.",
+                "vocab[token]"
+              ],
+              "explanation": "The encoder reads the id stored under the token.",
+              "xp_reward": 10,
+              "options": [
+                "token == token",
+                "vocab[token]",
+                "return vocab",
+                "pass"
+              ],
+              "correct_answer": "vocab[token]"
+            },
+            {
+              "id": "ai-tok-encode-predict",
+              "type": "output_prediction",
+              "question": "Plaza potters recount crates before dawn. For encode tokens to ids, what value is displayed?",
+              "hints": [
+                "Run the example in your head from the top.",
+                "The last line is what gets displayed.",
+                "1"
+              ],
+              "explanation": "The Encode Sequence program displays that value.",
+              "xp_reward": 10,
+              "starter_code": "vocab = {'yarrow': 1, 'cedar': 2}\nprint(vocab['yarrow'])\n",
+              "options": [
+                "none",
+                "1",
+                "2",
+                "0"
+              ],
+              "correct_answer": "1"
+            },
+            {
+              "id": "ai-tok-encode-order",
+              "type": "ordering",
+              "question": "Plaza potters recount crates before dawn. For encode tokens to ids, build the line that looks up the token id.",
+              "hints": [
+                "Start at the left of the example.",
+                "Keep the example order.",
+                "code = vocab[token]"
+              ],
+              "explanation": "The encoder reads the id stored under the token.",
+              "xp_reward": 10,
+              "options": [
+                "code",
+                "=",
+                "vocab[token]",
+                "=="
+              ],
+              "correct_answer": [
+                "code",
+                "=",
+                "vocab[token]"
+              ]
+            },
+            {
+              "id": "ai-tok-encode-fill",
+              "type": "fill_blank",
+              "question": "Plaza potters recount crates before dawn. For encode tokens to ids, fill the blank so the line looks up the token id.",
+              "hints": [
+                "The blank is the missing piece of the example.",
+                "The example uses that piece.",
+                "'yarrow'"
+              ],
+              "explanation": "The encoder reads the id stored under the token.",
+              "xp_reward": 10,
+              "starter_code": "code = vocab[___]\n",
+              "options": [
+                "'cedar'",
+                "'yarrow'",
+                "'missing'",
+                "'id'"
+              ],
+              "correct_answer": "'yarrow'"
+            },
+            {
+              "id": "ai-tok-encode-bug",
+              "type": "debugging",
+              "question": "Plaza potters recount crates before dawn. For encode tokens to ids, which line does a different job than the example?",
+              "hints": [
+                "The other lines match the example.",
+                "One line is the odd one.",
+                "Line 2"
+              ],
+              "explanation": "The print counts the vocabulary instead of reading one id.",
+              "xp_reward": 10,
+              "starter_code": "vocab = {'yarrow': 1}\nprint(len(vocab))\n",
+              "correct_answer": "2"
+            },
+            {
+              "id": "ai-tok-encode-predict-2",
+              "type": "output_prediction",
+              "question": "Plaza potters recount crates before dawn. For encode tokens to ids, what does the second run display?",
+              "hints": [
+                "Apply the same steps to the new value.",
+                "The display comes from the last line.",
+                "2"
+              ],
+              "explanation": "The second Encode Sequence program displays that value.",
+              "xp_reward": 10,
+              "starter_code": "vocab = {'yarrow': 1, 'cedar': 2}\nprint(vocab['cedar'])\n",
+              "options": [
+                "1",
+                "none",
+                "0",
+                "2"
+              ],
+              "correct_answer": "2"
+            },
+            {
+              "id": "ai-tok-encode-write",
+              "type": "code",
+              "question": "Plaza potters recount crates before dawn. For encode tokens to ids, fill the blank so the program prints the result.",
+              "hints": [
+                "The blank is the missing piece.",
+                "Print the value that piece produces.",
+                "label = vocab['yarrow']"
+              ],
+              "explanation": "The printed value is the result after this step looks up the token id.",
+              "xp_reward": 10,
+              "starter_code": "vocab = {'yarrow': 1, 'cedar': 2}\nlabel = ___\nprint(label)\n",
+              "solution_code": "vocab = {'yarrow': 1, 'cedar': 2}\nlabel = vocab['yarrow']\nprint(label)\n",
+              "tests": [
+                {
+                  "name": "ai-tok-encode-prints",
+                  "description": "The printed value is the result after this step looks up the token id.",
+                  "expected_stdout": "1\n",
+                  "required": true
+                }
+              ]
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "ai-tok-checkpoint",
-      "title": "8. Checkpoint: Sliding Windows",
-      "description": "Implement `ngrams(tokens, n)` returning list of n-length tuples. The test checks that `ngrams(['a', 'b', 'c'], 2)` equals `[('a', 'b'), ('b', 'c')]`.",
+      "title": "Practice Checkpoint Sliding Windows",
+      "description": "Implement ngrams(tokens, n) returning list of n-length tuples. The test checks that ngrams(['a', 'b', 'c'], 2) equals [('a', 'b'), ('b', 'c')].",
       "order": 8,
       "difficulty": "intermediate",
       "duration_minutes": 10,
@@ -179,7 +827,7 @@
       ],
       "prerequisites": [],
       "learning_objectives": [
-        "Generate n-grams"
+        "Marsh potters recount crates before dawn, and generate n-grams."
       ],
       "starter_code": "def ngrams(tokens, n):\n    # TODO\n    pass\n",
       "solution_code": "def ngrams(tokens, n):\n    return [tuple(tokens[i:i + n]) for i in range(len(tokens) - n + 1)]\n",
@@ -200,7 +848,177 @@
         "url": "https://docs.python.org/3/tutorial/introduction.html#strings",
         "license": "Python documentation license (PSF)"
       },
-      "xp_reward": 40
+      "xp_reward": 40,
+      "player_mode": "micro",
+      "sublessons": [
+        {
+          "id": "ai-tok-checkpoint-micro",
+          "title": "Practice Checkpoint Sliding Windows",
+          "description": "",
+          "order": 1,
+          "exercises": [
+            {
+              "id": "ai-tok-checkpoint-teach",
+              "type": "teach",
+              "question": "Marsh potters recount crates before dawn, and generate n-grams.",
+              "hints": [
+                "Read the one job this step is practicing.",
+                "The example is about Checkpoint Sliding Windows.",
+                "len(text) - size + 1"
+              ],
+              "explanation": "Marsh potters recount crates before dawn, and generate n-grams.",
+              "xp_reward": 0,
+              "worked_example": "len(text) - size + 1"
+            },
+            {
+              "id": "ai-tok-checkpoint-mcq",
+              "type": "mcq",
+              "question": "Marsh potters recount crates before dawn. For generate n-grams, which line counts windows that fit in the text?",
+              "hints": [
+                "Compare each line with the example.",
+                "One line matches the example.",
+                "len(text) - size + 1"
+              ],
+              "explanation": "The window count is the length minus the size plus one.",
+              "xp_reward": 10,
+              "options": [
+                "text == text",
+                "return text",
+                "len(text) - size + 1",
+                "pass"
+              ],
+              "correct_answer": "len(text) - size + 1"
+            },
+            {
+              "id": "ai-tok-checkpoint-predict",
+              "type": "output_prediction",
+              "question": "Marsh potters recount crates before dawn. For generate n-grams, what value is displayed?",
+              "hints": [
+                "Run the example in your head from the top.",
+                "The last line is what gets displayed.",
+                "6"
+              ],
+              "explanation": "The Checkpoint Sliding Windows program displays that value.",
+              "xp_reward": 10,
+              "starter_code": "text = 'abcdefgh'\nsize = 3\nprint(len(text) - size + 1)\n",
+              "options": [
+                "8",
+                "none",
+                "6",
+                "0"
+              ],
+              "correct_answer": "6"
+            },
+            {
+              "id": "ai-tok-checkpoint-order",
+              "type": "ordering",
+              "question": "Marsh potters recount crates before dawn. For generate n-grams, build the line that counts windows that fit in the text.",
+              "hints": [
+                "Start at the left of the example.",
+                "Keep the example order.",
+                "windows = len(text) - size + 1"
+              ],
+              "explanation": "The window count is the length minus the size plus one.",
+              "xp_reward": 10,
+              "options": [
+                "windows",
+                "=",
+                "len(text)",
+                "-",
+                "size",
+                "+",
+                "1",
+                "*"
+              ],
+              "correct_answer": [
+                "windows",
+                "=",
+                "len(text)",
+                "-",
+                "size",
+                "+",
+                "1"
+              ]
+            },
+            {
+              "id": "ai-tok-checkpoint-fill",
+              "type": "fill_blank",
+              "question": "Marsh potters recount crates before dawn. Choose the match for this step.",
+              "hints": [
+                "The blank is the missing piece of the example.",
+                "The example uses that piece.",
+                "-"
+              ],
+              "explanation": "The window count is the length minus the size plus one.",
+              "xp_reward": 10,
+              "starter_code": "windows = len(text) ___ size + 1\n",
+              "options": [
+                "/",
+                "+",
+                "*",
+                "-"
+              ],
+              "correct_answer": "-"
+            },
+            {
+              "id": "ai-tok-checkpoint-bug",
+              "type": "debugging",
+              "question": "Marsh potters recount crates before dawn. For generate n-grams, which line does a different job than the example?",
+              "hints": [
+                "The other lines match the example.",
+                "One line is the odd one.",
+                "Line 3"
+              ],
+              "explanation": "The print counts characters, not windows.",
+              "xp_reward": 10,
+              "starter_code": "text = 'abcdefgh'\nsize = 3\nprint(len(text))\n",
+              "correct_answer": "3"
+            },
+            {
+              "id": "ai-tok-checkpoint-predict-2",
+              "type": "output_prediction",
+              "question": "Marsh potters recount crates before dawn. For generate n-grams, what does the second run display?",
+              "hints": [
+                "Apply the same steps to the new value.",
+                "The display comes from the last line.",
+                "8"
+              ],
+              "explanation": "The second Checkpoint Sliding Windows program displays that value.",
+              "xp_reward": 10,
+              "starter_code": "text = 'abcdefghij'\nsize = 3\nprint(len(text) - size + 1)\n",
+              "options": [
+                "6",
+                "8",
+                "none",
+                "0"
+              ],
+              "correct_answer": "8"
+            },
+            {
+              "id": "ai-tok-checkpoint-write",
+              "type": "code",
+              "question": "Marsh potters recount crates before dawn. For generate n-grams, fill the blank so the program prints the result.",
+              "hints": [
+                "The blank is the missing piece.",
+                "Print the value that piece produces.",
+                "label = len(text) - size + 1"
+              ],
+              "explanation": "The printed value is the result after this step counts windows that fit in the text.",
+              "xp_reward": 10,
+              "starter_code": "text = 'abcdefgh'\nsize = 3\nlabel = ___\nprint(label)\n",
+              "solution_code": "text = 'abcdefgh'\nsize = 3\nlabel = len(text) - size + 1\nprint(label)\n",
+              "tests": [
+                {
+                  "name": "ai-tok-checkpoint-prints",
+                  "description": "The printed value is the result after this step counts windows that fit in the t",
+                  "expected_stdout": "6\n",
+                  "required": true
+                }
+              ]
+            }
+          ]
+        }
+      ]
     }
   ]
 }

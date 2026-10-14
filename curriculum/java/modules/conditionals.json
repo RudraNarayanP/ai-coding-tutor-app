@@ -14,8 +14,8 @@
   "lessons": [
     {
       "id": "java-conditionals-step-1",
-      "title": "1. If-Else Statements",
-      "description": "Finish `isEven(number)` so it returns true when `number` is divisible by 2, and false otherwise. The test checks that `isEven(4)` is true and `isEven(7)` is false.",
+      "title": "Practice If-Else Statements",
+      "description": "Finish isEven(number) so it returns true when number is divisible by 2, and false otherwise. The test checks that isEven(4) is true and isEven(7) is false.",
       "order": 6,
       "difficulty": "beginner",
       "duration_minutes": 5,
@@ -27,7 +27,7 @@
         "java-variables"
       ],
       "learning_objectives": [
-        "Use boolean conditions and modulo % operator in Java"
+        "Harbor potters recount crates before dawn, and use boolean conditions and modulo operator in Java."
       ],
       "starter_code": "public class Solution {\n    public static boolean isEven(int number) {\n        // TODO: Return true if number % 2 == 0\n        return false;\n    }\n}\n",
       "solution_code": "public class Solution {\n    public static boolean isEven(int number) {\n        return number % 2 == 0;\n    }\n}\n",
@@ -48,12 +48,178 @@
         "url": "https://docs.oracle.com/javase/tutorial/java/nutsandbolts/if.html",
         "license": "Oracle Free Use Terms and Conditions (documentation)"
       },
-      "xp_reward": 10
+      "xp_reward": 10,
+      "player_mode": "micro",
+      "sublessons": [
+        {
+          "id": "java-conditionals-step-1-micro",
+          "title": "Practice If-Else Statements",
+          "description": "",
+          "order": 1,
+          "exercises": [
+            {
+              "id": "java-conditionals-step-1-teach",
+              "type": "teach",
+              "question": "Harbor potters recount crates before dawn, and use boolean conditions and modulo operator in Java.",
+              "hints": [
+                "Read the one job this step is practicing.",
+                "The example is about If-Else Statements.",
+                "int score = 40;"
+              ],
+              "explanation": "Harbor potters recount crates before dawn, and use boolean conditions and modulo operator in Java.",
+              "xp_reward": 0,
+              "worked_example": "int score = 40;"
+            },
+            {
+              "id": "java-conditionals-step-1-mcq",
+              "type": "mcq",
+              "question": "Harbor potters recount crates before dawn. For use boolean conditions and modulo operator in Java, which line keeps yes when the score meets the limit?",
+              "hints": [
+                "Compare each line with the example.",
+                "One line matches the example.",
+                "score >= 30 ? \"yes\" : \"no\""
+              ],
+              "explanation": "score >= 30 chooses the yes branch at the boundary.",
+              "xp_reward": 10,
+              "options": [
+                "score == 30;",
+                "return score;",
+                "score = 30;",
+                "score >= 30 ? \"yes\" : \"no\""
+              ],
+              "correct_answer": "score >= 30 ? \"yes\" : \"no\""
+            },
+            {
+              "id": "java-conditionals-step-1-predict",
+              "type": "output_prediction",
+              "question": "Harbor potters recount crates before dawn. For use boolean conditions and modulo operator in Java, what value is displayed?",
+              "hints": [
+                "Run the example in your head from the top.",
+                "The last line is what gets displayed.",
+                "yes"
+              ],
+              "explanation": "The If-Else Statements program displays that value.",
+              "xp_reward": 10,
+              "starter_code": "public class Solution {\n    public static void main(String[] args) {\n        int score = 40;\n        System.out.println(score >= 30 ? \"yes\" : \"no\");\n    }\n}\n",
+              "options": [
+                "no",
+                "none",
+                "0",
+                "yes"
+              ],
+              "correct_answer": "yes"
+            },
+            {
+              "id": "java-conditionals-step-1-order",
+              "type": "ordering",
+              "question": "Harbor potters recount crates before dawn. For use boolean conditions and modulo operator in Java, build the line that keeps yes when the score meets the limit.",
+              "hints": [
+                "Start at the left of the example.",
+                "Keep the example order.",
+                "if (left >= right) left++;"
+              ],
+              "explanation": "score >= 30 chooses the yes branch at the boundary.",
+              "xp_reward": 10,
+              "options": [
+                "if",
+                "(left",
+                ">=",
+                "right)",
+                "left++;",
+                "=="
+              ],
+              "correct_answer": [
+                "if",
+                "(left",
+                ">=",
+                "right)",
+                "left++;"
+              ]
+            },
+            {
+              "id": "java-conditionals-step-1-fill",
+              "type": "fill_blank",
+              "question": "Harbor potters recount crates before dawn. For use boolean conditions and modulo operator in Java, fill the blank so the line keeps yes when the score meets the limit.",
+              "hints": [
+                "The blank is the missing piece of the example.",
+                "The example uses that piece.",
+                ">="
+              ],
+              "explanation": "score >= 30 chooses the yes branch at the boundary.",
+              "xp_reward": 10,
+              "starter_code": "if (left ___ right) left++;",
+              "options": [
+                "==",
+                "<=",
+                "!=",
+                ">="
+              ],
+              "correct_answer": ">="
+            },
+            {
+              "id": "java-conditionals-step-1-bug",
+              "type": "debugging",
+              "question": "Harbor potters recount crates before dawn. For use boolean conditions and modulo operator in Java, which line does a different job than the example?",
+              "hints": [
+                "The other lines match the example.",
+                "One line is the odd one.",
+                "Line 4"
+              ],
+              "explanation": "The comparison is flipped, so a passing score takes the no branch.",
+              "xp_reward": 10,
+              "starter_code": "public class Solution {\n    public static void main(String[] args) {\n        int score = 40;\n        System.out.println(score < 30 ? \"yes\" : \"no\");\n    }\n}\n",
+              "correct_answer": "4"
+            },
+            {
+              "id": "java-conditionals-step-1-predict-2",
+              "type": "output_prediction",
+              "question": "Harbor potters recount crates before dawn. For use boolean conditions and modulo operator in Java, what does the second run display?",
+              "hints": [
+                "Apply the same steps to the new value.",
+                "The display comes from the last line.",
+                "no"
+              ],
+              "explanation": "The second If-Else Statements program displays that value.",
+              "xp_reward": 10,
+              "starter_code": "public class Solution {\n    public static void main(String[] args) {\n        int score = 10;\n        System.out.println(score >= 30 ? \"yes\" : \"no\");\n    }\n}\n",
+              "options": [
+                "yes",
+                "none",
+                "no",
+                "0"
+              ],
+              "correct_answer": "no"
+            },
+            {
+              "id": "java-conditionals-step-1-write",
+              "type": "code",
+              "question": "Harbor potters recount crates before dawn. For use boolean conditions and modulo operator in Java, fill the blank so the program prints the result.",
+              "hints": [
+                "The blank is the missing piece.",
+                "Print the value that piece produces.",
+                "String label = score >= 30 ? \"yes\" : \"no\";"
+              ],
+              "explanation": "The printed value is the result after this step keeps yes when the score meets the limit.",
+              "xp_reward": 10,
+              "starter_code": "public class Solution {\n    public static void main(String[] args) {\n        int score = 40;\n        String label = ___;\n        System.out.println(label);\n    }\n}\n",
+              "solution_code": "public class Solution {\n    public static void main(String[] args) {\n        int score = 40;\n        String label = score >= 30 ? \"yes\" : \"no\";\n        System.out.println(label);\n    }\n}\n",
+              "tests": [
+                {
+                  "name": "java-conditionals-step-1-prints",
+                  "description": "The printed value is the result after this step keeps yes when the score meets t",
+                  "expected_stdout": "yes\n",
+                  "required": true
+                }
+              ]
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "java-conditionals-step-2",
-      "title": "2. Logical Operators (&&, ||, !)",
-      "description": "Finish `canAccessSystem(hasBadge, knowsPassword)` so it returns true only when both values are true. The test checks that `(true, true)` is allowed and `(true, false)` is not.",
+      "title": "Practice Logical Operators",
+      "description": "Finish canAccessSystem(hasBadge, knowsPassword) so it returns true only when both values are true. The test checks that (true, true) is allowed and (true, false) is not.",
       "order": 7,
       "difficulty": "beginner",
       "duration_minutes": 5,
@@ -65,7 +231,7 @@
         "java-variables"
       ],
       "learning_objectives": [
-        "Combine logical operators && and || in Java"
+        "Mesa potters recount crates before dawn, and combine logical operators and in Java."
       ],
       "starter_code": "public class Solution {\n    public static boolean canAccessSystem(boolean hasBadge, boolean knowsPassword) {\n        // TODO: Return true if hasBadge && knowsPassword\n        return false;\n    }\n}\n",
       "solution_code": "public class Solution {\n    public static boolean canAccessSystem(boolean hasBadge, boolean knowsPassword) {\n        return hasBadge && knowsPassword;\n    }\n}\n",
@@ -86,12 +252,186 @@
         "url": "https://docs.oracle.com/javase/tutorial/java/nutsandbolts/operators.html",
         "license": "Oracle Free Use Terms and Conditions (documentation)"
       },
-      "xp_reward": 10
+      "xp_reward": 10,
+      "player_mode": "micro",
+      "sublessons": [
+        {
+          "id": "java-conditionals-step-2-micro",
+          "title": "Practice Logical Operators",
+          "description": "",
+          "order": 1,
+          "exercises": [
+            {
+              "id": "java-conditionals-step-2-teach",
+              "type": "teach",
+              "question": "Mesa potters recount crates before dawn, and combine logical operators and in Java.",
+              "hints": [
+                "Read the one job this step is practicing.",
+                "The example is about Logical Operators.",
+                "speed >= 30 && speed <= 50"
+              ],
+              "explanation": "Mesa potters recount crates before dawn, and combine logical operators and in Java.",
+              "xp_reward": 0,
+              "worked_example": "speed >= 30 && speed <= 50"
+            },
+            {
+              "id": "java-conditionals-step-2-mcq",
+              "type": "mcq",
+              "question": "Mesa potters recount crates before dawn. For combine logical operators and in Java, which line requires both comparisons with and?",
+              "hints": [
+                "Compare each line with the example.",
+                "One line matches the example.",
+                "speed >= 30 && speed <= 50"
+              ],
+              "explanation": "&& keeps the value only when both comparisons pass.",
+              "xp_reward": 10,
+              "options": [
+                "speed == 30;",
+                "speed >= 30 && speed <= 50",
+                "return speed;",
+                "speed = 30;"
+              ],
+              "correct_answer": "speed >= 30 && speed <= 50"
+            },
+            {
+              "id": "java-conditionals-step-2-predict",
+              "type": "output_prediction",
+              "question": "Mesa potters recount crates before dawn. For combine logical operators and in Java, what value is displayed?",
+              "hints": [
+                "Run the example in your head from the top.",
+                "The last line is what gets displayed.",
+                "true"
+              ],
+              "explanation": "The Logical Operators program displays that value.",
+              "xp_reward": 10,
+              "starter_code": "public class Solution {\n    public static void main(String[] args) {\n        int speed = 40;\n        System.out.println(speed >= 30 && speed <= 50);\n    }\n}\n",
+              "options": [
+                "false",
+                "true",
+                "none",
+                "0"
+              ],
+              "correct_answer": "true"
+            },
+            {
+              "id": "java-conditionals-step-2-order",
+              "type": "ordering",
+              "question": "Mesa potters recount crates before dawn. For combine logical operators and in Java, build the line that requires both comparisons with and.",
+              "hints": [
+                "Start at the left of the example.",
+                "Keep the example order.",
+                "if (left >= right && count > 0) left++;"
+              ],
+              "explanation": "&& keeps the value only when both comparisons pass.",
+              "xp_reward": 10,
+              "options": [
+                "if",
+                "(left",
+                ">=",
+                "right",
+                "&&",
+                "count",
+                ">",
+                "0)",
+                "left++;",
+                "=="
+              ],
+              "correct_answer": [
+                "if",
+                "(left",
+                ">=",
+                "right",
+                "&&",
+                "count",
+                ">",
+                "0)",
+                "left++;"
+              ]
+            },
+            {
+              "id": "java-conditionals-step-2-fill",
+              "type": "fill_blank",
+              "question": "Mesa potters recount crates before dawn. For combine logical operators and in Java, fill the blank so the line requires both comparisons with and.",
+              "hints": [
+                "The blank is the missing piece of the example.",
+                "The example uses that piece.",
+                "&&"
+              ],
+              "explanation": "&& keeps the value only when both comparisons pass.",
+              "xp_reward": 10,
+              "starter_code": "if (left >= right ___ count > 0) left++;",
+              "options": [
+                "||",
+                "&&",
+                "==",
+                "!="
+              ],
+              "correct_answer": "&&"
+            },
+            {
+              "id": "java-conditionals-step-2-bug",
+              "type": "debugging",
+              "question": "Mesa potters recount crates before dawn. For combine logical operators and in Java, which line does a different job than the example?",
+              "hints": [
+                "The other lines match the example.",
+                "One line is the odd one.",
+                "Line 4"
+              ],
+              "explanation": "Or keeps the row when only one comparison is true.",
+              "xp_reward": 10,
+              "starter_code": "public class Solution {\n    public static void main(String[] args) {\n        int speed = 40;\n        System.out.println(speed >= 30 || speed <= 50);\n    }\n}\n",
+              "correct_answer": "4"
+            },
+            {
+              "id": "java-conditionals-step-2-predict-2",
+              "type": "output_prediction",
+              "question": "Mesa potters recount crates before dawn. For combine logical operators and in Java, what does the second run display?",
+              "hints": [
+                "Apply the same steps to the new value.",
+                "The display comes from the last line.",
+                "false"
+              ],
+              "explanation": "The second Logical Operators program displays that value.",
+              "xp_reward": 10,
+              "starter_code": "public class Solution {\n    public static void main(String[] args) {\n        int speed = 10;\n        System.out.println(speed >= 30 && speed <= 50);\n    }\n}\n",
+              "options": [
+                "true",
+                "0",
+                "none",
+                "false"
+              ],
+              "correct_answer": "false"
+            },
+            {
+              "id": "java-conditionals-step-2-write",
+              "type": "code",
+              "question": "Mesa potters recount crates before dawn. For combine logical operators and in Java, fill the blank so the program prints the result.",
+              "hints": [
+                "The blank is the missing piece.",
+                "Print the value that piece produces.",
+                "boolean label = speed >= 30 && speed <= 50;"
+              ],
+              "explanation": "The printed value is the result after this step requires both comparisons with and.",
+              "xp_reward": 10,
+              "starter_code": "public class Solution {\n    public static void main(String[] args) {\n        int speed = 40;\n        boolean label = ___;\n        System.out.println(label);\n    }\n}\n",
+              "solution_code": "public class Solution {\n    public static void main(String[] args) {\n        int speed = 40;\n        boolean label = speed >= 30 && speed <= 50;\n        System.out.println(label);\n    }\n}\n",
+              "tests": [
+                {
+                  "name": "java-conditionals-step-2-prints",
+                  "description": "The printed value is the result after this step requires both comparisons with a",
+                  "expected_stdout": "true\n",
+                  "required": true
+                }
+              ]
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "java-conditionals-01",
-      "title": "3. Speed Limit Monitor (Concept Challenge)",
-      "description": "Finish `getTicketCategory`. Determine fine tier based on driving speed. The test checks that `Solution.getTicketCategory(55, 60` equals `\"NONE\"`; `Solution.getTicketCategory(65, 60` equals `\"WARNING\"`; `Solution.getTicketCategory(80, 60` equals `\"FINE\"`.",
+      "title": "Practice Speed Limit Monitor",
+      "description": "Finish getTicketCategory. Determine fine tier based on driving speed. The test checks that Solution.getTicketCategory(55, 60 equals \"NONE\"; Solution.getTicketCategory(65, 60 equals \"WARNING\"; Solution.getTicketCategory(80, 60 equals \"FINE\".",
       "order": 8,
       "difficulty": "beginner",
       "duration_minutes": 8,
@@ -103,7 +443,7 @@
         "java-variables"
       ],
       "learning_objectives": [
-        "Implement multi-way if-else if-else chain"
+        "Orchard potters recount crates before dawn, and implement multi-way if-else if-else chain."
       ],
       "starter_code": "public class Solution {\n    public static String getTicketCategory(int speed, int speedLimit) {\n        // TODO: Return \"NONE\" if speed <= speedLimit\n        // Return \"WARNING\" if speed <= speedLimit + 10\n        // Return \"FINE\" otherwise\n        return \"\";\n    }\n}\n",
       "solution_code": "public class Solution {\n    public static String getTicketCategory(int speed, int speedLimit) {\n        if (speed <= speedLimit) return \"NONE\";\n        if (speed <= speedLimit + 10) return \"WARNING\";\n        return \"FINE\";\n    }\n}\n",
@@ -124,11 +464,177 @@
         "url": "https://docs.oracle.com/javase/tutorial/java/nutsandbolts/if.html",
         "license": "Oracle Free Use Terms and Conditions (documentation)"
       },
-      "xp_reward": 25
+      "xp_reward": 25,
+      "player_mode": "micro",
+      "sublessons": [
+        {
+          "id": "java-conditionals-01-micro",
+          "title": "Practice Speed Limit Monitor",
+          "description": "",
+          "order": 1,
+          "exercises": [
+            {
+              "id": "java-conditionals-01-teach",
+              "type": "teach",
+              "question": "Orchard potters recount crates before dawn, and implement multi-way if-else if-else chain.",
+              "hints": [
+                "Read the one job this step is practicing.",
+                "The example is about Speed Limit Monitor.",
+                "int speed = 70;"
+              ],
+              "explanation": "Orchard potters recount crates before dawn, and implement multi-way if-else if-else chain.",
+              "xp_reward": 0,
+              "worked_example": "int speed = 70;"
+            },
+            {
+              "id": "java-conditionals-01-mcq",
+              "type": "mcq",
+              "question": "Orchard potters recount crates before dawn. For implement multi-way if-else if-else chain, which line labels a speed over the limit?",
+              "hints": [
+                "Compare each line with the example.",
+                "One line matches the example.",
+                "speed > 55 ? \"over\" : \"ok\""
+              ],
+              "explanation": "speed > 55 selects the over branch.",
+              "xp_reward": 10,
+              "options": [
+                "speed == 55;",
+                "return speed;",
+                "speed = 55;",
+                "speed > 55 ? \"over\" : \"ok\""
+              ],
+              "correct_answer": "speed > 55 ? \"over\" : \"ok\""
+            },
+            {
+              "id": "java-conditionals-01-predict",
+              "type": "output_prediction",
+              "question": "Orchard potters recount crates before dawn. For implement multi-way if-else if-else chain, what value is displayed?",
+              "hints": [
+                "Run the example in your head from the top.",
+                "The last line is what gets displayed.",
+                "over"
+              ],
+              "explanation": "The Speed Limit Monitor program displays that value.",
+              "xp_reward": 10,
+              "starter_code": "public class Solution {\n    public static void main(String[] args) {\n        int speed = 70;\n        System.out.println(speed > 55 ? \"over\" : \"ok\");\n    }\n}\n",
+              "options": [
+                "ok",
+                "0",
+                "none",
+                "over"
+              ],
+              "correct_answer": "over"
+            },
+            {
+              "id": "java-conditionals-01-order",
+              "type": "ordering",
+              "question": "Orchard potters recount crates before dawn. For implement multi-way if-else if-else chain, build the line that labels a speed over the limit.",
+              "hints": [
+                "Start at the left of the example.",
+                "Keep the example order.",
+                "if (left > right) left++;"
+              ],
+              "explanation": "speed > 55 selects the over branch.",
+              "xp_reward": 10,
+              "options": [
+                "if",
+                "(left",
+                ">",
+                "right)",
+                "left++;",
+                "=="
+              ],
+              "correct_answer": [
+                "if",
+                "(left",
+                ">",
+                "right)",
+                "left++;"
+              ]
+            },
+            {
+              "id": "java-conditionals-01-fill",
+              "type": "fill_blank",
+              "question": "Orchard potters recount crates before dawn. For implement multi-way if-else if-else chain, fill the blank so the line labels a speed over the limit.",
+              "hints": [
+                "The blank is the missing piece of the example.",
+                "The example uses that piece.",
+                ">"
+              ],
+              "explanation": "speed > 55 selects the over branch.",
+              "xp_reward": 10,
+              "starter_code": "if (left ___ right) left++;",
+              "options": [
+                "<",
+                "==",
+                "!=",
+                ">"
+              ],
+              "correct_answer": ">"
+            },
+            {
+              "id": "java-conditionals-01-bug",
+              "type": "debugging",
+              "question": "Orchard potters recount crates before dawn. For implement multi-way if-else if-else chain, which line does a different job than the example?",
+              "hints": [
+                "The other lines match the example.",
+                "One line is the odd one.",
+                "Line 4"
+              ],
+              "explanation": "The comparison is flipped, so a high speed is labeled ok.",
+              "xp_reward": 10,
+              "starter_code": "public class Solution {\n    public static void main(String[] args) {\n        int speed = 70;\n        System.out.println(speed < 55 ? \"over\" : \"ok\");\n    }\n}\n",
+              "correct_answer": "4"
+            },
+            {
+              "id": "java-conditionals-01-predict-2",
+              "type": "output_prediction",
+              "question": "Orchard potters recount crates before dawn. For implement multi-way if-else if-else chain, what does the second run display?",
+              "hints": [
+                "Apply the same steps to the new value.",
+                "The display comes from the last line.",
+                "ok"
+              ],
+              "explanation": "The second Speed Limit Monitor program displays that value.",
+              "xp_reward": 10,
+              "starter_code": "public class Solution {\n    public static void main(String[] args) {\n        int speed = 40;\n        System.out.println(speed > 55 ? \"over\" : \"ok\");\n    }\n}\n",
+              "options": [
+                "none",
+                "over",
+                "ok",
+                "0"
+              ],
+              "correct_answer": "ok"
+            },
+            {
+              "id": "java-conditionals-01-write",
+              "type": "code",
+              "question": "Orchard potters recount crates before dawn. For implement multi-way if-else if-else chain, fill the blank so the program prints the result.",
+              "hints": [
+                "The blank is the missing piece.",
+                "Print the value that piece produces.",
+                "String label = speed > 55 ? \"over\" : \"ok\";"
+              ],
+              "explanation": "The printed value is the result after this step labels a speed over the limit.",
+              "xp_reward": 10,
+              "starter_code": "public class Solution {\n    public static void main(String[] args) {\n        int speed = 70;\n        String label = ___;\n        System.out.println(label);\n    }\n}\n",
+              "solution_code": "public class Solution {\n    public static void main(String[] args) {\n        int speed = 70;\n        String label = speed > 55 ? \"over\" : \"ok\";\n        System.out.println(label);\n    }\n}\n",
+              "tests": [
+                {
+                  "name": "java-conditionals-01-prints",
+                  "description": "The printed value is the result after this step labels a speed over the limit.",
+                  "expected_stdout": "over\n",
+                  "required": true
+                }
+              ]
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "java-conditionals-practice-1",
-      "title": "4. Leap Year Checker (Practice)",
+      "title": "Practice Leap Year Checker",
       "description": "Implement isLeapYear(int year): a year is a leap year when it is divisible by 4 but not by 100, unless it is also divisible by 400. The tests require 2000 and 2024 to be leap years and 1900 to be a common year.",
       "order": 9,
       "difficulty": "beginner",
@@ -141,7 +647,7 @@
         "java-variables"
       ],
       "learning_objectives": [
-        "Apply boolean logic to leap year calculations"
+        "Quarry potters recount crates before dawn, and apply boolean logic to leap year calculations."
       ],
       "starter_code": "public class Solution {\n    public static boolean isLeapYear(int year) {\n        // TODO: Divisible by 4 AND (not divisible by 100 OR divisible by 400)\n        return false;\n    }\n}\n",
       "solution_code": "public class Solution {\n    public static boolean isLeapYear(int year) {\n        return (year % 4 == 0 && year % 100 != 0) || (year % 400 == 0);\n    }\n}\n",
@@ -162,12 +668,182 @@
         "url": "https://docs.oracle.com/javase/tutorial/java/nutsandbolts/if.html",
         "license": "Oracle Free Use Terms and Conditions (documentation)"
       },
-      "xp_reward": 15
+      "xp_reward": 15,
+      "player_mode": "micro",
+      "sublessons": [
+        {
+          "id": "java-conditionals-practice-1-micro",
+          "title": "Practice Leap Year Checker",
+          "description": "",
+          "order": 1,
+          "exercises": [
+            {
+              "id": "java-conditionals-practice-1-teach",
+              "type": "teach",
+              "question": "Quarry potters recount crates before dawn, and apply boolean logic to leap year calculations.",
+              "hints": [
+                "Read the one job this step is practicing.",
+                "The example is about Leap Year Checker.",
+                "int year = 2024;"
+              ],
+              "explanation": "Quarry potters recount crates before dawn, and apply boolean logic to leap year calculations.",
+              "xp_reward": 0,
+              "worked_example": "int year = 2024;"
+            },
+            {
+              "id": "java-conditionals-practice-1-mcq",
+              "type": "mcq",
+              "question": "Quarry potters recount crates before dawn. For apply boolean logic to leap year calculations, which line detects a leap year?",
+              "hints": [
+                "Compare each line with the example.",
+                "One line matches the example.",
+                "year % 4 == 0"
+              ],
+              "explanation": "A leap year is divisible by 4, with the century exception.",
+              "xp_reward": 10,
+              "options": [
+                "year == 2024;",
+                "return year;",
+                "year = 4;",
+                "year % 4 == 0"
+              ],
+              "correct_answer": "year % 4 == 0"
+            },
+            {
+              "id": "java-conditionals-practice-1-predict",
+              "type": "output_prediction",
+              "question": "Quarry potters recount crates before dawn. For apply boolean logic to leap year calculations, what value is displayed?",
+              "hints": [
+                "Run the example in your head from the top.",
+                "The last line is what gets displayed.",
+                "true"
+              ],
+              "explanation": "The Leap Year Checker program displays that value.",
+              "xp_reward": 10,
+              "starter_code": "public class Solution {\n    public static void main(String[] args) {\n        int year = 2024;\n        boolean leap = (year % 4 == 0 && year % 100 != 0) || year % 400 == 0;\n        System.out.println(leap);\n    }\n}\n",
+              "options": [
+                "none",
+                "false",
+                "0",
+                "true"
+              ],
+              "correct_answer": "true"
+            },
+            {
+              "id": "java-conditionals-practice-1-order",
+              "type": "ordering",
+              "question": "Quarry potters recount crates before dawn. For apply boolean logic to leap year calculations, build the line that detects a leap year.",
+              "hints": [
+                "Start at the left of the example.",
+                "Keep the example order.",
+                "if (left % 4 == 0) left++;"
+              ],
+              "explanation": "A leap year is divisible by 4, with the century exception.",
+              "xp_reward": 10,
+              "options": [
+                "if",
+                "(left",
+                "%",
+                "4",
+                "==",
+                "0)",
+                "left++;",
+                "!="
+              ],
+              "correct_answer": [
+                "if",
+                "(left",
+                "%",
+                "4",
+                "==",
+                "0)",
+                "left++;"
+              ]
+            },
+            {
+              "id": "java-conditionals-practice-1-fill",
+              "type": "fill_blank",
+              "question": "Quarry potters recount crates before dawn. For apply boolean logic to leap year calculations, fill the blank so the line detects a leap year.",
+              "hints": [
+                "The blank is the missing piece of the example.",
+                "The example uses that piece.",
+                "%"
+              ],
+              "explanation": "A leap year is divisible by 4, with the century exception.",
+              "xp_reward": 10,
+              "starter_code": "int year = 2024; if (year ___ 4 == 0) year++;",
+              "options": [
+                "+",
+                "-",
+                "*",
+                "%"
+              ],
+              "correct_answer": "%"
+            },
+            {
+              "id": "java-conditionals-practice-1-bug",
+              "type": "debugging",
+              "question": "Quarry potters recount crates before dawn. For apply boolean logic to leap year calculations, which line does a different job than the example?",
+              "hints": [
+                "The other lines match the example.",
+                "One line is the odd one.",
+                "Line 4"
+              ],
+              "explanation": "The test checks evenness, not the leap-year rule.",
+              "xp_reward": 10,
+              "starter_code": "public class Solution {\n    public static void main(String[] args) {\n        int year = 2024;\n        System.out.println(year % 2 == 0);\n    }\n}\n",
+              "correct_answer": "4"
+            },
+            {
+              "id": "java-conditionals-practice-1-predict-2",
+              "type": "output_prediction",
+              "question": "Quarry potters recount crates before dawn. For apply boolean logic to leap year calculations, what does the second run display?",
+              "hints": [
+                "Apply the same steps to the new value.",
+                "The display comes from the last line.",
+                "false"
+              ],
+              "explanation": "The second Leap Year Checker program displays that value.",
+              "xp_reward": 10,
+              "starter_code": "public class Solution {\n    public static void main(String[] args) {\n        int year = 2023;\n        boolean leap = (year % 4 == 0 && year % 100 != 0) || year % 400 == 0;\n        System.out.println(leap);\n    }\n}\n",
+              "options": [
+                "true",
+                "none",
+                "false",
+                "0"
+              ],
+              "correct_answer": "false"
+            },
+            {
+              "id": "java-conditionals-practice-1-write",
+              "type": "code",
+              "question": "Quarry potters recount crates before dawn. For apply boolean logic to leap year calculations, fill the blank so the program prints the result.",
+              "hints": [
+                "The blank is the missing piece.",
+                "Print the value that piece produces.",
+                "boolean label = (year % 4 == 0 && year % 100 != 0) || year % 400 == 0;"
+              ],
+              "explanation": "The printed value is the result after this step detects a leap year.",
+              "xp_reward": 10,
+              "starter_code": "public class Solution {\n    public static void main(String[] args) {\n        int year = 2024;\n        boolean label = ___;\n        System.out.println(label);\n    }\n}\n",
+              "solution_code": "public class Solution {\n    public static void main(String[] args) {\n        int year = 2024;\n        boolean label = (year % 4 == 0 && year % 100 != 0) || year % 400 == 0;\n        System.out.println(label);\n    }\n}\n",
+              "tests": [
+                {
+                  "name": "java-conditionals-practice-1-prints",
+                  "description": "The printed value is the result after this step detects a leap year.",
+                  "expected_stdout": "true\n",
+                  "required": true
+                }
+              ]
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "java-conditionals-checkpoint",
-      "title": "5. Unit 2 Checkpoint: Conditionals Mastery",
-      "description": "Finish `Solution.maxOfThree` so it returns the largest of `a`, `b`, and `c`. The test checks that `Solution.maxOfThree(3, 9, 5)` equals `9`.",
+      "title": "Practice Unit 2 Checkpoint Conditionals Mastery",
+      "description": "Finish Solution.maxOfThree so it returns the largest of a, b, and c. The test checks that Solution.maxOfThree(3, 9, 5) equals 9.",
       "order": 10,
       "difficulty": "beginner",
       "duration_minutes": 10,
@@ -179,7 +855,7 @@
         "java-variables"
       ],
       "learning_objectives": [
-        "Return the largest of three ints from maxOfThree"
+        "Attic potters recount crates before dawn, and return the largest of three ints from maxOfThree."
       ],
       "starter_code": "public class Solution {\n    public static int maxOfThree(int a, int b, int c) {\n        // TODO: Return highest of a, b, and c\n        return 0;\n    }\n}\n",
       "solution_code": "public class Solution {\n    public static int maxOfThree(int a, int b, int c) {\n        return Math.max(a, Math.max(b, c));\n    }\n}\n",
@@ -200,7 +876,181 @@
         "url": "https://docs.oracle.com/javase/tutorial/java/nutsandbolts/if.html",
         "license": "Oracle Free Use Terms and Conditions (documentation)"
       },
-      "xp_reward": 40
+      "xp_reward": 40,
+      "player_mode": "micro",
+      "sublessons": [
+        {
+          "id": "java-conditionals-checkpoint-micro",
+          "title": "Practice Unit 2 Checkpoint Conditionals Mastery",
+          "description": "",
+          "order": 1,
+          "exercises": [
+            {
+              "id": "java-conditionals-checkpoint-teach",
+              "type": "teach",
+              "question": "Attic potters recount crates before dawn, and return the largest of three ints from maxOfThree.",
+              "hints": [
+                "Read the one job this step is practicing.",
+                "The example is about Unit 2 Checkpoint Conditionals Mastery.",
+                "gate == 0 || gate == 1"
+              ],
+              "explanation": "Attic potters recount crates before dawn, and return the largest of three ints from maxOfThree.",
+              "xp_reward": 0,
+              "worked_example": "gate == 0 || gate == 1"
+            },
+            {
+              "id": "java-conditionals-checkpoint-mcq",
+              "type": "mcq",
+              "question": "Attic potters recount crates before dawn. For return the largest of three ints from maxOfThree, which line accepts either match with or?",
+              "hints": [
+                "Compare each line with the example.",
+                "One line matches the example.",
+                "gate == 0 || gate == 1"
+              ],
+              "explanation": "|| keeps the row when either comparison matches.",
+              "xp_reward": 10,
+              "options": [
+                "return gate;",
+                "gate == 0 || gate == 1",
+                "gate = 1;",
+                "gate == gate;"
+              ],
+              "correct_answer": "gate == 0 || gate == 1"
+            },
+            {
+              "id": "java-conditionals-checkpoint-predict",
+              "type": "output_prediction",
+              "question": "Attic potters recount crates before dawn. For return the largest of three ints from maxOfThree, what value is displayed?",
+              "hints": [
+                "Run the example in your head from the top.",
+                "The last line is what gets displayed.",
+                "true"
+              ],
+              "explanation": "The Unit 2 Checkpoint Conditionals Mastery program displays that value.",
+              "xp_reward": 10,
+              "starter_code": "public class Solution {\n    public static void main(String[] args) {\n        int gate = 1;\n        System.out.println(gate == 0 || gate == 1);\n    }\n}\n",
+              "options": [
+                "false",
+                "true",
+                "none",
+                "0"
+              ],
+              "correct_answer": "true"
+            },
+            {
+              "id": "java-conditionals-checkpoint-order",
+              "type": "ordering",
+              "question": "Attic potters recount crates before dawn. For return the largest of three ints from maxOfThree, build the line that accepts either match with or.",
+              "hints": [
+                "Start at the left of the example.",
+                "Keep the example order.",
+                "if (left < 0 || right > 0) left++;"
+              ],
+              "explanation": "|| keeps the row when either comparison matches.",
+              "xp_reward": 10,
+              "options": [
+                "if",
+                "(left",
+                "<",
+                "0",
+                "||",
+                "right",
+                ">",
+                "0)",
+                "left++;",
+                "=="
+              ],
+              "correct_answer": [
+                "if",
+                "(left",
+                "<",
+                "0",
+                "||",
+                "right",
+                ">",
+                "0)",
+                "left++;"
+              ]
+            },
+            {
+              "id": "java-conditionals-checkpoint-fill",
+              "type": "fill_blank",
+              "question": "Attic potters recount crates before dawn. For return the largest of three ints from maxOfThree, fill the blank so the line accepts either match with or.",
+              "hints": [
+                "The blank is the missing piece of the example.",
+                "The example uses that piece.",
+                "||"
+              ],
+              "explanation": "|| keeps the row when either comparison matches.",
+              "xp_reward": 10,
+              "starter_code": "if (left < 0 ___ right > 0) left++;",
+              "options": [
+                "&&",
+                "||",
+                "==",
+                "!="
+              ],
+              "correct_answer": "||"
+            },
+            {
+              "id": "java-conditionals-checkpoint-bug",
+              "type": "debugging",
+              "question": "Attic potters recount crates before dawn. For return the largest of three ints from maxOfThree, which line does a different job than the example?",
+              "hints": [
+                "The other lines match the example.",
+                "One line is the odd one.",
+                "Line 4"
+              ],
+              "explanation": "And can never be true when the two comparisons disagree.",
+              "xp_reward": 10,
+              "starter_code": "public class Solution {\n    public static void main(String[] args) {\n        int gate = 1;\n        System.out.println(gate == 0 && gate == 1);\n    }\n}\n",
+              "correct_answer": "4"
+            },
+            {
+              "id": "java-conditionals-checkpoint-predict-2",
+              "type": "output_prediction",
+              "question": "Attic potters recount crates before dawn. For return the largest of three ints from maxOfThree, what does the second run display?",
+              "hints": [
+                "Apply the same steps to the new value.",
+                "The display comes from the last line.",
+                "false"
+              ],
+              "explanation": "The second Unit 2 Checkpoint Conditionals Mastery program displays that value.",
+              "xp_reward": 10,
+              "starter_code": "public class Solution {\n    public static void main(String[] args) {\n        int gate = 2;\n        System.out.println(gate == 0 || gate == 1);\n    }\n}\n",
+              "options": [
+                "true",
+                "none",
+                "0",
+                "false"
+              ],
+              "correct_answer": "false"
+            },
+            {
+              "id": "java-conditionals-checkpoint-write",
+              "type": "code",
+              "question": "Attic potters recount crates before dawn. For return the largest of three ints from maxOfThree, fill the blank so the program prints the result.",
+              "hints": [
+                "The blank is the missing piece.",
+                "Print the value that piece produces.",
+                "boolean label = gate == 0 || gate == 1;"
+              ],
+              "explanation": "The printed value is the result after this step accepts either match with or.",
+              "xp_reward": 10,
+              "starter_code": "public class Solution {\n    public static void main(String[] args) {\n        int gate = 1;\n        boolean label = ___;\n        System.out.println(label);\n    }\n}\n",
+              "solution_code": "public class Solution {\n    public static void main(String[] args) {\n        int gate = 1;\n        boolean label = gate == 0 || gate == 1;\n        System.out.println(label);\n    }\n}\n",
+              "tests": [
+                {
+                  "name": "java-conditionals-checkpoint-prints",
+                  "description": "The printed value is the result after this step accepts either match with or.",
+                  "expected_stdout": "true\n",
+                  "required": true
+                }
+              ]
+            }
+          ]
+        }
+      ]
     }
   ]
 }

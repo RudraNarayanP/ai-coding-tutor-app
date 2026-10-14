@@ -14,8 +14,8 @@
   "lessons": [
     {
       "id": "hash-maps-step-1",
-      "title": "1. Frequency Counter",
-      "description": "Finish `char_counts`. Count character frequencies with a dict. The test checks that `char_counts('aba')` equals `{'a': 2, 'b': 1}`.",
+      "title": "Practice Frequency Counter",
+      "description": "Finish char_counts. Count character frequencies with a dict. The test checks that char_counts('aba') equals {'a': 2, 'b': 1}.",
       "order": 21,
       "difficulty": "intermediate",
       "duration_minutes": 5,
@@ -29,7 +29,7 @@
         "big-o"
       ],
       "learning_objectives": [
-        "Build a frequency map"
+        "Harbor potters recount crates before dawn, and build a frequency map."
       ],
       "starter_code": "def char_counts(text):\n    # TODO: return dict of char -> count\n    pass\n",
       "solution_code": "def char_counts(text):\n    counts = {}\n    for ch in text:\n        counts[ch] = counts.get(ch, 0) + 1\n    return counts\n",
@@ -50,12 +50,180 @@
         "url": "https://docs.python.org/3/library/stdtypes.html#mapping-types-dict",
         "license": "Python documentation license (PSF)"
       },
-      "xp_reward": 10
+      "xp_reward": 10,
+      "player_mode": "micro",
+      "sublessons": [
+        {
+          "id": "hash-maps-step-1-micro",
+          "title": "Practice Frequency Counter",
+          "description": "",
+          "order": 1,
+          "exercises": [
+            {
+              "id": "hash-maps-step-1-teach",
+              "type": "teach",
+              "question": "Harbor potters recount crates before dawn, and build a frequency map.",
+              "hints": [
+                "Read the one job this step is practicing.",
+                "The example is about Frequency Counter.",
+                "counts.get(ch, 0) + 1"
+              ],
+              "explanation": "Harbor potters recount crates before dawn, and build a frequency map.",
+              "xp_reward": 0,
+              "worked_example": "counts.get(ch, 0) + 1"
+            },
+            {
+              "id": "hash-maps-step-1-mcq",
+              "type": "mcq",
+              "question": "Harbor potters recount crates before dawn. For build a frequency map, which line counts how often the first letter appears?",
+              "hints": [
+                "Compare each line with the example.",
+                "One line matches the example.",
+                "counts[ch] = counts.get(ch, 0) + 1"
+              ],
+              "explanation": "get returns zero the first time, then one is added.",
+              "xp_reward": 10,
+              "options": [
+                "ch == ch",
+                "return counts",
+                "pass",
+                "counts[ch] = counts.get(ch, 0) + 1"
+              ],
+              "correct_answer": "counts[ch] = counts.get(ch, 0) + 1"
+            },
+            {
+              "id": "hash-maps-step-1-predict",
+              "type": "output_prediction",
+              "question": "Harbor potters recount crates before dawn. For build a frequency map, what value is displayed?",
+              "hints": [
+                "Run the example in your head from the top.",
+                "The last line is what gets displayed.",
+                "2"
+              ],
+              "explanation": "The Frequency Counter program displays that value.",
+              "xp_reward": 10,
+              "starter_code": "text = 'grovegrove'\ncounts = {}\nfor ch in text:\n    counts[ch] = counts.get(ch, 0) + 1\nprint(counts['grove'[0]])\n",
+              "options": [
+                "1",
+                "none",
+                "0",
+                "2"
+              ],
+              "correct_answer": "2"
+            },
+            {
+              "id": "hash-maps-step-1-order",
+              "type": "ordering",
+              "question": "Harbor potters recount crates before dawn. For build a frequency map, build the line that counts how often the first letter appears.",
+              "hints": [
+                "Start at the left of the example.",
+                "Keep the example order.",
+                "counts[ch] = counts.get(ch, 0) + 1"
+              ],
+              "explanation": "get returns zero the first time, then one is added.",
+              "xp_reward": 10,
+              "options": [
+                "counts[ch]",
+                "=",
+                "counts.get(ch,",
+                "0)",
+                "+",
+                "1",
+                "=="
+              ],
+              "correct_answer": [
+                "counts[ch]",
+                "=",
+                "counts.get(ch,",
+                "0)",
+                "+",
+                "1"
+              ]
+            },
+            {
+              "id": "hash-maps-step-1-fill",
+              "type": "fill_blank",
+              "question": "Harbor potters recount crates before dawn. For build a frequency map, fill the blank so the line counts how often the first letter appears.",
+              "hints": [
+                "The blank is the missing piece of the example.",
+                "The example uses that piece.",
+                "+"
+              ],
+              "explanation": "get returns zero the first time, then one is added.",
+              "xp_reward": 10,
+              "starter_code": "counts[ch] = counts.get(ch, 0) ___ 1\n",
+              "options": [
+                "==",
+                "*",
+                "+",
+                "-"
+              ],
+              "correct_answer": "+"
+            },
+            {
+              "id": "hash-maps-step-1-bug",
+              "type": "debugging",
+              "question": "Harbor potters recount crates before dawn. For build a frequency map, which line does a different job than the example?",
+              "hints": [
+                "The other lines match the example.",
+                "One line is the odd one.",
+                "Line 3"
+              ],
+              "explanation": "The read asks for a letter that was never counted.",
+              "xp_reward": 10,
+              "starter_code": "text = 'grove'\ncounts = {}\nprint(counts['missing'])\n",
+              "correct_answer": "3"
+            },
+            {
+              "id": "hash-maps-step-1-predict-2",
+              "type": "output_prediction",
+              "question": "Harbor potters recount crates before dawn. For build a frequency map, what does the second run display?",
+              "hints": [
+                "Apply the same steps to the new value.",
+                "The display comes from the last line.",
+                "1"
+              ],
+              "explanation": "The second Frequency Counter program displays that value.",
+              "xp_reward": 10,
+              "starter_code": "text = 'grove'\ncounts = {}\nfor ch in text:\n    counts[ch] = counts.get(ch, 0) + 1\nprint(counts['grove'[0]])\n",
+              "options": [
+                "2",
+                "none",
+                "1",
+                "0"
+              ],
+              "correct_answer": "1"
+            },
+            {
+              "id": "hash-maps-step-1-write",
+              "type": "code",
+              "question": "Harbor potters recount crates before dawn. For build a frequency map, fill the blank so the program prints the result.",
+              "hints": [
+                "The blank is the missing piece.",
+                "Print the value that piece produces.",
+                "label = counts['grove'[0]]"
+              ],
+              "explanation": "The printed value is the result after this step counts how often the first letter appears.",
+              "xp_reward": 10,
+              "starter_code": "text = 'grovegrove'\ncounts = {}\nfor ch in text:\n    counts[ch] = counts.get(ch, 0) + 1\nlabel = ___\nprint(label)\n",
+              "solution_code": "text = 'grovegrove'\ncounts = {}\nfor ch in text:\n    counts[ch] = counts.get(ch, 0) + 1\nlabel = counts['grove'[0]]\nprint(label)\n",
+              "tests": [
+                {
+                  "name": "hash-maps-step-1-prints",
+                  "description": "The printed value is the result after this step counts how often the first lette",
+                  "expected_stdout": "2\n",
+                  "required": true
+                }
+              ]
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "hash-maps-step-2",
-      "title": "2. Two Sum Indices",
-      "description": "Finish `two_sum`. Return indices of two numbers that add to target using a hash map. The test checks that `two_sum([2, 7, 11, 15], 9)` equals `(0, 1)`; `two_sum([1, 2, 3], 100)` is None.",
+      "title": "Practice Two Sum Indices",
+      "description": "Finish two_sum. Return indices of two numbers that add to target using a hash map. The test checks that two_sum([2, 7, 11, 15], 9) equals (0, 1); two_sum([1, 2, 3], 100) is None.",
       "order": 22,
       "difficulty": "intermediate",
       "duration_minutes": 5,
@@ -69,7 +237,7 @@
         "big-o"
       ],
       "learning_objectives": [
-        "Complement lookup in a hash map"
+        "Mesa potters recount crates before dawn, and complement lookup in a hash map."
       ],
       "starter_code": "def two_sum(nums, target):\n    # TODO: return (i, j) with i < j or None\n    pass\n",
       "solution_code": "def two_sum(nums, target):\n    seen = {}\n    for i, n in enumerate(nums):\n        need = target - n\n        if need in seen:\n            return (seen[need], i)\n        seen[n] = i\n    return None\n",
@@ -93,37 +261,183 @@
       "xp_reward": 10,
       "sublessons": [
         {
-          "id": "twosum-hashmap-sub",
-          "title": "Select every true statement",
+          "id": "hash-maps-step-2-micro",
+          "title": "Practice Two Sum Indices",
+          "description": "",
           "order": 1,
           "exercises": [
             {
-              "id": "twosum-hashmap-multi-1",
-              "type": "select_multiple",
-              "question": "The lesson's `two_sum` makes one pass with a dict called `seen`. Select every statement that is true of that approach.",
+              "id": "hash-maps-step-2-teach",
+              "type": "teach",
+              "question": "Mesa potters recount crates before dawn, and complement lookup in a hash map.",
+              "hints": [
+                "Read the one job this step is practicing.",
+                "The example is about Two Sum Indices.",
+                "nums[i] + nums[j]"
+              ],
+              "explanation": "Mesa potters recount crates before dawn, and complement lookup in a hash map.",
+              "xp_reward": 0,
+              "worked_example": "nums[i] + nums[j]"
+            },
+            {
+              "id": "hash-maps-step-2-mcq",
+              "type": "mcq",
+              "question": "Mesa potters recount crates before dawn. For complement lookup in a hash map, which line finds the later index of a two-sum pair?",
+              "hints": [
+                "Compare each line with the example.",
+                "One line matches the example.",
+                "nums[i] + nums[j] == target"
+              ],
+              "explanation": "The pair is the two indexes whose values add to the target.",
+              "xp_reward": 10,
               "options": [
-                "`seen` maps each value it has passed to that value's index",
-                "for each number it looks up `target - number` before storing it",
-                "the returned pair is ordered as the earlier index then the later one",
-                "it sorts the numbers before searching",
-                "it compares every pair of numbers with two nested loops"
+                "i == j",
+                "nums[i] + nums[j] == target",
+                "return pair",
+                "pass"
+              ],
+              "correct_answer": "nums[i] + nums[j] == target"
+            },
+            {
+              "id": "hash-maps-step-2-predict",
+              "type": "output_prediction",
+              "question": "Mesa potters recount crates before dawn. For complement lookup in a hash map, what value is displayed?",
+              "hints": [
+                "Run the example in your head from the top.",
+                "The last line is what gets displayed.",
+                "2"
+              ],
+              "explanation": "The Two Sum Indices program displays that value.",
+              "xp_reward": 10,
+              "starter_code": "nums = [2, 7, 52]\ntarget = 52 + 2\npair = 0\nfor i in range(len(nums)):\n    for j in range(i + 1, len(nums)):\n        if nums[i] + nums[j] == target:\n            pair = j\nprint(pair)\n",
+              "options": [
+                "1",
+                "2",
+                "none",
+                "0"
+              ],
+              "correct_answer": "2"
+            },
+            {
+              "id": "hash-maps-step-2-order",
+              "type": "ordering",
+              "question": "Mesa potters recount crates before dawn. For complement lookup in a hash map, build the line that finds the later index of a two-sum pair.",
+              "hints": [
+                "Start at the left of the example.",
+                "Keep the example order.",
+                "if nums[i] + nums[j] == target: pair = j"
+              ],
+              "explanation": "The pair is the two indexes whose values add to the target.",
+              "xp_reward": 10,
+              "options": [
+                "if",
+                "nums[i]",
+                "+",
+                "nums[j]",
+                "==",
+                "target:",
+                "pair",
+                "=",
+                "j",
+                "!="
               ],
               "correct_answer": [
-                "`seen` maps each value it has passed to that value's index",
-                "for each number it looks up `target - number` before storing it",
-                "the returned pair is ordered as the earlier index then the later one"
+                "if",
+                "nums[i]",
+                "+",
+                "nums[j]",
+                "==",
+                "target:",
+                "pair",
+                "=",
+                "j"
+              ]
+            },
+            {
+              "id": "hash-maps-step-2-fill",
+              "type": "fill_blank",
+              "question": "Mesa potters recount crates before dawn. For complement lookup in a hash map, fill the blank so the line finds the later index of a two-sum pair.",
+              "hints": [
+                "The blank is the missing piece of the example.",
+                "The example uses that piece.",
+                "+"
               ],
-              "explanation": "One pass, keyed by complement lookup: `seen[need]` is necessarily an earlier index than the current `i`. Sorting or nested loops are the slower approaches this lesson replaces.",
-              "xp_reward": 10
+              "explanation": "The pair is the two indexes whose values add to the target.",
+              "xp_reward": 10,
+              "starter_code": "if nums[i] ___ nums[j] == target:\n    pair = j\n",
+              "options": [
+                "-",
+                "+",
+                "*",
+                "=="
+              ],
+              "correct_answer": "+"
+            },
+            {
+              "id": "hash-maps-step-2-bug",
+              "type": "debugging",
+              "question": "Mesa potters recount crates before dawn. For complement lookup in a hash map, which line does a different job than the example?",
+              "hints": [
+                "The other lines match the example.",
+                "One line is the odd one.",
+                "Line 2"
+              ],
+              "explanation": "The line subtracts a fixed number and never searches pairs.",
+              "xp_reward": 10,
+              "starter_code": "nums = [2, 7, 52]\nprint(nums[0] - 7)\n",
+              "correct_answer": "2"
+            },
+            {
+              "id": "hash-maps-step-2-predict-2",
+              "type": "output_prediction",
+              "question": "Mesa potters recount crates before dawn. For complement lookup in a hash map, what does the second run display?",
+              "hints": [
+                "Apply the same steps to the new value.",
+                "The display comes from the last line.",
+                "1"
+              ],
+              "explanation": "The second Two Sum Indices program displays that value.",
+              "xp_reward": 10,
+              "starter_code": "nums = [52, 7, 3]\ntarget = 52 + 7\npair = 0\nfor i in range(len(nums)):\n    for j in range(i + 1, len(nums)):\n        if nums[i] + nums[j] == target:\n            pair = j\nprint(pair)\n",
+              "options": [
+                "2",
+                "none",
+                "0",
+                "1"
+              ],
+              "correct_answer": "1"
+            },
+            {
+              "id": "hash-maps-step-2-write",
+              "type": "code",
+              "question": "Mesa potters recount crates before dawn. For complement lookup in a hash map, fill the blank so the program prints the result.",
+              "hints": [
+                "The blank is the missing piece.",
+                "Print the value that piece produces.",
+                "label = pair"
+              ],
+              "explanation": "The printed value is the result after this step finds the later index of a two-sum pair.",
+              "xp_reward": 10,
+              "starter_code": "nums = [2, 7, 52]\ntarget = 52 + 2\npair = 0\nfor i in range(len(nums)):\n    for j in range(i + 1, len(nums)):\n        if nums[i] + nums[j] == target:\n            pair = j\nlabel = ___\nprint(label)\n",
+              "solution_code": "nums = [2, 7, 52]\ntarget = 52 + 2\npair = 0\nfor i in range(len(nums)):\n    for j in range(i + 1, len(nums)):\n        if nums[i] + nums[j] == target:\n            pair = j\nlabel = pair\nprint(label)\n",
+              "tests": [
+                {
+                  "name": "hash-maps-step-2-prints",
+                  "description": "The printed value is the result after this step finds the later index of a two-s",
+                  "expected_stdout": "2\n",
+                  "required": true
+                }
+              ]
             }
           ]
         }
-      ]
+      ],
+      "player_mode": "micro"
     },
     {
       "id": "hash-maps-01",
-      "title": "3. Group Anagrams (Concept Challenge)",
-      "description": "Finish `group_anagrams`. Group words that are anagrams of each other. The test checks that `{frozenset(g) for g in groups}` equals `{frozenset(['eat', 'tea', 'ate']), frozenset(['tan', 'nat']), frozenset(['bat'])}`.",
+      "title": "Group Anagrams",
+      "description": "Finish group_anagrams. Group words that are anagrams of each other. The test checks that {frozenset(g) for g in groups} equals {frozenset(['eat', 'tea', 'ate']), frozenset(['tan', 'nat']), frozenset(['bat'])}.",
       "order": 23,
       "difficulty": "intermediate",
       "duration_minutes": 8,
@@ -137,7 +451,7 @@
         "big-o"
       ],
       "learning_objectives": [
-        "Key anagrams by sorted letters"
+        "Orchard potters recount crates before dawn, and key anagrams by sorted letters."
       ],
       "starter_code": "def group_anagrams(words):\n    # TODO: return list of groups (order of groups/words unconstrained)\n    pass\n",
       "solution_code": "def group_anagrams(words):\n    groups = {}\n    for w in words:\n        key = ''.join(sorted(w))\n        groups.setdefault(key, []).append(w)\n    return list(groups.values())\n",
@@ -158,12 +472,176 @@
         "url": "https://docs.python.org/3/library/functions.html#sorted",
         "license": "Python documentation license (PSF)"
       },
-      "xp_reward": 25
+      "xp_reward": 25,
+      "player_mode": "micro",
+      "sublessons": [
+        {
+          "id": "hash-maps-01-micro",
+          "title": "Group Anagrams",
+          "description": "",
+          "order": 1,
+          "exercises": [
+            {
+              "id": "hash-maps-01-teach",
+              "type": "teach",
+              "question": "Orchard potters recount crates before dawn, and key anagrams by sorted letters.",
+              "hints": [
+                "Read the one job this step is practicing.",
+                "The example is about Group Anagrams.",
+                "sorted(text)"
+              ],
+              "explanation": "Orchard potters recount crates before dawn, and key anagrams by sorted letters.",
+              "xp_reward": 0,
+              "worked_example": "sorted(text)"
+            },
+            {
+              "id": "hash-maps-01-mcq",
+              "type": "mcq",
+              "question": "Orchard potters recount crates before dawn. For key anagrams by sorted letters, which line treats two words as the same when their letters match?",
+              "hints": [
+                "Compare each line with the example.",
+                "One line matches the example.",
+                "''.join(sorted(text))"
+              ],
+              "explanation": "Sorting the letters makes an anagram key.",
+              "xp_reward": 10,
+              "options": [
+                "text == text",
+                "pass",
+                "return text",
+                "''.join(sorted(text))"
+              ],
+              "correct_answer": "''.join(sorted(text))"
+            },
+            {
+              "id": "hash-maps-01-predict",
+              "type": "output_prediction",
+              "question": "Orchard potters recount crates before dawn. For key anagrams by sorted letters, what value is displayed?",
+              "hints": [
+                "Run the example in your head from the top.",
+                "The last line is what gets displayed.",
+                "1"
+              ],
+              "explanation": "The Group Anagrams program displays that value.",
+              "xp_reward": 10,
+              "starter_code": "def key(text):\n    return ''.join(sorted(text))\nprint(int(key('ab') == key('ba')))\n",
+              "options": [
+                "blank",
+                "1",
+                "0",
+                "none"
+              ],
+              "correct_answer": "1"
+            },
+            {
+              "id": "hash-maps-01-order",
+              "type": "ordering",
+              "question": "Orchard potters recount crates before dawn. For key anagrams by sorted letters, build the line that treats two words as the same when their letters match.",
+              "hints": [
+                "Start at the left of the example.",
+                "Keep the example order.",
+                "def key(text): return ''.join(sorted(text))"
+              ],
+              "explanation": "Sorting the letters makes an anagram key.",
+              "xp_reward": 10,
+              "options": [
+                "def",
+                "key(text):",
+                "return",
+                "''.join(sorted(text))",
+                "=="
+              ],
+              "correct_answer": [
+                "def",
+                "key(text):",
+                "return",
+                "''.join(sorted(text))"
+              ]
+            },
+            {
+              "id": "hash-maps-01-fill",
+              "type": "fill_blank",
+              "question": "Orchard potters recount crates before dawn. For key anagrams by sorted letters, fill the blank so the line treats two words as the same when their letters match.",
+              "hints": [
+                "The blank is the missing piece of the example.",
+                "The example uses that piece.",
+                "=="
+              ],
+              "explanation": "Sorting the letters makes an anagram key.",
+              "xp_reward": 10,
+              "starter_code": "same = int(key('ab') ___ key('ba'))\n",
+              "options": [
+                "!=",
+                ">=",
+                "<",
+                "=="
+              ],
+              "correct_answer": "=="
+            },
+            {
+              "id": "hash-maps-01-bug",
+              "type": "debugging",
+              "question": "Orchard potters recount crates before dawn. For key anagrams by sorted letters, which line does a different job than the example?",
+              "hints": [
+                "The other lines match the example.",
+                "One line is the odd one.",
+                "Line 2"
+              ],
+              "explanation": "The key keeps the original order, so anagrams look different.",
+              "xp_reward": 10,
+              "starter_code": "def key(text):\n    return text\nprint(int(key('ab') == key('ba')))\n",
+              "correct_answer": "2"
+            },
+            {
+              "id": "hash-maps-01-predict-2",
+              "type": "output_prediction",
+              "question": "Orchard potters recount crates before dawn. For key anagrams by sorted letters, what does the second run display?",
+              "hints": [
+                "Apply the same steps to the new value.",
+                "The display comes from the last line.",
+                "0"
+              ],
+              "explanation": "The second Group Anagrams program displays that value.",
+              "xp_reward": 10,
+              "starter_code": "def key(text):\n    return ''.join(sorted(text))\nprint(int(key('ab') == key('zz')))\n",
+              "options": [
+                "1",
+                "none",
+                "0",
+                "blank"
+              ],
+              "correct_answer": "0"
+            },
+            {
+              "id": "hash-maps-01-write",
+              "type": "code",
+              "question": "Orchard potters recount crates before dawn. For key anagrams by sorted letters, fill the blank so the program prints the result.",
+              "hints": [
+                "The blank is the missing piece.",
+                "Print the value that piece produces.",
+                "label = int(key('ab') == key('ba'))"
+              ],
+              "explanation": "The printed value is the result after this step treats two words as the same when their letters match.",
+              "xp_reward": 10,
+              "starter_code": "def key(text):\n    return ''.join(sorted(text))\nlabel = ___\nprint(label)\n",
+              "solution_code": "def key(text):\n    return ''.join(sorted(text))\nlabel = int(key('ab') == key('ba'))\nprint(label)\n",
+              "tests": [
+                {
+                  "name": "hash-maps-01-prints",
+                  "description": "The printed value is the result after this step treats two words as the same whe",
+                  "expected_stdout": "1\n",
+                  "required": true
+                }
+              ]
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "hash-maps-practice-1",
-      "title": "4. First Unique Char (Practice)",
-      "description": "Finish `first_unique`. Return the first character that appears once, or None. The test checks that `first_unique('swiss')` equals `'w'`; `first_unique('aabb')` is None.",
+      "title": "Practice First Unique Char",
+      "description": "Finish first_unique. Return the first character that appears once, or None. The test checks that first_unique('swiss') equals 'w'; first_unique('aabb') is None.",
       "order": 24,
       "difficulty": "intermediate",
       "duration_minutes": 6,
@@ -177,7 +655,7 @@
         "big-o"
       ],
       "learning_objectives": [
-        "Two-pass frequency then scan"
+        "Quarry potters recount crates before dawn, and two-pass frequency then scan."
       ],
       "starter_code": "def first_unique(text):\n    # TODO\n    pass\n",
       "solution_code": "def first_unique(text):\n    counts = {}\n    for ch in text:\n        counts[ch] = counts.get(ch, 0) + 1\n    for ch in text:\n        if counts[ch] == 1:\n            return ch\n    return None\n",
@@ -198,12 +676,178 @@
         "url": "https://docs.python.org/3/library/stdtypes.html#mapping-types-dict",
         "license": "Python documentation license (PSF)"
       },
-      "xp_reward": 15
+      "xp_reward": 15,
+      "player_mode": "micro",
+      "sublessons": [
+        {
+          "id": "hash-maps-practice-1-micro",
+          "title": "Practice First Unique Char",
+          "description": "",
+          "order": 1,
+          "exercises": [
+            {
+              "id": "hash-maps-practice-1-teach",
+              "type": "teach",
+              "question": "Quarry potters recount crates before dawn, and two-pass frequency then scan.",
+              "hints": [
+                "Read the one job this step is practicing.",
+                "The example is about First Unique Char.",
+                "counts[ch] == 1"
+              ],
+              "explanation": "Quarry potters recount crates before dawn, and two-pass frequency then scan.",
+              "xp_reward": 0,
+              "worked_example": "counts[ch] == 1"
+            },
+            {
+              "id": "hash-maps-practice-1-mcq",
+              "type": "mcq",
+              "question": "Quarry potters recount crates before dawn. For two-pass frequency then scan, which line returns the first letter that appears once?",
+              "hints": [
+                "Compare each line with the example.",
+                "One line matches the example.",
+                "if counts[ch] == 1: break"
+              ],
+              "explanation": "The first letter whose count is one is the answer.",
+              "xp_reward": 10,
+              "options": [
+                "ch == ch",
+                "return found",
+                "pass",
+                "if counts[ch] == 1: break"
+              ],
+              "correct_answer": "if counts[ch] == 1: break"
+            },
+            {
+              "id": "hash-maps-practice-1-predict",
+              "type": "output_prediction",
+              "question": "Quarry potters recount crates before dawn. For two-pass frequency then scan, what value is displayed?",
+              "hints": [
+                "Run the example in your head from the top.",
+                "The last line is what gets displayed.",
+                "once-c"
+              ],
+              "explanation": "The First Unique Char program displays that value.",
+              "xp_reward": 10,
+              "starter_code": "text = 'aabbc'\ncounts = {}\nfor ch in text:\n    counts[ch] = counts.get(ch, 0) + 1\nfound = ''\nfor ch in text:\n    if counts[ch] == 1:\n        found = ch\n        break\nprint('once-' + found)\n",
+              "options": [
+                "once-y",
+                "none",
+                "0",
+                "once-c"
+              ],
+              "correct_answer": "once-c"
+            },
+            {
+              "id": "hash-maps-practice-1-order",
+              "type": "ordering",
+              "question": "Quarry potters recount crates before dawn. For two-pass frequency then scan, build the line that returns the first letter that appears once.",
+              "hints": [
+                "Start at the left of the example.",
+                "Keep the example order.",
+                "if counts[ch] == 1: break"
+              ],
+              "explanation": "The first letter whose count is one is the answer.",
+              "xp_reward": 10,
+              "options": [
+                "if",
+                "counts[ch]",
+                "==",
+                "1:",
+                "break",
+                "!="
+              ],
+              "correct_answer": [
+                "if",
+                "counts[ch]",
+                "==",
+                "1:",
+                "break"
+              ]
+            },
+            {
+              "id": "hash-maps-practice-1-fill",
+              "type": "fill_blank",
+              "question": "Quarry potters recount crates before dawn. For two-pass frequency then scan, fill the blank so the line returns the first letter that appears once.",
+              "hints": [
+                "The blank is the missing piece of the example.",
+                "The example uses that piece.",
+                "=="
+              ],
+              "explanation": "The first letter whose count is one is the answer.",
+              "xp_reward": 10,
+              "starter_code": "if counts[ch] ___ 1:\n    found = ch\n",
+              "options": [
+                "!=",
+                ">",
+                "<",
+                "=="
+              ],
+              "correct_answer": "=="
+            },
+            {
+              "id": "hash-maps-practice-1-bug",
+              "type": "debugging",
+              "question": "Quarry potters recount crates before dawn. For two-pass frequency then scan, which line does a different job than the example?",
+              "hints": [
+                "The other lines match the example.",
+                "One line is the odd one.",
+                "Line 2"
+              ],
+              "explanation": "The print takes the first letter even though it is repeated.",
+              "xp_reward": 10,
+              "starter_code": "text = 'aabbc'\nprint(text[0])\n",
+              "correct_answer": "2"
+            },
+            {
+              "id": "hash-maps-practice-1-predict-2",
+              "type": "output_prediction",
+              "question": "Quarry potters recount crates before dawn. For two-pass frequency then scan, what does the second run display?",
+              "hints": [
+                "Apply the same steps to the new value.",
+                "The display comes from the last line.",
+                "once-y"
+              ],
+              "explanation": "The second First Unique Char program displays that value.",
+              "xp_reward": 10,
+              "starter_code": "text = 'xxyz'\ncounts = {}\nfor ch in text:\n    counts[ch] = counts.get(ch, 0) + 1\nfound = ''\nfor ch in text:\n    if counts[ch] == 1:\n        found = ch\n        break\nprint('once-' + found)\n",
+              "options": [
+                "once-c",
+                "none",
+                "once-y",
+                "0"
+              ],
+              "correct_answer": "once-y"
+            },
+            {
+              "id": "hash-maps-practice-1-write",
+              "type": "code",
+              "question": "Quarry potters recount crates before dawn. For two-pass frequency then scan, fill the blank so the program prints the result.",
+              "hints": [
+                "The blank is the missing piece.",
+                "Print the value that piece produces.",
+                "label = 'once-' + found"
+              ],
+              "explanation": "The printed value is the result after this step returns the first letter that appears once.",
+              "xp_reward": 10,
+              "starter_code": "text = 'aabbc'\ncounts = {}\nfor ch in text:\n    counts[ch] = counts.get(ch, 0) + 1\nfound = ''\nfor ch in text:\n    if counts[ch] == 1:\n        found = ch\n        break\nlabel = ___\nprint(label)\n",
+              "solution_code": "text = 'aabbc'\ncounts = {}\nfor ch in text:\n    counts[ch] = counts.get(ch, 0) + 1\nfound = ''\nfor ch in text:\n    if counts[ch] == 1:\n        found = ch\n        break\nlabel = 'once-' + found\nprint(label)\n",
+              "tests": [
+                {
+                  "name": "hash-maps-practice-1-prints",
+                  "description": "The printed value is the result after this step returns the first letter that ap",
+                  "expected_stdout": "once-c\n",
+                  "required": true
+                }
+              ]
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "hash-maps-checkpoint",
-      "title": "5. Unit 5 Checkpoint: Hash Maps",
-      "description": "Implement `intersection(a, b)` returning sorted unique common elements. The test checks that `intersection([1, 2, 2, 3], [2, 3, 4])` equals `[2, 3]`.",
+      "title": "Practice Unit 5 Checkpoint Hash Maps",
+      "description": "Implement intersection(a, b) returning sorted unique common elements. The test checks that intersection([1, 2, 2, 3], [2, 3, 4]) equals [2, 3].",
       "order": 25,
       "difficulty": "intermediate",
       "duration_minutes": 10,
@@ -217,7 +861,7 @@
         "big-o"
       ],
       "learning_objectives": [
-        "Set intersection via hash sets"
+        "Attic potters recount crates before dawn, and set intersection via hash sets."
       ],
       "starter_code": "def intersection(a, b):\n    # TODO: sorted unique commons\n    pass\n",
       "solution_code": "def intersection(a, b):\n    return sorted(set(a) & set(b))\n",
@@ -238,7 +882,169 @@
         "url": "https://docs.python.org/3/library/time-complexity.html",
         "license": "Python documentation license (PSF)"
       },
-      "xp_reward": 40
+      "xp_reward": 40,
+      "player_mode": "micro",
+      "sublessons": [
+        {
+          "id": "hash-maps-checkpoint-micro",
+          "title": "Practice Unit 5 Checkpoint Hash Maps",
+          "description": "",
+          "order": 1,
+          "exercises": [
+            {
+              "id": "hash-maps-checkpoint-teach",
+              "type": "teach",
+              "question": "Attic potters recount crates before dawn, and set intersection via hash sets.",
+              "hints": [
+                "Read the one job this step is practicing.",
+                "The example is about Unit 5 Checkpoint Hash Maps.",
+                "set(rows)"
+              ],
+              "explanation": "Attic potters recount crates before dawn, and set intersection via hash sets.",
+              "xp_reward": 0,
+              "worked_example": "set(rows)"
+            },
+            {
+              "id": "hash-maps-checkpoint-mcq",
+              "type": "mcq",
+              "question": "Attic potters recount crates before dawn. For set intersection via hash sets, which line counts the distinct keys?",
+              "hints": [
+                "Compare each line with the example.",
+                "One line matches the example.",
+                "set(rows)"
+              ],
+              "explanation": "set(rows) keeps each key once.",
+              "xp_reward": 10,
+              "options": [
+                "rows == rows",
+                "set(rows)",
+                "return rows",
+                "pass"
+              ],
+              "correct_answer": "set(rows)"
+            },
+            {
+              "id": "hash-maps-checkpoint-predict",
+              "type": "output_prediction",
+              "question": "Attic potters recount crates before dawn. For set intersection via hash sets, what value is displayed?",
+              "hints": [
+                "Run the example in your head from the top.",
+                "The last line is what gets displayed.",
+                "2"
+              ],
+              "explanation": "The Unit 5 Checkpoint Hash Maps program displays that value.",
+              "xp_reward": 10,
+              "starter_code": "rows = ['hazel', 'hazel', 'linen']\nseen = set(rows)\nprint(len(seen))\n",
+              "options": [
+                "3",
+                "2",
+                "none",
+                "0"
+              ],
+              "correct_answer": "2"
+            },
+            {
+              "id": "hash-maps-checkpoint-order",
+              "type": "ordering",
+              "question": "Attic potters recount crates before dawn. For set intersection via hash sets, build the line that counts the distinct keys.",
+              "hints": [
+                "Start at the left of the example.",
+                "Keep the example order.",
+                "seen = set(rows)"
+              ],
+              "explanation": "set(rows) keeps each key once.",
+              "xp_reward": 10,
+              "options": [
+                "seen",
+                "=",
+                "set(rows)",
+                "=="
+              ],
+              "correct_answer": [
+                "seen",
+                "=",
+                "set(rows)"
+              ]
+            },
+            {
+              "id": "hash-maps-checkpoint-fill",
+              "type": "fill_blank",
+              "question": "Attic potters recount crates before dawn. Choose the match for this step.",
+              "hints": [
+                "The blank is the missing piece of the example.",
+                "The example uses that piece.",
+                "set"
+              ],
+              "explanation": "set(rows) keeps each key once.",
+              "xp_reward": 10,
+              "starter_code": "seen = ___(rows)\n",
+              "options": [
+                "list",
+                "set",
+                "tuple",
+                "dict"
+              ],
+              "correct_answer": "set"
+            },
+            {
+              "id": "hash-maps-checkpoint-bug",
+              "type": "debugging",
+              "question": "Attic potters recount crates before dawn. For set intersection via hash sets, which line does a different job than the example?",
+              "hints": [
+                "The other lines match the example.",
+                "One line is the odd one.",
+                "Line 2"
+              ],
+              "explanation": "The print counts rows, so duplicates are counted twice.",
+              "xp_reward": 10,
+              "starter_code": "rows = ['hazel', 'hazel']\nprint(len(rows))\n",
+              "correct_answer": "2"
+            },
+            {
+              "id": "hash-maps-checkpoint-predict-2",
+              "type": "output_prediction",
+              "question": "Attic potters recount crates before dawn. For set intersection via hash sets, what does the second run display?",
+              "hints": [
+                "Apply the same steps to the new value.",
+                "The display comes from the last line.",
+                "3"
+              ],
+              "explanation": "The second Unit 5 Checkpoint Hash Maps program displays that value.",
+              "xp_reward": 10,
+              "starter_code": "rows = ['hazel', 'linen', 'extra']\nseen = set(rows)\nprint(len(seen))\n",
+              "options": [
+                "2",
+                "none",
+                "0",
+                "3"
+              ],
+              "correct_answer": "3"
+            },
+            {
+              "id": "hash-maps-checkpoint-write",
+              "type": "code",
+              "question": "Attic potters recount crates before dawn. For set intersection via hash sets, fill the blank so the program prints the result.",
+              "hints": [
+                "The blank is the missing piece.",
+                "Print the value that piece produces.",
+                "label = len(seen)"
+              ],
+              "explanation": "The printed value is the result after this step counts the distinct keys.",
+              "xp_reward": 10,
+              "starter_code": "rows = ['hazel', 'hazel', 'linen']\nseen = set(rows)\nlabel = ___\nprint(label)\n",
+              "solution_code": "rows = ['hazel', 'hazel', 'linen']\nseen = set(rows)\nlabel = (len(seen))\nprint(label)\n",
+              "tests": [
+                {
+                  "name": "hash-maps-checkpoint-prints",
+                  "description": "The printed value is the result after this step counts the distinct keys.",
+                  "expected_stdout": "2\n",
+                  "required": true
+                }
+              ]
+            }
+          ]
+        }
+      ]
     }
   ]
 }

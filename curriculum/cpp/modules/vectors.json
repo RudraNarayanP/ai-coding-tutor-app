@@ -14,8 +14,8 @@
   "lessons": [
     {
       "id": "cpp-vectors-step-1",
-      "title": "1. std::vector Push Back & Traversal",
-      "description": "`std::vector` is the standard dynamic array container in C++. Implement `vector_sum(const std::vector<int>& numbers)`. The test checks that `vector_sum(v)` equals `60`.",
+      "title": "Practice std vector Push Back Traversal",
+      "description": "std::vector is the standard dynamic array container in C++. Implement vector_sum(const std::vector<int>& numbers). The test checks that vector_sum(v) equals 60.",
       "order": 21,
       "difficulty": "intermediate",
       "duration_minutes": 5,
@@ -27,7 +27,7 @@
         "cpp-functions"
       ],
       "learning_objectives": [
-        "Iterate over std::vector<int> using range-based for loop"
+        "Plaza pickers recount crates before dawn, and iterate over std vector int using range-based for loop."
       ],
       "starter_code": "#include <vector>\n\nint vector_sum(const std::vector<int>& numbers) {\n    // TODO: Sum all elements in numbers\n    return 0;\n}\n",
       "solution_code": "#include <vector>\n\nint vector_sum(const std::vector<int>& numbers) {\n    int sum = 0;\n    for (int n : numbers) {\n        sum += n;\n    }\n    return sum;\n}\n",
@@ -48,12 +48,174 @@
         "url": "https://en.cppreference.com/w/cpp/container/vector",
         "license": "CC BY-SA 4.0 (cppreference.com)"
       },
-      "xp_reward": 10
+      "xp_reward": 10,
+      "player_mode": "micro",
+      "sublessons": [
+        {
+          "id": "cpp-vectors-step-1-micro",
+          "title": "Practice std vector Push Back Traversal",
+          "description": "",
+          "order": 1,
+          "exercises": [
+            {
+              "id": "cpp-vectors-step-1-teach",
+              "type": "teach",
+              "question": "Plaza pickers recount crates before dawn, and iterate over std vector int using range-based for loop.",
+              "hints": [
+                "Read the one job this step is practicing.",
+                "The example is about std vector Push Back Traversal.",
+                "items.push_back(55);"
+              ],
+              "explanation": "Plaza pickers recount crates before dawn, and iterate over std vector int using range-based for loop.",
+              "xp_reward": 0,
+              "worked_example": "items.push_back(55);"
+            },
+            {
+              "id": "cpp-vectors-step-1-mcq",
+              "type": "mcq",
+              "question": "Plaza pickers recount crates before dawn. For iterate over std vector int using range-based for loop, which line counts items after push_back?",
+              "hints": [
+                "Compare each line with the example.",
+                "One line matches the example.",
+                "items.push_back(value);"
+              ],
+              "explanation": "size() is the number of push_back calls.",
+              "xp_reward": 10,
+              "options": [
+                "items == items;",
+                "items.push_back(value);",
+                "return;",
+                "items = items;"
+              ],
+              "correct_answer": "items.push_back(value);"
+            },
+            {
+              "id": "cpp-vectors-step-1-predict",
+              "type": "output_prediction",
+              "question": "Plaza pickers recount crates before dawn. For iterate over std vector int using range-based for loop, what value is displayed?",
+              "hints": [
+                "Run the example in your head from the top.",
+                "The last line is what gets displayed.",
+                "2"
+              ],
+              "explanation": "The std vector Push Back Traversal program displays that value.",
+              "xp_reward": 10,
+              "starter_code": "#include <iostream>\n#include <string>\n#include <vector>\n#include <algorithm>\n#include <memory>\nint main() {\n    std::vector<int> items;\n    items.push_back(55);\n    items.push_back(1);\n    std::cout << items.size() << std::endl;\n    return 0;\n}\n",
+              "options": [
+                "0",
+                "3",
+                "none",
+                "2"
+              ],
+              "correct_answer": "2"
+            },
+            {
+              "id": "cpp-vectors-step-1-order",
+              "type": "ordering",
+              "question": "Plaza pickers recount crates before dawn. For iterate over std vector int using range-based for loop, build the line that counts items after push_back.",
+              "hints": [
+                "Start at the left of the example.",
+                "Keep the example order.",
+                "std::vector<int> items{left, right};"
+              ],
+              "explanation": "size() is the number of push_back calls.",
+              "xp_reward": 10,
+              "options": [
+                "std::vector<int>",
+                "items{left,",
+                "right};",
+                "new"
+              ],
+              "correct_answer": [
+                "std::vector<int>",
+                "items{left,",
+                "right};"
+              ]
+            },
+            {
+              "id": "cpp-vectors-step-1-fill",
+              "type": "fill_blank",
+              "question": "Plaza pickers recount crates before dawn. For iterate over std vector int using range-based for loop, fill the blank so the line counts items after push_back.",
+              "hints": [
+                "The blank is the missing piece of the example.",
+                "The example uses that piece.",
+                "push_back(left)"
+              ],
+              "explanation": "size() is the number of push_back calls.",
+              "xp_reward": 10,
+              "starter_code": "std::vector<int> items; items.___;",
+              "options": [
+                "clear()",
+                "pop_back()",
+                "push_back(left)",
+                "size()"
+              ],
+              "correct_answer": "push_back(left)"
+            },
+            {
+              "id": "cpp-vectors-step-1-bug",
+              "type": "debugging",
+              "question": "Plaza pickers recount crates before dawn. For iterate over std vector int using range-based for loop, which line does a different job than the example?",
+              "hints": [
+                "The other lines match the example.",
+                "One line is the odd one.",
+                "Line 9"
+              ],
+              "explanation": "The print shows the item instead of how many items were stored.",
+              "xp_reward": 10,
+              "starter_code": "#include <iostream>\n#include <string>\n#include <vector>\n#include <algorithm>\n#include <memory>\nint main() {\n    std::vector<int> items;\n    items.push_back(55);\n    std::cout << items.front() << std::endl;\n    return 0;\n}\n",
+              "correct_answer": "9"
+            },
+            {
+              "id": "cpp-vectors-step-1-predict-2",
+              "type": "output_prediction",
+              "question": "Plaza pickers recount crates before dawn. For iterate over std vector int using range-based for loop, what does the second run display?",
+              "hints": [
+                "Apply the same steps to the new value.",
+                "The display comes from the last line.",
+                "3"
+              ],
+              "explanation": "The second std vector Push Back Traversal program displays that value.",
+              "xp_reward": 10,
+              "starter_code": "#include <iostream>\n#include <string>\n#include <vector>\n#include <algorithm>\n#include <memory>\nint main() {\n    std::vector<int> items;\n    items.push_back(55);\n    items.push_back(1);\n    items.push_back(2);\n    std::cout << items.size() << std::endl;\n    return 0;\n}\n",
+              "options": [
+                "2",
+                "none",
+                "0",
+                "3"
+              ],
+              "correct_answer": "3"
+            },
+            {
+              "id": "cpp-vectors-step-1-write",
+              "type": "code",
+              "question": "Plaza pickers recount crates before dawn. For iterate over std vector int using range-based for loop, fill the blank so the program prints the result.",
+              "hints": [
+                "The blank is the missing piece.",
+                "Print the value that piece produces.",
+                "int label = static_cast<int>(items.size());"
+              ],
+              "explanation": "The printed value is the result after this step counts items after push_back.",
+              "xp_reward": 10,
+              "starter_code": "#include <iostream>\n#include <string>\n#include <vector>\n#include <algorithm>\n#include <memory>\nint main() {\n    std::vector<int> items;\n    items.push_back(55);\n    items.push_back(1);\n    int label = ___;\n    std::cout << label << std::endl;\n    return 0;\n}\n",
+              "solution_code": "#include <iostream>\n#include <string>\n#include <vector>\n#include <algorithm>\n#include <memory>\nint main() {\n    std::vector<int> items;\n    items.push_back(55);\n    items.push_back(1);\n    int label = static_cast<int>(items.size());\n    std::cout << label << std::endl;\n    return 0;\n}\n",
+              "tests": [
+                {
+                  "name": "cpp-vectors-step-1-prints",
+                  "description": "The printed value is the result after this step counts items after push_back.",
+                  "expected_stdout": "2\n",
+                  "required": true
+                }
+              ]
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "cpp-vectors-step-2",
-      "title": "2. Filtering Vectors",
-      "description": "Finish `filter_evens`. Create a new vector containing only even numbers. The test checks that `res.size()` equals `3 && res[0] == 2 && res[2] == 6`.",
+      "title": "Filter Vectors",
+      "description": "Finish filter_evens. Create a new vector containing only even numbers. The test checks that res.size() equals 3 && res[0] == 2 && res[2] == 6.",
       "order": 22,
       "difficulty": "intermediate",
       "duration_minutes": 5,
@@ -65,7 +227,7 @@
         "cpp-functions"
       ],
       "learning_objectives": [
-        "Filter vector elements with push_back"
+        "Marsh pickers recount crates before dawn, and filter vector elements with push back."
       ],
       "starter_code": "#include <vector>\n\nstd::vector<int> filter_evens(const std::vector<int>& numbers) {\n    std::vector<int> evens;\n    // TODO: Push even numbers into evens\n    return evens;\n}\n",
       "solution_code": "#include <vector>\n\nstd::vector<int> filter_evens(const std::vector<int>& numbers) {\n    std::vector<int> evens;\n    for (int n : numbers) {\n        if (n % 2 == 0) evens.push_back(n);\n    }\n    return evens;\n}\n",
@@ -86,12 +248,174 @@
         "url": "https://en.cppreference.com/w/cpp/container/vector",
         "license": "CC BY-SA 4.0 (cppreference.com)"
       },
-      "xp_reward": 10
+      "xp_reward": 10,
+      "player_mode": "micro",
+      "sublessons": [
+        {
+          "id": "cpp-vectors-step-2-micro",
+          "title": "Filter Vectors",
+          "description": "",
+          "order": 1,
+          "exercises": [
+            {
+              "id": "cpp-vectors-step-2-teach",
+              "type": "teach",
+              "question": "Marsh pickers recount crates before dawn, and filter vector elements with push back.",
+              "hints": [
+                "Read the one job this step is practicing.",
+                "The example is about Filtering Vectors.",
+                "if (item >= 10) ++kept;"
+              ],
+              "explanation": "Marsh pickers recount crates before dawn, and filter vector elements with push back.",
+              "xp_reward": 0,
+              "worked_example": "if (item >= 10) ++kept;"
+            },
+            {
+              "id": "cpp-vectors-step-2-mcq",
+              "type": "mcq",
+              "question": "Marsh pickers recount crates before dawn. For filter vector elements with push back, which line counts values at or above ten?",
+              "hints": [
+                "Compare each line with the example.",
+                "One line matches the example.",
+                "if (item >= 10) ++kept;"
+              ],
+              "explanation": "The loop counts items that are at least 10.",
+              "xp_reward": 10,
+              "options": [
+                "item == 10;",
+                "return kept;",
+                "if (item >= 10) ++kept;",
+                "kept = 0;"
+              ],
+              "correct_answer": "if (item >= 10) ++kept;"
+            },
+            {
+              "id": "cpp-vectors-step-2-predict",
+              "type": "output_prediction",
+              "question": "Marsh pickers recount crates before dawn. For filter vector elements with push back, what value is displayed?",
+              "hints": [
+                "Run the example in your head from the top.",
+                "The last line is what gets displayed.",
+                "1"
+              ],
+              "explanation": "The Filtering Vectors program displays that value.",
+              "xp_reward": 10,
+              "starter_code": "#include <iostream>\n#include <string>\n#include <vector>\n#include <algorithm>\n#include <memory>\nint main() {\n    std::vector<int> items{{1, 56, 2}};\n    int kept = 0;\n    for (int item : items) if (item >= 10) ++kept;\n    std::cout << kept << std::endl;\n    return 0;\n}\n",
+              "options": [
+                "0",
+                "blank",
+                "1",
+                "none"
+              ],
+              "correct_answer": "1"
+            },
+            {
+              "id": "cpp-vectors-step-2-order",
+              "type": "ordering",
+              "question": "Marsh pickers recount crates before dawn. For filter vector elements with push back, build the line that counts values at or above ten.",
+              "hints": [
+                "Start at the left of the example.",
+                "Keep the example order.",
+                "std::vector<int> items{left, right};"
+              ],
+              "explanation": "The loop counts items that are at least 10.",
+              "xp_reward": 10,
+              "options": [
+                "std::vector<int>",
+                "items{left,",
+                "right};",
+                "new"
+              ],
+              "correct_answer": [
+                "std::vector<int>",
+                "items{left,",
+                "right};"
+              ]
+            },
+            {
+              "id": "cpp-vectors-step-2-fill",
+              "type": "fill_blank",
+              "question": "Marsh pickers recount crates before dawn. For filter vector elements with push back, fill the blank so the line counts values at or above ten.",
+              "hints": [
+                "The blank is the missing piece of the example.",
+                "The example uses that piece.",
+                ">="
+              ],
+              "explanation": "The loop counts items that are at least 10.",
+              "xp_reward": 10,
+              "starter_code": "int kept = 0; if (left ___ 10) ++kept;",
+              "options": [
+                "<",
+                "==",
+                ">=",
+                "!="
+              ],
+              "correct_answer": ">="
+            },
+            {
+              "id": "cpp-vectors-step-2-bug",
+              "type": "debugging",
+              "question": "Marsh pickers recount crates before dawn. For filter vector elements with push back, which line does a different job than the example?",
+              "hints": [
+                "The other lines match the example.",
+                "One line is the odd one.",
+                "Line 9"
+              ],
+              "explanation": "The filter keeps the small values instead of the large ones.",
+              "xp_reward": 10,
+              "starter_code": "#include <iostream>\n#include <string>\n#include <vector>\n#include <algorithm>\n#include <memory>\nint main() {\n    std::vector<int> items{{1, 56, 2}};\n    int kept = 0;\n    for (int item : items) if (item < 10) ++kept;\n    std::cout << kept << std::endl;\n    return 0;\n}\n",
+              "correct_answer": "9"
+            },
+            {
+              "id": "cpp-vectors-step-2-predict-2",
+              "type": "output_prediction",
+              "question": "Marsh pickers recount crates before dawn. For filter vector elements with push back, what does the second run display?",
+              "hints": [
+                "Apply the same steps to the new value.",
+                "The display comes from the last line.",
+                "0"
+              ],
+              "explanation": "The second Filtering Vectors program displays that value.",
+              "xp_reward": 10,
+              "starter_code": "#include <iostream>\n#include <string>\n#include <vector>\n#include <algorithm>\n#include <memory>\nint main() {\n    std::vector<int> items{{1, 2, 3}};\n    int kept = 0;\n    for (int item : items) if (item >= 10) ++kept;\n    std::cout << kept << std::endl;\n    return 0;\n}\n",
+              "options": [
+                "blank",
+                "0",
+                "1",
+                "none"
+              ],
+              "correct_answer": "0"
+            },
+            {
+              "id": "cpp-vectors-step-2-write",
+              "type": "code",
+              "question": "Marsh pickers recount crates before dawn. For filter vector elements with push back, fill the blank so the program prints the result.",
+              "hints": [
+                "The blank is the missing piece.",
+                "Print the value that piece produces.",
+                "int label = kept;"
+              ],
+              "explanation": "The printed value is the result after this step counts values at or above ten.",
+              "xp_reward": 10,
+              "starter_code": "#include <iostream>\n#include <string>\n#include <vector>\n#include <algorithm>\n#include <memory>\nint main() {\n    std::vector<int> items{{1, 56, 2}};\n    int kept = 0;\n    for (int item : items) if (item >= 10) ++kept;\n    int label = ___;\n    std::cout << label << std::endl;\n    return 0;\n}\n",
+              "solution_code": "#include <iostream>\n#include <string>\n#include <vector>\n#include <algorithm>\n#include <memory>\nint main() {\n    std::vector<int> items{{1, 56, 2}};\n    int kept = 0;\n    for (int item : items) if (item >= 10) ++kept;\n    int label = kept;\n    std::cout << label << std::endl;\n    return 0;\n}\n",
+              "tests": [
+                {
+                  "name": "cpp-vectors-step-2-prints",
+                  "description": "The printed value is the result after this step counts values at or above ten.",
+                  "expected_stdout": "1\n",
+                  "required": true
+                }
+              ]
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "cpp-vectors-01",
-      "title": "3. Sensor Data Outlier Removal (Concept Challenge)",
-      "description": "Finish `find_max`. Find maximum element in a std::vector<double>. The test checks that `find_max(r)` equals `45.1`.",
+      "title": "Practice Sensor Data Outlier Removal",
+      "description": "Finish find_max. Find maximum element in a std::vector<double>. The test checks that find_max(r) equals 45.1.",
       "order": 23,
       "difficulty": "intermediate",
       "duration_minutes": 8,
@@ -103,7 +427,7 @@
         "cpp-functions"
       ],
       "learning_objectives": [
-        "Track max element in std::vector<double>"
+        "Harbor crews recount crates before dawn, and track max element in std vector double."
       ],
       "starter_code": "#include <vector>\n#include <stdexcept>\n\ndouble find_max(const std::vector<double>& readings) {\n    if (readings.empty()) return 0.0;\n    // TODO: Return maximum value\n    return 0.0;\n}\n",
       "solution_code": "#include <vector>\n#include <algorithm>\n\ndouble find_max(const std::vector<double>& readings) {\n    if (readings.empty()) return 0.0;\n    double m = readings[0];\n    for (double r : readings) {\n        if (r > m) m = r;\n    }\n    return m;\n}\n",
@@ -124,11 +448,173 @@
         "url": "https://en.cppreference.com/w/cpp/container/vector",
         "license": "CC BY-SA 4.0 (cppreference.com)"
       },
-      "xp_reward": 25
+      "xp_reward": 25,
+      "player_mode": "micro",
+      "sublessons": [
+        {
+          "id": "cpp-vectors-01-micro",
+          "title": "Practice Sensor Data Outlier Removal",
+          "description": "",
+          "order": 1,
+          "exercises": [
+            {
+              "id": "cpp-vectors-01-teach",
+              "type": "teach",
+              "question": "Harbor crews recount crates before dawn, and track max element in std vector double.",
+              "hints": [
+                "Read the one job this step is practicing.",
+                "The example is about Sensor Data Outlier Removal.",
+                "if (item < 80) ++kept;"
+              ],
+              "explanation": "Harbor crews recount crates before dawn, and track max element in std vector double.",
+              "xp_reward": 0,
+              "worked_example": "if (item < 80) ++kept;"
+            },
+            {
+              "id": "cpp-vectors-01-mcq",
+              "type": "mcq",
+              "question": "Harbor crews recount crates before dawn. For track max element in std vector double, which line counts values that are not outliers?",
+              "hints": [
+                "Compare each line with the example.",
+                "One line matches the example.",
+                "if (item < 80) ++kept;"
+              ],
+              "explanation": "Values below 80 stay; the large spike is the outlier.",
+              "xp_reward": 10,
+              "options": [
+                "return kept;",
+                "if (item < 80) ++kept;",
+                "item == 80;",
+                "kept = 0;"
+              ],
+              "correct_answer": "if (item < 80) ++kept;"
+            },
+            {
+              "id": "cpp-vectors-01-predict",
+              "type": "output_prediction",
+              "question": "Harbor crews recount crates before dawn. For track max element in std vector double, what value is displayed?",
+              "hints": [
+                "Run the example in your head from the top.",
+                "The last line is what gets displayed.",
+                "2"
+              ],
+              "explanation": "The Sensor Data Outlier Removal program displays that value.",
+              "xp_reward": 10,
+              "starter_code": "#include <iostream>\n#include <string>\n#include <vector>\n#include <algorithm>\n#include <memory>\nint main() {\n    std::vector<int> items{{1, 100, 54}};\n    int kept = 0;\n    for (int item : items) if (item < 80) ++kept;\n    std::cout << kept << std::endl;\n    return 0;\n}\n",
+              "options": [
+                "3",
+                "2",
+                "none",
+                "0"
+              ],
+              "correct_answer": "2"
+            },
+            {
+              "id": "cpp-vectors-01-order",
+              "type": "ordering",
+              "question": "Harbor crews recount crates before dawn. For track max element in std vector double, build the line that counts values that are not outliers.",
+              "hints": [
+                "Start at the left of the example.",
+                "Keep the example order.",
+                "std::vector<int> items{left, right};"
+              ],
+              "explanation": "Values below 80 stay; the large spike is the outlier.",
+              "xp_reward": 10,
+              "options": [
+                "std::vector<int>",
+                "items{left,",
+                "right};",
+                "new"
+              ],
+              "correct_answer": [
+                "std::vector<int>",
+                "items{left,",
+                "right};"
+              ]
+            },
+            {
+              "id": "cpp-vectors-01-fill",
+              "type": "fill_blank",
+              "question": "Harbor crews recount crates before dawn. For track max element in std vector double, fill the blank so the line counts values that are not outliers.",
+              "hints": [
+                "The blank is the missing piece of the example.",
+                "The example uses that piece.",
+                "<"
+              ],
+              "explanation": "Values below 80 stay; the large spike is the outlier.",
+              "xp_reward": 10,
+              "starter_code": "int kept = 0; if (left ___ 80) ++kept;",
+              "options": [
+                ">",
+                "==",
+                "<",
+                "!="
+              ],
+              "correct_answer": "<"
+            },
+            {
+              "id": "cpp-vectors-01-bug",
+              "type": "debugging",
+              "question": "Harbor crews recount crates before dawn. For track max element in std vector double, which line does a different job than the example?",
+              "hints": [
+                "The other lines match the example.",
+                "One line is the odd one.",
+                "Line 9"
+              ],
+              "explanation": "The filter keeps the outlier instead of the ordinary values.",
+              "xp_reward": 10,
+              "starter_code": "#include <iostream>\n#include <string>\n#include <vector>\n#include <algorithm>\n#include <memory>\nint main() {\n    std::vector<int> items{{1, 100, 54}};\n    int kept = 0;\n    for (int item : items) if (item > 80) ++kept;\n    std::cout << kept << std::endl;\n    return 0;\n}\n",
+              "correct_answer": "9"
+            },
+            {
+              "id": "cpp-vectors-01-predict-2",
+              "type": "output_prediction",
+              "question": "Harbor crews recount crates before dawn. For track max element in std vector double, what does the second run display?",
+              "hints": [
+                "Apply the same steps to the new value.",
+                "The display comes from the last line.",
+                "3"
+              ],
+              "explanation": "The second Sensor Data Outlier Removal program displays that value.",
+              "xp_reward": 10,
+              "starter_code": "#include <iostream>\n#include <string>\n#include <vector>\n#include <algorithm>\n#include <memory>\nint main() {\n    std::vector<int> items{{1, 2, 3}};\n    int kept = 0;\n    for (int item : items) if (item < 80) ++kept;\n    std::cout << kept << std::endl;\n    return 0;\n}\n",
+              "options": [
+                "2",
+                "none",
+                "0",
+                "3"
+              ],
+              "correct_answer": "3"
+            },
+            {
+              "id": "cpp-vectors-01-write",
+              "type": "code",
+              "question": "Harbor crews recount crates before dawn. For track max element in std vector double, fill the blank so the program prints the result.",
+              "hints": [
+                "The blank is the missing piece.",
+                "Print the value that piece produces.",
+                "int label = kept;"
+              ],
+              "explanation": "The printed value is the result after this step counts values that are not outliers.",
+              "xp_reward": 10,
+              "starter_code": "#include <iostream>\n#include <string>\n#include <vector>\n#include <algorithm>\n#include <memory>\nint main() {\n    std::vector<int> items{{1, 100, 54}};\n    int kept = 0;\n    for (int item : items) if (item < 80) ++kept;\n    int label = ___;\n    std::cout << label << std::endl;\n    return 0;\n}\n",
+              "solution_code": "#include <iostream>\n#include <string>\n#include <vector>\n#include <algorithm>\n#include <memory>\nint main() {\n    std::vector<int> items{{1, 100, 54}};\n    int kept = 0;\n    for (int item : items) if (item < 80) ++kept;\n    int label = kept;\n    std::cout << label << std::endl;\n    return 0;\n}\n",
+              "tests": [
+                {
+                  "name": "cpp-vectors-01-prints",
+                  "description": "The printed value is the result after this step counts values that are not outli",
+                  "expected_stdout": "2\n",
+                  "required": true
+                }
+              ]
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "cpp-vectors-practice-1",
-      "title": "4. Vector Reversal (Practice)",
+      "title": "Practice Vector Reversal",
       "description": "Practice: implement reverse_vector(std::vector<int>& numbers) reversing the vector in place — std::reverse(numbers.begin(), numbers.end()) or manual two-end swapping. The test asserts {1, 2, 3} becomes {3, 2, 1}.",
       "order": 24,
       "difficulty": "intermediate",
@@ -141,7 +627,7 @@
         "cpp-functions"
       ],
       "learning_objectives": [
-        "Use std::reverse or swap with vector"
+        "Mesa crews recount crates before dawn, and use std reverse or swap with vector."
       ],
       "starter_code": "#include <vector>\n#include <algorithm>\n\nvoid reverse_vector(std::vector<int>& numbers) {\n    // TODO: Reverse numbers in-place\n}\n",
       "solution_code": "#include <vector>\n#include <algorithm>\n\nvoid reverse_vector(std::vector<int>& numbers) {\n    std::reverse(numbers.begin(), numbers.end());\n}\n",
@@ -162,11 +648,177 @@
         "url": "https://en.cppreference.com/w/cpp/algorithm/reverse",
         "license": "CC BY-SA 4.0 (cppreference.com)"
       },
-      "xp_reward": 15
+      "xp_reward": 15,
+      "player_mode": "micro",
+      "sublessons": [
+        {
+          "id": "cpp-vectors-practice-1-micro",
+          "title": "Practice Vector Reversal",
+          "description": "",
+          "order": 1,
+          "exercises": [
+            {
+              "id": "cpp-vectors-practice-1-teach",
+              "type": "teach",
+              "question": "Mesa crews recount crates before dawn, and use std reverse or swap with vector.",
+              "hints": [
+                "Read the one job this step is practicing.",
+                "The example is about Vector Reversal.",
+                "std::reverse(items.begin(), items.end());"
+              ],
+              "explanation": "Mesa crews recount crates before dawn, and use std reverse or swap with vector.",
+              "xp_reward": 0,
+              "worked_example": "std::reverse(items.begin(), items.end());"
+            },
+            {
+              "id": "cpp-vectors-practice-1-mcq",
+              "type": "mcq",
+              "question": "Mesa crews recount crates before dawn. For use std reverse or swap with vector, which line reads the front after reversing?",
+              "hints": [
+                "Compare each line with the example.",
+                "One line matches the example.",
+                "std::reverse(items.begin(), items.end());"
+              ],
+              "explanation": "After reverse, front() is the old last item.",
+              "xp_reward": 10,
+              "options": [
+                "items == items;",
+                "std::reverse(items.begin(), items.end());",
+                "return;",
+                "items = items;"
+              ],
+              "correct_answer": "std::reverse(items.begin(), items.end());"
+            },
+            {
+              "id": "cpp-vectors-practice-1-predict",
+              "type": "output_prediction",
+              "question": "Mesa crews recount crates before dawn. For use std reverse or swap with vector, what value is displayed?",
+              "hints": [
+                "Run the example in your head from the top.",
+                "The last line is what gets displayed.",
+                "54"
+              ],
+              "explanation": "The Vector Reversal program displays that value.",
+              "xp_reward": 10,
+              "starter_code": "#include <iostream>\n#include <string>\n#include <vector>\n#include <algorithm>\n#include <memory>\nint main() {\n    std::vector<int> items{{1, 2, 54}};\n    std::reverse(items.begin(), items.end());\n    std::cout << items.front() << std::endl;\n    return 0;\n}\n",
+              "options": [
+                "57",
+                "54",
+                "none",
+                "0"
+              ],
+              "correct_answer": "54"
+            },
+            {
+              "id": "cpp-vectors-practice-1-order",
+              "type": "ordering",
+              "question": "Mesa crews recount crates before dawn. For use std reverse or swap with vector, build the line that reads the front after reversing.",
+              "hints": [
+                "Start at the left of the example.",
+                "Keep the example order.",
+                "std::vector<int> items{left, right}; std::reverse(items.begin(), items.end());"
+              ],
+              "explanation": "After reverse, front() is the old last item.",
+              "xp_reward": 10,
+              "options": [
+                "std::vector<int>",
+                "items{left,",
+                "right};",
+                "std::reverse(items.begin(),",
+                "items.end());",
+                "new"
+              ],
+              "correct_answer": [
+                "std::vector<int>",
+                "items{left,",
+                "right};",
+                "std::reverse(items.begin(),",
+                "items.end());"
+              ]
+            },
+            {
+              "id": "cpp-vectors-practice-1-fill",
+              "type": "fill_blank",
+              "question": "Mesa crews recount crates before dawn. For use std reverse or swap with vector, fill the blank so the line reads the front after reversing.",
+              "hints": [
+                "The blank is the missing piece of the example.",
+                "The example uses that piece.",
+                "end()"
+              ],
+              "explanation": "After reverse, front() is the old last item.",
+              "xp_reward": 10,
+              "starter_code": "std::vector<int> items{{left, right}}; std::reverse(items.begin(), items.___);",
+              "options": [
+                "begin()",
+                "end()",
+                "size()",
+                "front()"
+              ],
+              "correct_answer": "end()"
+            },
+            {
+              "id": "cpp-vectors-practice-1-bug",
+              "type": "debugging",
+              "question": "Mesa crews recount crates before dawn. For use std reverse or swap with vector, which line does a different job than the example?",
+              "hints": [
+                "The other lines match the example.",
+                "One line is the odd one.",
+                "Line 8"
+              ],
+              "explanation": "The print reads the front before the reverse.",
+              "xp_reward": 10,
+              "starter_code": "#include <iostream>\n#include <string>\n#include <vector>\n#include <algorithm>\n#include <memory>\nint main() {\n    std::vector<int> items{{1, 2, 54}};\n    std::cout << items.front() << std::endl;\n    return 0;\n}\n",
+              "correct_answer": "8"
+            },
+            {
+              "id": "cpp-vectors-practice-1-predict-2",
+              "type": "output_prediction",
+              "question": "Mesa crews recount crates before dawn. For use std reverse or swap with vector, what does the second run display?",
+              "hints": [
+                "Apply the same steps to the new value.",
+                "The display comes from the last line.",
+                "57"
+              ],
+              "explanation": "The second Vector Reversal program displays that value.",
+              "xp_reward": 10,
+              "starter_code": "#include <iostream>\n#include <string>\n#include <vector>\n#include <algorithm>\n#include <memory>\nint main() {\n    std::vector<int> items{{1, 2, 57}};\n    std::reverse(items.begin(), items.end());\n    std::cout << items.front() << std::endl;\n    return 0;\n}\n",
+              "options": [
+                "54",
+                "none",
+                "0",
+                "57"
+              ],
+              "correct_answer": "57"
+            },
+            {
+              "id": "cpp-vectors-practice-1-write",
+              "type": "code",
+              "question": "Mesa crews recount crates before dawn. For use std reverse or swap with vector, fill the blank so the program prints the result.",
+              "hints": [
+                "The blank is the missing piece.",
+                "Print the value that piece produces.",
+                "int label = items.front();"
+              ],
+              "explanation": "The printed value is the result after this step reads the front after reversing.",
+              "xp_reward": 10,
+              "starter_code": "#include <iostream>\n#include <string>\n#include <vector>\n#include <algorithm>\n#include <memory>\nint main() {\n    std::vector<int> items{{1, 2, 54}};\n    std::reverse(items.begin(), items.end());\n    int label = ___;\n    std::cout << label << std::endl;\n    return 0;\n}\n",
+              "solution_code": "#include <iostream>\n#include <string>\n#include <vector>\n#include <algorithm>\n#include <memory>\nint main() {\n    std::vector<int> items{{1, 2, 54}};\n    std::reverse(items.begin(), items.end());\n    int label = items.front();\n    std::cout << label << std::endl;\n    return 0;\n}\n",
+              "tests": [
+                {
+                  "name": "cpp-vectors-practice-1-prints",
+                  "description": "The printed value is the result after this step reads the front after reversing.",
+                  "expected_stdout": "54\n",
+                  "required": true
+                }
+              ]
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "cpp-vectors-checkpoint",
-      "title": "5. Unit 5 Checkpoint: C++ Vectors Mastery",
+      "title": "Practice Unit 5 Checkpoint C Vectors",
       "description": "Checkpoint for vectors: implement contains_value(const std::vector<int>& vec, int target) returning true when target appears in vec — a range-based for loop fits well. The test checks contains_value({10,20,30}, 20) is true and contains_value({10,20,30}, 99) is false.",
       "order": 25,
       "difficulty": "intermediate",
@@ -179,7 +831,7 @@
         "cpp-functions"
       ],
       "learning_objectives": [
-        "Pass C++ vectors checkpoint"
+        "Orchard crews recount crates before dawn, and pass C vectors checkpoint."
       ],
       "starter_code": "#include <vector>\n\nbool contains_value(const std::vector<int>& vec, int target) {\n    // TODO: Return true if target is in vec\n    return false;\n}\n",
       "solution_code": "#include <vector>\n\nbool contains_value(const std::vector<int>& vec, int target) {\n    for (int num : vec) {\n        if (num == target) return true;\n    }\n    return false;\n}\n",
@@ -200,7 +852,169 @@
         "url": "https://en.cppreference.com/w/cpp/container/vector",
         "license": "CC BY-SA 4.0 (cppreference.com)"
       },
-      "xp_reward": 40
+      "xp_reward": 40,
+      "player_mode": "micro",
+      "sublessons": [
+        {
+          "id": "cpp-vectors-checkpoint-micro",
+          "title": "Practice Unit 5 Checkpoint C Vectors",
+          "description": "",
+          "order": 1,
+          "exercises": [
+            {
+              "id": "cpp-vectors-checkpoint-teach",
+              "type": "teach",
+              "question": "Orchard crews recount crates before dawn, and pass C vectors checkpoint.",
+              "hints": [
+                "Read the one job this step is practicing.",
+                "The example is about Unit 5 Checkpoint C Vectors Mastery.",
+                "total = total + item;"
+              ],
+              "explanation": "Orchard crews recount crates before dawn, and pass C vectors checkpoint.",
+              "xp_reward": 0,
+              "worked_example": "total = total + item;"
+            },
+            {
+              "id": "cpp-vectors-checkpoint-mcq",
+              "type": "mcq",
+              "question": "Orchard crews recount crates before dawn. For pass C vectors checkpoint, which line sums the vector?",
+              "hints": [
+                "Compare each line with the example.",
+                "One line matches the example.",
+                "total = total + item;"
+              ],
+              "explanation": "The loop adds every stored item.",
+              "xp_reward": 10,
+              "options": [
+                "total == item;",
+                "return total;",
+                "total = total + item;",
+                "item = total;"
+              ],
+              "correct_answer": "total = total + item;"
+            },
+            {
+              "id": "cpp-vectors-checkpoint-predict",
+              "type": "output_prediction",
+              "question": "Orchard crews recount crates before dawn. For pass C vectors checkpoint, what value is displayed?",
+              "hints": [
+                "Run the example in your head from the top.",
+                "The last line is what gets displayed.",
+                "27"
+              ],
+              "explanation": "The Unit 5 Checkpoint C Vectors Mastery program displays that value.",
+              "xp_reward": 10,
+              "starter_code": "#include <iostream>\n#include <string>\n#include <vector>\n#include <algorithm>\n#include <memory>\nint main() {\n    std::vector<int> items{{2, 4, 21}};\n    int total = 0;\n    for (int item : items) total = total + item;\n    std::cout << total << std::endl;\n    return 0;\n}\n",
+              "options": [
+                "30",
+                "none",
+                "27",
+                "0"
+              ],
+              "correct_answer": "27"
+            },
+            {
+              "id": "cpp-vectors-checkpoint-order",
+              "type": "ordering",
+              "question": "Orchard crews recount crates before dawn. For pass C vectors checkpoint, build the line that sums the vector.",
+              "hints": [
+                "Start at the left of the example.",
+                "Keep the example order.",
+                "std::vector<int> items{left, right};"
+              ],
+              "explanation": "The loop adds every stored item.",
+              "xp_reward": 10,
+              "options": [
+                "std::vector<int>",
+                "items{left,",
+                "right};",
+                "new"
+              ],
+              "correct_answer": [
+                "std::vector<int>",
+                "items{left,",
+                "right};"
+              ]
+            },
+            {
+              "id": "cpp-vectors-checkpoint-fill",
+              "type": "fill_blank",
+              "question": "Orchard crews recount crates before dawn. For pass C vectors checkpoint, fill the blank so the line sums the vector.",
+              "hints": [
+                "The blank is the missing piece of the example.",
+                "The example uses that piece.",
+                "+"
+              ],
+              "explanation": "The loop adds every stored item.",
+              "xp_reward": 10,
+              "starter_code": "int total = 0; total = total ___ left;",
+              "options": [
+                "-",
+                "*",
+                "+",
+                "=="
+              ],
+              "correct_answer": "+"
+            },
+            {
+              "id": "cpp-vectors-checkpoint-bug",
+              "type": "debugging",
+              "question": "Orchard crews recount crates before dawn. For pass C vectors checkpoint, which line does a different job than the example?",
+              "hints": [
+                "The other lines match the example.",
+                "One line is the odd one.",
+                "Line 9"
+              ],
+              "explanation": "The loop subtracts each item.",
+              "xp_reward": 10,
+              "starter_code": "#include <iostream>\n#include <string>\n#include <vector>\n#include <algorithm>\n#include <memory>\nint main() {\n    std::vector<int> items{{2, 4, 21}};\n    int total = 0;\n    for (int item : items) total = total - item;\n    std::cout << total << std::endl;\n    return 0;\n}\n",
+              "correct_answer": "9"
+            },
+            {
+              "id": "cpp-vectors-checkpoint-predict-2",
+              "type": "output_prediction",
+              "question": "Orchard crews recount crates before dawn. For pass C vectors checkpoint, what does the second run display, using willow?",
+              "hints": [
+                "Apply the same steps to the new value.",
+                "The display comes from the last line.",
+                "30"
+              ],
+              "explanation": "The second Unit 5 Checkpoint C Vectors Mastery program displays that value.",
+              "xp_reward": 10,
+              "starter_code": "#include <iostream>\n#include <string>\n#include <vector>\n#include <algorithm>\n#include <memory>\nint main() {\n    std::vector<int> items{{2, 4, 24}};\n    int total = 0;\n    for (int item : items) total = total + item;\n    std::cout << total << std::endl;\n    return 0;\n}\n",
+              "options": [
+                "27",
+                "30",
+                "none",
+                "0"
+              ],
+              "correct_answer": "30"
+            },
+            {
+              "id": "cpp-vectors-checkpoint-write",
+              "type": "code",
+              "question": "Orchard crews recount crates before dawn. For pass C vectors checkpoint, fill the blank so the program prints the result.",
+              "hints": [
+                "The blank is the missing piece.",
+                "Print the value that piece produces.",
+                "int label = total;"
+              ],
+              "explanation": "The printed value is the result after this step sums the vector.",
+              "xp_reward": 10,
+              "starter_code": "#include <iostream>\n#include <string>\n#include <vector>\n#include <algorithm>\n#include <memory>\nint main() {\n    std::vector<int> items{{2, 4, 21}};\n    int total = 0;\n    for (int item : items) total = total + item;\n    int label = ___;\n    std::cout << label << std::endl;\n    return 0;\n}\n",
+              "solution_code": "#include <iostream>\n#include <string>\n#include <vector>\n#include <algorithm>\n#include <memory>\nint main() {\n    std::vector<int> items{{2, 4, 21}};\n    int total = 0;\n    for (int item : items) total = total + item;\n    int label = total;\n    std::cout << label << std::endl;\n    return 0;\n}\n",
+              "tests": [
+                {
+                  "name": "cpp-vectors-checkpoint-prints",
+                  "description": "The printed value is the result after this step sums the vector.",
+                  "expected_stdout": "27\n",
+                  "required": true
+                }
+              ]
+            }
+          ]
+        }
+      ]
     }
   ]
 }

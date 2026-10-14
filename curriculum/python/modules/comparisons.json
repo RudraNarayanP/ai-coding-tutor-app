@@ -16,8 +16,8 @@
   "lessons": [
     {
       "id": "comparisons-step-1",
-      "title": "1. Relational Operators",
-      "description": "Python provides comparison operators: `==` (equal), `!=` (not equal), `<`, `>`, `<=`, `>=`. Write `is_equal(a, b)` and `is_greater(a, b)`. The test checks that `is_equal(5, 5)` is true; `is_greater(10, 3)` is true; `is_equal(5, 6)` is false.",
+      "title": "Practice Relational Operators",
+      "description": "Python provides comparison operators: == (equal), != (not equal), <, >, <=, >=. Write is_equal(a, b) and is_greater(a, b). The test checks that is_equal(5, 5) is true; is_greater(10, 3) is true; is_equal(5, 6) is false.",
       "order": 21,
       "difficulty": "beginner",
       "duration_minutes": 5,
@@ -30,7 +30,7 @@
         "conditionals"
       ],
       "learning_objectives": [
-        "Compare values using ==, !=, <, >"
+        "Plaza clerks recount crates before dawn, and compare values using."
       ],
       "starter_code": "def is_equal(a, b):\n    # TODO: Return a == b\n    pass\n\ndef is_greater(a, b):\n    # TODO: Return a > b\n    pass\n",
       "tests": [
@@ -54,49 +54,175 @@
       "xp_reward": 10,
       "sublessons": [
         {
-          "id": "compare-ops-sub",
-          "title": "Match the operator",
+          "id": "comparisons-step-1-micro",
+          "title": "Practice Relational Operators",
+          "description": "",
           "order": 1,
           "exercises": [
             {
-              "id": "compare-ops-match-1",
-              "type": "matching",
-              "question": "Match each comparison operator to the question it asks.",
-              "pairs": [
-                {
-                  "left": "a == b",
-                  "right": "do the two values hold the same content?"
-                },
-                {
-                  "left": "a != b",
-                  "right": "are the two values different?"
-                },
-                {
-                  "left": "a > b",
-                  "right": "is a strictly larger than b?"
-                },
-                {
-                  "left": "a <= b",
-                  "right": "is a no more than b?"
-                }
+              "id": "comparisons-step-1-teach",
+              "type": "teach",
+              "question": "Plaza clerks recount crates before dawn, and compare values using.",
+              "hints": [
+                "Read the one job this step is practicing.",
+                "The example is about Relational Operators.",
+                "score >= 15"
               ],
-              "correct_answer": {
-                "a == b": "do the two values hold the same content?",
-                "a != b": "are the two values different?",
-                "a > b": "is a strictly larger than b?",
-                "a <= b": "is a no more than b?"
-              },
-              "explanation": "`==` and `=` are not the same thing: one compares, the other assigns.",
-              "xp_reward": 10
+              "explanation": "Plaza clerks recount crates before dawn, and compare values using.",
+              "xp_reward": 0,
+              "worked_example": "score >= 15"
+            },
+            {
+              "id": "comparisons-step-1-mcq",
+              "type": "mcq",
+              "question": "Plaza clerks recount crates before dawn. For compare values using, which line keeps twice the score when it reaches the limit?",
+              "hints": [
+                "Compare each line with the example.",
+                "One line matches the example.",
+                "score >= 15"
+              ],
+              "explanation": "score >= limit includes the boundary.",
+              "xp_reward": 10,
+              "options": [
+                "score == 0",
+                "print(score)",
+                "score >= 15",
+                "score = limit"
+              ],
+              "correct_answer": "score >= 15"
+            },
+            {
+              "id": "comparisons-step-1-predict",
+              "type": "output_prediction",
+              "question": "Plaza clerks recount crates before dawn. For compare values using, what value is displayed?",
+              "hints": [
+                "Run the example in your head from the top.",
+                "The last line is what gets displayed.",
+                "62"
+              ],
+              "explanation": "The Relational Operators program displays that value.",
+              "xp_reward": 10,
+              "starter_code": "score = 31\nprint(score * 2 if score >= 15 else score)\n",
+              "options": [
+                "14",
+                "none",
+                "0",
+                "62"
+              ],
+              "correct_answer": "62"
+            },
+            {
+              "id": "comparisons-step-1-order",
+              "type": "ordering",
+              "question": "Plaza clerks recount crates before dawn. For compare values using, build the line that keeps twice the score when it reaches the limit.",
+              "hints": [
+                "Start at the left of the example.",
+                "Keep the example order.",
+                "if score >= limit: pass"
+              ],
+              "explanation": "if score >= limit: is the boundary check.",
+              "xp_reward": 10,
+              "options": [
+                "if",
+                "score",
+                ">=",
+                "limit:",
+                "pass",
+                "=="
+              ],
+              "correct_answer": [
+                "if",
+                "score",
+                ">=",
+                "limit:",
+                "pass"
+              ]
+            },
+            {
+              "id": "comparisons-step-1-fill",
+              "type": "fill_blank",
+              "question": "Plaza clerks recount crates before dawn. For compare values using, fill the blank so the line keeps twice the score when it reaches the limit.",
+              "hints": [
+                "The blank is the missing piece of the example.",
+                "The example uses that piece.",
+                ">="
+              ],
+              "explanation": "The boundary check includes the limit itself.",
+              "xp_reward": 10,
+              "starter_code": "if score ___ limit:\n    label = 1\n",
+              "options": [
+                ">",
+                "==",
+                "<",
+                ">="
+              ],
+              "correct_answer": ">="
+            },
+            {
+              "id": "comparisons-step-1-bug",
+              "type": "debugging",
+              "question": "Plaza clerks recount crates before dawn. For compare values using, which line does a different job than the example?",
+              "hints": [
+                "The other lines match the example.",
+                "One line is the odd one.",
+                "Line 2"
+              ],
+              "explanation": "The branch compares with zero instead of the limit.",
+              "xp_reward": 10,
+              "starter_code": "score = 31\nif score == 0:\n    score = 1\nprint(score)\n",
+              "correct_answer": "2"
+            },
+            {
+              "id": "comparisons-step-1-predict-2",
+              "type": "output_prediction",
+              "question": "Plaza clerks recount crates before dawn. For compare values using, what does the second run display?",
+              "hints": [
+                "Apply the same steps to the new value.",
+                "The display comes from the last line.",
+                "14"
+              ],
+              "explanation": "The second Relational Operators program displays that value.",
+              "xp_reward": 10,
+              "starter_code": "score = 14\nprint(score * 2 if score >= 15 else score)\n",
+              "options": [
+                "62",
+                "none",
+                "14",
+                "0"
+              ],
+              "correct_answer": "14"
+            },
+            {
+              "id": "comparisons-step-1-write",
+              "type": "code",
+              "question": "Plaza clerks recount crates before dawn. For compare values using, fill the blank so the program prints the result.",
+              "hints": [
+                "The blank is the missing piece.",
+                "Print the value that piece produces.",
+                "label = score * 2 if score >= 15 else score"
+              ],
+              "explanation": "The boundary result is what gets printed.",
+              "xp_reward": 10,
+              "starter_code": "score = 31\nlabel = ___\nprint(label)\n",
+              "solution_code": "score = 31\nlabel = score * 2 if score >= 15 else score\nprint(label)\n",
+              "tests": [
+                {
+                  "name": "comparisons-step-1-prints",
+                  "description": "The boundary result is what gets printed.",
+                  "expected_stdout": "62\n",
+                  "required": true
+                }
+              ]
             }
           ]
         }
-      ]
+      ],
+      "player_mode": "micro"
     },
     {
       "id": "comparisons-step-2",
-      "title": "2. Chained Comparisons",
-      "description": "Python allows chaining comparisons like `min_val <= x <= max_val`. Write `in_range(x, low, high)`. The test checks that `in_range(5, 1, 10)` is true; `in_range(1, 1, 10)` is true; `in_range(0, 1, 10)` is false.",
+      "title": "Practice Chained Comparisons",
+      "description": "Python allows chaining comparisons like min_val <= x <= max_val. Write in_range(x, low, high). The test checks that in_range(5, 1, 10) is true; in_range(1, 1, 10) is true; in_range(0, 1, 10) is false.",
       "order": 22,
       "difficulty": "beginner",
       "duration_minutes": 5,
@@ -109,7 +235,7 @@
         "conditionals"
       ],
       "learning_objectives": [
-        "Chain comparisons concisely"
+        "Marsh clerks recount crates before dawn, and chain comparisons concisely."
       ],
       "starter_code": "def in_range(x, low, high):\n    # TODO: Return True if low <= x <= high\n    pass\n",
       "tests": [
@@ -130,12 +256,178 @@
         "url": "https://docs.python.org/3/reference/expressions.html#comparisons",
         "license": "Python documentation license (PSF)"
       },
-      "xp_reward": 10
+      "xp_reward": 10,
+      "player_mode": "micro",
+      "sublessons": [
+        {
+          "id": "comparisons-step-2-micro",
+          "title": "Practice Chained Comparisons",
+          "description": "",
+          "order": 1,
+          "exercises": [
+            {
+              "id": "comparisons-step-2-teach",
+              "type": "teach",
+              "question": "Marsh clerks recount crates before dawn, and chain comparisons concisely.",
+              "hints": [
+                "Read the one job this step is practicing.",
+                "The example is about Chained Comparisons.",
+                "15 < score < 80"
+              ],
+              "explanation": "Marsh clerks recount crates before dawn, and chain comparisons concisely.",
+              "xp_reward": 0,
+              "worked_example": "15 < score < 80"
+            },
+            {
+              "id": "comparisons-step-2-mcq",
+              "type": "mcq",
+              "question": "Marsh clerks recount crates before dawn. For chain comparisons concisely, which line keeps the score only when it sits between the two bounds?",
+              "hints": [
+                "Compare each line with the example.",
+                "One line matches the example.",
+                "15 < score < 80"
+              ],
+              "explanation": "15 < score < 80 is one chained comparison.",
+              "xp_reward": 10,
+              "options": [
+                "score = 15",
+                "15 < score < 80",
+                "score == 80",
+                "print(score)"
+              ],
+              "correct_answer": "15 < score < 80"
+            },
+            {
+              "id": "comparisons-step-2-predict",
+              "type": "output_prediction",
+              "question": "Marsh clerks recount crates before dawn. For chain comparisons concisely, what value is displayed?",
+              "hints": [
+                "Run the example in your head from the top.",
+                "The last line is what gets displayed.",
+                "132"
+              ],
+              "explanation": "The Chained Comparisons program displays that value.",
+              "xp_reward": 10,
+              "starter_code": "score = 32\nprint(score + 100 if 15 < score < 80 else 7)\n",
+              "options": [
+                "7",
+                "132",
+                "none",
+                "0"
+              ],
+              "correct_answer": "132"
+            },
+            {
+              "id": "comparisons-step-2-order",
+              "type": "ordering",
+              "question": "Marsh clerks recount crates before dawn. For chain comparisons concisely, build the line that keeps the score only when it sits between the two bounds.",
+              "hints": [
+                "Start at the left of the example.",
+                "Keep the example order.",
+                "if low < score: pass"
+              ],
+              "explanation": "if low < score: opens the range check.",
+              "xp_reward": 10,
+              "options": [
+                "if",
+                "low",
+                "<",
+                "score:",
+                "pass",
+                "=="
+              ],
+              "correct_answer": [
+                "if",
+                "low",
+                "<",
+                "score:",
+                "pass"
+              ]
+            },
+            {
+              "id": "comparisons-step-2-fill",
+              "type": "fill_blank",
+              "question": "Marsh clerks recount crates before dawn. For chain comparisons concisely, fill the blank so the line keeps the score only when it sits between the two bounds.",
+              "hints": [
+                "The blank is the missing piece of the example.",
+                "The example uses that piece.",
+                "<"
+              ],
+              "explanation": "The second symbol finishes the chain.",
+              "xp_reward": 10,
+              "starter_code": "if low < score ___ high:\n    label = 1\n",
+              "options": [
+                ">",
+                "<",
+                "==",
+                "="
+              ],
+              "correct_answer": "<"
+            },
+            {
+              "id": "comparisons-step-2-bug",
+              "type": "debugging",
+              "question": "Marsh clerks recount crates before dawn. For chain comparisons concisely, which line does a different job than the example?",
+              "hints": [
+                "The other lines match the example.",
+                "One line is the odd one.",
+                "Line 2"
+              ],
+              "explanation": "The branch checks equality instead of the range.",
+              "xp_reward": 10,
+              "starter_code": "score = 32\nif score == 15:\n    score = 1\nprint(score)\n",
+              "correct_answer": "2"
+            },
+            {
+              "id": "comparisons-step-2-predict-2",
+              "type": "output_prediction",
+              "question": "Marsh clerks recount crates before dawn. For chain comparisons concisely, what does the second run display?",
+              "hints": [
+                "Apply the same steps to the new value.",
+                "The display comes from the last line.",
+                "7"
+              ],
+              "explanation": "The second Chained Comparisons program displays that value.",
+              "xp_reward": 10,
+              "starter_code": "score = 3\nprint(score + 100 if 15 < score < 80 else 7)\n",
+              "options": [
+                "132",
+                "none",
+                "0",
+                "7"
+              ],
+              "correct_answer": "7"
+            },
+            {
+              "id": "comparisons-step-2-write",
+              "type": "code",
+              "question": "Marsh clerks recount crates before dawn. For chain comparisons concisely, fill the blank so the program prints the result.",
+              "hints": [
+                "The blank is the missing piece.",
+                "Print the value that piece produces.",
+                "label = score + 100 if 15 < score < 80 else 7"
+              ],
+              "explanation": "The range result is what gets printed.",
+              "xp_reward": 10,
+              "starter_code": "score = 32\nlabel = ___\nprint(label)\n",
+              "solution_code": "score = 32\nlabel = score + 100 if 15 < score < 80 else 7\nprint(label)\n",
+              "tests": [
+                {
+                  "name": "comparisons-step-2-prints",
+                  "description": "The range result is what gets printed.",
+                  "expected_stdout": "132\n",
+                  "required": true
+                }
+              ]
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "comparisons-01",
-      "title": "3. Black Jack (Concept Challenge)",
-      "description": "Finish `value_of_card`, `higher_card`, `value_of_ace`, `is_blackjack` and 2 more. Implement Black Jack card counting rules using relational comparisons. The test checks that `value_of_card('K')` equals `10`; `value_of_card('7')` equals `7`; `higher_card('A', '10')` equals `'10'`.",
+      "title": "Practice Black Jack",
+      "description": "Finish value_of_card, higher_card, value_of_ace, is_blackjack and 2 more. Implement Black Jack card counting rules using relational comparisons. The test checks that value_of_card('K') equals 10; value_of_card('7') equals 7; higher_card('A', '10') equals '10'.",
       "order": 23,
       "difficulty": "beginner",
       "duration_minutes": 8,
@@ -149,9 +441,7 @@
         "conditionals"
       ],
       "learning_objectives": [
-        "Use equality == and inequality operators !=, <, >, <=, >=",
-        "Chain comparison expressions",
-        "Model value rules and edge cases with comparison expressions"
+        "Harbor potters recount crates before dawn, and use equality and inequality operators."
       ],
       "starter_code": "def value_of_card(card):\n    \"\"\"Return numeric value of a card.\"\"\"\n    pass\n\ndef higher_card(card_one, card_two):\n    \"\"\"Return the higher card, or both as a tuple if equal.\"\"\"\n    pass\n\ndef value_of_ace(card_one, card_two):\n    \"\"\"Return 11 if safe, else 1.\"\"\"\n    pass\n\ndef is_blackjack(card_one, card_two):\n    \"\"\"Return True if hand totals 21 with an ace and a 10-value card.\"\"\"\n    pass\n\ndef can_split_pairs(card_one, card_two):\n    \"\"\"Return True if cards have equal value.\"\"\"\n    pass\n\ndef can_double_down(card_one, card_two):\n    \"\"\"Return True if hand totals 9, 10, or 11.\"\"\"\n    pass\n",
       "tests": [
@@ -202,12 +492,178 @@
         "license": "MIT"
       },
       "solution_code": "FACE_CARDS = {'K', 'Q', 'J'}\n\n\ndef value_of_card(card):\n    \"\"\"Return numeric value of a card.\"\"\"\n    if card in FACE_CARDS:\n        return 10\n    if card == \"A\":\n        return 1\n    return int(card)\n\n\ndef higher_card(card_one, card_two):\n    \"\"\"Return the higher card, or both as a tuple if equal.\"\"\"\n    v1, v2 = value_of_card(card_one), value_of_card(card_two)\n    if v1 > v2:\n        return card_one\n    if v2 > v1:\n        return card_two\n    return (card_one, card_two)\n\n\ndef value_of_ace(card_one, card_two):\n    \"\"\"Return 11 if safe, else 1.\"\"\"\n    total = value_of_card(card_one) + value_of_card(card_two)\n    if card_one == \"A\":\n        total += 10\n    if card_two == \"A\":\n        total += 10\n    return 11 if total + 11 <= 21 else 1\n\n\ndef is_blackjack(card_one, card_two):\n    \"\"\"Return True if hand totals 21 with an ace and a 10-value card.\"\"\"\n    cards = (card_one, card_two)\n    return 'A' in cards and any(value_of_card(c) == 10 for c in cards)\n\n\ndef can_split_pairs(card_one, card_two):\n    \"\"\"Return True if cards have equal value.\"\"\"\n    return value_of_card(card_one) == value_of_card(card_two)\n\n\ndef can_double_down(card_one, card_two):\n    \"\"\"Return True if hand totals 9, 10, or 11.\"\"\"\n    return value_of_card(card_one) + value_of_card(card_two) in (9, 10, 11)\n",
-      "xp_reward": 25
+      "xp_reward": 25,
+      "player_mode": "micro",
+      "sublessons": [
+        {
+          "id": "comparisons-01-micro",
+          "title": "Practice Black Jack",
+          "description": "",
+          "order": 1,
+          "exercises": [
+            {
+              "id": "comparisons-01-teach",
+              "type": "teach",
+              "question": "Harbor potters recount crates before dawn, and use equality and inequality operators.",
+              "hints": [
+                "Read the one job this step is practicing.",
+                "The example is about Black Jack.",
+                "card == target"
+              ],
+              "explanation": "Harbor potters recount crates before dawn, and use equality and inequality operators.",
+              "xp_reward": 0,
+              "worked_example": "card == target"
+            },
+            {
+              "id": "comparisons-01-mcq",
+              "type": "mcq",
+              "question": "Harbor potters recount crates before dawn. For use equality and inequality operators, which line doubles the card when it matches the target?",
+              "hints": [
+                "Compare each line with the example.",
+                "One line matches the example.",
+                "card == target"
+              ],
+              "explanation": "card == target is the match.",
+              "xp_reward": 10,
+              "options": [
+                "card = target",
+                "card != target",
+                "print(card)",
+                "card == target"
+              ],
+              "correct_answer": "card == target"
+            },
+            {
+              "id": "comparisons-01-predict",
+              "type": "output_prediction",
+              "question": "Harbor potters recount crates before dawn. For use equality and inequality operators, what value is displayed?",
+              "hints": [
+                "Run the example in your head from the top.",
+                "The last line is what gets displayed.",
+                "60"
+              ],
+              "explanation": "The Black Jack program displays that value.",
+              "xp_reward": 10,
+              "starter_code": "card = 30\ntarget = 30\nprint(card * 2 if card == target else card)\n",
+              "options": [
+                "30",
+                "none",
+                "0",
+                "60"
+              ],
+              "correct_answer": "60"
+            },
+            {
+              "id": "comparisons-01-order",
+              "type": "ordering",
+              "question": "Harbor potters recount crates before dawn. For use equality and inequality operators, build the line that doubles the card when it matches the target.",
+              "hints": [
+                "Start at the left of the example.",
+                "Keep the example order.",
+                "if card == target: pass"
+              ],
+              "explanation": "if card == target: is the match.",
+              "xp_reward": 10,
+              "options": [
+                "if",
+                "card",
+                "==",
+                "target:",
+                "pass",
+                "="
+              ],
+              "correct_answer": [
+                "if",
+                "card",
+                "==",
+                "target:",
+                "pass"
+              ]
+            },
+            {
+              "id": "comparisons-01-fill",
+              "type": "fill_blank",
+              "question": "Harbor potters recount crates before dawn. For use equality and inequality operators, fill the blank so the line doubles the card when it matches the target.",
+              "hints": [
+                "The blank is the missing piece of the example.",
+                "The example uses that piece.",
+                "=="
+              ],
+              "explanation": "Two equals signs ask whether the values match.",
+              "xp_reward": 10,
+              "starter_code": "if card ___ target:\n    label = 1\n",
+              "options": [
+                "=",
+                "!=",
+                "<",
+                "=="
+              ],
+              "correct_answer": "=="
+            },
+            {
+              "id": "comparisons-01-bug",
+              "type": "debugging",
+              "question": "Harbor potters recount crates before dawn. For use equality and inequality operators, which line does a different job than the example?",
+              "hints": [
+                "The other lines match the example.",
+                "One line is the odd one.",
+                "Line 3"
+              ],
+              "explanation": "The branch keeps the mismatch instead of the match.",
+              "xp_reward": 10,
+              "starter_code": "card = 30\ntarget = 30\nprint(card * 2 if card != target else card)\n",
+              "correct_answer": "3"
+            },
+            {
+              "id": "comparisons-01-predict-2",
+              "type": "output_prediction",
+              "question": "Harbor potters recount crates before dawn. For use equality and inequality operators, what does the second run display?",
+              "hints": [
+                "Apply the same steps to the new value.",
+                "The display comes from the last line.",
+                "30"
+              ],
+              "explanation": "The second Black Jack program displays that value.",
+              "xp_reward": 10,
+              "starter_code": "card = 30\ntarget = 31\nprint(card * 2 if card == target else card)\n",
+              "options": [
+                "60",
+                "none",
+                "30",
+                "0"
+              ],
+              "correct_answer": "30"
+            },
+            {
+              "id": "comparisons-01-write",
+              "type": "code",
+              "question": "Harbor potters recount crates before dawn. For use equality and inequality operators, fill the blank so the program prints the result.",
+              "hints": [
+                "The blank is the missing piece.",
+                "Print the value that piece produces.",
+                "label = card * 2 if card == target else card"
+              ],
+              "explanation": "The match result is what gets printed.",
+              "xp_reward": 10,
+              "starter_code": "card = 30\ntarget = 30\nlabel = ___\nprint(label)\n",
+              "solution_code": "card = 30\ntarget = 30\nlabel = card * 2 if card == target else card\nprint(label)\n",
+              "tests": [
+                {
+                  "name": "comparisons-01-prints",
+                  "description": "The match result is what gets printed.",
+                  "expected_stdout": "60\n",
+                  "required": true
+                }
+              ]
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "comparisons-practice-1",
-      "title": "4. Rollercoaster Entry Check (Practice)",
-      "description": "Finish `can_ride`. Determine if a person can ride a rollercoaster: `age >= 10` and `height_cm >= 130`. The test checks that `can_ride(12, 140)` is true; `can_ride(8, 140)` is false; `can_ride(12, 120)` is false.",
+      "title": "Practice Rollercoaster Entry Check",
+      "description": "Finish can_ride. Determine if a person can ride a rollercoaster: age >= 10 and height_cm >= 130. The test checks that can_ride(12, 140) is true; can_ride(8, 140) is false; can_ride(12, 120) is false.",
       "order": 24,
       "difficulty": "beginner",
       "duration_minutes": 6,
@@ -220,7 +676,7 @@
         "conditionals"
       ],
       "learning_objectives": [
-        "Apply multiple relational comparisons"
+        "Mesa potters recount crates before dawn, and apply multiple relational comparisons."
       ],
       "starter_code": "def can_ride(age, height_cm):\n    # TODO: Return True if age >= 10 AND height_cm >= 130\n    pass\n",
       "tests": [
@@ -241,12 +697,178 @@
         "url": "https://docs.python.org/3/reference/expressions.html#comparisons",
         "license": "Python documentation license (PSF)"
       },
-      "xp_reward": 15
+      "xp_reward": 15,
+      "player_mode": "micro",
+      "sublessons": [
+        {
+          "id": "comparisons-practice-1-micro",
+          "title": "Practice Rollercoaster Entry Check",
+          "description": "",
+          "order": 1,
+          "exercises": [
+            {
+              "id": "comparisons-practice-1-teach",
+              "type": "teach",
+              "question": "Mesa potters recount crates before dawn, and apply multiple relational comparisons.",
+              "hints": [
+                "Read the one job this step is practicing.",
+                "The example is about Rollercoaster Entry Check.",
+                "score >= 15"
+              ],
+              "explanation": "Mesa potters recount crates before dawn, and apply multiple relational comparisons.",
+              "xp_reward": 0,
+              "worked_example": "score >= 15"
+            },
+            {
+              "id": "comparisons-practice-1-mcq",
+              "type": "mcq",
+              "question": "Mesa potters recount crates before dawn. For apply multiple relational comparisons, which line keeps twice the score when it reaches the limit?",
+              "hints": [
+                "Compare each line with the example.",
+                "One line matches the example.",
+                "score >= 15"
+              ],
+              "explanation": "score >= limit includes the boundary.",
+              "xp_reward": 10,
+              "options": [
+                "score = limit",
+                "score == 0",
+                "print(score)",
+                "score >= 15"
+              ],
+              "correct_answer": "score >= 15"
+            },
+            {
+              "id": "comparisons-practice-1-predict",
+              "type": "output_prediction",
+              "question": "Mesa potters recount crates before dawn. For apply multiple relational comparisons, what value is displayed?",
+              "hints": [
+                "Run the example in your head from the top.",
+                "The last line is what gets displayed.",
+                "66"
+              ],
+              "explanation": "The Rollercoaster Entry Check program displays that value.",
+              "xp_reward": 10,
+              "starter_code": "score = 33\nprint(score * 2 if score >= 15 else score)\n",
+              "options": [
+                "14",
+                "none",
+                "0",
+                "66"
+              ],
+              "correct_answer": "66"
+            },
+            {
+              "id": "comparisons-practice-1-order",
+              "type": "ordering",
+              "question": "Mesa potters recount crates before dawn. For apply multiple relational comparisons, build the line that keeps twice the score when it reaches the limit.",
+              "hints": [
+                "Start at the left of the example.",
+                "Keep the example order.",
+                "if score >= limit: pass"
+              ],
+              "explanation": "if score >= limit: is the boundary check.",
+              "xp_reward": 10,
+              "options": [
+                "if",
+                "score",
+                ">=",
+                "limit:",
+                "pass",
+                "=="
+              ],
+              "correct_answer": [
+                "if",
+                "score",
+                ">=",
+                "limit:",
+                "pass"
+              ]
+            },
+            {
+              "id": "comparisons-practice-1-fill",
+              "type": "fill_blank",
+              "question": "Mesa potters recount crates before dawn. For apply multiple relational comparisons, fill the blank so the line keeps twice the score when it reaches the limit.",
+              "hints": [
+                "The blank is the missing piece of the example.",
+                "The example uses that piece.",
+                ">="
+              ],
+              "explanation": "The boundary check includes the limit itself.",
+              "xp_reward": 10,
+              "starter_code": "if score ___ limit:\n    label = 1\n",
+              "options": [
+                ">",
+                "<",
+                "==",
+                ">="
+              ],
+              "correct_answer": ">="
+            },
+            {
+              "id": "comparisons-practice-1-bug",
+              "type": "debugging",
+              "question": "Mesa potters recount crates before dawn. For apply multiple relational comparisons, which line does a different job than the example?",
+              "hints": [
+                "The other lines match the example.",
+                "One line is the odd one.",
+                "Line 2"
+              ],
+              "explanation": "The branch compares with zero instead of the limit.",
+              "xp_reward": 10,
+              "starter_code": "score = 33\nif score == 0:\n    score = 1\nprint(score)\n",
+              "correct_answer": "2"
+            },
+            {
+              "id": "comparisons-practice-1-predict-2",
+              "type": "output_prediction",
+              "question": "Mesa potters recount crates before dawn. For apply multiple relational comparisons, what does the second run display?",
+              "hints": [
+                "Apply the same steps to the new value.",
+                "The display comes from the last line.",
+                "14"
+              ],
+              "explanation": "The second Rollercoaster Entry Check program displays that value.",
+              "xp_reward": 10,
+              "starter_code": "score = 14\nprint(score * 2 if score >= 15 else score)\n",
+              "options": [
+                "66",
+                "none",
+                "14",
+                "0"
+              ],
+              "correct_answer": "14"
+            },
+            {
+              "id": "comparisons-practice-1-write",
+              "type": "code",
+              "question": "Mesa potters recount crates before dawn. For apply multiple relational comparisons, fill the blank so the program prints the result.",
+              "hints": [
+                "The blank is the missing piece.",
+                "Print the value that piece produces.",
+                "label = score * 2 if score >= 15 else score"
+              ],
+              "explanation": "The boundary result is what gets printed.",
+              "xp_reward": 10,
+              "starter_code": "score = 33\nlabel = ___\nprint(label)\n",
+              "solution_code": "score = 33\nlabel = score * 2 if score >= 15 else score\nprint(label)\n",
+              "tests": [
+                {
+                  "name": "comparisons-practice-1-prints",
+                  "description": "The boundary result is what gets printed.",
+                  "expected_stdout": "66\n",
+                  "required": true
+                }
+              ]
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "comparisons-checkpoint",
-      "title": "5. Unit 5 Checkpoint: Comparisons Mastery",
-      "description": "compare_scores(score_a, score_b) must return \"A\" when score_a is greater, \"B\" when score_b is greater, and \"Tie\" when both are equal — practicing comparison operators and if/elif/else. The test checks that `compare_scores(10, 5)` equals `\"A\"`; `compare_scores(5, 10)` equals `\"B\"`; `compare_scores(7, 7)` equals `\"Tie\"`.",
+      "title": "Practice Unit 5 Checkpoint Comparisons Mastery",
+      "description": "compare_scores(score_a, score_b) must return \"A\" when score_a is greater, \"B\" when score_b is greater, and \"Tie\" when both are equal — practicing comparison operators and if/elif/else. The test checks that compare_scores(10, 5) equals \"A\"; compare_scores(5, 10) equals \"B\"; compare_scores(7, 7) equals \"Tie\".",
       "order": 25,
       "difficulty": "beginner",
       "duration_minutes": 10,
@@ -259,7 +881,7 @@
         "conditionals"
       ],
       "learning_objectives": [
-        "Master relational comparison logic"
+        "Orchard potters recount crates before dawn, and master relational comparison logic."
       ],
       "starter_code": "def compare_scores(score_a, score_b):\n    # TODO: Return \"A\" if score_a > score_b, \"B\" if score_b > score_a, else \"Tie\"\n    pass\n",
       "tests": [
@@ -280,7 +902,173 @@
         "url": "https://docs.python.org/3/reference/expressions.html#comparisons",
         "license": "Python documentation license (PSF)"
       },
-      "xp_reward": 40
+      "xp_reward": 40,
+      "player_mode": "micro",
+      "sublessons": [
+        {
+          "id": "comparisons-checkpoint-micro",
+          "title": "Practice Unit 5 Checkpoint Comparisons Mastery",
+          "description": "",
+          "order": 1,
+          "exercises": [
+            {
+              "id": "comparisons-checkpoint-teach",
+              "type": "teach",
+              "question": "Orchard potters recount crates before dawn, and master relational comparison logic.",
+              "hints": [
+                "Read the one job this step is practicing.",
+                "The example is about Unit 5 Checkpoint Comparisons Mastery.",
+                "left != right"
+              ],
+              "explanation": "Orchard potters recount crates before dawn, and master relational comparison logic.",
+              "xp_reward": 0,
+              "worked_example": "left != right"
+            },
+            {
+              "id": "comparisons-checkpoint-mcq",
+              "type": "mcq",
+              "question": "Orchard potters recount crates before dawn. For master relational comparison logic, which line adds the two readings when they differ?",
+              "hints": [
+                "Compare each line with the example.",
+                "One line matches the example.",
+                "left != right"
+              ],
+              "explanation": "left != right is the difference check.",
+              "xp_reward": 10,
+              "options": [
+                "left = right",
+                "left != right",
+                "print(left)",
+                "left == right"
+              ],
+              "correct_answer": "left != right"
+            },
+            {
+              "id": "comparisons-checkpoint-predict",
+              "type": "output_prediction",
+              "question": "Orchard potters recount crates before dawn. For master relational comparison logic, what value is displayed?",
+              "hints": [
+                "Run the example in your head from the top.",
+                "The last line is what gets displayed.",
+                "76"
+              ],
+              "explanation": "The Unit 5 Checkpoint Comparisons Mastery program displays that value.",
+              "xp_reward": 10,
+              "starter_code": "left = 37\nright = 39\nprint(left + right if left != right else left)\n",
+              "options": [
+                "37",
+                "76",
+                "none",
+                "0"
+              ],
+              "correct_answer": "76"
+            },
+            {
+              "id": "comparisons-checkpoint-order",
+              "type": "ordering",
+              "question": "Orchard potters recount crates before dawn. For master relational comparison logic, build the line that adds the two readings when they differ.",
+              "hints": [
+                "Start at the left of the example.",
+                "Keep the example order.",
+                "if left != right: pass"
+              ],
+              "explanation": "if left != right: keeps the unequal case.",
+              "xp_reward": 10,
+              "options": [
+                "if",
+                "left",
+                "!=",
+                "right:",
+                "pass",
+                "=="
+              ],
+              "correct_answer": [
+                "if",
+                "left",
+                "!=",
+                "right:",
+                "pass"
+              ]
+            },
+            {
+              "id": "comparisons-checkpoint-fill",
+              "type": "fill_blank",
+              "question": "Orchard potters recount crates before dawn. For master relational comparison logic, fill the blank so the line adds the two readings when they differ.",
+              "hints": [
+                "The blank is the missing piece of the example.",
+                "The example uses that piece.",
+                "!="
+              ],
+              "explanation": "The exclamation form asks whether the values differ.",
+              "xp_reward": 10,
+              "starter_code": "if left ___ right:\n    label = 1\n",
+              "options": [
+                "==",
+                "!=",
+                "=",
+                "<"
+              ],
+              "correct_answer": "!="
+            },
+            {
+              "id": "comparisons-checkpoint-bug",
+              "type": "debugging",
+              "question": "Orchard potters recount crates before dawn. For master relational comparison logic, which line does a different job than the example?",
+              "hints": [
+                "The other lines match the example.",
+                "One line is the odd one.",
+                "Line 3"
+              ],
+              "explanation": "The branch keeps the equal case.",
+              "xp_reward": 10,
+              "starter_code": "left = 37\nright = 39\nprint(left + right if left == right else 0)\n",
+              "correct_answer": "3"
+            },
+            {
+              "id": "comparisons-checkpoint-predict-2",
+              "type": "output_prediction",
+              "question": "Orchard potters recount crates before dawn. For master relational comparison logic, what does the second run display?",
+              "hints": [
+                "Apply the same steps to the new value.",
+                "The display comes from the last line.",
+                "37"
+              ],
+              "explanation": "The second Unit 5 Checkpoint Comparisons Mastery program displays that value.",
+              "xp_reward": 10,
+              "starter_code": "left = 37\nright = 37\nprint(left + right if left != right else left)\n",
+              "options": [
+                "none",
+                "76",
+                "0",
+                "37"
+              ],
+              "correct_answer": "37"
+            },
+            {
+              "id": "comparisons-checkpoint-write",
+              "type": "code",
+              "question": "Orchard potters recount crates before dawn. For master relational comparison logic, fill the blank so the program prints the result.",
+              "hints": [
+                "The blank is the missing piece.",
+                "Print the value that piece produces.",
+                "label = left + right if left != right else left"
+              ],
+              "explanation": "The unequal sum is what gets printed.",
+              "xp_reward": 10,
+              "starter_code": "left = 37\nright = 39\nlabel = ___\nprint(label)\n",
+              "solution_code": "left = 37\nright = 39\nlabel = left + right if left != right else left\nprint(label)\n",
+              "tests": [
+                {
+                  "name": "comparisons-checkpoint-prints",
+                  "description": "The unequal sum is what gets printed.",
+                  "expected_stdout": "76\n",
+                  "required": true
+                }
+              ]
+            }
+          ]
+        }
+      ]
     }
   ]
 }

@@ -221,8 +221,8 @@
     },
     {
       "id": "loops-step-2",
-      "title": "2. List Comprehensions & `enumerate()`",
-      "description": "Finish `double_evens(numbers)`. Return a new list of each even number multiplied by 2. Skip the odd numbers. A list comprehension fits. `double_evens([1, 2, 3, 4])` equals `[4, 8]`. The test checks that `double_evens([1, 2, 3, 4])` equals `[4, 8]`.",
+      "title": "Practice List Comprehensions enumerate",
+      "description": "Finish double_evens(numbers). Return a new list of each even number multiplied by 2. Skip the odd numbers. A list comprehension fits. double_evens([1, 2, 3, 4]) equals [4, 8]. The test checks that double_evens([1, 2, 3, 4]) equals [4, 8].",
       "order": 47,
       "difficulty": "intermediate",
       "duration_minutes": 5,
@@ -234,7 +234,7 @@
         "lists"
       ],
       "learning_objectives": [
-        "Build list comprehensions and use enumerate"
+        "Harbor scouts recount crates before dawn, and build list comprehensions and use enumerate."
       ],
       "starter_code": "def double_evens(numbers):\n    # TODO: Return [x * 2 for x in numbers if x % 2 == 0]\n    pass\n",
       "tests": [
@@ -255,12 +255,180 @@
         "url": "https://docs.python.org/3/tutorial/datastructures.html#list-comprehensions",
         "license": "Python documentation license (PSF)"
       },
-      "xp_reward": 10
+      "xp_reward": 10,
+      "player_mode": "micro",
+      "sublessons": [
+        {
+          "id": "loops-step-2-micro",
+          "title": "Practice List Comprehensions enumerate",
+          "description": "",
+          "order": 1,
+          "exercises": [
+            {
+              "id": "loops-step-2-teach",
+              "type": "teach",
+              "question": "Harbor scouts recount crates before dawn, and build list comprehensions and use enumerate.",
+              "hints": [
+                "Read the one job this step is practicing.",
+                "The example is about List Comprehensions enumerate.",
+                "enumerate(items)"
+              ],
+              "explanation": "Harbor scouts recount crates before dawn, and build list comprehensions and use enumerate.",
+              "xp_reward": 0,
+              "worked_example": "enumerate(items)"
+            },
+            {
+              "id": "loops-step-2-mcq",
+              "type": "mcq",
+              "question": "Harbor scouts recount crates before dawn. For build list comprehensions and use enumerate, which line adds each slot number and its reading?",
+              "hints": [
+                "Compare each line with the example.",
+                "One line matches the example.",
+                "enumerate(items)"
+              ],
+              "explanation": "enumerate pairs the slot number with the reading.",
+              "xp_reward": 10,
+              "options": [
+                "items[0]",
+                "len(items)",
+                "enumerate(items)",
+                "items + 1"
+              ],
+              "correct_answer": "enumerate(items)"
+            },
+            {
+              "id": "loops-step-2-predict",
+              "type": "output_prediction",
+              "question": "Harbor scouts recount crates before dawn. For build list comprehensions and use enumerate, what value is displayed?",
+              "hints": [
+                "Run the example in your head from the top.",
+                "The last line is what gets displayed.",
+                "36"
+              ],
+              "explanation": "The List Comprehensions enumerate program displays that value.",
+              "xp_reward": 10,
+              "starter_code": "items = [31, 4]\ntotal = 0\nfor index, value in enumerate(items):\n    total = total + index + value\nprint(total)\n",
+              "options": [
+                "43",
+                "none",
+                "36",
+                "0"
+              ],
+              "correct_answer": "36"
+            },
+            {
+              "id": "loops-step-2-order",
+              "type": "ordering",
+              "question": "Harbor scouts recount crates before dawn. For build list comprehensions and use enumerate, build the line that adds each slot number and its reading.",
+              "hints": [
+                "Start at the left of the example.",
+                "Keep the example order.",
+                "for index, value in enumerate(items): pass"
+              ],
+              "explanation": "for index, value in enumerate(items): walks the pairs.",
+              "xp_reward": 10,
+              "options": [
+                "for",
+                "index,",
+                "value",
+                "in",
+                "enumerate(items):",
+                "pass",
+                "if"
+              ],
+              "correct_answer": [
+                "for",
+                "index,",
+                "value",
+                "in",
+                "enumerate(items):",
+                "pass"
+              ]
+            },
+            {
+              "id": "loops-step-2-fill",
+              "type": "fill_blank",
+              "question": "Harbor scouts recount crates before dawn. For build list comprehensions and use enumerate, fill the blank so the line adds each slot number and its reading.",
+              "hints": [
+                "The blank is the missing piece of the example.",
+                "The example uses that piece.",
+                "+"
+              ],
+              "explanation": "Plus adds the reading.",
+              "xp_reward": 10,
+              "starter_code": "total = total ___ value\n",
+              "options": [
+                "-",
+                "*",
+                "+",
+                "=="
+              ],
+              "correct_answer": "+"
+            },
+            {
+              "id": "loops-step-2-bug",
+              "type": "debugging",
+              "question": "Harbor scouts recount crates before dawn. For build list comprehensions and use enumerate, which line does a different job than the example?",
+              "hints": [
+                "The other lines match the example.",
+                "One line is the odd one.",
+                "Line 3"
+              ],
+              "explanation": "The walk drops the slot numbers.",
+              "xp_reward": 10,
+              "starter_code": "items = [31, 4]\ntotal = 0\nfor value in items:\n    total = total + value\nprint(total)\n",
+              "correct_answer": "3"
+            },
+            {
+              "id": "loops-step-2-predict-2",
+              "type": "output_prediction",
+              "question": "Harbor scouts recount crates before dawn. For build list comprehensions and use enumerate, what does the second run display?",
+              "hints": [
+                "Apply the same steps to the new value.",
+                "The display comes from the last line.",
+                "43"
+              ],
+              "explanation": "The second List Comprehensions enumerate program displays that value.",
+              "xp_reward": 10,
+              "starter_code": "items = [31, 4, 5]\ntotal = 0\nfor index, value in enumerate(items):\n    total = total + index + value\nprint(total)\n",
+              "options": [
+                "36",
+                "43",
+                "none",
+                "0"
+              ],
+              "correct_answer": "43"
+            },
+            {
+              "id": "loops-step-2-write",
+              "type": "code",
+              "question": "Harbor scouts recount crates before dawn. For build list comprehensions and use enumerate, fill the blank so the program prints the result.",
+              "hints": [
+                "The blank is the missing piece.",
+                "Print the value that piece produces.",
+                "label = total"
+              ],
+              "explanation": "The paired total is what gets printed.",
+              "xp_reward": 10,
+              "starter_code": "items = [31, 4]\ntotal = 0\nfor index, value in enumerate(items):\n    total = total + index + value\nlabel = ___\nprint(label)\n",
+              "solution_code": "items = [31, 4]\ntotal = 0\nfor index, value in enumerate(items):\n    total = total + index + value\nlabel = total\nprint(label)\n",
+              "tests": [
+                {
+                  "name": "loops-step-2-prints",
+                  "description": "The paired total is what gets printed.",
+                  "expected_stdout": "36\n",
+                  "required": true
+                }
+              ]
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "loops-01",
-      "title": "3. Making the Grade (Concept Challenge)",
-      "description": "Finish `round_scores`, `count_failed_students`, `above_threshold`, `letter_grades` and 2 more. Organize student test scores using loops, range(), enumerate(), zip(), and list comprehensions. The test checks that `round_scores([90.33, 40.5, 55.44])` equals `[90, 40, 55]`; `count_failed_students([89, 40, 38, 70])` equals `2`; `above_threshold([88, 45, 75], 70)` equals `[88, 75]`.",
+      "title": "Make the Grade",
+      "description": "Finish round_scores, count_failed_students, above_threshold, letter_grades and 2 more. Organize student test scores using loops, range(), enumerate(), zip(), and list comprehensions. The test checks that round_scores([90.33, 40.5, 55.44]) equals [90, 40, 55]; count_failed_students([89, 40, 38, 70]) equals 2; above_threshold([88, 45, 75], 70) equals [88, 75].",
       "order": 48,
       "difficulty": "intermediate",
       "duration_minutes": 8,
@@ -276,9 +444,7 @@
         "strings"
       ],
       "learning_objectives": [
-        "Iterate over lists using for loops and list comprehensions",
-        "Use range(), enumerate(), and zip()",
-        "Filter and format collection items dynamically"
+        "Mesa scouts recount crates before dawn, and iterate over lists using for loops and list comprehensions."
       ],
       "starter_code": "def round_scores(student_scores):\n    \"\"\"Return scores rounded to nearest integer.\"\"\"\n    pass\n\ndef count_failed_students(student_scores):\n    \"\"\"Count scores at or below 40.\"\"\"\n    pass\n\ndef above_threshold(student_scores, threshold):\n    \"\"\"Return scores at or above threshold.\"\"\"\n    pass\n\ndef letter_grades(highest):\n    \"\"\"Return lower thresholds for D, C, B, A bands.\"\"\"\n    pass\n\ndef student_ranking(student_scores, student_names):\n    \"\"\"Return ranking strings.\"\"\"\n    pass\n\ndef perfect_score(student_info):\n    \"\"\"Return first [name, 100] pair, or [] if none.\"\"\"\n    pass\n",
       "tests": [
@@ -329,12 +495,178 @@
         "license": "MIT"
       },
       "solution_code": "def round_scores(student_scores):\n    \"\"\"Return scores rounded to nearest integer.\"\"\"\n    return [round(score) for score in student_scores]\n\n\ndef count_failed_students(student_scores):\n    \"\"\"Count scores at or below 40.\"\"\"\n    return sum(1 for score in student_scores if score <= 40)\n\n\ndef above_threshold(student_scores, threshold):\n    \"\"\"Return scores at or above threshold.\"\"\"\n    return [score for score in student_scores if score >= threshold]\n\n\ndef letter_grades(highest):\n    \"\"\"Return lower thresholds for D, C, B, A bands.\"\"\"\n    increment = (highest - 40) // 4\n    return [41 + i * increment for i in range(4)]\n\n\ndef student_ranking(student_scores, student_names):\n    \"\"\"Return ranking strings.\"\"\"\n    return [f'{index}. {name}: {score}'\n            for index, (name, score) in enumerate(zip(student_names, student_scores), start=1)]\n\n\ndef perfect_score(student_info):\n    \"\"\"Return first [name, 100] pair, or [] if none.\"\"\"\n    for name, score in student_info:\n        if score == 100:\n            return [name, 100]\n    return []\n",
-      "xp_reward": 25
+      "xp_reward": 25,
+      "player_mode": "micro",
+      "sublessons": [
+        {
+          "id": "loops-01-micro",
+          "title": "Make the Grade",
+          "description": "",
+          "order": 1,
+          "exercises": [
+            {
+              "id": "loops-01-teach",
+              "type": "teach",
+              "question": "Mesa scouts recount crates before dawn, and iterate over lists using for loops and list comprehensions.",
+              "hints": [
+                "Read the one job this step is practicing.",
+                "The example is about Making the Grade.",
+                "for step in range(count)"
+              ],
+              "explanation": "Mesa scouts recount crates before dawn, and iterate over lists using for loops and list comprehensions.",
+              "xp_reward": 0,
+              "worked_example": "for step in range(count)"
+            },
+            {
+              "id": "loops-01-mcq",
+              "type": "mcq",
+              "question": "Mesa scouts recount crates before dawn. For iterate over lists using for loops and list comprehensions, which line adds the reading once for every step?",
+              "hints": [
+                "Compare each line with the example.",
+                "One line matches the example.",
+                "for step in range(count)"
+              ],
+              "explanation": "The loop adds the reading on each step.",
+              "xp_reward": 10,
+              "options": [
+                "if step == count",
+                "for step in range(count)",
+                "step = count",
+                "print(step)"
+              ],
+              "correct_answer": "for step in range(count)"
+            },
+            {
+              "id": "loops-01-predict",
+              "type": "output_prediction",
+              "question": "Mesa scouts recount crates before dawn. For iterate over lists using for loops and list comprehensions, what value is displayed?",
+              "hints": [
+                "Run the example in your head from the top.",
+                "The last line is what gets displayed.",
+                "116"
+              ],
+              "explanation": "The Making the Grade program displays that value.",
+              "xp_reward": 10,
+              "starter_code": "total = 0\nfor step in range(4):\n    total = total + 29\nprint(total)\n",
+              "options": [
+                "87",
+                "none",
+                "116",
+                "0"
+              ],
+              "correct_answer": "116"
+            },
+            {
+              "id": "loops-01-order",
+              "type": "ordering",
+              "question": "Mesa scouts recount crates before dawn. For iterate over lists using for loops and list comprehensions, build the line that adds the reading once for every step.",
+              "hints": [
+                "Start at the left of the example.",
+                "Keep the example order.",
+                "for step in steps: pass"
+              ],
+              "explanation": "for step in steps: walks the steps.",
+              "xp_reward": 10,
+              "options": [
+                "for",
+                "step",
+                "in",
+                "steps:",
+                "pass",
+                "if"
+              ],
+              "correct_answer": [
+                "for",
+                "step",
+                "in",
+                "steps:",
+                "pass"
+              ]
+            },
+            {
+              "id": "loops-01-fill",
+              "type": "fill_blank",
+              "question": "Mesa scouts recount crates before dawn. For iterate over lists using for loops and list comprehensions, fill the blank so the line adds the reading once for every step.",
+              "hints": [
+                "The blank is the missing piece of the example.",
+                "The example uses that piece.",
+                "+"
+              ],
+              "explanation": "Plus adds the reading for this step.",
+              "xp_reward": 10,
+              "starter_code": "total = total ___ left\n",
+              "options": [
+                "-",
+                "+",
+                "*",
+                "=="
+              ],
+              "correct_answer": "+"
+            },
+            {
+              "id": "loops-01-bug",
+              "type": "debugging",
+              "question": "Mesa scouts recount crates before dawn. For iterate over lists using for loops and list comprehensions, which line does a different job than the example?",
+              "hints": [
+                "The other lines match the example.",
+                "One line is the odd one.",
+                "Line 3"
+              ],
+              "explanation": "The loop subtracts the reading.",
+              "xp_reward": 10,
+              "starter_code": "total = 0\nfor step in range(4):\n    total = total - 29\nprint(total)\n",
+              "correct_answer": "3"
+            },
+            {
+              "id": "loops-01-predict-2",
+              "type": "output_prediction",
+              "question": "Mesa scouts recount crates before dawn. For iterate over lists using for loops and list comprehensions, what does the second run display?",
+              "hints": [
+                "Apply the same steps to the new value.",
+                "The display comes from the last line.",
+                "87"
+              ],
+              "explanation": "The second Making the Grade program displays that value.",
+              "xp_reward": 10,
+              "starter_code": "total = 0\nfor step in range(3):\n    total = total + 29\nprint(total)\n",
+              "options": [
+                "116",
+                "none",
+                "0",
+                "87"
+              ],
+              "correct_answer": "87"
+            },
+            {
+              "id": "loops-01-write",
+              "type": "code",
+              "question": "Mesa scouts recount crates before dawn. For iterate over lists using for loops and list comprehensions, fill the blank so the program prints the result.",
+              "hints": [
+                "The blank is the missing piece.",
+                "Print the value that piece produces.",
+                "label = total"
+              ],
+              "explanation": "The step total is what gets printed.",
+              "xp_reward": 10,
+              "starter_code": "total = 0\nfor step in range(4):\n    total = total + 29\nlabel = ___\nprint(label)\n",
+              "solution_code": "total = 0\nfor step in range(4):\n    total = total + 29\nlabel = total\nprint(label)\n",
+              "tests": [
+                {
+                  "name": "loops-01-prints",
+                  "description": "The step total is what gets printed.",
+                  "expected_stdout": "116\n",
+                  "required": true
+                }
+              ]
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "loops-practice-1",
-      "title": "4. Discount Price Applier (Practice)",
-      "description": "Finish `apply_discounts`. Apply a percentage discount to all prices in a list using a comprehension: each price is reduced by `discount_pct` percent. The test checks that `apply_discounts([100, 50], 10)` equals `[90.0, 45.0]`.",
+      "title": "Practice Discount Price Applier",
+      "description": "Finish apply_discounts. Apply a percentage discount to all prices in a list using a comprehension: each price is reduced by discount_pct percent. The test checks that apply_discounts([100, 50], 10) equals [90.0, 45.0].",
       "order": 49,
       "difficulty": "intermediate",
       "duration_minutes": 6,
@@ -346,7 +678,7 @@
         "lists"
       ],
       "learning_objectives": [
-        "Apply list comprehensions to price transformations"
+        "Orchard scouts recount crates before dawn, and apply list comprehensions to price transformations."
       ],
       "starter_code": "def apply_discounts(prices, discount_pct):\n    # TODO: return a new list with every price discounted\n    pass\n",
       "tests": [
@@ -367,12 +699,178 @@
         "url": "https://docs.python.org/3/tutorial/datastructures.html#list-comprehensions",
         "license": "Python documentation license (PSF)"
       },
-      "xp_reward": 15
+      "xp_reward": 15,
+      "player_mode": "micro",
+      "sublessons": [
+        {
+          "id": "loops-practice-1-micro",
+          "title": "Practice Discount Price Applier",
+          "description": "",
+          "order": 1,
+          "exercises": [
+            {
+              "id": "loops-practice-1-teach",
+              "type": "teach",
+              "question": "Orchard scouts recount crates before dawn, and apply list comprehensions to price transformations.",
+              "hints": [
+                "Read the one job this step is practicing.",
+                "The example is about Discount Price Applier.",
+                "price - 2"
+              ],
+              "explanation": "Orchard scouts recount crates before dawn, and apply list comprehensions to price transformations.",
+              "xp_reward": 0,
+              "worked_example": "price - 2"
+            },
+            {
+              "id": "loops-practice-1-mcq",
+              "type": "mcq",
+              "question": "Orchard scouts recount crates before dawn. For apply list comprehensions to price transformations, which line subtracts two from each price and adds the results?",
+              "hints": [
+                "Compare each line with the example.",
+                "One line matches the example.",
+                "price - 2"
+              ],
+              "explanation": "price - 2 is the discounted price.",
+              "xp_reward": 10,
+              "options": [
+                "price + 2",
+                "price - 2",
+                "print(price)",
+                "price == 2"
+              ],
+              "correct_answer": "price - 2"
+            },
+            {
+              "id": "loops-practice-1-predict",
+              "type": "output_prediction",
+              "question": "Orchard scouts recount crates before dawn. For apply list comprehensions to price transformations, what value is displayed?",
+              "hints": [
+                "Run the example in your head from the top.",
+                "The last line is what gets displayed.",
+                "59"
+              ],
+              "explanation": "The Discount Price Applier program displays that value.",
+              "xp_reward": 10,
+              "starter_code": "prices = [29, 34]\ndiscounted = [price - 2 for price in prices]\nprint(sum(discounted))\n",
+              "options": [
+                "95",
+                "59",
+                "none",
+                "0"
+              ],
+              "correct_answer": "59"
+            },
+            {
+              "id": "loops-practice-1-order",
+              "type": "ordering",
+              "question": "Orchard scouts recount crates before dawn. For apply list comprehensions to price transformations, build the line that subtracts two from each price and adds the results.",
+              "hints": [
+                "Start at the left of the example.",
+                "Keep the example order.",
+                "saved = price - 2"
+              ],
+              "explanation": "saved = price - 2 stores the discount.",
+              "xp_reward": 10,
+              "options": [
+                "saved",
+                "=",
+                "price",
+                "-",
+                "2",
+                "+"
+              ],
+              "correct_answer": [
+                "saved",
+                "=",
+                "price",
+                "-",
+                "2"
+              ]
+            },
+            {
+              "id": "loops-practice-1-fill",
+              "type": "fill_blank",
+              "question": "Orchard scouts recount crates before dawn. For apply list comprehensions to price transformations, fill the blank so the line subtracts two from each price and adds the results.",
+              "hints": [
+                "The blank is the missing piece of the example.",
+                "The example uses that piece.",
+                "-"
+              ],
+              "explanation": "Minus takes two off the price.",
+              "xp_reward": 10,
+              "starter_code": "saved = price ___ 2\n",
+              "options": [
+                "+",
+                "-",
+                "*",
+                "=="
+              ],
+              "correct_answer": "-"
+            },
+            {
+              "id": "loops-practice-1-bug",
+              "type": "debugging",
+              "question": "Orchard scouts recount crates before dawn. For apply list comprehensions to price transformations, which line does a different job than the example?",
+              "hints": [
+                "The other lines match the example.",
+                "One line is the odd one.",
+                "Line 2"
+              ],
+              "explanation": "The comprehension adds two instead of subtracting.",
+              "xp_reward": 10,
+              "starter_code": "prices = [29, 34]\ndiscounted = [price + 2 for price in prices]\nprint(sum(discounted))\n",
+              "correct_answer": "2"
+            },
+            {
+              "id": "loops-practice-1-predict-2",
+              "type": "output_prediction",
+              "question": "Orchard scouts recount crates before dawn. For apply list comprehensions to price transformations, what does the second run display?",
+              "hints": [
+                "Apply the same steps to the new value.",
+                "The display comes from the last line.",
+                "95"
+              ],
+              "explanation": "The second Discount Price Applier program displays that value.",
+              "xp_reward": 10,
+              "starter_code": "prices = [29, 34, 38]\ndiscounted = [price - 2 for price in prices]\nprint(sum(discounted))\n",
+              "options": [
+                "59",
+                "none",
+                "95",
+                "0"
+              ],
+              "correct_answer": "95"
+            },
+            {
+              "id": "loops-practice-1-write",
+              "type": "code",
+              "question": "Orchard scouts recount crates before dawn. For apply list comprehensions to price transformations, fill the blank so the program prints the result.",
+              "hints": [
+                "The blank is the missing piece.",
+                "Print the value that piece produces.",
+                "label = sum(discounted)"
+              ],
+              "explanation": "The discounted total is what gets printed.",
+              "xp_reward": 10,
+              "starter_code": "prices = [29, 34]\ndiscounted = [price - 2 for price in prices]\nlabel = ___\nprint(label)\n",
+              "solution_code": "prices = [29, 34]\ndiscounted = [price - 2 for price in prices]\nlabel = sum(discounted)\nprint(label)\n",
+              "tests": [
+                {
+                  "name": "loops-practice-1-prints",
+                  "description": "The discounted total is what gets printed.",
+                  "expected_stdout": "59\n",
+                  "required": true
+                }
+              ]
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "loops-checkpoint",
-      "title": "5. Unit 10 Checkpoint: Loops Mastery",
-      "description": "filter_long_words(words, min_len) must return, via a list comprehension, only the words whose length is at least min_len. The test checks that `filter_long_words([\"hi\", \"hello\", \"hey\"], 3)` equals `[\"hello\", \"hey\"]`.",
+      "title": "Practice Unit 10 Checkpoint Loops Mastery",
+      "description": "filter_long_words(words, min_len) must return, via a list comprehension, only the words whose length is at least min_len. The test checks that filter_long_words([\"hi\", \"hello\", \"hey\"], 3) equals [\"hello\", \"hey\"].",
       "order": 50,
       "difficulty": "intermediate",
       "duration_minutes": 10,
@@ -384,7 +882,7 @@
         "lists"
       ],
       "learning_objectives": [
-        "Master loop filtering and iteration"
+        "Quarry scouts recount crates before dawn, and master loop filtering and iteration."
       ],
       "starter_code": "def filter_long_words(words, min_len):\n    # TODO: Return [w for w in words if len(w) >= min_len]\n    pass\n",
       "tests": [
@@ -405,7 +903,173 @@
         "url": "https://docs.python.org/3/tutorial/datastructures.html#list-comprehensions",
         "license": "Python documentation license (PSF)"
       },
-      "xp_reward": 40
+      "xp_reward": 40,
+      "player_mode": "micro",
+      "sublessons": [
+        {
+          "id": "loops-checkpoint-micro",
+          "title": "Practice Unit 10 Checkpoint Loops Mastery",
+          "description": "",
+          "order": 1,
+          "exercises": [
+            {
+              "id": "loops-checkpoint-teach",
+              "type": "teach",
+              "question": "Quarry scouts recount crates before dawn, and master loop filtering and iteration.",
+              "hints": [
+                "Read the one job this step is practicing.",
+                "The example is about Unit 10 Checkpoint Loops Mastery.",
+                "value > cut"
+              ],
+              "explanation": "Quarry scouts recount crates before dawn, and master loop filtering and iteration.",
+              "xp_reward": 0,
+              "worked_example": "value > cut"
+            },
+            {
+              "id": "loops-checkpoint-mcq",
+              "type": "mcq",
+              "question": "Quarry scouts recount crates before dawn. For master loop filtering and iteration, which line adds only the readings above the cutoff?",
+              "hints": [
+                "Compare each line with the example.",
+                "One line matches the example.",
+                "value > cut"
+              ],
+              "explanation": "yield runs only when the reading is above the cutoff.",
+              "xp_reward": 10,
+              "options": [
+                "value == cut",
+                "print(value)",
+                "value > cut",
+                "pass"
+              ],
+              "correct_answer": "value > cut"
+            },
+            {
+              "id": "loops-checkpoint-predict",
+              "type": "output_prediction",
+              "question": "Quarry scouts recount crates before dawn. For master loop filtering and iteration, what value is displayed?",
+              "hints": [
+                "Run the example in your head from the top.",
+                "The last line is what gets displayed.",
+                "77"
+              ],
+              "explanation": "The Unit 10 Checkpoint Loops Mastery program displays that value.",
+              "xp_reward": 10,
+              "starter_code": "def keep(values, cut):\n    for value in values:\n        if value > cut:\n            yield value\nprint(sum(keep([36, 3, 41], 10)))\n",
+              "options": [
+                "41",
+                "none",
+                "77",
+                "0"
+              ],
+              "correct_answer": "77"
+            },
+            {
+              "id": "loops-checkpoint-order",
+              "type": "ordering",
+              "question": "Quarry scouts recount crates before dawn. For master loop filtering and iteration, build the line that adds only the readings above the cutoff.",
+              "hints": [
+                "Start at the left of the example.",
+                "Keep the example order.",
+                "flag = value > cut"
+              ],
+              "explanation": "flag = value > cut is the keep test.",
+              "xp_reward": 10,
+              "options": [
+                "flag",
+                "=",
+                "value",
+                ">",
+                "cut",
+                "<"
+              ],
+              "correct_answer": [
+                "flag",
+                "=",
+                "value",
+                ">",
+                "cut"
+              ]
+            },
+            {
+              "id": "loops-checkpoint-fill",
+              "type": "fill_blank",
+              "question": "Quarry scouts recount crates before dawn. For master loop filtering and iteration, fill the blank so the line adds only the readings above the cutoff.",
+              "hints": [
+                "The blank is the missing piece of the example.",
+                "The example uses that piece.",
+                ">"
+              ],
+              "explanation": "The cutoff keeps the greater readings.",
+              "xp_reward": 10,
+              "starter_code": "if value ___ cut:\n    label = 1\n",
+              "options": [
+                "<",
+                "==",
+                ">",
+                "<="
+              ],
+              "correct_answer": ">"
+            },
+            {
+              "id": "loops-checkpoint-bug",
+              "type": "debugging",
+              "question": "Quarry scouts recount crates before dawn. For master loop filtering and iteration, which line does a different job than the example?",
+              "hints": [
+                "The other lines match the example.",
+                "One line is the odd one.",
+                "Line 3"
+              ],
+              "explanation": "The generator keeps the small readings.",
+              "xp_reward": 10,
+              "starter_code": "def keep(values, cut):\n    for value in values:\n        if value < cut:\n            yield value\nprint(sum(keep([36, 3], 10)))\n",
+              "correct_answer": "3"
+            },
+            {
+              "id": "loops-checkpoint-predict-2",
+              "type": "output_prediction",
+              "question": "Quarry scouts recount crates before dawn. For master loop filtering and iteration, what does the second run display?",
+              "hints": [
+                "Apply the same steps to the new value.",
+                "The display comes from the last line.",
+                "41"
+              ],
+              "explanation": "The second Unit 10 Checkpoint Loops Mastery program displays that value.",
+              "xp_reward": 10,
+              "starter_code": "def keep(values, cut):\n    for value in values:\n        if value > cut:\n            yield value\nprint(sum(keep([36, 3, 41], 36)))\n",
+              "options": [
+                "77",
+                "41",
+                "0",
+                "none"
+              ],
+              "correct_answer": "41"
+            },
+            {
+              "id": "loops-checkpoint-write",
+              "type": "code",
+              "question": "Quarry scouts recount crates before dawn. For master loop filtering and iteration, fill the blank so the program prints the result.",
+              "hints": [
+                "The blank is the missing piece.",
+                "Print the value that piece produces.",
+                "label = sum(keep([36, 3, 41], 10))"
+              ],
+              "explanation": "The kept total is what gets printed.",
+              "xp_reward": 10,
+              "starter_code": "def keep(values, cut):\n    for value in values:\n        if value > cut:\n            yield value\nlabel = ___\nprint(label)\n",
+              "solution_code": "def keep(values, cut):\n    for value in values:\n        if value > cut:\n            yield value\nlabel = sum(keep([36, 3, 41], 10))\nprint(label)\n",
+              "tests": [
+                {
+                  "name": "loops-checkpoint-prints",
+                  "description": "The kept total is what gets printed.",
+                  "expected_stdout": "77\n",
+                  "required": true
+                }
+              ]
+            }
+          ]
+        }
+      ]
     }
   ]
 }

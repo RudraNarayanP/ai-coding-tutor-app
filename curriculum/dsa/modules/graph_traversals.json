@@ -15,8 +15,8 @@
   "lessons": [
     {
       "id": "graph-traversals-step-1",
-      "title": "1. Adjacency List Graph",
-      "description": "Finish `add_edge`, `neighbors`. Represent an undirected graph and add edges. The test checks that `sorted(g.neighbors('a'))` equals `['b']`; `sorted(g.neighbors('b'))` equals `['a']`.",
+      "title": "Practice Adjacency List Graph",
+      "description": "Finish add_edge, neighbors. Represent an undirected graph and add edges. The test checks that sorted(g.neighbors('a')) equals ['b']; sorted(g.neighbors('b')) equals ['a'].",
       "order": 31,
       "difficulty": "intermediate",
       "duration_minutes": 5,
@@ -30,7 +30,7 @@
         "stacks-queues"
       ],
       "learning_objectives": [
-        "Store neighbors in a dict of lists"
+        "Depot clerks recount crates before dawn, and store neighbors in a dict of lists."
       ],
       "starter_code": "class Graph:\n    def __init__(self):\n        self.adj = {}\n\n    def add_edge(self, u, v):\n        # TODO: undirected edge u-v\n        pass\n\n    def neighbors(self, u):\n        return list(self.adj.get(u, []))\n",
       "solution_code": "class Graph:\n    def __init__(self):\n        self.adj = {}\n\n    def add_edge(self, u, v):\n        self.adj.setdefault(u, []).append(v)\n        self.adj.setdefault(v, []).append(u)\n\n    def neighbors(self, u):\n        return list(self.adj.get(u, []))\n",
@@ -54,49 +54,173 @@
       "xp_reward": 10,
       "sublessons": [
         {
-          "id": "graph-repr-sub",
-          "title": "Match the operation",
+          "id": "graph-traversals-step-1-micro",
+          "title": "Practice Adjacency List Graph",
+          "description": "",
           "order": 1,
           "exercises": [
             {
-              "id": "graph-repr-match-1",
-              "type": "matching",
-              "question": "This graph keeps an adjacency list and treats every edge as undirected. Match each call to what it does to `self.adj`.",
-              "pairs": [
-                {
-                  "left": "add_edge('a', 'b')",
-                  "right": "'b' is listed under 'a' and 'a' under 'b'"
-                },
-                {
-                  "left": "neighbors('a')",
-                  "right": "a list of the nodes directly joined to 'a'"
-                },
-                {
-                  "left": "neighbors('zzz')",
-                  "right": "an empty list, because the node is absent"
-                },
-                {
-                  "left": "add_edge('a', 'b') twice",
-                  "right": "'b' appears under 'a' two times"
-                }
+              "id": "graph-traversals-step-1-teach",
+              "type": "teach",
+              "question": "Depot clerks recount crates before dawn, and store neighbors in a dict of lists.",
+              "hints": [
+                "Read the one job this step is practicing.",
+                "The example is about Adjacency List Graph.",
+                "graph['a']"
               ],
-              "correct_answer": {
-                "add_edge('a', 'b')": "'b' is listed under 'a' and 'a' under 'b'",
-                "neighbors('a')": "a list of the nodes directly joined to 'a'",
-                "neighbors('zzz')": "an empty list, because the node is absent",
-                "add_edge('a', 'b') twice": "'b' appears under 'a' two times"
-              },
-              "explanation": "Edges are stored in both directions, a missing node falls back to an empty list, and appending never de-duplicates.",
-              "xp_reward": 10
+              "explanation": "Depot clerks recount crates before dawn, and store neighbors in a dict of lists.",
+              "xp_reward": 0,
+              "worked_example": "graph['a']"
+            },
+            {
+              "id": "graph-traversals-step-1-mcq",
+              "type": "mcq",
+              "question": "Depot clerks recount crates before dawn. For store neighbors in a dict of lists, which line counts the neighbors stored for a node?",
+              "hints": [
+                "Compare each line with the example.",
+                "One line matches the example.",
+                "len(graph['a'])"
+              ],
+              "explanation": "len(graph['a']) is the neighbor count.",
+              "xp_reward": 10,
+              "options": [
+                "graph == graph",
+                "len(graph['a'])",
+                "pass",
+                "return graph"
+              ],
+              "correct_answer": "len(graph['a'])"
+            },
+            {
+              "id": "graph-traversals-step-1-predict",
+              "type": "output_prediction",
+              "question": "Depot clerks recount crates before dawn. For store neighbors in a dict of lists, what value is displayed?",
+              "hints": [
+                "Run the example in your head from the top.",
+                "The last line is what gets displayed.",
+                "2"
+              ],
+              "explanation": "The Adjacency List Graph program displays that value.",
+              "xp_reward": 10,
+              "starter_code": "graph = {'a': ['b', 'c'], 'b': [], 'c': []}\nprint(len(graph['a']))\n",
+              "options": [
+                "1",
+                "2",
+                "none",
+                "0"
+              ],
+              "correct_answer": "2"
+            },
+            {
+              "id": "graph-traversals-step-1-order",
+              "type": "ordering",
+              "question": "Depot clerks recount crates before dawn. For store neighbors in a dict of lists, build the line that counts the neighbors stored for a node.",
+              "hints": [
+                "Start at the left of the example.",
+                "Keep the example order.",
+                "graph = {'a': ['b']}"
+              ],
+              "explanation": "len(graph['a']) is the neighbor count.",
+              "xp_reward": 10,
+              "options": [
+                "graph",
+                "=",
+                "{'a':",
+                "['b']}",
+                "=="
+              ],
+              "correct_answer": [
+                "graph",
+                "=",
+                "{'a':",
+                "['b']}"
+              ]
+            },
+            {
+              "id": "graph-traversals-step-1-fill",
+              "type": "fill_blank",
+              "question": "Depot clerks recount crates before dawn. For store neighbors in a dict of lists, fill the blank so the line counts the neighbors stored for a node.",
+              "hints": [
+                "The blank is the missing piece of the example.",
+                "The example uses that piece.",
+                "'a'"
+              ],
+              "explanation": "len(graph['a']) is the neighbor count.",
+              "xp_reward": 10,
+              "starter_code": "seen = len(graph[___])\n",
+              "options": [
+                "'b'",
+                "'a'",
+                "'z'",
+                "'c'"
+              ],
+              "correct_answer": "'a'"
+            },
+            {
+              "id": "graph-traversals-step-1-bug",
+              "type": "debugging",
+              "question": "Depot clerks recount crates before dawn. For store neighbors in a dict of lists, which line does a different job than the example?",
+              "hints": [
+                "The other lines match the example.",
+                "One line is the odd one.",
+                "Line 2"
+              ],
+              "explanation": "The read asks for a node that was never stored.",
+              "xp_reward": 10,
+              "starter_code": "graph = {'a': ['b', 'c']}\nprint(len(graph['missing']))\n",
+              "correct_answer": "2"
+            },
+            {
+              "id": "graph-traversals-step-1-predict-2",
+              "type": "output_prediction",
+              "question": "Depot clerks recount crates before dawn. For store neighbors in a dict of lists, what does the second run display?",
+              "hints": [
+                "Apply the same steps to the new value.",
+                "The display comes from the last line.",
+                "1"
+              ],
+              "explanation": "The second Adjacency List Graph program displays that value.",
+              "xp_reward": 10,
+              "starter_code": "graph = {'a': ['b'], 'b': []}\nprint(len(graph['a']))\n",
+              "options": [
+                "2",
+                "0",
+                "none",
+                "1"
+              ],
+              "correct_answer": "1"
+            },
+            {
+              "id": "graph-traversals-step-1-write",
+              "type": "code",
+              "question": "Depot clerks recount crates before dawn. For store neighbors in a dict of lists, fill the blank so the program prints the result.",
+              "hints": [
+                "The blank is the missing piece.",
+                "Print the value that piece produces.",
+                "label = len(graph['a'])"
+              ],
+              "explanation": "The printed value is the result after this step counts the neighbors stored for a node.",
+              "xp_reward": 10,
+              "starter_code": "graph = {'a': ['b', 'c'], 'b': [], 'c': []}\nlabel = ___\nprint(label)\n",
+              "solution_code": "graph = {'a': ['b', 'c'], 'b': [], 'c': []}\nlabel = len(graph['a'])\nprint(label)\n",
+              "tests": [
+                {
+                  "name": "graph-traversals-step-1-prints",
+                  "description": "The printed value is the result after this step counts the neighbors stored for ",
+                  "expected_stdout": "2\n",
+                  "required": true
+                }
+              ]
             }
           ]
         }
-      ]
+      ],
+      "player_mode": "micro"
     },
     {
       "id": "graph-traversals-step-2",
-      "title": "2. DFS Traversal",
-      "description": "Finish `dfs`. Return DFS visit order starting from a node (iterative or recursive). The test checks that `dfs(g, 'a')[0]` equals `'a'`; `set(order)` equals `{'a', 'b', 'c', 'd'}`.",
+      "title": "Practice DFS Traversal",
+      "description": "Finish dfs. Return DFS visit order starting from a node (iterative or recursive). The test checks that dfs(g, 'a')[0] equals 'a'; set(order) equals {'a', 'b', 'c', 'd'}.",
       "order": 32,
       "difficulty": "intermediate",
       "duration_minutes": 5,
@@ -110,7 +234,7 @@
         "stacks-queues"
       ],
       "learning_objectives": [
-        "Depth-first visit with a stack or recursion"
+        "Ridge clerks recount crates before dawn, and depth-first visit with a stack or recursion."
       ],
       "starter_code": "def dfs(graph, start):\n    # graph is dict[str, list[str]]; return visit order\n    # TODO\n    pass\n",
       "solution_code": "def dfs(graph, start):\n    visited = []\n    seen = set()\n    stack = [start]\n    while stack:\n        node = stack.pop()\n        if node in seen:\n            continue\n        seen.add(node)\n        visited.append(node)\n        for nbr in reversed(graph.get(node, [])):\n            if nbr not in seen:\n                stack.append(nbr)\n    return visited\n",
@@ -131,12 +255,170 @@
         "url": "https://docs.python.org/3/reference/compound_stmts.html#while",
         "license": "Python documentation license (PSF)"
       },
-      "xp_reward": 10
+      "xp_reward": 10,
+      "player_mode": "micro",
+      "sublessons": [
+        {
+          "id": "graph-traversals-step-2-micro",
+          "title": "Practice DFS Traversal",
+          "description": "",
+          "order": 1,
+          "exercises": [
+            {
+              "id": "graph-traversals-step-2-teach",
+              "type": "teach",
+              "question": "Ridge clerks recount crates before dawn, and depth-first visit with a stack or recursion.",
+              "hints": [
+                "Read the one job this step is practicing.",
+                "The example is about DFS Traversal.",
+                "seen.append(node)"
+              ],
+              "explanation": "Ridge clerks recount crates before dawn, and depth-first visit with a stack or recursion.",
+              "xp_reward": 0,
+              "worked_example": "seen.append(node)"
+            },
+            {
+              "id": "graph-traversals-step-2-mcq",
+              "type": "mcq",
+              "question": "Ridge clerks recount crates before dawn. For depth-first visit with a stack or recursion, which line walks depth first and joins the visit order?",
+              "hints": [
+                "Compare each line with the example.",
+                "One line matches the example.",
+                "seen.append(node)"
+              ],
+              "explanation": "append records the node as it is visited.",
+              "xp_reward": 10,
+              "options": [
+                "node == node",
+                "return seen",
+                "seen.append(node)",
+                "pass"
+              ],
+              "correct_answer": "seen.append(node)"
+            },
+            {
+              "id": "graph-traversals-step-2-predict",
+              "type": "output_prediction",
+              "question": "Ridge clerks recount crates before dawn. For depth-first visit with a stack or recursion, what value is displayed?",
+              "hints": [
+                "Run the example in your head from the top.",
+                "The last line is what gets displayed.",
+                "path-a-b-c"
+              ],
+              "explanation": "The DFS Traversal program displays that value.",
+              "xp_reward": 10,
+              "starter_code": "graph = {'a': ['b', 'c'], 'b': [], 'c': []}\nseen = []\nstack = ['a']\nwhile stack:\n    node = stack.pop()\n    if node in seen:\n        continue\n    seen.append(node)\n    stack.extend(reversed(graph[node]))\nprint('path-' + '-'.join(seen))\n",
+              "options": [
+                "path-b",
+                "none",
+                "path-a-b-c",
+                "0"
+              ],
+              "correct_answer": "path-a-b-c"
+            },
+            {
+              "id": "graph-traversals-step-2-order",
+              "type": "ordering",
+              "question": "Ridge clerks recount crates before dawn. For depth-first visit with a stack or recursion, build the line that walks depth first and joins the visit order.",
+              "hints": [
+                "Start at the left of the example.",
+                "Keep the example order.",
+                "seen.append(node)"
+              ],
+              "explanation": "append records the node as it is visited.",
+              "xp_reward": 10,
+              "options": [
+                "seen.append(node)",
+                "if"
+              ],
+              "correct_answer": [
+                "seen.append(node)"
+              ]
+            },
+            {
+              "id": "graph-traversals-step-2-fill",
+              "type": "fill_blank",
+              "question": "Ridge clerks recount crates before dawn. For depth-first visit with a stack or recursion, fill the blank so the line walks depth first and joins the visit order.",
+              "hints": [
+                "The blank is the missing piece of the example.",
+                "The example uses that piece.",
+                "append"
+              ],
+              "explanation": "append records the node as it is visited.",
+              "xp_reward": 10,
+              "starter_code": "seen.___(node)\n",
+              "options": [
+                "pop",
+                "sort",
+                "append",
+                "clear"
+              ],
+              "correct_answer": "append"
+            },
+            {
+              "id": "graph-traversals-step-2-bug",
+              "type": "debugging",
+              "question": "Ridge clerks recount crates before dawn. For depth-first visit with a stack or recursion, which line does a different job than the example?",
+              "hints": [
+                "The other lines match the example.",
+                "One line is the odd one.",
+                "Line 6"
+              ],
+              "explanation": "The walk pops nodes and never records them.",
+              "xp_reward": 10,
+              "starter_code": "graph = {'a': ['b']}\nseen = []\nstack = ['a']\nwhile stack:\n    node = stack.pop()\nprint(node)\n",
+              "correct_answer": "6"
+            },
+            {
+              "id": "graph-traversals-step-2-predict-2",
+              "type": "output_prediction",
+              "question": "Ridge clerks recount crates before dawn. For depth-first visit with a stack or recursion, what does the second run display?",
+              "hints": [
+                "Apply the same steps to the new value.",
+                "The display comes from the last line.",
+                "path-b"
+              ],
+              "explanation": "The second DFS Traversal program displays that value.",
+              "xp_reward": 10,
+              "starter_code": "graph = {'a': ['b', 'c'], 'b': [], 'c': []}\nseen = []\nstack = ['b']\nwhile stack:\n    node = stack.pop()\n    if node in seen:\n        continue\n    seen.append(node)\n    stack.extend(reversed(graph[node]))\nprint('path-' + '-'.join(seen))\n",
+              "options": [
+                "path-a-b-c",
+                "path-b",
+                "none",
+                "0"
+              ],
+              "correct_answer": "path-b"
+            },
+            {
+              "id": "graph-traversals-step-2-write",
+              "type": "code",
+              "question": "Ridge clerks recount crates before dawn. For depth-first visit with a stack or recursion, fill the blank so the program prints the result.",
+              "hints": [
+                "The blank is the missing piece.",
+                "Print the value that piece produces.",
+                "label = 'path-' + '-'.join(seen)"
+              ],
+              "explanation": "The printed value is the result after this step walks depth first and joins the visit order.",
+              "xp_reward": 10,
+              "starter_code": "graph = {'a': ['b', 'c'], 'b': [], 'c': []}\nseen = []\nstack = ['a']\nwhile stack:\n    node = stack.pop()\n    if node in seen:\n        continue\n    seen.append(node)\n    stack.extend(reversed(graph[node]))\nlabel = ___\nprint(label)\n",
+              "solution_code": "graph = {'a': ['b', 'c'], 'b': [], 'c': []}\nseen = []\nstack = ['a']\nwhile stack:\n    node = stack.pop()\n    if node in seen:\n        continue\n    seen.append(node)\n    stack.extend(reversed(graph[node]))\nlabel = 'path-' + '-'.join(seen)\nprint(label)\n",
+              "tests": [
+                {
+                  "name": "graph-traversals-step-2-prints",
+                  "description": "The printed value is the result after this step walks depth first and joins the ",
+                  "expected_stdout": "path-a-b-c\n",
+                  "required": true
+                }
+              ]
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "graph-traversals-01",
-      "title": "3. BFS Traversal (Concept Challenge)",
-      "description": "Finish `bfs`. Return BFS visit order from a start node. The test checks that `bfs(g, 'a')` equals `['a', 'b', 'c', 'd']`.",
+      "title": "Practice BFS Traversal",
+      "description": "Finish bfs. Return BFS visit order from a start node. The test checks that bfs(g, 'a') equals ['a', 'b', 'c', 'd'].",
       "order": 33,
       "difficulty": "intermediate",
       "duration_minutes": 8,
@@ -150,7 +432,7 @@
         "stacks-queues"
       ],
       "learning_objectives": [
-        "Breadth-first visit with a queue"
+        "Cove clerks recount crates before dawn, and breadth-first visit with a queue."
       ],
       "starter_code": "from collections import deque\n\ndef bfs(graph, start):\n    # TODO\n    pass\n",
       "solution_code": "from collections import deque\n\ndef bfs(graph, start):\n    visited = []\n    seen = {start}\n    q = deque([start])\n    while q:\n        node = q.popleft()\n        visited.append(node)\n        for nbr in graph.get(node, []):\n            if nbr not in seen:\n                seen.add(nbr)\n                q.append(nbr)\n    return visited\n",
@@ -171,12 +453,170 @@
         "url": "https://docs.python.org/3/library/collections.html#collections.deque",
         "license": "Python documentation license (PSF)"
       },
-      "xp_reward": 25
+      "xp_reward": 25,
+      "player_mode": "micro",
+      "sublessons": [
+        {
+          "id": "graph-traversals-01-micro",
+          "title": "Practice BFS Traversal",
+          "description": "",
+          "order": 1,
+          "exercises": [
+            {
+              "id": "graph-traversals-01-teach",
+              "type": "teach",
+              "question": "Cove clerks recount crates before dawn, and breadth-first visit with a queue.",
+              "hints": [
+                "Read the one job this step is practicing.",
+                "The example is about BFS Traversal.",
+                "queue.pop(0)"
+              ],
+              "explanation": "Cove clerks recount crates before dawn, and breadth-first visit with a queue.",
+              "xp_reward": 0,
+              "worked_example": "queue.pop(0)"
+            },
+            {
+              "id": "graph-traversals-01-mcq",
+              "type": "mcq",
+              "question": "Cove clerks recount crates before dawn. For breadth-first visit with a queue, which line walks breadth first and joins the visit order?",
+              "hints": [
+                "Compare each line with the example.",
+                "One line matches the example.",
+                "queue.pop(0)"
+              ],
+              "explanation": "pop(0) takes the node that has been waiting longest.",
+              "xp_reward": 10,
+              "options": [
+                "node == node",
+                "queue.pop(0)",
+                "return queue",
+                "pass"
+              ],
+              "correct_answer": "queue.pop(0)"
+            },
+            {
+              "id": "graph-traversals-01-predict",
+              "type": "output_prediction",
+              "question": "Cove clerks recount crates before dawn. For breadth-first visit with a queue, what value is displayed?",
+              "hints": [
+                "Run the example in your head from the top.",
+                "The last line is what gets displayed.",
+                "path-a-b-c-d"
+              ],
+              "explanation": "The BFS Traversal program displays that value.",
+              "xp_reward": 10,
+              "starter_code": "graph = {'a': ['b', 'c'], 'b': ['d'], 'c': [], 'd': []}\nseen = []\nqueue = ['a']\nwhile queue:\n    node = queue.pop(0)\n    if node in seen:\n        continue\n    seen.append(node)\n    queue.extend(graph[node])\nprint('path-' + '-'.join(seen))\n",
+              "options": [
+                "path-c",
+                "path-a-b-c-d",
+                "none",
+                "0"
+              ],
+              "correct_answer": "path-a-b-c-d"
+            },
+            {
+              "id": "graph-traversals-01-order",
+              "type": "ordering",
+              "question": "Cove clerks recount crates before dawn. For breadth-first visit with a queue, build the line that walks breadth first and joins the visit order.",
+              "hints": [
+                "Start at the left of the example.",
+                "Keep the example order.",
+                "queue.pop(0)"
+              ],
+              "explanation": "pop(0) takes the node that has been waiting longest.",
+              "xp_reward": 10,
+              "options": [
+                "queue.pop(0)",
+                "append"
+              ],
+              "correct_answer": [
+                "queue.pop(0)"
+              ]
+            },
+            {
+              "id": "graph-traversals-01-fill",
+              "type": "fill_blank",
+              "question": "Cove clerks recount crates before dawn. For breadth-first visit with a queue, fill the blank so the line walks breadth first and joins the visit order.",
+              "hints": [
+                "The blank is the missing piece of the example.",
+                "The example uses that piece.",
+                "pop(0)"
+              ],
+              "explanation": "pop(0) takes the node that has been waiting longest.",
+              "xp_reward": 10,
+              "starter_code": "node = queue.___\n",
+              "options": [
+                "pop()",
+                "append(0)",
+                "clear()",
+                "pop(0)"
+              ],
+              "correct_answer": "pop(0)"
+            },
+            {
+              "id": "graph-traversals-01-bug",
+              "type": "debugging",
+              "question": "Cove clerks recount crates before dawn. For breadth-first visit with a queue, which line does a different job than the example?",
+              "hints": [
+                "The other lines match the example.",
+                "One line is the odd one.",
+                "Line 3"
+              ],
+              "explanation": "pop() takes the last node, which is a stack rather than a queue.",
+              "xp_reward": 10,
+              "starter_code": "graph = {'a': ['b']}\nqueue = ['a']\nnode = queue.pop()\nprint(node)\n",
+              "correct_answer": "3"
+            },
+            {
+              "id": "graph-traversals-01-predict-2",
+              "type": "output_prediction",
+              "question": "Cove clerks recount crates before dawn. For breadth-first visit with a queue, what does the second run display?",
+              "hints": [
+                "Apply the same steps to the new value.",
+                "The display comes from the last line.",
+                "path-c"
+              ],
+              "explanation": "The second BFS Traversal program displays that value.",
+              "xp_reward": 10,
+              "starter_code": "graph = {'a': ['b', 'c'], 'b': ['d'], 'c': [], 'd': []}\nseen = []\nqueue = ['c']\nwhile queue:\n    node = queue.pop(0)\n    if node in seen:\n        continue\n    seen.append(node)\n    queue.extend(graph[node])\nprint('path-' + '-'.join(seen))\n",
+              "options": [
+                "path-a-b-c-d",
+                "none",
+                "0",
+                "path-c"
+              ],
+              "correct_answer": "path-c"
+            },
+            {
+              "id": "graph-traversals-01-write",
+              "type": "code",
+              "question": "Cove clerks recount crates before dawn. For breadth-first visit with a queue, fill the blank so the program prints the result.",
+              "hints": [
+                "The blank is the missing piece.",
+                "Print the value that piece produces.",
+                "label = 'path-' + '-'.join(seen)"
+              ],
+              "explanation": "The printed value is the result after this step walks breadth first and joins the visit order.",
+              "xp_reward": 10,
+              "starter_code": "graph = {'a': ['b', 'c'], 'b': ['d'], 'c': [], 'd': []}\nseen = []\nqueue = ['a']\nwhile queue:\n    node = queue.pop(0)\n    if node in seen:\n        continue\n    seen.append(node)\n    queue.extend(graph[node])\nlabel = ___\nprint(label)\n",
+              "solution_code": "graph = {'a': ['b', 'c'], 'b': ['d'], 'c': [], 'd': []}\nseen = []\nqueue = ['a']\nwhile queue:\n    node = queue.pop(0)\n    if node in seen:\n        continue\n    seen.append(node)\n    queue.extend(graph[node])\nlabel = 'path-' + '-'.join(seen)\nprint(label)\n",
+              "tests": [
+                {
+                  "name": "graph-traversals-01-prints",
+                  "description": "The printed value is the result after this step walks breadth first and joins th",
+                  "expected_stdout": "path-a-b-c-d\n",
+                  "required": true
+                }
+              ]
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "graph-traversals-practice-1",
-      "title": "4. Shortest Path Length (Practice)",
-      "description": "Finish `shortest_path_length`. Unweighted shortest path length via BFS (edges count), or -1 if unreachable. The test checks that `shortest_path_length(g, 'a', 'c')` equals `2`; `shortest_path_length(g, 'a', 'z')` equals `-1`.",
+      "title": "Practice Shortest Path Length",
+      "description": "Finish shortest_path_length. Unweighted shortest path length via BFS (edges count), or -1 if unreachable. The test checks that shortest_path_length(g, 'a', 'c') equals 2; shortest_path_length(g, 'a', 'z') equals -1.",
       "order": 34,
       "difficulty": "intermediate",
       "duration_minutes": 6,
@@ -190,7 +630,7 @@
         "stacks-queues"
       ],
       "learning_objectives": [
-        "BFS layers give unweighted distance"
+        "Plaza clerks recount crates before dawn, and BFS layers give unweighted distance."
       ],
       "starter_code": "from collections import deque\n\ndef shortest_path_length(graph, start, goal):\n    # TODO\n    pass\n",
       "solution_code": "from collections import deque\n\ndef shortest_path_length(graph, start, goal):\n    if start == goal:\n        return 0\n    seen = {start}\n    q = deque([(start, 0)])\n    while q:\n        node, dist = q.popleft()\n        for nbr in graph.get(node, []):\n            if nbr in seen:\n                continue\n            if nbr == goal:\n                return dist + 1\n            seen.add(nbr)\n            q.append((nbr, dist + 1))\n    return -1\n",
@@ -211,12 +651,178 @@
         "url": "https://docs.python.org/3/library/collections.html#collections.deque",
         "license": "Python documentation license (PSF)"
       },
-      "xp_reward": 15
+      "xp_reward": 15,
+      "player_mode": "micro",
+      "sublessons": [
+        {
+          "id": "graph-traversals-practice-1-micro",
+          "title": "Practice Shortest Path Length",
+          "description": "",
+          "order": 1,
+          "exercises": [
+            {
+              "id": "graph-traversals-practice-1-teach",
+              "type": "teach",
+              "question": "Plaza clerks recount crates before dawn, and BFS layers give unweighted distance.",
+              "hints": [
+                "Read the one job this step is practicing.",
+                "The example is about Shortest Path Length.",
+                "seen[node] + 1"
+              ],
+              "explanation": "Plaza clerks recount crates before dawn, and BFS layers give unweighted distance.",
+              "xp_reward": 0,
+              "worked_example": "seen[node] + 1"
+            },
+            {
+              "id": "graph-traversals-practice-1-mcq",
+              "type": "mcq",
+              "question": "Plaza clerks recount crates before dawn. For BFS layers give unweighted distance, which line counts edges on the shortest path?",
+              "hints": [
+                "Compare each line with the example.",
+                "One line matches the example.",
+                "seen[nxt] = seen[node] + 1"
+              ],
+              "explanation": "Each edge adds one to the distance.",
+              "xp_reward": 10,
+              "options": [
+                "nxt == node",
+                "seen[nxt] = seen[node] + 1",
+                "return seen",
+                "pass"
+              ],
+              "correct_answer": "seen[nxt] = seen[node] + 1"
+            },
+            {
+              "id": "graph-traversals-practice-1-predict",
+              "type": "output_prediction",
+              "question": "Plaza clerks recount crates before dawn. For BFS layers give unweighted distance, what value is displayed?",
+              "hints": [
+                "Run the example in your head from the top.",
+                "The last line is what gets displayed.",
+                "2"
+              ],
+              "explanation": "The Shortest Path Length program displays that value.",
+              "xp_reward": 10,
+              "starter_code": "graph = {'a': ['b'], 'b': ['c'], 'c': []}\nseen = {'a': 0}\nqueue = ['a']\nwhile queue:\n    node = queue.pop(0)\n    for nxt in graph[node]:\n        if nxt not in seen:\n            seen[nxt] = seen[node] + 1\n            queue.append(nxt)\nprint(seen['c'])\n",
+              "options": [
+                "1",
+                "2",
+                "none",
+                "0"
+              ],
+              "correct_answer": "2"
+            },
+            {
+              "id": "graph-traversals-practice-1-order",
+              "type": "ordering",
+              "question": "Plaza clerks recount crates before dawn. For BFS layers give unweighted distance, build the line that counts edges on the shortest path.",
+              "hints": [
+                "Start at the left of the example.",
+                "Keep the example order.",
+                "seen[nxt] = seen[node] + 1"
+              ],
+              "explanation": "Each edge adds one to the distance.",
+              "xp_reward": 10,
+              "options": [
+                "seen[nxt]",
+                "=",
+                "seen[node]",
+                "+",
+                "1",
+                "=="
+              ],
+              "correct_answer": [
+                "seen[nxt]",
+                "=",
+                "seen[node]",
+                "+",
+                "1"
+              ]
+            },
+            {
+              "id": "graph-traversals-practice-1-fill",
+              "type": "fill_blank",
+              "question": "Plaza clerks recount crates before dawn. For BFS layers give unweighted distance, fill the blank so the line counts edges on the shortest path.",
+              "hints": [
+                "The blank is the missing piece of the example.",
+                "The example uses that piece.",
+                "+"
+              ],
+              "explanation": "Each edge adds one to the distance.",
+              "xp_reward": 10,
+              "starter_code": "seen[nxt] = seen[node] ___ 1\n",
+              "options": [
+                "*",
+                "+",
+                "==",
+                "-"
+              ],
+              "correct_answer": "+"
+            },
+            {
+              "id": "graph-traversals-practice-1-bug",
+              "type": "debugging",
+              "question": "Plaza clerks recount crates before dawn. For BFS layers give unweighted distance, which line does a different job than the example?",
+              "hints": [
+                "The other lines match the example.",
+                "One line is the odd one.",
+                "Line 2"
+              ],
+              "explanation": "The code prints zero and never walks the edges.",
+              "xp_reward": 10,
+              "starter_code": "graph = {'a': ['b'], 'b': ['c'], 'c': []}\nprint(0)\n",
+              "correct_answer": "2"
+            },
+            {
+              "id": "graph-traversals-practice-1-predict-2",
+              "type": "output_prediction",
+              "question": "Plaza clerks recount crates before dawn. For BFS layers give unweighted distance, what does the second run display?",
+              "hints": [
+                "Apply the same steps to the new value.",
+                "The display comes from the last line.",
+                "1"
+              ],
+              "explanation": "The second Shortest Path Length program displays that value.",
+              "xp_reward": 10,
+              "starter_code": "graph = {'a': ['b'], 'b': ['c'], 'c': []}\nseen = {'a': 0}\nqueue = ['a']\nwhile queue:\n    node = queue.pop(0)\n    for nxt in graph[node]:\n        if nxt not in seen:\n            seen[nxt] = seen[node] + 1\n            queue.append(nxt)\nprint(seen['b'])\n",
+              "options": [
+                "2",
+                "none",
+                "0",
+                "1"
+              ],
+              "correct_answer": "1"
+            },
+            {
+              "id": "graph-traversals-practice-1-write",
+              "type": "code",
+              "question": "Plaza clerks recount crates before dawn. For BFS layers give unweighted distance, fill the blank so the program prints the result.",
+              "hints": [
+                "The blank is the missing piece.",
+                "Print the value that piece produces.",
+                "label = seen['c']"
+              ],
+              "explanation": "The printed value is the result after this step counts edges on the shortest path.",
+              "xp_reward": 10,
+              "starter_code": "graph = {'a': ['b'], 'b': ['c'], 'c': []}\nseen = {'a': 0}\nqueue = ['a']\nwhile queue:\n    node = queue.pop(0)\n    for nxt in graph[node]:\n        if nxt not in seen:\n            seen[nxt] = seen[node] + 1\n            queue.append(nxt)\nlabel = ___\nprint(label)\n",
+              "solution_code": "graph = {'a': ['b'], 'b': ['c'], 'c': []}\nseen = {'a': 0}\nqueue = ['a']\nwhile queue:\n    node = queue.pop(0)\n    for nxt in graph[node]:\n        if nxt not in seen:\n            seen[nxt] = seen[node] + 1\n            queue.append(nxt)\nlabel = seen['c']\nprint(label)\n",
+              "tests": [
+                {
+                  "name": "graph-traversals-practice-1-prints",
+                  "description": "The printed value is the result after this step counts edges on the shortest pat",
+                  "expected_stdout": "2\n",
+                  "required": true
+                }
+              ]
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "graph-traversals-checkpoint",
-      "title": "5. Unit 7 Checkpoint: Graph Traversals",
-      "description": "Finish `is_connected`. Return True if an undirected graph is connected (all nodes reachable from any). The test checks that `is_connected({'a': ['b'], 'b': ['a']})` is true; `is_connected({'a': [], 'b': []})` is false.",
+      "title": "Practice Unit 7 Checkpoint Graph Traversals",
+      "description": "Finish is_connected. Return True if an undirected graph is connected (all nodes reachable from any). The test checks that is_connected({'a': ['b'], 'b': ['a']}) is true; is_connected({'a': [], 'b': []}) is false.",
       "order": 35,
       "difficulty": "intermediate",
       "duration_minutes": 10,
@@ -230,7 +836,7 @@
         "stacks-queues"
       ],
       "learning_objectives": [
-        "Compare visited size to node count"
+        "Marsh clerks recount crates before dawn, and compare visited size to node count."
       ],
       "starter_code": "from collections import deque\n\ndef is_connected(graph):\n    # graph: dict[node, list[neighbors]]; empty graph is connected\n    # TODO\n    pass\n",
       "solution_code": "from collections import deque\n\ndef is_connected(graph):\n    if not graph:\n        return True\n    start = next(iter(graph))\n    seen = {start}\n    q = deque([start])\n    while q:\n        node = q.popleft()\n        for nbr in graph.get(node, []):\n            if nbr not in seen:\n                seen.add(nbr)\n                q.append(nbr)\n    return len(seen) == len(graph)\n",
@@ -251,7 +857,165 @@
         "url": "https://docs.python.org/3/library/collections.html#collections.deque",
         "license": "Python documentation license (PSF)"
       },
-      "xp_reward": 40
+      "xp_reward": 40,
+      "player_mode": "micro",
+      "sublessons": [
+        {
+          "id": "graph-traversals-checkpoint-micro",
+          "title": "Practice Unit 7 Checkpoint Graph Traversals",
+          "description": "",
+          "order": 1,
+          "exercises": [
+            {
+              "id": "graph-traversals-checkpoint-teach",
+              "type": "teach",
+              "question": "Marsh clerks recount crates before dawn, and compare visited size to node count.",
+              "hints": [
+                "Read the one job this step is practicing.",
+                "The example is about Unit 7 Checkpoint Graph Traversals.",
+                "len(graph)"
+              ],
+              "explanation": "Marsh clerks recount crates before dawn, and compare visited size to node count.",
+              "xp_reward": 0,
+              "worked_example": "len(graph)"
+            },
+            {
+              "id": "graph-traversals-checkpoint-mcq",
+              "type": "mcq",
+              "question": "Marsh clerks recount crates before dawn. For compare visited size to node count, which line counts the nodes stored in the graph?",
+              "hints": [
+                "Compare each line with the example.",
+                "One line matches the example.",
+                "len(graph)"
+              ],
+              "explanation": "len(graph) is the node count.",
+              "xp_reward": 10,
+              "options": [
+                "return graph",
+                "pass",
+                "graph == graph",
+                "len(graph)"
+              ],
+              "correct_answer": "len(graph)"
+            },
+            {
+              "id": "graph-traversals-checkpoint-predict",
+              "type": "output_prediction",
+              "question": "Marsh clerks recount crates before dawn. For compare visited size to node count, what value is displayed?",
+              "hints": [
+                "Run the example in your head from the top.",
+                "The last line is what gets displayed.",
+                "3"
+              ],
+              "explanation": "The Unit 7 Checkpoint Graph Traversals program displays that value.",
+              "xp_reward": 10,
+              "starter_code": "graph = {'a': ['b'], 'b': [], 'c': []}\nprint(len(graph))\n",
+              "options": [
+                "2",
+                "none",
+                "3",
+                "0"
+              ],
+              "correct_answer": "3"
+            },
+            {
+              "id": "graph-traversals-checkpoint-order",
+              "type": "ordering",
+              "question": "Marsh clerks recount crates before dawn. For compare visited size to node count, build the line that counts the nodes stored in the graph.",
+              "hints": [
+                "Start at the left of the example.",
+                "Keep the example order.",
+                "len(graph)"
+              ],
+              "explanation": "len(graph) is the node count.",
+              "xp_reward": 10,
+              "options": [
+                "len(graph)",
+                "=="
+              ],
+              "correct_answer": [
+                "len(graph)"
+              ]
+            },
+            {
+              "id": "graph-traversals-checkpoint-fill",
+              "type": "fill_blank",
+              "question": "Marsh clerks recount crates before dawn. For compare visited size to node count, fill the blank so the line counts the nodes stored in the graph.",
+              "hints": [
+                "The blank is the missing piece of the example.",
+                "The example uses that piece.",
+                "len"
+              ],
+              "explanation": "len(graph) is the node count.",
+              "xp_reward": 10,
+              "starter_code": "total = ___(graph)\n",
+              "options": [
+                "min",
+                "sum",
+                "len",
+                "max"
+              ],
+              "correct_answer": "len"
+            },
+            {
+              "id": "graph-traversals-checkpoint-bug",
+              "type": "debugging",
+              "question": "Marsh clerks recount crates before dawn. For compare visited size to node count, which line does a different job than the example?",
+              "hints": [
+                "The other lines match the example.",
+                "One line is the odd one.",
+                "Line 2"
+              ],
+              "explanation": "The print counts neighbors of one node instead of the nodes in the graph.",
+              "xp_reward": 10,
+              "starter_code": "graph = {'a': ['b'], 'b': []}\nprint(len(graph['a']))\n",
+              "correct_answer": "2"
+            },
+            {
+              "id": "graph-traversals-checkpoint-predict-2",
+              "type": "output_prediction",
+              "question": "Marsh clerks recount crates before dawn. For compare visited size to node count, what does the second run display?",
+              "hints": [
+                "Apply the same steps to the new value.",
+                "The display comes from the last line.",
+                "2"
+              ],
+              "explanation": "The second Unit 7 Checkpoint Graph Traversals program displays that value.",
+              "xp_reward": 10,
+              "starter_code": "graph = {'a': ['b'], 'b': []}\nprint(len(graph))\n",
+              "options": [
+                "3",
+                "2",
+                "none",
+                "0"
+              ],
+              "correct_answer": "2"
+            },
+            {
+              "id": "graph-traversals-checkpoint-write",
+              "type": "code",
+              "question": "Marsh clerks recount crates before dawn. For compare visited size to node count, fill the blank so the program prints the result.",
+              "hints": [
+                "The blank is the missing piece.",
+                "Print the value that piece produces.",
+                "label = len(graph)"
+              ],
+              "explanation": "The printed value is the result after this step counts the nodes stored in the graph.",
+              "xp_reward": 10,
+              "starter_code": "graph = {'a': ['b'], 'b': [], 'c': []}\nlabel = ___\nprint(label)\n",
+              "solution_code": "graph = {'a': ['b'], 'b': [], 'c': []}\nlabel = len(graph)\nprint(label)\n",
+              "tests": [
+                {
+                  "name": "graph-traversals-checkpoint-prints",
+                  "description": "The printed value is the result after this step counts the nodes stored in the g",
+                  "expected_stdout": "3\n",
+                  "required": true
+                }
+              ]
+            }
+          ]
+        }
+      ]
     }
   ]
 }

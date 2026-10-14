@@ -14,8 +14,8 @@
   "lessons": [
     {
       "id": "recursion-binary-search-step-1",
-      "title": "1. Recursive Factorial",
-      "description": "Implement `factorial(n)` recursively with base case n <= 1. The test checks that `factorial(5)` equals `120`.",
+      "title": "Practice Recursive Factorial",
+      "description": "Implement factorial(n) recursively with base case n <= 1. The test checks that factorial(5) equals 120.",
       "order": 16,
       "difficulty": "intermediate",
       "duration_minutes": 5,
@@ -29,7 +29,7 @@
         "big-o"
       ],
       "learning_objectives": [
-        "Write a classic recursive base/recursive case"
+        "Harbor pickers recount crates before dawn, and write a classic recursive base recursive case."
       ],
       "starter_code": "def factorial(n):\n    # TODO\n    pass\n",
       "solution_code": "def factorial(n):\n    if n <= 1:\n        return 1\n    return n * factorial(n - 1)\n",
@@ -50,12 +50,180 @@
         "url": "https://docs.python.org/3/tutorial/controlflow.html#defining-functions",
         "license": "Python documentation license (PSF)"
       },
-      "xp_reward": 10
+      "xp_reward": 10,
+      "player_mode": "micro",
+      "sublessons": [
+        {
+          "id": "recursion-binary-search-step-1-micro",
+          "title": "Practice Recursive Factorial",
+          "description": "",
+          "order": 1,
+          "exercises": [
+            {
+              "id": "recursion-binary-search-step-1-teach",
+              "type": "teach",
+              "question": "Harbor pickers recount crates before dawn, and write a classic recursive base recursive case.",
+              "hints": [
+                "Read the one job this step is practicing.",
+                "The example is about Recursive Factorial.",
+                "n * fact(n - 1)"
+              ],
+              "explanation": "Harbor pickers recount crates before dawn, and write a classic recursive base recursive case.",
+              "xp_reward": 0,
+              "worked_example": "n * fact(n - 1)"
+            },
+            {
+              "id": "recursion-binary-search-step-1-mcq",
+              "type": "mcq",
+              "question": "Harbor pickers recount crates before dawn. For write a classic recursive base recursive case, which line multiplies n by the factorial of n minus one?",
+              "hints": [
+                "Compare each line with the example.",
+                "One line matches the example.",
+                "return n * fact(n - 1)"
+              ],
+              "explanation": "The recursive call multiplies the smaller factorial.",
+              "xp_reward": 10,
+              "options": [
+                "n == 1",
+                "return n * fact(n - 1)",
+                "return n",
+                "pass"
+              ],
+              "correct_answer": "return n * fact(n - 1)"
+            },
+            {
+              "id": "recursion-binary-search-step-1-predict",
+              "type": "output_prediction",
+              "question": "Harbor pickers recount crates before dawn. For write a classic recursive base recursive case, what value is displayed?",
+              "hints": [
+                "Run the example in your head from the top.",
+                "The last line is what gets displayed.",
+                "24"
+              ],
+              "explanation": "The Recursive Factorial program displays that value.",
+              "xp_reward": 10,
+              "starter_code": "def fact(n):\n    if n <= 1:\n        return 1\n    return n * fact(n - 1)\nprint(fact(4))\n",
+              "options": [
+                "120",
+                "24",
+                "none",
+                "0"
+              ],
+              "correct_answer": "24"
+            },
+            {
+              "id": "recursion-binary-search-step-1-order",
+              "type": "ordering",
+              "question": "Harbor pickers recount crates before dawn. For write a classic recursive base recursive case, build the line that multiplies n by the factorial of n minus one.",
+              "hints": [
+                "Start at the left of the example.",
+                "Keep the example order.",
+                "def f(): return n * fact(n-1)"
+              ],
+              "explanation": "The recursive call multiplies the smaller factorial.",
+              "xp_reward": 10,
+              "options": [
+                "def",
+                "f():",
+                "return",
+                "n",
+                "*",
+                "fact(n-1)",
+                "+"
+              ],
+              "correct_answer": [
+                "def",
+                "f():",
+                "return",
+                "n",
+                "*",
+                "fact(n-1)"
+              ]
+            },
+            {
+              "id": "recursion-binary-search-step-1-fill",
+              "type": "fill_blank",
+              "question": "Harbor pickers recount crates before dawn. For write a classic recursive base recursive case, fill the blank so the line multiplies n by the factorial of n minus one.",
+              "hints": [
+                "The blank is the missing piece of the example.",
+                "The example uses that piece.",
+                "*"
+              ],
+              "explanation": "The recursive call multiplies the smaller factorial.",
+              "xp_reward": 10,
+              "starter_code": "return n ___ fact(n - 1)\n",
+              "options": [
+                "+",
+                "*",
+                "-",
+                "=="
+              ],
+              "correct_answer": "*"
+            },
+            {
+              "id": "recursion-binary-search-step-1-bug",
+              "type": "debugging",
+              "question": "Harbor pickers recount crates before dawn. For write a classic recursive base recursive case, which line does a different job than the example?",
+              "hints": [
+                "The other lines match the example.",
+                "One line is the odd one.",
+                "Line 4"
+              ],
+              "explanation": "The function adds instead of multiplying.",
+              "xp_reward": 10,
+              "starter_code": "def fact(n):\n    if n <= 1:\n        return 1\n    return n + fact(n - 1)\nprint(fact(4))\n",
+              "correct_answer": "4"
+            },
+            {
+              "id": "recursion-binary-search-step-1-predict-2",
+              "type": "output_prediction",
+              "question": "Harbor pickers recount crates before dawn. For write a classic recursive base recursive case, what does the second run display?",
+              "hints": [
+                "Apply the same steps to the new value.",
+                "The display comes from the last line.",
+                "120"
+              ],
+              "explanation": "The second Recursive Factorial program displays that value.",
+              "xp_reward": 10,
+              "starter_code": "def fact(n):\n    if n <= 1:\n        return 1\n    return n * fact(n - 1)\nprint(fact(5))\n",
+              "options": [
+                "24",
+                "none",
+                "0",
+                "120"
+              ],
+              "correct_answer": "120"
+            },
+            {
+              "id": "recursion-binary-search-step-1-write",
+              "type": "code",
+              "question": "Harbor pickers recount crates before dawn. For write a classic recursive base recursive case, fill the blank so the program prints the result.",
+              "hints": [
+                "The blank is the missing piece.",
+                "Print the value that piece produces.",
+                "label = fact(4)"
+              ],
+              "explanation": "The printed value is the result after this step multiplies n by the factorial of n minus one.",
+              "xp_reward": 10,
+              "starter_code": "def fact(n):\n    if n <= 1:\n        return 1\n    return n * fact(n - 1)\nlabel = ___\nprint(label)\n",
+              "solution_code": "def fact(n):\n    if n <= 1:\n        return 1\n    return n * fact(n - 1)\nlabel = fact(4)\nprint(label)\n",
+              "tests": [
+                {
+                  "name": "recursion-binary-search-step-1-prints",
+                  "description": "The printed value is the result after this step multiplies n by the factorial of",
+                  "expected_stdout": "24\n",
+                  "required": true
+                }
+              ]
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "recursion-binary-search-step-2",
-      "title": "2. Binary Search",
-      "description": "Implement iterative `binary_search(sorted_items, target)` returning index or -1. The test checks that `binary_search(data, 7)` equals `3`; `binary_search(data, 2)` equals `-1`.",
+      "title": "Practice Binary Search",
+      "description": "Implement iterative binary_search(sorted_items, target) returning index or -1. The test checks that binary_search(data, 7) equals 3; binary_search(data, 2) equals -1.",
       "order": 17,
       "difficulty": "intermediate",
       "duration_minutes": 5,
@@ -69,7 +237,7 @@
         "big-o"
       ],
       "learning_objectives": [
-        "Halve the search space each step"
+        "Mesa pickers recount crates before dawn, and halve the search space each step."
       ],
       "starter_code": "def binary_search(sorted_items, target):\n    # TODO: return index or -1\n    pass\n",
       "solution_code": "def binary_search(sorted_items, target):\n    lo, hi = 0, len(sorted_items) - 1\n    while lo <= hi:\n        mid = (lo + hi) // 2\n        if sorted_items[mid] == target:\n            return mid\n        if sorted_items[mid] < target:\n            lo = mid + 1\n        else:\n            hi = mid - 1\n    return -1\n",
@@ -90,12 +258,182 @@
         "url": "https://docs.python.org/3/library/bisect.html",
         "license": "Python documentation license (PSF)"
       },
-      "xp_reward": 10
+      "xp_reward": 10,
+      "player_mode": "micro",
+      "sublessons": [
+        {
+          "id": "recursion-binary-search-step-2-micro",
+          "title": "Practice Binary Search",
+          "description": "",
+          "order": 1,
+          "exercises": [
+            {
+              "id": "recursion-binary-search-step-2-teach",
+              "type": "teach",
+              "question": "Mesa pickers recount crates before dawn, and halve the search space each step.",
+              "hints": [
+                "Read the one job this step is practicing.",
+                "The example is about Binary Search.",
+                "(lo + hi) // 2"
+              ],
+              "explanation": "Mesa pickers recount crates before dawn, and halve the search space each step.",
+              "xp_reward": 0,
+              "worked_example": "(lo + hi) // 2"
+            },
+            {
+              "id": "recursion-binary-search-step-2-mcq",
+              "type": "mcq",
+              "question": "Mesa pickers recount crates before dawn. For halve the search space each step, which line returns the index found by binary search?",
+              "hints": [
+                "Compare each line with the example.",
+                "One line matches the example.",
+                "mid = (lo + hi) // 2"
+              ],
+              "explanation": "The middle index halves the remaining range.",
+              "xp_reward": 10,
+              "options": [
+                "lo == hi",
+                "return items",
+                "mid = (lo + hi) // 2",
+                "pass"
+              ],
+              "correct_answer": "mid = (lo + hi) // 2"
+            },
+            {
+              "id": "recursion-binary-search-step-2-predict",
+              "type": "output_prediction",
+              "question": "Mesa pickers recount crates before dawn. For halve the search space each step, what value is displayed?",
+              "hints": [
+                "Run the example in your head from the top.",
+                "The last line is what gets displayed.",
+                "3"
+              ],
+              "explanation": "The Binary Search program displays that value.",
+              "xp_reward": 10,
+              "starter_code": "items = [1, 3, 5, 7, 9]\ntarget = 7\nlo = 0\nhi = len(items) - 1\nfound = -1\nwhile lo <= hi:\n    mid = (lo + hi) // 2\n    if items[mid] == target:\n        found = mid\n        break\n    if items[mid] < target:\n        lo = mid + 1\n    else:\n        hi = mid - 1\nprint(found)\n",
+              "options": [
+                "0",
+                "none",
+                "3",
+                "1"
+              ],
+              "correct_answer": "3"
+            },
+            {
+              "id": "recursion-binary-search-step-2-order",
+              "type": "ordering",
+              "question": "Mesa pickers recount crates before dawn. For halve the search space each step, build the line that returns the index found by binary search.",
+              "hints": [
+                "Start at the left of the example.",
+                "Keep the example order.",
+                "mid = (lo + hi) // 2"
+              ],
+              "explanation": "The middle index halves the remaining range.",
+              "xp_reward": 10,
+              "options": [
+                "mid",
+                "=",
+                "(lo",
+                "+",
+                "hi)",
+                "//",
+                "2",
+                "/"
+              ],
+              "correct_answer": [
+                "mid",
+                "=",
+                "(lo",
+                "+",
+                "hi)",
+                "//",
+                "2"
+              ]
+            },
+            {
+              "id": "recursion-binary-search-step-2-fill",
+              "type": "fill_blank",
+              "question": "Mesa pickers recount crates before dawn. For halve the search space each step, fill the blank so the line returns the index found by binary search.",
+              "hints": [
+                "The blank is the missing piece of the example.",
+                "The example uses that piece.",
+                "//"
+              ],
+              "explanation": "The middle index halves the remaining range.",
+              "xp_reward": 10,
+              "starter_code": "mid = (lo + hi) ___ 2\n",
+              "options": [
+                "/",
+                "%",
+                "//",
+                "*"
+              ],
+              "correct_answer": "//"
+            },
+            {
+              "id": "recursion-binary-search-step-2-bug",
+              "type": "debugging",
+              "question": "Mesa pickers recount crates before dawn. For halve the search space each step, which line does a different job than the example?",
+              "hints": [
+                "The other lines match the example.",
+                "One line is the odd one.",
+                "Line 2"
+              ],
+              "explanation": "The print reads the first slot and never searches.",
+              "xp_reward": 10,
+              "starter_code": "items = [1, 3, 5, 7, 9]\nprint(items[0])\n",
+              "correct_answer": "2"
+            },
+            {
+              "id": "recursion-binary-search-step-2-predict-2",
+              "type": "output_prediction",
+              "question": "Mesa pickers recount crates before dawn. For halve the search space each step, what does the second run display?",
+              "hints": [
+                "Apply the same steps to the new value.",
+                "The display comes from the last line.",
+                "0"
+              ],
+              "explanation": "The second Binary Search program displays that value.",
+              "xp_reward": 10,
+              "starter_code": "items = [1, 3, 5, 7, 9]\ntarget = 1\nlo = 0\nhi = len(items) - 1\nfound = -1\nwhile lo <= hi:\n    mid = (lo + hi) // 2\n    if items[mid] == target:\n        found = mid\n        break\n    if items[mid] < target:\n        lo = mid + 1\n    else:\n        hi = mid - 1\nprint(found)\n",
+              "options": [
+                "3",
+                "0",
+                "none",
+                "1"
+              ],
+              "correct_answer": "0"
+            },
+            {
+              "id": "recursion-binary-search-step-2-write",
+              "type": "code",
+              "question": "Mesa pickers recount crates before dawn. For halve the search space each step, fill the blank so the program prints the result.",
+              "hints": [
+                "The blank is the missing piece.",
+                "Print the value that piece produces.",
+                "label = found"
+              ],
+              "explanation": "The printed value is the result after this step returns the index found by binary search.",
+              "xp_reward": 10,
+              "starter_code": "items = [1, 3, 5, 7, 9]\ntarget = 7\nlo = 0\nhi = len(items) - 1\nfound = -1\nwhile lo <= hi:\n    mid = (lo + hi) // 2\n    if items[mid] == target:\n        found = mid\n        break\n    if items[mid] < target:\n        lo = mid + 1\n    else:\n        hi = mid - 1\nlabel = ___\nprint(label)\n",
+              "solution_code": "items = [1, 3, 5, 7, 9]\ntarget = 7\nlo = 0\nhi = len(items) - 1\nfound = -1\nwhile lo <= hi:\n    mid = (lo + hi) // 2\n    if items[mid] == target:\n        found = mid\n        break\n    if items[mid] < target:\n        lo = mid + 1\n    else:\n        hi = mid - 1\nlabel = found\nprint(label)\n",
+              "tests": [
+                {
+                  "name": "recursion-binary-search-step-2-prints",
+                  "description": "The printed value is the result after this step returns the index found by binar",
+                  "expected_stdout": "3\n",
+                  "required": true
+                }
+              ]
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "recursion-binary-search-01",
-      "title": "3. Recursive Binary Search (Concept Challenge)",
-      "description": "Finish `contains`. Implement recursive binary search returning True/False. The test checks that `contains([2, 4, 6, 8], 6)` is true; `contains([2, 4, 6, 8], 5)` is false.",
+      "title": "Practice Recursive Binary Search",
+      "description": "Finish contains. Implement recursive binary search returning True/False. The test checks that contains([2, 4, 6, 8], 6) is true; contains([2, 4, 6, 8], 5) is false.",
       "order": 18,
       "difficulty": "intermediate",
       "duration_minutes": 8,
@@ -109,7 +447,7 @@
         "big-o"
       ],
       "learning_objectives": [
-        "Express binary search recursively"
+        "Orchard pickers recount crates before dawn, and express binary search recursively."
       ],
       "starter_code": "def contains(sorted_items, target):\n    # TODO: recursive binary search -> bool\n    pass\n",
       "solution_code": "def contains(sorted_items, target):\n    def helper(lo, hi):\n        if lo > hi:\n            return False\n        mid = (lo + hi) // 2\n        if sorted_items[mid] == target:\n            return True\n        if sorted_items[mid] < target:\n            return helper(mid + 1, hi)\n        return helper(lo, mid - 1)\n    return helper(0, len(sorted_items) - 1)\n",
@@ -130,12 +468,182 @@
         "url": "https://docs.python.org/3/library/bisect.html",
         "license": "Python documentation license (PSF)"
       },
-      "xp_reward": 25
+      "xp_reward": 25,
+      "player_mode": "micro",
+      "sublessons": [
+        {
+          "id": "recursion-binary-search-01-micro",
+          "title": "Practice Recursive Binary Search",
+          "description": "",
+          "order": 1,
+          "exercises": [
+            {
+              "id": "recursion-binary-search-01-teach",
+              "type": "teach",
+              "question": "Orchard pickers recount crates before dawn, and express binary search recursively.",
+              "hints": [
+                "Read the one job this step is practicing.",
+                "The example is about Recursive Binary Search.",
+                "search(items, target, mid + 1, hi)"
+              ],
+              "explanation": "Orchard pickers recount crates before dawn, and express binary search recursively.",
+              "xp_reward": 0,
+              "worked_example": "search(items, target, mid + 1, hi)"
+            },
+            {
+              "id": "recursion-binary-search-01-mcq",
+              "type": "mcq",
+              "question": "Orchard pickers recount crates before dawn. For express binary search recursively, which line returns the index from a recursive search?",
+              "hints": [
+                "Compare each line with the example.",
+                "One line matches the example.",
+                "return search(items, target, mid + 1, hi)"
+              ],
+              "explanation": "The recursive call keeps the half that can hold the target.",
+              "xp_reward": 10,
+              "options": [
+                "lo == hi",
+                "return search(items, target, mid + 1, hi)",
+                "return items",
+                "pass"
+              ],
+              "correct_answer": "return search(items, target, mid + 1, hi)"
+            },
+            {
+              "id": "recursion-binary-search-01-predict",
+              "type": "output_prediction",
+              "question": "Orchard pickers recount crates before dawn. For express binary search recursively, what value is displayed?",
+              "hints": [
+                "Run the example in your head from the top.",
+                "The last line is what gets displayed.",
+                "4"
+              ],
+              "explanation": "The Recursive Binary Search program displays that value.",
+              "xp_reward": 10,
+              "starter_code": "def search(items, target, lo, hi):\n    if lo > hi:\n        return -1\n    mid = (lo + hi) // 2\n    if items[mid] == target:\n        return mid\n    if items[mid] < target:\n        return search(items, target, mid + 1, hi)\n    return search(items, target, lo, mid - 1)\nitems = [1, 3, 5, 7, 9]\nprint(search(items, 9, 0, 4))\n",
+              "options": [
+                "0",
+                "4",
+                "none",
+                "1"
+              ],
+              "correct_answer": "4"
+            },
+            {
+              "id": "recursion-binary-search-01-order",
+              "type": "ordering",
+              "question": "Orchard pickers recount crates before dawn. For express binary search recursively, build the line that returns the index from a recursive search.",
+              "hints": [
+                "Start at the left of the example.",
+                "Keep the example order.",
+                "def f(): return search(items, target, mid+1, hi)"
+              ],
+              "explanation": "The recursive call keeps the half that can hold the target.",
+              "xp_reward": 10,
+              "options": [
+                "def",
+                "f():",
+                "return",
+                "search(items,",
+                "target,",
+                "mid+1,",
+                "hi)",
+                "-"
+              ],
+              "correct_answer": [
+                "def",
+                "f():",
+                "return",
+                "search(items,",
+                "target,",
+                "mid+1,",
+                "hi)"
+              ]
+            },
+            {
+              "id": "recursion-binary-search-01-fill",
+              "type": "fill_blank",
+              "question": "Orchard pickers recount crates before dawn. For express binary search recursively, fill the blank so the line returns the index from a recursive search.",
+              "hints": [
+                "The blank is the missing piece of the example.",
+                "The example uses that piece.",
+                "+"
+              ],
+              "explanation": "The recursive call keeps the half that can hold the target.",
+              "xp_reward": 10,
+              "starter_code": "return search(items, target, mid ___ 1, hi)\n",
+              "options": [
+                "-",
+                "+",
+                "*",
+                "=="
+              ],
+              "correct_answer": "+"
+            },
+            {
+              "id": "recursion-binary-search-01-bug",
+              "type": "debugging",
+              "question": "Orchard pickers recount crates before dawn. For express binary search recursively, which line does a different job than the example?",
+              "hints": [
+                "The other lines match the example.",
+                "One line is the odd one.",
+                "Line 2"
+              ],
+              "explanation": "The function returns zero and never looks at the list.",
+              "xp_reward": 10,
+              "starter_code": "def search(items, target, lo, hi):\n    return 0\nitems = [1, 3, 5, 7, 9]\nprint(search(items, 9, 0, 4))\n",
+              "correct_answer": "2"
+            },
+            {
+              "id": "recursion-binary-search-01-predict-2",
+              "type": "output_prediction",
+              "question": "Orchard pickers recount crates before dawn. For express binary search recursively, what does the second run display?",
+              "hints": [
+                "Apply the same steps to the new value.",
+                "The display comes from the last line.",
+                "0"
+              ],
+              "explanation": "The second Recursive Binary Search program displays that value.",
+              "xp_reward": 10,
+              "starter_code": "def search(items, target, lo, hi):\n    if lo > hi:\n        return -1\n    mid = (lo + hi) // 2\n    if items[mid] == target:\n        return mid\n    if items[mid] < target:\n        return search(items, target, mid + 1, hi)\n    return search(items, target, lo, mid - 1)\nitems = [1, 3, 5, 7, 9]\nprint(search(items, 1, 0, 4))\n",
+              "options": [
+                "4",
+                "none",
+                "1",
+                "0"
+              ],
+              "correct_answer": "0"
+            },
+            {
+              "id": "recursion-binary-search-01-write",
+              "type": "code",
+              "question": "Orchard pickers recount crates before dawn. For express binary search recursively, fill the blank so the program prints the result.",
+              "hints": [
+                "The blank is the missing piece.",
+                "Print the value that piece produces.",
+                "label = search(items, 9, 0, 4)"
+              ],
+              "explanation": "The printed value is the result after this step returns the index from a recursive search.",
+              "xp_reward": 10,
+              "starter_code": "def search(items, target, lo, hi):\n    if lo > hi:\n        return -1\n    mid = (lo + hi) // 2\n    if items[mid] == target:\n        return mid\n    if items[mid] < target:\n        return search(items, target, mid + 1, hi)\n    return search(items, target, lo, mid - 1)\nitems = [1, 3, 5, 7, 9]\nlabel = ___\nprint(label)\n",
+              "solution_code": "def search(items, target, lo, hi):\n    if lo > hi:\n        return -1\n    mid = (lo + hi) // 2\n    if items[mid] == target:\n        return mid\n    if items[mid] < target:\n        return search(items, target, mid + 1, hi)\n    return search(items, target, lo, mid - 1)\nitems = [1, 3, 5, 7, 9]\nlabel = search(items, 9, 0, 4)\nprint(label)\n",
+              "tests": [
+                {
+                  "name": "recursion-binary-search-01-prints",
+                  "description": "The printed value is the result after this step returns the index from a recursi",
+                  "expected_stdout": "4\n",
+                  "required": true
+                }
+              ]
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "recursion-binary-search-practice-1",
-      "title": "4. Sum Nested Lists (Practice)",
-      "description": "Finish `deep_sum`. Recursively sum integers in a nested list structure. The test checks that `deep_sum([1, [2, [3]], 4])` equals `10`.",
+      "title": "Sum Nested Lists",
+      "description": "Finish deep_sum. Recursively sum integers in a nested list structure. The test checks that deep_sum([1, [2, [3]], 4]) equals 10.",
       "order": 19,
       "difficulty": "intermediate",
       "duration_minutes": 6,
@@ -149,7 +657,7 @@
         "big-o"
       ],
       "learning_objectives": [
-        "Recurse into nested lists"
+        "Quarry pickers recount crates before dawn, and recurse into nested lists."
       ],
       "starter_code": "def deep_sum(obj):\n    # TODO: if int return it; if list sum deep_sum of children\n    pass\n",
       "solution_code": "def deep_sum(obj):\n    if isinstance(obj, int):\n        return obj\n    return sum(deep_sum(x) for x in obj)\n",
@@ -170,12 +678,184 @@
         "url": "https://docs.python.org/3/tutorial/controlflow.html#defining-functions",
         "license": "Python documentation license (PSF)"
       },
-      "xp_reward": 15
+      "xp_reward": 15,
+      "player_mode": "micro",
+      "sublessons": [
+        {
+          "id": "recursion-binary-search-practice-1-micro",
+          "title": "Sum Nested Lists",
+          "description": "",
+          "order": 1,
+          "exercises": [
+            {
+              "id": "recursion-binary-search-practice-1-teach",
+              "type": "teach",
+              "question": "Quarry pickers recount crates before dawn, and recurse into nested lists.",
+              "hints": [
+                "Read the one job this step is practicing.",
+                "The example is about Sum Nested Lists.",
+                "sum(total(child) for child in node)"
+              ],
+              "explanation": "Quarry pickers recount crates before dawn, and recurse into nested lists.",
+              "xp_reward": 0,
+              "worked_example": "sum(total(child) for child in node)"
+            },
+            {
+              "id": "recursion-binary-search-practice-1-mcq",
+              "type": "mcq",
+              "question": "Quarry pickers recount crates before dawn. For recurse into nested lists, which line adds numbers nested inside lists?",
+              "hints": [
+                "Compare each line with the example.",
+                "One line matches the example.",
+                "sum(total(child) for child in node)"
+              ],
+              "explanation": "sum adds the totals of the nested children.",
+              "xp_reward": 10,
+              "options": [
+                "node == node",
+                "sum(total(child) for child in node)",
+                "pass",
+                "return node"
+              ],
+              "correct_answer": "sum(total(child) for child in node)"
+            },
+            {
+              "id": "recursion-binary-search-practice-1-predict",
+              "type": "output_prediction",
+              "question": "Quarry pickers recount crates before dawn. For recurse into nested lists, what value is displayed?",
+              "hints": [
+                "Run the example in your head from the top.",
+                "The last line is what gets displayed.",
+                "6"
+              ],
+              "explanation": "The Sum Nested Lists program displays that value.",
+              "xp_reward": 10,
+              "starter_code": "def total(node):\n    if isinstance(node, int):\n        return node\n    return sum(total(child) for child in node)\nprint(total([1, [2, 3]]))\n",
+              "options": [
+                "0",
+                "7",
+                "none",
+                "6"
+              ],
+              "correct_answer": "6"
+            },
+            {
+              "id": "recursion-binary-search-practice-1-order",
+              "type": "ordering",
+              "question": "Quarry pickers recount crates before dawn. For recurse into nested lists, build the line that adds numbers nested inside lists.",
+              "hints": [
+                "Start at the left of the example.",
+                "Keep the example order.",
+                "def f(): return sum(total(child) for child in node)"
+              ],
+              "explanation": "sum adds the totals of the nested children.",
+              "xp_reward": 10,
+              "options": [
+                "def",
+                "f():",
+                "return",
+                "sum(total(child)",
+                "for",
+                "child",
+                "in",
+                "node)",
+                "+"
+              ],
+              "correct_answer": [
+                "def",
+                "f():",
+                "return",
+                "sum(total(child)",
+                "for",
+                "child",
+                "in",
+                "node)"
+              ]
+            },
+            {
+              "id": "recursion-binary-search-practice-1-fill",
+              "type": "fill_blank",
+              "question": "Quarry pickers recount crates before dawn. For recurse into nested lists, fill the blank so the line adds numbers nested inside lists.",
+              "hints": [
+                "The blank is the missing piece of the example.",
+                "The example uses that piece.",
+                "sum"
+              ],
+              "explanation": "sum adds the totals of the nested children.",
+              "xp_reward": 10,
+              "starter_code": "return ___(total(child) for child in node)\n",
+              "options": [
+                "min",
+                "sum",
+                "max",
+                "len"
+              ],
+              "correct_answer": "sum"
+            },
+            {
+              "id": "recursion-binary-search-practice-1-bug",
+              "type": "debugging",
+              "question": "Quarry pickers recount crates before dawn. For recurse into nested lists, which line does a different job than the example?",
+              "hints": [
+                "The other lines match the example.",
+                "One line is the odd one.",
+                "Line 2"
+              ],
+              "explanation": "The function returns zero and never opens the nested lists.",
+              "xp_reward": 10,
+              "starter_code": "def total(node):\n    return 0\nprint(total([1, [2, 3]]))\n",
+              "correct_answer": "2"
+            },
+            {
+              "id": "recursion-binary-search-practice-1-predict-2",
+              "type": "output_prediction",
+              "question": "Quarry pickers recount crates before dawn. For recurse into nested lists, what does the second run display?",
+              "hints": [
+                "Apply the same steps to the new value.",
+                "The display comes from the last line.",
+                "7"
+              ],
+              "explanation": "The second Sum Nested Lists program displays that value.",
+              "xp_reward": 10,
+              "starter_code": "def total(node):\n    if isinstance(node, int):\n        return node\n    return sum(total(child) for child in node)\nprint(total([1, [2, 4]]))\n",
+              "options": [
+                "6",
+                "none",
+                "0",
+                "7"
+              ],
+              "correct_answer": "7"
+            },
+            {
+              "id": "recursion-binary-search-practice-1-write",
+              "type": "code",
+              "question": "Quarry pickers recount crates before dawn. For recurse into nested lists, fill the blank so the program prints the result.",
+              "hints": [
+                "The blank is the missing piece.",
+                "Print the value that piece produces.",
+                "label = total([1, [2, 3]])"
+              ],
+              "explanation": "The printed value is the result after this step adds numbers nested inside lists.",
+              "xp_reward": 10,
+              "starter_code": "def total(node):\n    if isinstance(node, int):\n        return node\n    return sum(total(child) for child in node)\nlabel = ___\nprint(label)\n",
+              "solution_code": "def total(node):\n    if isinstance(node, int):\n        return node\n    return sum(total(child) for child in node)\nlabel = total([1, [2, 3]])\nprint(label)\n",
+              "tests": [
+                {
+                  "name": "recursion-binary-search-practice-1-prints",
+                  "description": "The printed value is the result after this step adds numbers nested inside lists",
+                  "expected_stdout": "6\n",
+                  "required": true
+                }
+              ]
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "recursion-binary-search-checkpoint",
-      "title": "5. Unit 4 Checkpoint: Recursion & Search",
-      "description": "Implement `fib(n)` recursively (naive is fine for small n). The test checks that `fib(0)` equals `0`; `fib(1)` equals `1`; `fib(7)` equals `13`.",
+      "title": "Practice Unit 4 Checkpoint Recursion Search",
+      "description": "Implement fib(n) recursively (naive is fine for small n). The test checks that fib(0) equals 0; fib(1) equals 1; fib(7) equals 13.",
       "order": 20,
       "difficulty": "intermediate",
       "duration_minutes": 10,
@@ -189,7 +869,7 @@
         "big-o"
       ],
       "learning_objectives": [
-        "Recursive Fibonacci base cases"
+        "Attic pickers recount crates before dawn, and recursive Fibonacci base cases."
       ],
       "starter_code": "def fib(n):\n    # TODO: fib(0)=0, fib(1)=1\n    pass\n",
       "solution_code": "def fib(n):\n    if n < 2:\n        return n\n    return fib(n - 1) + fib(n - 2)\n",
@@ -210,7 +890,175 @@
         "url": "https://docs.python.org/3/tutorial/controlflow.html#defining-functions",
         "license": "Python documentation license (PSF)"
       },
-      "xp_reward": 40
+      "xp_reward": 40,
+      "player_mode": "micro",
+      "sublessons": [
+        {
+          "id": "recursion-binary-search-checkpoint-micro",
+          "title": "Practice Unit 4 Checkpoint Recursion Search",
+          "description": "",
+          "order": 1,
+          "exercises": [
+            {
+              "id": "recursion-binary-search-checkpoint-teach",
+              "type": "teach",
+              "question": "Attic pickers recount crates before dawn, and recursive Fibonacci base cases.",
+              "hints": [
+                "Read the one job this step is practicing.",
+                "The example is about Unit 4 Checkpoint Recursion Search.",
+                "n % 10"
+              ],
+              "explanation": "Attic pickers recount crates before dawn, and recursive Fibonacci base cases.",
+              "xp_reward": 0,
+              "worked_example": "n % 10"
+            },
+            {
+              "id": "recursion-binary-search-checkpoint-mcq",
+              "type": "mcq",
+              "question": "Attic pickers recount crates before dawn. For recursive Fibonacci base cases, which line adds the digits of a number?",
+              "hints": [
+                "Compare each line with the example.",
+                "One line matches the example.",
+                "return (n % 10) + digits(n // 10)"
+              ],
+              "explanation": "The last digit plus the digits of the rest is the sum.",
+              "xp_reward": 10,
+              "options": [
+                "n == 10",
+                "return n",
+                "return (n % 10) + digits(n // 10)",
+                "pass"
+              ],
+              "correct_answer": "return (n % 10) + digits(n // 10)"
+            },
+            {
+              "id": "recursion-binary-search-checkpoint-predict",
+              "type": "output_prediction",
+              "question": "Attic pickers recount crates before dawn. For recursive Fibonacci base cases, what value is displayed?",
+              "hints": [
+                "Run the example in your head from the top.",
+                "The last line is what gets displayed.",
+                "5"
+              ],
+              "explanation": "The Unit 4 Checkpoint Recursion Search program displays that value.",
+              "xp_reward": 10,
+              "starter_code": "def digits(n):\n    if n < 10:\n        return n\n    return (n % 10) + digits(n // 10)\nprint(digits(23))\n",
+              "options": [
+                "13",
+                "none",
+                "5",
+                "0"
+              ],
+              "correct_answer": "5"
+            },
+            {
+              "id": "recursion-binary-search-checkpoint-order",
+              "type": "ordering",
+              "question": "Attic pickers recount crates before dawn. For recursive Fibonacci base cases, build the line that adds the digits of a number.",
+              "hints": [
+                "Start at the left of the example.",
+                "Keep the example order.",
+                "def f(): return (n%10) + digits(n//10)"
+              ],
+              "explanation": "The last digit plus the digits of the rest is the sum.",
+              "xp_reward": 10,
+              "options": [
+                "def",
+                "f():",
+                "return",
+                "(n%10)",
+                "+",
+                "digits(n//10)",
+                "-"
+              ],
+              "correct_answer": [
+                "def",
+                "f():",
+                "return",
+                "(n%10)",
+                "+",
+                "digits(n//10)"
+              ]
+            },
+            {
+              "id": "recursion-binary-search-checkpoint-fill",
+              "type": "fill_blank",
+              "question": "Attic pickers recount crates before dawn. For recursive Fibonacci base cases, fill the blank so the line adds the digits of a number.",
+              "hints": [
+                "The blank is the missing piece of the example.",
+                "The example uses that piece.",
+                "%"
+              ],
+              "explanation": "The last digit plus the digits of the rest is the sum.",
+              "xp_reward": 10,
+              "starter_code": "return (n ___ 10) + digits(n // 10)\n",
+              "options": [
+                "*",
+                "+",
+                "%",
+                "-"
+              ],
+              "correct_answer": "%"
+            },
+            {
+              "id": "recursion-binary-search-checkpoint-bug",
+              "type": "debugging",
+              "question": "Attic pickers recount crates before dawn. For recursive Fibonacci base cases, which line does a different job than the example?",
+              "hints": [
+                "The other lines match the example.",
+                "One line is the odd one.",
+                "Line 2"
+              ],
+              "explanation": "The function returns the whole number and never splits off a digit.",
+              "xp_reward": 10,
+              "starter_code": "def digits(n):\n    return n\nprint(digits(23))\n",
+              "correct_answer": "2"
+            },
+            {
+              "id": "recursion-binary-search-checkpoint-predict-2",
+              "type": "output_prediction",
+              "question": "Attic pickers recount crates before dawn. For recursive Fibonacci base cases, what does the second run display?",
+              "hints": [
+                "Apply the same steps to the new value.",
+                "The display comes from the last line.",
+                "13"
+              ],
+              "explanation": "The second Unit 4 Checkpoint Recursion Search program displays that value.",
+              "xp_reward": 10,
+              "starter_code": "def digits(n):\n    if n < 10:\n        return n\n    return (n % 10) + digits(n // 10)\nprint(digits(49))\n",
+              "options": [
+                "5",
+                "13",
+                "none",
+                "0"
+              ],
+              "correct_answer": "13"
+            },
+            {
+              "id": "recursion-binary-search-checkpoint-write",
+              "type": "code",
+              "question": "Attic pickers recount crates before dawn. For recursive Fibonacci base cases, fill the blank so the program prints the result.",
+              "hints": [
+                "The blank is the missing piece.",
+                "Print the value that piece produces.",
+                "label = digits(23)"
+              ],
+              "explanation": "The printed value is the result after this step adds the digits of a number.",
+              "xp_reward": 10,
+              "starter_code": "def digits(n):\n    if n < 10:\n        return n\n    return (n % 10) + digits(n // 10)\nlabel = ___\nprint(label)\n",
+              "solution_code": "def digits(n):\n    if n < 10:\n        return n\n    return (n % 10) + digits(n // 10)\nlabel = digits(23)\nprint(label)\n",
+              "tests": [
+                {
+                  "name": "recursion-binary-search-checkpoint-prints",
+                  "description": "The printed value is the result after this step adds the digits of a number.",
+                  "expected_stdout": "5\n",
+                  "required": true
+                }
+              ]
+            }
+          ]
+        }
+      ]
     }
   ]
 }
