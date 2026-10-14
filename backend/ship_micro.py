@@ -28,6 +28,23 @@ SKIP = {
     "booleans-step-3",
     "booleans-01",
 }
+# Hand-authored micro lessons. Their prompts already match the code.
+KEEP_HAND = {
+    "variables-step-1",
+    "variables-step-2",
+    "variables-01",
+    "variables-practice-1",
+    "variables-checkpoint",
+    "numbers-step-1",
+    "numbers-step-2",
+    "numbers-01",
+    "numbers-practice-1",
+    "numbers-checkpoint",
+    "loops-step-1",
+    "conditionals-step-1",
+    "conditionals-step-2",
+    "functions-step-1",
+}
 PY = {"python", "py", "dsa", "ml", "ml-math", "ai", "fullstack"}
 JS = {"javascript", "js", "typescript", "ts"}
 SOURCES = {
@@ -203,20 +220,12 @@ def _run(language: str, code: str) -> str:
 
 
 def _hide(text: str, answer: str) -> str:
-    """Return text that does not contain the answer as a substring."""
-    if not hint_gives_answer(text, answer):
+    """Return a nudge that does not contain the answer."""
+    from backend.prompt_align import render_nudge
+
+    if not hint_gives_answer(text, answer) and "example" not in text.lower():
         return text
-    bank = [
-        "Use the example rather than the lookalike.",
-        "The lookalike choice is the trap here.",
-        "Match the example, then stop.",
-        "Skip the choice that only looks close.",
-        "The example shows the shape to follow.",
-    ]
-    for choice in bank:
-        if not hint_gives_answer(choice, answer):
-            return choice
-    return "Follow the example shape."
+    return render_nudge(text or "this step", ["the snippet"], 0, answer)
 
 
 def _pack(language: str, family: str, word: str, number: int) -> dict:
@@ -547,84 +556,73 @@ def _sql_pack(family: str, word: str, number: int) -> dict:
     )
 
 
-def _spec(lesson: dict, language: str, scene: str) -> dict:
+def _spec(lesson: dict, language: str) -> dict:
+    from backend.prompt_align import KEYS, _details, apply_prompts
+
     blob = " ".join([
         lesson.get("title") or "",
         lesson.get("description") or "",
         (lesson.get("solution_code") or "")[:240],
     ]).lower()
-    family = _family(language, blob)
     phrase = _concept(lesson)
     title = verb_title(lesson.get("title") or lesson["id"])
     topic = _plain(lesson.get("title") or lesson["id"]) or lesson["id"]
-    word = _word(lesson["id"], f"{phrase} {topic} {scene}")
+    word = _word(lesson["id"], f"{phrase} {topic}")
     number = _number(lesson["id"] + "n", f"{phrase} {topic}")
     if language == "python":
         pack = python_recipe(lesson["id"], word, number)
     else:
         from backend.concept_packs import pack_for
         pack = pack_for(lesson["id"], word, number)
-    teach = f"{scene}, and {phrase}."
-    if teach.count(".") != 1:
-        teach = f"{scene}, and this step practices {topic}."
     mcq_answer = pack["mcq"][0]
-    mcq_q = f"{scene}. For {phrase}, which line {pack['action']}?"
-    return {
+    spec = {
         "id": lesson["id"],
-        "scene": scene,
         "title": title,
-        "teach": teach,
         "example": pack["example"],
-        "teach_nudge": _hide("Read the one job this step is practicing.", teach),
-        "teach_bridge": _hide(f"The example is about {topic}.", teach),
-        "mcq_q": mcq_q,
+        "teach_bridge": pack["why"],
         "mcq_options": pack["mcq"],
         "mcq_answer": mcq_answer,
-        "mcq_nudge": _hide("Compare each line with the example.", mcq_answer),
-        "mcq_bridge": _hide("One line matches the example.", mcq_answer),
+        "mcq_bridge": pack["why"],
         "mcq_why": pack["why"],
-        "predict_q": f"{scene}. For {phrase}, what value is displayed?",
         "predict_code": pack["predict"],
         "predict_options": ["pending", "other", "none", "zero"],
-        "predict_nudge": "Run the example in your head from the top.",
-        "predict_bridge": "The last line is what gets displayed.",
-        "predict_why": f"The {topic} program displays that value.",
-        "order_q": f"{scene}. For {phrase}, build the line that {pack['action']}.",
+        "predict_bridge": pack["why"],
+        "predict_why": pack["why"],
         "chips": pack["order"] + ([pack["distractor"]] if pack["distractor"] not in pack["order"] else ["#"]),
         "order": pack["order"],
-        "order_nudge": _hide("Start at the left of the example.", pack["order"]),
-        "order_bridge": _hide("Keep the example order.", pack["order"]),
+        "order_bridge": pack["order_why"],
         "order_why": pack["order_why"],
-        "fill_q": f"{scene}. For {phrase}, fill the blank so the line {pack['action']}.",
         "fill_code": pack["fill_code"],
         "fill_options": pack["fill_options"],
         "fill_answer": pack["fill_answer"],
-        "fill_nudge": _hide("The blank is the missing piece of the example.", pack["fill_answer"]),
-        "fill_bridge": _hide("The example uses that piece.", pack["fill_answer"]),
+        "fill_bridge": pack["fill_why"],
         "fill_why": pack["fill_why"],
-        "bug_q": f"{scene}. For {phrase}, which line does a different job than the example?",
         "bug_code": pack["bug"],
         "bug_line": pack["bug_line"],
-        "bug_nudge": _hide("The other lines match the example.", pack["bug_line"]),
-        "bug_bridge": _hide("One line is the odd one.", pack["bug_line"]),
+        "bug_bridge": pack["bug_why"],
         "bug_why": pack["bug_why"],
         "second_kind": "predict",
-        "second_q": f"{scene}. For {phrase}, what does the second run display?",
         "predict2_code": pack["predict2"],
         "predict2_options": ["pending", "other", "none", "zero"],
-        "second_nudge": "Apply the same steps to the new value.",
-        "second_bridge": "The display comes from the last line.",
-        "second_why": f"The second {topic} program displays that value.",
-        "write_q": f"{scene}. For {phrase}, fill the blank so the program prints the result.",
+        "second_bridge": pack["why"],
+        "second_why": pack["why"],
         "starter": pack["starter"],
         "solution": pack["solution"],
-        "write_nudge": "The blank is the missing piece.",
-        "write_bridge": "Print the value that piece produces.",
+        "write_bridge": pack["write_why"],
         "write_reveal": pack["reveal"],
         "write_why": pack["write_why"],
         "source_name": (lesson.get("source") or {}).get("name"),
         "source_url": (lesson.get("source") or {}).get("url"),
+        "_action": pack["action"],
+        "_details": _details(pack, lesson["id"]),
+        "_frame": {
+            key: 0 if key == "teach" else sum(lesson["id"].encode("utf-8")) % 8
+            for key in KEYS
+        },
+        "_answers": {},
     }
+    apply_prompts(spec)
+    return spec
 
 
 def _ensure_options(exercise_id: str, answer: str, seeds: list[str]) -> list[str]:
@@ -656,17 +654,20 @@ def _choices(answer: str, seeds: list[str]) -> list[str]:
     return _ensure_options("unused-choices", answer, seeds)
 
 
-def _without(text: str, answer: str, scene: str) -> str:
-    """Drop a prompt that contains its answer, keeping the unique scene."""
+def _without(text: str, answer: str, scene: str = "") -> str:
+    """Drop any prompt that contains its answer, without a shared scene line."""
+    del scene
     if not hint_gives_answer(text, answer):
         return text
-    for kept in (
-        f"{scene}. Choose the match for this step.",
-        f"{scene}. Choose the match.",
-    ):
-        if not hint_gives_answer(kept, answer):
-            return kept
-    raise SystemExit(f"cannot hide {answer!r} from {scene!r}")
+    from backend.prompt_align import _drop, _sentence
+
+    cleaned = _sentence(_drop(text, answer))
+    if not hint_gives_answer(cleaned, answer):
+        return cleaned
+    fallback = _hide("Stay with the step this screen is about", answer)
+    if hint_gives_answer(fallback, answer):
+        raise SystemExit(f"cannot hide {answer!r}")
+    return fallback
 
 
 def _with_outputs(spec: dict, language: str) -> dict:
@@ -680,7 +681,6 @@ def _with_outputs(spec: dict, language: str) -> dict:
     spec["predict2_options"] = _ensure_options(f"{spec['id']}-predict-2", second, [first, "none", "0"])
     spec["mcq_options"] = _ensure_options(f"{spec['id']}-mcq", spec["mcq_answer"], spec["mcq_options"])
     spec["fill_options"] = _ensure_options(f"{spec['id']}-fill", spec["fill_answer"], spec["fill_options"])
-    scene = spec.get("scene") or spec["teach"].split(",")[0]
     guards = {
         "predict_q": first,
         "predict_nudge": first,
@@ -701,8 +701,18 @@ def _with_outputs(spec: dict, language: str) -> dict:
         if key.endswith("_nudge"):
             spec[key] = _hide(spec[key], answer)
         else:
-            spec[key] = _without(spec[key], answer, scene)
+            spec[key] = _without(spec[key], answer)
     spec["_guard"] = [first, second, spec["fill_answer"], spec["mcq_answer"], spec["bug_line"], " ".join(spec["order"])]
+    spec["_answers"] = {
+        "teach": spec["teach"],
+        "mcq_q": spec["mcq_answer"],
+        "predict_q": first,
+        "order_q": spec["order"],
+        "fill_q": spec["fill_answer"],
+        "bug_q": spec["bug_line"],
+        "second_q": second,
+        "write_q": spec["write_reveal"],
+    }
     return spec
 
 
@@ -724,53 +734,11 @@ def _existing_prompts(course: str) -> list[tuple[str, str]]:
 
 
 def _separate(course: str, specs: list[dict]) -> None:
-    keys = ["teach", "mcq_q", "predict_q", "order_q", "fill_q", "bug_q", "second_q", "write_q"]
-    marks = WORDS[:]
-    existing = _existing_prompts(course)
-    for round_i in range(160):
-        records: list[tuple] = [(lid, None, "", normalize(text)) for lid, text in existing]
-        for spec in specs:
-            for key in keys:
-                records.append((spec["id"], spec, key, normalize(spec[key])))
-        found = None
-        for index, (left_id, left_spec, left_key, left) in enumerate(records):
-            for right_id, right_spec, right_key, right in records[index + 1:]:
-                if left_id == right_id or not left or not right:
-                    continue
-                shorter, longer = (len(left), len(right)) if len(left) < len(right) else (len(right), len(left))
-                if shorter / longer < 0.81:
-                    continue
-                if left == right or SequenceMatcher(None, left, right).ratio() >= 0.9:
-                    target = right_spec if right_spec is not None else left_spec
-                    key = right_key if right_spec is not None else left_key
-                    if target is not None and key:
-                        found = (target, key, round_i)
-                    break
-            if found:
-                break
-        if not found:
-            return
-        spec, key, round_i = found
-        guards = spec.get("_guard") or []
-        placed = False
-        for offset in range(len(marks)):
-            mark = marks[(round_i * 5 + len(spec["id"]) + offset) % len(marks)]
-            if key == "teach":
-                proposal = spec["teach"][:-1] + f" using {mark}."
-            else:
-                base = spec[key].rstrip()
-                if base.endswith("?"):
-                    proposal = base[:-1] + f", using {mark}?"
-                else:
-                    proposal = base.rstrip(". ") + f", using {mark}."
-            if any(hint_gives_answer(proposal, answer) for answer in guards):
-                continue
-            spec[key] = proposal
-            placed = True
-            break
-        if not placed:
-            raise SystemExit(f"cannot separate {spec['id']} {key}")
-    raise SystemExit(f"{course} still has near-duplicate prompts")
+    from backend.prompt_align import separate
+
+    rewriting = {spec["id"] for spec in specs}
+    frozen = [item for item in _existing_prompts(course) if item[0] not in rewriting]
+    separate(course, specs, frozen)
 
 
 def _parse_for(language: str):
@@ -813,7 +781,7 @@ def _sanitize(lesson: dict) -> None:
             hints = list(exercise.get("hints") or [])
             answer = exercise.get("correct_answer")
             if hints and exercise.get("type") != "teach" and hint_gives_answer(hints[0], answer):
-                hints[0] = _hide("Use the example rather than the lookalike.", answer)
+                hints[0] = _hide("Stay with the step this screen is about.", answer)
                 exercise["hints"] = hints
 
 
@@ -824,17 +792,16 @@ def ship(courses: list[str]) -> None:
         for path in sorted(folder.glob("*.json")):
             data = json.loads(path.read_text(encoding="utf-8"))
             for lesson in data.get("lessons", []):
-                if lesson.get("player_mode") == "micro" or lesson["id"] in SKIP:
+                if lesson["id"] in SKIP or lesson["id"] in KEEP_HAND:
                     continue
                 lessons.append(lesson)
         if not lessons:
             print(f"{course}: nothing to install")
             continue
         language = course
-        scenes = _scenes(len(lessons) + 5)
         specs = []
-        for index, lesson in enumerate(lessons):
-            spec = _with_outputs(_spec(lesson, language, scenes[index]), language)
+        for lesson in lessons:
+            spec = _with_outputs(_spec(lesson, language), language)
             if not (lesson.get("source") or {}).get("url"):
                 name, url, _license = SOURCES.get(course, SOURCES["python"])
                 spec["source_name"] = name
@@ -842,7 +809,7 @@ def ship(courses: list[str]) -> None:
             specs.append(spec)
             print(f"built {course}/{lesson['id']}", flush=True)
         _separate(course, specs)
-        install(course, specs, run=_runner_for(language), parse=_parse_for(language))
+        install(course, specs, run=_runner_for(language), parse=_parse_for(language), replace=True)
         wanted = {spec["id"] for spec in specs}
         for path in sorted(folder.glob("*.json")):
             data = json.loads(path.read_text(encoding="utf-8"))

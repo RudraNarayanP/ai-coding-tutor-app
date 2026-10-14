@@ -6,8 +6,8 @@ from backend.concept_packs import js
 def load() -> None:
     js(
         "js-01", "returns twice the input from an arrow function",
-        "const double = (value) => value * 2;\n", "{n}",
-        "const double = (value) => value * 2;\n", "{p}",
+        "const double = (value) => value * 2;\n", "double({n})",
+        "const double = (value) => value * 2;\n", "double({p})",
         ["const", "double", "=", "(value)", "=>", "value", "*", "2;"], "==",
         "const double = (value) => value ___ 2;\n", "*", ["*", "+", "-", "=="],
         "const double = (value) => value + 2;\nconsole.log(double({n}));\n", "value + 2",

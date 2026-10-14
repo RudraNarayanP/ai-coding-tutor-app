@@ -35,6 +35,36 @@ def test_hint_1_may_not_contain_the_key_and_a_parse_must_be_real_code():
     assert program_parses("sql", "SELECT city FROM stops")[0]
 
 
+def test_scene_openings_and_example_hints_are_gone():
+    import json
+    import re
+    from pathlib import Path
+
+    scene = re.compile(
+        r"\b(?:Harbor|Mesa|Orchard|Quarry|Attic|Depot|Ridge|Cove|Plaza|Marsh) "
+        r"(?:clerks|potters|pickers|crews|archivists|runners|scouts|bakers|wardens|smiths)\b"
+    )
+    hits = []
+    root = Path("curriculum")
+    for path in root.glob("*/modules/*.json"):
+        data = json.loads(path.read_text(encoding="utf-8"))
+        for lesson in data.get("lessons", []):
+            if lesson.get("player_mode") != "micro":
+                continue
+            for sub in lesson.get("sublessons") or []:
+                for exercise in sub.get("exercises") or []:
+                    blob = " ".join([
+                        exercise.get("question") or "",
+                        " ".join(exercise.get("hints") or []),
+                    ])
+                    if scene.search(blob):
+                        hits.append(f"{lesson['id']} scene")
+                    hint = ((exercise.get("hints") or [""])[0]).lower()
+                    if "example" in hint or "compare each" in hint:
+                        hits.append(f"{lesson['id']} hint")
+    assert hits == []
+
+
 def test_pilot_lessons_execute_and_are_not_copies():
     lessons = {lesson.id: lesson for lesson in load_all_curriculums()["python"].lessons}
     records = []

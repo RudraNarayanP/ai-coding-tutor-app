@@ -248,7 +248,7 @@ def assert_distinct(groups: list[tuple[str, list[str]]]) -> None:
                 raise SystemExit(f"near duplicate\n{left_id}: {left}\n{right_id}: {right}")
 
 
-def install(course: str, specs: list[dict], *, run=None, parse=None) -> None:
+def install(course: str, specs: list[dict], *, run=None, parse=None, replace: bool = False) -> None:
     folder = ROOT / course / "modules"
     by_id = {spec["id"]: spec for spec in specs}
     if len(by_id) != len(specs):
@@ -284,9 +284,9 @@ def install(course: str, specs: list[dict], *, run=None, parse=None) -> None:
             spec = by_id.get(lesson["id"])
             if spec is None:
                 continue
-            # A shipped micro lesson is the source of truth. Re-running a catalog
-            # must not overwrite it.
-            if lesson.get("player_mode") == "micro":
+            # A shipped micro lesson is the source of truth unless this run is
+            # explicitly replacing scene-prefixed prompts.
+            if lesson.get("player_mode") == "micro" and not replace:
                 continue
             exercises = built[lesson["id"]]
             lesson["title"] = spec["title"]
